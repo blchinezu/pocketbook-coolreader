@@ -904,6 +904,7 @@ LVGrayDrawBuf::~LVGrayDrawBuf()
 void LVGrayDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int height, lUInt32 * )
 {
     //int buf_width = _dx; /* 2bpp */
+    int initial_height = height;
     int bx = 0;
     int by = 0;
     int xx;
@@ -926,6 +927,8 @@ void LVGrayDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int he
         height += y-_clip.top;
         by -= y-_clip.top;
         y = _clip.top;
+        if (_hidePartialGlyphs && height<=initial_height/2) // HIDE PARTIAL VISIBLE GLYPHS
+            return;
         if (height<=0)
             return;
     }
@@ -937,7 +940,13 @@ void LVGrayDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int he
         return;
     if (y + height > _clip.bottom)
     {
-        height = _clip.bottom - y;
+        if (_hidePartialGlyphs && height<=initial_height/2) // HIDE PARTIAL VISIBLE GLYPHS
+            return;
+        int clip_bottom = _clip.bottom;
+        if ( _hidePartialGlyphs )
+            clip_bottom = this->_dy;
+        if ( y+height > clip_bottom)
+            height = clip_bottom - y;
     }
     if (height<=0)
         return;
@@ -1324,6 +1333,7 @@ void LVColorDrawBuf::InvertRect(int x0, int y0, int x1, int y1)
 void LVColorDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int height, lUInt32 * palette )
 {
     //int buf_width = _dx; /* 2bpp */
+    int initial_height = height;
     int bx = 0;
     int by = 0;
     int xx;
@@ -1344,6 +1354,8 @@ void LVColorDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int h
         height += y-_clip.top;
         by -= y-_clip.top;
         y = _clip.top;
+        if (_hidePartialGlyphs && height<=initial_height/2) // HIDE PARTIAL VISIBLE GLYPHS
+            return;
         if (height<=0)
             return;
     }
@@ -1355,7 +1367,13 @@ void LVColorDrawBuf::Draw( int x, int y, const lUInt8 * bitmap, int width, int h
         return;
     if (y + height > _clip.bottom)
     {
-        height = _clip.bottom - y;
+        if (_hidePartialGlyphs && height<=initial_height/2) // HIDE PARTIAL VISIBLE GLYPHS
+            return;
+        int clip_bottom = _clip.bottom;
+        if (_hidePartialGlyphs )
+            clip_bottom = this->_dy;
+        if ( y+height > clip_bottom)
+            height = clip_bottom - y;
     }
     if (height<=0)
         return;

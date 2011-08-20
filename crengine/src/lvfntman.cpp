@@ -35,6 +35,9 @@
 #define DEBUG_FONT_MAN_LOG_FILE "/tmp/font_man.log"
 #endif
 
+#define GAMMA_TABLES_IMPL
+#include "../include/gammatbl.h"
+
 #if (USE_FREETYPE==1)
 
 //#include <ft2build.h>
@@ -67,6 +70,61 @@
 
 
 LVFontManager * fontMan = NULL;
+
+static double gammaLevel = 1.0;
+static int gammaIndex = GAMMA_LEVELS/2;
+
+/// fills array with list of available gamma levels
+void LVFontManager::GetGammaLevels(LVArray<double> dst) {
+    dst.clear();
+    for ( int i=0; i<GAMMA_LEVELS; i++ )
+        dst.add(cr_gamma_levels[i]);
+}
+
+/// returns current gamma level index
+int  LVFontManager::GetGammaIndex() {
+    return gammaIndex;
+}
+
+/// sets current gamma level index
+void LVFontManager::SetGammaIndex( int index ) {
+    if ( index<0 )
+        index = 0;
+    if ( index>=GAMMA_LEVELS )
+        index = GAMMA_LEVELS-1;
+    if ( gammaIndex!=index ) {
+        CRLog::trace("FontManager gamma index changed from %d to %d", gammaIndex, index);
+        gammaIndex = index;
+        gammaLevel = cr_gamma_levels[index];
+        clearGlyphCache();
+    }
+}
+
+/// returns current gamma level
+double LVFontManager::GetGamma() {
+    return gammaLevel;
+}
+
+/// sets current gamma level
+void LVFontManager::SetGamma( double gamma ) {
+//    gammaLevel = cr_ft_gamma_levels[GAMMA_LEVELS/2];
+//    gammaIndex = GAMMA_LEVELS/2;
+    int oldGammaIndex = gammaIndex;
+    for ( int i=0; i<GAMMA_LEVELS; i++ ) {
+        double diff1 = cr_gamma_levels[i] - gamma;
+        if ( diff1<0 ) diff1 = -diff1;
+        double diff2 = gammaLevel - gamma;
+        if ( diff2<0 ) diff2 = -diff2;
+        if ( diff1 < diff2 ) {
+            gammaLevel = cr_gamma_levels[i];
+            gammaIndex = i;
+        }
+    }
+    if ( gammaIndex!=oldGammaIndex ) {
+        CRLog::trace("FontManager gamma index changed from %d to %d", oldGammaIndex, gammaIndex);
+        clearGlyphCache();
+    }
+}
 
 
 /**
@@ -358,6 +416,9 @@ static LVFontGlyphCacheItem * newItem( LVFontLocalGlyphCache * local_cache, lCha
         } else {
 #endif
             memcpy( item->bmp, bitmap->buffer, w*h );
+            // correct gamma
+            if ( gammaIndex!=GAMMA_LEVELS/2 )
+                cr_correct_gamma_buf(item->bmp, w*h, gammaIndex);
 //            }
     }
     item->origin_x =   (lInt8)slot->bitmap_left;
@@ -495,7 +556,10 @@ static lUInt16 char_flags[] = {
 };
 
 #define GET_CHAR_FLAGS(ch) \
-     (ch<48?char_flags[ch]:(ch==UNICODE_SOFT_HYPHEN_CODE?LCHAR_ALLOW_WRAP_AFTER:0))
+     (ch<48?char_flags[ch]: \
+        (ch==UNICODE_SOFT_HYPHEN_CODE?LCHAR_ALLOW_WRAP_AFTER: \
+        (ch==UNICODE_NO_BREAK_SPACE?LCHAR_DEPRECATED_WRAP_AFTER|LCHAR_IS_SPACE: \
+        (ch==UNICODE_HYPHEN?LCHAR_DEPRECATED_WRAP_AFTER:0))))
 
 class LVFreeTypeFace : public LVFont
 {

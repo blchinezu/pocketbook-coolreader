@@ -48,6 +48,7 @@ static void findBackgrounds( lString16Collection & baseDirs, lString16Collection
     }
 }
 
+static int interline_spaces[] = {75, 80, 85, 90, 95, 100, 110, 120, 140, 150};
 
 SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     QDialog(parent),
@@ -110,6 +111,11 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     optionToUi( PROP_SHOW_TITLE, m_ui->cbShowBookName );
     optionToUi( PROP_TXT_OPTION_PREFORMATTED, m_ui->cbTxtPreFormatted );
     optionToUi( PROP_FLOATING_PUNCTUATION, m_ui->cbFloatingPunctuation );
+
+    QString gamma = m_props->getStringDef(PROP_FONT_GAMMA, "");
+    if ( gamma=="" )
+        m_props->setString(PROP_FONT_GAMMA, "1.0");
+    optionToUiString(PROP_FONT_GAMMA, m_ui->cbFontGamma);
 
     optionToUiInversed( PROP_STATUS_LINE, m_ui->cbShowPageHeader );
 
@@ -190,17 +196,11 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     //PROP_HYPHENATION_DICT
     QString v = QString("%1").arg(m_props->getIntDef(PROP_INTERLINE_SPACE, 100)) + "%";
     QStringList isitems;
-    isitems.append("80%");
-    isitems.append("90%");
-    isitems.append("95%");
-    isitems.append("100%");
-    isitems.append("110%");
-    isitems.append("120%");
-    isitems.append("140%");
-    isitems.append("150%");
+    for ( int i=0; i<sizeof(interline_spaces)/sizeof(int); i++ )
+        isitems.append(QString("%1").arg(interline_spaces[i]) + "%");
     m_ui->cbInterlineSpace->addItems(isitems);
     int isi = m_ui->cbInterlineSpace->findText(v);
-    m_ui->cbInterlineSpace->setCurrentIndex(isi>=0 ? isi : 1);
+    m_ui->cbInterlineSpace->setCurrentIndex(isi>=0 ? isi : 6);
 
     int hi = -1;
     v = m_props->getStringDef(PROP_HYPHENATION_DICT,"@algorithm"); //HYPH_DICT_ID_ALGORITHM;
@@ -269,6 +269,21 @@ void SettingsDlg::optionToUi( const char * optionName, QCheckBox * cb )
     int state = ( m_props->getIntDef( optionName, 1 ) != 0 ) ? 1 : 0;
     CRLog::debug("optionToUI(%s,%d)", optionName, state);
     cb->setCheckState( state ? Qt::Checked : Qt::Unchecked );
+}
+
+void SettingsDlg::optionToUiString( const char * optionName, QComboBox * cb )
+{
+    QString value = m_props->getStringDef( optionName, "" );
+    int index = -1;
+    for ( int i=0; i<cb->count(); i++ ) {
+        if ( cb->itemText(i)==value ) {
+            index = i;
+            break;
+        }
+    }
+    if ( index<0 )
+        index = 0;
+    cb->setCurrentIndex( index );
 }
 
 void SettingsDlg::optionToUiInversed( const char * optionName, QCheckBox * cb )
@@ -490,8 +505,7 @@ void SettingsDlg::on_cbInterlineSpace_currentIndexChanged(int index)
 {
     if ( !initDone )
         return;
-    static int n[] = {80,90,95,100,110,120,140,150};
-    m_props->setInt( PROP_INTERLINE_SPACE, n[index] );
+    m_props->setInt( PROP_INTERLINE_SPACE, interline_spaces[index] );
     updateStyleSample();
 }
 
@@ -530,4 +544,9 @@ void SettingsDlg::on_cbPageSkin_currentIndexChanged(int index)
 void SettingsDlg::on_cbFloatingPunctuation_stateChanged(int s)
 {
     setCheck( PROP_FLOATING_PUNCTUATION, s );
+}
+
+void SettingsDlg::on_cbFontGamma_currentIndexChanged(QString s)
+{
+    m_props->setString( PROP_FONT_GAMMA, s );
 }
