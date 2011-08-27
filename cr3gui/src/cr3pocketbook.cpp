@@ -165,6 +165,7 @@ char key_buffer[KEY_BUFFER_LEN];
 class CRPocketBookScreen : public CRGUIScreenBase {
 private:
     bool _forceSoft;
+    bool _update_gray;
     CRGUIWindowBase *m_mainWindow;
 #if GRAY_BACKBUFFER_BITS == 4
     lUInt8 *_buf4bpp;
@@ -184,7 +185,7 @@ public:
     }
 
     CRPocketBookScreen( int width, int height )
-        :  CRGUIScreenBase( width, height, true ), _forceSoft(false)
+        :  CRGUIScreenBase( width, height, true ), _forceSoft(false), _update_gray(false)
     {
         instance = this;
 #if GRAY_BACKBUFFER_BITS == 4
@@ -207,6 +208,7 @@ public:
         _forceSoft = force;
         return ret;
     }
+    virtual void flush( bool full );
 };
 
 CRPocketBookScreen * CRPocketBookScreen::instance = NULL;
@@ -448,6 +450,55 @@ void CRPocketBookScreen::draw(int x, int y, int w, int h)
 #endif
 }
 
+void CRPocketBookScreen::flush( bool full )
+{
+    if ( _updateRect.isEmpty() && !full && !getTurboUpdateEnabled() ) {
+        CRLog::trace("CRGUIScreenBase::flush() - update rectangle is empty");
+        return;
+    }
+    if ( !_front.isNull() && !_updateRect.isEmpty() && !full ) {
+        // calculate really changed area
+        lvRect rc;
+        lvRect lineRect(_updateRect);
+        _update_gray = false;
+        int sz = _canvas->GetRowSize();
+        for ( int y = _updateRect.top; y < _updateRect.bottom; y++ ) {
+            if ( y>=0 && y<_height ) {
+                lUInt8 * line1 = _canvas->GetScanLine( y );
+                lUInt8 * line2 = _front->GetScanLine( y );
+                if ( memcmp( line1, line2, sz ) ) {
+                    for (int i = 0; !_update_gray && i < sz; i++) {
+                        _update_gray = (line1[i] != line2[i] && !(line1[i] == 0 || line1[i] == 0xFF));
+                    }
+                    // line content is different
+                    lineRect.top = y;
+                    lineRect.bottom = y+1;
+                    rc.extend( lineRect );
+                    // copy line to front buffer
+                    memcpy( line2, line1, sz );
+                }
+            }
+        }
+        if ( rc.isEmpty() ) {
+            // no actual changes
+            _updateRect.clear();
+            return;
+        }
+        _updateRect.top = rc.top;
+        _updateRect.bottom = rc.bottom;
+    }
+    //if ( !full && !checkFullUpdateCounter() )
+    //    full = false;
+    if ( full && !_front.isNull() ) {
+        // copy full screen to front buffer
+        _canvas->DrawTo( _front.get(), 0, 0, 0, NULL );
+    }
+    if ( full )
+        _updateRect = getRect();
+    update( _updateRect, full );
+    _updateRect.clear();
+}
+
 void CRPocketBookScreen::update( const lvRect & rc2, bool full )
 {
     if (rc2.isEmpty() && !full)
@@ -472,9 +523,15 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
         FullUpdate();
     } else {
         draw(0, rc.top, _front->GetWidth(), rc.height());
-        if (!isDocWnd && rc.height() < 300)
-            PartialUpdateBW(rc.left, rc.top, rc.right, rc.bottom);
-        else
+        if (!isDocWnd && rc.height() < 300) {
+            if (_update_gray) {
+                PartialUpdate(rc.left, rc.top, rc.right, rc.bottom);
+                CRLog::trace("PartialUpdate(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
+            } else {
+                PartialUpdateBW(rc.left, rc.top, rc.right, rc.bottom);
+                CRLog::trace("PartialUpdateBW(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
+            }
+        } else
             SoftUpdate();
     }
 }
