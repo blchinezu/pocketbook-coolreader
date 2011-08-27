@@ -96,6 +96,12 @@ typedef enum {
     txt_format_auto  // autodetect format
 } txt_format_t;
 
+/// no battery
+#define CR_BATTERY_STATE_NO_BATTERY -2
+/// battery is charging
+#define CR_BATTERY_STATE_CHARGING -1
+// values 0..100 -- battery life percent
+
 #ifndef CR_ENABLE_PAGE_IMAGE_CACHE
 #ifdef ANDROID
 #define CR_ENABLE_PAGE_IMAGE_CACHE 0
@@ -534,6 +540,10 @@ public:
     void setCursorPos( ldomXPointer ptr ) { m_cursorPos = ptr; }
     /// try swappping of document to cache, if size is big enough, and no swapping attempt yet done
     void swapToCache();
+    /// save document to cache file, with timeout option
+    ContinuousOperationResult swapToCache(CRTimerUtil & maxTime);
+    /// save unsaved data to cache file (if one is created), with timeout option
+    ContinuousOperationResult updateCache(CRTimerUtil & maxTime);
 
     /// returns selected (marked) ranges
     ldomMarkedRangeList * getMarkedRanges() { return &m_markRanges; }
@@ -595,7 +605,7 @@ public:
 
     // callback functions
     /// set callback
-    void setCallback( LVDocViewCallback * callback ) { m_callback = callback; }
+    LVDocViewCallback * setCallback( LVDocViewCallback * callback ) { LVDocViewCallback * old = m_callback; m_callback = callback; return old; }
     /// get callback
     LVDocViewCallback * getCallback( ) { return m_callback; }
 

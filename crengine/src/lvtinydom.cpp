@@ -12,12 +12,16 @@
 *******************************************************/
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
-#define CACHE_FILE_FORMAT_VERSION "3.04.01"
+#define CACHE_FILE_FORMAT_VERSION "3.04.02"
 
 #ifndef DOC_DATA_COMPRESSION_LEVEL
 /// data compression level (0=no compression, 1=fast compressions, 3=normal compression)
 #define DOC_DATA_COMPRESSION_LEVEL 1 // 0, 1, 3 (0=no compression)
 #endif
+
+#ifndef STREAM_AUTO_SYNC_SIZE
+#define STREAM_AUTO_SYNC_SIZE 300000
+#endif //STREAM_AUTO_SYNC_SIZE
 
 //=====================================================
 // Document data caching parameters
@@ -438,25 +442,31 @@ public:
     /// sets dirty flag value, returns true if value is changed
     bool setDirtyFlag( bool dirty );
     // flushes index
-    bool flush( bool sync );
+    bool flush( bool clearDirtyFlag, CRTimerUtil & maxTime );
     int roundSector( int n )
     {
         return (n + (_sectorSize-1)) & ~(_sectorSize-1);
+    }
+    void setAutoSyncSize(int sz) {
+        _stream->setAutoSyncSize(sz);
     }
 };
 
 
 // create uninitialized cache file, call open or create to initialize
 CacheFile::CacheFile()
-: _sectorSize( CACHE_FILE_SECTOR_SIZE ), _size(0), _indexChanged(false), _dirty(false), _map(1024)
+: _sectorSize( CACHE_FILE_SECTOR_SIZE ), _size(0), _indexChanged(false), _dirty(true), _map(1024)
 {
 }
 
 // free resources
 CacheFile::~CacheFile()
 {
-    if ( !_stream.isNull() )
-        flush( true );
+    if ( !_stream.isNull() ) {
+        // don't flush -- leave file dirty
+        //CRTimerUtil infinite;
+        //flush( true, infinite );
+    }
 }
 
 /// sets dirty flag value, returns true if value is changed
@@ -464,8 +474,13 @@ bool CacheFile::setDirtyFlag( bool dirty )
 {
     if ( _dirty==dirty )
         return false;
-    if ( !dirty )
+    if ( !dirty ) {
+        CRLog::info("CacheFile::clearing Dirty flag");
         _stream->Flush(true);
+    } else {
+        CRLog::info("CacheFile::setting Dirty flag");
+    }
+    _dirty = dirty;
     SimpleCacheFileHeader hdr(_dirty?1:0);
     _stream->SetPos(0);
     lvsize_t bytesWritten = 0;
@@ -473,17 +488,24 @@ bool CacheFile::setDirtyFlag( bool dirty )
     if ( bytesWritten!=sizeof(hdr) )
         return false;
     _stream->Flush(true);
+    //CRLog::trace("setDirtyFlag : hdr is saved with Dirty flag = %d", hdr._dirty);
     return true;
 }
 
 // flushes index
-bool CacheFile::flush( bool )
+bool CacheFile::flush( bool clearDirtyFlag, CRTimerUtil & maxTime )
 {
-    setDirtyFlag(true);
-    if ( !writeIndex() )
-        return false;
-    setDirtyFlag(false);
-	return true;
+    if ( clearDirtyFlag ) {
+        //setDirtyFlag(true);
+        if ( !writeIndex() )
+            return false;
+        setDirtyFlag(false);
+    } else {
+        CRTimerUtil timer;
+        _stream->Flush(false, maxTime);
+        //CRLog::trace("CacheFile->flush() took %d ms ", (int)timer.elapsed());
+    }
+    return true;
 }
 
 // reads all blocks of index and checks CRCs
@@ -512,6 +534,7 @@ bool CacheFile::readIndex()
     _stream->Read(&hdr, sizeof(hdr), &bytesRead );
     if ( bytesRead!=sizeof(hdr) )
         return false;
+    CRLog::info("Header read: DirtyFlag=%d", hdr._dirty);
     if ( !hdr.validate() )
         return false;
     if ( (int)hdr._fsize > _size + 4096-1 ) {
@@ -609,6 +632,7 @@ bool CacheFile::updateHeader( CacheFileItem * indexItem )
     _stream->Write(&hdr, sizeof(hdr), &bytesWritten );
     if ( bytesWritten!=sizeof(hdr) )
         return false;
+    //CRLog::trace("updateHeader finished: Dirty flag = %d", hdr._dirty);
     return true;
 }
 
@@ -896,11 +920,14 @@ bool CacheFile::open( lString16 filename )
     }
     return open(stream);
 }
+
+
 // try open existing cache file
 bool CacheFile::open( LVStreamRef stream )
 {
     _stream = stream;
     _size = _stream->GetSize();
+    //_stream->setAutoSyncSize(STREAM_AUTO_SYNC_SIZE);
 
     if ( !readIndex() ) {
         CRLog::error("CacheFile::open : cannot read index from file");
@@ -928,6 +955,7 @@ bool CacheFile::create( lString16 filename )
 bool CacheFile::create( LVStreamRef stream )
 {
     _stream = stream;
+    //_stream->setAutoSyncSize(STREAM_AUTO_SYNC_SIZE);
     if ( _stream->SetPos(0)!=0 ) {
         CRLog::error( "CacheFile::create: cannot seek file");
         _stream.Clear();
@@ -1205,6 +1233,7 @@ tinyNodeCollection::tinyNodeCollection()
 , _cacheFile(NULL)
 , _mapped(false)
 , _maperror(false)
+, _mapSavingStage(0)
 #endif
 , _textStorage(this, 't', TEXT_CACHE_UNPACKED_SPACE, TEXT_CACHE_CHUNK_SIZE ) // persistent text node data storage
 , _elemStorage(this, 'e', ELEM_CACHE_UNPACKED_SPACE, ELEM_CACHE_CHUNK_SIZE ) // persistent element data storage
@@ -1233,6 +1262,7 @@ tinyNodeCollection::tinyNodeCollection( tinyNodeCollection & v )
 , _cacheFile(NULL)
 , _mapped(false)
 , _maperror(false)
+, _mapSavingStage(0)
 #endif
 , _textStorage(this, 't', TEXT_CACHE_UNPACKED_SPACE, TEXT_CACHE_CHUNK_SIZE ) // persistent text node data storage
 , _elemStorage(this, 'e', ELEM_CACHE_UNPACKED_SPACE, ELEM_CACHE_CHUNK_SIZE ) // persistent element data storage
@@ -1648,7 +1678,7 @@ tinyNodeCollection::~tinyNodeCollection()
 
 #if BUILD_LITE!=1
 /// put all objects into persistent storage
-void tinyNodeCollection::persist()
+void tinyNodeCollection::persist( CRTimerUtil & maxTime )
 {
     CRLog::info("lxmlDocBase::persist() invoked - converting all nodes to persistent objects");
     // elements
@@ -1657,20 +1687,32 @@ void tinyNodeCollection::persist()
         if ( part ) {
             int n0 = TNC_PART_LEN * partindex;
             for ( int i=0; i<TNC_PART_LEN && n0+i<=_elemCount; i++ )
-                if ( !part[i].isNull() && !part[i].isPersistent() )
+                if ( !part[i].isNull() && !part[i].isPersistent() ) {
                     part[i].persist();
+                    if (maxTime.expired())
+                        return;
+                }
         }
     }
+    //_cacheFile->flush(false); // intermediate flush
+    if ( maxTime.expired() )
+        return;
     // texts
     for ( int partindex = 0; partindex<=(_textCount>>TNC_PART_SHIFT); partindex++ ) {
         ldomNode * part = _textList[partindex];
         if ( part ) {
             int n0 = TNC_PART_LEN * partindex;
             for ( int i=0; i<TNC_PART_LEN && n0+i<=_textCount; i++ )
-                if ( !part[i].isNull() && !part[i].isPersistent() )
+                if ( !part[i].isNull() && !part[i].isPersistent() ) {
+                    //CRLog::trace("before persist");
                     part[i].persist();
+                    //CRLog::trace("after persist");
+                    if (maxTime.expired())
+                        return;
+                }
         }
     }
+    //_cacheFile->flush(false); // intermediate flush
 }
 #endif
 
@@ -1698,15 +1740,26 @@ void tinyNodeCollection::persist()
 
 
 /// saves all unsaved chunks to cache file
-bool ldomDataStorageManager::save()
+bool ldomDataStorageManager::save( CRTimerUtil & maxTime )
 {
     bool res = true;
 #if BUILD_LITE!=1
     if ( !_cache )
         return true;
-    for ( int i=0; i<_chunks.length(); i++ )
-        if ( !_chunks[i]->save() )
+    for ( int i=0; i<_chunks.length(); i++ ) {
+        if ( !_chunks[i]->save() ) {
             res = false;
+            break;
+        }
+        //CRLog::trace("time elapsed: %d", (int)maxTime.elapsed());
+        if (maxTime.expired())
+            return res;
+//        if ( (i&3)==3 &&  maxTime.expired() )
+//            return res;
+    }
+    _cache->flush(false, maxTime); // intermediate flush
+    if ( maxTime.expired() )
+        return res;
     if ( !res )
         return false;
     // save chunk index
@@ -2733,7 +2786,7 @@ bool ldomDocument::saveToStream( LVStreamRef stream, const char *, bool treeLayo
 ldomDocument::~ldomDocument()
 {
 #if BUILD_LITE!=1
-    updateMap();
+    //updateMap();
 #endif
 }
 
@@ -2982,7 +3035,7 @@ int ldomDocument::render( LVRendPageList * pages, LVDocViewCallback * callback, 
         _pagesData.reset();
         pages->serialize( _pagesData );
 
-        saveChanges();
+        //saveChanges();
 
         //persist();
         dumpStatistics();
@@ -7578,105 +7631,189 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
 
 static const char * styles_magic = "CRSTYLES";
 
+#define CHECK_EXPIRATION(s) \
+    if ( maxTime.expired() ) { CRLog::info("timer expired while " s); return CR_TIMEOUT; }
+
+/// saves changes to cache file, limited by time interval (can be called again to continue after TIMEOUT)
+ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
+{
+    if ( !_cacheFile )
+        return CR_DONE;
+
+    if (maxTime.infinite()) {
+        _mapSavingStage = 0; // all stages from the beginning
+        _cacheFile->setAutoSyncSize(0);
+    } else {
+        //CRLog::trace("setting autosync");
+        _cacheFile->setAutoSyncSize(STREAM_AUTO_SYNC_SIZE);
+        //CRLog::trace("setting autosync - done");
+    }
+
+    CRLog::trace("ldomDocument::saveChanges(timeout=%d stage=%d)", maxTime.interval(), _mapSavingStage);
+
+    switch (_mapSavingStage) {
+    default:
+    case 0:
+
+        persist( maxTime );
+        CHECK_EXPIRATION("persisting of node data")
+
+        // fall through
+    case 1:
+        _mapSavingStage = 1;
+        CRLog::trace("ldomDocument::saveChanges() - element storage");
+
+        if ( !_elemStorage.save(maxTime) ) {
+            CRLog::error("Error while saving element data");
+            return CR_ERROR;
+        }
+        CHECK_EXPIRATION("saving element storate")
+        // fall through
+    case 2:
+        _mapSavingStage = 2;
+        CRLog::trace("ldomDocument::saveChanges() - text storage");
+        if ( !_textStorage.save(maxTime) ) {
+            CRLog::error("Error while saving text data");
+            return CR_ERROR;
+        }
+        CHECK_EXPIRATION("saving text storate")
+        // fall through
+    case 3:
+        _mapSavingStage = 3;
+        CRLog::trace("ldomDocument::saveChanges() - rect storage");
+
+        if ( !_rectStorage.save(maxTime) ) {
+            CRLog::error("Error while saving rect data");
+            return CR_ERROR;
+        }
+        CHECK_EXPIRATION("saving rect storate")
+        // fall through
+    case 4:
+        _mapSavingStage = 4;
+        CRLog::trace("ldomDocument::saveChanges() - node style storage");
+
+        if ( !_styleStorage.save(maxTime) ) {
+            CRLog::error("Error while saving node style data");
+            return CR_ERROR;
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving node style storage")
+        // fall through
+    case 5:
+        _mapSavingStage = 5;
+        CRLog::trace("ldomDocument::saveChanges() - misc data");
+        {
+            SerialBuf propsbuf(4096);
+            getProps()->serialize( propsbuf );
+            if ( !_cacheFile->write( CBT_PROP_DATA, propsbuf, COMPRESS_MISC_DATA ) ) {
+                CRLog::error("Error while saving props data");
+                return CR_ERROR;
+            }
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving props data")
+        // fall through
+    case 6:
+        _mapSavingStage = 6;
+        {
+            SerialBuf idbuf(4096);
+            serializeMaps( idbuf );
+            if ( !_cacheFile->write( CBT_MAPS_DATA, idbuf, COMPRESS_MISC_DATA ) ) {
+                CRLog::error("Error while saving Id data");
+                return CR_ERROR;
+            }
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving ID data")
+        // fall through
+    case 7:
+        _mapSavingStage = 7;
+        if ( _pagesData.pos() ) {
+            CRLog::trace("ldomDocument::saveChanges() - page data (%d bytes)", _pagesData.pos());
+            if ( !_cacheFile->write( CBT_PAGE_DATA, _pagesData, COMPRESS_PAGES_DATA  ) ) {
+                CRLog::error("Error while saving pages data");
+                return CR_ERROR;
+            }
+        } else {
+            CRLog::trace("ldomDocument::saveChanges() - no page data");
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving page data")
+        // fall through
+    case 8:
+        _mapSavingStage = 8;
+
+        CRLog::trace("ldomDocument::saveChanges() - node data");
+        if ( !saveNodeData() ) {
+            CRLog::error("Error while node instance data");
+            return CR_ERROR;
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving node data")
+        // fall through
+    case 9:
+        _mapSavingStage = 9;
+        CRLog::trace("ldomDocument::saveChanges() - render info");
+        {
+            SerialBuf hdrbuf(0,true);
+            if ( !_hdr.serialize(hdrbuf) ) {
+                CRLog::error("Header data serialization is failed");
+                return CR_ERROR;
+            } else if ( !_cacheFile->write( CBT_REND_PARAMS, hdrbuf, false ) ) {
+                CRLog::error("Error while writing header data");
+                return CR_ERROR;
+            }
+        }
+        CRLog::info("Saving render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
+                    _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
+
+
+        CRLog::trace("ldomDocument::saveChanges() - TOC");
+        {
+            SerialBuf tocbuf(0,true);
+            if ( !m_toc.serialize(tocbuf) ) {
+                CRLog::error("TOC data serialization is failed");
+                return CR_ERROR;
+            } else if ( !_cacheFile->write( CBT_TOC_DATA, tocbuf, COMPRESS_TOC_DATA ) ) {
+                CRLog::error("Error while writing TOC data");
+                return CR_ERROR;
+            }
+        }
+        _cacheFile->flush(false, maxTime); // intermediate flush
+        CHECK_EXPIRATION("saving TOC data")
+        // fall through
+    case 10:
+        _mapSavingStage = 10;
+
+        if ( !saveStylesData() ) {
+            CRLog::error("Error while writing style data");
+            return CR_ERROR;
+        }
+        CRLog::trace("ldomDocument::saveChanges() - flush");
+        {
+            CRTimerUtil infinite;
+            if ( !_cacheFile->flush(true, infinite) ) {
+                CRLog::error("Error while updating index of cache file");
+                return CR_ERROR;
+            }
+        }
+        // fall through
+    case 11:
+        _mapSavingStage = 11;
+    }
+    CRLog::trace("ldomDocument::saveChanges() - done");
+    return CR_DONE;
+}
+
 /// save changes to cache file, @see loadCacheFileContent()
 bool ldomDocument::saveChanges()
 {
-    bool res = true;
     if ( !_cacheFile )
         return true;
-    CRLog::trace("ldomDocument::saveChanges()");
-    persist();
-    CRLog::trace("ldomDocument::saveChanges() - element storage");
-    if ( !_elemStorage.save() ) {
-        CRLog::error("Error while saving element data");
-        res = false;
-    }
-    CRLog::trace("ldomDocument::saveChanges() - text storage");
-    if ( !_textStorage.save() ) {
-        CRLog::error("Error while saving text data");
-        res = false;
-    }
-    CRLog::trace("ldomDocument::saveChanges() - rect storage");
-    if ( !_rectStorage.save() ) {
-        CRLog::error("Error while saving rect data");
-        res = false;
-    }
-    CRLog::trace("ldomDocument::saveChanges() - node style storage");
-    if ( !_styleStorage.save() ) {
-        CRLog::error("Error while saving node style data");
-        res = false;
-    }
-
-
-    CRLog::trace("ldomDocument::saveChanges() - misc data");
-    SerialBuf propsbuf(4096);
-    getProps()->serialize( propsbuf );
-    if ( !_cacheFile->write( CBT_PROP_DATA, propsbuf, COMPRESS_MISC_DATA ) ) {
-        CRLog::error("Error while saving props data");
-        res = false;
-    }
-
-    SerialBuf idbuf(4096);
-    serializeMaps( idbuf );
-    if ( !_cacheFile->write( CBT_MAPS_DATA, idbuf, COMPRESS_MISC_DATA ) ) {
-        CRLog::error("Error while saving Id data");
-        res = false;
-    }
-
-    if ( _pagesData.pos() ) {
-        CRLog::trace("ldomDocument::saveChanges() - page data (%d bytes)", _pagesData.pos());
-        if ( !_cacheFile->write( CBT_PAGE_DATA, _pagesData, COMPRESS_PAGES_DATA  ) ) {
-            CRLog::error("Error while saving pages data");
-            res = false;
-        }
-    } else {
-        CRLog::trace("ldomDocument::saveChanges() - no page data");
-    }
-
-    CRLog::trace("ldomDocument::saveChanges() - node data");
-    if ( !saveNodeData() ) {
-        CRLog::error("Error while node instance data");
-        res = false;
-    }
-
-    CRLog::trace("ldomDocument::saveChanges() - render info");
-    SerialBuf hdrbuf(0,true);
-    if ( !_hdr.serialize(hdrbuf) ) {
-        CRLog::error("Header data serialization is failed");
-        res = false;
-    } else if ( !_cacheFile->write( CBT_REND_PARAMS, hdrbuf, false ) ) {
-        CRLog::error("Error while writing header data");
-        res = false;
-    }
-    CRLog::info("Saving render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
-                _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
-
-
-    CRLog::trace("ldomDocument::saveChanges() - TOC");
-    SerialBuf tocbuf(0,true);
-    if ( !m_toc.serialize(tocbuf) ) {
-        CRLog::error("TOC data serialization is failed");
-        res = false;
-    } else if ( !_cacheFile->write( CBT_TOC_DATA, tocbuf, COMPRESS_TOC_DATA ) ) {
-        CRLog::error("Error while writing TOC data");
-        res = false;
-    }
-
-    if ( !saveStylesData() ) {
-            CRLog::error("Error while writing style data");
-            res = false;
-    }
-
-    if ( res ) {
-        CRLog::trace("ldomDocument::saveChanges() - flush");
-        if ( !_cacheFile->flush(true) ) {
-            CRLog::error("Error while updating index of cache file");
-            res = false;
-        }
-    }
-
-    CRLog::trace("ldomDocument::saveChanges() - done %s", (res?"successfully":"with error"));
-    return res;
+    CRLog::debug("ldomDocument::saveChanges() - infinite");
+    CRTimerUtil timerNoLimit;
+    ContinuousOperationResult res = saveChanges(timerNoLimit);
+    return res!=CR_ERROR;
 }
 
 bool tinyNodeCollection::saveStylesData()
@@ -7913,48 +8050,52 @@ bool tinyNodeCollection::updateLoadedStyles( bool enabled )
     return res;
 }
 
-bool ldomDocument::swapToCache( lUInt32 reservedSize )
+/// swaps to cache file or saves changes, limited by time interval
+ContinuousOperationResult ldomDocument::swapToCache( CRTimerUtil & maxTime )
 {
     if ( _maperror )
-        return false;
-    if ( _mapped ) {
-        return true;
+        return CR_ERROR;
+    if ( !_mapped ) {
+        if ( !createCacheFile() ) {
+            CRLog::error("ldomDocument::swapToCache: failed: cannot create cache file");
+            _maperror = true;
+            return CR_ERROR;
+        }
     }
-    if ( !createCacheFile() ) {
-        CRLog::error("ldomDocument::swapToCache: failed: cannot create cache file");
-        _maperror = true;
-        return false;
+    _mapped = true;
+    if (!maxTime.infinite()) {
+        CRLog::info("Cache file is created, but document saving is postponed");
+        return CR_TIMEOUT;
     }
-
-    if ( !saveChanges() )
+    ContinuousOperationResult res = saveChanges(maxTime);
+    if ( res==CR_ERROR )
     {
         CRLog::error("Error while saving changes to cache file");
         _maperror = true;
-        return false;
+        return CR_ERROR;
     }
-
-    _mapped = true;
-
     CRLog::info("Successfully saved document to cache file: %dK", _cacheFile->getSize()/1024 );
-    return true;
+    return res;
 }
 
 /// saves recent changes to mapped file
-bool ldomDocument::updateMap()
+ContinuousOperationResult ldomDocument::updateMap(CRTimerUtil & maxTime)
 {
     if ( !_cacheFile || !_mapped )
-        return false;
+        return CR_DONE;
 
-    if ( !saveChanges() )
+    ContinuousOperationResult res = saveChanges(maxTime);
+    if ( res==CR_ERROR )
     {
         CRLog::error("Error while saving changes to cache file");
-        return false;
+        return CR_ERROR;
     }
 
-    CRLog::info("Cache file updated successfully");
-    dumpStatistics();
-
-    return true;
+    if ( res==CR_DONE ) {
+        CRLog::info("Cache file updated successfully");
+        dumpStatistics();
+    }
+    return res;
 }
 
 #endif
@@ -10860,7 +11001,8 @@ void runBasicTinyDomUnitTests()
     }
 
     CRLog::info("* convert to persistent");
-    doc->persist();
+    CRTimerUtil infinite;
+    doc->persist(infinite);
     doc->dumpStatistics();
 
     MYASSERT(el21->getFirstChild()==NULL,"first child - no children");
@@ -10878,7 +11020,8 @@ void runBasicTinyDomUnitTests()
     MYASSERT(el211->getChildCount()==2, "child count, in persistent");
     el211->modify();
     MYASSERT(el211->getChildCount()==2, "child count, in mutable again");
-    doc->persist();
+    CRTimerUtil infinite2;
+    doc->persist(infinite2);
 
     ldomNode * f1 = root->findChildElement(path1);
     MYASSERT(f1->getNodeId()==el_p, "find 1");

@@ -760,7 +760,7 @@ public:
 		// LINUX IMPLEMENTATION
         m_fd = -1;
 
-        int flags = (mode==LVOM_READ) ? O_RDONLY : O_RDWR | O_CREAT | O_SYNC;
+        int flags = (mode==LVOM_READ) ? O_RDONLY : O_RDWR | O_CREAT; // | O_SYNC
         m_fd = open( fn8.c_str(), flags, (mode_t)0666);
         if (m_fd == -1) {
             CRLog::error( "Error opening file %s for %s, errno=%d, msg=%s", fn8.c_str(), (mode==LVOM_READ) ? "reading" : "read/write",  (int)errno, strerror(errno) );
@@ -886,6 +886,7 @@ public:
         lvsize_t sz = fwrite( buf, 1, count, m_file );
         if (nBytesWritten)
             *nBytesWritten = sz;
+        handleAutoSync(sz);
         if (sz < count)
         {
             return LVERR_FAIL;
@@ -979,12 +980,17 @@ public:
     virtual lverror_t Flush( bool sync )
     {
 #ifdef _WIN32
-		if ( m_hFile==INVALID_HANDLE_VALUE || !FlushFileBuffers( m_hFile ) )
+        if ( m_hFile==INVALID_HANDLE_VALUE || !FlushFileBuffers( m_hFile ) )
             return LVERR_FAIL;
 #else
         if ( m_fd==-1 )
             return LVERR_FAIL;
-        fsync( m_fd );
+        if ( sync ) {
+//            CRTimerUtil timer;
+//            CRLog::trace("calling fsync");
+            fsync( m_fd );
+//            CRLog::trace("fsync took %d ms", (int)timer.elapsed());
+        }
 #endif
         return LVERR_OK;
     }
@@ -1103,7 +1109,8 @@ public:
             m_pos += dwBytesWritten;
             if ( m_size < m_pos )
                 m_size = m_pos;
-	        return LVERR_OK;
+            handleAutoSync(dwBytesWritten);
+            return LVERR_OK;
         }
         if (nBytesWritten)
             *nBytesWritten = 0;
@@ -1119,6 +1126,7 @@ public:
             m_pos += res;
             if ( m_size < m_pos )
                 m_size = m_pos;
+            handleAutoSync(res);
             return LVERR_OK;
         }
         if (nBytesWritten)
@@ -4395,9 +4403,10 @@ class LVBlockWriteStream : public LVNamedStream
                 lUInt8 ch2 = ptr[i];
                 if ( pos+i>block_end || ch1!=ch2 ) {
                     buf[offset+i] = ptr[i];
-                    if ( modified_start==(lvpos_t)-1 )
-                        modified_start = modified_end = pos + i;
-                    else {
+                    if ( modified_start==(lvpos_t)-1 ) {
+                        modified_start = pos + i;
+                        modified_end = modified_start + 1;
+                    } else {
                         if ( modified_start>pos+i )
                             modified_start = pos+i;
                         if ( modified_end<pos+i+1)
@@ -4419,6 +4428,13 @@ class LVBlockWriteStream : public LVNamedStream
     // list of blocks
     Block * _firstBlock;
     int _count;
+
+    /// set write bytes limit to call flush(true) automatically after writing of each sz bytes
+    void setAutoSyncSize(lvsize_t sz) {
+        _baseStream->setAutoSyncSize(sz);
+        handleAutoSync(0);
+    }
+
 
     /// fills block with data existing in file
     lverror_t readBlock( Block * block )
@@ -4570,8 +4586,12 @@ class LVBlockWriteStream : public LVNamedStream
 
 
 public:
+    virtual lverror_t Flush( bool sync ) {
+        CRTimerUtil infinite;
+        return Flush(sync, infinite);
+    }
     /// flushes unsaved data from buffers to file, with optional flush of OS buffers
-    virtual lverror_t Flush( bool sync )
+    virtual lverror_t Flush( bool sync, CRTimerUtil & timeout )
     {
 #if TRACE_BLOCK_WRITE_STREAM
         CRLog::trace("flushing unsaved blocks");
@@ -4583,6 +4603,12 @@ public:
                 res = LVERR_FAIL;
             p = p->next;
             delete tmp;
+            if (!sync && timeout.expired()) {
+                //CRLog::trace("LVBlockWriteStream::flush - timeout expired");
+                _firstBlock = p;
+                return LVERR_OK;
+            }
+
         }
         _firstBlock = NULL;
         _baseStream->Flush( sync );
