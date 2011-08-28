@@ -3639,6 +3639,20 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 	}
 }
 
+bool LVDocView::LoadFb2Document( LVStreamRef stream )
+{
+    m_swapDone = false;
+
+    setRenderProps(0, 0); // to allow apply styles and rend method while loading
+
+    LVLock lock(getMutex());
+
+    clearImageCache();
+    m_filesize = stream->GetSize();
+    m_stream = stream;
+    return ParseDocument();
+}
+
 const lChar16 * getDocFormatName(doc_format_t fmt) {
 	switch (fmt) {
 	case doc_format_fb2:

@@ -921,7 +921,7 @@ public:
     bool LoadDocument( const lChar16 * fname );
     /// load document from stream
     bool LoadDocument( LVStreamRef stream );
-
+    bool LoadFb2Document( LVStreamRef stream );
     /// save last file position
     void savePosition();
     /// restore last file position

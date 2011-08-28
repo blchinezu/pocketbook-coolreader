@@ -49,6 +49,7 @@ enum CRPbCommands {
 #define PROP_POCKETBOOK_DICT_AUTO_TRANSLATE "cr3.pocketbook.dict.auto"
 #define PROP_POCKETBOOK_ROTATE_MODE "cr3.pocketbook.rotate_mode"
 #define PROP_POCKETBOOK_ROTATE_ANGLE "cr3.pocketbook.rotate_angle"
+#define PROP_POCKETBOOK_GRAYBUFFER_BPP "cr3.pocketbook.buffer.bpp"
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
@@ -64,16 +65,6 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
 const char* TR(const char *label);
-
-#if GRAY_BACKBUFFER_BITS == 2
-#define PB_BUFFER_GRAYS IMAGE_GRAY2
-#elif GRAY_BACKBUFFER_BITS == 4
-#define PB_BUFFER_GRAYS IMAGE_GRAY4
-#elif GRAY_BACKBUFFER_BITS == 8
-#define PB_BUFFER_GRAYS IMAGE_GRAY8
-#else
-#error "Unsupported GRAY_BACKBUFFER_BITS"
-#endif
 
 #endif //CR3_POCKETBOOK_H
 

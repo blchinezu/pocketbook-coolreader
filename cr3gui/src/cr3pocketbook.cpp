@@ -167,9 +167,8 @@ private:
     bool _forceSoft;
     bool _update_gray;
     CRGUIWindowBase *m_mainWindow;
-#if GRAY_BACKBUFFER_BITS == 4
+    int m_bpp;
     lUInt8 *_buf4bpp;
-#endif
 public:
     static CRPocketBookScreen * instance;
 protected:
@@ -179,21 +178,23 @@ public:
     virtual ~CRPocketBookScreen()
     {
         instance = NULL;
-#if GRAY_BACKBUFFER_BITS == 4
-        delete [] _buf4bpp;
-#endif
+        if (m_bpp == 4)
+            delete [] _buf4bpp;
     }
 
-    CRPocketBookScreen( int width, int height )
-        :  CRGUIScreenBase( width, height, true ), _forceSoft(false), _update_gray(false)
+    CRPocketBookScreen( int width, int height, int bpp)
+        :  CRGUIScreenBase( width, height, true ), _forceSoft(false), _update_gray(false), m_bpp(bpp)
     {
         instance = this;
-#if GRAY_BACKBUFFER_BITS == 4
-        if (width > height)
-            _buf4bpp = new lUInt8[ (width + 1)/2 * width ];
-        else
-            _buf4bpp = new lUInt8[ (height + 1)/2 * height ];
-#endif
+        if (m_bpp == 4) {
+            if (width > height)
+                _buf4bpp = new lUInt8[ (width + 1)/2 * width ];
+            else
+                _buf4bpp = new lUInt8[ (height + 1)/2 * height ];
+        }
+        _canvas = LVRef<LVDrawBuf>( createCanvas( width, height ) );
+        if ( !_front.isNull() )
+            _front = LVRef<LVDrawBuf>( createCanvas( width, height ) );
     }
 
     void MakeSnapShot()
@@ -209,6 +210,12 @@ public:
         return ret;
     }
     virtual void flush( bool full );
+    /// creates compatible canvas of specified size
+    virtual LVDrawBuf * createCanvas( int dx, int dy )
+    {
+        LVDrawBuf * buf = new LVGrayDrawBuf( dx, dy, m_bpp );
+        return buf;
+    }
 };
 
 CRPocketBookScreen * CRPocketBookScreen::instance = NULL;
@@ -298,10 +305,10 @@ public:
         return _pbTable.get(lString8(name));
     }
 
-    CRPocketBookWindowManager(int dx, int dy)
+    CRPocketBookWindowManager(int dx, int dy, int bpp)
         : CRGUIWindowManager(NULL), _pbTable(32)
     {
-        CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy);
+        CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy, bpp);
         _orientation = pocketbook_orientations[GetOrientation()];
         _screen = s;
         _ownScreen = true;
@@ -428,26 +435,25 @@ int main_handler(int type, int par1, int par2);
 
 void CRPocketBookScreen::draw(int x, int y, int w, int h)
 {
-#if (GRAY_BACKBUFFER_BITS == 4)
-    lUInt8 * line = _front->GetScanLine(y);
-    lUInt8 *dest = _buf4bpp;
-    int limit = x + w -1;
-    int scanline = (w + 1)/2;
+    if (m_bpp == 4) {
+        lUInt8 * line = _front->GetScanLine(y);
+        lUInt8 *dest = _buf4bpp;
+        int limit = x + w -1;
+        int scanline = (w + 1)/2;
 
-    for (int yy = 0; yy < h; yy++) {
-        int sx = x;
-        for (int xx = 0; xx < scanline; xx++) {
-            dest[xx] = line[sx++] & 0xF0;
-            if (sx < limit)
-                dest[xx] |= (line[sx++] >> 4);
+        for (int yy = 0; yy < h; yy++) {
+            int sx = x;
+            for (int xx = 0; xx < scanline; xx++) {
+                dest[xx] = line[sx++] & 0xF0;
+                if (sx < limit)
+                    dest[xx] |= (line[sx++] >> 4);
+            }
+            line += _front->GetRowSize();
+            dest += scanline;
         }
-        line += _front->GetRowSize();
-        dest += scanline;
-    }
-    Stretch(_buf4bpp, IMAGE_GRAY4, w, h, scanline, x, y, w, h, 0);
-#else
-    Stretch(_front->GetScanLine(y), PB_BUFFER_GRAYS, w, h, _front->GetRowSize(), x, y, w, h, 0);
-#endif
+        Stretch(_buf4bpp, IMAGE_GRAY4, w, h, scanline, x, y, w, h, 0);
+    } else
+        Stretch(_front->GetScanLine(y), m_bpp, w, h, _front->GetRowSize(), x, y, w, h, 0);
 }
 
 void CRPocketBookScreen::flush( bool full )
@@ -467,8 +473,33 @@ void CRPocketBookScreen::flush( bool full )
                 lUInt8 * line1 = _canvas->GetScanLine( y );
                 lUInt8 * line2 = _front->GetScanLine( y );
                 if ( memcmp( line1, line2, sz ) ) {
-                    for (int i = 0; !_update_gray && i < sz; i++) {
-                        _update_gray = (line1[i] != line2[i] && !(line1[i] == 0 || line1[i] == 0xFF));
+                    // check if gray pixels changed
+                    if (m_bpp == 2) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i]) {
+                                for (int j = 0; !_update_gray && j < 3; j++) {
+                                    lUInt8 color1 = (line1[i] >> (j << 1)) & 0x3;
+                                    lUInt8 color2 = (line1[i] >> (j << 1)) & 0x3;
+                                    _update_gray = color1 != color2 && (color1 == 1 || color1 == 2);
+                                }
+                                if (_update_gray)
+                                    CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                            }
+                        }
+                    } else if (m_bpp == 4) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i])
+                                _update_gray = line1[i] != 0 && line1[i] != 0xF0;
+                            if (_update_gray)
+                                CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                        }
+                    } else if (m_bpp == 8) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i])
+                                _update_gray = line1[i] != 0 && (line1[i] > 64 && line1[i] < 192);
+                            if (_update_gray)
+                                CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                        }
                     }
                     // line content is different
                     lineRect.top = y;
@@ -487,14 +518,12 @@ void CRPocketBookScreen::flush( bool full )
         _updateRect.top = rc.top;
         _updateRect.bottom = rc.bottom;
     }
-    //if ( !full && !checkFullUpdateCounter() )
-    //    full = false;
-    if ( full && !_front.isNull() ) {
-        // copy full screen to front buffer
-        _canvas->DrawTo( _front.get(), 0, 0, 0, NULL );
-    }
-    if ( full )
+    if ( full) {
         _updateRect = getRect();
+        // copy full screen to front buffer
+        if (!_front.isNull())
+            _canvas->DrawTo( _front.get(), 0, 0, 0, NULL );
+    }
     update( _updateRect, full );
     _updateRect.clear();
 }
@@ -522,7 +551,7 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
         draw(0, 0, _front->GetWidth(), _front->GetHeight());
         FullUpdate();
     } else {
-        draw(0, rc.top, _front->GetWidth(), rc.height());
+        draw(rc.left, rc.top, rc.width(), rc.height());
         if (!isDocWnd && rc.height() < 300) {
             if (_update_gray) {
                 PartialUpdate(rc.left, rc.top, rc.right, rc.bottom);
@@ -1627,12 +1656,17 @@ void CRPbDictionaryView::drawTitleBar()
 
 void CRPbDictionaryView::draw()
 {
+    int antialiasingMode = fontMan->GetAntialiasMode();
+    if (antialiasingMode == 1)
+        fontMan->SetAntialiasMode(0);
     if (isArticleListActive()) {
         _dictMenu->draw();
     } else {
         CRViewDialog::draw();
         _dirty = false;
     }
+    if (antialiasingMode == 1)
+        fontMan->SetAntialiasMode(1);
 }
 
 void CRPbDictionaryView::selectDictionary()
@@ -1897,15 +1931,14 @@ void CRPbDictionaryView::translate(const lString16 &w)
     }
     setDirty();
     _selectedIndex = PB_DICT_DEACTIVATE;
-    _stream = LVCreateStringStream( CRViewDialog::makeFb2Xml( body ) );
-    getDocView()->LoadDocument(_stream);
+    setTranslation(CRViewDialog::makeFb2Xml( body ));
     CRLog::trace("CRPbDictionaryView::translate() end");
 }
 
 void CRPbDictionaryView::setTranslation(lString8 translation)
 {
     _stream = LVCreateStringStream( translation );
-    getDocView()->LoadDocument(_stream);
+    getDocView()->LoadFb2Document(_stream);
 }
 
 void CRPbDictionaryView::reconfigure( int flags )
@@ -2458,8 +2491,32 @@ int InitDoc(const char *exename, char *fileName)
         return 0;
 
     {
+        CRLog::trace("choosing init file...");
+        static const lChar16 * dirs[] = {
+            L""CONFIGPATH"/cr3/",
+            L""USERDATA2"/share/cr3/",
+            L""USERDATA"/share/cr3/",
+            L""CONFIGPATH"/cr3/",
+            NULL
+        };
+        lString16 ini;
+        CRPropRef props = LVCreatePropsContainer();
+        int bpp = 2;
+        for (int i = 0; dirs[i]; i++ ) {
+            ini = lString16(dirs[i]) + ini_fname;
+            LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
+            if ( !stream.isNull() ) {
+                if ( props->loadFromStream( stream.get() ) ) {
+                    bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 8);
+                    if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
+                        bpp = 2;
+                    break;
+                }
+            }
+        }
+        CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
-        CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight());
+        CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight(), bpp);
 
         const char * keymap_locations [] = {
             CONFIGPATH"/cr3/keymaps",
@@ -2495,26 +2552,10 @@ int InitDoc(const char *exename, char *fileName)
             if ( !main_win->loadCSS(  lString16( L""USERDATA"/share/cr3/" ) + lString16(css_file_name) ) )
                 main_win->loadCSS( lString16( L""USERDATA2"/share/cr3/" ) + lString16(css_file_name) );
         main_win->setBookmarkDir(lString16(L""FLASHDIR"/cr3_notes/"));
-        CRLog::trace("choosing init file...");
-        static const lChar16 * dirs[] = {
-            L""CONFIGPATH"/cr3/",
-            L""USERDATA2"/share/cr3/",
-            L""USERDATA"/share/cr3/",
-            L""CONFIGPATH"/cr3/",
-            NULL
-        };
         CRLog::debug("Loading settings...");
-        lString16 ini;
-        for (int i = 0; dirs[i]; i++ ) {
-            ini = lString16(dirs[i]) + ini_fname;
-            if ( main_win->loadSettings( ini ) ) {
-                break;
-            }
-        }
-        CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
+        main_win->loadSettings( ini );
 
         int orient;
-
         if (GetGlobalOrientation() == -1 || pbGlobals->getKeepOrientation() == 0 || pbGlobals->getKeepOrientation() == 2) {
             orient = GetOrientation();
         } else {
