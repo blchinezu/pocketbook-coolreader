@@ -107,6 +107,13 @@ typedef enum {
 } xpath_step_t;
 xpath_step_t ParseXPathStep( const lChar8 * &path, lString8 & name, int & index );
 
+/// return value for continuous operations
+typedef enum {
+    CR_DONE,    ///< operation is finished successfully
+    CR_TIMEOUT, ///< operation is incomplete - interrupted by timeout
+    CR_ERROR   ///< error while executing operation
+} ContinuousOperationResult;
+
 /// type of image scaling
 typedef enum {
     IMG_NO_SCALE, /// scaling is disabled
@@ -212,6 +219,23 @@ struct ldomNodeStyleInfo
     lUInt16 _styleIndex;
 };
 
+class ldomBlobItem;
+#define BLOB_NAME_PREFIX L"@blob#"
+class ldomBlobCache
+{
+    CacheFile * _cacheFile;
+    LVPtrVector<ldomBlobItem> _list;
+    bool _changed;
+    bool loadIndex();
+    bool saveIndex();
+public:
+    ldomBlobCache();
+    void setCacheFile( CacheFile * cacheFile );
+    ContinuousOperationResult saveToCache(CRTimerUtil & timeout);
+    bool addBlob( const lUInt8 * data, int size, lString16 name );
+    LVStreamRef getBlob( lString16 name );
+};
+
 class ldomDataStorageManager
 {
     friend class ldomTextStorageChunk;
@@ -226,7 +250,6 @@ protected:
     int _chunkSize;
     char _type;       /// type, to show in log
     ldomTextStorageChunk * getChunk( lUInt32 address );
-    /// checks buffer sizes, compacts most unused chunks
 public:
     /// type
     lUInt16 cacheType();
@@ -340,13 +363,6 @@ public:
 // forward declaration
 class ldomNode;
 
-/// return value for continuous operations
-typedef enum {
-    CR_DONE,    ///< operation is finished successfully
-    CR_TIMEOUT, ///< operation is incomplete - interrupted by timeout
-    CR_ERROR   ///< error while executing operation
-} ContinuousOperationResult;
-
 #define TNC_PART_COUNT 1024
 #define TNC_PART_SHIFT 10
 #define TNC_PART_INDEX_SHIFT (TNC_PART_SHIFT+4)
@@ -399,6 +415,9 @@ protected:
 
     LVHashTable<lUInt16, lUInt16> _fontMap; // style index to font index
 
+    /// checks buffer sizes, compacts most unused chunks
+    ldomBlobCache _blobCache;
+
     /// uniquie id of file format parsing option (usually 0, but 1 for preformatted text files)
     int getPersistenceFlags();
 
@@ -429,8 +448,12 @@ protected:
 
     tinyNodeCollection( tinyNodeCollection & v );
 
-
 public:
+
+    /// add named BLOB data to document
+    bool addBlob(lString16 name, const lUInt8 * data, int size) { return _blobCache.addBlob(data, size, name); }
+    /// get BLOB by name
+    LVStreamRef getBlob(lString16 name) { return _blobCache.getBlob(name); }
 
     /// called on document loading end
     bool validateDocument();
@@ -2098,6 +2121,8 @@ public:
     ldomElementWriter * pop( ldomElementWriter * obj, lUInt16 id );
     /// called on text
     virtual void OnText( const lChar16 * text, int len, lUInt32 flags );
+    /// add named BLOB data to document
+    virtual bool OnBlob(lString16 name, const lUInt8 * data, int size) { return _document->addBlob(name, data, size); }
     /// constructor
     ldomDocumentWriter(ldomDocument * document, bool headerOnly=false );
     /// destructor
@@ -2214,6 +2239,8 @@ public:
         if ( insideTag )
             parent->OnText( text, len, flags );
     }
+    /// add named BLOB data to document
+    virtual bool OnBlob(lString16 name, const lUInt8 * data, int size) { }
     /// constructor
     ldomDocumentFragmentWriter( LVXMLParserCallback * parentWriter, lString16 baseTagName, lString16 baseTagReplacementName, lString16 fragmentFilePath )
     : parent(parentWriter), baseTag(baseTagName), baseTagReplacement(baseTagReplacementName),
