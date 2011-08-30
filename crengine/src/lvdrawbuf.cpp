@@ -803,6 +803,7 @@ void LVGrayDrawBuf::InvertRect(int x0, int y0, int x1, int y1)
 			}
 			line += _rowsize;
 		}
+#ifdef INVERT_PRSERVE_GRAYS
         } else if (_bpp == 4) {
             lUInt8 * line = GetScanLine(y0);
             for (int y=y0; y<y1; y++) {
@@ -822,6 +823,7 @@ void LVGrayDrawBuf::InvertRect(int x0, int y0, int x1, int y1)
                 }
                 line += _rowsize;
             }
+#endif
         } else { // 3
             lUInt8 * line = GetScanLine(y0);
             for (int y=y0; y<y1; y++) {
