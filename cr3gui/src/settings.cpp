@@ -506,7 +506,27 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
-	CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
+    item_def_t font_gammas[] = {
+        {"0.3", "0.3"},
+        {"0.4", "0.4"},
+        {"0.5", "0.5"},
+        {"0.6", "0.6"},
+        {"0.7", "0.7"},
+        {"0.8", "0.8"},
+        {"0.9", "0.9"},
+        {"1.0", "1.0"},
+        {"1.1", "1.1"},
+        {"1.2", "1.2"},
+        {"1.3", "1.3"},
+        {"1.4", "1.4"},
+        {"1.5", "1.5"},
+        {"1.7", "1.7"},
+        {"1.8", "1.8"},
+        {"1.9", "1.9"},
+        {NULL, NULL}
+    };
+
+    CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
 
         setSkinName(lString16(L"#settings"));
         //setSkinName(lString16(L"#main"));
@@ -750,6 +770,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         scalingMenu->setSkinName(lString16(L"#settings"));
         scalingMenu->reconfigure( 0 );
         mainMenu->addItem( scalingMenu );
+
+        CRMenu * fontGammaMenu = new CRMenu(_wm, mainMenu, mm_fontGamma,
+                _("Font gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
+        addMenuItems( fontGammaMenu, font_gammas );
+        mainMenu->addItem( fontGammaMenu );
+
         reconfigure(0);
 }
 
