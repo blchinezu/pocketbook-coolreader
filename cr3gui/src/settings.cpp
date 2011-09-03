@@ -684,7 +684,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         //====== Margins ==============
         CRMenu * marginsMenu = new CRMenu(_wm, mainMenu, mm_PageMargins,
                 _("Page margins"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props );
+                                LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
         CRMenu * marginsMenuTop = new CRMenu(_wm, marginsMenu, mm_PageMarginTop,
                 _("Top margin"),
                  LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_PAGE_MARGIN_TOP );
@@ -724,7 +724,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
         //====== Image scaling ==============
         CRMenu * scalingMenu = new CRMenu(_wm, mainMenu, mm_ImageScaling,
-                _("Image scaling"), LVImageSourceRef(), LVFontRef(), valueFont, props );
+                _("Image scaling"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
         CRMenu * blockImagesZoominModeMenu = new CRMenu(_wm, scalingMenu, mm_blockImagesZoominMode,
                 _("Block image scaling mode"),
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_IMG_SCALING_ZOOMIN_BLOCK_MODE );

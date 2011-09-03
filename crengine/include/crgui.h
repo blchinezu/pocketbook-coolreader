@@ -1072,7 +1072,7 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual int getDefaultSelectionIndex() 
         {
 #ifdef CR_POCKETBOOK
-			if (getProps().isNull())
+                        if (getProps().isNull() && getItems().length() > 0)
 				return 0;
 #endif
 			return -1; 
