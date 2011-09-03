@@ -66,5 +66,8 @@ enum CRPbCommands {
 
 const char* TR(const char *label);
 
+#ifndef BACKGROUND_CACHE_FILE_CREATION
+#define BACKGROUND_CACHE_FILE_CREATION
+#endif
 #endif //CR3_POCKETBOOK_H
 

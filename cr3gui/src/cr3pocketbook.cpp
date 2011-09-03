@@ -53,6 +53,7 @@ static const int angles_measured[] = { 19, 24, 29, 33, 38, 43, 47, 50, 52, 55, 5
 static void translate_timer();
 static void rotate_timer();
 static void paused_rotate_timer();
+static void cache_timer();
 
 class CRPocketBookGlobals
 {
@@ -262,6 +263,8 @@ static const struct {
 
 class CRPocketBookWindowManager : public CRGUIWindowManager
 {
+private:
+    bool m_incommand;
 protected:
     LVHashTable<lString8, int> _pbTable;
 
@@ -306,7 +309,7 @@ public:
     }
 
     CRPocketBookWindowManager(int dx, int dy, int bpp)
-        : CRGUIWindowManager(NULL), _pbTable(32)
+        : CRGUIWindowManager(NULL), _pbTable(32), m_incommand(false)
     {
         CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy, bpp);
         _orientation = pocketbook_orientations[GetOrientation()];
@@ -338,10 +341,11 @@ public:
 
     bool doCommand( int cmd, int params )
     {
-        CRLog::debug("doCommand(%d, %d)", cmd, params);
+        m_incommand = true;
         if ( !onCommand( cmd, params ) )
             return false;
         update( false );
+        m_incommand = false;
         return true;
     }
 
@@ -393,10 +397,36 @@ public:
         }
         return CRGUIWindowManager::onKeyPressed(key, flags);
     }
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+    void scheduleCacheSwap()
+    {
+        SetHardTimer(const_cast<char *>("UpdateCacheTimer"), cache_timer, 1500);
+    }
+    void cancelCacheSwap()
+    {
+        ClearTimer(cache_timer);
+    }
+    void updateCache();
+#endif
 };
 
 CRPocketBookWindowManager * CRPocketBookWindowManager::instance = NULL;
 V3DocViewWin * main_win = NULL;
+
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+void CRPocketBookWindowManager::updateCache()
+{
+    CRTimerUtil timeout(500);
+    if (m_incommand || !_events.empty() || CR_TIMEOUT == main_win->getDocView()->updateCache(timeout))
+        scheduleCacheSwap();
+}
+#endif
+
+static void cache_timer()
+{
+    CRLog::trace("cache_timer()");
+    CRPocketBookWindowManager::instance->updateCache();
+}
 
 void executeCommand(int commandId, int commandParam)
 {
@@ -1203,7 +1233,16 @@ public:
         case PB_CMD_VOLUME:
             SetVolume(GetVolume() + params);
             return true;
+        case MCMD_SWITCH_TO_RECENT_BOOK:
+        case DCMD_SAVE_TO_CACHE:
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+            CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
+            break;
         case MCMD_OPEN_RECENT_BOOK:
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+            CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
             switchToRecentBook(params);
             break;
         case PB_CMD_PAGEUP_REPEAT:
@@ -1496,9 +1535,19 @@ public:
             }
         }
     }
+    void OnFormatStart()
+    {
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+        CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
+        V3DocViewWin::OnFormatStart();
+    }
     void OnFormatEnd()
     {
         V3DocViewWin::OnFormatEnd();
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+        CRPocketBookWindowManager::instance->scheduleCacheSwap();
+#endif
         if (_restore_globOrientation) {
             SetGlobalOrientation(-1);
             _restore_globOrientation = false;

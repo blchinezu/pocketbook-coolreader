@@ -428,8 +428,7 @@ void V3DocViewWin::OnFormatEnd()
     // To implement background cache file saving, schedule on Idle state following task:
     // in each idle cycle call _docview->updateCache(timeOut) while it returns CR_TIMEOUT
 #ifndef BACKGROUND_CACHE_FILE_CREATION
-    CRTimerUtil infinite;
-    _docview->updateCache(infinite);
+    _docview->updateCache();
 #endif
 }
 
