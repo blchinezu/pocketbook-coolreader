@@ -221,6 +221,7 @@ struct ldomNodeStyleInfo
 
 class ldomBlobItem;
 #define BLOB_NAME_PREFIX L"@blob#"
+#define MOBI_IMAGE_NAME_PREFIX L"mobi_image_"
 class ldomBlobCache
 {
     CacheFile * _cacheFile;
@@ -2123,6 +2124,9 @@ public:
     virtual void OnText( const lChar16 * text, int len, lUInt32 flags );
     /// add named BLOB data to document
     virtual bool OnBlob(lString16 name, const lUInt8 * data, int size) { return _document->addBlob(name, data, size); }
+    /// set document property
+    virtual void OnDocProperty(const char * name, lString8 value) { _document->getProps()->setString(name, value); }
+
     /// constructor
     ldomDocumentWriter(ldomDocument * document, bool headerOnly=false );
     /// destructor
@@ -2240,7 +2244,9 @@ public:
             parent->OnText( text, len, flags );
     }
     /// add named BLOB data to document
-    virtual bool OnBlob(lString16 name, const lUInt8 * data, int size) { }
+    virtual bool OnBlob(lString16 name, const lUInt8 * data, int size) { return parent->OnBlob(name, data, size); }
+    /// set document property
+    virtual void OnDocProperty(const char * name, lString8 value) { parent->OnDocProperty(name, value); }
     /// constructor
     ldomDocumentFragmentWriter( LVXMLParserCallback * parentWriter, lString16 baseTagName, lString16 baseTagReplacementName, lString16 fragmentFilePath )
     : parent(parentWriter), baseTag(baseTagName), baseTagReplacement(baseTagReplacementName),

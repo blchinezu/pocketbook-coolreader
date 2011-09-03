@@ -4827,6 +4827,8 @@ int LVDocView::doCommand(LVDocCmd cmd, int param) {
     case DCMD_SELECT_FIRST_SENTENCE:
     case DCMD_SELECT_NEXT_SENTENCE:
     case DCMD_SELECT_PREV_SENTENCE:
+    case DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS: // move selection start by words
+    case DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS: // move selection end by words
         return onSelectionCommand( cmd, param );
 
     /*
@@ -4879,28 +4881,67 @@ int LVDocView::onSelectionCommand( int cmd, int param )
         clearSelection();
         return 0;
     }
-    // selection start doesn't match sentence bounds
-    if ( !currSel.getStart().isSentenceStart() ) {
-        currSel.getStart().thisSentenceStart();
-        moved = true;
-    }
-    // update sentence end
-    if ( !moved )
-        switch ( cmd ) {
-        case DCMD_SELECT_NEXT_SENTENCE:
-            if ( !currSel.getStart().nextSentenceStart() )
-                return 0;
-            break;
-        case DCMD_SELECT_PREV_SENTENCE:
-            if ( !currSel.getStart().prevSentenceStart() )
-                return 0;
-            break;
-        case DCMD_SELECT_FIRST_SENTENCE:
-        default: // unknown action
-            break;
+    if (cmd==DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS || cmd==DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS) {
+        int dir = param>0 ? 1 : -1;
+        int distance = param>0 ? param : -param;
+        CRLog::debug("Changing selection by words: bound=%s dir=%d distance=%d", (cmd==DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS?"left":"right"), dir, distance);
+        bool res;
+        if (cmd==DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS) {
+            // DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS
+            for (int i=0; i<distance; i++) {
+                if (dir>0) {
+                    res = currSel.getStart().nextVisibleWordStart();
+                    CRLog::debug("nextVisibleWordStart returned %s", res?"true":"false");
+                } else {
+                    res = currSel.getStart().prevVisibleWordStart();
+                    CRLog::debug("prevVisibleWordStart returned %s", res?"true":"false");
+                }
+            }
+            if (currSel.isNull()) {
+                currSel.setEnd(currSel.getStart());
+                currSel.getEnd().nextVisibleWordEnd();
+            }
+        } else {
+            // DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS
+            for (int i=0; i<distance; i++) {
+                if (dir>0) {
+                    res = currSel.getEnd().nextVisibleWordEnd();
+                    CRLog::debug("nextVisibleWordEnd returned %s", res?"true":"false");
+                } else {
+                    res = currSel.getEnd().prevVisibleWordEnd();
+                    CRLog::debug("prevVisibleWordEnd returned %s", res?"true":"false");
+                }
+            }
+            if (currSel.isNull()) {
+                currSel.setStart(currSel.getEnd());
+                currSel.getStart().prevVisibleWordStart();
+            }
         }
-    currSel.setEnd(currSel.getStart());
-    currSel.getEnd().thisSentenceEnd();
+        moved = true;
+    } else {
+        // selection start doesn't match sentence bounds
+        if ( !currSel.getStart().isSentenceStart() ) {
+            currSel.getStart().thisSentenceStart();
+            moved = true;
+        }
+        // update sentence end
+        if ( !moved )
+            switch ( cmd ) {
+            case DCMD_SELECT_NEXT_SENTENCE:
+                if ( !currSel.getStart().nextSentenceStart() )
+                    return 0;
+                break;
+            case DCMD_SELECT_PREV_SENTENCE:
+                if ( !currSel.getStart().prevSentenceStart() )
+                    return 0;
+                break;
+            case DCMD_SELECT_FIRST_SENTENCE:
+            default: // unknown action
+                break;
+        }
+        currSel.setEnd(currSel.getStart());
+        currSel.getEnd().thisSentenceEnd();
+    }
     currSel.setFlags(1);
     selectRange(currSel);
     goToBookmark(currSel.getStart());

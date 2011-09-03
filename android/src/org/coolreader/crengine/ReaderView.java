@@ -13,9 +13,9 @@ import java.util.concurrent.Callable;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.Engine.HyphDict;
-import org.coolreader.crengine.EinkScreen;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -58,6 +58,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     public static final String PROP_FONT_ANTIALIASING       ="font.antialiasing.mode";
     public static final String PROP_FONT_FACE               ="font.face.default";
     public static final String PROP_FONT_GAMMA              ="font.gamma";
+    public static final String PROP_FONT_GAMMA_DAY          ="font.gamma.day";
+    public static final String PROP_FONT_GAMMA_NIGHT        ="font.gamma.night";
     public static final String PROP_FONT_WEIGHT_EMBOLDEN    ="font.face.weight.embolden";
     public static final String PROP_TXT_OPTION_PREFORMATTED ="crengine.file.txt.preformatted";
     public static final String PROP_LOG_FILENAME            ="crengine.log.filename";
@@ -203,8 +205,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     	DCMD_SET_INTERNAL_STYLES(130),
     	
         DCMD_SELECT_FIRST_SENTENCE(131), // select first sentence on page
-        DCMD_SELECT_NEXT_SENTENCE(132), // nove selection to next sentence
-        DCMD_SELECT_PREV_SENTENCE(133), // nove selection to next sentence
+        DCMD_SELECT_NEXT_SENTENCE(132), // move selection to next sentence
+        DCMD_SELECT_PREV_SENTENCE(133), // move selection to next sentence
+        DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS(134), // move selection start by words 
+        DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS(135), // move selection end by words 
     	
     	// definitions from android/jni/readerview.h
     	DCMD_OPEN_RECENT_BOOK(2000),
@@ -232,6 +236,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     	DCMD_ABOUT(2019),
     	DCMD_BOOK_INFO(2020),
     	DCMD_TTS_PLAY(2021),
+    	DCMD_TOGGLE_TITLEBAR(2022),
+    	DCMD_SHOW_POSITION_INFO_POPUP(2023),
     	;
     	
     	private final int nativeId;
@@ -872,6 +878,23 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		dlg.show();
 	}
 	
+	public void sendQuotationInEmail( Selection sel ) {
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("plain/text");
+        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ });
+        StringBuilder buf = new StringBuilder();
+        if (mBookInfo.getFileInfo().authors!=null)
+        	buf.append(mBookInfo.getFileInfo().authors + "\n");
+        if (mBookInfo.getFileInfo().title!=null)
+        	buf.append(mBookInfo.getFileInfo().title + "\n");
+        if (sel.chapter!=null && sel.chapter.length()>0)
+        	buf.append(sel.chapter + "\n");
+    	buf.append(sel.text + "\n");
+    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mBookInfo.getFileInfo().authors + " " + mBookInfo.getFileInfo().title);
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, buf.toString());
+		mActivity.startActivity(Intent.createChooser(emailIntent, "Send quotation..."));	
+	}
+	
 	public void copyToClipboard( String text ) {
 		if ( text!=null && text.length()>0 ) {
 			ClipboardManager cm = mActivity.getClipboardmanager();
@@ -923,10 +946,48 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 				}
 			}
 			public void done() {
-				if ( link==null )
+				if ( link==null ) {
 					onTapZone( zone, true );
-				else if (!link.startsWith("#")) {
-					mActivity.showToast("External links are not yet supported");
+				} else if (!link.startsWith("#")) {
+					log.d("external link " + link);
+					if (link.startsWith("http://")||link.startsWith("https://")) {
+						mActivity.openURL(link);
+					} else {
+						// absolute path to file
+						FileInfo fi = new FileInfo(link);
+						if (fi.exists()) {
+							mActivity.loadDocument(fi);
+							return;
+						}
+						File baseDir = null;
+						if (mBookInfo!=null && mBookInfo.getFileInfo()!=null) {
+							if (!mBookInfo.getFileInfo().isArchive) {
+								// relatively to base directory
+								File f = new File(mBookInfo.getFileInfo().getBasePath());
+								baseDir = f.getParentFile();
+								String url = link;
+								while (baseDir!=null && url!=null && url.startsWith("../")) {
+									baseDir = baseDir.getParentFile();
+									url = url.substring(3);
+								}
+								if (baseDir!=null && url!=null && url.length()>0) {
+									fi = new FileInfo(baseDir.getAbsolutePath()+"/"+url);
+									if (fi.exists()) {
+										mActivity.loadDocument(fi);
+										return;
+									}
+								}
+							} else {
+								// from archive
+								fi = new FileInfo(mBookInfo.getFileInfo().getArchiveName() + FileInfo.ARC_SEPARATOR + link);
+								if (fi.exists()) {
+									mActivity.loadDocument(fi);
+									return;
+								}
+							}
+						}
+						mActivity.showToast("Cannot open link " + link);
+					}
 				}
 			}
 		});
@@ -1360,6 +1421,52 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		mActivity.setFullscreen(newBool);
 	}
 	
+	public void showReadingPositionPopup()
+	{
+		if (mBookInfo==null)
+			return;
+		final StringBuilder buf = new StringBuilder();
+//		if (mActivity.isFullscreen()) {
+		SimpleDateFormat fmt = new SimpleDateFormat("HH:mm");
+		final String time = fmt.format(new Date());
+		buf.append(time + " ");
+		if (mBatteryState>=0)
+ 			buf.append(" [" + mBatteryState + "%]\n");
+//		}
+		execute( new Task() {
+			Bookmark bm;
+			@Override
+			public void work() {
+				bm = getCurrentPageBookmarkInternal();
+				if ( bm!=null ) {
+					PositionProperties prop = getPositionPropsInternal(bm.getStartPos());
+					if ( prop.pageMode!=0 ) {
+						buf.append("" + (prop.pageNumber+1) + " / " + prop.pageCount + "   ");
+					}
+					int percent = (int)(10000 * (long)prop.y / prop.fullHeight);
+					buf.append("" + (percent/100) + "." + (percent%100) + "%" );
+					String chapter = bm.getTitleText();
+					if (chapter!=null && chapter.length()>100)
+						chapter = chapter.substring(0, 100) + "...";
+					if (chapter!=null)
+			 			buf.append("\n" + chapter);
+				}
+			}
+			public void done() {
+				mActivity.showToast(buf.toString());
+			}
+		});
+	}
+
+	public void toggleTitlebar()
+	{
+		boolean newBool = "1".equals(getSetting(PROP_STATUS_LINE));
+		String newValue = !newBool ? "1" : "0";
+		Properties settings = new Properties();
+		settings.setProperty(PROP_STATUS_LINE, newValue);
+		setSettings(settings, null, true);
+	}
+	
 	public void toggleDocumentStyles()
 	{
 		if ( mOpened && mBookInfo!=null ) {
@@ -1482,6 +1589,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			break;
 		case DCMD_TOGGLE_FULLSCREEN:
 			toggleFullscreen();
+			break;
+		case DCMD_TOGGLE_TITLEBAR:
+			toggleTitlebar();
+			break;
+		case DCMD_SHOW_POSITION_INFO_POPUP:
+			showReadingPositionPopup();
 			break;
 		case DCMD_TOGGLE_SELECTION_MODE:
 			toggleSelectionMode();
@@ -3944,13 +4057,13 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     	public void onFail();
     }
     
-    public void moveSelection( final ReaderCommand command, final MoveSelectionCallback callback ) {
+    public void moveSelection( final ReaderCommand command, final int param, final MoveSelectionCallback callback ) {
     	post( new Task() {
     		private boolean res;
     		private Selection selection = new Selection();
 			@Override
 			public void work() throws Exception {
-				res = moveSelectionInternal(selection, command.nativeId, 0);
+				res = moveSelectionInternal(selection, command.nativeId, param);
 			}
 
 			@Override

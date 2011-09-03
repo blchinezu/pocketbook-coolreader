@@ -2,6 +2,7 @@ package org.coolreader.crengine;
 
 import org.coolreader.CoolReader;
 import org.coolreader.R;
+import org.coolreader.crengine.ReaderView.ReaderCommand;
 
 import android.graphics.drawable.BitmapDrawable;
 import android.util.Log;
@@ -17,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.PopupWindow.OnDismissListener;
+import android.widget.SeekBar;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class SelectionToolbarDlg {
 	PopupWindow mWindow;
@@ -24,7 +27,7 @@ public class SelectionToolbarDlg {
 	CoolReader mCoolReader;
 	ReaderView mReaderView;
 	View mPanel;
-	final Selection selection;
+	Selection selection;
 	static public void showDialog( CoolReader coolReader, ReaderView readerView, final Selection selection )
 	{
 		SelectionToolbarDlg dlg = new SelectionToolbarDlg(coolReader, readerView, selection);
@@ -35,7 +38,86 @@ public class SelectionToolbarDlg {
 		//dlg.showAsDropDown(readerView);
 		//dlg.update();
 	}
-	public SelectionToolbarDlg( CoolReader coolReader, ReaderView readerView, final Selection sel )
+
+	private boolean changedPageMode;
+	private void setReaderMode()
+	{
+		String oldViewSetting = mReaderView.getSetting( ReaderView.PROP_PAGE_VIEW_MODE );
+		if ( "1".equals(oldViewSetting) ) {
+			changedPageMode = true;
+			mReaderView.setSetting(ReaderView.PROP_PAGE_VIEW_MODE, "0");
+		}
+	}
+	
+	private void restoreReaderMode()
+	{
+		if ( changedPageMode ) {
+			mReaderView.setSetting(ReaderView.PROP_PAGE_VIEW_MODE, "1");
+		}
+	}
+	
+	private void changeSelectionBound(boolean start, int delta) {
+		L.d("changeSelectionBound(" + (start?"start":"end") + ", " + delta + ")");
+		ReaderCommand cmd = start ? ReaderCommand.DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS : ReaderCommand.DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS; 
+		mReaderView.moveSelection(cmd, delta, new ReaderView.MoveSelectionCallback() {
+			
+			@Override
+			public void onNewSelection(Selection selection) {
+				Log.d("cr3", "onNewSelection: " + selection.text);
+				SelectionToolbarDlg.this.selection = selection;
+			}
+			
+			@Override
+			public void onFail() {
+				Log.d("cr3", "fail()");
+				//currentSelection = null;
+			}
+		});
+	}
+	
+	private final static int SELECTION_CONTROL_STEP = 10; 
+	private class BoundControlListener implements OnSeekBarChangeListener {
+
+		public BoundControlListener(SeekBar sb, boolean start) {
+			this.start = start;
+			this.sb = sb;
+			sb.setOnSeekBarChangeListener(this);
+		}
+		final boolean start;
+		final SeekBar sb;
+		int lastProgress = 50;
+		
+		@Override
+		public void onStopTrackingTouch(SeekBar seekBar) {
+			sb.setProgress(50);
+			lastProgress = 50;
+		}
+		
+		@Override
+		public void onStartTrackingTouch(SeekBar seekBar) {
+			sb.setProgress(50);
+		}
+		
+		@Override
+		public void onProgressChanged(SeekBar seekBar, int progress,
+				boolean fromUser) {
+			if (!fromUser)
+				return;
+			int diff = (progress - lastProgress) / SELECTION_CONTROL_STEP * SELECTION_CONTROL_STEP;
+			if (diff!=0) {
+				lastProgress += diff;
+				changeSelectionBound(start, diff/SELECTION_CONTROL_STEP);
+			}
+		}
+	};
+	
+	private void closeDialog() {
+		mReaderView.clearSelection();
+		restoreReaderMode();
+		mWindow.dismiss();
+	}
+	
+	public SelectionToolbarDlg( CoolReader coolReader, ReaderView readerView, Selection sel )
 	{
 		this.selection = sel;
 		mCoolReader = coolReader;
@@ -46,6 +128,7 @@ public class SelectionToolbarDlg {
 		panel.measure(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 		
 		//mReaderView.getS
+		setReaderMode();
 		
 		mWindow = new PopupWindow( mAnchor.getContext() );
 		mWindow.setTouchInterceptor(new OnTouchListener() {
@@ -53,8 +136,7 @@ public class SelectionToolbarDlg {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if ( event.getAction()==MotionEvent.ACTION_OUTSIDE ) {
-					mReaderView.clearSelection();
-					mWindow.dismiss();
+					closeDialog();
 					return true;
 				}
 				return false;
@@ -65,31 +147,34 @@ public class SelectionToolbarDlg {
 		mPanel.findViewById(R.id.selection_copy).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				mReaderView.copyToClipboard(selection.text);
-				mReaderView.clearSelection();
-				mWindow.dismiss();
+				closeDialog();
 			}
 		});
 		mPanel.findViewById(R.id.selection_dict).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				//mReaderView.findNext(pattern, false, caseInsensitive);
-				mCoolReader.findInDictionary( sel.text );
-				mReaderView.clearSelection();
-				mWindow.dismiss();
+				mCoolReader.findInDictionary( selection.text );
+				closeDialog();
 			}
 		});
 		mPanel.findViewById(R.id.selection_bookmark).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				//mReaderView.findNext(pattern, false, caseInsensitive);
-				mReaderView.showNewBookmarkDialog(sel);
-				mWindow.dismiss();
+				mReaderView.showNewBookmarkDialog(selection);
+				closeDialog();
+			}
+		});
+		mPanel.findViewById(R.id.selection_email).setOnClickListener(new OnClickListener() {
+			public void onClick(View v) {
+				mReaderView.sendQuotationInEmail(selection);
+				closeDialog();
 			}
 		});
 		mPanel.findViewById(R.id.selection_cancel).setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
-				mReaderView.clearSelection();
-				mWindow.dismiss();
+				closeDialog();
 			}
 		});
+		new BoundControlListener((SeekBar)mPanel.findViewById(R.id.selection_left_bound_control), true);
+		new BoundControlListener((SeekBar)mPanel.findViewById(R.id.selection_right_bound_control), false);
 		mPanel.setFocusable(true);
 		mPanel.setOnKeyListener( new OnKeyListener() {
 
@@ -97,8 +182,7 @@ public class SelectionToolbarDlg {
 				if ( event.getAction()==KeyEvent.ACTION_UP ) {
 					switch ( keyCode ) {
 					case KeyEvent.KEYCODE_BACK:
-						mReaderView.clearSelection();
-						mWindow.dismiss();
+						closeDialog();
 						return true;
 //					case KeyEvent.KEYCODE_DPAD_LEFT:
 //					case KeyEvent.KEYCODE_DPAD_UP:
@@ -130,6 +214,7 @@ public class SelectionToolbarDlg {
 		mWindow.setOnDismissListener(new OnDismissListener() {
 			@Override
 			public void onDismiss() {
+				restoreReaderMode();
 				mReaderView.clearSelection();
 			}
 		});
