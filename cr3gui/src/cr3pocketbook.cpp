@@ -981,6 +981,7 @@ private:
     int  m_goToPage;
     bool _restore_globOrientation;
     bool m_skipEvent;
+    bool m_saveForceSoft;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -1100,8 +1101,10 @@ protected:
 
     bool incrementPage(int delta)
     {
-        if (m_goToPage == -1)
+        if (m_goToPage == -1) {
+            m_saveForceSoft = CRPocketBookScreen::instance->setForceSoftUpdate(true);
             m_goToPage = _docview->getCurPage();
+        }
         m_goToPage = m_goToPage + delta * _docview->getVisiblePageCount();
         bool res = true;
         int page_count = _docview->getPageCount();
@@ -1122,7 +1125,8 @@ public:
     static CRPocketBookDocView * instance;
     CRPocketBookDocView( CRGUIWindowManager * wm, lString16 dataDir )
         : V3DocViewWin( wm, dataDir ), _tocLength(0), _toc(NULL), _bm3x3(NULL), _dictDlg(NULL), _rotatetimerset(false),
-        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false)
+        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false),
+        m_saveForceSoft(false)
     {
         instance = this;
     }
@@ -1246,14 +1250,6 @@ public:
             switchToRecentBook(params);
             break;
         case PB_CMD_PAGEUP_REPEAT:
-            if (m_skipEvent) {
-                m_skipEvent = false;
-                return false;
-            }
-            m_skipEvent = true;
-            if (params < 1)
-                params = 1;
-            return incrementPage(-params);
         case PB_CMD_PAGEDOWN_REPEAT:
             if (m_skipEvent) {
                 m_skipEvent = false;
@@ -1262,9 +1258,10 @@ public:
             if (params < 1)
                 params = 1;
             m_skipEvent = true;
-            return incrementPage(params);
+            return incrementPage(command == PB_CMD_PAGEUP_REPEAT ? -params : params);
         case PB_CMD_REPEAT_FINISH:
             if (m_goToPage != -1) {
+                CRPocketBookScreen::instance->setForceSoftUpdate(m_saveForceSoft);
                 int page = m_goToPage;
                 m_goToPage = -1;
                 m_skipEvent = false;
