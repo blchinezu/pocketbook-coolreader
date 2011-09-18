@@ -1225,7 +1225,6 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     lvRect mark;
                     ldomMarkedRange * range = marks->get(i);
                     if ( range->intersects( lineRect, mark ) ) {
-                        //
                         buf->FillRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y, 0xAAAAAA );
                     }
                 }
@@ -1313,7 +1312,22 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     lvRect mark;
                     ldomMarkedRange * range = marks->get(i);
                     if ( range->intersects( lineRect, mark ) ) {
-						buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+#ifdef CR_USE_UNDERLINE_FOR_SELECTION
+                        buf->InvertRect( mark.left + x, mark.bottom + y, mark.right + x, mark.bottom + y + 3);
+#else
+#ifdef CR_INVERT_PRSERVE_GRAYS
+                        if (buf->GetBitsPerPixel() > 2) {
+                            lvRect markRc(mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+                            if (markRc.left - 2 > clip.left)
+                                markRc.left -=1;
+                            markRc.left -=1;
+                            if (markRc.right + 2 < clip.right)
+                                markRc.right += 2; // This is some magic :)
+                            buf->Rect( markRc, 2, buf->GetTextColor();
+                        } else
+#endif /* CR_INVERT_PRSERVE_GRAYS */
+                            buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+#endif /* CR_USE_UNDERLINE_FOR_SELECTION */
                     }
                 }
             }

@@ -283,4 +283,7 @@
 #define MAX_IMAGE_SCALE_MUL 2
 #endif
 
+#if CR_POCKETBOOK==1
+#define CR_INVERT_PRSERVE_GRAYS 1
+#endif
 #endif//CRSETUP_H_INCLUDED

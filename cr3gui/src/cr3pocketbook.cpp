@@ -2065,8 +2065,14 @@ void CRPbDictionaryMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef s
     textRect.left = textRect.right + 1;
     textRect.right = rc.right;
     valueSkin->drawText( buf, textRect, _translation16 );
-    if (selected)
-        buf.InvertRect(rc.left, rc.top, rc.right, rc.bottom);
+    if (selected) {
+#ifdef CR_INVERT_PRSERVE_GRAYS
+        if (buf.GetBitsPerPixel() > 2)
+            buf.Rect(rc, 2, buf.GetTextColor());
+        else
+#endif /* CR_INVERT_PRSERVE_GRAYS */
+            buf.InvertRect(rc.left, rc.top, rc.right, rc.bottom);
+    }
 }
 
 
@@ -2553,7 +2559,7 @@ int InitDoc(const char *exename, char *fileName)
             LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
             if ( !stream.isNull() ) {
                 if ( props->loadFromStream( stream.get() ) ) {
-                    bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 8);
+                    bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
                     if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
                         bpp = 2;
                     break;
