@@ -12,7 +12,7 @@
 *******************************************************/
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
-#define CACHE_FILE_FORMAT_VERSION "3.04.02"
+#define CACHE_FILE_FORMAT_VERSION "3.04.03"
 
 #ifndef DOC_DATA_COMPRESSION_LEVEL
 /// data compression level (0=no compression, 1=fast compressions, 3=normal compression)
@@ -34,7 +34,10 @@
 //--------------------------------------------------------
 // cache memory sizes
 //--------------------------------------------------------
-#define ENABLED_BLOCK_WRITE_CACHE 1
+#ifndef ENABLED_BLOCK_WRITE_CACHE
+#define ENABLED_BLOCK_WRITE_CACHE 0
+#endif
+
 #define WRITE_CACHE_TOTAL_SIZE    (10*DOC_BUFFER_SIZE/100)
 
 #define TEXT_CACHE_UNPACKED_SPACE (25*DOC_BUFFER_SIZE/100)
@@ -110,7 +113,7 @@ enum CacheFileBlockType {
     CBT_RECT_DATA,
     CBT_ELEM_STYLE_DATA,
     CBT_MAPS_DATA,
-    CBT_PAGE_DATA,
+    CBT_PAGE_DATA, //7
     CBT_PROP_DATA,
     CBT_NODE_INDEX,
     CBT_ELEM_NODE,
@@ -118,7 +121,7 @@ enum CacheFileBlockType {
     CBT_REND_PARAMS,
     CBT_TOC_DATA,
     CBT_STYLE_DATA,
-    CBT_BLOB_INDEX,
+    CBT_BLOB_INDEX, //15
     CBT_BLOB_DATA,
 };
 

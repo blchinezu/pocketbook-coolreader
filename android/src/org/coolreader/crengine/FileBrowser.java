@@ -344,6 +344,12 @@ public class FileBrowser extends ListView {
 		showDirectory(null, null);
 	}
 
+	public boolean isBookShownInRecentList(FileInfo book) {
+		if (currDirectory==null || !currDirectory.isRecentDir())
+			return false;
+		return currDirectory.findItemByPathName(book.getPathName())!=null;
+	}
+	
 	public void showLastDirectory()
 	{
 		if ( currDirectory==null || currDirectory==mScanner.getRoot() )
@@ -586,23 +592,7 @@ public class FileBrowser extends ListView {
 	
 	public void showDirectory( FileInfo fileOrDir, FileInfo itemToSelect )
 	{
-		if ( !BackgroundThread.instance().isGUIThread() ) {
-			try {
-				throw new Exception("showDirectory called from background thread!");
-			} catch ( Exception e ) {
-				log.e(e.getMessage(), e);
-			}
-			final FileInfo dir = fileOrDir;
-			final FileInfo item = itemToSelect;
-			BackgroundThread.instance().callGUI(new Callable<Object>() {
-				@Override
-				public Object call() throws Exception {
-					showDirectory( dir, item );
-					return null;
-				}
-			});
-			return;
-		}
+		BackgroundThread.ensureGUI();
 		if ( fileOrDir!=null && fileOrDir.isOPDSDir() ) {
 			showOPDSDir(fileOrDir, itemToSelect);
 			return;
@@ -674,21 +664,7 @@ public class FileBrowser extends ListView {
 
 	private void showDirectoryInternal( final FileInfo dir, final FileInfo file )
 	{
-		if ( !BackgroundThread.instance().isGUIThread() ) {
-			try {
-				throw new Exception("showDirectoryInternal called from background thread!");
-			} catch ( Exception e ) {
-				log.e(e.getMessage(), e);
-			}
-			BackgroundThread.instance().callGUI(new Callable<Object>() {
-				@Override
-				public Object call() throws Exception {
-					showDirectoryInternal( dir, file );
-					return null;
-				}
-			});
-			return;
-		}
+		BackgroundThread.ensureGUI();
 		currDirectory = dir;
 		if ( dir!=null )
 			log.i("Showing directory " + dir + " " + Thread.currentThread().getName());

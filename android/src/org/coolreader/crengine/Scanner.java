@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.zip.ZipEntry;
 
@@ -604,35 +605,17 @@ public class Scanner {
 		"/sdcard2",
 	};
 	
-	public void initRoots()
+	public void initRoots(Map<String, String> fsRoots)
 	{
 		mRoot.clear();
 		// create recent books dir
 		addRoot( FileInfo.RECENT_DIR_TAG, R.string.dir_recent_books, false);
-		String sdpath = Environment.getExternalStorageDirectory().getAbsolutePath();
-		if ( "/nand".equals(sdpath) && new File("/sdcard").isDirectory() )
-			sdpath = "/sdcard";
-		addRoot( sdpath, R.string.dir_sd_card, true);
-		// internal SD card on Nook
-		addRoot( "/system/media/sdcard", R.string.dir_internal_sd_card, true);
-		// internal memory
-		addRoot( "/media", R.string.dir_internal_memory, true);
-		addRoot( "/nand", R.string.dir_internal_memory, true);
-		// internal SD card on PocketBook 701 IQ
-		addRoot( "/PocketBook701", R.string.dir_internal_sd_card, true);
-		// external SD
-		addRoot( "/mnt/extsd", "External SD /mnt/extsd", true);
-		// external SD
-		addRoot( "/mnt/external1", "External SD /mnt/external1", true);
-		// external SD / Galaxy S
-		addRoot( "/mnt/ext.sd", "External SD /mnt/ext.sd", true);
-		addRoot( "/ext.sd", "External SD /ext.sd", true);
-		// external SD card Huawei S7
-		addRoot( "/sdcard2", R.string.dir_sd_card_2, true);
-		//addRoot( "/mnt/localdisk", "/mnt/localdisk", true);
-		autoAddRoots( "/", SYSTEM_ROOT_PATHS );
-		autoAddRoots( "/mnt", new String[] {} );
-		
+
+		// create system dirs
+		for (Map.Entry<String, String> entry : fsRoots.entrySet())
+			addRoot( entry.getKey(), entry.getValue(), true);
+
+		// create OPDS dir
 		addOPDSRoot();
 	}
 	
@@ -649,8 +632,6 @@ public class Scanner {
 		}
 		return false;
 	}
-	
-	private static final String[] SYSTEM_ROOT_PATHS = {"/system", "/data", "/mnt"};
 	
 //	public boolean scan()
 //	{
@@ -725,7 +706,7 @@ public class Scanner {
 		this.coolReader = coolReader;
 		mRoot = new FileInfo();
 		mRoot.path = FileInfo.ROOT_DIR_TAG;	
-		mRoot.filename = "File Manager";	
+		mRoot.filename = "File Manager";
 		mRoot.pathname = FileInfo.ROOT_DIR_TAG;
 		mRoot.isListed = true;
 		mRoot.isScanned = true;

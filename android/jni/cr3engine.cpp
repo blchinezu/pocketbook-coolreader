@@ -472,6 +472,17 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_isLink
 }
 
 
+/*
+ * Class:     org_coolreader_crengine_Engine
+ * Method:    suspendLongOperationInternal
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_coolreader_crengine_Engine_suspendLongOperationInternal
+  (JNIEnv *, jclass)
+{
+	_timeoutControl.cancel();
+}
+
 //=====================================================================
 
 static JNINativeMethod sEngineMethods[] = {
@@ -484,6 +495,7 @@ static JNINativeMethod sEngineMethods[] = {
   {"setHyphenationMethod", "(I[B)Z", (void*)Java_org_coolreader_crengine_Engine_setHyphenationMethod},
   {"getArchiveItemsInternal", "(Ljava/lang/String;)[Ljava/lang/String;", (void*)Java_org_coolreader_crengine_Engine_getArchiveItemsInternal},
   {"isLink", "(Ljava/lang/String;)Z", (void*)JNICALL Java_org_coolreader_crengine_Engine_isLink},
+  {"suspendLongOperationInternal", "()V", (void*)Java_org_coolreader_crengine_Engine_suspendLongOperationInternal},
 };
 
 
@@ -512,7 +524,7 @@ static JNINativeMethod sReaderViewMethods[] = {
   {"checkLinkInternal", "(III)Ljava/lang/String;", (void*)Java_org_coolreader_crengine_ReaderView_checkLinkInternal},
   {"goLinkInternal", "(Ljava/lang/String;)I", (void*)Java_org_coolreader_crengine_ReaderView_goLinkInternal},
   {"moveSelectionInternal", "(Lorg/coolreader/crengine/Selection;II)Z", (void*)Java_org_coolreader_crengine_ReaderView_moveSelectionInternal},
-  {"swapToCacheInternal", "()I", (void*)JNICALL Java_org_coolreader_crengine_ReaderView_swapToCacheInternal},
+  {"swapToCacheInternal", "()I", (void*)Java_org_coolreader_crengine_ReaderView_swapToCacheInternal},
 };
 
 /*

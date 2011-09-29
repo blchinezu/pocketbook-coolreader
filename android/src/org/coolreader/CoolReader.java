@@ -28,7 +28,6 @@ import org.coolreader.crengine.TTS;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
 import org.coolreader.crengine.EinkScreen;
 
-import android.R.drawable;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
@@ -133,11 +132,10 @@ public class CoolReader extends Activity
 	public int getScreenUpdateMode() {
 		return mScreenUpdateMode;
 	}
-	public void setScreenUpdateMode( int screenUpdateMode ) {
-		mScreenUpdateMode = screenUpdateMode;
-		if (EinkScreen.UpdateMode != screenUpdateMode) {
-			EinkScreen.UpdateMode = screenUpdateMode;
-			EinkScreen.ResetController(2);
+	public void setScreenUpdateMode( int screenUpdateMode, View view ) {
+		if (mReaderView != null) {
+			mScreenUpdateMode = screenUpdateMode;
+			EinkScreen.ResetController(screenUpdateMode, view);
 		}
 	}
 
@@ -145,10 +143,11 @@ public class CoolReader extends Activity
 	public int getScreenUpdateInterval() {
 		return mScreenUpdateInterval;
 	}
-	public void setScreenUpdateInterval( int screenUpdateInterval ) {
+	public void setScreenUpdateInterval( int screenUpdateInterval, View view ) {
 		mScreenUpdateInterval = screenUpdateInterval;
 		if (EinkScreen.UpdateModeInterval != screenUpdateInterval) {
 			EinkScreen.UpdateModeInterval = screenUpdateInterval;
+			EinkScreen.ResetController(mScreenUpdateMode, view);
 		}
 	}
 
@@ -475,7 +474,10 @@ public class CoolReader extends Activity
 		// testing background thread
     	mBackgroundThread = BackgroundThread.instance();
 		mFrame = new FrameLayout(this);
+		log.i("initializing scanner");
 		mEngine = new Engine(this, mBackgroundThread);
+       	mScanner = new Scanner(this, mDB, mEngine);
+       	mScanner.initRoots(mEngine.getMountedRootsMap());
 		mBackgroundThread.setGUI(mFrame);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
@@ -517,7 +519,6 @@ public class CoolReader extends Activity
 		}
 		mDB = new CRDB(dbfile);
 		
-       	mScanner = new Scanner(this, mDB, mEngine); //, Environment.getExternalStorageDirectory(), "SD"
        	mHistory = new History(this, mDB);
 		mHistory.setCoverPagesEnabled(props.getBool(ReaderView.PROP_APP_SHOW_COVERPAGES, true));
 
@@ -531,11 +532,9 @@ public class CoolReader extends Activity
 		}
 		
 		mReaderView = new ReaderView(this, mEngine, mBackgroundThread, props);
-		
-		mScanner.setDirScanEnabled(props.getBool(ReaderView.PROP_APP_BOOK_PROPERTY_SCAN_ENABLED, true));
-		log.i("initializing scanner");
-        mScanner.initRoots();
 
+		mScanner.setDirScanEnabled(props.getBool(ReaderView.PROP_APP_BOOK_PROPERTY_SCAN_ENABLED, true));
+		
 		mBrowser = new FileBrowser(this, mEngine, mScanner, mHistory);
 
 		
@@ -684,7 +683,7 @@ public class CoolReader extends Activity
 		}
 		
 		if ( mEngine!=null ) {
-			mEngine.uninit();
+			//mEngine.uninit();
 		}
 
 		if ( mDB!=null ) {
@@ -763,7 +762,7 @@ public class CoolReader extends Activity
 		log.i("CoolReader.onPause() : saving reader state");
 		mIsStarted = false;
 		mPaused = true;
-		EinkScreen.UpdateMode = -1;
+		setScreenUpdateMode(-1, mReaderView);
 		releaseBacklightControl();
 		mReaderView.saveCurrentPositionBookmarkSync(true);
 		super.onPause();
@@ -806,7 +805,7 @@ public class CoolReader extends Activity
 		mPaused = false;
 		mIsStarted = true;
 		Properties props = mReaderView.getSettings();
-		setScreenUpdateMode(props.getInt(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, 0)); 
+		setScreenUpdateMode(props.getInt(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, 0), mReaderView);
 		
 		backlightControl.onUserActivity();
 		super.onResume();
@@ -981,7 +980,7 @@ public class CoolReader extends Activity
 		mEngine.runInGUI( new Runnable() {
 			public void run() {
 				showView(mBrowser);
-		        if ( fileToShow==null )
+		        if (fileToShow==null || mBrowser.isBookShownInRecentList(fileToShow))
 		        	mBrowser.showLastDirectory();
 		        else
 		        	mBrowser.showDirectory(fileToShow, fileToShow);
@@ -1157,10 +1156,6 @@ public class CoolReader extends Activity
 				mBackgroundThread.executeGUI(new Runnable() {
 					public void run() {
 						OptionsDialog dlg = new OptionsDialog(_this, mReaderView, mFontFaces);
-						// reset controller if EINK
-						if (DeviceInfo.EINK_SCREEN) {
-							EinkScreen.ResetController(2);
-						}
 						dlg.show();
 					}
 				});
@@ -1350,7 +1345,7 @@ public class CoolReader extends Activity
 	{
         Properties props = new Properties();
 
-		File[] dataDirs = Engine.getDataDirectories(null, false, true);
+		File[] dataDirs = mEngine.getDataDirectories(null, false, true);
 		File existingFile = null;
 		for ( File dir : dataDirs ) {
 			File f = new File(dir, SETTINGS_FILE_NAME);
@@ -1487,17 +1482,20 @@ public class CoolReader extends Activity
 		public final String packageName;
 		public final String className;
 		public final String action;
-		public DictInfo ( String id, String name, String packageName, String className, String action ) {
+		public final Integer internal;
+		public DictInfo ( String id, String name, String packageName, String className, String action, Integer internal ) {
 			this.id = id;
 			this.name = name;
 			this.packageName = packageName;
 			this.className = className;
 			this.action = action;
+			this.internal = internal;
 		}
 	}
 	private static final DictInfo dicts[] = {
-		new DictInfo("Fora", "Fora Dictionary", "com.ngc.fora", "com.ngc.fora.ForaDictionary", Intent.ACTION_SEARCH),	
-		new DictInfo("ColorDict", "ColorDict", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH),	
+		new DictInfo("Fora", "Fora Dictionary", "com.ngc.fora", "com.ngc.fora.ForaDictionary", Intent.ACTION_SEARCH, 0),
+		new DictInfo("ColorDict", "ColorDict", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 0),
+		new DictInfo("ColorDictApi", "ColorDict (new)", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 1),
 	};
 
 	public DictInfo[] getDictList() {
@@ -1514,8 +1512,47 @@ public class CoolReader extends Activity
 			}
 		}
 	}
+
+	private void findInDictionaryInternal(String s) {
+		switch (currentDict.internal) {
+		case 0:
+			Intent intent0 = new Intent(currentDict.action).setComponent(new ComponentName(
+				currentDict.packageName, currentDict.className
+				)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			intent0.putExtra(SearchManager.QUERY, s);
+			try {
+				startActivity( intent0 );
+			} catch ( ActivityNotFoundException e ) {
+				showToast("Dictionary \"" + currentDict.name + "\" is not installed");
+			}
+			break;
+		case 1:
+			final String SEARCH_ACTION  = "colordict.intent.action.SEARCH";
+			final String EXTRA_QUERY   = "EXTRA_QUERY";
+			final String EXTRA_FULLSCREEN = "EXTRA_FULLSCREEN";
+			final String EXTRA_HEIGHT  = "EXTRA_HEIGHT";
+			final String EXTRA_WIDTH   = "EXTRA_WIDTH";
+			final String EXTRA_GRAVITY  = "EXTRA_GRAVITY";
+			final String EXTRA_MARGIN_LEFT = "EXTRA_MARGIN_LEFT";
+			final String EXTRA_MARGIN_TOP  = "EXTRA_MARGIN_TOP";
+			final String EXTRA_MARGIN_BOTTOM = "EXTRA_MARGIN_BOTTOM";
+			final String EXTRA_MARGIN_RIGHT = "EXTRA_MARGIN_RIGHT";
+
+			Intent intent1 = new Intent(SEARCH_ACTION);
+			intent1.putExtra(EXTRA_QUERY, s); //Search Query
+			intent1.putExtra(EXTRA_FULLSCREEN, true); //
+			try
+			{
+				startActivity(intent1);
+			} catch ( ActivityNotFoundException e ) {
+				showToast("Dictionary \"" + currentDict.name + "\" is not installed");
+			}
+			break;
+		}
+	}
 	
 	public void findInDictionary( String s ) {
+		
 		if ( s!=null && s.length()!=0 ) {
 			s = s.trim();
 			for ( ;s.length()>0; ) {
@@ -1528,15 +1565,18 @@ public class CoolReader extends Activity
 			}
 			if ( s.length()>0 ) {
 				//
-				Intent intent = new Intent(currentDict.action).setComponent(new ComponentName(
-						currentDict.packageName, currentDict.className
-						)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				intent.putExtra(SearchManager.QUERY, s);
-				try {
-					startActivity( intent );
-				} catch ( ActivityNotFoundException e ) {
-					showToast("Dictionary \"" + currentDict.name + "\" is not installed");
-				}
+				final String pattern = s;
+				BackgroundThread.instance().executeBackground(new Runnable() {
+					@Override
+					public void run() {
+						BackgroundThread.instance().postGUI(new Runnable() {
+							@Override
+							public void run() {
+								findInDictionaryInternal(pattern);
+							}
+						}, 100);
+					}
+				});
 			}
 		}
 	}

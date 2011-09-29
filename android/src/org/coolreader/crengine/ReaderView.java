@@ -13,6 +13,7 @@ import java.util.concurrent.Callable;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.Engine.HyphDict;
+import org.coolreader.crengine.DeviceInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -355,7 +356,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     private native boolean moveSelectionInternal( Selection sel, int moveCmd, int params );
     private native String checkLinkInternal( int x, int y, int delta );
     private native int goLinkInternal( String link );
-
+    
     public static final int SWAP_DONE=0;
     public static final int SWAP_TIMEOUT=1;
     public static final int SWAP_ERROR=2;
@@ -880,19 +881,18 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	
 	public void sendQuotationInEmail( Selection sel ) {
         final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
-        emailIntent.setType("plain/text");
-        emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{ });
+        emailIntent.setType("text/plain");
         StringBuilder buf = new StringBuilder();
         if (mBookInfo.getFileInfo().authors!=null)
-        	buf.append(mBookInfo.getFileInfo().authors + "\n");
+        	buf.append("|" + mBookInfo.getFileInfo().authors + "\n");
         if (mBookInfo.getFileInfo().title!=null)
-        	buf.append(mBookInfo.getFileInfo().title + "\n");
+        	buf.append("|" + mBookInfo.getFileInfo().title + "\n");
         if (sel.chapter!=null && sel.chapter.length()>0)
-        	buf.append(sel.chapter + "\n");
+        	buf.append("|" + sel.chapter + "\n");
     	buf.append(sel.text + "\n");
     	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, mBookInfo.getFileInfo().authors + " " + mBookInfo.getFileInfo().title);
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, buf.toString());
-		mActivity.startActivity(Intent.createChooser(emailIntent, "Send quotation..."));	
+		mActivity.startActivity(Intent.createChooser(emailIntent, null));	
 	}
 	
 	public void copyToClipboard( String text ) {
@@ -1102,7 +1102,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			}
 			if ( touchEventIgnoreNextUp )
 				return true;
-			if ( !isManualScrollActive && !isBrightnessControlActive && manualScrollStartPosX>=0 && manualScrollStartPosY>=0 ) {
+			if ( !isManualScrollActive && !isBrightnessControlActive && !DeviceInfo.EINK_SCREEN && manualScrollStartPosX>=0 && manualScrollStartPosY>=0 ) {
 				int movex = manualScrollStartPosX - x;
 				int deltay = manualScrollStartPosY - y;
 				int deltax = movex < 0 ? -movex : movex;
@@ -1808,9 +1808,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
         } else if ( key.equals(PROP_NIGHT_MODE) ) {
 			mActivity.setNightMode(flg);
         } else if ( key.equals(PROP_APP_SCREEN_UPDATE_MODE) ) {
-			mActivity.setScreenUpdateMode(stringToInt(value, 0));
+			mActivity.setScreenUpdateMode(stringToInt(value, 0), this);
         } else if ( key.equals(PROP_APP_SCREEN_UPDATE_INTERVAL) ) {
-			mActivity.setScreenUpdateInterval(stringToInt(value, 10));
+			mActivity.setScreenUpdateInterval(stringToInt(value, 10), this);
         } else if ( key.equals(PROP_APP_TAP_ZONE_HILIGHT) ) {
         	hiliteTapZoneOnTap = flg;
         } else if ( key.equals(PROP_APP_DICTIONARY) ) {
@@ -1836,7 +1836,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			pageFlipAnimationSpeedMs = pageFlipAnimationMode!=PAGE_ANIMATION_NONE ? DEF_PAGE_FLIP_MS : 0; 
         } else if ( PROP_CONTROLS_ENABLE_VOLUME_KEYS.equals(key) ) {
         	enableVolumeKeys = flg;
-        } else if ( PROP_APP_SCREEN_BACKLIGHT.equals(key) ) {
+        } else if ( !DeviceInfo.EINK_SCREEN && PROP_APP_SCREEN_BACKLIGHT.equals(key) ) {
         	try {
         		final int n = Integer.valueOf(value);
         		// delay before setting brightness
@@ -2103,7 +2103,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		if ( state!=mBatteryState ) {
 			log.i("Battery state changed: " + state);
 			mBatteryState = state;
-			drawPage();
+			if (!DeviceInfo.EINK_SCREEN) {
+				drawPage();
+			}
 		}
 	}
 	
@@ -2170,6 +2172,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			factory.release(bitmap);
 			bitmap = null;
 			position = null;
+		}
+		boolean isReleased() {
+			return bitmap == null;
 		}
 		@Override
 		public String toString() {
@@ -2711,11 +2716,11 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			try {
 				canvas = holder.lockCanvas(rc);
 				//log.v("before draw(canvas)");
-				if (DeviceInfo.EINK_SCREEN) {
-					EinkScreen.PrepareController();
-				}
 				if ( canvas!=null ) {
 					callback.drawTo(canvas);
+					if (DeviceInfo.EINK_SCREEN){
+						EinkScreen.PrepareController(this);
+					}
 				}
 			} finally {
 				//log.v("exiting finally");
@@ -2776,6 +2781,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		int pointerStartPos;
 		int pointerDestPos;
 		int pointerCurrPos;
+		BitmapInfo image1;
+		BitmapInfo image2;
 		ScrollViewAnimation( int startY, int maxY )
 		{
 			super();
@@ -2791,8 +2798,6 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			pointerStartPos = pos;
 			pointerCurrPos = pos;
 			pointerDestPos = startY;
-			BitmapInfo image1;
-			BitmapInfo image2;
 			doCommandInternal(ReaderCommand.DCMD_GO_POS.nativeId, pos0);
 			image1 = preparePageImage(0);
 			image2 = preparePageImage(image1.position.pageHeight);
@@ -2882,8 +2887,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 
 		public void draw(Canvas canvas)
 		{
-			BitmapInfo image1 = mCurrentPageInfo;
-			BitmapInfo image2 = mNextPageInfo;
+//			BitmapInfo image1 = mCurrentPageInfo;
+//			BitmapInfo image2 = mNextPageInfo;
+			if (image1.isReleased() || image2.isReleased())
+				return;
 			int h = image1.position.pageHeight;
 			int rowsFromImg1 = image1.position.y + h - pointerCurrPos;
 			int rowsFromImg2 = h - rowsFromImg1;
@@ -2954,6 +2961,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		Paint[] hilitePaints;
 		private final boolean naturalPageFlip; 
 		private final boolean flipTwoPages; 
+
+		BitmapInfo image1;
+		BitmapInfo image2;
+		
 		PageViewAnimation( int startX, int maxX, int direction )
 		{
 			super();
@@ -2978,8 +2989,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 				return;
 			}
 			this.pageCount = currPos.pageMode;
-			BitmapInfo image1 = preparePageImage(0);
-			BitmapInfo image2 = preparePageImage(direction);
+			image1 = preparePageImage(0);
+			image2 = preparePageImage(direction);
 			if ( image1==null || image2==null ) {
 				log.v("PageViewAnimation -- cannot start animation: page image is null");
 				return;
@@ -3251,8 +3262,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		public void draw(Canvas canvas)
 		{
 			if (DEBUG_ANIMATION) log.v("PageViewAnimation.draw("+currShift + ")");
-			BitmapInfo image1 = mCurrentPageInfo;
-			BitmapInfo image2 = mNextPageInfo;
+//			BitmapInfo image1 = mCurrentPageInfo;
+//			BitmapInfo image2 = mNextPageInfo;
+			if (image1.isReleased() || image2.isReleased())
+				return;
 			int w = image1.bitmap.getWidth(); 
 			int h = image1.bitmap.getHeight();
 			int div;
@@ -3550,6 +3563,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	private final static boolean centerPageInsteadOfResizing = true;
 	
 	private void dimRect( Canvas canvas, Rect dst ) {
+		if (DeviceInfo.EINK_SCREEN)
+			return; // no backlight
 		int alpha = dimmingAlpha;
 		if ( alpha!=255 ) {
 			Paint p = new Paint();
@@ -3823,7 +3838,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	{
 		if ( fileFormat==null )
 			fileFormat = DocumentFormat.FB2;
-		File[] dataDirs = Engine.getDataDirectories(null, false, false);
+		File[] dataDirs = mEngine.getDataDirectories(null, false, false);
 		String defaultCss = mEngine.loadResourceUtf8(fileFormat.getCSSResourceId());
 		for ( File dir : dataDirs ) {
 			File file = new File( dir, fileFormat.getCssName() );

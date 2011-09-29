@@ -79,6 +79,13 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_setHyphenationMet
 JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_isLink
   (JNIEnv *, jobject, jstring);
 
+/*
+ * Class:     org_coolreader_crengine_Engine
+ * Method:    suspendLongOperationInternal
+ * Signature: ()V
+ */
+JNIEXPORT void JNICALL Java_org_coolreader_crengine_Engine_suspendLongOperationInternal
+  (JNIEnv *, jclass);
 
 #ifdef __cplusplus
 }
