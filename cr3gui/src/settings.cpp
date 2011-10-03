@@ -431,6 +431,42 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 		{NULL, NULL},
 	};
 
+	item_def_t show_title[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
+	item_def_t show_battery[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
+	item_def_t show_battery_persent[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
+	item_def_t show_pos_persent[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
+	item_def_t show_page_count[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
+	item_def_t show_page_number[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
 	item_def_t preformatted_text[] = {
 		{_("On"), "1"},
 		{_("Off"), "0"},
@@ -704,12 +740,6 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                 LVImageSourceRef(), menuFont, L"bla" );
         mainMenu->addItem( setTime );
 */
-        CRMenu * showTimeMenu = new CRMenu(_wm, mainMenu, mm_ShowTime,
-                _("Show time"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_TIME );
-        addMenuItems( showTimeMenu, showtime );
-        mainMenu->addItem( showTimeMenu );
-
         CRMenu * landscapePagesMenu = new CRMenu(_wm, mainMenu, mm_LandscapePages,
                 _("Landscape pages"),
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_LANDSCAPE_PAGES );
@@ -759,11 +789,54 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         mainMenu->addItem( bookmarkIconsMenu );
 #endif
 
-        CRMenu * statusLineMenu = new CRMenu(_wm, mainMenu, mm_StatusLine,
+	//====== Status line settings ========
+	CRMenu * statusMenu = new CRMenu(_wm, mainMenu, mm_StatusMenu,
+                _("Status line menu"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+        CRMenu * statusLineMenu = new CRMenu(_wm, statusMenu, mm_StatusLine,
                 _("Status line"),
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_STATUS_LINE );
         addMenuItems( statusLineMenu, status_line );
-        mainMenu->addItem( statusLineMenu );
+        statusMenu->addItem( statusLineMenu );
+        CRMenu * showTimeMenu = new CRMenu(_wm, statusMenu, mm_ShowTime,
+                _("Show time"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_TIME );
+        addMenuItems( showTimeMenu, showtime );
+        statusMenu->addItem( showTimeMenu );
+        CRMenu * showTitleMenu = new CRMenu(_wm, statusMenu, mm_ShowTitle,
+                _("Show title"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_TITLE );
+        addMenuItems( showTitleMenu, show_title );
+        statusMenu->addItem( showTitleMenu );
+        CRMenu * showBatteryMenu = new CRMenu(_wm, statusMenu, mm_ShowBattery,
+                _("Show Battery"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_BATTERY );
+        addMenuItems( showBatteryMenu, show_battery );
+        statusMenu->addItem( showBatteryMenu );
+        CRMenu * showBatteryPersentMenu = new CRMenu(_wm, statusMenu, mm_ShowBatteryPersent,
+                _("Show Battery Persent"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_BATTERY_PERCENT );
+        addMenuItems( showBatteryPersentMenu, show_battery_persent );
+        statusMenu->addItem( showBatteryPersentMenu );
+        CRMenu * showPosPersentMenu = new CRMenu(_wm, statusMenu, mm_ShowPosPersent,
+                _("Show Position Persent"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_POS_PERCENT );
+        addMenuItems( showPosPersentMenu, show_pos_persent );
+        statusMenu->addItem( showPosPersentMenu );
+        CRMenu * showPageCountMenu = new CRMenu(_wm, statusMenu, mm_ShowPageCount,
+                _("Show Page Count"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_PAGE_COUNT );
+        addMenuItems( showPageCountMenu, show_page_count );
+        statusMenu->addItem( showPageCountMenu );
+        CRMenu * showPageNumberMenu = new CRMenu(_wm, statusMenu, mm_ShowPageNumber,
+                _("Show Page Number"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_PAGE_NUMBER );
+        addMenuItems( showPageNumberMenu, show_page_number );
+        statusMenu->addItem( showPageNumberMenu );
+	statusMenu->setAccelerators( _menuAccelerators );
+	statusMenu->setSkinName(lString16(L"#settings"));
+        statusMenu->reconfigure( 0 );
+        mainMenu->addItem( statusMenu );
+	//====== End of Status line  ========
 
         CRMenu * kerningMenu = new CRMenu(_wm, mainMenu, mm_Kerning,
                 _("Font kerning"),
