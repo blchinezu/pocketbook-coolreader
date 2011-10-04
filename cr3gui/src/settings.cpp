@@ -467,6 +467,26 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 		{NULL, NULL},
 	};
 
+	item_def_t space_condensing_percent[] = {
+		{"25%", "25"},
+		{"30%", "30"},
+		{"35%", "35"},
+		{"40%", "40"},
+		{"45%", "45"},
+		{"50%", "50"},
+		{"55%", "55"},
+		{"60%", "60"},
+		{"65%", "65"},
+		{"70%", "70"},
+		{"75%", "75"},
+		{"80%", "80"},
+		{"85%", "85"},
+		{"90%", "90"},
+		{"95%", "95"},
+		{"100%", "100"},
+		{NULL, NULL}
+	};
+
 	item_def_t preformatted_text[] = {
 		{_("On"), "1"},
 		{_("Off"), "0"},
@@ -837,6 +857,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         statusMenu->reconfigure( 0 );
         mainMenu->addItem( statusMenu );
 	//====== End of Status line  ========
+
+        CRMenu * spaceCondensingMenu = new CRMenu(_wm, mainMenu, mm_SpaceCondensing,
+                _("Space condensing percent"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT );
+        addMenuItems( spaceCondensingMenu, space_condensing_percent );
+        mainMenu->addItem( spaceCondensingMenu );
+
 
         CRMenu * kerningMenu = new CRMenu(_wm, mainMenu, mm_Kerning,
                 _("Font kerning"),
