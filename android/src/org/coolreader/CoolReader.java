@@ -135,7 +135,9 @@ public class CoolReader extends Activity
 	public void setScreenUpdateMode( int screenUpdateMode, View view ) {
 		if (mReaderView != null) {
 			mScreenUpdateMode = screenUpdateMode;
-			EinkScreen.ResetController(screenUpdateMode, view);
+			if (EinkScreen.UpdateMode != screenUpdateMode || EinkScreen.UpdateMode == 2) {
+				EinkScreen.ResetController(screenUpdateMode, view);
+			}
 		}
 	}
 
@@ -476,16 +478,14 @@ public class CoolReader extends Activity
 		mFrame = new FrameLayout(this);
 		log.i("initializing scanner");
 		mEngine = new Engine(this, mBackgroundThread);
-       	mScanner = new Scanner(this, mDB, mEngine);
-       	mScanner.initRoots(mEngine.getMountedRootsMap());
 		mBackgroundThread.setGUI(mFrame);
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 
 		// load settings
 		Properties props = loadSettings();
 		
-		setFullscreen( props.getBool(ReaderView.PROP_APP_FULLSCREEN, false) );
-		int orientation = props.getInt(ReaderView.PROP_APP_SCREEN_ORIENTATION, 4);
+		setFullscreen( props.getBool(ReaderView.PROP_APP_FULLSCREEN, (DeviceInfo.EINK_SCREEN?true:false)));
+		int orientation = props.getInt(ReaderView.PROP_APP_SCREEN_ORIENTATION, (DeviceInfo.EINK_SCREEN?0:4));
 		if ( orientation!=1 && orientation!=4 )
 			orientation = 0;
 		setScreenOrientation(orientation);
@@ -518,6 +518,9 @@ public class CoolReader extends Activity
 			dbfile = Engine.checkOrMoveFile(externalDir, dbdir, SQLITE_DB_NAME);
 		}
 		mDB = new CRDB(dbfile);
+
+       	mScanner = new Scanner(this, mDB, mEngine);
+       	mScanner.initRoots(mEngine.getMountedRootsMap());
 		
        	mHistory = new History(this, mDB);
 		mHistory.setCoverPagesEnabled(props.getBool(ReaderView.PROP_APP_SHOW_COVERPAGES, true));
@@ -762,7 +765,7 @@ public class CoolReader extends Activity
 		log.i("CoolReader.onPause() : saving reader state");
 		mIsStarted = false;
 		mPaused = true;
-		setScreenUpdateMode(-1, mReaderView);
+//		setScreenUpdateMode(-1, mReaderView);
 		releaseBacklightControl();
 		mReaderView.saveCurrentPositionBookmarkSync(true);
 		super.onPause();
@@ -805,7 +808,10 @@ public class CoolReader extends Activity
 		mPaused = false;
 		mIsStarted = true;
 		Properties props = mReaderView.getSettings();
-		setScreenUpdateMode(props.getInt(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, 0), mReaderView);
+		
+		if (DeviceInfo.EINK_SCREEN) {
+			setScreenUpdateMode(props.getInt(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, 0), mReaderView);
+		}
 		
 		backlightControl.onUserActivity();
 		super.onResume();
