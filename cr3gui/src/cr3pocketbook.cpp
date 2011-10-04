@@ -843,14 +843,25 @@ protected:
     int _lastWordX;
     int _lastWordY;
 public:
+    CRPbDictionaryDialog(CRGUIWindowManager * wm) : CRGUIWindowBase(wm), _dictView(NULL)
+    {
+        _wordSelector = NULL;
+        _fullscreen = true;
+        CRGUIAcceleratorTableRef acc = _wm->getAccTables().get("dict");
+        if ( acc.isNull() )
+            acc = _wm->getAccTables().get("dialog");
+        setAccelerators( acc );
+    }
     CRPbDictionaryDialog( CRGUIWindowManager * wm, CRViewDialog * docwin,  lString8 css);
     virtual ~CRPbDictionaryDialog() {
         if (_wordSelector) {
             delete _wordSelector;
             _wordSelector = NULL;
         }
-        delete _dictView;
-        _dictView = NULL;
+        if (_dictView) {
+            delete _dictView;
+            _dictView = NULL;
+        }
     }
     /// returns true if command is processed
     virtual bool onCommand( int command, int params );
@@ -887,7 +898,7 @@ protected:
     virtual void draw() { _dictDlg->draw(); }
 public:
     CRPbDictionaryProxyWindow(CRPbDictionaryDialog * dictDialog)
-        : CRPbDictionaryDialog(dictDialog->getWindowManager(), dictDialog->_docwin, lString8() ), _dictDlg(dictDialog)
+        : CRPbDictionaryDialog(dictDialog->getWindowManager() /*, dictDialog->_docwin, lString8()*/), _dictDlg(dictDialog)
     {
         _dictDlg->_wordTranslated = _dictDlg->_dictViewActive = false;
         _dictDlg->_selText.clear();
@@ -1569,6 +1580,7 @@ CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDi
     _dictsTable(16), _active(false), _newWord(NULL), _newTranslation(NULL), _translateResult(0),
     _dictsLoaded(false)
 {
+    bool default_dict = false;
     setSkinName(lString16(L"#dict"));
     lvRect rect = _wm->getScreen()->getRect();
     if ( !_wm->getSkin().isNull() ) {
@@ -1590,17 +1602,24 @@ CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDi
     CRPropRef props = CRPocketBookDocView::instance->getProps();
     getDocView()->setVisiblePageCount(props->getIntDef(PROP_POCKETBOOK_DICT_PAGES, 1));
     lString16 lastDict = props->getStringDef(PROP_POCKETBOOK_DICT, pbGlobals->getDictionary());
-    if (lastDict.empty()) {
+    if ((default_dict = lastDict.empty())) {
+        CRLog::trace("last dictionary is empty");
         loadDictionaries();
         if (_dictCount > 0)
             lastDict = Utf8ToUnicode(lString8(_dictNames[0]));
+        CRLog::trace("_dictCount = %d", _dictCount);
     }
     if (!lastDict.empty()) {
         _dictIndex = 0;
         int rc = OpenDictionary((char *)UnicodeToUtf8(lastDict).c_str());
+        CRLog::trace("OpenDictionary() returned = %d", rc);
         if (rc == 1) {
             _caption = lastDict;
             getDocView()->createDefaultDocument(lString16(), Utf8ToUnicode(TR("@Word_not_found")));
+            if (default_dict) {
+                props->setString(PROP_POCKETBOOK_DICT, lastDict);
+                CRPocketBookDocView::instance->saveSettings(lString16());
+            }
             return;
         }
         lString8 dName =  UnicodeToUtf8(lastDict);
@@ -1752,19 +1771,23 @@ void CRPbDictionaryView::onDictionarySelect()
     lString16 lastDict = props->getStringDef(PROP_POCKETBOOK_DICT);
     int index = _dictsTable.get(lastDict);
     CRLog::trace("CRPbDictionaryView::onDictionarySelect(%d)", index);
-    if (index >= 0 && index <= _dictCount) {
+    while (index >= 0 && index <= _dictCount) {
         if (_dictIndex >= 0) {
+            if (index == _dictIndex) {
+                break; /* The same dictionary selected */
+            }
             CloseDictionary();
         }
         int rc = OpenDictionary(_dictNames[index]);
+        CRLog::trace("OpenDictionary(%s) returned %d", _dictNames[index], rc);
         if (rc == 1) {
             _dictIndex = index;
             CRPocketBookDocView::instance->saveSettings(lString16());
         } else {
             _dictIndex = -1;
-            CRLog::error("OpenDictionary(%s) returned %d", _dictNames[_dictIndex], rc);
         }
         _caption = lastDict;
+        index = -1; // to break from the loop
     }
     lString16 word = _word;
     _word.clear();
@@ -1941,17 +1964,20 @@ void CRPbDictionaryView::translate(const lString16 &w)
 {
     lString8 body;
 
-    CRLog::trace("CRPbDictionaryView::translate() start");
-    if (_dictIndex >= 0) {
-        lString16 s16 = w;
-        if (s16 == _word)
-            return;
-        _word = s16;
+    lString16 s16 = w;
+    if (s16 == _word) {
+        CRLog::trace("CRPbDictionaryView::translate() - the same word");
+        return;
+    }
+    _word = s16;
 
+    CRLog::trace("CRPbDictionaryView::translate() start, _dictIndex = %d", _dictIndex);
+    if (_dictIndex >= 0) {
         s16.lowercase();
         lString8 what = UnicodeToUtf8( s16 );
         char *word = NULL, *translation = NULL;
 
+        CRLog::trace("CRPbDictionaryView::translate() LookupWord");
         _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
         //_translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
         CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
