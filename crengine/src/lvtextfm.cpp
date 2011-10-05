@@ -1282,7 +1282,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                             markRc.left -=1;
                             if (markRc.right + 2 < clip.right)
                                 markRc.right += 2; // This is some magic :)
-                            buf->Rect( markRc, 2, buf->GetTextColor();
+                            buf->Rect( markRc, 2, buf->GetTextColor());
                         } else
 #endif /* CR_INVERT_PRSERVE_GRAYS */
                             buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);

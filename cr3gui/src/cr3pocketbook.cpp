@@ -417,7 +417,9 @@ V3DocViewWin * main_win = NULL;
 void CRPocketBookWindowManager::updateCache()
 {
     CRTimerUtil timeout(500);
-    if (m_incommand || !_events.empty() || CR_TIMEOUT == main_win->getDocView()->updateCache(timeout))
+    if (m_incommand || !_events.empty() ||
+        main_win != getTopVisibleWindow() ||
+        CR_TIMEOUT == main_win->getDocView()->updateCache(timeout))
         scheduleCacheSwap();
 }
 #endif
