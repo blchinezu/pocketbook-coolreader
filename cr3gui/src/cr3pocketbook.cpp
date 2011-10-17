@@ -217,6 +217,10 @@ public:
         LVDrawBuf * buf = new LVGrayDrawBuf( dx, dy, m_bpp );
         return buf;
     }
+    bool isTouchSupported()
+    {
+        return (QueryTouchpanel() != 0);
+    }
 };
 
 CRPocketBookScreen * CRPocketBookScreen::instance = NULL;
@@ -839,7 +843,7 @@ protected:
     virtual void draw();
     void endWordSelection();
     bool isWordSelection() { return _wordSelector!=NULL; }
-    void onWordSelection();
+    void onWordSelection(bool translate=true);
     bool _docDirty;
     int _curPage;
     int _lastWordX;
@@ -889,6 +893,23 @@ public:
     virtual bool isSelectingWord()
     {
         return (!_autoTranslate && !_wordTranslated);
+    }
+    virtual bool isClickableElement(int x, int y, bool moveEvent)
+    {
+        lvPoint pt (x, y);
+        ldomXPointer p = _docview->getNodeByPoint( pt );
+        if ( !p.isNull() ) {
+            pt = p.toPoint();
+            _wordSelector->selectWord(pt.x, pt.y);
+            onWordSelection(false);
+            return true;
+        }
+        return false;
+    }
+
+    virtual bool handleTouchUpEvent()
+    {
+        return _wm->onCommand(PB_CMD_TRANSLATE, 0);
     }
 };
 
@@ -977,6 +998,10 @@ public:
     {
         _dictDlg->activated();
     }
+    virtual bool onTouchEvent(int x, int y, CRGUITouchEventType type)
+    {
+        return _dictDlg->onTouchEvent(x, y, type);
+    }
 };
 
 class CRPocketBookDocView : public V3DocViewWin {
@@ -995,6 +1020,7 @@ private:
     bool _restore_globOrientation;
     bool m_skipEvent;
     bool m_saveForceSoft;
+    int _selectedZone;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -1133,13 +1159,69 @@ protected:
             setDirty();
         return res;
     }
+    virtual bool isClickableElement(int x, int y, bool moveEvent)
+    {
+        lvRect rc;
+        if (getClientRect(rc)) {
+            lvPoint pt(x, y);
+            if (rc.isPointInside(pt)) {
+                _selectedZone = getTapZone(x, y);
+                return true;
+            }
+        }
+        return false;
+    }
+    virtual bool handleLongTouchEvent()
+    {
+        // TODO: for now hardcoded, add touch zones settings dialog
+        int command = 0, param = 0;
+        switch (_selectedZone) {
+        case 4:
+            command = DCMD_PAGEUP;
+            param = 10;
+            break;
+        case 5:
+            command = MCMD_MAIN_MENU;
+            break;
+        case 6:
+            command = DCMD_PAGEDOWN;
+            param = 10;
+            break;
+        }
+        if (command != 0) {
+            _wm->postCommand(command, param);
+            return true;
+        }
+        return false;
+    }
 
+    virtual bool handleTouchUpEvent()
+    {
+        // TODO: for now hardcoded, add touch zones settings dialog
+        int command = 0, param = 0;
+        switch (_selectedZone) {
+        case 4:
+            command = DCMD_PAGEUP;
+            break;
+        case 5:
+            command = PB_QUICK_MENU;
+            break;
+        case 6:
+            command = DCMD_PAGEDOWN;
+            break;
+        }
+        if (command != 0) {
+            _wm->postCommand(command, param);
+            return true;
+        }
+        return false;
+    }
 public:
     static CRPocketBookDocView * instance;
     CRPocketBookDocView( CRGUIWindowManager * wm, lString16 dataDir )
         : V3DocViewWin( wm, dataDir ), _tocLength(0), _toc(NULL), _bm3x3(NULL), _dictDlg(NULL), _rotatetimerset(false),
         _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false),
-        m_saveForceSoft(false)
+        m_saveForceSoft(false), _selectedZone(0)
     {
         instance = this;
     }
@@ -2312,7 +2394,7 @@ void CRPbDictionaryDialog::endWordSelection()
     }
 }
 
-void CRPbDictionaryDialog::onWordSelection() 
+void CRPbDictionaryDialog::onWordSelection(bool translate)
 {
     CRLog::trace("CRPbDictionaryDialog::onWordSelection()");
     ldomWordEx * word = _wordSelector->getSelectedWord();
@@ -2345,7 +2427,10 @@ void CRPbDictionaryDialog::onWordSelection()
     bool firstTime = _selText.empty();
     _selText = word->getText();
     CRLog::trace("_selText = %s", UnicodeToUtf8( _selText).c_str());
-    if (_autoTranslate) {
+    if (!translate) {
+        setDocDirty();
+        Update();
+    } else if (_autoTranslate) {
         if (!firstTime) {
             setDocDirty();
             Update();
@@ -2732,6 +2817,19 @@ static bool commandCanRepeat(int command)
     return false;
 }
 
+CRGUITouchEventType getTouchEventType(int inkview_evt)
+{
+    switch (inkview_evt) {
+    case EVT_POINTERDOWN:
+        return CRTOUCH_DOWN;
+    case EVT_POINTERLONG:
+        return CRTOUCH_DOWN_LONG;
+    case EVT_POINTERUP:
+        return CRTOUCH_UP;
+    }
+    return CRTOUCH_MOVE;
+}
+
 int main_handler(int type, int par1, int par2)
 {
     bool process_events = false;
@@ -2796,6 +2894,13 @@ int main_handler(int type, int par1, int par2)
         break;
     case EVT_SNAPSHOT:
         CRPocketBookScreen::instance->MakeSnapShot();
+        break;
+    case EVT_POINTERDOWN:
+    case EVT_POINTERUP:
+    case EVT_POINTERMOVE:
+    case EVT_POINTERLONG:
+        CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
+        process_events = true;
         break;
     default:
         break;

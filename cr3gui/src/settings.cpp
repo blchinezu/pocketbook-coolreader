@@ -144,6 +144,81 @@ int CRControlsMenuItem::onSelect()
     return 1;
 }
 
+class CRTapZoneSettings : public CRFullScreenMenu
+{
+private:
+    int _selectedZone;
+protected:
+    CRPropRef _props;
+    virtual void drawClient();
+public:
+    CRTapZoneSettings(CRMenu * parentMenu, int id, CRPropRef props, int numItems, lvRect & rc) :
+        CRFullScreenMenu( parentMenu->getWindowManager(), id, lString16(_("Touch screen actions")), numItems, rc )
+    {
+        _menu = parentMenu;
+        _props = props;
+        setSkinName(lString16(L"#dialog"));
+        setAccelerators(parentMenu->getAccelerators());
+        _selectedZone = 0;
+    }
+    virtual bool onCommand( int command, int params)
+    {
+        switch (command) {
+        case MCMD_CANCEL:
+            closeMenu( 0 );
+            return true;
+        case MCMD_PREV_PAGE:
+        case MCMD_OK:
+            doCloseMenu(getId(), false, params);
+            return true;
+        }
+        return false;
+    }
+    virtual bool isClickableElement(int x, int y, bool moveEvent)
+    {
+        lvRect rc;
+        if (getClientRect(rc)) {
+            lvPoint pt(x, y);
+            if (rc.isPointInside(pt)) {
+                _selectedZone = getTapZone(x, y);
+                return true;
+            }
+        }
+        return false;
+    }
+    virtual bool handleLongTouchEvent()
+    {
+        CRLog::trace("long touch, zone = %d", _selectedZone);
+        return false;
+    }
+    virtual bool handleTouchUpEvent()
+    {
+        CRLog::trace("touch, zone = %d", _selectedZone);
+        return false;
+    }
+};
+
+class CRTapZoneSettingsMenuItem : public CRMenu
+{
+public:
+    CRTapZoneSettingsMenuItem(CRMenu * parentMenu, CRPropRef props)
+        : CRMenu(parentMenu->getWindowManager(), parentMenu, mm_touchScreenZones, lString16(_("Touch screen actions")), LVImageSourceRef(), LVFontRef(), LVFontRef())
+    {
+        _props = props;
+    }
+    int onSelect()
+    {
+        CRTapZoneSettings *menu = new CRTapZoneSettings(_menu, mm_touchScreenZones, _props, 0, _rect);
+        _wm->activateWindow(menu);
+        return 1;
+    }
+};
+
+void CRTapZoneSettings::drawClient()
+{
+    CRGUIWindowBase::drawClient();
+}
+
 CRControlsMenuItem::CRControlsMenuItem( CRControlsMenu * menu, int id, int key, int flags, const CRGUIAccelerator * defAcc )
 : CRMenuItem(menu, id, getKeyName(key, flags), LVImageSourceRef(), LVFontRef() ), _key( key ), _flags(flags)
 {
@@ -775,7 +850,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                 _("Font gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
         addMenuItems( fontGammaMenu, font_gammas );
         mainMenu->addItem( fontGammaMenu );
-
+#if 0
+        if (getWindowManager()->getScreen()->isTouchSupported()) {
+            CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(mainMenu, props);
+            mainMenu->addItem(touchMenu);
+        }
+#endif
         reconfigure(0);
 }
 

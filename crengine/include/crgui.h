@@ -322,11 +322,21 @@ enum CRGUIEventType {
     CREV_KEYDOWN = 1,
     CREV_KEYUP,
     CREV_COMMAND,
+    CREV_TOUCH,
 
     CREV_WM_EVENTS_START=100,
     CREV_UPDATE = 100,
     CREV_RESIZE,
 
+};
+
+
+enum CRGUITouchEventType {
+    CRTOUCH_DOWN = 1,
+    CRTOUCH_DOWN_LONG,
+    CRTOUCH_DOUBLE,
+    CRTOUCH_MOVE,
+    CRTOUCH_UP
 };
 
 class CRGUIWindow;
@@ -393,6 +403,7 @@ class CRGUIScreen
         virtual void flush( bool full ) = 0;
         /// invalidates rectangle: add it to bounding box of next partial update
         virtual void invalidateRect( const lvRect & rc ) { }
+        virtual bool isTouchSupported() { return false; }
         virtual ~CRGUIScreen() { }
 };
 
@@ -427,6 +438,10 @@ class CRGUIWindow
         virtual CRGUIAcceleratorTableRef getAccelerators() { return CRGUIAcceleratorTableRef(); }
         /// returns true if key is processed
         virtual bool onKeyPressed( int key, int flags = 0 ) = 0;
+        /// returns true if event is processed
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType ) = 0;
+        /// returns true if event is processed
+        virtual bool onTouchEvent(int x, int y, CRGUITouchEventType evType) = 0;
         /// returns true if command is processed
         virtual bool onCommand( int command, int params = 0 ) = 0;
         /// returns true if window is visible
@@ -480,6 +495,7 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         cr_rotate_angle_t _orientation;
         LVRefVec<LVImageSource> m_batteryIcons;
         bool _stopFlag;
+        bool _ignoreTillUp;
     public:
         /// forward events from system queue to application queue
         virtual void forwardSystemEvents( bool waitForEvent ) { }
@@ -572,6 +588,9 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         }
         /// returns true if key is processed
         virtual bool onKeyPressed( int key, int flags = 0 );
+
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType );
+
         /// returns top visible window
         CRGUIWindow * getTopVisibleWindow()
         {
@@ -621,6 +640,7 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         ,_lastProgressPercent(-1)
         ,_orientation(CR_ROTATE_ANGLE_0)
         ,_stopFlag(false)
+        ,_ignoreTillUp(false)
         {
         }
         virtual void closeAllWindows()
@@ -685,6 +705,12 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual bool getInputRect( lvRect & rc );
         /// calculates scroll rectangle for window rectangle
         virtual bool getScrollRect( lvRect & rc );
+        virtual bool isClickableElement(int x, int y, bool moveEvent) { return false; }
+        virtual bool handleTouchEvent() { return true; }
+        virtual bool handleLongTouchEvent() { return true; }
+        virtual bool handleTouchUpEvent() { return true; }
+        virtual bool handleTouchDoubleEvent() { return true; }
+        int getTapZone(int x, int y);
     public:
         /// use to override status text
         virtual void setStatusText( lString16 s ) { _statusText = s; }
@@ -706,6 +732,8 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual bool onCommand( int command, int params = 0 ) { return !_passCommandsToParent; }
         /// returns true if key is processed (by default, let's translate key to command using accelerator table)
         virtual bool onKeyPressed( int key, int flags = 0 );
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType );
+        virtual bool onTouchEvent(int x, int y, CRGUITouchEventType evType);
         /// set accelerator table for window
         virtual void setAccelerators( CRGUIAcceleratorTableRef table ) { _acceleratorTable = table; }
         /// get window accelerator table
@@ -1045,8 +1073,6 @@ class CRMenuItem
 
 /// CRGUI menu base class
 class CRMenu : public CRGUIWindowBase, public CRMenuItem {
-	private:
-		void doCloseMenu(int command, bool highlight = false, int param = 0);
     protected:
         LVPtrVector<CRMenuItem> _items;
         CRPropRef _props;
@@ -1064,8 +1090,13 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
         //virtual void Draw( LVDrawBuf & buf, int x, int y );
         virtual void highlightCommandItem( int cmd );
-		virtual bool onItemSelect(int command, int params = 0 );
-		int getLastOnPage();
+        virtual bool onItemSelect(int command, int params = 0 );
+        int getLastOnPage();
+        virtual int getItemIndexFromPoint(lvPoint & pt);
+        virtual bool isClickableElement(int x, int y, bool moveEvent);
+        virtual bool handleLongTouchEvent();
+        virtual bool handleTouchUpEvent();
+        void doCloseMenu(int command, bool highlight = false, int param = 0);
     public:
         /// returns index of selected item, -1 if no item selected
         virtual int getSelectedItemIndex();
@@ -1209,5 +1240,20 @@ public:
     virtual bool isForVisibleOnly() { return true; }
 };
 
+class CRGUITouchEvent : public CRGUIEvent
+{
+    CRGUITouchEventType _type;
+public:
+    CRGUITouchEvent( int x, int y, CRGUITouchEventType evType )
+        : CRGUIEvent( CREV_TOUCH )
+    {
+        _param1 = x;
+        _param2 = y;
+        _type = evType;
+    }
+    virtual bool handle( CRGUIWindow * window );
+    virtual bool handle( CRGUIWindowManager * wm ) { return false; }
+    virtual bool isForVisibleOnly() { return true; }
+};
 
 #endif// CR_GUI_INCLUDED

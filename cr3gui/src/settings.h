@@ -63,7 +63,8 @@ enum MainMenuItems_t {
     mm_blockImagesZoominScale,
     mm_inlineImagesZoominMode,
     mm_inlineImagesZoominScale,
-    mm_fontGamma
+    mm_fontGamma,
+    mm_touchScreenZones
 };
 
 

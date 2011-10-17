@@ -211,6 +211,32 @@ bool CRGUIWindowManager::onKeyPressed( int key, int flags )
     return false;
 }
 
+bool CRGUIWindowManager::onTouch( int x, int y, CRGUITouchEventType evType )
+{
+    if (_ignoreTillUp) {
+        if (evType == CRTOUCH_UP)
+            _ignoreTillUp = false;
+        return false;
+    }
+    CRGUIWindow * topWin = getTopVisibleWindow();
+    for ( int i=_windows.length()-1; i>=0; i-- ) {
+        if ( _windows[i]->isVisible() ) {
+            if ( _windows[i]->onTouch( x, y, evType ) ) {
+                CRLog::trace("CRGUIWindowManager::onTouch() -- window %d has processed the event, exiting", i );
+                if (topWin != _windows[i])
+                    activateWindow(_windows[i]);
+                _ignoreTillUp = (evType == CRTOUCH_DOWN_LONG);
+                return true;
+            } else {
+                CRLog::trace("CRGUIWindowManager::onTouch() -- window %d cannot process the event, continue", i );
+            }
+        } else {
+            CRLog::trace("CRGUIWindowManager::onTouch() -- window %d is invisible, continue", i );
+        }
+    }
+    return false;
+}
+
 /// changes screen size and orientation
 void CRGUIWindowManager::reconfigure( int dx, int dy, cr_rotate_angle_t orientation )
 {
@@ -382,7 +408,7 @@ void CRGUIWindowManager::postCommand( int command, int params )
 void CRGUIWindowManager::postEvent( CRGUIEvent * event )
 {
     int evt = event->getType();
-    if ( evt==CREV_KEYDOWN || evt==CREV_KEYUP || evt==CREV_COMMAND ) {
+    if ( evt==CREV_KEYDOWN || evt==CREV_KEYUP || evt==CREV_COMMAND || evt == CREV_TOUCH ) {
         // for window events, like keyPress or Command, post them before Update/Resize
         int i=_events.length()-1;
         for ( ; i>=0; i-- ) {
@@ -671,6 +697,80 @@ bool CRGUIWindowBase::getScrollRect( lvRect & rc )
         rc.top -= h;
     }
     return !rc.isEmpty();
+}
+
+bool CRGUIWindowBase::onTouch( int x, int y, CRGUITouchEventType evType)
+{
+    lvPoint pt = lvPoint(x, y);
+    lvRect rc;
+    rc = _rect;
+    if (!_skinName.empty() ) {
+        CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+        rc.shrinkBy(skin->getBorderWidths());
+    }
+    if (rc.isPointInside(pt)) {
+        CRGUIEvent * event = new CRGUITouchEvent( x, y, evType);
+        event->setTargetWindow(this);
+        _wm->postEvent( event );
+        return true;
+    }
+    return false;
+}
+
+bool CRGUIWindowBase::onTouchEvent(int x, int y, CRGUITouchEventType evType)
+{
+    if (!isClickableElement(x, y, evType == CRTOUCH_MOVE))
+        return false;
+    switch (evType) {
+    case CRTOUCH_DOWN:
+        return handleTouchEvent();
+    case CRTOUCH_DOWN_LONG:
+        return handleLongTouchEvent();
+    case CRTOUCH_UP:
+        return handleTouchUpEvent();
+    case CRTOUCH_DOUBLE:
+        return handleTouchDoubleEvent();
+    }
+    return true;
+}
+
+int CRGUIWindowBase::getTapZone(int x, int y)
+{
+    lvRect rc;
+
+    getClientRect(rc);
+
+    int dx = rc.width();
+    int dy = rc.height();
+
+    int x1 = dx / 3;
+    int x2 = dx * 2 / 3;
+    int y1 = dy / 3;
+    int y2 = dy * 2 / 3;
+    int zone = 0;
+    if ( y<y1 ) {
+        if ( x<x1 )
+            zone = 1;
+        else if ( x<x2 )
+            zone = 2;
+        else
+            zone = 3;
+    } else if ( y<y2 ) {
+        if ( x<x1 )
+            zone = 4;
+        else if ( x<x2 )
+            zone = 5;
+        else
+            zone = 6;
+    } else {
+        if ( x<x1 )
+            zone = 7;
+        else if ( x<x2 )
+            zone = 8;
+        else
+            zone = 9;
+    }
+    return zone;
 }
 
 /// calculates input box rectangle for window rectangle
@@ -1696,6 +1796,45 @@ void CRMenu::draw()
 	}
 }
 
+int CRMenu::getItemIndexFromPoint(lvPoint & pt)
+{
+    lvRect rc;
+    if (!getClientRect(rc))
+        return false;
+    if (rc.isPointInside(pt) && _pageItems != 0) {
+        int rel_y = pt.y - rc.top;
+        int idx = rel_y / (rc.height() / _pageItems);
+        idx += _topItem;
+        if (idx < _items.length())
+            return idx;
+    }
+    return -1;
+}
+
+bool CRMenu::isClickableElement(int x, int y, bool moveEvent)
+{
+    lvPoint pt = lvPoint(x, y);
+    int item_index = getItemIndexFromPoint(pt);
+    if (item_index != -1) {
+        if (_selectedItem != item_index)
+            setCurItem(item_index);
+        return true;
+    }
+    return false;
+}
+
+bool CRMenu::handleLongTouchEvent()
+{
+    _wm->postCommand(MCMD_SELECT_LONG, 0);
+    return true;
+}
+
+bool CRMenu::handleTouchUpEvent()
+{
+    _wm->postCommand(MCMD_SELECT, 0);
+    return true;
+}
+
 static bool readNextLine( const LVStreamRef & stream, lString16 & dst )
 {
     lString8 line;
@@ -2087,6 +2226,19 @@ bool CRGUICommandEvent::handle( CRGUIWindow * window )
     wm->forwardSystemEvents(false);
     bool res = window->onCommand( _param1, _param2 );
     wm->forwardSystemEvents(false);
+    if ( res )
+        wm->postEvent( new CRGUIUpdateEvent(false) );
+    return res;
+}
+
+bool CRGUITouchEvent::handle(CRGUIWindow *window)
+{
+    if ( _targetWindow!=NULL ) {
+        if ( window!=_targetWindow )
+            return false;
+    }
+    CRGUIWindowManager * wm = window->getWindowManager();
+    bool res = window->onTouchEvent( _param1, _param2, _type );
     if ( res )
         wm->postEvent( new CRGUIUpdateEvent(false) );
     return res;
