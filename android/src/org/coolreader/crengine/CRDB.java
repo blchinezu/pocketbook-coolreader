@@ -94,7 +94,7 @@ public class CRDB {
 		")"
 	};
 	
-	public final int DB_VERSION = 5;
+	public final int DB_VERSION = 7;
 	protected boolean updateSchema()
 	{
 		if (DROP_TABLES)
@@ -178,14 +178,122 @@ public class CRDB {
 			execSQLIgnoreErrors("ALTER TABLE book ADD COLUMN flags INTEGER DEFAULT 0");
 		if ( currentVersion>0 && currentVersion<5 )
 			migrateCoverpages();
-		// version 2 updates ====================================================================
+		if ( currentVersion<6 )
+			execSQL("CREATE TABLE IF NOT EXISTS opds_catalog (" +
+					"id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+					"name VARCHAR NOT NULL COLLATE NOCASE, " +
+					"url VARCHAR NOT NULL COLLATE NOCASE" +
+					")");
+		if ( currentVersion<7 )
+			addOPDSCatalogs(DEF_OPDS_URLS1);
 		// TODO: add more updates here
+			
 		// set current version
 		if ( currentVersion<DB_VERSION )
 			mDB.setVersion(DB_VERSION);
 		return true;
 	}
 	
+	private final static String[] DEF_OPDS_URLS1 = {
+			"http://www.feedbooks.com/catalog.atom", "Feedbooks",
+			"http://bookserver.archive.org/catalog/", "Internet Archive",
+			"http://m.gutenberg.org/", "Project Gutenberg", 
+//			"http://ebooksearch.webfactional.com/catalog.atom", "eBookSearch", 
+			"http://bookserver.revues.org/", "Revues.org", 
+			"http://www.legimi.com/opds/root.atom", "Legimi",
+			"http://www.ebooksgratuits.com/opds/", "Ebooks libres et gratuits",
+			"http://flibusta.net/opds/", "Flibusta", 
+//			"http://lib.ololo.cc/opds/", "lib.ololo.cc",
+	};
+	
+	private void addOPDSCatalogs(String[] catalogs) {
+		for (int i=0; i<catalogs.length-1; i+=2) {
+			String url = catalogs[i];
+			String name = catalogs[i+1];
+			saveOPDSCatalog(null, url, name);
+		}
+	}
+
+	private static String quoteSqlString(String src) {
+		if (src==null)
+			return "null";
+		String s = src.replaceAll("\\'", "\\\\'");
+		return "'" + s + "'";
+	}
+	
+	public boolean saveOPDSCatalog(Long id, String url, String name) {
+		if (url==null || name==null)
+			return false;
+		url = url.trim();
+		name = name.trim();
+		if (url.length()==0 || name.length()==0)
+			return false;
+		try {
+			Long existingIdByUrl = longQuery("SELECT id FROM opds_catalog WHERE url=" + quoteSqlString(url));
+			Long existingIdByName = longQuery("SELECT id FROM opds_catalog WHERE name=" + quoteSqlString(name));
+			if (existingIdByUrl!=null && existingIdByName!=null && !existingIdByName.equals(existingIdByUrl))
+				return false; // duplicates detected
+			if (id==null) {
+				id = existingIdByUrl;
+				if (id==null)
+					id = existingIdByName;
+			}
+			if (id==null) {
+				// insert new
+				execSQL("INSERT INTO opds_catalog (name, url) VALUES ("+quoteSqlString(name)+", "+quoteSqlString(url)+")");
+			} else {
+				// update existing
+				execSQL("UPDATE opds_catalog SET name="+quoteSqlString(name)+", url="+quoteSqlString(url)+" WHERE id=" + id);
+			}
+				
+		} catch (Exception e) {
+			Log.e("cr3", "exception while saving OPDS catalog item", e);
+			return false;
+		}
+		return true;
+	}
+
+	public boolean loadOPDSCatalogs(FileInfo parent) {
+		Log.i("cr3", "loadOPDSCatalogs()");
+		boolean found = false;
+		Cursor rs = null;
+		try {
+			String sql = "SELECT id, name, url FROM opds_catalog";
+			rs = mDB.rawQuery(sql, null);
+			if ( rs.moveToFirst() ) {
+				// remove existing entries
+				parent.clear();
+				// read DB
+				do {
+					Long id = rs.getLong(0);
+					String name = rs.getString(1);
+					String url = rs.getString(2);
+					FileInfo opds = new FileInfo();
+					opds.isDirectory = true;
+					opds.pathname = FileInfo.OPDS_DIR_PREFIX + url;
+					opds.filename = name;
+					opds.isListed = true;
+					opds.isScanned = true;
+					opds.parent = parent;
+					opds.id = id;
+					parent.addDir(opds);
+					found = true;
+				} while (rs.moveToNext());
+			}
+		} catch (Exception e) {
+			Log.e("cr3", "exception while loading list of OPDS catalogs", e);
+		} finally {
+			if ( rs!=null )
+				rs.close();
+		}
+		return found;
+	}
+	
+	public void removeOPDSCatalog(Long id) {
+		Log.i("cr3", "removeOPDSCatalog(" + id + ")");
+		execSQLIgnoreErrors("DELETE FROM opds_catalog WHERE id = " + id);
+	}
+
 	private void migrateCoverpages() {
 		Thread migrationThread = new Thread() {
 			@Override

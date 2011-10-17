@@ -410,15 +410,17 @@ public class CoolReader extends Activity
 		}
 	}
 	
+	private boolean isFirstStart = true;
+	
 	/** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-    	
-    	
 		log.i("CoolReader.onCreate() entered");
 		super.onCreate(savedInstanceState);
 
+    	isFirstStart = true;
+		
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 		
 		try {
@@ -838,7 +840,10 @@ public class CoolReader extends Activity
 		
 		backlightControl.onUserActivity();
 		
-
+		if (!isFirstStart)
+			return;
+		isFirstStart = false;
+		
 		if ( fileToLoadOnStart==null ) {
 			if ( mReaderView!=null && currentView==mReaderView && mReaderView.isBookLoaded() ) {
 				log.v("Book is already opened, showing ReaderView");
@@ -854,8 +859,7 @@ public class CoolReader extends Activity
 //			}
 		}
 		if ( !stopped ) {
-	        mEngine.showProgress( 500, R.string.progress_starting_cool_reader );
-			//mEngine.setHyphenationDictionary( HyphDict.RUSSIAN );
+			mEngine.showProgress( 500, R.string.progress_starting_cool_reader );
 		}
         //log.i("waiting for engine tasks completion");
         //engine.waitTasksCompletion();
@@ -1525,7 +1529,8 @@ public class CoolReader extends Activity
 			Intent intent0 = new Intent(currentDict.action).setComponent(new ComponentName(
 				currentDict.packageName, currentDict.className
 				)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			intent0.putExtra(SearchManager.QUERY, s);
+			if (s!=null)
+				intent0.putExtra(SearchManager.QUERY, s);
 			try {
 				startActivity( intent0 );
 			} catch ( ActivityNotFoundException e ) {
@@ -1545,7 +1550,8 @@ public class CoolReader extends Activity
 			final String EXTRA_MARGIN_RIGHT = "EXTRA_MARGIN_RIGHT";
 
 			Intent intent1 = new Intent(SEARCH_ACTION);
-			intent1.putExtra(EXTRA_QUERY, s); //Search Query
+			if (s!=null)
+				intent1.putExtra(EXTRA_QUERY, s); //Search Query
 			intent1.putExtra(EXTRA_FULLSCREEN, true); //
 			try
 			{
@@ -1556,9 +1562,12 @@ public class CoolReader extends Activity
 			break;
 		}
 	}
+
+	public void showDictionary() {
+		findInDictionaryInternal(null);
+	}
 	
 	public void findInDictionary( String s ) {
-		
 		if ( s!=null && s.length()!=0 ) {
 			s = s.trim();
 			for ( ;s.length()>0; ) {

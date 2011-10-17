@@ -260,4 +260,16 @@
     <string name="options_render_font_gamma">Гамма-коррекция шрифта</string>
     <string name="action_toggle_titlebar">Вкл/выкл колонтитул</string>
     <string name="action_show_position_info">Информация о позиции</string>
+    <string name="action_show_dictionary">Показать словарь</string>
+    <string name="action_open_last_book">Предыдущая книга</string>
+    <string name="mi_catalog_edit">Редактировать</string>
+    <string name="mi_catalog_add">Новый каталог</string>
+    <string name="mi_catalog_delete">Удалить каталог</string>
+    <string name="mi_catalog_open">Открыть каталог</string>
+    <string name="menu_title_catalog">Каталог OPDS</string>
+    <string name="dlg_catalog_edit_name">Название</string>
+    <string name="dlg_catalog_edit_url">URL</string>
+    <string name="dlg_catalog_edit_title">Каталог OPDS</string>
+    <string name="dlg_catalog_add_title">Добавить каталог</string>
+    <string name="options_format_min_space_width_percent">Мин. ширина пробела</string>
 </resources>

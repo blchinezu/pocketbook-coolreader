@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <resources>
     <string name="app_name">Cool reader</string>
     <string name="mi_search">Hľadať</string>
@@ -260,4 +260,16 @@
     <string name="options_render_font_gamma">Gamma korekcia písma</string>
     <string name="action_toggle_titlebar">Zap. / Vyp hlavičku</string>
     <string name="action_show_position_info">Informácie o polohe</string>
+    <string name="action_show_dictionary">Show dictionary</string>
+    <string name="action_open_last_book">Switch to previous book</string>
+    <string name="mi_catalog_edit">Edit Catalog</string>
+    <string name="mi_catalog_add">New Catalog</string>
+    <string name="mi_catalog_delete">Delete Catalog</string>
+    <string name="mi_catalog_open">Open Catalog</string>
+    <string name="menu_title_catalog">OPDS Catalog</string>
+    <string name="dlg_catalog_edit_name">Name</string>
+    <string name="dlg_catalog_edit_url">URL</string>
+    <string name="dlg_catalog_edit_title">OPDS Catalog</string>
+    <string name="dlg_catalog_add_title">Add Catalog</string>
+    <string name="options_format_min_space_width_percent">Min space width %</string>
 </resources>

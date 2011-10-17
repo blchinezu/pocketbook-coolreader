@@ -1,6 +1,7 @@
 package org.coolreader.crengine;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,7 +14,6 @@ import java.util.concurrent.Callable;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.Engine.HyphDict;
-import org.coolreader.crengine.DeviceInfo;
 
 import android.content.Context;
 import android.content.Intent;
@@ -113,6 +113,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     public static final String PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE = "crengine.image.scaling.zoomin.block.scale";
     public static final String PROP_IMG_SCALING_ZOOMOUT_BLOCK_MODE = "crengine.image.scaling.zoomout.block.mode";
     public static final String PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE = "crengine.image.scaling.zoomout.block.scale";
+    
+    public static final String PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT = "crengine.style.space.condensing.percent";
     
     public static final String PROP_MIN_FILE_SIZE_TO_CACHE  ="crengine.cache.filesize.min";
     public static final String PROP_FORCED_MIN_FILE_SIZE_TO_CACHE  ="crengine.cache.forced.filesize.min";
@@ -239,6 +241,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     	DCMD_TTS_PLAY(2021),
     	DCMD_TOGGLE_TITLEBAR(2022),
     	DCMD_SHOW_POSITION_INFO_POPUP(2023),
+    	DCMD_SHOW_DICTIONARY(2024),
+    	DCMD_OPEN_PREVIOUS_BOOK(2025),
     	;
     	
     	private final int nativeId;
@@ -852,7 +856,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			break;
 		case SELECTION_ACTION_DICTIONARY:
 			mActivity.findInDictionary( sel.text );
-			clearSelection();
+			//clearSelection();
 			break;
 		case SELECTION_ACTION_BOOKMARK:
 			clearSelection();
@@ -1563,6 +1567,17 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		case DCMD_ABOUT:
 			mActivity.showAboutDialog();
 			break;
+		case DCMD_SHOW_DICTIONARY:
+			mActivity.showDictionary();
+			break;
+		case DCMD_OPEN_PREVIOUS_BOOK:
+			loadPreviousDocument(new Runnable() {
+				@Override
+				public void run() {
+					// do nothing
+				}
+			});
+			break;
 		case DCMD_BOOK_INFO:
 			showBookInfo();
 			break;
@@ -2052,6 +2067,25 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		String lastBookName = mActivity.getLastSuccessfullyOpenedBook();
 		log.i("loadLastDocument() is called, lastBookName = " + lastBookName);
 		return loadDocument( lastBookName, errorHandler );
+	}
+	
+	/**
+	 * When current book is opened, switch to previous book.
+	 * @param errorHandler
+	 * @return
+	 */
+	public boolean loadPreviousDocument( final Runnable errorHandler )
+	{
+		BackgroundThread.ensureGUI();
+		BookInfo bi = mActivity.getHistory().getPreviousBook();
+		if (bi!=null && bi.getFileInfo()!=null) {
+			save();
+			close();
+			log.i("loadPreviousDocument() is called, prevBookName = " + bi.getFileInfo().getPathName());
+			return loadDocument( bi.getFileInfo().getPathName(), errorHandler );
+		}
+		errorHandler.run();
+		return false;
 	}
 	
 	public boolean loadDocument( String fileName, final Runnable errorHandler )
@@ -3555,6 +3589,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	    		mActivity.getHistory().saveToDB();
 		        if (mBookInfo.getFileInfo().id!=null && coverPageBytes!=null && coverPageDrawable!=null && mBookInfo!=null && mBookInfo.getFileInfo()!=null) {
 		        	mActivity.getHistory().setBookCoverpageData( mBookInfo.getFileInfo().id, coverPageBytes );
+		        	if (DeviceInfo.EINK_NOOK)
+		        		updateNookTouchCoverpage(mBookInfo.getFileInfo().getPathName(), coverPageBytes);
 		        	//mEngine.setProgressDrawable(coverPageDrawable);
 		        }
 		        mOpened = true;
@@ -4139,6 +4175,72 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     		
     	});
     }
+
+    private final static String NOOK_TOUCH_COVERPAGE_DIR = "/media/screensavers/currentbook";
+	private void updateNookTouchCoverpage(String bookFileName,
+			byte[] coverpageBytes) {
+		try {
+			String imageFileName;
+			int lastSlash = bookFileName.lastIndexOf("/");
+			// exclude path and extension
+			if (lastSlash >= 0 && lastSlash < bookFileName.length()) {
+				imageFileName = bookFileName.substring(lastSlash);
+			} else {
+				imageFileName = bookFileName;
+			}
+			int lastDot = imageFileName.lastIndexOf(".");
+			if (lastDot > 0) {
+				imageFileName = imageFileName.substring(0, lastDot);
+			}
+			// guess image type
+			if (coverpageBytes.length > 8 // PNG signature length
+					&& coverpageBytes[0] == 0x89 // PNG signature start 4 bytes
+					&& coverpageBytes[1] == 0x50
+					&& coverpageBytes[2] == 0x4E
+					&& coverpageBytes[3] == 0x47) {
+				imageFileName += ".png";
+			} else if (coverpageBytes.length > 3 // Checking only the first 3
+													// bytes of JPEG header
+					&& coverpageBytes[0] == 0xFF
+					&& coverpageBytes[1] == 0xD8
+					&& coverpageBytes[2] == 0xFF) {
+				imageFileName += ".jpg";
+			} else if (coverpageBytes.length > 3 // Checking only the first 3
+													// bytes of GIF header
+					&& coverpageBytes[0] == 0x47
+					&& coverpageBytes[1] == 0x49
+					&& coverpageBytes[2] == 0x46) {
+				imageFileName += ".gif";
+			} else if (coverpageBytes.length > 2 // Checking only the first 2
+													// bytes of BMP signature
+					&& coverpageBytes[0] == 0x42 && coverpageBytes[1] == 0x4D) {
+				imageFileName += ".bmp";
+			} else {
+				imageFileName += ".jpg"; // default image type
+			}
+			// create directory if it does not exist
+			File d = new File(NOOK_TOUCH_COVERPAGE_DIR);
+			if (!d.exists()) {
+				d.mkdir();
+			}
+			// create file only if file with same name does not exist
+			File f = new File(d, imageFileName);
+			if (!f.exists()) {
+				// delete other files in directory so that only current cover is
+				// shown all the time
+				File[] files = d.listFiles();
+				for (File oldFile : files) {
+					oldFile.delete();
+				}
+				// write the image file
+				FileOutputStream fos = new FileOutputStream(f);
+				fos.write(coverpageBytes);
+				fos.close();
+			}
+		} catch (Exception ex) {
+			log.e("Error writing cover page: ", ex);
+		}
+	}
     
     @Override
     public void finalize()

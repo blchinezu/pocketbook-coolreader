@@ -78,7 +78,7 @@ public class FileBrowser extends ListView {
 				FileInfo item = (FileInfo) getAdapter().getItem(position);
 				if ( item==null )
 					return false;
-				if ( item.isDirectory ) {
+				if (item.isDirectory && !item.isOPDSDir()) {
 					showDirectory(item, null);
 					return true;
 				}
@@ -97,7 +97,7 @@ public class FileBrowser extends ListView {
 	
 	public boolean onContextItemSelected(MenuItem item) {
 		
-		if ( selectedItem==null || selectedItem.isDirectory )
+		if ( selectedItem==null || (selectedItem.isDirectory && !selectedItem.isOPDSDir()) )
 			return false;
 			
 		switch (item.getItemId()) {
@@ -143,8 +143,54 @@ public class FileBrowser extends ListView {
 			mActivity.getHistory().removeBookInfo(selectedItem, true, false);
 			showRecentBooks();
 			return true;
+		case R.id.catalog_add:
+			log.d("catalog_add menu item selected");
+			editOPDSCatalog(null);
+			return true;
+		case R.id.catalog_delete:
+			log.d("catalog_delete menu item selected");
+			if (selectedItem!=null && selectedItem.isOPDSDir()) {
+				mActivity.getDB().removeOPDSCatalog(selectedItem.id);
+				refreshOPDSRootDirectory();
+			}
+			return true;
+		case R.id.catalog_edit:
+			log.d("catalog_edit menu item selected");
+			editOPDSCatalog(selectedItem);
+			return true;
+		case R.id.catalog_open:
+			log.d("catalog_open menu item selected");
+			showOPDSDir(selectedItem, null);
+			return true;
 		}
 		return false;
+	}
+	
+	private void editOPDSCatalog(FileInfo opds) {
+		if (opds==null) {
+			opds = new FileInfo();
+			opds.isDirectory = true;
+			opds.pathname = FileInfo.OPDS_DIR_PREFIX + "http://";
+			opds.filename = "New Catalog";
+			opds.isListed = true;
+			opds.isScanned = true;
+			opds.parent = mScanner.getOPDSRoot();
+		}
+		OPDSCatalogEditDialog dlg = new OPDSCatalogEditDialog(mActivity, opds, new Runnable() {
+			@Override
+			public void run() {
+				refreshOPDSRootDirectory();
+			}
+		});
+		dlg.show();
+	}
+	
+	private void refreshOPDSRootDirectory() {
+		FileInfo opdsRoot = mScanner.getOPDSRoot();
+		if ( opdsRoot!=null ) {
+			mActivity.getDB().loadOPDSCatalogs(opdsRoot);
+			showDirectory(opdsRoot, null);
+		}
 	}
 	
 	@Override
@@ -155,6 +201,9 @@ public class FileBrowser extends ListView {
 	    if ( isRecentDir() ) {
 		    inflater.inflate(R.menu.cr3_file_browser_recent_context_menu, menu);
 		    menu.setHeaderTitle(mActivity.getString(R.string.context_menu_title_recent_book));
+	    } else if (selectedItem!=null && selectedItem.isOPDSDir()) {
+		    inflater.inflate(R.menu.cr3_file_browser_opds_context_menu, menu);
+		    menu.setHeaderTitle(mActivity.getString(R.string.menu_title_catalog));
 	    } else if (selectedItem!=null && selectedItem.isDirectory) {
 		    inflater.inflate(R.menu.cr3_file_browser_folder_context_menu, menu);
 		    menu.setHeaderTitle(mActivity.getString(R.string.context_menu_title_book));
