@@ -2177,8 +2177,11 @@ void CRPbDictionaryMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef s
     valueSkin->drawText( buf, textRect, _translation16 );
     if (selected) {
 #ifdef CR_INVERT_PRSERVE_GRAYS
-        if (buf.GetBitsPerPixel() > 2)
-            buf.Rect(rc, 2, buf.GetTextColor());
+        if (buf.GetBitsPerPixel() > 2){
+		buf.InvertRect( rc.left, rc.top, rc.right, rc.bottom);
+		buf.InvertRect( rc.left + 2, rc.top + 2, rc.right -2 , rc.bottom - 2);
+//            buf.Rect(rc, 2, buf.GetTextColor());
+	}
         else
 #endif /* CR_INVERT_PRSERVE_GRAYS */
             buf.InvertRect(rc.left, rc.top, rc.right, rc.bottom);
