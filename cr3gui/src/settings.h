@@ -64,7 +64,8 @@ enum MainMenuItems_t {
     mm_FloatingPunctuation
 #ifdef CR_POCKETBOOK
     ,mm_rotateMode,
-    mm_rotateAngle
+    mm_rotateAngle,
+    mm_grayBufferMode
 #endif /* CR_POCKETBOOK*/
     ,mm_ImageScaling = 350,
     mm_blockImagesZoominMode,

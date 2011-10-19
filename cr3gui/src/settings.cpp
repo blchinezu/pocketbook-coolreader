@@ -620,6 +620,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {"70°", "10"},
         {NULL, NULL}
     };
+    item_def_t gray_buffer_bpp[] = {
+        {_("2 BPP"), "2"},
+        {_("3 BPP"), "3"},
+        {_("4 BPP"), "4"},
+        {_("8 BPP"), "8"},
+        {NULL, NULL}
+    };
 #endif
 
     item_def_t image_scaling_modes[] = {
@@ -979,6 +986,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
             mainMenu->addItem(touchMenu);
         }
 #endif
+#ifdef CR_POCKETBOOK
+        CRMenu * grayBufferModeMenu = new CRMenu(_wm, mainMenu, mm_grayBufferMode,
+                _("Gray buffer depth(need restart)"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_POCKETBOOK_GRAYBUFFER_BPP );
+        addMenuItems( grayBufferModeMenu, gray_buffer_bpp );
+        mainMenu->addItem( grayBufferModeMenu );
+#endif
+
         reconfigure(0);
 }
 
