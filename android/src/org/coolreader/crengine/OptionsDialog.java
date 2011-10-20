@@ -430,6 +430,9 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 				addKey(listView, ReaderView.KEYCODE_PAGE_BOTTOMLEFT, "Bottom left navigation button");
 				addKey(listView, ReaderView.KEYCODE_PAGE_TOPRIGHT, "Top right navigation button");
 				addKey(listView, ReaderView.KEYCODE_PAGE_BOTTOMRIGHT, "Bottom right navigation button");
+			} else if ( DeviceInfo.SONY_NAVIGATION_KEYS ) {
+					addKey(listView, KeyEvent.KEYCODE_DPAD_UP, "Prev button");
+					addKey(listView, KeyEvent.KEYCODE_DPAD_DOWN, "Next button");
 			} else {
 				addKey(listView, KeyEvent.KEYCODE_MENU, "Menu");
 				addKey(listView, KeyEvent.KEYCODE_DPAD_LEFT, "Left");
@@ -1173,6 +1176,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		if ( !DeviceInfo.EINK_SCREEN )
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_animation), ReaderView.PROP_PAGE_ANIMATION).add(mAnimation, mAnimationTitles).setDefaultValue("1"));
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_selection_action), ReaderView.PROP_APP_SELECTION_ACTION).add(mSelectionAction, mSelectionActionTitles).setDefaultValue("0"));
+		mOptionsPage.add(new BoolOption(this, getString(R.string.options_selection_keep_selection_after_dictionary), ReaderView.PROP_APP_SELECTION_PERSIST).setDefaultValue("0"));
 		
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_left), ReaderView.PROP_PAGE_MARGIN_LEFT).add(mMargins).setDefaultValue("5"));
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_right), ReaderView.PROP_PAGE_MARGIN_RIGHT).add(mMargins).setDefaultValue("5"));

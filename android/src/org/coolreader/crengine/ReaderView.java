@@ -139,6 +139,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     public static final String PROP_APP_BOOK_SORT_ORDER = "app.browser.sort.order";
     public static final String PROP_APP_DICTIONARY = "app.dictionary.current";
     public static final String PROP_APP_SELECTION_ACTION = "app.selection.action";
+    public static final String PROP_APP_SELECTION_PERSIST = "app.selection.persist";
     public static final String PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS = "app.browser.hide.empty.folders";
     public static final String PROP_APP_FILE_BROWSER_SIMPLE_MODE = "app.browser.simple.mode";
 
@@ -856,7 +857,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			break;
 		case SELECTION_ACTION_DICTIONARY:
 			mActivity.findInDictionary( sel.text );
-			//clearSelection();
+			if (!getSettings().getBool(PROP_APP_SELECTION_PERSIST, false))
+				clearSelection();
 			break;
 		case SELECTION_ACTION_BOOKMARK:
 			clearSelection();
@@ -1106,7 +1108,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			}
 			if ( touchEventIgnoreNextUp )
 				return true;
-			if ( !isManualScrollActive && !isBrightnessControlActive && !DeviceInfo.EINK_SCREEN && manualScrollStartPosX>=0 && manualScrollStartPosY>=0 ) {
+			if ( !isManualScrollActive && !isBrightnessControlActive && manualScrollStartPosX>=0 && manualScrollStartPosY>=0 ) {
 				int movex = manualScrollStartPosX - x;
 				int deltay = manualScrollStartPosY - y;
 				int deltax = movex < 0 ? -movex : movex;
@@ -1114,12 +1116,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 				if ( deltax + deltay > START_DRAG_THRESHOLD ) {
 					log.v("onTouchEvent: move threshold reached");
 					longTouchId++;
-					if ( manualScrollStartPosX < START_DRAG_THRESHOLD * 170 / 100 && deltay>deltax && isBacklightControlFlick==1 ) {
+					if ( manualScrollStartPosX < START_DRAG_THRESHOLD * 170 / 100 && deltay>deltax && isBacklightControlFlick==1 && !DeviceInfo.EINK_SCREEN) {
 						// brightness
 						isBrightnessControlActive = true;
 						startBrightnessControl(x, y);
 						return true;
-					} else if ( manualScrollStartPosX > dx - START_DRAG_THRESHOLD * 170 / 100 && deltay>deltax && isBacklightControlFlick==2 ) {
+					} else if ( manualScrollStartPosX > dx - START_DRAG_THRESHOLD * 170 / 100 && deltay>deltax && isBacklightControlFlick==2 && !DeviceInfo.EINK_SCREEN) {
 							// brightness
 							isBrightnessControlActive = true;
 							startBrightnessControl(x, y);
@@ -2080,7 +2082,6 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		BookInfo bi = mActivity.getHistory().getPreviousBook();
 		if (bi!=null && bi.getFileInfo()!=null) {
 			save();
-			close();
 			log.i("loadPreviousDocument() is called, prevBookName = " + bi.getFileInfo().getPathName());
 			return loadDocument( bi.getFileInfo().getPathName(), errorHandler );
 		}
@@ -2363,6 +2364,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			this.id = ++lastDrawTaskId;
 			this.doneHandler = doneHandler;
 			this.isPartially = isPartially;
+			cancelGc();
 		}
 		public void work() {
 			BackgroundThread.ensureBackground();
@@ -2394,6 +2396,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
    			mEngine.hideProgress();
    			if ( doneHandler!=null )
    				doneHandler.run();
+   			scheduleGc();
 		}
 		@Override
 		public void fail(Exception e) {
@@ -2648,6 +2651,23 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		});
 	}
 
+	private void startAutoScroll(final int startProgress)
+	{
+		if (DEBUG_ANIMATION) log.d("startAutoScroll()");
+		BackgroundThread.backgroundExecutor.execute(new Runnable() {
+			@Override
+			public void run() {
+				BackgroundThread.ensureBackground();
+				new AutoScrollAnimation(startProgress);
+				if ( currentAnimation!=null ) {
+					nextHiliteId++;
+					hiliteRect = null;
+				}
+			}
+			
+		});
+	}
+
 	
 	private final static boolean DEBUG_ANIMATION = false;
 	private volatile int updateSerialNumber = 0;
@@ -2788,10 +2808,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		ViewAnimationBase()
 		{
 			startTimeStamp = android.os.SystemClock.uptimeMillis();
+			cancelGc();
 		}
 		public void close()
 		{
 			currentAnimation = null;
+			scheduleGc();
 		}
 
 		
@@ -2822,6 +2844,137 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		abstract void draw( Canvas canvas );
 	}
 	
+	class AutoScrollAnimation extends ViewAnimationBase {
+
+		boolean isScrollView;
+		BitmapInfo image1;
+		BitmapInfo image2;
+		PositionProperties currPos;
+		int progress;
+		int pageCount;
+		
+		public AutoScrollAnimation(int startProgress) {
+			long start = android.os.SystemClock.uptimeMillis();
+			progress = startProgress;
+			currPos = getPositionPropsInternal(null);
+			pageCount = currPos.pageMode;
+			isScrollView = currPos.pageMode == 0;
+			if (isScrollView) {
+				
+			} else {
+				int page1 = currPos.pageNumber;
+				int page2 = currPos.pageNumber + 1;
+				if ( page2<0 || page2>=currPos.pageCount) {
+					currentAnimation = null;
+					return;
+				}
+				image1 = preparePageImage(0);
+				image2 = preparePageImage(1);
+				if ( page1==page2 ) {
+					log.v("PageViewAnimation -- cannot start animation: not moved");
+					return;
+				}
+				if ( image1==null || image2==null ) {
+					log.v("PageViewAnimation -- cannot start animation: page image is null");
+					return;
+				}
+				
+				long duration = android.os.SystemClock.uptimeMillis() - start;
+				log.v("AutoScrollAnimation -- created in " + duration + " millis");
+				currentAnimation = this;
+			}
+		}
+
+		@Override
+		public void update(int x, int y) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void stop(int x, int y) {
+			// TODO: decide whether to turn page
+			close();
+		}
+
+		@Override
+		public void animate() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void move(int duration, boolean accelerated) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public static final int MAX_PROGRESS = 10000;
+		public static final int START_ANIMATION_PROGRESS = 8000;
+		@Override
+		void draw(Canvas canvas) {
+			if (DEBUG_ANIMATION) log.v("AutoScrollAnimation.draw(" + progress + ")");
+			if (progress<START_ANIMATION_PROGRESS)
+				return; // don't draw page w/o started animation
+			int scrollPercent = 10000 * (progress - START_ANIMATION_PROGRESS) / (MAX_PROGRESS - START_ANIMATION_PROGRESS);
+			int w = image1.bitmap.getWidth(); 
+			int h = image1.bitmap.getHeight();
+			int div;
+			if (isScrollView) {
+				// scroll
+				div = h * scrollPercent / 10000;
+	    		Rect src1 = new Rect(0, 0, w, div);
+	    		Rect dst1 = new Rect(0, 0, w, div);
+	    		drawDimmedBitmap(canvas, image2.bitmap, src1, dst1);
+	    		Rect src2 = new Rect(0, div, w, h);
+	    		Rect dst2 = new Rect(0, div, w, h);
+	    		drawDimmedBitmap(canvas, image1.bitmap, src2, dst2);
+			} else {
+				if (image1.isReleased() || image2.isReleased())
+					return;
+				if (pageCount==2) {
+					if (scrollPercent<5000) {
+						// < 50%
+						div = h * scrollPercent / 5000;
+			    		Rect src1 = new Rect(0, 0, w/2, div);
+			    		Rect dst1 = new Rect(0, 0, w/2, div);
+			    		drawDimmedBitmap(canvas, image2.bitmap, src1, dst1);
+			    		Rect src2 = new Rect(0, div, w/2, h);
+			    		Rect dst2 = new Rect(0, div, w/2, h);
+			    		drawDimmedBitmap(canvas, image1.bitmap, src2, dst2);
+			    		Rect src3 = new Rect(w/2, 0, w, h);
+			    		Rect dst3 = new Rect(w/2, 0, w, h);
+			    		drawDimmedBitmap(canvas, image1.bitmap, src3, dst3);
+					} else {
+						// >=50%
+						div = h * (scrollPercent - 5000) / 5000;
+			    		Rect src1 = new Rect(w/2, 0, w/2, div);
+			    		Rect dst1 = new Rect(w/2, 0, w/2, div);
+			    		drawDimmedBitmap(canvas, image2.bitmap, src1, dst1);
+			    		Rect src2 = new Rect(w/2, div, w/2, h);
+			    		Rect dst2 = new Rect(w/2, div, w/2, h);
+			    		drawDimmedBitmap(canvas, image1.bitmap, src2, dst2);
+			    		Rect src3 = new Rect(0, 0, w/2, h);
+			    		Rect dst3 = new Rect(0, 0, w/2, h);
+			    		drawDimmedBitmap(canvas, image2.bitmap, src3, dst3);
+					}
+				} else {
+					div = h * scrollPercent / 10000;
+		    		Rect src1 = new Rect(0, 0, w, div);
+		    		Rect dst1 = new Rect(0, 0, w, div);
+		    		drawDimmedBitmap(canvas, image2.bitmap, src1, dst1);
+		    		Rect src2 = new Rect(0, div, w, h);
+		    		Rect dst2 = new Rect(0, div, w, h);
+		    		drawDimmedBitmap(canvas, image1.bitmap, src2, dst2);
+					//Rect shadowRect = new Rect(0, div, w, div + h/16);
+					//drawShadow( canvas, shadowRect );
+				}
+			}
+			
+		}
+		
+	}
+
 	//private static final int PAGE_ANIMATION_DURATION = 3000;
 	class ScrollViewAnimation extends ViewAnimationBase {
 		int startY;
@@ -4247,6 +4400,32 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     {
     	log.w("ReaderView.finalize() is called");
     	//destroyInternal();
+    }
+
+    private static volatile int gcCounter = 0;
+    private static final int GC_INTERVAL = 5000; // 5 ms
+    private static class GcScheduleTask implements Runnable {
+    	public static void scheduleGc() {
+    		BackgroundThread.instance().postGUI(new GcScheduleTask(), GC_INTERVAL);
+    	}
+    	private final int myCounter;
+    	private GcScheduleTask() {
+    		myCounter = ++gcCounter;
+    	}
+		@Override
+		public void run() {
+			if (myCounter == gcCounter) {
+				log.v("Initiating garbage collection");
+				System.gc();
+				++gcCounter;
+			}
+		}
+    }
+    public static void scheduleGc() {
+    	GcScheduleTask.scheduleGc();
+    }
+    public static void cancelGc() {
+    	++gcCounter;
     }
 
 	public ReaderView(CoolReader activity, Engine engine, BackgroundThread backThread, Properties props ) 
