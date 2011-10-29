@@ -12,7 +12,7 @@
 *******************************************************/
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
-#define CACHE_FILE_FORMAT_VERSION "3.04.03"
+#define CACHE_FILE_FORMAT_VERSION "3.04.06"
 
 #ifndef DOC_DATA_COMPRESSION_LEVEL
 /// data compression level (0=no compression, 1=fast compressions, 3=normal compression)
@@ -28,7 +28,7 @@
 //=====================================================
 
 #ifndef DOC_BUFFER_SIZE
-#define DOC_BUFFER_SIZE 0x800000 // default buffer size
+#define DOC_BUFFER_SIZE 0xA00000 // default buffer size
 #endif
 
 //--------------------------------------------------------
@@ -110,7 +110,7 @@ enum CacheFileBlockType {
     CBT_INDEX = 1,
     CBT_TEXT_DATA,
     CBT_ELEM_DATA,
-    CBT_RECT_DATA,
+    CBT_RECT_DATA, //4
     CBT_ELEM_STYLE_DATA,
     CBT_MAPS_DATA,
     CBT_PAGE_DATA, //7
@@ -118,7 +118,7 @@ enum CacheFileBlockType {
     CBT_NODE_INDEX,
     CBT_ELEM_NODE,
     CBT_TEXT_NODE,
-    CBT_REND_PARAMS,
+    CBT_REND_PARAMS, //12
     CBT_TOC_DATA,
     CBT_STYLE_DATA,
     CBT_BLOB_INDEX, //15
@@ -373,9 +373,9 @@ struct CacheFileHeader : public SimpleCacheFileHeader
     CacheFileHeader( CacheFileItem * indexRec, int fsize, lUInt32 dirtyFlag )
     : SimpleCacheFileHeader(dirtyFlag), _indexBlock(0,0)
     {
-        if ( indexRec )
+        if ( indexRec ) {
             memcpy( &_indexBlock, indexRec, sizeof(CacheFileItem));
-        else
+        } else
             memset( &_indexBlock, 0, sizeof(CacheFileItem));
         _fsize = fsize;
     }
@@ -401,7 +401,7 @@ class CacheFile
     // mark block as free, for later reusing
     void freeBlock( CacheFileItem * block );
     // writes file header
-    bool updateHeader( CacheFileItem * indexItem );
+    bool updateHeader();
     // writes index block
     bool writeIndex();
     // reads index from file
@@ -571,11 +571,13 @@ bool CacheFile::readIndex()
     // check CRC
     lUInt64 hash = calcHash64( (lUInt8*)index, sz );
     if ( hdr._indexBlock._dataHash!=hash ) {
-        CRLog::error("CacheFile::readIndex: CRC doesn't match");
+        CRLog::error("CacheFile::readIndex: CRC doesn't match found %08x expected %08x", hash, hdr._indexBlock._dataHash);
         delete[] index;
         return false;
     }
     for ( int i=0; i<count; i++ ) {
+        if (index[i]._dataType == CBT_INDEX)
+            index[i] = hdr._indexBlock;
         if ( !index[i].validate(_size) ) {
             delete[] index;
             return false;
@@ -595,6 +597,7 @@ bool CacheFile::readIndex()
         CRLog::error("CacheFile::readIndex: index block info doesn't match header");
         return false;
     }
+    _dirty = hdr._dirty;
     return true;
 }
 
@@ -603,35 +606,49 @@ bool CacheFile::writeIndex()
 {
     if ( !_indexChanged )
         return true; // no changes: no writes
+
     if ( _index.length()==0 )
-        return updateHeader( 0 );
+        return updateHeader();
+
     // create copy of index in memory
-    bool indexItemFound = findBlock( CBT_INDEX, 0 )!=NULL;
     int count = _index.length();
-    if ( !indexItemFound ) {
-        count++;
-        allocBlock( CBT_INDEX, 0, sizeof(CacheFileItem)*count );
+    CacheFileItem * indexItem = findBlock(CBT_INDEX, 0);
+    if (!indexItem) {
+        int sz = sizeof(CacheFileItem) * (count * 2 + 100);
+        allocBlock(CBT_INDEX, 0, sz);
+        indexItem = findBlock(CBT_INDEX, 0);
+        count = _index.length();
     }
-    CacheFileItem * index = new CacheFileItem[_index.length()];
-    memset( index, 0, sizeof(CacheFileItem)*_index.length());
-    for ( int i=0; i<_index.length(); i++ ) {
+    CacheFileItem * index = new CacheFileItem[count];
+    int sz = count * sizeof(CacheFileItem);
+    memset(index, 0, sz);
+    for ( int i = 0; i < count; i++ ) {
         memcpy( &index[i], _index[i], sizeof(CacheFileItem) );
+        if (index[i]._dataType == CBT_INDEX) {
+            index[i]._dataHash = 0;
+            index[i]._packedHash = 0;
+            index[i]._dataSize = 0;
+        }
     }
-    bool res = write( CBT_INDEX, 0, (const lUInt8*)index, _index.length()*sizeof(CacheFileItem), false );
-    CacheFileItem * indexItem = findBlock( CBT_INDEX, 0 );
+    bool res = write(CBT_INDEX, 0, (const lUInt8*)index, sz, false);
     delete[] index;
+
+    indexItem = findBlock(CBT_INDEX, 0);
     if ( !res || !indexItem ) {
         CRLog::error("CacheFile::writeIndex: error while writing index!!!");
         return false;
     }
-    updateHeader( indexItem );
+
+    updateHeader();
     _indexChanged = false;
     return true;
 }
 
 // writes file header
-bool CacheFile::updateHeader( CacheFileItem * indexItem )
+bool CacheFile::updateHeader()
 {
+    CacheFileItem * indexItem = NULL;
+    indexItem = findBlock(CBT_INDEX, 0);
     CacheFileHeader hdr(indexItem, _size, _dirty?1:0);
     _stream->SetPos(0);
     lvsize_t bytesWritten = 0;
@@ -820,7 +837,7 @@ bool CacheFile::read( lUInt16 type, lUInt16 dataIndex, lUInt8 * &buf, int &size 
 
     // check CRC
     lUInt64 hash = calcHash64( buf, size );
-    if ( hash!=block->_dataHash ) {
+    if (hash != block->_dataHash) {
         CRLog::error("CacheFile::read: CRC doesn't match for block %d:%d of size %d", type, dataIndex, (int)size);
         free(buf);
         buf = NULL;
@@ -834,13 +851,23 @@ bool CacheFile::read( lUInt16 type, lUInt16 dataIndex, lUInt8 * &buf, int &size 
 // writes block to file
 bool CacheFile::write( lUInt16 type, lUInt16 dataIndex, const lUInt8 * buf, int size, bool compress )
 {
-    setDirtyFlag(true);
     // check whether data is changed
     lUInt64 newhash = calcHash64( buf, size );
     CacheFileItem * existingblock = findBlock( type, dataIndex );
-    if ( existingblock && (int)existingblock->_uncompressedSize==size && existingblock->_dataHash==newhash ) {
-        return true;
+
+    if (existingblock) {
+        bool sameSize = ((int)existingblock->_uncompressedSize==size) || (existingblock->_uncompressedSize==0 && (int)existingblock->_dataSize==size);
+        if (sameSize && existingblock->_dataHash == newhash ) {
+            return true;
+        }
     }
+
+#if 1
+    if (existingblock)
+        CRLog::trace("*    oldsz=%d oldhash=%08x", (int)existingblock->_uncompressedSize, (int)existingblock->_dataHash);
+    CRLog::trace("* wr block t=%d[%d] sz=%d hash=%08x", type, dataIndex, size, newhash);
+#endif
+    setDirtyFlag(true);
 
     lUInt32 uncompressedSize = 0;
     lUInt64 newpackedhash = newhash;
@@ -888,11 +915,19 @@ bool CacheFile::write( lUInt16 type, lUInt16 dataIndex, const lUInt8 * buf, int 
 #if CACHE_FILE_WRITE_BLOCK_PADDING==1
     int paddingSize = block->_blockSize - size; //roundSector( size ) - size
     if ( paddingSize ) {
-        if ( block->_blockFilePos+block->_dataSize >= (int)_stream->GetSize() - _sectorSize ) {
+        if ((int)block->_blockFilePos + (int)block->_dataSize >= (int)_stream->GetSize() - _sectorSize) {
             LASSERT(size + paddingSize == block->_blockSize );
+//            if (paddingSize > 16384) {
+//                CRLog::error("paddingSize > 16384");
+//            }
+//            LASSERT(paddingSize <= 16384);
             lUInt8 tmp[16384];//paddingSize];
-            memset(tmp, 0xFF, paddingSize );
-            _stream->Write(tmp, paddingSize, &bytesWritten );
+            memset(tmp, 0xFF, paddingSize < 16384 ? paddingSize : 16384);
+            do {
+                int blkSize = paddingSize < 16384 ? paddingSize : 16384;
+                _stream->Write(tmp, blkSize, &bytesWritten );
+                paddingSize -= blkSize;
+            } while (paddingSize > 0);
         }
     }
 #endif
@@ -994,7 +1029,7 @@ bool CacheFile::create( LVStreamRef stream )
         _stream.Clear();
         return false;
     }
-    if ( !updateHeader( NULL ) ) {
+    if (!updateHeader()) {
         _stream.Clear();
         return false;
     }
@@ -2976,7 +3011,7 @@ bool ldomDocument::saveToStream( LVStreamRef stream, const char *, bool treeLayo
 ldomDocument::~ldomDocument()
 {
 #if BUILD_LITE!=1
-    //updateMap();
+    updateMap();
 #endif
 }
 
@@ -3224,6 +3259,10 @@ int ldomDocument::render( LVRendPageList * pages, LVDocViewCallback * callback, 
         updateRenderContext();
         _pagesData.reset();
         pages->serialize( _pagesData );
+
+        if ( callback ) {
+            callback->OnFormatEnd();
+        }
 
         //saveChanges();
 
@@ -7845,6 +7884,10 @@ ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
     default:
     case 0:
 
+        if (!maxTime.infinite())
+            _cacheFile->flush(false, maxTime);
+        CHECK_EXPIRATION("flushing of stream")
+
         persist( maxTime );
         CHECK_EXPIRATION("persisting of node data")
 
@@ -7919,6 +7962,7 @@ ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
         // fall through
     case 6:
         _mapSavingStage = 6;
+        CRLog::trace("ldomDocument::saveChanges() - ID data");
         {
             SerialBuf idbuf(4096);
             serializeMaps( idbuf );
