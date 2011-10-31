@@ -53,8 +53,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-3"
-#define CR_PB_BUILD_DATE "2011-09-18"
+#define CR_PB_VERSION "0.0.6-4"
+#define CR_PB_BUILD_DATE "2011-10-31"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -66,8 +66,8 @@ enum CRPbCommands {
 
 const char* TR(const char *label);
 
-#ifndef BACKGROUND_CACHE_FILE_CREATION
-#define BACKGROUND_CACHE_FILE_CREATION
-#endif
+//#ifndef BACKGROUND_CACHE_FILE_CREATION
+//#define BACKGROUND_CACHE_FILE_CREATION
+//#endif
 #endif //CR3_POCKETBOOK_H
 

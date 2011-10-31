@@ -426,13 +426,13 @@ void CRPocketBookWindowManager::updateCache()
         CR_TIMEOUT == main_win->getDocView()->updateCache(timeout))
         scheduleCacheSwap();
 }
-#endif
 
 static void cache_timer()
 {
     CRLog::trace("cache_timer()");
     CRPocketBookWindowManager::instance->updateCache();
 }
+#endif
 
 void executeCommand(int commandId, int commandParam)
 {

@@ -728,6 +728,11 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         addMenuItems( emboldenModeMenu, embolden_mode );
         mainMenu->addItem( emboldenModeMenu );
 
+        CRMenu * fontGammaMenu = new CRMenu(_wm, mainMenu, mm_fontGamma,
+                _("Font gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
+        addMenuItems( fontGammaMenu, font_gammas );
+        mainMenu->addItem( fontGammaMenu );
+
         CRMenu * fontAntialiasingMenu = new CRMenu(_wm, mainMenu, mm_FontAntiAliasing,
                 _("Font antialiasing"),
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_ANTIALIASING );
@@ -976,10 +981,6 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         scalingMenu->reconfigure( 0 );
         mainMenu->addItem( scalingMenu );
 
-        CRMenu * fontGammaMenu = new CRMenu(_wm, mainMenu, mm_fontGamma,
-                _("Font gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
-        addMenuItems( fontGammaMenu, font_gammas );
-        mainMenu->addItem( fontGammaMenu );
 #if 0
         if (getWindowManager()->getScreen()->isTouchSupported()) {
             CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(mainMenu, props);
