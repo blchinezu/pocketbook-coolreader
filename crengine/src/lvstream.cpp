@@ -4383,8 +4383,8 @@ class LVBlockWriteStream : public LVNamedStream
                 CRLog::error("buffer allocation failed");
             }
             memset(buf, 0, size);
-            modified_start = 0;
-            modified_end = size;
+//            modified_start = 0;
+//            modified_end = size;
         }
         ~Block()
         {
@@ -4402,7 +4402,6 @@ class LVBlockWriteStream : public LVNamedStream
             }
             for ( unsigned i=0; i<len; i++ ) {
                 lUInt8 ch1 = buf[offset+i];
-                //lUInt8 ch2 = ptr[i];
                 if ( pos+i>block_end || ch1!=ptr[i] ) {
                     buf[offset+i] = ptr[i];
                     if ( modified_start==(lvpos_t)-1 ) {
@@ -4474,10 +4473,13 @@ class LVBlockWriteStream : public LVNamedStream
             CRLog::trace("WRITE BLOCK %x (%x, %x)", (int)block->block_start, (int)block->modified_start, (int)(block->modified_end-block->modified_start));
 #endif
             _baseStream->SetPos( block->modified_start );
+            if (block->modified_end > _size) {
+                block->modified_end = block->block_end;
+            }
             lvpos_t bytesWritten = 0;
             lverror_t res = _baseStream->Write( block->buf + (block->modified_start-block->block_start), block->modified_end-block->modified_start, &bytesWritten );
             if ( res==LVERR_OK ) {
-                if ( _size<block->modified_end )
+                if (_size < block->modified_end)
                     _size = block->modified_end;
             }
             block->modified_end = block->modified_start = (lvpos_t)-1;
