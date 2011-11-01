@@ -739,6 +739,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         addMenuItems( fontAntialiasingMenu, antialiasing_modes );
         mainMenu->addItem( fontAntialiasingMenu );
 
+        CRMenu * kerningMenu = new CRMenu(_wm, mainMenu, mm_Kerning,
+                _("Font kerning"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_KERNING_ENABLED );
+        addMenuItems( kerningMenu, kerning_options );
+        mainMenu->addItem( kerningMenu );
+
         CRMenu * interlineSpaceMenu = new CRMenu(_wm, mainMenu, mm_InterlineSpace,
                 _("Interline space"),
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_INTERLINE_SPACE );
@@ -875,13 +881,6 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT );
         addMenuItems( spaceCondensingMenu, space_condensing_percent );
         mainMenu->addItem( spaceCondensingMenu );
-
-
-        CRMenu * kerningMenu = new CRMenu(_wm, mainMenu, mm_Kerning,
-                _("Font kerning"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_KERNING_ENABLED );
-        addMenuItems( kerningMenu, kerning_options );
-        mainMenu->addItem( kerningMenu );
 
         //====== Hyphenation ==========
 		if ( HyphMan::getDictList() ) {
