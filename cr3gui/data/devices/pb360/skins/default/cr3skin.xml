@@ -365,7 +365,7 @@
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="true" valign="bottom" halign="left"/>
         </value>
         <item base="#menu-item">
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="top" halign="left"/>
         </item>
   </menu>
   <menu id="bookmarks-rotated" base="#bookmarks" min-item-count="5" max-item-count="5" />

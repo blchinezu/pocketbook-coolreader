@@ -1037,14 +1037,9 @@ void CRMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectS
     } else {
         s1 = _label;
     }
-
     LVFontRef font = getFont();
     if ( font.isNull() )
         font = skin->getFont();
-    if ( s2.empty() ) {
-        textRect.top += (textRect.height() - font->getHeight() - itemBorders.top - itemBorders.bottom) / 2;
-        textRect.bottom = textRect.top + font->getHeight() + itemBorders.top + itemBorders.bottom;
-    }
     skin->drawText( buf, textRect, s1, font );
     if ( !s2.empty() ) {
         valueSkin->drawText( buf, valueRect, s2 );
@@ -1119,11 +1114,6 @@ void CRMenu::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinR
         } else {
             valueSkin->drawText( buf, textRect, s );
         }
-    } else {
-		LVFontRef skinFont = skin->getFont();
-		int fh = skinFont.isNull() ? skin->getFontSize() : skinFont->getHeight();
-        textRect.top += (textRect.height() - fh - itemBorders.top - itemBorders.bottom) / 2;
-        textRect.bottom = textRect.top + fh + itemBorders.top + itemBorders.bottom;
     }
     skin->drawText( buf, textRect, _label );
     if ( !s.empty() ) {
