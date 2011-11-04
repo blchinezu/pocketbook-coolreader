@@ -51,6 +51,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     public static final int KEYCODE_PAGE_TOPLEFT = 0x5c; // back = 92
     public static final int KEYCODE_PAGE_TOPRIGHT = 0x5e; // back = 94
     
+    public static final int SONY_DPAD_UP_SCANCODE = 105;
+    public static final int SONY_DPAD_DOWN_SCANCODE = 106;
+    
     
     public static final int PAGE_ANIMATION_NONE = 0;
     public static final int PAGE_ANIMATION_PAPER = 1;
@@ -423,6 +426,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	private int currentDoubleClickActionKeyCode = 0;
 	@Override
 	public boolean onKeyUp(int keyCode, final KeyEvent event) {
+		if (keyCode == 0)
+			keyCode = event.getScanCode();
 		if ( keyCode==KeyEvent.KEYCODE_VOLUME_DOWN || keyCode==KeyEvent.KEYCODE_VOLUME_UP )
 			if ( !enableVolumeKeys )
 				return super.onKeyUp(keyCode, event);
@@ -572,6 +577,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	
 	@Override
 	public boolean onKeyDown(int keyCode, final KeyEvent event) {
+		if (keyCode == 0)
+			keyCode = event.getScanCode();
 		backKeyDownHere = false;
 		if ( event.getRepeatCount()==0 ) {
 			log.v("onKeyDown("+keyCode + ", " + event +")");
