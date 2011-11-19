@@ -16,12 +16,14 @@ import android.util.Log;
 public class FileInfo {
 
 	public final static String RECENT_DIR_TAG = "@recent";
-	public final static String SEARCH_RESULT_DIR_TAG = "@search";
+	public final static String SEARCH_RESULT_DIR_TAG = "@searchResults";
 	public final static String ROOT_DIR_TAG = "@root";
 	public final static String OPDS_LIST_TAG = "@opds";
 	public final static String OPDS_DIR_PREFIX = "@opds:";
 	public final static String AUTHORS_TAG = "@authors";
+	public final static String AUTHOR_GROUP_PREFIX = "@authorGroup:";
 	public final static String AUTHOR_PREFIX = "@author:";
+	public final static String SEARCH_SHORTCUT_TAG = "@search";
 	
 	
 	
@@ -221,6 +223,32 @@ public class FileInfo {
 	public boolean isOPDSRoot()
 	{
 		return OPDS_LIST_TAG.equals(pathname);
+	}
+	
+	public boolean isSearchShortcut()
+	{
+		return SEARCH_SHORTCUT_TAG.equals(pathname);
+	}
+	
+	public boolean isBooksByAuthorRoot()
+	{
+		return AUTHORS_TAG.equals(pathname);
+	}
+	
+	public boolean isBooksByAuthorDir()
+	{
+		return pathname!=null && pathname.startsWith(AUTHOR_PREFIX);
+	}
+	
+	public long getAuthorId()
+	{
+		if (!isBooksByAuthorDir())
+			return 0;
+		try {
+			return Long.parseLong(pathname.substring(AUTHOR_PREFIX.length()));
+		} catch (NumberFormatException e) {
+			return 0;
+		}
 	}
 	
 	public boolean isHidden()
@@ -456,6 +484,14 @@ public class FileInfo {
 
 	public void setModified(boolean isModified) {
 		this.isModified = isModified;
+	}
+
+	public String getAuthors() {
+		return authors;
+	}
+	
+	public String getTitle() {
+		return title;
 	}
 
 	public void clear()

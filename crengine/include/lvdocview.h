@@ -582,8 +582,12 @@ public:
     CRBookmark * saveCurrentPageBookmark( lString16 comment );
     /// removes bookmark from list, and deletes it, false if not found
     bool removeBookmark( CRBookmark * bm );
+    /// sets new list of bookmarks, removes old values
+    void setBookmarkList(LVPtrVector<CRBookmark> & bookmarks);
     /// restores page using bookmark by numbered shortcut
 	bool goToPageShortcutBookmark( int number );
+    /// find bookmark by window point, return NULL if point doesn't belong to any bookmark
+    CRBookmark * findBookmarkByPoint(lvPoint pt);
     /// returns true if coverpage display is on
     bool getShowCover() { return  m_showCover; }
     /// sets coverpage display flag
@@ -632,6 +636,8 @@ public:
     virtual void selectRange( const ldomXRange & range );
     /// sets selection for list of words, clears previous selection
     virtual void selectWords( const LVArray<ldomWord> & words );
+    /// sets selections for ranges, clears previous selections
+    virtual void selectRanges(ldomXRangeList & ranges);
     /// clears selection
     virtual void clearSelection();
     /// update selection -- command handler
@@ -810,6 +816,10 @@ public:
 
     /// returns xpointer for specified window point
     ldomXPointer getNodeByPoint( lvPoint pt );
+    /// returns image source for specified window point, if point is inside image
+    LVImageSourceRef getImageByPoint(lvPoint pt);
+    /// draws scaled image into buffer, clear background according to current settings
+    bool drawImage(LVDrawBuf * buf, LVImageSourceRef img, int x, int y, int dx, int dy);
     /// converts point from window to document coordinates, returns true if success
     bool windowToDocPoint( lvPoint & pt );
     /// converts point from documsnt to window coordinates, returns true if success

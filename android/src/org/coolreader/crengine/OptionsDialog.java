@@ -90,11 +90,17 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			R.string.options_screen_update_mode_quality, R.string.options_screen_update_mode_fast, R.string.options_screen_update_mode_fast2
 		};
 	int[] mOrientations = new int[] {
-			0, 1//, 2, 3
-			,4
+			0, 1, 4
 		};
 	int[] mOrientationsTitles = new int[] {
-			R.string.options_page_orientation_0, R.string.options_page_orientation_90 //, R.string.options_page_orientation_180, R.string.options_page_orientation_270
+			R.string.options_page_orientation_0, R.string.options_page_orientation_90, 
+			R.string.options_page_orientation_sensor
+		};
+	int[] mOrientations_API9 = new int[] {
+			0, 1, 2, 3, 4
+		};
+	int[] mOrientationsTitles_API9 = new int[] {
+			R.string.options_page_orientation_0, R.string.options_page_orientation_90, R.string.options_page_orientation_180, R.string.options_page_orientation_270
 			,R.string.options_page_orientation_sensor
 		};
 	int[] mImageScalingModes = new int[] {
@@ -114,6 +120,12 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		};
 	int[] mFlickBrightnessTitles = new int[] {
 			R.string.options_controls_flick_brightness_none, R.string.options_controls_flick_brightness_left, R.string.options_controls_flick_brightness_right
+		};
+	int[] mTapSecondaryActionType = new int[] {
+			TAP_ACTION_TYPE_LONGPRESS, TAP_ACTION_TYPE_DOUBLE
+		};
+	int[] mTapSecondaryActionTypeTitles = new int[] {
+			R.string.options_controls_tap_type_long, R.string.options_controls_tap_type_double
 		};
 	int[] mAnimation = new int[] {
 			ReaderView.PAGE_ANIMATION_NONE, ReaderView.PAGE_ANIMATION_SLIDE, ReaderView.PAGE_ANIMATION_SLIDE2, 
@@ -1170,7 +1182,10 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		mOptionsPage.add(new StatusBarOption(this, getString(R.string.options_page_titlebar)));
 		mOptionsPage.add(new BoolOption(this, getString(R.string.options_page_footnotes), PROP_FOOTNOTES).setDefaultValue("1"));
 		//mOptionsPage.add(new ListOption(getString(R.string.options_page_orientation), PROP_ROTATE_ANGLE).add(mOrientations, mOrientationsTitles).setDefaultValue("0"));
-		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_orientation), PROP_APP_SCREEN_ORIENTATION).add(mOrientations, mOrientationsTitles).setDefaultValue("0").setIconId(android.R.drawable.ic_menu_always_landscape_portrait));
+		if (mActivity.getSDKLevel() >= 9)
+			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_orientation), PROP_APP_SCREEN_ORIENTATION).add(mOrientations_API9, mOrientationsTitles_API9).setDefaultValue("0").setIconId(android.R.drawable.ic_menu_always_landscape_portrait));
+		else
+			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_orientation), PROP_APP_SCREEN_ORIENTATION).add(mOrientations, mOrientationsTitles).setDefaultValue("0").setIconId(android.R.drawable.ic_menu_always_landscape_portrait));
 		if ( DeviceInfo.EINK_SCREEN_UPDATE_MODES_SUPPORTED ) {
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_screen_update_mode), PROP_APP_SCREEN_UPDATE_MODE).add(mScreenUpdateModes, mScreenUpdateModesTitles).setDefaultValue("0"));
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_screen_update_interval), PROP_APP_SCREEN_UPDATE_INTERVAL).add(mScreenFullUpdateInterval).setDefaultValue("10"));
@@ -1180,6 +1195,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_animation), PROP_PAGE_ANIMATION).add(mAnimation, mAnimationTitles).setDefaultValue("1"));
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_selection_action), PROP_APP_SELECTION_ACTION).add(mSelectionAction, mSelectionActionTitles).setDefaultValue("0"));
 		mOptionsPage.add(new BoolOption(this, getString(R.string.options_selection_keep_selection_after_dictionary), PROP_APP_SELECTION_PERSIST).setDefaultValue("0"));
+		mOptionsPage.add(new BoolOption(this, getString(R.string.options_view_bookmarks_highlight), PROP_APP_HIGHLIGHT_BOOKMARKS).setDefaultValue("1"));
 		
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_left), PROP_PAGE_MARGIN_LEFT).add(mMargins).setDefaultValue("5"));
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_right), PROP_PAGE_MARGIN_RIGHT).add(mMargins).setDefaultValue("5"));
@@ -1188,12 +1204,13 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		mOptionsApplication = new OptionsListView(getContext());
 		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_fullscreen), PROP_APP_FULLSCREEN));
 		mOptionsApplication.add(new DictOptions(this, getString(R.string.options_app_dictionary)));
-		mOptionsApplication.add(new TapZoneOption(this, getString(R.string.options_app_tapzones_normal), PROP_APP_TAP_ZONE_ACTIONS_TAP));
 		mOptionsApplication.add(new KeyMapOption(this, getString(R.string.options_app_key_actions)));
+		mOptionsApplication.add(new TapZoneOption(this, getString(R.string.options_app_tapzones_normal), PROP_APP_TAP_ZONE_ACTIONS_TAP));
+		mOptionsApplication.add(new ListOption(this, getString(R.string.options_controls_tap_secondary_action_type), PROP_APP_SECONDARY_TAP_ACTION_TYPE).add(mTapSecondaryActionType, mTapSecondaryActionTypeTitles).setDefaultValue(String.valueOf(TAP_ACTION_TYPE_LONGPRESS)));
+		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_double_tap_selection), PROP_APP_DOUBLE_TAP_SELECTION).setDefaultValue("0"));
 		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_show_cover_pages), PROP_APP_SHOW_COVERPAGES));
 		if ( !DeviceInfo.EINK_SCREEN )
 			mOptionsApplication.add(new BoolOption(this, getString(R.string.options_controls_enable_volume_keys), PROP_CONTROLS_ENABLE_VOLUME_KEYS).setDefaultValue("1"));
-		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_double_tap_selection), PROP_APP_DOUBLE_TAP_SELECTION).setDefaultValue("0"));
 		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_tapzone_hilite), PROP_APP_TAP_ZONE_HILIGHT).setDefaultValue("0"));
 		if ( !DeviceInfo.EINK_SCREEN )
 			mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_trackball_disable), PROP_APP_TRACKBALL_DISABLED).setDefaultValue("0"));

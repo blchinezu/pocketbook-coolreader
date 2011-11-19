@@ -276,6 +276,20 @@ public class BookmarksDlg  extends BaseDialog {
 		mList = new BookmarkList(activity, false);
 		body.addView(mList);
 		setView(frame);
+		setFlingHandlers(mList, new Runnable() {
+			@Override
+			public void run() {
+				// cancel
+				BookmarksDlg.this.dismiss();
+			}
+		}, new Runnable() {
+			@Override
+			public void run() {
+				// add bookmark
+				mReaderView.addBookmark(0);
+				BookmarksDlg.this.dismiss();
+			}
+		});
 	}
 
 	@Override
@@ -286,6 +300,11 @@ public class BookmarksDlg  extends BaseDialog {
 		super.onCreate(savedInstanceState);
 		registerForContextMenu(mList);
 	}
+	
+	private void listUpdated() {
+		mList.setShortcutMode(mList.isShortcutMode());
+	}
+	
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		
@@ -296,14 +315,12 @@ public class BookmarksDlg  extends BaseDialog {
 				switch (item.getItemId()) {
 				case R.id.bookmark_shortcut_add:
 					mReaderView.addBookmark(shortcut+1);
+					listUpdated();
 					dismiss();
 					return true;
 				case R.id.bookmark_delete:
-					Bookmark removed = mBookInfo.removeBookmark(bm);
-					if ( removed.getId()!=null ) {
-						mCoolReader.getDB().deleteBookmark(removed);
-						mList.setShortcutMode(mList.isShortcutMode());
-					}
+					if (mReaderView.removeBookmark(bm) != null)
+						listUpdated();
 					return true;
 				case R.id.bookmark_shortcut_goto:
 					mReaderView.goToBookmark(shortcut+1);
@@ -316,14 +333,12 @@ public class BookmarksDlg  extends BaseDialog {
 		switch (item.getItemId()) {
 		case R.id.bookmark_add:
 			mReaderView.addBookmark(0);
+			listUpdated();
 			dismiss();
 			return true;
 		case R.id.bookmark_delete:
-			Bookmark removed = mBookInfo.removeBookmark(bm);
-			if ( removed.getId()!=null ) {
-				mCoolReader.getDB().deleteBookmark(removed);
-				mList.setShortcutMode(mList.isShortcutMode());
-			}
+			if (mReaderView.removeBookmark(bm) != null)
+				listUpdated();
 			return true;
 		case R.id.bookmark_goto:
 			if ( bm!=null )
@@ -332,7 +347,7 @@ public class BookmarksDlg  extends BaseDialog {
 			return true;
 		case R.id.bookmark_edit:
 			if ( bm!=null && (bm.getType()==Bookmark.TYPE_COMMENT || bm.getType()==Bookmark.TYPE_CORRECTION)) {
-				BookmarkEditDialog dlg = new BookmarkEditDialog(mCoolReader, mReaderView, mBookInfo, bm, false);
+				BookmarkEditDialog dlg = new BookmarkEditDialog(mCoolReader, mReaderView, bm, false);
 				dlg.show();
 			}
 			dismiss();
@@ -347,6 +362,13 @@ public class BookmarksDlg  extends BaseDialog {
 					mCoolReader.showToast( getContext().getString(R.string.toast_bookmark_export_ok) + " " + s);
 				else
 					mCoolReader.showToast(getContext().getString(R.string.toast_bookmark_export_failed) + " " + s);
+			}
+			dismiss();
+			return true;
+		case R.id.bookmark_send:
+			if ( mBookInfo.getBookmarkCount()>0 ) {
+				String s = mBookInfo.getBookmarksExportText();
+				mCoolReader.sendBookFragment(mBookInfo, s);
 			}
 			dismiss();
 			return true;

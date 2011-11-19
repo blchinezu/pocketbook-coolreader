@@ -44,7 +44,11 @@ public class CRDB {
 			this.mDB = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
 		} catch (SQLiteDiskIOException e) {
 			moveToBackup(dbfile);
-			this.mDB = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
+			try {
+				this.mDB = SQLiteDatabase.openOrCreateDatabase(dbfile, null);
+			} catch (SQLiteDiskIOException e2) {
+				throw new SQLiteDiskIOException("can't open DB " + dbfile + ": " + e2.getMessage());
+			}
 		}
 		this.mDBFile = dbfile;
 		File coverFile = new File(dbfile.getAbsolutePath().replace(".sqlite", "_cover.sqlite"));
@@ -52,7 +56,12 @@ public class CRDB {
 			this.mCoverpageDB = SQLiteDatabase.openOrCreateDatabase(coverFile, null);
 		} catch (SQLiteDiskIOException e) {
 			moveToBackup(coverFile);
-			this.mDB = SQLiteDatabase.openOrCreateDatabase(coverFile, null);
+			this.mCoverpageDB = SQLiteDatabase.openOrCreateDatabase(coverFile, null);
+			try {
+				this.mCoverpageDB = SQLiteDatabase.openOrCreateDatabase(coverFile, null);
+			} catch (SQLiteDiskIOException e2) {
+				throw new SQLiteDiskIOException("can't open DB " + coverFile + ": " + e2.getMessage());
+			}
 		}
 		this.mCoverpageDBFile = coverFile;
 		return true;
@@ -234,9 +243,8 @@ public class CRDB {
 			"http://www.legimi.com/opds/root.atom", "Legimi",
 			"http://www.ebooksgratuits.com/opds/", "Ebooks libres et gratuits",
 			"http://flibusta.net/opds/", "Flibusta", 
-//			"http://lib.ololo.cc/opds/", "lib.ololo.cc",
 	};
-	
+
 	private void addOPDSCatalogs(String[] catalogs) {
 		for (int i=0; i<catalogs.length-1; i+=2) {
 			String url = catalogs[i];
@@ -245,6 +253,79 @@ public class CRDB {
 		}
 	}
 
+	public boolean loadAuthorBooks(FileInfo parent) {
+		Log.i("cr3", "loadAuthorBooks()");
+		parent.clear();
+		boolean found = false;
+		if (!parent.isBooksByAuthorDir())
+			return false;
+		long id = parent.getAuthorId();
+		if (id == 0)
+			return false;
+		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
+		if (findAuthorBooks(list, id)) {
+			for (FileInfo file : list) {
+				file.parent = parent;
+				parent.addFile(file);
+			}
+		}
+		return found;
+	}
+
+	public boolean loadAuthorsList(FileInfo parent) {
+		Log.i("cr3", "loadAuthorsList()");
+		parent.clear();
+		boolean found = false;
+		Cursor rs = null;
+		FileInfo letterDir = null;
+		String lastAuthorFirstLetter = null;
+		try {
+			String sql = "SELECT author.id, author.name, count(*) as book_count FROM author INNER JOIN book_author ON book_author.author_fk = author.id GROUP BY author.id, author.name ORDER BY author.name";
+			rs = mDB.rawQuery(sql, null);
+			if ( rs.moveToFirst() ) {
+				// remove existing entries
+				parent.clear();
+				// read DB
+				do {
+					long id = rs.getLong(0);
+					String name = rs.getString(1);
+					Integer bookCount = rs.getInt(2);
+					String firstLetter = (name!=null && name.length()>0) ? name.substring(0, 1).toUpperCase() : "_";
+					if (letterDir == null || !firstLetter.equals(lastAuthorFirstLetter)) {
+						letterDir = new FileInfo();
+						letterDir.isDirectory = true;
+						letterDir.pathname = FileInfo.AUTHOR_GROUP_PREFIX + firstLetter;
+						letterDir.filename = firstLetter + "...";
+						letterDir.isListed = true;
+						letterDir.isScanned = true;
+						letterDir.parent = parent;
+						letterDir.id = id;
+						lastAuthorFirstLetter = firstLetter;
+						parent.addDir(letterDir);
+						found = true;
+					}
+					FileInfo author = new FileInfo();
+					author.isDirectory = true;
+					author.pathname = FileInfo.AUTHOR_PREFIX + id;
+					author.filename = name;
+					author.isListed = true;
+					author.isScanned = true;
+					author.parent = parent;
+					author.id = id;
+					author.tag = bookCount;
+					letterDir.addDir(author);
+					found = true;
+				} while (rs.moveToNext());
+			}
+		} catch (Exception e) {
+			Log.e("cr3", "exception while loading list of authors", e);
+		} finally {
+			if ( rs!=null )
+				rs.close();
+		}
+		return found;
+	}
+	
 	private static String quoteSqlString(String src) {
 		if (src==null)
 			return "null";
@@ -363,7 +444,13 @@ public class CRDB {
 	public CRDB( File dbfile )
 	{
 		open(dbfile);
-		updateSchema();
+
+		try {
+			updateSchema();
+		} catch (SQLiteDiskIOException e) {
+			throw (SQLiteDiskIOException)new SQLiteDiskIOException("error updating schema " + mDBFile + ": " + e.getMessage()).initCause(e);
+		}
+
 		dumpStatistics();
 	}
 	
@@ -589,6 +676,30 @@ public class CRDB {
 			}
 		} finally {
 			rs.close();
+		}
+		return found;
+	}
+	
+	synchronized public boolean findAuthorBooks(ArrayList<FileInfo> list, long authorId)
+	{
+		String sql = READ_FILEINFO_SQL + " LEFT JOIN book_author ON book_author.book_fk = b.id WHERE book_author.author_fk = " + authorId + " ORDER BY b.title";
+		Cursor rs = null;
+		boolean found = false;
+		try {
+			rs = mDB.rawQuery(sql, null);
+			if ( rs.moveToFirst() ) {
+				do {
+					FileInfo fileInfo = new FileInfo();
+					readFileInfoFromCursor( fileInfo, rs );
+					if ( !fileInfo.fileExists() )
+						continue;
+					list.add(fileInfo);
+					found = true;
+				} while (rs.moveToNext());
+			}
+		} finally {
+			if (rs != null)
+				rs.close();
 		}
 		return found;
 	}
@@ -1035,34 +1146,38 @@ public class CRDB {
 	synchronized public boolean save( FileInfo fileInfo )
 	{
 		boolean authorsChanged = true;
-		if ( fileInfo.id!=null ) {
-			// update
-			FileInfo oldValue = new FileInfo();
-			oldValue.id = fileInfo.id;
-			if ( findById(oldValue) ) {
-				// found, updating
-				QueryHelper h = new QueryHelper(fileInfo, oldValue);
-				h.update(fileInfo.id);
-				authorsChanged = !eq(fileInfo.authors, oldValue.authors);
+		try {
+			if ( fileInfo.id!=null ) {
+				// update
+				FileInfo oldValue = new FileInfo();
+				oldValue.id = fileInfo.id;
+				if ( findById(oldValue) ) {
+					// found, updating
+					QueryHelper h = new QueryHelper(fileInfo, oldValue);
+					h.update(fileInfo.id);
+					authorsChanged = !eq(fileInfo.authors, oldValue.authors);
+				} else {
+					oldValue = new FileInfo();
+					QueryHelper h = new QueryHelper(fileInfo, oldValue);
+					fileInfo.id = h.insert();
+				}
 			} else {
-				oldValue = new FileInfo();
+				FileInfo oldValue = new FileInfo();
 				QueryHelper h = new QueryHelper(fileInfo, oldValue);
 				fileInfo.id = h.insert();
 			}
-		} else {
-			FileInfo oldValue = new FileInfo();
-			QueryHelper h = new QueryHelper(fileInfo, oldValue);
-			fileInfo.id = h.insert();
-		}
-		fileInfo.setModified(false);
-		if ( fileInfo.id!=null ) {
-			if ( authorsChanged ) {
-				Long[] authorIds = getAuthorIds(fileInfo.authors);
-				saveBookAuthors(fileInfo.id, authorIds);
+			fileInfo.setModified(false);
+			if ( fileInfo.id!=null ) {
+				if ( authorsChanged ) {
+					Long[] authorIds = getAuthorIds(fileInfo.authors);
+					saveBookAuthors(fileInfo.id, authorIds);
+				}
+				return true;
 			}
-			return true;
+			return false;
+		} catch (SQLiteDiskIOException e) {
+			throw new SQLiteDiskIOException("error while writing to DB " + mDBFile + ": " + e.getMessage());
 		}
-		return false;
 	}
 
     public void flush()

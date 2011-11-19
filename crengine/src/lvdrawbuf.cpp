@@ -42,6 +42,11 @@ static lUInt8 rgbToGray( lUInt32 color, int bpp )
     return (lUInt8)(((r + g + g + b)>>2) & (((1<<bpp)-1)<<(8-bpp)));
 }
 
+static lUInt16 rgb565(int r, int g, int b) {
+	// rrrr rggg gggb bbbb
+	return (lUInt16)(((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((g & 0xF8) >> 3));
+}
+
 static lUInt8 rgbToGrayMask( lUInt32 color, int bpp )
 {
     switch ( bpp ) {
@@ -76,6 +81,19 @@ static void ApplyAlphaRGB( lUInt32 &dst, lUInt32 src, lUInt32 alpha )
         lUInt32 n1 = (((dst & 0xFF00FF) * alpha + (src & 0xFF00FF) * opaque) >> 8) & 0xFF00FF;
         lUInt32 n2 = (((dst & 0x00FF00) * alpha + (src & 0x00FF00) * opaque) >> 8) & 0x00FF00;
         dst = n1 | n2;
+    }
+}
+
+static void ApplyAlphaRGB565( lUInt16 &dst, lUInt16 src, lUInt32 alpha )
+{
+    if ( alpha==0 )
+        dst = src;
+    else if ( alpha<255 ) {
+        lUInt32 opaque = 256 - alpha;
+        lUInt32 r = (((dst & 0xF800) * alpha + (src & 0xF800) * opaque) >> 8) & 0xF800;
+        lUInt32 g = (((dst & 0x07E0) * alpha + (src & 0x7E00) * opaque) >> 8) & 0x07E0;
+        lUInt32 b = (((dst & 0x0018) * alpha + (src & 0x0018) * opaque) >> 8) & 0x0018;
+        dst = (lUInt16)(r | g | b);
     }
 }
 
@@ -1205,6 +1223,7 @@ void LVColorDrawBuf::FillRect( int x0, int y0, int x1, int y1, lUInt32 color )
         y1 = _clip.bottom;
     if (x0>=x1 || y0>=y1)
         return;
+    int alpha = (color >> 24) & 0xFF;
     if ( _bpp==16 ) {
         lUInt16 cl16 = rgb888to565(color);
         for (int y=y0; y<y1; y++)
@@ -1212,7 +1231,10 @@ void LVColorDrawBuf::FillRect( int x0, int y0, int x1, int y1, lUInt32 color )
             lUInt16 * line = (lUInt16 *)GetScanLine(y);
             for (int x=x0; x<x1; x++)
             {
-                line[x] = cl16;
+                if (alpha)
+                    ApplyAlphaRGB565(line[x], color, alpha);
+                else
+                    line[x] = cl16;
             }
         }
     } else {
@@ -1221,7 +1243,10 @@ void LVColorDrawBuf::FillRect( int x0, int y0, int x1, int y1, lUInt32 color )
             lUInt32 * line = (lUInt32 *)GetScanLine(y);
             for (int x=x0; x<x1; x++)
             {
-                line[x] = color;
+                if (alpha)
+                    ApplyAlphaRGB(line[x], color, alpha);
+                else
+                    line[x] = color;
             }
         }
     }
@@ -1525,9 +1550,149 @@ void LVGrayDrawBuf::DrawTo( LVDrawBuf * buf, int x, int y, int options, lUInt32 
         memcpy( buf->GetScanLine(0), GetScanLine(0), GetHeight() * GetRowSize() );
 		return;
 	}
-	if ( buf->GetBitsPerPixel()!=GetBitsPerPixel() )
+    int bpp = GetBitsPerPixel();
+	if (buf->GetBitsPerPixel() == 32) {
+		// support for 32bpp to Gray drawing
+	    for (int yy=0; yy<_dy; yy++)
+	    {
+	        if (y+yy >= clip.top && y+yy < clip.bottom)
+	        {
+	            lUInt8 * src = (lUInt8 *)GetScanLine(yy);
+                lUInt32 * dst = ((lUInt32 *)buf->GetScanLine(y+yy)) + x;
+	            if (bpp==1)
+	            {
+	                int shift = x & 7;
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt8 cl = (*src << shift) & 0x80;
+	                        *dst = cl ? 0xFFFFFF : 0x000000;
+	                    }
+	                    dst++;
+	                    if (++shift >= 8) {
+	                    	shift = 0;
+		                    src++;
+	                    }
+
+	                }
+	            }
+	            else if (bpp==2)
+	            {
+	                int shift = x & 3;
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt32 cl = (*src << (shift<<1)) & 0xC0;
+	                        cl = cl | (cl >> 2) | (cl>>4) | (cl>>6);
+	                        *dst = cl | (cl << 8) | (cl << 16);
+	                    }
+	                    dst++;
+	                    if (++shift >= 4) {
+	                    	shift = 0;
+		                    src++;
+	                    }
+
+	                }
+	            }
+	            else
+	            {
+	            	// byte per pixel
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt32 cl = *src;
+	                        if (bpp == 3) {
+	                        	cl &= 0xE0;
+	                        	cl = cl | (cl>>3) | (cl>>6);
+	                        } else if (bpp == 4) {
+	                        	cl &= 0xF0;
+	                        	cl = cl | (cl>>4);
+	                        }
+	                        *dst = cl | (cl << 8) | (cl << 16);
+	                    }
+	                    dst++;
+	                    src++;
+	                }
+	            }
+	        }
+	    }
+	    return;
+	}
+	if (buf->GetBitsPerPixel() == 16) {
+		// support for 32bpp to Gray drawing
+	    for (int yy=0; yy<_dy; yy++)
+	    {
+	        if (y+yy >= clip.top && y+yy < clip.bottom)
+	        {
+	            lUInt8 * src = (lUInt8 *)GetScanLine(yy);
+                lUInt16 * dst = ((lUInt16 *)buf->GetScanLine(y+yy)) + x;
+	            if (bpp==1)
+	            {
+	                int shift = x & 7;
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt8 cl = (*src << shift) & 0x80;
+	                        *dst = cl ? 0xFFFF : 0x0000;
+	                    }
+	                    dst++;
+	                    if (++shift >= 8) {
+	                    	shift = 0;
+		                    src++;
+	                    }
+
+	                }
+	            }
+	            else if (bpp==2)
+	            {
+	                int shift = x & 3;
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt16 cl = (*src << (shift<<1)) & 0xC0;
+	                        cl = cl | (cl >> 2) | (cl>>4) | (cl>>6);
+	                        *dst = rgb565(cl, cl, cl);
+	                    }
+	                    dst++;
+	                    if (++shift >= 4) {
+	                    	shift = 0;
+		                    src++;
+	                    }
+
+	                }
+	            }
+	            else
+	            {
+	            	// byte per pixel
+	                for (int xx=0; xx<_dx; xx++)
+	                {
+	                    if ( x+xx >= clip.left && x+xx < clip.right )
+	                    {
+	                        lUInt16 cl = *src;
+	                        if (bpp == 3) {
+	                        	cl &= 0xE0;
+	                        	cl = cl | (cl>>3) | (cl>>6);
+	                        } else if (bpp == 4) {
+	                        	cl &= 0xF0;
+	                        	cl = cl | (cl>>4);
+	                        }
+	                        *dst = rgb565(cl, cl, cl);
+	                    }
+	                    dst++;
+	                    src++;
+	                }
+	            }
+	        }
+	    }
+	    return;
+	}
+	if (buf->GetBitsPerPixel() != bpp)
 		return; // not supported yet
-    int bpp = buf->GetBitsPerPixel();
     for (int yy=0; yy<_dy; yy++)
     {
         if (y+yy >= clip.top && y+yy < clip.bottom)

@@ -14,6 +14,7 @@ import org.coolreader.crengine.CRDB;
 import org.coolreader.crengine.DeviceInfo;
 import org.coolreader.crengine.Engine;
 import org.coolreader.crengine.Engine.HyphDict;
+import org.coolreader.crengine.BookInfo;
 import org.coolreader.crengine.FileBrowser;
 import org.coolreader.crengine.FileInfo;
 import org.coolreader.crengine.History;
@@ -25,6 +26,7 @@ import org.coolreader.crengine.ReaderAction;
 import org.coolreader.crengine.ReaderView;
 import org.coolreader.crengine.Scanner;
 import org.coolreader.crengine.TTS;
+import org.coolreader.crengine.Utils;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
 import org.coolreader.crengine.EinkScreen;
 
@@ -185,6 +187,30 @@ public class CoolReader extends Activity
 		}
 	}
 	
+	private int sdkInt = 0;
+	public int getSDKLevel() {
+		if (sdkInt > 0)
+			return sdkInt;
+		// hack for Android 1.5
+		sdkInt = 3;
+		Field fld;
+		try {
+			Class<?> cl = android.os.Build.VERSION.class;
+			fld = cl.getField("SDK_INT");
+			sdkInt = fld.getInt(cl);
+			log.i("API LEVEL " + sdkInt + " detected");
+		} catch (SecurityException e) {
+			// ignore
+		} catch (NoSuchFieldException e) {
+			// ignore
+		} catch (IllegalArgumentException e) {
+			// ignore
+		} catch (IllegalAccessException e) {
+			// ignore
+		}
+		return sdkInt;
+	}
+	
 	private boolean mWakeLockEnabled = false;
 	public boolean isWakeLockEnabled() {
 		return mWakeLockEnabled;
@@ -222,6 +248,10 @@ public class CoolReader extends Activity
 			return 0;
 		case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
 			return 1;
+		case ActivityInfo_SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+			return 2;
+		case ActivityInfo_SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+			return 3;
 		default:
 			return orientationFromSensor;
 		}
@@ -229,101 +259,125 @@ public class CoolReader extends Activity
 
 	public boolean isLandscape()
 	{
-		return screenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+		return screenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || screenOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
 	}
+
+	// support pre API LEVEL 9
+	final static public int ActivityInfo_SCREEN_ORIENTATION_SENSOR_PORTRAIT = 7;
+	final static public int ActivityInfo_SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
+	final static public int ActivityInfo_SCREEN_ORIENTATION_REVERSE_PORTRAIT = 9;
+	final static public int ActivityInfo_SCREEN_ORIENTATION_REVERSE_LANDSCAPE = 8;
+	final static public int ActivityInfo_SCREEN_ORIENTATION_FULL_SENSOR = 10;
 
 	public void setScreenOrientation( int angle )
 	{
 		int newOrientation = screenOrientation;
-//		{
-//			ActivityManager am = (ActivityManager)getSystemService(
-//		            Context.ACTIVITY_SERVICE);
-			//am.getDeviceConfigurationInfo().
-
-//			WindowManager wm = (WindowManager)getSystemService(
-//		            Context.WINDOW_SERVICE);
-			
-//		}
-		//getWindowManager(). //getDefaultDisplay().getMetrics(outMetrics)
-		if ( angle==4 )
-			newOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR;
-		else if ( (angle&1)!=0 )
-			newOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-		else
-			newOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-		if ( newOrientation!=screenOrientation ) {
+		boolean level9 = getSDKLevel() >= 9;
+		switch (angle) {
+		case 0:
+			newOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT; // level9 ? ActivityInfo_SCREEN_ORIENTATION_SENSOR_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+			break;
+		case 1:
+			newOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE; // level9 ? ActivityInfo_SCREEN_ORIENTATION_SENSOR_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+			break;
+		case 2:
+			newOrientation = level9 ? ActivityInfo_SCREEN_ORIENTATION_REVERSE_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+			break;
+		case 3:
+			newOrientation = level9 ? ActivityInfo_SCREEN_ORIENTATION_REVERSE_LANDSCAPE : ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+			break;
+		case 4:
+			newOrientation = level9 ? ActivityInfo_SCREEN_ORIENTATION_FULL_SENSOR : ActivityInfo.SCREEN_ORIENTATION_SENSOR;
+			break;
+		}
+		if (newOrientation != screenOrientation) {
+			log.d("setScreenOrientation(" + angle + ")");
 			screenOrientation = newOrientation;
 			setRequestedOrientation(screenOrientation);
 			applyScreenOrientation(getWindow());
-			
-//			if ( newOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE )
-//				Surface.setOrientation(Display.DEFAULT_DISPLAY, Surface.ROTATION_270);
-//			else if ( newOrientation == ActivityInfo.SCREEN_ORIENTATION_PORTRAIT )
-//				Surface.setOrientation(Display.DEFAULT_DISPLAY, Surface.ROTATION_180);
 		}
 	}
 
-	private Runnable backlightTimerTask = null; 
-	private class ScreenBacklightControl
-	{
+	private Runnable backlightTimerTask = null;
+	private static long lastUserActivityTime;
+
+	private class ScreenBacklightControl {
 		PowerManager.WakeLock wl = null;
-		public ScreenBacklightControl()
-		{
+
+		public ScreenBacklightControl() {
 		}
-		public static final int SCREEN_BACKLIGHT_DURATION_STEPS = 3;
-		public static final int SCREEN_BACKLIGHT_TIMER_STEP = 60*1000;
-		int backlightCountDown = 0; 
-		public void onUserActivity()
-		{
-			if ( !isWakeLockEnabled() )
+
+		public static final int SCREEN_BACKLIGHT_TIMER_INTERVAL = 3 * 60 * 1000;
+
+		public void onUserActivity() {
+			lastUserActivityTime = Utils.timeStamp();
+			if (!isWakeLockEnabled())
 				return;
-			if ( wl==null ) {
-				PowerManager pm = (PowerManager)getSystemService(
-			            Context.POWER_SERVICE);
-				wl = pm.newWakeLock(
-			        PowerManager.SCREEN_BRIGHT_WAKE_LOCK
-			        /* | PowerManager.ON_AFTER_RELEASE */,
-			        "cr3");
+			if (wl == null) {
+				PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+				wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK
+				/* | PowerManager.ON_AFTER_RELEASE */, "cr3");
+				log.d("ScreenBacklightControl: WakeLock created");
 			}
-			if ( !isStarted() ) {
-			    release();
-			    return;
+			if (!isStarted()) {
+				log.d("ScreenBacklightControl: user activity while not started");
+				release();
+				return;
 			}
-			if ( !wl.isHeld() )
+
+			if (!isHeld()) {
+				log.d("ScreenBacklightControl: acquiring WakeLock");
 				wl.acquire();
-			backlightCountDown = SCREEN_BACKLIGHT_DURATION_STEPS;
-			if ( backlightTimerTask==null ) {
-				backlightTimerTask = new Runnable() {
-					public void run() {
-						if ( backlightTimerTask!=this )
-							return;
-						if ( backlightCountDown<=0 || !isStarted())
-							release();
-						else {
-							backlightCountDown--;
-							BackgroundThread.instance().postGUI(backlightTimerTask, SCREEN_BACKLIGHT_TIMER_STEP);
-						}
-					}
-				};
-				BackgroundThread.instance().postGUI(backlightTimerTask, SCREEN_BACKLIGHT_TIMER_STEP);
 			}
+
+			if (backlightTimerTask == null)
+				log.v("ScreenBacklightControl: timer task started");
+			backlightTimerTask = new BacklightTimerTask();
+			BackgroundThread.instance().postGUI(backlightTimerTask,
+					SCREEN_BACKLIGHT_TIMER_INTERVAL);
 		}
-		public boolean isHeld()
-		{
-			return wl!=null && wl.isHeld();
+
+		public boolean isHeld() {
+			return wl != null && wl.isHeld();
 		}
-		public void release()
-		{
-			if ( wl!=null && wl.isHeld() )
+
+		public void release() {
+			if (wl != null && wl.isHeld()) {
+				log.d("ScreenBacklightControl: wl.release()");
 				wl.release();
+			}
 			backlightTimerTask = null;
 		}
+
+		private class BacklightTimerTask implements Runnable {
+
+			@Override
+			public void run() {
+				if (backlightTimerTask != this)
+					return;
+				long interval = Utils.timeInterval(lastUserActivityTime);
+				log.v("ScreenBacklightControl: timer task, lastActivityMillis = "
+						+ interval);
+				if (interval > SCREEN_BACKLIGHT_TIMER_INTERVAL) {
+					log.v("ScreenBacklightControl: interval is expired");
+					release();
+				}
+			}
+
+		};
+
 	}
+
 	ScreenBacklightControl backlightControl = new ScreenBacklightControl();
 	
 	public int getPalmTipPixels()
 	{
 		return densityDpi / 3; // 1/3"
+	}
+	
+	public int getDensityDpi()
+	{
+		return densityDpi;
 	}
 	
 	private int densityDpi = 120;
@@ -493,7 +547,7 @@ public class CoolReader extends Activity
 		
 		setFullscreen( props.getBool(ReaderView.PROP_APP_FULLSCREEN, (DeviceInfo.EINK_SCREEN?true:false)));
 		int orientation = props.getInt(ReaderView.PROP_APP_SCREEN_ORIENTATION, (DeviceInfo.EINK_SCREEN?0:4));
-		if ( orientation!=1 && orientation!=4 )
+		if ( orientation < 0 || orientation > 4 )
 			orientation = 0;
 		setScreenOrientation(orientation);
 		int backlight = props.getInt(ReaderView.PROP_APP_SCREEN_BACKLIGHT, -1);
@@ -622,7 +676,7 @@ public class CoolReader extends Activity
 					        		b = 1.0f; //BRIGHTNESS_OVERRIDE_FULL
 			        		} else {
 				        		b = minb;
-				        		dimmingAlpha = 255 - (11-screenBacklightBrightness) * 255 / 10; 
+				        		dimmingAlpha = 255 - (11-screenBacklightBrightness) * 180 / 10; 
 			        		}
 			        	} else
 			        		b = -1.0f; //BRIGHTNESS_OVERRIDE_NONE
@@ -710,7 +764,7 @@ public class CoolReader extends Activity
 			
 		mDB = null;
 		mReaderView = null;
-		mEngine = null;
+		//mEngine = null;
 		mBackgroundThread = null;
 		log.i("CoolReader.onDestroy() exiting");
 		super.onDestroy();
@@ -1075,7 +1129,7 @@ public class CoolReader extends Activity
 	public void showToast( String msg )
 	{
 		log.v("showing toast: " + msg);
-		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
@@ -1355,7 +1409,7 @@ public class CoolReader extends Activity
 		new DefTapAction(7, false, ReaderAction.PAGE_DOWN),
 		new DefTapAction(8, false, ReaderAction.PAGE_DOWN),
 		new DefTapAction(9, false, ReaderAction.PAGE_DOWN),
-		new DefTapAction(3, true, ReaderAction.PAGE_DOWN_10),
+		new DefTapAction(3, true, ReaderAction.TOGGLE_AUTOSCROLL),
 		new DefTapAction(6, true, ReaderAction.PAGE_DOWN_10),
 		new DefTapAction(7, true, ReaderAction.PAGE_DOWN_10),
 		new DefTapAction(8, true, ReaderAction.PAGE_DOWN_10),
@@ -1446,6 +1500,7 @@ public class CoolReader extends Activity
         props.setProperty(ReaderView.PROP_ROTATE_ANGLE, "0"); // crengine's rotation will not be user anymore
         props.setProperty(ReaderView.PROP_DISPLAY_INVERSE, "0");
         props.applyDefault(ReaderView.PROP_APP_FULLSCREEN, "0");
+        props.applyDefault(ReaderView.PROP_APP_VIEW_AUTOSCROLL_SPEED, "1500");
         props.applyDefault(ReaderView.PROP_APP_SCREEN_BACKLIGHT, "-1");
 		props.applyDefault(ReaderView.PROP_SHOW_BATTERY, "1"); 
 		props.applyDefault(ReaderView.PROP_SHOW_POS_PERCENT, "0"); 
@@ -1499,6 +1554,8 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_HYPHENATION_DICT, Engine.HyphDict.RUSSIAN.toString());
 		props.applyDefault(ReaderView.PROP_APP_FILE_BROWSER_SIMPLE_MODE, "0");
 		
+		props.applyDefault(ReaderView.PROP_APP_HIGHLIGHT_BOOKMARKS, "1");
+		
 		return props;
 	}
 
@@ -1521,7 +1578,9 @@ public class CoolReader extends Activity
 	private static final DictInfo dicts[] = {
 		new DictInfo("Fora", "Fora Dictionary", "com.ngc.fora", "com.ngc.fora.ForaDictionary", Intent.ACTION_SEARCH, 0),
 		new DictInfo("ColorDict", "ColorDict", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 0),
-		new DictInfo("ColorDictApi", "ColorDict (new)", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 1),
+		new DictInfo("ColorDictApi", "ColorDict new / GoldenDict", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 1),
+		new DictInfo("AardDict", "Aard Dictionary", "aarddict.android", "aarddict.android.Article", Intent.ACTION_SEARCH, 0),
+		new DictInfo("AardDictLookup", "Aard Dictionary Lookup", "aarddict.android", "aarddict.android.Lookup", Intent.ACTION_SEARCH, 0),
 	};
 
 	public DictInfo[] getDictList() {
@@ -1660,5 +1719,13 @@ public class CoolReader extends Activity
 			log.e("Exception " + e + " while trying to open URL " + url);
 			showToast("Cannot open URL " + url);
 		}
+	}
+	
+	public void sendBookFragment(BookInfo bookInfo, String text) {
+        final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
+        emailIntent.setType("text/plain");
+    	emailIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, bookInfo.getFileInfo().getAuthors() + " " + bookInfo.getFileInfo().getTitle());
+        emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
+		startActivity(Intent.createChooser(emailIntent, null));	
 	}
 }

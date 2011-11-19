@@ -1,5 +1,6 @@
 package org.coolreader.crengine;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -83,21 +84,65 @@ public class BookInfo {
 		return bookmarks.get(index);
 	}
 
-	synchronized public Bookmark removeBookmark( Bookmark bm )
+	synchronized public Bookmark findBookmark(Bookmark bm)
 	{
 		if ( bm==null )
 			return null;
+		int index = findBookmarkIndex(bm);
+		if (index < 0)
+			return null;
+		return bookmarks.get(index);
+	}
+
+	private int findBookmarkIndex(Bookmark bm)
+	{
+		if ( bm==null )
+			return -1;
 		int index = -1;
 		for ( int i=0; i<bookmarks.size(); i++ ) {
-			if ( bm.getShortcut()>0 && bookmarks.get(0).getShortcut()==bm.getShortcut() ) {
+			Bookmark item = bookmarks.get(i);
+			if ( bm.getShortcut()>0 && item.getShortcut()==bm.getShortcut() ) {
 				index = i;
 				break;
 			}
-			if ( bm.getStartPos()!=null && bm.getStartPos().equals(bookmarks.get(i).getStartPos())) {
-				index = i;
-				break;
+			if ( bm.getStartPos()!=null && bm.getStartPos().equals(item.getStartPos())) {
+				if (bm.getType() == Bookmark.TYPE_POSITION) {
+					index = i;
+					break;
+				}
+				if (bm.getEndPos()!=null && bm.getEndPos().equals(item.getEndPos())) {
+					if (item.getId() != null && bm.getId() != null && bm.getId() != item.getId())
+						continue; // another bookmark with same pos
+					index = i;
+					break;
+				}
 			}
 		}
+		return index;
+	}
+
+	synchronized public Bookmark updateBookmark(Bookmark bm)
+	{
+		if ( bm==null )
+			return null;
+		int index = findBookmarkIndex(bm);
+		if ( index<0 ) {
+			Log.e("cr3", "cannot find bookmark " + bm);
+			return null;
+		}
+		Bookmark item = bookmarks.get(index);
+		item.setTimeStamp(bm.getTimeStamp());
+		item.setPosText(bm.getPosText());
+		item.setCommentText(bm.getCommentText());
+		if (!item.isModified())
+			return null;
+		return item;
+	}
+	synchronized public Bookmark removeBookmark(Bookmark bm)
+	{
+		if ( bm==null )
+			return null;
+		int index = findBookmarkIndex(bm);
 		if ( index<0 ) {
 			Log.e("cr3", "cannot find bookmark " + bm);
 			return null;
@@ -118,6 +163,34 @@ public class BookInfo {
 		});
 	}
 	
+	synchronized public String getBookmarksExportText() {
+		StringBuilder buf = new StringBuilder();
+		File pathname = new File(fileInfo.getPathName());
+		buf.append("# file name: " + pathname.getName() + "\n");
+		buf.append("# file path: " + pathname.getParent() + "\n");
+		buf.append("# book title: " + fileInfo.title + "\n");
+		buf.append("# author: " + fileInfo.authors + "\n");
+		buf.append("\n");
+		for ( Bookmark bm : bookmarks ) {
+			if ( bm.getType()!=Bookmark.TYPE_COMMENT && bm.getType()!=Bookmark.TYPE_CORRECTION )
+				continue;
+			int percent = bm.getPercent();
+			String ps = String.valueOf(percent%100);
+			if ( ps.length()<2 )
+				ps = "0" + ps;
+			ps = String.valueOf(percent/100) + "." + ps  + "%";
+			buf.append("## " + ps + " - " + (bm.getType()!=Bookmark.TYPE_COMMENT ? "comment" : "correction")  + "\n");
+			if ( bm.getTitleText()!=null )
+				buf.append("## " + bm.getTitleText() + "\n");
+			if ( bm.getPosText()!=null )
+				buf.append("<< " + bm.getPosText() + "\n");
+			if ( bm.getCommentText()!=null )
+				buf.append(">> " + bm.getCommentText() + "\n");
+			buf.append("\n");
+		}
+		return buf.toString();
+	}
+
 	synchronized public boolean exportBookmarks( String fileName ) {
 		Log.i("cr3", "Exporting bookmarks to file " + fileName);
 		try { 

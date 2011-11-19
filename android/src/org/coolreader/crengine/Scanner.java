@@ -406,12 +406,34 @@ public class Scanner {
 		FileInfo dir = new FileInfo();
 		dir.isDirectory = true;
 		dir.pathname = FileInfo.OPDS_LIST_TAG;
-		dir.filename = "OPDS Catalogs";
+		dir.filename = coolReader.getString(R.string.mi_book_opds_root);
 		dir.isListed = true;
 		dir.isScanned = true;
 		dir.parent = mRoot;
 		mRoot.addDir(dir);
 		db.loadOPDSCatalogs(dir);
+	}
+	
+	private void addSearchRoot() {
+		FileInfo dir = new FileInfo();
+		dir.isDirectory = true;
+		dir.pathname = FileInfo.SEARCH_SHORTCUT_TAG;
+		dir.filename = coolReader.getString(R.string.mi_book_search);
+		dir.isListed = true;
+		dir.isScanned = true;
+		dir.parent = mRoot;
+		mRoot.addDir(dir);
+	}
+	
+	private void addAuthorsRoot() {
+		FileInfo dir = new FileInfo();
+		dir.isDirectory = true;
+		dir.pathname = FileInfo.AUTHORS_TAG;
+		dir.filename = coolReader.getString(R.string.folder_name_books_by_author);
+		dir.isListed = true;
+		dir.isScanned = true;
+		dir.parent = mRoot;
+		mRoot.addDir(dir);
 	}
 	
 	/**
@@ -595,6 +617,12 @@ public class Scanner {
 
 		// create OPDS dir
 		addOPDSRoot();
+		
+		// create search dir
+		addSearchRoot();
+		
+		// create books by author root
+		addAuthorsRoot();
 	}
 	
 	public boolean autoAddRootForFile( File f ) {
@@ -642,11 +670,15 @@ public class Scanner {
 		for ( int i=0; i<mRoot.dirCount(); i++ ) {
 			FileInfo item = mRoot.getDir(i);
 			if ( !item.isSpecialDir() && !item.isArchive ) {
-				FileInfo books = item.findItemByPathName(item.pathname+"/Books");
-				if ( books.exists() )
+				FileInfo books = item.findItemByPathName(item.pathname + "/Books");
+				if (books == null)
+					books = item.findItemByPathName(item.pathname + "/books");
+				if (books != null && books.exists())
 					return books;
 				File dir = new File(item.getPathName());
-				if ( dir.isDirectory() && dir.canWrite() ) {
+				if (dir.isDirectory()) {
+					if (!dir.canWrite())
+						Log.w("cr3", "Directory " + dir + " is readonly");
 					File f = new File( dir, "Books" );
 					if ( f.mkdirs() ) {
 						books = new FileInfo(f);

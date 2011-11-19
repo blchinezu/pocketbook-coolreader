@@ -9,7 +9,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.TimeZone;
-import java.util.concurrent.Callable;
 
 import org.coolreader.CoolReader;
 import org.coolreader.R;
@@ -23,11 +22,14 @@ import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.view.ContextMenu;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -248,7 +250,7 @@ public class FileBrowser extends ListView {
 
 	protected void showParentDirectory()
 	{
-		if ( currDirectory.parent!=null ) {
+		if (currDirectory != null && currDirectory.parent != null) {
 			showDirectory(currDirectory.parent, currDirectory);
 		}
 	}
@@ -264,6 +266,10 @@ public class FileBrowser extends ListView {
 					return super.onKeyDown(keyCode, event);
 			}
 			showParentDirectory();
+			return true;
+		}
+		if (keyCode==KeyEvent.KEYCODE_SEARCH) {
+			showFindBookDialog();
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
@@ -646,6 +652,20 @@ public class FileBrowser extends ListView {
 			showOPDSDir(fileOrDir, itemToSelect);
 			return;
 		}
+		if (fileOrDir!=null && fileOrDir.isSearchShortcut()) {
+			showFindBookDialog();
+			return;
+		}
+		if (fileOrDir!=null && fileOrDir.isBooksByAuthorRoot()) {
+			// refresh authors list
+			log.d("Updating authors list");
+			mActivity.getDB().loadAuthorsList(fileOrDir);
+		}
+		if (fileOrDir!=null && fileOrDir.isBooksByAuthorDir()) {
+			log.d("Updating author book list");
+			mActivity.getDB().loadAuthorBooks(fileOrDir);
+		}
+		
 		if ( fileOrDir==null && mScanner.getRoot()!=null && mScanner.getRoot().dirCount()>0 ) {
 			if ( mScanner.getRoot().getDir(0).fileCount()>0 ) {
 				fileOrDir = mScanner.getRoot().getDir(0);
@@ -719,6 +739,13 @@ public class FileBrowser extends ListView {
 			log.i("Showing directory " + dir + " " + Thread.currentThread().getName());
 		if ( !BackgroundThread.instance().isGUIThread() )
 			throw new IllegalStateException("showDirectoryInternal should be called from GUI thread!");
+		final GestureDetector detector = new GestureDetector(new MyGestureListener());
+		this.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				return detector.onTouchEvent(event);
+			}
+		});
 		this.setAdapter(new ListAdapter() {
 
 			public boolean areAllItemsEnabled() {
@@ -814,7 +841,13 @@ public class FileBrowser extends ListView {
 						return;
 					}
 					if ( item.isDirectory ) {
-						if ( item.isRecentDir() )
+						if (item.isBooksByAuthorRoot())
+							image.setImageResource(R.drawable.cr3_browser_folder_authors);
+						else if (item.isOPDSRoot() || item.isOPDSDir())
+							image.setImageResource(R.drawable.cr3_browser_folder_opds);
+						else if (item.isSearchShortcut())
+							image.setImageResource(R.drawable.cr3_browser_find);
+						else if ( item.isRecentDir() )
 							image.setImageResource(R.drawable.cr3_browser_folder_recent);
 						else if ( item.isArchive )
 							image.setImageResource(R.drawable.cr3_browser_folder_zip);
@@ -822,7 +855,15 @@ public class FileBrowser extends ListView {
 							image.setImageResource(R.drawable.cr3_browser_folder);
 						setText(name, item.filename);
 
-						if ( !item.isOPDSDir() ) {
+						if ( item.isBooksByAuthorDir() ) {
+							int bookCount = 0;
+							if (item.fileCount() > 0)
+								bookCount = item.fileCount();
+							else if (item.tag != null && item.tag instanceof Integer)
+								bookCount = (Integer)item.tag;
+							setText(field1, "books: " + String.valueOf(bookCount));
+							setText(field2, "folders: 0");
+						} else  if ( !item.isOPDSDir() && !item.isSearchShortcut() && (!item.isBooksByAuthorRoot() || item.dirCount()>0)) {
 							setText(field1, "books: " + String.valueOf(item.fileCount()));
 							setText(field2, "folders: " + String.valueOf(item.dirCount()));
 						} else {
@@ -962,6 +1003,42 @@ public class FileBrowser extends ListView {
 		invalidate();
 	}
 
+	private class MyGestureListener extends SimpleOnGestureListener {
+
+		@Override
+		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+				float velocityY) {
+			if (e1 == null || e2 == null)
+				return false;
+			int thresholdDistance = mActivity.getPalmTipPixels() * 2;
+			int thresholdVelocity = mActivity.getPalmTipPixels();
+			int x1 = (int)e1.getX();
+			int x2 = (int)e2.getX();
+			int y1 = (int)e1.getY();
+			int y2 = (int)e2.getY();
+			int dist = x2 - x1;
+			int adist = dist > 0 ? dist : -dist;
+			int ydist = y2 - y1;
+			int aydist = ydist > 0 ? ydist : -ydist;
+			int vel = (int)velocityX;
+			if (vel<0)
+				vel = -vel;
+			if (vel > thresholdVelocity && adist > thresholdDistance && adist > aydist * 2) {
+				if (dist > 0) {
+					log.d("LTR fling detected: moving to parent");
+					showParentDirectory();
+					return true;
+				} else {
+					log.d("RTL fling detected: show menu");
+					mActivity.openOptionsMenu();
+					return true;
+				}
+			}
+			return false;
+		}
+		
+	}
+	
 	private void execute( Engine.EngineTask task )
     {
     	mEngine.execute(task);

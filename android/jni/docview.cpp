@@ -185,8 +185,6 @@ static LVRefVec<LVImageSource> getBatteryIcons( lUInt32 color )
         ".0..0.XXXX.XXXX.XXXX.XXXX.0.",
         ".0..0.XXXX.XXXX.XXXX.XXXX.0.",
         ".0..0.XXXX.XXXX.XXXX.XXXX.0.",
-        ".0..0.XXXX.XXXX.XXXX.XXXX.0.",
-        ".0..0.XXXX.XXXX.XXXX.XXXX.0.",
         ".0000.XXXX.XXXX.XXXX.XXXX.0.",
         "....0.XXXX.XXXX.XXXX.XXXX.0.",
         "   .0.....................0.",
@@ -467,6 +465,7 @@ bool DocViewNative::openRecentBook()
 
 bool DocViewNative::closeBook()
 {
+	closeImage();
 	if ( _docview->isDocumentOpened() ) {
 	    _docview->savePosition();
         _docview->getDocument()->updateMap();
@@ -653,10 +652,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_destroyInternal
 /*
  * Class:     org_coolreader_crengine_DocView
  * Method:    getPageImageInternal
- * Signature: (Landroid/graphics/Bitmap;)V
+ * Signature: (Landroid/graphics/Bitmap;I)V
  */
 JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageInternal
-  (JNIEnv * env, jobject view, jobject bitmap)
+  (JNIEnv * env, jobject view, jobject bitmap, jint bpp)
 {
     CRLog::trace("getPageImageInternal entered");
     DocViewNative * p = getNative(env, view);
@@ -666,13 +665,142 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageInternal
     //CRLog::trace("getPageImageInternal calling bitmap->lock");
 	LVDrawBuf * drawbuf = BitmapAccessorInterface::getInstance()->lock(env, bitmap);
 	if ( drawbuf!=NULL ) {
-    	p->_docview->Draw( *drawbuf );
+		if (bpp >= 16) {
+			// native resolution
+			p->_docview->Draw( *drawbuf );
+		} else {
+			LVGrayDrawBuf grayBuf(drawbuf->GetWidth(), drawbuf->GetHeight(), bpp);
+			p->_docview->Draw(grayBuf);
+			grayBuf.DrawTo(drawbuf, 0, 0, 0, NULL);
+		}
 	    //CRLog::trace("getPageImageInternal calling bitmap->unlock");
 		BitmapAccessorInterface::getInstance()->unlock(env, bitmap, drawbuf);
 	} else {
 		CRLog::error("bitmap accessor is invalid");
 	}
     //CRLog::trace("getPageImageInternal exiting");
+}
+
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    checkImageInternal
+ * Signature: (IILorg/coolreader/crengine/ImageInfo;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkImageInternal
+  (JNIEnv * _env, jobject view, jint x, jint y, jobject imageInfo)
+{
+    //CRLog::trace("checkImageInternal entered");
+	CRJNIEnv env(_env);
+    DocViewNative * p = getNative(_env, view);
+    int dx, dy;
+    bool needRotate = false;
+    CRObjectAccessor acc(_env, imageInfo);
+    int width = CRIntField(acc,"bufWidth").get();
+    int height = CRIntField(acc,"bufHeight").get();
+	if (!p->checkImage(x, y, width, height, dx, dy, needRotate))
+		return JNI_FALSE;
+    CRIntField(acc,"rotation").set(needRotate ? 1 : 0);
+    CRIntField(acc,"width").set(dx);
+    CRIntField(acc,"height").set(dy);
+    CRIntField(acc,"scaledWidth").set(dx);
+    CRIntField(acc,"scaledHeight").set(dy);
+    CRIntField(acc,"x").set(0);
+    CRIntField(acc,"y").set(0);
+	return JNI_TRUE;
+}
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    checkBookmarkInternal
+ * Signature: (IILorg/coolreader/crengine/Bookmark;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkBookmarkInternal
+  (JNIEnv * _env, jobject view, jint x, jint y, jobject bmk) {
+	CRJNIEnv env(_env);
+    DocViewNative * p = getNative(_env, view);
+    CRObjectAccessor acc(_env, bmk);
+    //CRLog::trace("checkBookmarkInternal(%d, %d)", x, y);
+    CRBookmark * found = p->_docview->findBookmarkByPoint(lvPoint(x, y));
+    if (!found)
+		return JNI_FALSE;
+    //CRLog::trace("checkBookmarkInternal - found bookmark of type %d", found->getType());
+    CRIntField(acc,"type").set(found->getType());
+    CRStringField(acc,"startPos").set(found->getStartPos());
+    CRStringField(acc,"endPos").set(found->getEndPos());
+	return JNI_TRUE;
+}
+
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    drawImageInternal
+ * Signature: (Landroid/graphics/Bitmap;ILorg/coolreader/crengine/ImageInfo;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_drawImageInternal
+  (JNIEnv * _env, jobject view, jobject bitmap, jint bpp, jobject imageInfo)
+{
+    CRLog::trace("checkImageInternal entered");
+	CRJNIEnv env(_env);
+    DocViewNative * p = getNative(_env, view);
+    CRObjectAccessor acc(_env, imageInfo);
+    int dx = CRIntField(acc,"scaledWidth").get();
+    int dy = CRIntField(acc,"scaledHeight").get();
+    int x = CRIntField(acc,"x").get();
+    int y = CRIntField(acc,"y").get();
+    int rotation = CRIntField(acc,"rotation").get();
+    int dpi = CRIntField(acc,"bufDpi").get();
+	LVDrawBuf * drawbuf = BitmapAccessorInterface::getInstance()->lock(_env, bitmap);
+	bool res = false;
+	if ( drawbuf!=NULL ) {
+
+	    lvRect full(0, 0, drawbuf->GetWidth(), drawbuf->GetHeight());
+	    lvRect zoomInRect(full);
+	    lvRect zoomOutRect(full);
+	    int zoomSize = dpi * 4 / 10;
+	    if (rotation == 0) {
+	    	zoomInRect.right = zoomInRect.left + zoomSize;
+	    	zoomInRect.top = zoomInRect.bottom - zoomSize;
+	    	zoomOutRect.left = zoomOutRect.right - zoomSize;
+	    	zoomOutRect.top = zoomOutRect.bottom - zoomSize;
+	    } else {
+	    	zoomInRect.right = zoomInRect.left + zoomSize;
+	    	zoomInRect.bottom = zoomInRect.top + zoomSize;
+	    	zoomOutRect.right = zoomOutRect.left + zoomSize;
+	    	zoomOutRect.top = zoomOutRect.bottom - zoomSize;
+	    }
+
+		if (bpp >= 16) {
+			// native resolution
+			res = p->drawImage(drawbuf, x, y, dx, dy);
+			p->drawIcon(drawbuf, zoomInRect, 0);
+			p->drawIcon(drawbuf, zoomOutRect, rotation ? 2 : 1);
+		} else {
+			LVGrayDrawBuf grayBuf(drawbuf->GetWidth(), drawbuf->GetHeight(), bpp);
+			res = p->drawImage(&grayBuf, x, y, dx, dy);
+			p->drawIcon(&grayBuf, zoomInRect, 0);
+			p->drawIcon(&grayBuf, zoomOutRect, rotation ? 2 : 1);
+			grayBuf.DrawTo(drawbuf, 0, 0, 0, NULL);
+		}
+	    //CRLog::trace("getPageImageInternal calling bitmap->unlock");
+		BitmapAccessorInterface::getInstance()->unlock(_env, bitmap, drawbuf);
+	} else {
+		CRLog::error("bitmap accessor is invalid");
+	}
+	return res ? JNI_TRUE : JNI_FALSE;
+}
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    closeImageInternal
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_closeImageInternal
+  (JNIEnv * env, jobject view)
+{
+    CRLog::trace("checkImageInternal entered");
+    DocViewNative * p = getNative(env, view);
+	return p->closeImage() ? JNI_TRUE : JNI_FALSE;
 }
 
 /*
@@ -1229,6 +1357,112 @@ lString16 DocViewNative::getLink( int x, int y )
 	return href;
 }
 
+#define MAX_IMAGE_BUF_SIZE 1200000
+
+// checks whether point belongs to image: if found, returns true, and _currentImage is set to image
+bool DocViewNative::checkImage(int x, int y, int bufWidth, int bufHeight, int &dx, int &dy, bool & needRotate)
+{
+	_currentImage = _docview->getImageByPoint(lvPoint(x, y));
+	if (_currentImage.isNull())
+		return false;
+	dx = _currentImage->GetWidth();
+	dy = _currentImage->GetHeight();
+	if (dx < 8 && dy < 8) {
+		_currentImage.Clear();
+		return JNI_FALSE;
+	}
+	needRotate = false;
+	if (bufWidth <= bufHeight) {
+		// screen == portrait
+		needRotate = 8 * dx > 10 * dy;
+	} else {
+		// screen == landscape
+		needRotate = 10 * dx < 8 * dy;
+	}
+	int scale = 1;
+	if (dx * dy > MAX_IMAGE_BUF_SIZE) {
+		scale = dx * dy /  MAX_IMAGE_BUF_SIZE;
+		dx /= scale;
+		dy /= scale;
+	}
+	LVColorDrawBuf * buf = new LVColorDrawBuf(dx, dy);
+	buf->Clear(0xFF000000); // transparent
+	buf->Draw(_currentImage, 0, 0, dx, dy, false);
+	if (needRotate) {
+		int c = dx;
+		dx = dy;
+		dy = c;
+		buf->Rotate(CR_ROTATE_ANGLE_90);
+	}
+	_currentImage = LVCreateDrawBufImageSource(buf, true);
+	return true;
+}
+
+// draws current image to buffer (scaled, panned)
+bool DocViewNative::drawImage(LVDrawBuf * buf, int x, int y, int dx, int dy)
+{
+	if (_currentImage.isNull())
+		return false;
+	return _docview->drawImage(buf, _currentImage, x, y, dx, dy);
+}
+
+// draws icon to buffer
+bool DocViewNative::drawIcon(LVDrawBuf * buf, lvRect & rc, int type) {
+	rc.shrink(rc.width() / 7);
+	lUInt32 light = 0x60C0C0C0;
+	lUInt32 dark = 0x80606060;
+	lUInt32 colors[2];
+	colors[0] = dark;
+	colors[1] = light;
+	// x0  x1  x2  x3
+	int x0 = rc.left;
+	int x1 = rc.left + rc.width() * 4 / 10;
+	int x2 = rc.right -  + rc.width() * 4 / 10;
+	int x3 = rc.right;
+	int y0 = rc.top;
+	int y1 = rc.top + rc.width() * 4 / 10;
+	int y2 = rc.bottom -  + rc.height() * 4 / 10;
+	int y3 = rc.bottom;
+	for (int w = 1; w>=0; w--) {
+		if (type == 1) {
+			// horizontal minus
+			buf->FillRect(x0-w, y1-w, x3+w+1, y1+w+1, colors[w]);
+			buf->FillRect(x0-w, y2-w, x3+w+1, y2+w+1, colors[w]);
+			buf->FillRect(x0-w, y1-w, x0+w+1, y2+w+1, colors[w]);
+			buf->FillRect(x3-w, y1-w, x3+w+1, y2+w+1, colors[w]);
+		} else if (type == 2) {
+			// vertical minus
+			buf->FillRect(x1-w, y0-w, x1+w+1, y3+w+1, colors[w]);
+			buf->FillRect(x2-w, y0-w, x2+w+1, y3+w+1, colors[w]);
+			buf->FillRect(x1-w, y0-w, x2+w+1, y0+w+1, colors[w]);
+			buf->FillRect(x1-w, y3-w, x2+w+1, y3+w+1, colors[w]);
+		} else {
+			// plus
+			buf->FillRect(x0-w, y1-w, x1+w+1, y1+w+1, colors[w]);
+			buf->FillRect(x1-w, y0-w, x1+w+1, y1+w+1, colors[w]);
+			buf->FillRect(x0-w, y1-w, x0+w+1, y2+w+1, colors[w]);
+			buf->FillRect(x1-w, y0-w, x2+w+1, y0+w+1, colors[w]);
+			buf->FillRect(x2-w, y0-w, x2+w+1, y1+w+1, colors[w]);
+			buf->FillRect(x2-w, y1-w, x3+w+1, y1+w+1, colors[w]);
+			buf->FillRect(x3-w, y1-w, x3+w+1, y2+w+1, colors[w]);
+			buf->FillRect(x2-w, y2-w, x3+w+1, y2+w+1, colors[w]);
+			buf->FillRect(x2-w, y2-w, x2+w+1, y3+w+1, colors[w]);
+			buf->FillRect(x1-w, y3-w, x2+w+1, y3+w+1, colors[w]);
+			buf->FillRect(x1-w, y2-w, x1+w+1, y3+w+1, colors[w]);
+			buf->FillRect(x0-w, y2-w, x1+w+1, y2+w+1, colors[w]);
+		}
+	}
+	return true;
+}
+
+// sets current image to null
+bool DocViewNative::closeImage() {
+	if (_currentImage.isNull())
+		return false;
+	_currentImage.Clear();
+	return true;
+}
+
 /*
  * Class:     org_coolreader_crengine_DocView
  * Method:    checkLinkInternal
@@ -1261,5 +1495,31 @@ JNIEXPORT jint JNICALL Java_org_coolreader_crengine_DocView_goLinkInternal
     lString16 link = env.fromJavaString(_link);
     bool res = p->_docview->goLink( link, true );
     return res ? 1 : 0;
+}
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    hilightBookmarksInternal
+ * Signature: ([Lorg/coolreader/crengine/Bookmark;)V
+ */
+JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_hilightBookmarksInternal
+  (JNIEnv * _env, jobject _this, jobjectArray list) {
+    CRJNIEnv env(_env);
+    DocViewNative * p = getNative(_env, _this);
+    LVPtrVector<CRBookmark> bookmarks;
+    if (list) {
+    	int len = _env->GetArrayLength(list);
+    	for (int i=0; i<len; i++) {
+    		jobject obj = _env->GetObjectArrayElement(list, i);
+    	    CRObjectAccessor bmk(_env, obj);
+    	    CRStringField startPos(bmk, "startPos");
+    	    CRStringField endPos(bmk, "endPos");
+    	    CRIntField type(bmk, "type");
+    	    CRBookmark * bookmark = new CRBookmark(startPos.get(), endPos.get());
+    	    bookmark->setType(type.get());
+    	    bookmarks.add(bookmark);
+    	}
+    }
+    p->_docview->setBookmarkList(bookmarks);
 }
 

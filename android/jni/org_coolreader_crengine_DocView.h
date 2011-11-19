@@ -34,10 +34,10 @@ extern "C" {
 /*
  * Class:     org_coolreader_crengine_DocView
  * Method:    getPageImageInternal
- * Signature: (Landroid/graphics/Bitmap;)V
+ * Signature: (Landroid/graphics/Bitmap;I)V
  */
 JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageInternal
-  (JNIEnv *, jobject, jobject);
+  (JNIEnv *, jobject, jobject, jint);
 
 /*
  * Class:     org_coolreader_crengine_DocView
@@ -201,6 +201,38 @@ JNIEXPORT jstring JNICALL Java_org_coolreader_crengine_DocView_checkLinkInternal
 
 /*
  * Class:     org_coolreader_crengine_DocView
+ * Method:    checkImageInternal
+ * Signature: (IILorg/coolreader/crengine/ImageInfo;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkImageInternal
+  (JNIEnv *, jobject, jint, jint, jobject);
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    checkBookmarkInternal
+ * Signature: (IILorg/coolreader/crengine/Bookmark;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkBookmarkInternal
+  (JNIEnv *, jobject, jint, jint, jobject);
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    drawImageInternal
+ * Signature: (Landroid/graphics/Bitmap;ILorg/coolreader/crengine/ImageInfo;)Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_drawImageInternal
+  (JNIEnv *, jobject, jobject, jint, jobject);
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    closeImageInternal
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_closeImageInternal
+  (JNIEnv *, jobject);
+
+/*
+ * Class:     org_coolreader_crengine_DocView
  * Method:    goLinkInternal
  * Signature: (Ljava/lang/String;)I
  */
@@ -222,6 +254,14 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_moveSelectionInt
  */
 JNIEXPORT jint JNICALL Java_org_coolreader_crengine_DocView_swapToCacheInternal
   (JNIEnv *, jobject);
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    hilightBookmarksInternal
+ * Signature: ([Lorg/coolreader/crengine/Bookmark;)V
+ */
+JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_hilightBookmarksInternal
+  (JNIEnv *, jobject, jobjectArray list);
 
 #define SEL_CMD_SELECT_FIRST_SENTENCE_ON_PAGE 1
 #define SEL_CMD_NEXT_SENTENCE 2

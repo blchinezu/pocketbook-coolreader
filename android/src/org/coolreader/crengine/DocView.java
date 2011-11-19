@@ -226,14 +226,70 @@ public class DocView {
 	 * @param bitmap is buffer to put data to.
 	 */
 	public void getPageImage(Bitmap bitmap) {
-		getPageImageInternal(bitmap);
+		getPageImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32);
+	}
+
+	/**
+	 * Check whether point of current document contains image.
+	 * If image is found, image becomes current image to be drawn by drawImage(), dstImage fields are set to image dimension.
+	 *  
+	 * @param x is X coordinate in document window
+	 * @param y is Y coordinate in document window
+	 * @param dstImage is to place found image dimensions to
+	 * @return true if point belongs to image
+	 */
+	public boolean checkImage(int x, int y, ImageInfo dstImage) {
+		return checkImageInternal(x, y, dstImage);
+	}
+
+	/**
+	 * Check whether point of current document belongs to bookmark.
+	 *  
+	 * @param x is X coordinate in document window
+	 * @param y is Y coordinate in document window
+	 * @return bookmark if point belongs to bookmark, null otherwise
+	 */
+	public Bookmark checkBookmark(int x, int y) {
+		Bookmark dstBookmark = new Bookmark();
+		if (checkBookmarkInternal(x, y, dstBookmark)) {
+			return dstBookmark;
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Draws currently opened image to bitmap.
+	 * @param bitmap is destination bitmap
+	 * @param imageInfo contains image position and scaling parameters.
+	 * @return true if current image is drawn successfully.
+	 */
+	public boolean drawImage(Bitmap bitmap, ImageInfo imageInfo) {
+		return drawImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32, imageInfo);
+	}
+
+	/**
+	 * Close currently opened image, free resources.
+	 * @return true if there was opened current image, and it's now closed 
+	 */
+	public boolean closeImage() {
+		return closeImageInternal();
+	}
+	
+	/**
+	 * Highlight bookmarks.
+	 * Remove highlight using clearSelection().
+	 * @params bookmarks is array of bookmarks to highlight 
+	 */
+	public void hilightBookmarks(Bookmark[] bookmarks) {
+		hilightBookmarksInternal(bookmarks);
 	}
 	
 	//========================================================================================
 	// Native functions
 	/* implementend by libcr3engine.so */
 	//========================================================================================
-	private native void getPageImageInternal(Bitmap bitmap);
+	private native void getPageImageInternal(Bitmap bitmap, int bpp);
 
 	private native void createInternal();
 
@@ -281,7 +337,17 @@ public class DocView {
 
 	private native String checkLinkInternal(int x, int y, int delta);
 
+	private native boolean checkImageInternal(int x, int y, ImageInfo dstImage);
+
+	private native boolean checkBookmarkInternal(int x, int y, Bookmark dstBookmark);
+
+	private native boolean drawImageInternal(Bitmap bitmap, int bpp, ImageInfo dstImage);
+
+	private native boolean closeImageInternal();
+
 	private native int goLinkInternal(String link);
+
+	private native void hilightBookmarksInternal(Bookmark[] bookmarks);
 
 	// / returns either SWAP_DONE, SWAP_TIMEOUT or SWAP_ERROR
 	private native int swapToCacheInternal();
