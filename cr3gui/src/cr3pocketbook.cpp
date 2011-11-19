@@ -15,6 +15,10 @@
 #include "cr3pocketbook.h"
 #include <inkview.h>
 
+#ifdef PB_DB_STATE_SUPPORTED
+#include <bookstate.h>
+#endif
+
 #define PB_CR3_TRANSLATE_DELAY 1000
 
 #define PB_DICT_SELECT 0
@@ -143,7 +147,8 @@ bool CRPocketBookGlobals::createFile(char *fName)
 
 void CRPocketBookGlobals::saveState(int cpage, int npages)
 {
-    char *af0 = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 0);
+    char *cf = (char *)UnicodeToLocal(_fileName).c_str();
+    char *af0 = GetAssociatedFile(cf, 0);
 
     if (createFile(af0)) {
         if (npages - cpage < 3 && cpage >= 5) {
@@ -151,6 +156,21 @@ void CRPocketBookGlobals::saveState(int cpage, int npages)
             createFile(afz);
         }
     }
+#ifdef PB_DB_STATE_SUPPORTED
+    bsHandle bs = bsLoad(cf);
+    if (bs)
+    {
+        bsSetCPage(bs, cpage);
+        bsSetNPage(bs, npages);
+        bsSetOpenTime(bs, time(0));
+        if (bsSave(bs))
+            CRLog::trace("Book(%s) state saved to db successfully", cf);
+        else
+            CRLog::error("Book(%s) state saving to db failed", cf);
+
+        bsClose(bs);
+    }
+#endif
 }
 
 class CRPocketBookGlobals * pbGlobals = NULL;
