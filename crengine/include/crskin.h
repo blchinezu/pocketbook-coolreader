@@ -336,7 +336,6 @@ protected:
 
 public:
 
-
     Location getLocation() { return _location; }
     void setLocation( Location location ) { _location = location; }
     CRRectSkinRef getBottomTabSkin() { return _bottomTabSkin; }
@@ -365,7 +364,6 @@ public:
     void setAutohide( bool flgAutoHide ) { _autohide = flgAutoHide; }
     bool getShowPageNumbers() { return _showPageNumbers; }
     void setShowPageNumbers( bool flg ) { _showPageNumbers = flg; }
-    virtual void drawScroll( LVDrawBuf & buf, const lvRect & rc, bool vertical, int pos, int maxpos, int pagesize );
     virtual void drawGauge( LVDrawBuf & buf, const lvRect & rc, int percent );
     CRScrollSkin();
     virtual ~CRScrollSkin() { }
@@ -414,6 +412,7 @@ protected:
     CRRectSkinRef _statusSkin;
     CRRectSkinRef _inputSkin;
     CRScrollSkinRef _scrollSkin;
+    CRButtonSkinRef _closebutton;
     bool _fullscreen;
 public:
     bool getFullScreen() { return _fullscreen; }
@@ -436,6 +435,8 @@ public:
     virtual void setStatusSkin( CRRectSkinRef skin ) { _statusSkin = skin; }
     virtual CRRectSkinRef getInputSkin() { return _inputSkin; }
     virtual void setInputSkin( CRRectSkinRef skin ) { _inputSkin = skin; }
+    CRButtonSkinRef getCloseButton() { return _closebutton; }
+    void setCloseButton( CRButtonSkinRef btn ) { _closebutton = btn; }
 };
 typedef LVFastRef<CRWindowSkin> CRWindowSkinRef;
 

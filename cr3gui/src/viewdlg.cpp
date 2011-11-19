@@ -673,6 +673,8 @@ void CRViewDialog::draw( int pageOffset )
         drawTitleBar();
         drawStatusBar();
     }
+    if (!_controlsCreated)
+        addControl(new CRClientControl(this, clientRect));
     LVDocImageRef pageImage = _docview->getPageImage( pageOffset );
     if ( !pageImage.isNull() ) {
         LVDrawBuf * pagedrawbuf = pageImage->getDrawBuf();

@@ -1020,7 +1020,6 @@ private:
     bool _restore_globOrientation;
     bool m_skipEvent;
     bool m_saveForceSoft;
-    int _selectedZone;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -1159,56 +1158,42 @@ protected:
             setDirty();
         return res;
     }
-    virtual bool isClickableElement(int x, int y, bool moveEvent)
-    {
-        lvRect rc;
-        if (getClientRect(rc)) {
-            lvPoint pt(x, y);
-            if (rc.isPointInside(pt)) {
-                _selectedZone = getTapZone(x, y);
-                return true;
-            }
-        }
-        return false;
-    }
-    virtual bool handleLongTouchEvent()
-    {
-        // TODO: for now hardcoded, add touch zones settings dialog
-        int command = 0, param = 0;
-        switch (_selectedZone) {
-        case 4:
-            command = DCMD_PAGEUP;
-            param = 10;
-            break;
-        case 5:
-            command = MCMD_MAIN_MENU;
-            break;
-        case 6:
-            command = DCMD_PAGEDOWN;
-            param = 10;
-            break;
-        }
-        if (command != 0) {
-            _wm->postCommand(command, param);
-            return true;
-        }
-        return false;
-    }
 
-    virtual bool handleTouchUpEvent()
+    virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
-        // TODO: for now hardcoded, add touch zones settings dialog
+        int tapZone = getTapZone(pt.x, pt.y);
         int command = 0, param = 0;
-        switch (_selectedZone) {
-        case 4:
-            command = DCMD_PAGEUP;
-            break;
-        case 5:
-            command = PB_QUICK_MENU;
-            break;
-        case 6:
-            command = DCMD_PAGEDOWN;
-            break;
+        // TODO: for now hardcoded, add touch zones settings dialog
+        if (CRTOUCH_UP == evType) {
+            switch (tapZone) {
+            case 4:
+                command = DCMD_PAGEUP;
+                break;
+            case 5:
+                command = PB_QUICK_MENU;
+                break;
+            case 6:
+                command = DCMD_PAGEDOWN;
+                break;
+            default:
+                ;
+            }
+        } else if (CRTOUCH_DOWN_LONG == evType) {
+            switch (tapZone) {
+            case 4:
+                command = DCMD_PAGEUP;
+                param = 10;
+                break;
+            case 5:
+                command = MCMD_MAIN_MENU;
+                break;
+            case 6:
+                command = DCMD_PAGEDOWN;
+                param = 10;
+                break;
+            default:
+                ;
+            }
         }
         if (command != 0) {
             _wm->postCommand(command, param);
@@ -1221,7 +1206,7 @@ public:
     CRPocketBookDocView( CRGUIWindowManager * wm, lString16 dataDir )
         : V3DocViewWin( wm, dataDir ), _tocLength(0), _toc(NULL), _bm3x3(NULL), _dictDlg(NULL), _rotatetimerset(false),
         _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false),
-        m_saveForceSoft(false), _selectedZone(0)
+        m_saveForceSoft(false)
     {
         instance = this;
     }

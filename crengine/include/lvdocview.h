@@ -297,6 +297,8 @@ enum LVDocCmd
     DCMD_SELECT_PREV_SENTENCE, // nove selection to next sentence
     DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS, // move selection start by words
     DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS, // move selection end by words
+    DCMD_BUTTON_PRESSED,
+    DCMD_BUTTON_PRESSED_LONG,
 
     //=======================================
     DCMD_EDIT_CURSOR_LEFT,
@@ -308,9 +310,9 @@ enum LVDocCmd
     DCMD_EDIT_HOME,
     DCMD_EDIT_END,
     DCMD_EDIT_INSERT_CHAR,
-    DCMD_EDIT_REPLACE_CHAR,
+    DCMD_EDIT_REPLACE_CHAR
 };
-#define LVDOCVIEW_COMMANDS_END DCMD_TOGGLE_BOLD
+#define LVDOCVIEW_COMMANDS_END DCMD_BUTTON_PRESSED_LONG
 
 /// document view mode: pages/scroll
 enum LVDocViewMode
