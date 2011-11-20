@@ -1868,9 +1868,8 @@ bool CRMenu::onCommand( int command, int params )
     if (DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) {
         switch (params) {
         case BTN_CLOSE:
-            command = MCMD_OK;
-            params = 0;
-            break;
+            doCloseMenu(getId(), false, 0);
+            return true;
         case BTN_SCROLL_DOWN:
             command = MCMD_NEXT_PAGE;
             params = 1;

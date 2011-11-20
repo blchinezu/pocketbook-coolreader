@@ -316,6 +316,9 @@
             <text color="#FFFFFF" face="Arial Narrow, Arial, DejaVu Sans Condensed, DejaVu Sans" size="34" bold="true" italic="false" valign="center" halign="center"/>
         </selshortcut-->
     <scroll base="#titlescroll"/>
+    <closebutton normal="arrow_back.png">
+        <border widths="6,3,3,3"/>
+    </closebutton>
   </menu>
   <menu id="main-rotated" base="#main" min-item-count="5" max-item-count="5" />
   <menu id="t9input">
@@ -370,9 +373,6 @@
   </menu>
   <menu id="bookmarks-rotated" base="#bookmarks" min-item-count="5" max-item-count="5" />
   <menu id="settings" base="#main" fullscreen="true">
-        <closebutton normal="arrow_back.png">
-    	    <border widths="6,3,3,3"/>
-        </closebutton>
         <value base="#menu-value">
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="true" valign="bottom" halign="right"/>
         </value>

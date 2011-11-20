@@ -279,6 +279,11 @@ bool CRBookmarkMenu::onCommand( int command, int params )
 		 return true;
 	 }
 #endif	
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+        BTN_CLOSE == params) {
+        closeMenu( 0 );
+        return true;
+    }
     return CRMenu::onCommand(command, params);
     //closeMenu( 0 );
     //return true;
@@ -412,6 +417,11 @@ bool CRCitesMenu::onCommand( int command, int params )
         return true;
     }
 #endif
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+        BTN_CLOSE == params) {
+        closeMenu( 0 );
+        return true;
+    }
     return CRMenu::onCommand(command, params);
 }
 

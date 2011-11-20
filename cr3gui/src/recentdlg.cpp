@@ -191,15 +191,15 @@ bool CRRecentBooksMenu::onCommand( int command, int params )
 		closeMenu( 0 );
 		return true;
 	} else if (command == MCMD_SELECT_LONG) {
-		if (_selectedItem >= 0) {
+            if (_selectedItem >= 0) {
 #ifdef CR_POCKETBOOK
-			showContextMenu();
+                showContextMenu();
 #else
-            removeItem( _selectedItem );
-            setDirty();			
+                removeItem( _selectedItem );
+                setDirty();
 #endif
-            return true;
-		}
+                return true;
+            }
 	} else if (command == MCMD_PREV_PAGE) {
 		if (_topItem == 0) {
 			closeMenu(0);
@@ -216,7 +216,12 @@ bool CRRecentBooksMenu::onCommand( int command, int params )
 		return true;
 	}
 #endif
-	return CRMenu::onCommand(command, params);
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+            BTN_CLOSE == params) {
+            closeMenu( 0 );
+            return true;
+    }
+    return CRMenu::onCommand(command, params);
     //closeMenu( 0 );
     //return true;
 }

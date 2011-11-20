@@ -167,7 +167,6 @@ void CRPocketBookGlobals::saveState(int cpage, int npages)
             CRLog::trace("Book(%s) state saved to db successfully", cf);
         else
             CRLog::error("Book(%s) state saving to db failed", cf);
-
         bsClose(bs);
     }
 #endif
@@ -1058,7 +1057,7 @@ private:
             if ( LVFileExists(fn) ) {
                 // Actually book opened in openRecentBook() we are in truble if it will fail
                 pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
-                pbGlobals->setFileName(file->getFilePathName());
+                pbGlobals->setFileName(fn);
             }
         }
     }
