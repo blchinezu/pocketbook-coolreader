@@ -147,8 +147,7 @@ bool CRPocketBookGlobals::createFile(char *fName)
 
 void CRPocketBookGlobals::saveState(int cpage, int npages)
 {
-    char *cf = (char *)UnicodeToLocal(_fileName).c_str();
-    char *af0 = GetAssociatedFile(cf, 0);
+    char *af0 = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 0);
 
     if (createFile(af0)) {
         if (npages - cpage < 3 && cpage >= 5) {
@@ -157,16 +156,16 @@ void CRPocketBookGlobals::saveState(int cpage, int npages)
         }
     }
 #ifdef PB_DB_STATE_SUPPORTED
-    bsHandle bs = bsLoad(cf);
+    bsHandle bs = bsLoad((char *)UnicodeToLocal(_fileName).c_str());
     if (bs)
     {
         bsSetCPage(bs, cpage);
         bsSetNPage(bs, npages);
         bsSetOpenTime(bs, time(0));
         if (bsSave(bs))
-            CRLog::trace("Book(%s) state saved to db successfully", cf);
+            CRLog::trace("Book(%s) state saved to db successfully", (char *)UnicodeToLocal(_fileName).c_str());
         else
-            CRLog::error("Book(%s) state saving to db failed", cf);
+            CRLog::error("Book(%s) state saving to db failed", (char *)UnicodeToLocal(_fileName).c_str());
         bsClose(bs);
     }
 #endif
