@@ -27,6 +27,83 @@ namespace Ui {
 
 #define DECL_DEF_CR_FONT_SIZES static int cr_font_sizes[] = { 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 28, 32, 38, 42, 48, 56, 64, 72 }
 
+
+struct StyleItem {
+    QString paramName;
+    bool updating;
+    QStringList values;
+    QStringList titles;
+    int currentIndex;
+    QComboBox * cb;
+    PropsRef props;
+    void init(QString param, const char * defValue, const char * styleValues[], QString styleTitles[], bool hideFirstItem, PropsRef props, QComboBox * cb) {
+        updating = true;
+        paramName = param;
+        this->cb = cb;
+        this->props = props;
+        currentIndex = -1;
+        values.clear();
+        titles.clear();
+        //CRLog::trace("StyleItem::init %s", paramName.toUtf8().constData());
+
+        QString currentValue = props->getStringDef(paramName.toUtf8().constData(), defValue);
+
+        for (int i=!hideFirstItem ? 0 : 1; styleValues[i]; i++) {
+            QString value = styleValues[i];
+            if (currentValue == value)
+                currentIndex = !hideFirstItem ? i : i-1;
+            values.append(value);
+            titles.append(styleTitles[i]);
+        }
+        if (currentIndex == -1)
+            currentIndex = 0;
+        cb->clear();
+        cb->addItems(titles);
+        cb->setCurrentIndex(currentIndex);
+        lString8 pname(paramName.toUtf8().constData());
+        props->setString(pname.c_str(), values.at(currentIndex));
+        //CRLog::trace("StyleItem::init %s done", paramName.toUtf8().constData());
+        updating = false;
+    }
+
+    void init(QString param, QStringList & styleValues, QStringList & styleTitles, PropsRef props, QComboBox * cb) {
+        updating = true;
+        paramName = param;
+        this->cb = cb;
+        this->props = props;
+        currentIndex = -1;
+        values.clear();
+        titles.clear();
+        values.append(styleValues);
+        titles.append(styleTitles);
+
+        QString currentValue = props->getStringDef(paramName.toUtf8().constData(), "");
+
+        for (int i=0; i < styleValues.length(); i++) {
+            if (currentValue == styleValues.at(i))
+                currentIndex = i;
+        }
+        if (currentIndex == -1)
+            currentIndex = 0;
+        cb->clear();
+        cb->addItems(titles);
+        cb->setCurrentIndex(currentIndex);
+        lString8 pname(paramName.toUtf8().constData());
+        props->setString(pname.c_str(), values.at(currentIndex));
+        updating = false;
+    }
+
+    void update(int newIndex) {
+        //CRLog::trace("StyleItem::update %s %s", paramName.toUtf8().constData(), updating ? "updating" : "");
+        if (updating)
+            return;
+        currentIndex = newIndex;
+        lString8 pname(paramName.toUtf8().constData());
+        props->setString(pname.c_str(), values.at(currentIndex));
+        //CRLog::trace("StyleItem::update '%s' = '%s'", pname, pvalue);
+    }
+};
+
 class CR3View;
 class SettingsDlg : public QDialog {
     Q_OBJECT
@@ -46,6 +123,8 @@ protected:
     void optionToUiInversed( const char * optionName, QCheckBox * cb );
     void fontToUi( const char * faceOptionName, const char * sizeOptionName, QComboBox * faceCombo, QComboBox * sizeCombo, const char * defFontFace );
 
+    void initStyleControls(const char * styleName);
+
     QColor getColor( const char * optionName, unsigned def );
     void setColor( const char * optionName, QColor cl );
     void colorDialog( const char * optionName, QString title );
@@ -59,6 +138,20 @@ private:
     PropsRef m_props;
     QString m_oldHyph;
     QStringList m_backgroundFiles;
+    QStringList m_faceList;
+    QString m_styleName;
+    StyleItem m_styleItemAlignment;
+    StyleItem m_styleItemIndent;
+    StyleItem m_styleItemMarginBefore;
+    StyleItem m_styleItemMarginAfter;
+    StyleItem m_styleItemMarginLeft;
+    StyleItem m_styleItemMarginRight;
+    StyleItem m_styleFontFace;
+    StyleItem m_styleFontSize;
+    StyleItem m_styleFontWeight;
+    StyleItem m_styleFontStyle;
+    StyleItem m_styleFontColor;
+    QStringList m_styleNames;
 
 private slots:
     void on_cbPageSkin_currentIndexChanged(int index);
@@ -91,6 +184,18 @@ private slots:
     void on_buttonBox_rejected();
     void on_cbFloatingPunctuation_stateChanged(int );
     void on_cbFontGamma_currentIndexChanged(QString );
+    void on_cbStyleName_currentIndexChanged(int index);
+    void on_cbDefAlignment_currentIndexChanged(int index);
+    void on_cbDefFirstLine_currentIndexChanged(int index);
+    void on_cbDefMarginBefore_currentIndexChanged(int index);
+    void on_cbDefMarginAfter_currentIndexChanged(int index);
+    void on_cbDefMarginLeft_currentIndexChanged(int index);
+    void on_cbDefMarginRight_currentIndexChanged(int index);
+    void on_cbDefFontSize_currentIndexChanged(int index);
+    void on_cbDefFontFace_currentIndexChanged(int index);
+    void on_cbDefFontWeight_currentIndexChanged(int index);
+    void on_cbDefFontStyle_currentIndexChanged(int index);
+    void on_cbDefFontColor_currentIndexChanged(int index);
 };
 
 #endif // SETTINGSDLG_H

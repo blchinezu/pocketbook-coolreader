@@ -381,11 +381,78 @@ void LVDocView::setPageHeaderInfo(int hdrFlags) {
 	}
 }
 
+lString16 mergeCssMacros(CRPropRef props) {
+    lString8 res = lString8();
+    for (int i=0; i<props->getCount(); i++) {
+        lString16 v = props->getValue(i);
+        if (!v.empty()) {
+            if (v.lastChar() != ';')
+                v.append(1, ';');
+            if (v.lastChar() != ' ')
+                v.append(1, ' ');
+            res.append(UnicodeToUtf8(v));
+        }
+    }
+    //CRLog::trace("merged: %s", res.c_str());
+    return Utf8ToUnicode(res);
+}
+
+lString8 substituteCssMacros(lString8 src, CRPropRef props) {
+    lString8 res = lString8(src.length());
+    const char * s = src.c_str();
+    for (; *s; s++) {
+        if (*s == '$') {
+            const char * s2 = s + 1;
+            bool err = false;
+            for (; *s2 && *s2 != ';' && *s2 != '}' &&  *s2 != ' ' &&  *s2 != '\r' &&  *s2 != '\n' &&  *s2 != '\t'; s2++) {
+                char ch = *s2;
+                if (ch != '.' && ch != '-' && (ch < 'a' || ch > 'z')) {
+                    err = true;
+                }
+            }
+            if (!err) {
+                // substitute variable
+                lString8 prop(s + 1, s2 - s - 1);
+                lString16 v;
+                // $styles.stylename.all will merge all properties like styles.stylename.*
+                if (prop.endsWith(".all")) {
+                    // merge whole branch
+                    v = mergeCssMacros(props->getSubProps(prop.substr(0, prop.length() - 3).c_str()));
+                    //CRLog::trace("merged %s = %s", prop.c_str(), LCSTR(v));
+                } else {
+                    // single property
+                    props->getString(prop.c_str(), v);
+                    if (!v.empty()) {
+                        if (v.lastChar() != ';')
+                            v.append(1, ';');
+                        if (v.lastChar() != ' ')
+                            v.append(1, ' ');
+                    }
+                }
+                if (!v.empty()) {
+                    res.append(UnicodeToUtf8(v));
+                } else {
+                    //CRLog::trace("CSS macro not found: %s", prop.c_str());
+                }
+            }
+            s = s2;
+        } else {
+            res.append(1, *s);
+        }
+    }
+    return res;
+}
+
 /// set document stylesheet text
 void LVDocView::setStyleSheet(lString8 css_text) {
 	LVLock lock(getMutex());
 	requestRender();
-	m_stylesheet = css_text;
+    m_stylesheet = css_text;
+}
+
+void LVDocView::updateDocStyleSheet() {
+    CRPropRef p = m_props->getSubProps("styles.");
+    m_doc->setStyleSheet(substituteCssMacros(m_stylesheet, p).c_str(), true);
 }
 
 void LVDocView::Clear() {
@@ -2294,7 +2361,10 @@ void LVDocView::setRenderProps(int dx, int dy) {
 			DEFAULT_FONT_FAMILY, m_statusFontFace);
 	if (!m_font || !m_infoFont)
 		return;
-	m_doc->setRenderProps(dx, dy, m_showCover, m_showCover ? dy
+
+    updateDocStyleSheet();
+
+    m_doc->setRenderProps(dx, dy, m_showCover, m_showCover ? dy
             + m_pageMargins.bottom * 4 : 0, m_font, m_def_interline_space, m_props);
 }
 
@@ -3436,7 +3506,7 @@ void LVDocView::createDefaultDocument(lString16 title, lString16 message) {
 	writer.OnTagClose(NULL, L"FictionBook");
 
 	// set stylesheet
-	m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+    updateDocStyleSheet();
 	//m_doc->getStyleSheet()->clear();
 	//m_doc->getStyleSheet()->parse(m_stylesheet.c_str());
 
@@ -3488,7 +3558,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
             setDocFormat( pdbFormat );
             if ( m_callback )
                 m_callback->OnLoadFileFormatDetected(pdbFormat);
-            m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+            updateDocStyleSheet();
             doc_format_t contentFormat = doc_format_none;
             bool res = ImportPDBDocument( m_stream, m_doc, m_callback, this, contentFormat );
             if ( !res ) {
@@ -3515,12 +3585,12 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 			// EPUB
 			CRLog::info("EPUB format detected");
 			createEmptyDocument();
-			m_doc->setProps( m_doc_props );
+            m_doc->setProps( m_doc_props );
 			setRenderProps( 0, 0 ); // to allow apply styles and rend method while loading
 			setDocFormat( doc_format_epub );
 			if ( m_callback )
                 m_callback->OnLoadFileFormatDetected(doc_format_epub);
-            m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+            updateDocStyleSheet();
             bool res = ImportEpubDocument( m_stream, m_doc, m_callback, this );
 			if ( !res ) {
 				setDocFormat( doc_format_none );
@@ -3559,7 +3629,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 			setDocFormat( doc_format_chm );
 			if ( m_callback )
 			m_callback->OnLoadFileFormatDetected(doc_format_chm);
-			m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+            updateDocStyleSheet();
             bool res = ImportCHMDocument( m_stream, m_doc, m_callback, this );
 			if ( !res ) {
 				setDocFormat( doc_format_none );
@@ -3592,7 +3662,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
             setDocFormat( doc_format_doc );
             if ( m_callback )
                 m_callback->OnLoadFileFormatDetected(doc_format_doc);
-            m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+            updateDocStyleSheet();
             bool res = ImportWordDocument( m_stream, m_doc, m_callback, this );
             if ( !res ) {
                 setDocFormat( doc_format_none );
@@ -3850,7 +3920,7 @@ void LVDocView::OnCacheFileFormatDetected( doc_format_t fmt )
         m_callback->OnLoadFileFormatDetected(getDocFormat());
     }
     // set stylesheet
-    m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+    updateDocStyleSheet();
 }
 
 void LVDocView::insertBookmarkPercentInfo(int start_page, int end_y, int percent)
@@ -3886,7 +3956,7 @@ bool LVDocView::ParseDocument() {
 				UnicodeToUtf8(fn).c_str(), crc);
 
 		// set stylesheet
-		m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+        updateDocStyleSheet();
 		//m_doc->getStyleSheet()->clear();
 		//m_doc->getStyleSheet()->parse(m_stylesheet.c_str());
 
@@ -3993,7 +4063,7 @@ bool LVDocView::ParseDocument() {
 		if (m_callback) {
 			m_callback->OnLoadFileFormatDetected(getDocFormat());
 		}
-		m_doc->setStyleSheet(m_stylesheet.c_str(), true);
+        updateDocStyleSheet();
 		setRenderProps(0, 0);
 
 		// set stylesheet
@@ -5162,6 +5232,58 @@ int LVDocView::onSelectionCommand( int cmd, int param )
 //static int cr_font_sizes[] = { 24, 29, 33, 39, 44 };
 static int cr_interline_spaces[] = { 100, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140, 145, 150, 160, 180, 200 };
 
+static const char * def_style_macros[] = {
+    "styles.def.align", "text-align: justify",
+    "styles.def.text-indent", "text-indent: 1.2em",
+    "styles.def.margin-top", "margin-top: 0em",
+    "styles.def.margin-bottom", "margin-bottom: 0em",
+    "styles.def.margin-left", "margin-left: 0em",
+    "styles.def.margin-right", "margin-right: 0em",
+    "styles.title.align", "text-align: center",
+    "styles.title.text-indent", "text-indent: 0em",
+    "styles.title.margin-top", "margin-top: 0.3em",
+    "styles.title.margin-bottom", "margin-bottom: 0.3em",
+    "styles.title.margin-left", "margin-left: 0em",
+    "styles.title.margin-right", "margin-right: 0em",
+    "styles.title.font-size", "font-size: 110%",
+    "styles.title.font-weight", "font-weight: bolder",
+    "styles.subtitle.align", "text-align: center",
+    "styles.subtitle.text-indent", "text-indent: 0em",
+    "styles.subtitle.margin-top", "margin-top: 0.2em",
+    "styles.subtitle.margin-bottom", "margin-bottom: 0.2em",
+    "styles.subtitle.font-style", "font-style: italic",
+    "styles.cite.align", "text-align: justify",
+    "styles.cite.text-indent", "text-indent: 1.2em",
+    "styles.cite.margin-top", "margin-top: 0.3em",
+    "styles.cite.margin-bottom", "margin-bottom: 0.3em",
+    "styles.cite.margin-left", "margin-left: 1em",
+    "styles.cite.margin-right", "margin-right: 1em",
+    "styles.cite.font-style", "font-style: italic",
+    "styles.epigraph.align", "text-align: left",
+    "styles.epigraph.text-indent", "text-indent: 1.2em",
+    "styles.epigraph.margin-top", "margin-top: 0.3em",
+    "styles.epigraph.margin-bottom", "margin-bottom: 0.3em",
+    "styles.epigraph.margin-left", "margin-left: 15%",
+    "styles.epigraph.margin-right", "margin-right: 1em",
+    "styles.epigraph.font-style", "font-style: italic",
+    "styles.pre.align", "text-align: left",
+    "styles.pre.text-indent", "text-indent: 0em",
+    "styles.pre.margin-top", "margin-top: 0em",
+    "styles.pre.margin-bottom", "margin-bottom: 0em",
+    "styles.pre.margin-left", "margin-left: 0em",
+    "styles.pre.margin-right", "margin-right: 0em",
+    "styles.pre.font-face", "font-family: \"Courier New\", \"Courier\", monospace",
+    "styles.stanza.align", "text-align: left",
+    "styles.stanza.text-indent", "text-indent: 0em",
+    "styles.stanza.margin-top", "margin-top: 0.3em",
+    "styles.stanza.margin-bottom", "margin-bottom: 0.3em",
+    "styles.stanza.margin-left", "margin-left: 15%",
+    "styles.stanza.margin-right", "margin-right: 1em",
+    "styles.stanza.font-style", "font-style: italic",
+    NULL,
+    NULL,
+};
+
 /// sets default property values if properties not found, checks ranges
 void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	lString16Collection list;
@@ -5285,6 +5407,9 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     props->setInt(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, p);
 
     props->setIntDef(PROP_FILE_PROPS_FONT_SIZE, 22);
+
+    for (int i=0; def_style_macros[i*2]; i++)
+        props->setStringDef(def_style_macros[i * 2], def_style_macros[i * 2 + 1]);
 }
 
 #define H_MARGIN 8
@@ -5332,6 +5457,8 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
 			int antialiasingMode = props->getIntDef(PROP_FONT_ANTIALIASING, 2);
 			fontMan->SetAntialiasMode(antialiasingMode);
 			requestRender();
+        } else if (name.startsWith(lString8("styles."))) {
+            requestRender();
         } else if (name == PROP_FONT_GAMMA) {
             double gamma = 1.0;
             lString16 s = props->getStringDef(PROP_FONT_GAMMA, "1.0");
