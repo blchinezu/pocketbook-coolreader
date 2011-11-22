@@ -1192,6 +1192,7 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         /// closes menu and its submenus
         virtual void destroyMenu();
         virtual void covered() { _pageUpdate = true; }
+        virtual void reactivated() { _pageUpdate = true; }
         virtual bool isScrollEnabled(bool downScroll)
         {
             if (downScroll)

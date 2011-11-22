@@ -369,7 +369,8 @@ void CRGUIWindowManager::activateWindow( CRGUIWindow * window )
         if ( lostFocus )
             lostFocus->covered();
         window->activated();
-    }
+    } else
+        window->reactivated();
 }
 
 /// runs event loop

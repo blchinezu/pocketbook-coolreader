@@ -147,25 +147,26 @@ bool CRPocketBookGlobals::createFile(char *fName)
 
 void CRPocketBookGlobals::saveState(int cpage, int npages)
 {
-    char *af0 = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 0);
+    lString8 cf = UnicodeToLocal(_fileName);
+    char *af0 = GetAssociatedFile((char *)cf.c_str(), 0);
 
     if (createFile(af0)) {
         if (npages - cpage < 3 && cpage >= 5) {
-            char *afz = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 'z');
+            char *afz = GetAssociatedFile((char *)cf.c_str(), 'z');
             createFile(afz);
         }
     }
 #ifdef PB_DB_STATE_SUPPORTED
-    bsHandle bs = bsLoad((char *)UnicodeToLocal(_fileName).c_str());
+    bsHandle bs = bsLoad((char *)cf.c_str());
     if (bs)
     {
         bsSetCPage(bs, cpage);
         bsSetNPage(bs, npages);
         bsSetOpenTime(bs, time(0));
         if (bsSave(bs))
-            CRLog::trace("Book(%s) state saved to db successfully", (char *)UnicodeToLocal(_fileName).c_str());
+            CRLog::trace("Book(%s) state saved to db successfully", (char *)cf.c_str());
         else
-            CRLog::error("Book(%s) state saving to db failed", (char *)UnicodeToLocal(_fileName).c_str());
+            CRLog::error("Book(%s) state saving to db failed", (char *)cf.c_str());
         bsClose(bs);
     }
 #endif
@@ -374,6 +375,7 @@ public:
     bool getBatteryStatus(int & percent, bool & charging) {
         charging = IsCharging() > 0; // TODO: find out values returned by the IsCharging() function.
         percent = GetBatteryPower(); // It seems that the GetBatteryPower() returns what needed here
+        return true;
     }
 
     int hasKeyMapping(int key, int flags) {
