@@ -19,7 +19,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 public class TOCDlg extends BaseDialog {
-	CoolReader mCoolReader;
+	//CoolReader mCoolReader;
 	ReaderView mReaderView;
 	TOCItem mTOC;
 	ListView mListView;
@@ -164,9 +164,9 @@ public class TOCDlg extends BaseDialog {
 
 	public TOCDlg( CoolReader coolReader, ReaderView readerView, TOCItem toc, int currentPage )
 	{
-		super(coolReader, 0, 0, false);
+		super(coolReader, coolReader.getResources().getString(R.string.win_title_toc), false, false);
         setCancelable(true);
-		this.mCoolReader = coolReader;
+//		this.mCoolReader = coolReader;
 		this.mReaderView = readerView;
 		this.mTOC = toc;
 		this.mCurrentPage = currentPage;
@@ -208,7 +208,6 @@ public class TOCDlg extends BaseDialog {
 		mListView.setFocusable(true);
 		mListView.setFocusableInTouchMode(true);
 		mListView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-		setTitle(mCoolReader.getResources().getString(R.string.win_title_toc));
 		setView(mListView);
 		setFlingHandlers(mListView, new Runnable() {
 			@Override
