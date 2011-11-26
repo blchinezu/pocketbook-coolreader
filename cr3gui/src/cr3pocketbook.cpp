@@ -1650,6 +1650,25 @@ public:
             _restore_globOrientation = false;
         }
     }
+    void OnExternalLink( lString16 url, ldomNode * node )
+    {
+        lString16 protocol;
+        lString16 path;
+
+        if ( url.split2(lString16(":"), protocol, path ) ) {
+            if (!protocol.compare(L"file") && path.startsWith(L"//") && path.length() > 5) {
+                lString16 anchor;
+                int p = path.pos(L"#");
+                if (p > 2) {
+                    anchor = path.substr(p + 1);
+                    path = path.substr(2, p -2);
+                } else
+                    path = path.substr(2, path.length() - 1);
+                OpenBook(UnicodeToLocal(path).c_str(), UnicodeToLocal(anchor).c_str(), 1);
+            }
+        } else
+            Message(ICON_WARNING, "CR3", "@Is_ext_link", 2000);
+    }
 };
 
 CRPocketBookDocView * CRPocketBookDocView::instance = NULL;
