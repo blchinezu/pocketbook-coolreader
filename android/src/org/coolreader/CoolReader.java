@@ -9,15 +9,17 @@ import java.lang.reflect.Field;
 import org.coolreader.crengine.AboutDialog;
 import org.coolreader.crengine.BackgroundThread;
 import org.coolreader.crengine.BaseDialog;
+import org.coolreader.crengine.BookInfo;
 import org.coolreader.crengine.BookmarksDlg;
 import org.coolreader.crengine.CRDB;
 import org.coolreader.crengine.DeviceInfo;
+import org.coolreader.crengine.EinkScreen;
 import org.coolreader.crengine.Engine;
 import org.coolreader.crengine.Engine.HyphDict;
-import org.coolreader.crengine.BookInfo;
 import org.coolreader.crengine.FileBrowser;
 import org.coolreader.crengine.FileInfo;
 import org.coolreader.crengine.History;
+import org.coolreader.crengine.InterfaceTheme;
 import org.coolreader.crengine.L;
 import org.coolreader.crengine.Logger;
 import org.coolreader.crengine.OptionsDialog;
@@ -26,9 +28,9 @@ import org.coolreader.crengine.ReaderAction;
 import org.coolreader.crengine.ReaderView;
 import org.coolreader.crengine.Scanner;
 import org.coolreader.crengine.TTS;
-import org.coolreader.crengine.Utils;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
-import org.coolreader.crengine.EinkScreen;
+import org.coolreader.crengine.ToastView;
+import org.coolreader.crengine.Utils;
 
 import android.app.Activity;
 import android.app.SearchManager;
@@ -43,7 +45,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
-import android.graphics.Color;
+import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.net.Uri;
@@ -56,10 +58,12 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
@@ -162,6 +166,39 @@ public class CoolReader extends Activity
 	public void setNightMode( boolean nightMode ) {
 		mNightMode = nightMode;
 	}
+	
+	private InterfaceTheme currentTheme = DeviceInfo.FORCE_LIGHT_THEME ? InterfaceTheme.WHITE : InterfaceTheme.LIGHT;
+	
+	public InterfaceTheme getCurrentTheme() {
+		return currentTheme;
+	}
+
+	public void setCurrentTheme(String themeCode) {
+		InterfaceTheme theme = InterfaceTheme.findByCode(themeCode);
+		if (theme != null) {
+			setCurrentTheme(theme);
+		}
+	}
+
+	public void setCurrentTheme(InterfaceTheme theme) {
+		currentTheme = theme;
+		getApplication().setTheme(theme.getThemeId());
+		setTheme(theme.getThemeId());
+		if (mFrame != null) {
+			TypedArray a = getTheme().obtainStyledAttributes(new int[] {android.R.attr.windowBackground, android.R.attr.background, android.R.attr.textColor, android.R.attr.colorBackground, android.R.attr.colorForeground});
+			int bgRes = a.getResourceId(0, 0);
+			//int clText = a.getColor(1, 0);
+			int clBackground = a.getColor(2, 0);
+			//int clForeground = a.getColor(3, 0);
+			a.recycle();
+			if (clBackground != 0)
+				mFrame.setBackgroundColor(clBackground);
+			if (bgRes != 0)
+				mFrame.setBackgroundResource(bgRes);
+		}
+		if (mBrowser != null)
+			mBrowser.onThemeChanged();
+	}
 
 	private boolean mFullscreen = false;
 	public boolean isFullscreen() {
@@ -211,16 +248,20 @@ public class CoolReader extends Activity
 		return sdkInt;
 	}
 	
-	private boolean mWakeLockEnabled = false;
 	public boolean isWakeLockEnabled() {
-		return mWakeLockEnabled;
+		return screenBacklightDuration > 0;
 	}
 
-	public void setWakeLockEnabled( boolean wakeLockEnabled )
+	/**
+	 * @param backlightDurationMinutes 0 = system default, 1 == 3 minutes, 2..5 == 2..5 minutes
+	 */
+	public void setScreenBacklightDuration(int backlightDurationMinutes)
 	{
-		if ( mWakeLockEnabled != wakeLockEnabled ) {
-			mWakeLockEnabled = wakeLockEnabled;
-			if ( !mWakeLockEnabled )
+		if (backlightDurationMinutes == 1)
+			backlightDurationMinutes = 3;
+		if (screenBacklightDuration != backlightDurationMinutes * 60 * 1000) {
+			screenBacklightDuration = backlightDurationMinutes * 60 * 1000;
+			if (screenBacklightDuration == 0)
 				backlightControl.release();
 			else
 				backlightControl.onUserActivity();
@@ -300,6 +341,8 @@ public class CoolReader extends Activity
 
 	private Runnable backlightTimerTask = null;
 	private static long lastUserActivityTime;
+	public static final int DEF_SCREEN_BACKLIGHT_TIMER_INTERVAL = 3 * 60 * 1000;
+	private int screenBacklightDuration = DEF_SCREEN_BACKLIGHT_TIMER_INTERVAL;
 
 	private class ScreenBacklightControl {
 		PowerManager.WakeLock wl = null;
@@ -307,7 +350,6 @@ public class CoolReader extends Activity
 		public ScreenBacklightControl() {
 		}
 
-		public static final int SCREEN_BACKLIGHT_TIMER_INTERVAL = 3 * 60 * 1000;
 
 		public void onUserActivity() {
 			lastUserActivityTime = Utils.timeStamp();
@@ -330,11 +372,12 @@ public class CoolReader extends Activity
 				wl.acquire();
 			}
 
-			if (backlightTimerTask == null)
+			if (backlightTimerTask == null) {
 				log.v("ScreenBacklightControl: timer task started");
-			backlightTimerTask = new BacklightTimerTask();
-			BackgroundThread.instance().postGUI(backlightTimerTask,
-					SCREEN_BACKLIGHT_TIMER_INTERVAL);
+				backlightTimerTask = new BacklightTimerTask();
+				BackgroundThread.instance().postGUI(backlightTimerTask,
+						screenBacklightDuration / 10);
+			}
 		}
 
 		public boolean isHeld() {
@@ -353,14 +396,25 @@ public class CoolReader extends Activity
 
 			@Override
 			public void run() {
-				if (backlightTimerTask != this)
+				if (backlightTimerTask == null)
 					return;
 				long interval = Utils.timeInterval(lastUserActivityTime);
 				log.v("ScreenBacklightControl: timer task, lastActivityMillis = "
 						+ interval);
-				if (interval > SCREEN_BACKLIGHT_TIMER_INTERVAL) {
+				int nextTimerInterval = screenBacklightDuration / 20;
+				boolean dim = false;
+				if (interval > screenBacklightDuration * 8 / 10) {
+					nextTimerInterval = nextTimerInterval / 8;
+					dim = true;
+				}
+				if (interval > screenBacklightDuration) {
 					log.v("ScreenBacklightControl: interval is expired");
 					release();
+				} else {
+					BackgroundThread.instance().postGUI(backlightTimerTask, nextTimerInterval);
+					if (dim) {
+						updateBacklightBrightness(-0.9f); // reduce by 9%
+					}
 				}
 			}
 
@@ -536,17 +590,21 @@ public class CoolReader extends Activity
 		
 		// testing background thread
     	mBackgroundThread = BackgroundThread.instance();
-		mFrame = new FrameLayout(this);
-		log.i("initializing scanner");
+    	
 		mEngine = new Engine(this, mBackgroundThread);
-		mBackgroundThread.setGUI(mFrame);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+		
 		// load settings
 		Properties props = loadSettings();
-		
+		String theme = props.getProperty(ReaderView.PROP_APP_THEME, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
+		setCurrentTheme(theme);
+    	
+		mFrame = new FrameLayout(this);
+		mBackgroundThread.setGUI(mFrame);
+
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+
 		setFullscreen( props.getBool(ReaderView.PROP_APP_FULLSCREEN, (DeviceInfo.EINK_SCREEN?true:false)));
-		int orientation = props.getInt(ReaderView.PROP_APP_SCREEN_ORIENTATION, (DeviceInfo.EINK_SCREEN?0:4));
+		int orientation = props.getInt(ReaderView.PROP_APP_SCREEN_ORIENTATION, 0); //(DeviceInfo.EINK_SCREEN?0:4)
 		if ( orientation < 0 || orientation > 4 )
 			orientation = 0;
 		setScreenOrientation(orientation);
@@ -554,7 +612,7 @@ public class CoolReader extends Activity
 		if ( backlight<-1 || backlight>100 )
 			backlight = -1;
 		setScreenBacklightLevel(backlight);
-		
+
         mEngine.showProgress( 0, R.string.progress_starting_cool_reader );
 
         // wait until all background tasks are executed
@@ -567,7 +625,7 @@ public class CoolReader extends Activity
 //		startupView = new View(this) {
 //		};
 //		startupView.setBackgroundColor(Color.BLACK);
-		setWakeLockEnabled(props.getBool(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, false));
+		setScreenBacklightDuration(props.getInt(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, 3));
 
 		// open DB
 		final String SQLITE_DB_NAME = "cr3db.sqlite";
@@ -590,10 +648,10 @@ public class CoolReader extends Activity
 //			setTheme(android.R.style.Theme_Light);
 //			getWindow().setBackgroundDrawableResource(drawable.editbox_background);
 //		}
-		if ( DeviceInfo.FORCE_LIGHT_THEME ) {
-			mFrame.setBackgroundColor( Color.WHITE );
-			setTheme(R.style.Dialog_Fullscreen_Day);
-		}
+//		if ( DeviceInfo.FORCE_LIGHT_THEME ) {
+//			mFrame.setBackgroundColor( Color.WHITE );
+//			setTheme(R.style.Dialog_Fullscreen_Day);
+//		}
 		
 		mReaderView = new ReaderView(this, mEngine, mBackgroundThread, props);
 
@@ -647,6 +705,47 @@ public class CoolReader extends Activity
     //private boolean brightnessHackError = false;
     private boolean brightnessHackError = false;
     	    
+    private void updateBacklightBrightness(float b) {
+        Window wnd = getWindow();
+        if (wnd != null) {
+	    	LayoutParams attrs =  wnd.getAttributes();
+	    	boolean changed = false;
+	    	if (b < 0) {
+	    		log.d("dimming screen by " + (int)((1 + b)*100) + "%");
+	    		b = -b * attrs.screenBrightness;
+	    		if (b < 0.15)
+	    			return;
+	    	}
+	    	float delta = attrs.screenBrightness - b;
+	    	if (delta < 0)
+	    		delta = -delta;
+	    	if (delta > 0.01) {
+	    		attrs.screenBrightness = b;
+	    		changed = true;
+	    	}
+	    	// hack to set buttonBrightness field
+	    	if ( !brightnessHackError )
+	    	try {
+	        	Field bb = attrs.getClass().getField("buttonBrightness");
+	        	if ( bb!=null ) {
+	        		//Float oldValue = (Float)bb.get(attrs);
+	        		//if ( oldValue==null || oldValue.floatValue()!=0 ) {
+	        			bb.set(attrs, Float.valueOf(0.0f));
+		        		changed = true;
+	        		//}
+	        	}
+	    	} catch ( Exception e ) {
+	    		log.e("WindowManager.LayoutParams.buttonBrightness field is not found, cannot turn buttons backlight off");
+	    		brightnessHackError = true;
+	    	}
+	    	//attrs.buttonBrightness = 0;
+	    	if ( changed ) {
+	    		log.d("Window attribute changed: " + attrs);
+	    		wnd.setAttributes(attrs);
+	    	}
+        }
+    }
+    
     public void onUserActivity()
     {
     	if ( backlightControl==null )
@@ -658,59 +757,26 @@ public class CoolReader extends Activity
 			@Override
 			public void run() {
 				try {
-			        Window wnd = getWindow();
-			        if ( wnd!=null ) {
-			        	LayoutParams attrs =  wnd.getAttributes();
-			        	boolean changed = false;
-			        	float b;
-			        	int dimmingAlpha = 255;
-			        	if ( screenBacklightBrightness>=0 ) {
-		        			float minb = 1/16f; 
-			        		if ( screenBacklightBrightness >= 10 ) {
-			        			b = (screenBacklightBrightness - 10) / 90.0f;
-			        			b = minb + b * (1-minb);
-				        		//b = (screenBacklightBrightness - 10) * 10.0f / 9.0f / 95.0f + 0.5f;
-					        	if ( b<0.0f ) // BRIGHTNESS_OVERRIDE_OFF
-					        		b = 0.0f;
-					        	else if ( b>1.0f )
-					        		b = 1.0f; //BRIGHTNESS_OVERRIDE_FULL
-			        		} else {
-				        		b = minb;
-				        		dimmingAlpha = 255 - (11-screenBacklightBrightness) * 180 / 10; 
-			        		}
-			        	} else
-			        		b = -1.0f; //BRIGHTNESS_OVERRIDE_NONE
-			        	mReaderView.setDimmingAlpha(dimmingAlpha);
-			        	log.d("Brightness: " + b + ", dim: " + dimmingAlpha);
-			        	float delta = attrs.screenBrightness - b;
-			        	if (delta < 0)
-			        		delta = -delta;
-			        	if (delta > 0.0001) {
-			        		attrs.screenBrightness = b;
-			        		changed = true;
-			        	}
-			        	// hack to set buttonBrightness field
-			        	if ( !brightnessHackError )
-			        	try {
-				        	Field bb = attrs.getClass().getField("buttonBrightness");
-				        	if ( bb!=null ) {
-				        		//Float oldValue = (Float)bb.get(attrs);
-				        		//if ( oldValue==null || oldValue.floatValue()!=0 ) {
-				        			bb.set(attrs, Float.valueOf(0.0f));
-					        		changed = true;
-				        		//}
-				        	}
-			        	} catch ( Exception e ) {
-			        		log.e("WindowManager.LayoutParams.buttonBrightness field is not found, cannot turn buttons backlight off");
-			        		brightnessHackError = true;
-			        	}
-			        	//attrs.buttonBrightness = 0;
-			        	if ( changed ) {
-			        		log.d("Window attribute changed: " + attrs);
-			        		wnd.setAttributes(attrs);
-			        	}
-			        	//attrs.screenOrientation = LayoutParams.SCREEN_;
-			        }
+		        	float b;
+		        	int dimmingAlpha = 255;
+		        	if ( screenBacklightBrightness>=0 ) {
+	        			float minb = 1/16f; 
+		        		if ( screenBacklightBrightness >= 10 ) {
+		        			b = (screenBacklightBrightness - 10) / 90.0f;
+		        			b = minb + b * (1-minb);
+				        	if (b < 0.0f ) // BRIGHTNESS_OVERRIDE_OFF
+				        		b = 0.0f;
+				        	else if ( b>1.0f )
+				        		b = 1.0f; //BRIGHTNESS_OVERRIDE_FULL
+		        		} else {
+			        		b = minb;
+			        		dimmingAlpha = 255 - (11-screenBacklightBrightness) * 180 / 10; 
+		        		}
+		        	} else
+		        		b = -1.0f; //BRIGHTNESS_OVERRIDE_NONE
+		        	mReaderView.setDimmingAlpha(dimmingAlpha);
+			    	log.d("Brightness: " + b + ", dim: " + dimmingAlpha);
+			    	updateBacklightBrightness(b);
 				} catch ( Exception e ) {
 					// ignore
 				}
@@ -1131,9 +1197,15 @@ public class CoolReader extends Activity
 
 	public void showToast( String msg )
 	{
-		log.v("showing toast: " + msg);
-		Toast toast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
-		toast.show();
+        log.v("showing toast: " + msg);
+        // TODO: enable custom toast
+//        if (DeviceInfo.EINK_NOOK) {
+//            ToastView.showToast(mReaderView, msg, Toast.LENGTH_LONG);
+//        } else {
+            //classic Toast
+            Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
+            toast.show();
+//        }
 	}
 
 	public interface InputHandler {
@@ -1149,13 +1221,16 @@ public class CoolReader extends Activity
 		{
 			super(activity, title, true, true);
 			this.handler = handler;
-	        input = new EditText(getContext());
+	        LayoutInflater mInflater = LayoutInflater.from(getContext());
+	        ViewGroup layout = (ViewGroup)mInflater.inflate(R.layout.line_edit_dlg, null);
+	        input = (EditText)layout.findViewById(R.id.input_field);
+	        //input = new EditText(getContext());
 	        if ( isNumberEdit )
 	        	input.setKeyListener(DigitsKeyListener.getInstance("0123456789."));
 //		        input.getText().setFilters(new InputFilter[] {
 //		        	new DigitsKeyListener()        
 //		        });
-	        setView(input);
+	        setView(layout);
 		}
 		@Override
 		protected void onNegativeButtonClick() {
@@ -1476,8 +1551,13 @@ public class CoolReader extends Activity
     		props.applyDefault(ReaderView.PROP_PAGE_ANIMATION, ReaderView.PAGE_ANIMATION_SLIDE2);
         }
         
+        props.applyDefault(ReaderView.PROP_APP_THEME, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
+        props.applyDefault(ReaderView.PROP_APP_THEME_DAY, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
+        props.applyDefault(ReaderView.PROP_APP_THEME_NIGHT, DeviceInfo.FORCE_LIGHT_THEME ? "BLACK" : "DARK");
         props.applyDefault(ReaderView.PROP_APP_SELECTION_PERSIST, "0");
-        props.applyDefault(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, "0");
+        props.applyDefault(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, "3");
+        if ("1".equals(props.getProperty(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK)))
+            props.setProperty(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, "3");
         props.applyDefault(ReaderView.PROP_APP_BOOK_PROPERTY_SCAN_ENABLED, "1");
         // autodetect best initial font size based on display resolution
         int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
@@ -1510,7 +1590,7 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_SHOW_TIME, "1");
 		props.applyDefault(ReaderView.PROP_FONT_ANTIALIASING, "2");
 		props.applyDefault(ReaderView.PROP_APP_SHOW_COVERPAGES, "1");
-		props.applyDefault(ReaderView.PROP_APP_SCREEN_ORIENTATION, DeviceInfo.EINK_SCREEN ? "0" : "4");
+		props.applyDefault(ReaderView.PROP_APP_SCREEN_ORIENTATION, "0"); // DeviceInfo.EINK_SCREEN ? "0" : "4"
 		props.applyDefault(ReaderView.PROP_CONTROLS_ENABLE_VOLUME_KEYS, "1");
 		props.applyDefault(ReaderView.PROP_APP_TAP_ZONE_HILIGHT, "0");
 		props.applyDefault(ReaderView.PROP_APP_BOOK_SORT_ORDER, FileInfo.DEF_SORT_ORDER.name());

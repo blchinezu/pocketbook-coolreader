@@ -233,7 +233,7 @@ cr_jpeg_src (j_decompress_ptr cinfo, LVStream * stream)
      * manager serially with the same JPEG object.  Caveat programmer.
      */
     if (cinfo->src == NULL) { /* first time for this JPEG object? */
-        src = (cr_jpeg_source_mgr *) new cr_jpeg_source_mgr;
+        src = new cr_jpeg_source_mgr();
         cinfo->src = (struct jpeg_source_mgr *) src;
         src->buffer = new JOCTET[INPUT_BUF_SIZE];
     }
@@ -657,7 +657,7 @@ bool LVPngImageSource::Decode( LVImageDecoderCallback * callback )
     if ( !png_ptr )
         return false;
 
-    if (setjmp( png_ptr->jmpbuf )) {
+    if (setjmp(png_jmpbuf(png_ptr))) {
         _width = 0;
         _height = 0;
         if (png_ptr)
@@ -676,7 +676,7 @@ bool LVPngImageSource::Decode( LVImageDecoderCallback * callback )
     if (!info_ptr)
         lvpng_error_func(png_ptr, "cannot create png info struct");
     png_set_read_fn(png_ptr,
-        (voidp)this, lvpng_read_func);
+        (void*)this, lvpng_read_func);
     png_read_info( png_ptr, info_ptr );
 
 

@@ -384,6 +384,9 @@ void LVDocView::setPageHeaderInfo(int hdrFlags) {
 lString16 mergeCssMacros(CRPropRef props) {
     lString8 res = lString8();
     for (int i=0; i<props->getCount(); i++) {
+    	lString8 n(props->getName(i));
+    	if (n.endsWith(".day") || n.endsWith(".night"))
+    		continue;
         lString16 v = props->getValue(i);
         if (!v.empty()) {
             if (v.lastChar() != ';')
@@ -2141,10 +2144,11 @@ bool LVDocView::windowToDocPoint(lvPoint & pt) {
 		page1.top += m_pageMargins.top + headerHeight;
 		page1.right -= m_pageMargins.right;
 		page1.bottom -= m_pageMargins.bottom;
+		lvRect page2;
 		if (page1.isPointInside(pt)) {
 			rc = &page1;
 		} else if (getVisiblePageCount() == 2) {
-			lvRect page2(m_pageRects[1]);
+			page2 = m_pageRects[1];
 			page2.left += m_pageMargins.left;
 			page2.top += m_pageMargins.top + headerHeight;
 			page2.right -= m_pageMargins.right;
@@ -2323,6 +2327,7 @@ int LVDocView::getCurrentPageImageCount()
             lString16 nodeName = ptr->getNode()->getNodeName();
             if (nodeName == L"img" || nodeName == L"image")
                 count++;
+			return true;
         }
 
     };
@@ -4648,6 +4653,7 @@ bool LVDocView::removeBookmark(CRBookmark * bm) {
 	if (bm) {
         updateBookMarksRanges();
         delete bm;
+		return true;
 #if 0
             if (m_highlightBookmarks && bm->getType() == bmkt_comment || bm->getType() == bmkt_correction) {
                 int by = m_doc->createXPointer(bm->getStartPos()).toPoint().y;
@@ -5291,6 +5297,12 @@ static const char * def_style_macros[] = {
     "styles.footnote-link.vertical-align", "vertical-align: super",
     "styles.footnote", "font-size: 70%",
     "styles.footnote-title", "font-size: 110%",
+    "styles.annotation.font-size", "font-size: 90%",
+    "styles.annotation.margin-left", "margin-left: 1em",
+    "styles.annotation.margin-right", "margin-right: 1em",
+    "styles.annotation.font-style", "font-style: italic",
+    "styles.annotation.align", "text-align: justify",
+    "styles.annotation.text-indent", "text-indent: 1.2em",
     NULL,
     NULL,
 };
@@ -5559,7 +5571,7 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
 			setStatusFontFace(UnicodeToUtf8(value));
 		} else if (name == PROP_STATUS_LINE || name == PROP_SHOW_TIME
 				|| name	== PROP_SHOW_TITLE || name == PROP_SHOW_BATTERY
-                || name == PROP_SHOW_BATTERY || name == PROP_STATUS_CHAPTER_MARKS || name == PROP_SHOW_POS_PERCENT
+                || name == PROP_STATUS_CHAPTER_MARKS || name == PROP_SHOW_POS_PERCENT
                 || name == PROP_SHOW_PAGE_COUNT || name == PROP_SHOW_PAGE_NUMBER) {
 			m_props->setString(name.c_str(), value);
 			setStatusMode(m_props->getIntDef(PROP_STATUS_LINE, 0),
@@ -5683,7 +5695,7 @@ LVPageWordSelector::LVPageWordSelector( LVDocView * docview )
     LVRef<ldomXRange> range = _docview->getPageDocumentRange();
     if (!range.isNull()) {
 		_words.addRangeWords(*range, true);
-                if (true/* _docview->isPageMode()*/ && _docview->getVisiblePageCount() > 1) {
+                if (_docview->getVisiblePageCount() > 1) { // _docview->isPageMode() &&
                         // process second page
                         int pageNumber = _docview->getCurPage();
                         range = _docview->getPageDocumentRange(pageNumber + 1);

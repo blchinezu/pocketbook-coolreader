@@ -7,9 +7,7 @@ import java.util.ArrayList;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.ColorPickerDialog.OnColorChangedListener;
-import org.coolreader.crengine.OptionsDialog.ThumbnailCache.Item;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.database.DataSetObserver;
@@ -34,6 +32,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TabHost;
 import android.widget.TabHost.TabContentFactory;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 public class OptionsDialog extends BaseDialog implements TabContentFactory, OptionOwner, Settings {
@@ -123,6 +122,12 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 	int[] mFlickBrightnessTitles = new int[] {
 			R.string.options_controls_flick_brightness_none, R.string.options_controls_flick_brightness_left, R.string.options_controls_flick_brightness_right
 		};
+	int[] mBacklightTimeout = new int[] {
+			0, 2, 3, 4, 5, 6
+		};
+	int[] mBacklightTimeoutTitles = new int[] {
+			R.string.options_app_backlight_timeout_0, R.string.options_app_backlight_timeout_2, R.string.options_app_backlight_timeout_3, R.string.options_app_backlight_timeout_4, R.string.options_app_backlight_timeout_5, R.string.options_app_backlight_timeout_6
+		};
 	int[] mTapSecondaryActionType = new int[] {
 			TAP_ACTION_TYPE_LONGPRESS, TAP_ACTION_TYPE_DOUBLE
 		};
@@ -210,6 +215,10 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			this.iconId = id;
 			return this;
 		}
+		public OptionBase noIcon() {
+			this.iconId = 0;
+			return this;
+		}
 		public OptionBase setDefaultValue(String value) {
 			this.defaultValue = value;
 			if ( mProperties.getProperty(property)==null )
@@ -251,10 +260,26 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			TextView labelView = (TextView)view.findViewById(R.id.option_label);
 			TextView valueView = (TextView)view.findViewById(R.id.option_value);
 			labelView.setText(label);
-			valueView.setText(getValueLabel());
+			if (valueView != null) {
+				String valueLabel = getValueLabel();
+				if (valueLabel != null && valueLabel.length() > 0) {
+					valueView.setText(valueLabel);
+					valueView.setVisibility(View.VISIBLE);
+				} else {
+					valueView.setText("");
+					valueView.setVisibility(View.INVISIBLE);
+				}
+			}
 			ImageView icon = (ImageView)view.findViewById(R.id.option_icon);
-			if (icon != null)
-				icon.setImageResource(iconId);
+			if (icon != null) {
+				if (iconId != 0) {
+					icon.setVisibility(View.VISIBLE);
+					icon.setImageResource(iconId);
+				} else {
+					icon.setImageResource(0);
+					icon.setVisibility(View.INVISIBLE);
+				}
+			}
 			return view;
 		}
 
@@ -369,6 +394,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mProperties.setColor(PROP_STATUS_FONT_COLOR_NIGHT, mProperties.getColor(PROP_STATUS_FONT_COLOR, 0xFFFFFF));
 			mProperties.setInt(PROP_APP_SCREEN_BACKLIGHT_NIGHT, mProperties.getInt(PROP_APP_SCREEN_BACKLIGHT, -1));
 			mProperties.setProperty(PROP_FONT_GAMMA_NIGHT, mProperties.getProperty(PROP_FONT_GAMMA, "1.0"));
+			mProperties.setProperty(PROP_APP_THEME_NIGHT, mProperties.getProperty(PROP_APP_THEME, "BLACK"));
 		} else {
 			mProperties.setProperty(PROP_PAGE_BACKGROUND_IMAGE_DAY, mProperties.getProperty(PROP_PAGE_BACKGROUND_IMAGE, "(NONE)"));
 			mProperties.setColor(PROP_BACKGROUND_COLOR_DAY, mProperties.getColor(PROP_BACKGROUND_COLOR, 0xFFFFFF));
@@ -376,8 +402,20 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mProperties.setColor(PROP_STATUS_FONT_COLOR_DAY, mProperties.getColor(PROP_STATUS_FONT_COLOR, 0x000000));
 			mProperties.setInt(PROP_APP_SCREEN_BACKLIGHT_DAY, mProperties.getInt(PROP_APP_SCREEN_BACKLIGHT, -1));
 			mProperties.setProperty(PROP_FONT_GAMMA_DAY, mProperties.getProperty(PROP_FONT_GAMMA, "1.0"));
+			mProperties.setProperty(PROP_APP_THEME_DAY, mProperties.getProperty(PROP_APP_THEME, "WHITE"));
+		}
+		for (String code : styleCodes) {
+			String styleName = "styles." + code + ".color";
+			String v = mProperties.getProperty(styleName); 
+			if (v != null) {
+				if ( night )
+					mProperties.setProperty(styleName + ".night", v);
+				else
+					mProperties.setProperty(styleName + ".day", v);
+			}
 		}
 	}
+
 	static public void restoreColor( Properties mProperties,  boolean night )
 	{
 		if ( night ) {
@@ -387,6 +425,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mProperties.setColor(PROP_STATUS_FONT_COLOR, mProperties.getColor(PROP_STATUS_FONT_COLOR_NIGHT, 0xFFFFFF));
 			mProperties.setInt(PROP_APP_SCREEN_BACKLIGHT, mProperties.getInt(PROP_APP_SCREEN_BACKLIGHT_NIGHT, 70));
 			mProperties.setProperty(PROP_FONT_GAMMA, mProperties.getProperty(PROP_FONT_GAMMA_NIGHT, "1.0"));
+			mProperties.setProperty(PROP_APP_THEME, mProperties.getProperty(PROP_APP_THEME_NIGHT, "BLACK"));
 		} else {
 			mProperties.setProperty(PROP_PAGE_BACKGROUND_IMAGE, mProperties.getProperty(PROP_PAGE_BACKGROUND_IMAGE_DAY, "(NONE)"));
 			mProperties.setColor(PROP_BACKGROUND_COLOR, mProperties.getColor(PROP_BACKGROUND_COLOR_DAY, 0xFFFFFF));
@@ -394,6 +433,14 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mProperties.setColor(PROP_STATUS_FONT_COLOR, mProperties.getColor(PROP_STATUS_FONT_COLOR_DAY, 0x000000));
 			mProperties.setInt(PROP_APP_SCREEN_BACKLIGHT, mProperties.getInt(PROP_APP_SCREEN_BACKLIGHT_DAY, 80));
 			mProperties.setProperty(PROP_FONT_GAMMA, mProperties.getProperty(PROP_FONT_GAMMA_DAY, "1.0"));
+			mProperties.setProperty(PROP_APP_THEME, mProperties.getProperty(PROP_APP_THEME_DAY, "WHITE"));
+		}
+		for (String code : styleCodes) {
+			String styleName = "styles." + code + ".color";
+			String pname = night ? styleName + ".night" : styleName + ".day";
+			String v = mProperties.getProperty(pname);
+			if (v != null)
+				mProperties.setProperty(styleName, mProperties.getProperty(pname));
 		}
 	}
 
@@ -530,7 +577,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		public String getValueLabel() { return ">"; }
 	}
 	
-	class TapZoneOption extends OptionBase {
+	class TapZoneOption extends SubmenuOption {
 		public TapZoneOption( OptionOwner owner, String label, String property ) {
 			super( owner, label, property);
 		}
@@ -880,6 +927,17 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		}
 	}
 	
+	class ThemeOptions extends ListOption
+	{
+		public ThemeOptions( OptionOwner owner, String label )
+		{
+			super( owner, label, PROP_APP_THEME );
+			setDefaultValue(DeviceInfo.EINK_SCREEN ? "WHITE" : "LIGHT");
+			for (InterfaceTheme theme : InterfaceTheme.allThemes)
+				add(theme.getCode(), getString(theme.getDisplayNameResourceId()));
+		}
+	}
+	
 	class ThumbnailCache {
 		final int maxcount;
 		final int dx;
@@ -1180,7 +1238,13 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			BaseDialog dlg = new BaseDialog(mActivity, label, false, false);
 			OptionsListView listView = new OptionsListView(getContext());
 			String[] firstLineOptions = {"", "text-align: justify", "text-align: left", "text-align: center", "text-align: right", };
-			String[] firstLineOptionNames = {"-", "Justify", "Left", "Center", "Right", };
+			int[] firstLineOptionNames = {
+					R.string.options_css_inherited,
+					R.string.options_css_text_align_justify,
+					R.string.options_css_text_align_left,
+					R.string.options_css_text_align_center,
+					R.string.options_css_text_align_right,
+			};
 			listView.add(new ListOption(mOwner, getString(R.string.options_css_text_align), prefix + ".align").add(firstLineOptions, firstLineOptionNames).setIconId(R.drawable.cr3_option_text_align));
 			
 			String[] identOptions = {"", // inherited
@@ -1189,12 +1253,13 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			        "text-indent: 2em",
 			        "text-indent: -1.2em",
 			        "text-indent: -2em"};
-			String[] identOptionNames = {"",
-			        "No indent",
-			        "Small Indent",
-			        "Big Indent",
-			        "Small Outdent",
-			        "Big Outdent"};
+			int[] identOptionNames = {
+					R.string.options_css_inherited,
+					R.string.options_css_text_indent_no_indent,
+					R.string.options_css_text_indent_small_indent,
+					R.string.options_css_text_indent_big_indent,
+					R.string.options_css_text_indent_small_outdent,
+					R.string.options_css_text_indent_big_outdent};
 			listView.add(new ListOption(mOwner, getString(R.string.options_css_text_indent), prefix + ".text-indent").add(identOptions, identOptionNames).setIconId(R.drawable.cr3_option_text_indent));
 
 			ArrayList<String> faces = new ArrayList<String>(); 
@@ -1426,10 +1491,10 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			    	R.string.options_css_margin_20p,
 			    	R.string.options_css_margin_30p,
 			};
-			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_top), prefix + ".margin-top").add(marginTopOptions, marginTopBottomOptionNames).setIconId(R.drawable.cr3_option_text_margins));
-			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_bottom), prefix + ".margin-bottom").add(marginBottomOptions, marginTopBottomOptionNames).setIconId(R.drawable.cr3_option_text_margins));
-			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_left), prefix + ".margin-left").add(marginLeftOptions, marginLeftRightOptionNames).setIconId(R.drawable.cr3_option_text_margins));
-			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_right), prefix + ".margin-right").add(marginRightOptions, marginLeftRightOptionNames).setIconId(R.drawable.cr3_option_text_margins));
+			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_top), prefix + ".margin-top").add(marginTopOptions, marginTopBottomOptionNames).setIconId(R.drawable.cr3_option_text_margin_top));
+			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_bottom), prefix + ".margin-bottom").add(marginBottomOptions, marginTopBottomOptionNames).setIconId(R.drawable.cr3_option_text_margin_bottom));
+			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_left), prefix + ".margin-left").add(marginLeftOptions, marginLeftRightOptionNames).setIconId(R.drawable.cr3_option_text_margin_left));
+			listView.add(new ListOption(mOwner, getString(R.string.options_css_margin_right), prefix + ".margin-right").add(marginRightOptions, marginLeftRightOptionNames).setIconId(R.drawable.cr3_option_text_margin_right));
 			
 
 			dlg.setTitle(label);
@@ -1443,24 +1508,46 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 	
 	private ListOption createStyleEditor(String styleCode, int titleId) {
 		ListOption res = new StyleEditorOption(this, getString(titleId), "styles." + styleCode);
-		res.setIconId(R.drawable.cr3_option_text_other);
+		res.noIcon();
 		return res;
 	}
+
+	final static private String[] styleCodes = {
+		"def",
+		"title",
+		"subtitle",
+		"pre",
+		"link",
+		"cite",
+		"epigraph",
+		"poem",
+		"text-author",
+		"footnote",
+		"footnote-link",
+		"footnote-title",
+		"annotation",
+	};
+	
+	final static private int[] styleTitles = {
+		R.string.options_css_def,
+		R.string.options_css_title,
+		R.string.options_css_subtitle,
+		R.string.options_css_pre,
+		R.string.options_css_link,
+		R.string.options_css_cite,
+		R.string.options_css_epigraph,
+		R.string.options_css_poem,
+		R.string.options_css_textauthor,
+		R.string.options_css_footnote,
+		R.string.options_css_footnotelink,
+		R.string.options_css_footnotetitle,
+		R.string.options_css_annotation,
+	};
 	
 	private void fillStyleEditorOptions() {
 		mOptionsCSS = new OptionsListView(getContext());
-		mOptionsCSS.add(createStyleEditor("def", R.string.options_css_def));
-		mOptionsCSS.add(createStyleEditor("title", R.string.options_css_title));
-		mOptionsCSS.add(createStyleEditor("subtitle", R.string.options_css_subtitle));
-		mOptionsCSS.add(createStyleEditor("pre", R.string.options_css_pre));
-		mOptionsCSS.add(createStyleEditor("cite", R.string.options_css_cite));
-		mOptionsCSS.add(createStyleEditor("epigraph", R.string.options_css_epigraph));
-		mOptionsCSS.add(createStyleEditor("poem", R.string.options_css_poem));
-		mOptionsCSS.add(createStyleEditor("text-author", R.string.options_css_textauthor));
-		mOptionsCSS.add(createStyleEditor("link", R.string.options_css_link));
-		mOptionsCSS.add(createStyleEditor("footnote", R.string.options_css_footnote));
-		mOptionsCSS.add(createStyleEditor("footnote-link", R.string.options_css_footnotelink));
-		mOptionsCSS.add(createStyleEditor("footnote-title", R.string.options_css_footnotetitle));
+		for (int i=0; i<styleCodes.length; i++)
+			mOptionsCSS.add(createStyleEditor(styleCodes[i], styleTitles[i]));
 	}
 	
 	@Override
@@ -1480,6 +1567,9 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		//setContentView(R.layout.options);
 		//mTabs = (TabHost)findViewById(android.R.id.tabhost); 
 		mTabs.setup();
+		
+		TabWidget tabWidget = (TabWidget)mTabs.findViewById(android.R.id.tabs);
+		//tabWidget.
 		//new TabHost(getContext());
 		
 		mOptionsStyles = new OptionsListView(getContext());
@@ -1487,7 +1577,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		mOptionsStyles.add(new ListOption(this, getString(R.string.options_font_size), PROP_FONT_SIZE).add(mFontSizes).setDefaultValue("24").setIconId(R.drawable.cr3_option_font_size));
 		mOptionsStyles.add(new BoolOption(this, getString(R.string.options_font_embolden), PROP_FONT_WEIGHT_EMBOLDEN).setDefaultValue("0").setIconId(R.drawable.cr3_option_text_bold));
 		//mOptionsStyles.add(new BoolOption(getString(R.string.options_font_antialias), PROP_FONT_ANTIALIASING).setInverse().setDefaultValue("0"));
-		mOptionsStyles.add(new ListOption(this, getString(R.string.options_font_antialias), PROP_FONT_ANTIALIASING).add(mAntialias, mAntialiasTitles).setDefaultValue("2").setIconId(R.drawable.cr3_option_text_other));
+		mOptionsStyles.add(new ListOption(this, getString(R.string.options_font_antialias), PROP_FONT_ANTIALIASING).add(mAntialias, mAntialiasTitles).setDefaultValue("2").setIconId(R.drawable.cr3_option_text_antialias));
 		mOptionsStyles.add(new ListOption(this, getString(R.string.options_interline_space), PROP_INTERLINE_SPACE).addPercents(mInterlineSpaces).setDefaultValue("100").setIconId(R.drawable.cr3_option_line_spacing));
 		//
 		mOptionsStyles.add(new HyphenationOptions(this, getString(R.string.options_hyphenation_dictionary)).setIconId(R.drawable.cr3_option_text_hyphenation));
@@ -1516,10 +1606,6 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_screen_update_mode), PROP_APP_SCREEN_UPDATE_MODE).add(mScreenUpdateModes, mScreenUpdateModesTitles).setDefaultValue("0"));
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_screen_update_interval), PROP_APP_SCREEN_UPDATE_INTERVAL).add(mScreenFullUpdateInterval).setDefaultValue("10"));
 		}
-		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_left), PROP_PAGE_MARGIN_LEFT).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margins));
-		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_right), PROP_PAGE_MARGIN_RIGHT).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margins));
-		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_top), PROP_PAGE_MARGIN_TOP).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margins));
-		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_bottom), PROP_PAGE_MARGIN_BOTTOM).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margins));
 
 		mOptionsPage.add(new StatusBarOption(this, getString(R.string.options_page_titlebar)));
 		mOptionsPage.add(new BoolOption(this, getString(R.string.options_page_footnotes), PROP_FOOTNOTES).setDefaultValue("1"));
@@ -1527,6 +1613,11 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_animation), PROP_PAGE_ANIMATION).add(mAnimation, mAnimationTitles).setDefaultValue("1"));
 		mOptionsPage.add(new BoolOption(this, getString(R.string.options_view_bookmarks_highlight), PROP_APP_HIGHLIGHT_BOOKMARKS).setDefaultValue("1"));
 
+		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_left), PROP_PAGE_MARGIN_LEFT).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margin_left));
+		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_right), PROP_PAGE_MARGIN_RIGHT).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margin_right));
+		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_top), PROP_PAGE_MARGIN_TOP).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margin_top));
+		mOptionsPage.add(new ListOption(this, getString(R.string.options_page_margin_bottom), PROP_PAGE_MARGIN_BOTTOM).add(mMargins).setDefaultValue("5").setIconId(R.drawable.cr3_option_text_margin_bottom));
+		
 		mOptionsControls = new OptionsListView(getContext());
 		mOptionsControls.add(new KeyMapOption(this, getString(R.string.options_app_key_actions)).setIconId(R.drawable.cr3_option_controls_keys));
 		mOptionsControls.add(new TapZoneOption(this, getString(R.string.options_app_tapzones_normal), PROP_APP_TAP_ZONE_ACTIONS_TAP).setIconId(R.drawable.cr3_option_controls_tapzones));
@@ -1543,15 +1634,18 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		mOptionsControls.add(new BoolOption(this, getString(R.string.options_selection_keep_selection_after_dictionary), PROP_APP_SELECTION_PERSIST).setDefaultValue("0"));
 		
 		mOptionsApplication = new OptionsListView(getContext());
-		if ( !DeviceInfo.EINK_SCREEN )
-			mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_backlight_lock_enabled), PROP_APP_SCREEN_BACKLIGHT_LOCK).setDefaultValue("0"));
-		mBacklightLevelsTitles[0] = getString(R.string.options_app_backlight_screen_default);
-		if ( !DeviceInfo.EINK_SCREEN )
-			mOptionsApplication.add(new ListOption(this, getString(R.string.options_app_backlight_screen), PROP_APP_SCREEN_BACKLIGHT).add(mBacklightLevels, mBacklightLevelsTitles).setDefaultValue("-1"));
-		mOptionsApplication.add(new DictOptions(this, getString(R.string.options_app_dictionary)));
-		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_show_cover_pages), PROP_APP_SHOW_COVERPAGES));
-		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_scan_book_props), PROP_APP_BOOK_PROPERTY_SCAN_ENABLED).setDefaultValue("1"));
-		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_browser_hide_empty_dirs), PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS).setDefaultValue("0"));
+		if ( !DeviceInfo.FORCE_LIGHT_THEME ) {
+			mOptionsApplication.add(new ThemeOptions(this, getString(R.string.options_app_ui_theme)).noIcon());
+		}
+		if ( !DeviceInfo.EINK_SCREEN ) {
+			mOptionsApplication.add(new ListOption(this, getString(R.string.options_app_backlight_timeout), PROP_APP_SCREEN_BACKLIGHT_LOCK).add(mBacklightTimeout, mBacklightTimeoutTitles).setDefaultValue("3").noIcon());
+			mBacklightLevelsTitles[0] = getString(R.string.options_app_backlight_screen_default);
+			mOptionsApplication.add(new ListOption(this, getString(R.string.options_app_backlight_screen), PROP_APP_SCREEN_BACKLIGHT).add(mBacklightLevels, mBacklightLevelsTitles).setDefaultValue("-1").noIcon());
+		}
+		mOptionsApplication.add(new DictOptions(this, getString(R.string.options_app_dictionary)).noIcon());
+		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_show_cover_pages), PROP_APP_SHOW_COVERPAGES).noIcon());
+		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_scan_book_props), PROP_APP_BOOK_PROPERTY_SCAN_ENABLED).setDefaultValue("1").noIcon());
+		mOptionsApplication.add(new BoolOption(this, getString(R.string.options_app_browser_hide_empty_dirs), PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS).setDefaultValue("0").noIcon());
 		
 		fillStyleEditorOptions();
 		
