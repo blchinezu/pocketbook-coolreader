@@ -687,6 +687,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t font_hinting[] = {
+        {_("No hinting"), "0"},
+        {_("Use bytecode"), "1"},
+        {_("Autohinting"), "2"},
+        {NULL, NULL}
+    };
+
+
     CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
 
         setSkinName(lString16(L"#settings"));
@@ -721,6 +729,11 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
         CRMenu * fontSizeMenu = createFontSizeMenu( _wm, mainMenu, props );
         mainMenu->addItem( fontSizeMenu );
+
+        CRMenu * fontHintingMenu = new CRMenu(_wm, mainMenu, mm_FontHinting,
+                _("Font Hinting"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_HINTING );
+        addMenuItems( fontHintingMenu, font_hinting );
+        mainMenu->addItem( fontHintingMenu );
 
         CRMenu * emboldenModeMenu = new CRMenu(_wm, mainMenu, mm_Embolden,
                 _("Font weight"),

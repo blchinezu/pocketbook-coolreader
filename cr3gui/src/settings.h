@@ -30,6 +30,7 @@ enum MainMenuItems_t {
     mm_Settings = SETTINGS_MENU_COMMANDS_START,
     mm_FontFace,
     mm_FontSize,
+    mm_FontHinting,
     mm_FontAntiAliasing,
     mm_InterlineSpace,
     mm_Orientation,

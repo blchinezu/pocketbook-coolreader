@@ -650,9 +650,25 @@ msgstr "*2"
 msgid "*3"
 msgstr "*3"
 
+#: ../src/settings.cpp:691
+msgid "No hinting"
+msgstr "Вимкнуто"
+
+#: .. / Src / settings.cpp: 692
+msgid "Use bytecode"
+msgstr "Використовувати байт-код"
+
+#: .. / Src / settings.cpp: 693
+msgid "Autohinting"
+msgstr "Автохінтінг"
+
 #: ../src/settings.cpp:625
 msgid "Default font face"
 msgstr "Шрифт за замовчуванням"
+
+#: .. / Src / settings.cpp: 734
+msgid "Font Hinting"
+msgstr "Хінтінг шрифту"
 
 #: ../src/settings.cpp:651
 msgid "Font weight"

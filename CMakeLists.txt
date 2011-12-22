@@ -182,7 +182,7 @@ if (NOT JPEG_FOUND)
 endif (NOT JPEG_FOUND)
 
 if (NOT WIN32)
-FIND_PACKAGE(Freetype)
+#FIND_PACKAGE(Freetype)
 endif (NOT WIN32)
 if (NOT FREETYPE_FOUND)
   message("System FREETYPE not found, will build local one")

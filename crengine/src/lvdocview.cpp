@@ -5349,6 +5349,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	lString16Collection list;
 	fontMan->getFaceList(list);
 	static int def_aa_props[] = { 2, 1, 0 };
+	static int def_hint_props[] = {2, 0, 1, 2 };
 
 	props->setIntDef(PROP_MIN_FILE_SIZE_TO_CACHE,
 			DOCUMENT_CACHING_SIZE_THRESHOLD); // ~6M
@@ -5356,6 +5357,8 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 			DOCUMENT_CACHING_MIN_SIZE); // 32K
 	props->setIntDef(PROP_PROGRESS_SHOW_FIRST_PAGE, 1);
 
+	props->limitValueList(PROP_FONT_HINTING, def_hint_props, 
+			sizeof(def_hint_props) / sizeof(int));
 	props->limitValueList(PROP_FONT_ANTIALIASING, def_aa_props,
 			sizeof(def_aa_props) / sizeof(int));
 	props->setHexDef(PROP_FONT_COLOR, 0x000000);
