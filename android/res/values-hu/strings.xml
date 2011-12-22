@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <string name="app_name">Cool Reader</string>
     <string name="mi_search">Keresés</string>
@@ -82,7 +82,7 @@
     <string name="options_view_mode">Olvasási mód</string>
     <string name="options_view_mode_pages">Oldalak</string>
     <string name="options_view_mode_scroll">Görgetés</string>
-    <string name="options_app_fullscreen">Teljes-képernyős mód</string>
+    <string name="options_app_fullscreen">Teljesképernyős mód</string>
     <string name="options_app_show_cover_pages">Borítók a böngészőben</string>
     <string name="options_value_on">Be</string>
     <string name="options_value_off">Ki</string>
@@ -351,22 +351,34 @@
     <string name="options_css_font_size_90p">Kisebb (90%)</string>
     <string name="options_css_font_size_70p">Kisebb (70%)</string>
     <string name="options_css_font_size_80p">Kisebb (80%)</string>
-    <string name="options_app_backlight_timeout_6">6 minutes</string>
-    <string name="options_app_backlight_timeout_5">5 minutes</string>
-    <string name="options_app_backlight_timeout_4">4 minutes</string>
-    <string name="options_app_backlight_timeout_3">3 minutes</string>
-    <string name="options_app_backlight_timeout_2">2 minutes</string>
-    <string name="options_app_backlight_timeout_0">Use system default</string>
-    <string name="options_app_backlight_timeout">Screen backlight timeout</string>
-    <string name="options_css_annotation">Annotation</string>
-    <string name="options_app_ui_theme">Interface Theme</string>
-    <string name="options_app_ui_theme_white">White</string>
-    <string name="options_app_ui_theme_dark">Dark</string>
-    <string name="options_app_ui_theme_black">Black</string>
-    <string name="options_app_ui_theme_light">Light</string>
-    <string name="options_css_text_align_center">Center</string>
-    <string name="options_css_text_align_justify">Justify</string>
-    <string name="options_css_text_align_left">Left</string>
-    <string name="options_css_text_align_right">Right</string>
-    <string name="action_switch_settings_profile">Switch profile</string>
+    <string name="options_app_backlight_timeout_6">6 perc</string>
+    <string name="options_app_backlight_timeout_5">5 perc</string>
+    <string name="options_app_backlight_timeout_4">4 perc</string>
+    <string name="options_app_backlight_timeout_3">3 perc</string>
+    <string name="options_app_backlight_timeout_2">2 perc</string>
+    <string name="options_app_backlight_timeout_0">Rendszer alapértelmezett</string>
+    <string name="options_app_backlight_timeout">Háttérvilágítás kikapcsolása</string>
+    <string name="options_css_annotation">Jegyzet</string>
+    <string name="options_app_ui_theme">Felhasználói felület téma</string>
+    <string name="options_app_ui_theme_white">Fehér</string>
+    <string name="options_app_ui_theme_dark">Sötét</string>
+    <string name="options_app_ui_theme_black">Fekete</string>
+    <string name="options_app_ui_theme_light">Világos</string>
+    <string name="options_css_text_align_center">Középre</string>
+    <string name="options_css_text_align_justify">Sorkizárt</string>
+    <string name="options_css_text_align_left">Balra</string>
+    <string name="options_css_text_align_right">Jobbra</string>
+    <string name="action_switch_settings_profile">Profilváltás</string>
+    <string name="options_app_settings_icons">Ikonok a beállítás menüben</string>
+    <string name="mi_text_autoformat_enable">Automatikus szövegformázás engedélyezése</string>
+    <string name="mi_text_autoformat_disable">Automatikus szövegformázás tiltása</string>
+    <string name="action_toggle_text_autoformat">Automatikus szövegformázás be/ki</string>
+    <string name="options_app_key_backlight_off">Billentyűzet háttérvilágítás ki</string>
+    <string name="action_chapter_next">Következő fejezet</string>
+    <string name="action_chapter_prev">Előző fejezet</string>
+    <string name="options_font_hinting_bytecode">Bájtkód használata</string>
+    <string name="options_font_hinting">Betű olvashatóság javítása</string>
+    <string name="options_font_hinting_disabled">Letiltva</string>
+    <string name="options_font_hinting_auto">Automatikus javítás</string>
+<string name="options_font_fallback_face">Másodlagos betűtípus</string>
 </resources>

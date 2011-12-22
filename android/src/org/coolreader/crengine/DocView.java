@@ -1,5 +1,7 @@
 package org.coolreader.crengine;
 
+import org.coolreader.crengine.ReaderView.ReaderCommand;
+
 import android.graphics.Bitmap;
 
 public class DocView {
@@ -10,18 +12,28 @@ public class DocView {
 	public static final int SWAP_TIMEOUT = 1;
 	public static final int SWAP_ERROR = 2;
 
+	private Object mutex;
+
+	public DocView(Object mutex) {
+		this.mutex = mutex;
+	}
+	
 	/**
 	 * Create native object.
 	 */
 	public void create() {
-		createInternal();
+		synchronized(mutex) {
+			createInternal();
+		}
 	}
 
 	/**
 	 * Destroy native object.
 	 */
 	public void destroy() {
-		destroyInternal();
+		synchronized(mutex) {
+			destroyInternal();
+		}
 	}
 
 	/**
@@ -37,7 +49,10 @@ public class DocView {
 	 * @return either SWAP_DONE, SWAP_TIMEOUT, SWAP_ERROR
 	 */
 	public int swapToCache() {
-		return swapToCacheInternal();
+		
+		synchronized(mutex) {
+			return swapToCacheInternal();
+		}
 	}
 
 	/**
@@ -46,7 +61,9 @@ public class DocView {
 	 * @return
 	 */
 	public int goLink(String link) {
-		return goLinkInternal(link);
+		synchronized(mutex) {
+			return goLinkInternal(link);
+		}
 	}
 	
 	/**
@@ -57,7 +74,9 @@ public class DocView {
 	 * @return
 	 */
 	public String checkLink(int x, int y, int delta) {
-		return checkLinkInternal(x, y, delta);
+		synchronized(mutex) {
+			return checkLinkInternal(x, y, delta);
+		}
 	}
 	
 	/**
@@ -65,7 +84,9 @@ public class DocView {
 	 * @param sel
 	 */
 	public void updateSelection(Selection sel) {
-		updateSelectionInternal(sel);
+		synchronized(mutex) {
+			updateSelectionInternal(sel);
+		}
 	}
 
 	/**
@@ -77,7 +98,9 @@ public class DocView {
 	 */
 	public boolean moveSelection(Selection sel,
 			int moveCmd, int params) {
-		return moveSelectionInternal(sel, moveCmd, params);
+		synchronized(mutex) {
+			return moveSelectionInternal(sel, moveCmd, params);
+		}
 	}
 
 	/**
@@ -85,7 +108,9 @@ public class DocView {
 	 * @param state
 	 */
 	public void setBatteryState(int state) {
-		setBatteryStateInternal(state);
+		synchronized(mutex) {
+			setBatteryStateInternal(state);
+		}
 	}
 
 	/**
@@ -93,7 +118,9 @@ public class DocView {
 	 * @return
 	 */
 	public byte[] getCoverPageData() {
-		return getCoverPageDataInternal();
+		synchronized(mutex) {
+			return getCoverPageDataInternal();
+		}
 	}
 
 	/**
@@ -103,7 +130,9 @@ public class DocView {
 	 */
 	public void setPageBackgroundTexture(
 			byte[] imageBytes, int tileFlags) {
-		setPageBackgroundTextureInternal(imageBytes, tileFlags);
+		synchronized(mutex) {
+			setPageBackgroundTextureInternal(imageBytes, tileFlags);
+		}
 	}
 
 	/**
@@ -112,7 +141,9 @@ public class DocView {
 	 * @return
 	 */
 	public boolean loadDocument(String fileName) {
-		return loadDocumentInternal(fileName);
+		synchronized(mutex) {
+			return loadDocumentInternal(fileName);
+		}
 	}
 
 	/**
@@ -120,7 +151,9 @@ public class DocView {
 	 * @return
 	 */
 	public java.util.Properties getSettings() {
-		return getSettingsInternal();
+		synchronized(mutex) {
+			return getSettingsInternal();
+		}
 	}
 
 	/**
@@ -129,7 +162,9 @@ public class DocView {
 	 * @return
 	 */
 	public boolean applySettings(java.util.Properties settings) {
-		return applySettingsInternal(settings);
+		synchronized(mutex) {
+			return applySettingsInternal(settings);
+		}
 	}
 
 	/**
@@ -137,7 +172,13 @@ public class DocView {
 	 * @param stylesheet
 	 */
 	public void setStylesheet(String stylesheet) {
-		setStylesheetInternal(stylesheet);
+		synchronized(mutex) {
+			setStylesheetInternal(stylesheet);
+		}
+	}
+	
+	public void requestRender() {
+		doCommand(ReaderCommand.DCMD_REQUEST_RENDER.getNativeId(), 0);
 	}
 
 	/**
@@ -146,7 +187,9 @@ public class DocView {
 	 * @param dy
 	 */
 	public void resize(int dx, int dy) {
-		resizeInternal(dx, dy);
+		synchronized(mutex) {
+			resizeInternal(dx, dy);
+		}
 	}
 
 	/**
@@ -156,7 +199,9 @@ public class DocView {
 	 * @return
 	 */
 	public boolean doCommand(int command, int param) {
-		return doCommandInternal(command, param);
+		synchronized(mutex) {
+			return doCommandInternal(command, param);
+		}
 	}
 
 	/**
@@ -164,7 +209,30 @@ public class DocView {
 	 * @return
 	 */
 	public Bookmark getCurrentPageBookmark() {
-		return getCurrentPageBookmarkInternal();
+		synchronized(mutex) {
+			return getCurrentPageBookmarkInternal();
+		}
+	}
+	
+	/**
+	 * Get current page bookmark info, returning null if document is not yet rendered (to avoid long call).
+	 * @return bookmark for current page, null if cannot be determined fast
+	 */
+	public Bookmark getCurrentPageBookmarkNoRender() {
+		if (!isRenderedInternal())
+			return null;
+		synchronized(mutex) {
+			return getCurrentPageBookmarkInternal();
+		}
+	}
+	
+	/**
+	 * Check whether document is formatted/rendered.
+	 * @return true if document is rendered, and e.g. retrieving of page image will not cause long activity (formatting etc.)
+	 */
+	public boolean isRendered() {
+		// thread safe
+		return isRenderedInternal();
 	}
 
 	/**
@@ -173,7 +241,9 @@ public class DocView {
 	 * @return
 	 */
 	public boolean goToPosition(String xPath) {
-		return goToPositionInternal(xPath);
+		synchronized(mutex) {
+			return goToPositionInternal(xPath);
+		}
 	}
 
 	/**
@@ -182,7 +252,9 @@ public class DocView {
 	 * @return
 	 */
 	public PositionProperties getPositionProps(String xPath) {
-		return getPositionPropsInternal(xPath);
+		synchronized(mutex) {
+			return getPositionPropsInternal(xPath);
+		}
 	}
 
 	/**
@@ -190,7 +262,9 @@ public class DocView {
 	 * @param info
 	 */
 	public void updateBookInfo(BookInfo info) {
-		updateBookInfoInternal(info);
+		synchronized(mutex) {
+			updateBookInfoInternal(info);
+		}
 	}
 
 	/**
@@ -198,14 +272,18 @@ public class DocView {
 	 * @return
 	 */
 	public TOCItem getTOC() {
-		return getTOCInternal();
+		synchronized(mutex) {
+			return getTOCInternal();
+		}
 	}
 
 	/**
 	 * Clear selection.
 	 */
 	public void clearSelection() {
-		clearSelectionInternal();
+		synchronized(mutex) {
+			clearSelectionInternal();
+		}
 	}
 
 	/**
@@ -218,7 +296,9 @@ public class DocView {
 	 */
 	public boolean findText(String pattern, int origin,
 			int reverse, int caseInsensitive) {
-		return findTextInternal(pattern, origin, reverse, caseInsensitive);
+		synchronized(mutex) {
+			return findTextInternal(pattern, origin, reverse, caseInsensitive);
+		}
 	}
 
 	/**
@@ -226,7 +306,9 @@ public class DocView {
 	 * @param bitmap is buffer to put data to.
 	 */
 	public void getPageImage(Bitmap bitmap) {
-		getPageImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32);
+		synchronized(mutex) {
+			getPageImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32);
+		}
 	}
 
 	/**
@@ -239,7 +321,9 @@ public class DocView {
 	 * @return true if point belongs to image
 	 */
 	public boolean checkImage(int x, int y, ImageInfo dstImage) {
-		return checkImageInternal(x, y, dstImage);
+		synchronized(mutex) {
+			return checkImageInternal(x, y, dstImage);
+		}
 	}
 
 	/**
@@ -250,11 +334,13 @@ public class DocView {
 	 * @return bookmark if point belongs to bookmark, null otherwise
 	 */
 	public Bookmark checkBookmark(int x, int y) {
-		Bookmark dstBookmark = new Bookmark();
-		if (checkBookmarkInternal(x, y, dstBookmark)) {
-			return dstBookmark;
+		synchronized(mutex) {
+			Bookmark dstBookmark = new Bookmark();
+			if (checkBookmarkInternal(x, y, dstBookmark)) {
+				return dstBookmark;
+			}
+			return null;
 		}
-		return null;
 	}
 	
 	
@@ -265,7 +351,9 @@ public class DocView {
 	 * @return true if current image is drawn successfully.
 	 */
 	public boolean drawImage(Bitmap bitmap, ImageInfo imageInfo) {
-		return drawImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32, imageInfo);
+		synchronized(mutex) {
+			return drawImageInternal(bitmap, DeviceInfo.EINK_SCREEN ? 4 : 32, imageInfo);
+		}
 	}
 
 	/**
@@ -273,7 +361,9 @@ public class DocView {
 	 * @return true if there was opened current image, and it's now closed 
 	 */
 	public boolean closeImage() {
-		return closeImageInternal();
+		synchronized(mutex) {
+			return closeImageInternal();
+		}
 	}
 	
 	/**
@@ -282,7 +372,9 @@ public class DocView {
 	 * @params bookmarks is array of bookmarks to highlight 
 	 */
 	public void hilightBookmarks(Bookmark[] bookmarks) {
-		hilightBookmarksInternal(bookmarks);
+		synchronized(mutex) {
+			hilightBookmarksInternal(bookmarks);
+		}
 	}
 	
 	//========================================================================================
@@ -344,6 +436,8 @@ public class DocView {
 	private native boolean drawImageInternal(Bitmap bitmap, int bpp, ImageInfo dstImage);
 
 	private native boolean closeImageInternal();
+
+	private native boolean isRenderedInternal();
 
 	private native int goLinkInternal(String link);
 

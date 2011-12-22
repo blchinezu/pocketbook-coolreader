@@ -12,7 +12,10 @@
 *******************************************************/
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
-#define CACHE_FILE_FORMAT_VERSION "3.04.06"
+// increment to force complete reload/reparsing of old file
+#define CACHE_FILE_FORMAT_VERSION "3.04.11"
+/// increment following value to force re-formatting of old book after load
+#define FORMATTING_VERSION_ID 0x0002
 
 #ifndef DOC_DATA_COMPRESSION_LEVEL
 /// data compression level (0=no compression, 1=fast compressions, 3=normal compression)
@@ -269,10 +272,11 @@ static lUInt64 calcHash64( const lUInt8 * s, int len )
 
 lUInt32 calcGlobalSettingsHash()
 {
-    lUInt32 hash = 0;
+    lUInt32 hash = FORMATTING_VERSION_ID;
     if ( fontMan->getKerning() )
         hash += 127365;
     hash = hash * 31 + fontMan->GetFontListHash();
+    hash = hash * 31 + (int)fontMan->GetHintingMode();
     if ( LVRendGetFontEmbolden() )
         hash = hash * 75 + 2384761;
     if ( gFlgFloatingPunctuationEnabled )
@@ -4001,6 +4005,9 @@ bool ldomNode::applyNodeStylesheet()
 #ifndef DISABLE_STYLESHEET_REL
     if ( getNodeId()!=el_DocFragment || !hasAttribute(attr_StyleSheet) )
         return false;
+    if (!getDocument()->getDocFlag(DOC_FLAG_ENABLE_INTERNAL_STYLES))
+        return false; // internal styles are disabled
+
     lString16 v = getAttributeValue(attr_StyleSheet);
     if ( v.empty() )
         return false;
@@ -4342,15 +4349,15 @@ private:
                             bytesRead += 2;
                         }
                         // stop!!!
-                        m_text_pos--;
+                        //m_text_pos--;
+                        m_iteration = 0;
                         flgEof = true;
                         break;
                     }
                     else
                     {
                         int k = base64_decode_table[ch];
-                        if ( !(k & 0x80) )
-                        {
+                        if ( !(k & 0x80) ) {
                             // next base-64 digit
                             m_value = (m_value << 6) | (k);
                             m_iteration++;
@@ -4364,6 +4371,8 @@ private:
                                 m_value = 0;
                                 bytesRead+=3;
                             }
+                        } else {
+                            //m_text_pos++;
                         }
                     }
                 }
@@ -7307,6 +7316,9 @@ void ldomDocumentWriterFilter::appendStyle( const lChar16 * style )
     if ( _styleAttrId==0 ) {
         _styleAttrId = _document->getAttrNameIndex(L"style");
     }
+    if (!_document->getDocFlag(DOC_FLAG_ENABLE_INTERNAL_STYLES))
+        return; // disabled
+
     lString16 oldStyle = node->getAttributeValue(_styleAttrId);
     if ( !oldStyle.empty() && oldStyle.at(oldStyle.length()-1)!=';' )
         oldStyle << L"; ";
@@ -7696,8 +7708,9 @@ void tinyNodeCollection::setDocFlags( lUInt32 value )
 
 int tinyNodeCollection::getPersistenceFlags()
 {
-    int format = getProps()->getIntDef(DOC_PROP_FILE_FORMAT, 0);
+    int format = 2; //getProps()->getIntDef(DOC_PROP_FILE_FORMAT, 0);
     int flag = ( format==2 && getDocFlag(DOC_FLAG_PREFORMATTED_TEXT) ) ? 1 : 0;
+    CRLog::trace("getPersistenceFlags() returned %d", flag);
     return flag;
 }
 
@@ -8149,7 +8162,7 @@ lUInt32 tinyNodeCollection::calcStyleHash()
     lUInt32 res = 0; //_elemCount;
     lUInt32 globalHash = calcGlobalSettingsHash();
     lUInt32 docFlags = getDocFlags();
-//    CRLog::info("Calculating style hash...  elemCount=%d, globalHash=%08x, docFlags=%08x", _elemCount, globalHash, docFlags);
+    //CRLog::info("Calculating style hash...  elemCount=%d, globalHash=%08x, docFlags=%08x", _elemCount, globalHash, docFlags);
     for ( int i=0; i<count; i++ ) {
         int offs = i*TNC_PART_LEN;
         int sz = TNC_PART_LEN;
@@ -8173,6 +8186,7 @@ lUInt32 tinyNodeCollection::calcStyleHash()
             }
         }
     }
+    CRLog::info("Calculating style hash...  elemCount=%d, globalHash=%08x, docFlags=%08x, nodeStyleHash=%08x", _elemCount, globalHash, docFlags, res);
     res = res * 31 + _imgScalingOptions.getHash();
     res = res * 31 + _minSpaceCondensingPercent;
     res = (res * 31 + globalHash) * 31 + docFlags;
@@ -8577,6 +8591,7 @@ public:
     LVStreamRef openExisting( lString16 filename, lUInt32 crc, lUInt32 docFlags )
     {
         lString16 fn = makeFileName( filename, crc, docFlags );
+        CRLog::debug("ldomDocCache::openExisting(%s)", LCSTR(fn));
         LVStreamRef res;
         if ( findFileIndex( fn ) < 0 ) {
             CRLog::error( "ldomDocCache::openExisting - File %s is not found in cache index", UnicodeToUtf8(fn).c_str() );

@@ -17,6 +17,18 @@
 #include <stdio.h>
 #include "lvstring.h"
 
+#ifndef GBK_ENCODING_SUPPORT
+#define GBK_ENCODING_SUPPORT 1
+#endif
+#ifndef JIS_ENCODING_SUPPORT
+#define JIS_ENCODING_SUPPORT 1
+#endif
+#ifndef BIG5_ENCODING_SUPPORT
+#define BIG5_ENCODING_SUPPORT 1
+#endif
+#ifndef EUC_KR_ENCODING_SUPPORT
+#define EUC_KR_ENCODING_SUPPORT 1
+#endif
 
 enum char_encoding_type {
     ce_unknown = 0,
@@ -26,6 +38,19 @@ enum char_encoding_type {
     ce_utf32_be = 4,
     ce_utf32_le = 5,
     ce_8bit_cp = 6,
+#if GBK_ENCODING_SUPPORT == 1
+    ce_gbk = 7,
+#endif
+#if JIS_ENCODING_SUPPORT == 1
+    ce_euc_jis = 8,
+    ce_shift_jis = 9,
+#endif
+#if JIS_ENCODING_SUPPORT == 1
+    ce_big5 = 10,
+#endif
+#if EUC_KR_ENCODING_SUPPORT == 1
+    ce_euc_kr = 11,
+#endif
 };
 
 #define CRENC_ID_UNKNOWN      ce_unknown

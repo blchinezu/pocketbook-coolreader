@@ -109,9 +109,23 @@ int main(int argc, char *argv[])
         lString16 exefontpath = exedir + L"fonts";
         CRLog::info("main()");
         lString16Collection fontDirs;
+
+        lString16 home = Utf8ToUnicode(lString8(( getenv("HOME") ) ));
+        lString16 homecr3 = home;
+        LVAppendPathDelimiter(homecr3);
+        homecr3 << L".cr3";
+        LVAppendPathDelimiter(homecr3);
+        //~/.cr3/
+        lString16 homefonts = homecr3;
+        homefonts << L"fonts";
+
         //fontDirs.add( lString16(L"/usr/local/share/crengine/fonts") );
         //fontDirs.add( lString16(L"/usr/local/share/fonts/truetype/freefont") );
         //fontDirs.add( lString16(L"/mnt/fonts") );
+        fontDirs.add(homefonts);
+#if MAC==1
+        fontDirs.add( lString16(L"/Library/Fonts") );
+#endif
 #if 0
         fontDirs.add( exefontpath );
         fontDirs.add( lString16(L"/usr/share/fonts/truetype") );
@@ -138,12 +152,17 @@ int main(int argc, char *argv[])
         //}
         {
             QApplication a(argc, argv);
-#ifdef _WIN32
+#if MAC == 1
+            QString exeDir = QDir::toNativeSeparators(qApp->applicationDirPath() + "/Contents/Resources/"); //QDir::separator();
+            QString translations = exeDir + "i18n";
+#else
+#if defined(_WIN32)
             QString exeDir = QDir::toNativeSeparators(qApp->applicationDirPath() + "/"); //QDir::separator();
             QString translations = exeDir + "i18n";
 #else
             QString exeDir = cr2qt(datadir);
             QString translations = exeDir + "i18n/";
+#endif
 #endif
              QTranslator qtTranslator;
              if (qtTranslator.load("qt_" + QLocale::system().name(),

@@ -23,6 +23,7 @@ class DocViewCallback : public LVDocViewCallback {
     jmethodID _OnLoadFileError;
     jmethodID _OnExternalLink;
     jmethodID _OnImageCacheClear;
+    jmethodID _OnRequestReload;
 public:
 	DocViewCallback( JNIEnv * env, LVDocView * docview, jobject obj )
 	: _env(env), _docview(docview)
@@ -42,6 +43,7 @@ public:
 	    GET_METHOD(OnFormatEnd,"()V");
 	    GET_METHOD(OnFormatProgress,"(I)Z");
 	    GET_METHOD(OnExportProgress,"(I)Z");
+	    GET_METHOD(OnRequestReload,"()Z");
 	    GET_METHOD(OnLoadFileError,"(Ljava/lang/String;)V");
 	    GET_METHOD(OnExternalLink,"(Ljava/lang/String;Ljava/lang/String;)V");
 	    GET_METHOD(OnImageCacheClear,"()V");
@@ -129,12 +131,19 @@ public:
 		//CRLog::info("DocViewCallback::OnImageCacheClear() called");
     	_env->CallVoidMethod(_obj, _OnImageCacheClear);
     }
+
+    /// return true if reload will be processed by external code, false to let internal code process it
+    virtual bool OnRequestReload() {
+    	_env->CallBooleanMethod(_obj, _OnRequestReload);
+    	return true;
+    }
+
 };
 
 CRTimerUtil _timeoutControl;
 
 #define DECL_DEF_CR_FONT_SIZES static int cr_font_sizes[] = \
- { 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 26, 28, 30, \
+ { 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
    32, 34, 36, 38, 40, 42, 44, 48, 52, 56, 60, 64, 68, 72 }
 
 DECL_DEF_CR_FONT_SIZES;
@@ -858,7 +867,8 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_applySettingsInt
 	lUInt32 oldStatusColor = oldProps->getColorDef(PROP_STATUS_FONT_COLOR, 0xFF000000);
 	lUInt32 newStatusColor = props->getColorDef(PROP_STATUS_FONT_COLOR, 0xFF000000);
 	//CRLog::debug("Text colors: %x->%x, %x->%x", oldTextColor, newTextColor, oldStatusColor, newStatusColor);
-	p->_docview->propsApply( props );
+	CRPropRef diff = oldProps ^ props;
+	CRPropRef unknown = p->_docview->propsApply(diff);
 	lUInt32 batteryColor = newStatusColor;
 	if ( batteryColor==0xFF000000 )
 		batteryColor = newTextColor;
@@ -869,6 +879,7 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_applySettingsInt
 	    p->_docview->setBatteryIcons( icons );
 		//CRLog::debug("Setting list of Battery icon bitmats - done");
 	}
+	CRLog::trace("DocView_applySettingsInternal - done");
     return JNI_TRUE;
 }
 #if 0
@@ -929,6 +940,7 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_resizeInternal
     DocViewNative * p = getNative(_env, _this);
 	DocViewCallback callback( _env, p->_docview, _this );
     p->_docview->Resize(dx, dy);
+    //p->_docview->checkRender();
     CRLog::trace("resizeInternal() is finished");
 }  
   
@@ -948,6 +960,21 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_doCommandInterna
     }
     //CRLog::trace("doCommandInternal(%d, %d) -- passing to LVDocView", cmd, param);
     return p->_docview->doCommand((LVDocCmd)cmd, param) ? JNI_TRUE : JNI_FALSE;
+}
+
+/*
+ * Class:     org_coolreader_crengine_DocView
+ * Method:    isRenderedInternal
+ * Signature: ()Z
+ */
+JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_isRenderedInternal
+(JNIEnv *_env, jobject _this)
+{
+	CRJNIEnv env(_env);
+    DocViewNative * p = getNative(_env, _this);
+	if ( !p->_docview->isDocumentOpened() )
+		return JNI_FALSE;
+	return p->_docview->IsRendered() ? JNI_TRUE : JNI_FALSE;
 }
 
 /*

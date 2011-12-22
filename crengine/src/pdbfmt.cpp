@@ -1,6 +1,9 @@
 #include "../include/pdbfmt.h"
 #include <ctype.h>
 
+// uncomment following line to save PDB content streams to /tmp
+//#define DUMP_PDB_CONTENTS
+
 struct PDBHdr
 {
     lUInt8    name[32];
@@ -370,6 +373,16 @@ static bool pattern_cmp( const lUInt8 * buf, const char * pattern ) {
 }
 
 class PDBFile : public LVNamedStream {
+public:
+    enum Format {
+        UNKNOWN,
+        PALMDOC,
+        EREADER,
+        PLUCKER,
+        MOBI,
+    };
+private:
+
     struct Record {
         lUInt32 offset;
         lUInt32 size;
@@ -378,13 +391,6 @@ class PDBFile : public LVNamedStream {
     };
     LVArray<Record> _records;
     LVStreamRef _stream;
-    enum Format {
-        UNKNOWN,
-        PALMDOC,
-        EREADER,
-        PLUCKER,
-        MOBI,
-    };
     Format _format;
     int _compression;
     lUInt32 _textSize;
@@ -851,9 +857,12 @@ public:
         return _pos>=_textSize;
     }
 
+    Format getFormat() { return _format; }
+
     /// Constructor
     PDBFile() {
         //_container.AddRef();
+        _bufIndex = -1;
     }
 
     /// Destructor
@@ -909,12 +918,13 @@ bool ImportPDBDocument( LVStreamRef & stream, ldomDocument * doc, LVDocViewCallb
         {
             ldomDocumentWriterFilter writerFilter(doc, false,
                     HTML_AUTOCLOSE_TABLE);
-
             LVHTMLParser parser(stream, &writerFilter);
             parser.setProgressCallback(progressCallback);
             if ( !parser.CheckFormat() ) {
                 return false;
             } else {
+                if (pdb->getFormat()==PDBFile::MOBI)
+                    parser.SetCharset(L"utf-8");
                 if (!parser.Parse()) {
                     return false;
                 }
@@ -954,6 +964,34 @@ bool ImportPDBDocument( LVStreamRef & stream, ldomDocument * doc, LVDocViewCallb
         }
         break;
     }
+#ifdef DUMP_PDB_CONTENTS
+    for (int i=0; i<container->GetObjectCount(); i++) {
+        const LVContainerItemInfo * item = container->GetObjectInfo(i);
+        if (item->IsContainer())
+            continue;
+        lString16 fn = item->GetName();
+        if (fn.empty())
+            fn = lString16("pdb_item_") + lString16::itoa(i);
+        fn = lString16("/tmp/") + fn;
+        LVStreamRef in = container->OpenStream(item->GetName(), LVOM_READ);
+        if (in.isNull())
+            continue;
+        LVStreamRef out = LVOpenFileStream(fn.c_str(), LVOM_WRITE);
+        if (out.isNull())
+            continue;
+        CRLog::trace("Dumping stream %s (%d)", LCSTR(fn), (int)item->GetSize());
+        LVPumpStream(out.get(), in.get());
+    }
+    {
+        LVStreamRef out = LVOpenFileStream("/tmp/pdb_main.txt", LVOM_WRITE);
+        if (!out.isNull()) {
+            stream->SetPos(0);
+            CRLog::trace("Dumping stream /tmp/pdb_main.txt (%d)", (int)stream->GetSize());
+            LVPumpStream(out.get(), stream.get());
+            stream->SetPos(0);
+        }
+    }
+#endif
 
     return true;
 }

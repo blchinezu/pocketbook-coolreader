@@ -10,6 +10,7 @@ msgstr ""
 "PO-Revision-Date: 2011-06-17 02:51+0200\n"
 "Last-Translator: Vitalii Stopchans'kyi <stopchanПЕСgmail.com>\n"
 "Language-Team: Ukrainian\n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,7 +20,7 @@ msgstr ""
 
 #: ../src/citedlg.cpp:80
 msgid "Select next/prev paragraph"
-msgstr ""
+msgstr "Вибрати наступний/попередній абзац"
 
 #: ../src/citedlg.cpp:83
 msgid "Select one more paragraph"
@@ -27,7 +28,7 @@ msgstr ""
 
 #: ../src/citedlg.cpp:86
 msgid "Deselect paragraph"
-msgstr ""
+msgstr "Зняти виділення абзацу"
 
 #: ../src/citedlg.cpp:89
 msgid "Select one more phrase"
@@ -51,7 +52,7 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:777
 msgid "No manual currently available for this language, sorry!"
-msgstr "Вибачте, інструкції на обраній Вами мові не існує."
+msgstr "Вибачте, інструкції на обраній Вами мові не існує!"
 
 #: ../src/mainwnd.cpp:788 ../src/mainwnd.cpp:896
 msgid "Help"
@@ -119,7 +120,7 @@ msgstr "Заряд батареї"
 
 #: ../src/mainwnd.cpp:1017
 msgid "charging..."
-msgstr "Заряджається..."
+msgstr "заряджається..."
 
 #: ../src/mainwnd.cpp:1018
 msgid "Current Time"
@@ -211,7 +212,7 @@ msgstr "URL книги-джерела"
 
 #: ../src/mainwnd.cpp:1052
 msgid "OCR by"
-msgstr "Оцифрування"
+msgstr "Оцифровано"
 
 #: ../src/mainwnd.cpp:1053
 msgid "Document version"
@@ -219,7 +220,7 @@ msgstr "Версія документу"
 
 #: ../src/mainwnd.cpp:1054
 msgid "Change history"
-msgstr "Iсторiя змiн"
+msgstr "Історія змін"
 
 #: ../src/mainwnd.cpp:1055
 msgid "Document info"
@@ -255,19 +256,19 @@ msgstr "Додаткова інформація"
 
 #: ../src/mainwnd.cpp:1069
 msgid "CoolReader for PocketBook"
-msgstr ""
+msgstr "CoolReader для PocketBook"
 
 #: ../src/mainwnd.cpp:1070
 msgid "Build date"
-msgstr ""
+msgstr "Дата компіляції"
 
 #: ../src/mainwnd.cpp:1071
 msgid "About program"
-msgstr ""
+msgstr "Про програму"
 
 #: ../src/mainwnd.cpp:1192
 msgid "Loading: please wait..."
-msgstr "Відкривається. Зачекайте..."
+msgstr "Завантажується: зачекайте..."
 
 #: ../src/recentdlg.cpp:104
 msgid "Open book"
@@ -363,7 +364,7 @@ msgstr "Нова цитата"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "
-msgstr "Знайти у словнику"
+msgstr "Знайти у словнику "
 
 #: ../src/dictdlg.cpp:89
 msgid "[cannot read article]"
@@ -371,7 +372,7 @@ msgstr "[неможливо відкрити файл]"
 
 #: ../src/settings.cpp:82
 msgid "choose command"
-msgstr "Оберіть команду"
+msgstr "оберіть команду"
 
 #: ../src/settings.cpp:100
 msgid "Controls"
@@ -751,11 +752,11 @@ msgstr "Кернінг шрифту"
 
 #: ../src/settings.cpp:809
 msgid "[No Hyphenation]"
-msgstr "Без переносів"
+msgstr "[Без переносів]"
 
 #: ../src/settings.cpp:810
 msgid "[Algorythmic Hyphenation]"
-msgstr "Автоматичні переноси"
+msgstr "[Автоматичні переноси]"
 
 #: ../src/settings.cpp:812
 msgid "Hyphenation"
@@ -787,23 +788,23 @@ msgstr "Праворуч"
 
 #: ../src/settings.cpp:877
 msgid "Image scaling"
-msgstr "Масштабування картинок"
+msgstr "Масштабування зображень"
 
 #: ../src/settings.cpp:879
 msgid "Block image scaling mode"
-msgstr "Режим для звичайних картинок"
+msgstr "Режим для звичайних зображень"
 
 #: ../src/settings.cpp:884
 msgid "Block image max zoom"
-msgstr "Макс. збільшення для звичайних картинок"
+msgstr "Макс. збільшення для звичайних зображень"
 
 #: ../src/settings.cpp:890
 msgid "Inline image scaling mode"
-msgstr "Режим для inline картинок"
+msgstr "Режим для inline зображень"
 
 #: ../src/settings.cpp:895
 msgid "Inline image max zoom"
-msgstr "Макс. збільшення для inline картинок"
+msgstr "Макс. збільшення для inline зображень"
 
 #: ../src/settings.cpp:905
 msgid "Font gamma"
@@ -823,7 +824,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:160
 msgid "No dictionaries found"
-msgstr "Не знайдено жодного словника!"
+msgstr "Не знайдено жодного словника"
 
 #: ../src/viewdlg.cpp:161
 msgid "Place dictionaries to directory 'dict' of SD card."
@@ -839,7 +840,7 @@ msgid ""
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
 "Кожен словник складається з файлу даних (.dict або .dict.dz) та файлу "
-"індексу слів (.index)."
+"індексу слів (.index)"
 
 #: ../src/viewdlg.cpp:178
 msgid "Table of contents"
@@ -851,7 +852,7 @@ msgstr "Вкажіть номер сторінки"
 
 #: ../src/viewdlg.cpp:197
 msgid "Enter position percent"
-msgstr "Введiть позицiю (%)"
+msgstr "Введіть позицію (%)"
 
 #: ../src/viewdlg.cpp:358
 msgid "Find in dictionary"
@@ -1035,7 +1036,7 @@ msgstr "Орієнтація сторінки"
 
 #: ../src/viewdlg.cpp:551
 msgid "Find in Dictionary (T5)"
-msgstr "Пошук у словнику"
+msgstr "Пошук у словнику (T5)"
 
 #: ../src/viewdlg.cpp:553
 msgid "Bookmark list"
@@ -1087,7 +1088,7 @@ msgstr "Функції клавіш"
 
 #: ../src/viewdlg.cpp:567
 msgid "Go to percent..."
-msgstr "Перейти на позицiю (%)"
+msgstr "Перейти на позицію (%)..."
 
 #: ../src/viewdlg.cpp:572
 msgid "PocketBook Main menu"
@@ -1151,7 +1152,7 @@ msgstr "Дія"
 
 #: ../src/cr3pocketbook.cpp:2367
 msgid "Press $1 to translate"
-msgstr "Коротке натискання $1 щоб переклад"
+msgstr "Коротке натискання $1 для перекладу"
 
 #~ msgid "Enter page number to go: "
 #~ msgstr " Введіть номер сторінки: "

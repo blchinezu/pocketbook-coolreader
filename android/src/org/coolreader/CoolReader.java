@@ -27,6 +27,7 @@ import org.coolreader.crengine.Properties;
 import org.coolreader.crengine.ReaderAction;
 import org.coolreader.crengine.ReaderView;
 import org.coolreader.crengine.Scanner;
+import org.coolreader.crengine.Settings;
 import org.coolreader.crengine.TTS;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
 import org.coolreader.crengine.ToastView;
@@ -87,7 +88,7 @@ public class CoolReader extends Activity
 	
 	
 	public CoolReader() {
-	    brightnessHackError = DeviceInfo.SAMSUNG_BUTTONS_HIGHLIGHT_PATCH;
+	    brightnessHackError = false; //DeviceInfo.SAMSUNG_BUTTONS_HIGHLIGHT_PATCH;
 	}
 	
 	public Scanner getScanner()
@@ -691,6 +692,16 @@ public class CoolReader extends Activity
     	return (ClipboardManager)getSystemService(CLIPBOARD_SERVICE);
     }
     
+    private boolean keyBacklightOff = true;
+    public boolean isKeyBacklightDisabled() {
+    	return keyBacklightOff;
+    }
+    
+    public void setKeyBacklightDisabled(boolean disabled) {
+    	keyBacklightOff = disabled;
+    	onUserActivity();
+    }
+    
     public void setScreenBacklightLevel( int percent )
     {
     	if ( percent<-1 )
@@ -704,7 +715,29 @@ public class CoolReader extends Activity
     private int screenBacklightBrightness = -1; // use default
     //private boolean brightnessHackError = false;
     private boolean brightnessHackError = false;
-    	    
+
+    private void turnOffKeyBacklight() {
+    	if (!isStarted())
+    		return;
+    	// repeat again in short interval
+    	if (!mEngine.setKeyBacklight(0)) {
+    		log.w("Cannot control key backlight directly");
+    		return;
+    	}
+    	// repeat again in short interval
+    	Runnable task = new Runnable() {
+			@Override
+			public void run() {
+		    	if (!isStarted())
+		    		return;
+		    	if (!mEngine.setKeyBacklight(0))
+		    		log.w("Cannot control key backlight directly (delayed)");
+			}
+		};
+		BackgroundThread.instance().postGUI(task, 1);
+		BackgroundThread.instance().postGUI(task, 10);
+    }
+    
     private void updateBacklightBrightness(float b) {
         Window wnd = getWindow();
         if (wnd != null) {
@@ -723,16 +756,29 @@ public class CoolReader extends Activity
 	    		attrs.screenBrightness = b;
 	    		changed = true;
 	    	}
+	    	if ( changed ) {
+	    		log.d("Window attribute changed: " + attrs);
+	    		wnd.setAttributes(attrs);
+	    	}
+        }
+    }
+
+    private void updateButtonsBrightness(float buttonBrightness) {
+        Window wnd = getWindow();
+        if (wnd != null) {
+	    	LayoutParams attrs =  wnd.getAttributes();
+	    	boolean changed = false;
 	    	// hack to set buttonBrightness field
-	    	if ( !brightnessHackError )
+	    	//float buttonBrightness = keyBacklightOff ? 0.0f : -1.0f;
+	    	if (!brightnessHackError)
 	    	try {
 	        	Field bb = attrs.getClass().getField("buttonBrightness");
 	        	if ( bb!=null ) {
-	        		//Float oldValue = (Float)bb.get(attrs);
-	        		//if ( oldValue==null || oldValue.floatValue()!=0 ) {
-	        			bb.set(attrs, Float.valueOf(0.0f));
+	        		Float oldValue = (Float)bb.get(attrs);
+	        		if ( oldValue==null || oldValue.floatValue()!=0 ) {
+	        			bb.set(attrs, buttonBrightness);
 		        		changed = true;
-	        		//}
+	        		}
 	        	}
 	    	} catch ( Exception e ) {
 	    		log.e("WindowManager.LayoutParams.buttonBrightness field is not found, cannot turn buttons backlight off");
@@ -743,14 +789,17 @@ public class CoolReader extends Activity
 	    		log.d("Window attribute changed: " + attrs);
 	    		wnd.setAttributes(attrs);
 	    	}
+	    	if (keyBacklightOff)
+	    		turnOffKeyBacklight();
         }
     }
+
+    private final static int MIN_BACKLIGHT_LEVEL_PERCENT = DeviceInfo.AMOLED_SCREEN ? 2 : 16;
     
     public void onUserActivity()
     {
-    	if ( backlightControl==null )
-    		return;
-    	backlightControl.onUserActivity();
+    	if (backlightControl != null)
+      	    backlightControl.onUserActivity();
     	// Hack
     	//if ( backlightControl.isHeld() )
     	BackgroundThread.guiExecutor.execute(new Runnable() {
@@ -759,24 +808,30 @@ public class CoolReader extends Activity
 				try {
 		        	float b;
 		        	int dimmingAlpha = 255;
-		        	if ( screenBacklightBrightness>=0 ) {
-	        			float minb = 1/16f; 
+		        	// screenBacklightBrightness is 0..100
+		        	if (screenBacklightBrightness >= 0) {
+	        			float minb = MIN_BACKLIGHT_LEVEL_PERCENT / 100.0f; 
 		        		if ( screenBacklightBrightness >= 10 ) {
-		        			b = (screenBacklightBrightness - 10) / 90.0f;
-		        			b = minb + b * (1-minb);
-				        	if (b < 0.0f ) // BRIGHTNESS_OVERRIDE_OFF
-				        		b = 0.0f;
-				        	else if ( b>1.0f )
+		        			// real brightness control, no colors dimming
+		        			b = (screenBacklightBrightness - 10) / (100.0f - 10.0f); // 0..1
+		        			b = minb + b * (1-minb); // minb..1
+				        	if (b < minb) // BRIGHTNESS_OVERRIDE_OFF
+				        		b = minb;
+				        	else if (b > 1.0f)
 				        		b = 1.0f; //BRIGHTNESS_OVERRIDE_FULL
 		        		} else {
+			        		// minimal brightness with colors dimming
 			        		b = minb;
 			        		dimmingAlpha = 255 - (11-screenBacklightBrightness) * 180 / 10; 
 		        		}
-		        	} else
+		        	} else {
+		        		// system
 		        		b = -1.0f; //BRIGHTNESS_OVERRIDE_NONE
+		        	}
 		        	mReaderView.setDimmingAlpha(dimmingAlpha);
 			    	log.d("Brightness: " + b + ", dim: " + dimmingAlpha);
 			    	updateBacklightBrightness(b);
+			    	updateButtonsBrightness(keyBacklightOff ? 0.0f : -1.0f);
 				} catch ( Exception e ) {
 					// ignore
 				}
@@ -1107,7 +1162,7 @@ public class CoolReader extends Activity
 	{
 		//showView(readerView);
 		//setContentView(readerView);
-		mReaderView.loadDocument(item);
+		mReaderView.loadDocument(item, null);
 	}
 	
 	public void showBrowser( final FileInfo fileToShow )
@@ -1163,6 +1218,13 @@ public class CoolReader extends Activity
 	    	item = menu.findItem(R.id.cr3_mi_toggle_day_night);
 	    	if ( item!=null )
 	    		item.setTitle(mReaderView.isNightMode() ? R.string.mi_night_mode_disable : R.string.mi_night_mode_enable);
+	    	item = menu.findItem(R.id.cr3_mi_toggle_text_autoformat);
+	    	if ( item!=null ) {
+	    		if (mReaderView.isTextFormat())
+	    			item.setTitle(mReaderView.isTextAutoformatEnabled() ? R.string.mi_text_autoformat_disable : R.string.mi_text_autoformat_enable);
+	    		else
+	    			menu.removeItem(item.getItemId());
+	    	}
 	    } else {
 	    	inflater.inflate(R.menu.cr3_browser_menu, menu);
 	    	if ( !isBookOpened() ) {
@@ -1188,24 +1250,29 @@ public class CoolReader extends Activity
 	    return true;
 	}
 
-	public void showToast( int stringResourceId )
-	{
-		String s = getString(stringResourceId);
-		if ( s!=null )
-			showToast(s);
+	public void showToast(int stringResourceId) {
+		showToast(stringResourceId, Toast.LENGTH_LONG);
 	}
 
-	public void showToast( String msg )
-	{
-        log.v("showing toast: " + msg);
-        // TODO: enable custom toast
-//        if (DeviceInfo.EINK_NOOK) {
-//            ToastView.showToast(mReaderView, msg, Toast.LENGTH_LONG);
-//        } else {
-            //classic Toast
-            Toast toast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
-            toast.show();
-//        }
+	public void showToast(int stringResourceId, int duration) {
+		String s = getString(stringResourceId);
+		if (s != null)
+			showToast(s, duration);
+	}
+
+	public void showToast(String msg) {
+		showToast(msg, Toast.LENGTH_LONG);
+	}
+
+	public void showToast(String msg, int duration) {
+		log.v("showing toast: " + msg);
+		if (DeviceInfo.USE_CUSTOM_TOAST) {
+			ToastView.showToast(mReaderView, msg, Toast.LENGTH_LONG);
+		} else {
+			// classic Toast
+			Toast toast = Toast.makeText(this, msg, duration);
+			toast.show();
+		}
 	}
 
 	public interface InputHandler {
@@ -1430,8 +1497,8 @@ public class CoolReader extends Activity
 		new DefKeyAction(KeyEvent.KEYCODE_DPAD_DOWN, ReaderAction.NORMAL, ReaderAction.PAGE_DOWN),
 		new DefKeyAction(KeyEvent.KEYCODE_DPAD_UP, ReaderAction.LONG, (DeviceInfo.EINK_SONY? ReaderAction.PAGE_UP_10 : ReaderAction.REPEAT)),
 		new DefKeyAction(KeyEvent.KEYCODE_DPAD_DOWN, ReaderAction.LONG, (DeviceInfo.EINK_SONY? ReaderAction.PAGE_DOWN_10 : ReaderAction.REPEAT)),
-		new DefKeyAction(KeyEvent.KEYCODE_DPAD_LEFT, ReaderAction.NORMAL, ReaderAction.PAGE_UP_10),
-		new DefKeyAction(KeyEvent.KEYCODE_DPAD_RIGHT, ReaderAction.NORMAL, ReaderAction.PAGE_DOWN_10),
+		new DefKeyAction(KeyEvent.KEYCODE_DPAD_LEFT, ReaderAction.NORMAL, (DeviceInfo.NAVIGATE_LEFTRIGHT ? ReaderAction.PAGE_UP : ReaderAction.PAGE_UP_10)),
+		new DefKeyAction(KeyEvent.KEYCODE_DPAD_RIGHT, ReaderAction.NORMAL, (DeviceInfo.NAVIGATE_LEFTRIGHT ? ReaderAction.PAGE_DOWN : ReaderAction.PAGE_DOWN_10)),
 		new DefKeyAction(KeyEvent.KEYCODE_DPAD_LEFT, ReaderAction.LONG, ReaderAction.REPEAT),
 		new DefKeyAction(KeyEvent.KEYCODE_DPAD_RIGHT, ReaderAction.LONG, ReaderAction.REPEAT),
 		new DefKeyAction(KeyEvent.KEYCODE_VOLUME_UP, ReaderAction.NORMAL, ReaderAction.PAGE_UP),
@@ -1494,38 +1561,13 @@ public class CoolReader extends Activity
 		new DefTapAction(5, false, ReaderAction.READER_MENU),
 		new DefTapAction(5, true, ReaderAction.OPTIONS),
 	};
-	File propsFile;
-	private static final String SETTINGS_FILE_NAME = "cr3.ini";
-	private static boolean DEBUG_RESET_OPTIONS = false;
-	private Properties loadSettings()
-	{
+	
+	public Properties loadSettings(File file) {
         Properties props = new Properties();
 
-		File[] dataDirs = mEngine.getDataDirectories(null, false, true);
-		File existingFile = null;
-		for ( File dir : dataDirs ) {
-			File f = new File(dir, SETTINGS_FILE_NAME);
-			if ( f.exists() && f.isFile() ) {
-				existingFile = f;
-				break;
-			}
-		}
-        if ( existingFile!=null )
-        	propsFile = existingFile;
-        else {
-	        File propsDir = getDir("settings", Context.MODE_PRIVATE);
-			propsFile = new File( propsDir, SETTINGS_FILE_NAME);
-			File dataDir = Engine.getExternalSettingsDir();
-			if ( dataDir!=null ) {
-				log.d("external settings dir: " + dataDir);
-				propsFile = Engine.checkOrMoveFile(dataDir, propsDir, SETTINGS_FILE_NAME);
-			} else {
-				propsDir.mkdirs();
-			}
-        }
-        if ( propsFile.exists() && !DEBUG_RESET_OPTIONS ) {
+        if ( file.exists() && !DEBUG_RESET_OPTIONS ) {
         	try {
-        		FileInputStream is = new FileInputStream(propsFile);
+        		FileInputStream is = new FileInputStream(file);
         		props.load(is);
         		log.v("" + props.size() + " settings items loaded from file " + propsFile.getAbsolutePath() );
         	} catch ( Exception e ) {
@@ -1559,6 +1601,7 @@ public class CoolReader extends Activity
         if ("1".equals(props.getProperty(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK)))
             props.setProperty(ReaderView.PROP_APP_SCREEN_BACKLIGHT_LOCK, "3");
         props.applyDefault(ReaderView.PROP_APP_BOOK_PROPERTY_SCAN_ENABLED, "1");
+        props.applyDefault(ReaderView.PROP_APP_KEY_BACKLIGHT_OFF, DeviceInfo.SAMSUNG_BUTTONS_HIGHLIGHT_PATCH ? "0" : "1");
         // autodetect best initial font size based on display resolution
         int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
         int fontSize = 20;
@@ -1568,6 +1611,7 @@ public class CoolReader extends Activity
         	fontSize = 28;
         props.applyDefault(ReaderView.PROP_FONT_SIZE, String.valueOf(fontSize));
         props.applyDefault(ReaderView.PROP_FONT_FACE, "Droid Sans");
+        props.applyDefault(ReaderView.PROP_FONT_HINTING, "2");
         props.applyDefault(ReaderView.PROP_STATUS_FONT_FACE, "Droid Sans");
         props.applyDefault(ReaderView.PROP_STATUS_FONT_SIZE, DeviceInfo.EINK_NOOK ? "15" : "16");
         props.applyDefault(ReaderView.PROP_FONT_COLOR, "#000000");
@@ -1637,7 +1681,46 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_APP_FILE_BROWSER_SIMPLE_MODE, "0");
 		
 		props.applyDefault(ReaderView.PROP_APP_HIGHLIGHT_BOOKMARKS, "1");
-		
+        
+        return props;
+	}
+	
+	public File getSettingsFile(int profile) {
+		if (profile == 0)
+			return propsFile;
+		return new File(propsFile.getAbsolutePath() + ".profile" + profile);
+	}
+	
+	File propsFile;
+	private static final String SETTINGS_FILE_NAME = "cr3.ini";
+	private static boolean DEBUG_RESET_OPTIONS = false;
+	private Properties loadSettings()
+	{
+		File[] dataDirs = mEngine.getDataDirectories(null, false, true);
+		File existingFile = null;
+		for ( File dir : dataDirs ) {
+			File f = new File(dir, SETTINGS_FILE_NAME);
+			if ( f.exists() && f.isFile() ) {
+				existingFile = f;
+				break;
+			}
+		}
+        if ( existingFile!=null )
+        	propsFile = existingFile;
+        else {
+	        File propsDir = getDir("settings", Context.MODE_PRIVATE);
+			propsFile = new File( propsDir, SETTINGS_FILE_NAME);
+			File dataDir = Engine.getExternalSettingsDir();
+			if ( dataDir!=null ) {
+				log.d("external settings dir: " + dataDir);
+				propsFile = Engine.checkOrMoveFile(dataDir, propsDir, SETTINGS_FILE_NAME);
+			} else {
+				propsDir.mkdirs();
+			}
+        }
+        
+        Properties props = loadSettings(propsFile);
+
 		return props;
 	}
 
@@ -1753,16 +1836,70 @@ public class CoolReader extends Activity
 		}
 	}
 	
-	public void saveSettings( Properties settings )
+	public Properties loadSettings(int profile) {
+		File f = getSettingsFile(profile);
+		if (!f.exists() && profile != 0)
+			f = getSettingsFile(0);
+		Properties res = loadSettings(f);
+		if (profile != 0) {
+			res = filterProfileSettings(res);
+			res.setInt(Settings.PROP_PROFILE_NUMBER, profile);
+		}
+		return res;
+	}
+	
+	public static Properties filterProfileSettings(Properties settings) {
+		Properties res = new Properties();
+		res.entrySet();
+		for (Object k : settings.keySet()) {
+			String key = (String)k;
+			String value = settings.getProperty(key);
+			boolean found = false;
+			for (String pattern : Settings.PROFILE_SETTINGS) {
+				if (pattern.endsWith("*")) {
+					if (key.startsWith(pattern.substring(0, pattern.length()-1))) {
+						found = true;
+						break;
+					}
+				} else if (pattern.equalsIgnoreCase(key)) {
+					found = true;
+					break;
+				} else if (key.startsWith("styles.")) {
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				res.setProperty(key, value);
+			}
+		}
+		return res;
+	}
+	
+	public void saveSettings(int profile, Properties settings) {
+		File f = getSettingsFile(profile);
+		if (profile != 0) {
+			settings = filterProfileSettings(settings);
+			settings.setInt(Settings.PROP_PROFILE_NUMBER, profile);
+		}
+		saveSettings(f, settings);
+	}
+	
+	public void saveSettings(File f, Properties settings)
 	{
 		try {
-			log.v("saveSettings() " + settings);
-    		FileOutputStream os = new FileOutputStream(propsFile);
+			log.v("saveSettings()");
+    		FileOutputStream os = new FileOutputStream(f);
     		settings.store(os, "Cool Reader 3 settings");
-			log.i("Settings successfully saved to file " + propsFile.getAbsolutePath());
+			log.i("Settings successfully saved to file " + f.getAbsolutePath());
 		} catch ( Exception e ) {
 			log.e("exception while saving settings", e);
 		}
+	}
+
+	public void saveSettings(Properties settings)
+	{
+		saveSettings(propsFile, settings);
 	}
 
 	private static Debug.MemoryInfo info = new Debug.MemoryInfo();
