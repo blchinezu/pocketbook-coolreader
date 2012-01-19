@@ -2,6 +2,9 @@ package org.coolreader.crengine;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import android.database.Cursor;
@@ -79,6 +82,9 @@ public class CRDB {
 			}
 		}
 		this.mDBFile = dbfile;
+		mDB.setLockingEnabled(false);
+		mCoverpageDB.setLockingEnabled(false);
+		//mDB.setLocale(Locale.getDefault());
 		return true;
 	}
 
@@ -190,7 +196,7 @@ public class CRDB {
 				")");
 		execSQL("CREATE INDEX IF NOT EXISTS " +
 				"book_folder_index ON book (folder_fk) ");
-		execSQL("CREATE INDEX IF NOT EXISTS " +
+		execSQL("CREATE UNIQUE INDEX IF NOT EXISTS " +
 				"book_pathname_index ON book (pathname) ");
 		execSQL("CREATE INDEX IF NOT EXISTS " +
 				"book_filename_index ON book (filename) ");
@@ -299,48 +305,147 @@ public class CRDB {
 		return found;
 	}
 
-	public boolean loadAuthorsList(FileInfo parent) {
-		Log.i("cr3", "loadAuthorsList()");
+	public boolean loadSeriesBooks(FileInfo parent) {
+		Log.i("cr3", "loadSeriesBooks()");
 		parent.clear();
 		boolean found = false;
+		if (!parent.isBooksBySeriesDir())
+			return false;
+		long id = parent.getSeriesId();
+		if (id == 0)
+			return false;
+		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
+		if (findSeriesBooks(list, id)) {
+			for (FileInfo file : list) {
+				file.parent = parent;
+				parent.addFile(file);
+			}
+		}
+		return found;
+	}
+
+	/// add items range to parent dir
+	private void addItems(FileInfo parent, ArrayList<FileInfo> items, int start, int end) {
+		for (int i=start; i<end; i++) {
+			items.get(i).parent = parent;
+			parent.addDir(items.get(i));
+		}
+	}
+
+	
+	private static abstract class ItemGroupExtractor {
+		public abstract String getComparisionField(FileInfo item);
+		public String getItemFirstLetters(FileInfo item, int level) {
+			String name = getComparisionField(item); //.filename;
+			int l = name == null ? 0 : (name.length() < level ? name.length() : level);  
+			return l > 0 ? name.substring(0, l).toUpperCase() : "_";
+		}
+	}
+
+	private static class ItemGroupFilenameExtractor extends ItemGroupExtractor {
+		@Override
+		public String getComparisionField(FileInfo item) {
+			return item.filename;
+		}
+	}
+
+	private static class ItemGroupTitleExtractor extends ItemGroupExtractor {
+		@Override
+		public String getComparisionField(FileInfo item) {
+			return item.title;
+		}
+	}
+	
+	private FileInfo createItemGroup(String groupPrefix, String groupPrefixTag) {
+		FileInfo groupDir = new FileInfo();
+		groupDir.isDirectory = true;
+		groupDir.pathname = groupPrefixTag + groupPrefix;
+		groupDir.filename = groupPrefix + "...";
+		groupDir.isListed = true;
+		groupDir.isScanned = true;
+		groupDir.id = 0l;
+		return groupDir;
+	}
+	
+	private void sortItems(ArrayList<FileInfo> items, final ItemGroupExtractor extractor) {
+		Collections.sort(items, new Comparator<FileInfo>() {
+			@Override
+			public int compare(FileInfo lhs, FileInfo rhs) {
+				String l = extractor.getComparisionField(lhs) != null ? extractor.getComparisionField(lhs).toUpperCase() : "";
+				String r = extractor.getComparisionField(rhs) != null ? extractor.getComparisionField(rhs).toUpperCase() : "";
+				return l.compareTo(r);
+			}
+		});
+	}
+	
+	private void addGroupedItems(FileInfo parent, ArrayList<FileInfo> items, int start, int end, String groupPrefixTag, int level, final ItemGroupExtractor extractor) {
+		int itemCount = end - start;
+		if (itemCount < 1)
+			return;
+		// for nested level (>1), create base subgroup, otherwise use parent 
+		if (level > 1 && itemCount > 1) {
+			String baseFirstLetter = extractor.getItemFirstLetters(items.get(start), level - 1);
+			FileInfo newGroup = createItemGroup(baseFirstLetter, groupPrefixTag);
+			newGroup.parent = parent;
+			parent.addDir(newGroup);
+			parent = newGroup;
+		}
+		
+		// check group count
+		int topLevelGroupsCount = 0;
+		String lastFirstLetter = "";
+		for (int i=start; i<end; i++) {
+			String firstLetter = extractor.getItemFirstLetters(items.get(i), level);
+			if (!firstLetter.equals(lastFirstLetter)) {
+				topLevelGroupsCount++;
+				lastFirstLetter = firstLetter;
+			}
+		}
+		if (itemCount <= topLevelGroupsCount * 11 / 10 || itemCount < 8) {
+			// small number of items: add as is
+			addItems(parent, items, start, end); 
+			return;
+		}
+
+		// divide items into groups
+		for (int i=start; i<end; ) {
+			String firstLetter = extractor.getItemFirstLetters(items.get(i), level);
+			int groupEnd = i + 1;
+			for (; groupEnd < end; groupEnd++) {
+				String firstLetter2 = groupEnd < end ? extractor.getItemFirstLetters(items.get(groupEnd), level) : "";
+				if (!firstLetter.equals(firstLetter2))
+					break;
+			}
+			// group is i..groupEnd
+			addGroupedItems(parent, items, i, groupEnd, groupPrefixTag, level + 1, extractor);
+			i = groupEnd;
+		}
+	}
+	
+	private boolean loadItemList(ArrayList<FileInfo> list, String sql, String groupPrefixTag) {
+		boolean found = false;
 		Cursor rs = null;
-		FileInfo letterDir = null;
-		String lastAuthorFirstLetter = null;
 		try {
-			String sql = "SELECT author.id, author.name, count(*) as book_count FROM author INNER JOIN book_author ON book_author.author_fk = author.id GROUP BY author.id, author.name ORDER BY author.name";
 			rs = mDB.rawQuery(sql, null);
 			if ( rs.moveToFirst() ) {
-				// remove existing entries
-				parent.clear();
 				// read DB
 				do {
 					long id = rs.getLong(0);
 					String name = rs.getString(1);
+					if (FileInfo.AUTHOR_PREFIX.equals(groupPrefixTag))
+						name = Utils.authorNameFileAs(name);
 					Integer bookCount = rs.getInt(2);
-					String firstLetter = (name!=null && name.length()>0) ? name.substring(0, 1).toUpperCase() : "_";
-					if (letterDir == null || !firstLetter.equals(lastAuthorFirstLetter)) {
-						letterDir = new FileInfo();
-						letterDir.isDirectory = true;
-						letterDir.pathname = FileInfo.AUTHOR_GROUP_PREFIX + firstLetter;
-						letterDir.filename = firstLetter + "...";
-						letterDir.isListed = true;
-						letterDir.isScanned = true;
-						letterDir.parent = parent;
-						letterDir.id = id;
-						lastAuthorFirstLetter = firstLetter;
-						parent.addDir(letterDir);
-						found = true;
-					}
-					FileInfo author = new FileInfo();
-					author.isDirectory = true;
-					author.pathname = FileInfo.AUTHOR_PREFIX + id;
-					author.filename = name;
-					author.isListed = true;
-					author.isScanned = true;
-					author.parent = parent;
-					author.id = id;
-					author.tag = bookCount;
-					letterDir.addDir(author);
+					
+					FileInfo item = new FileInfo();
+					item.isDirectory = true;
+					item.pathname = groupPrefixTag + id;
+					item.filename = name;
+					item.isListed = true;
+					item.isScanned = true;
+					item.id = id;
+					item.tag = bookCount;
+					
+					list.add(item);
 					found = true;
 				} while (rs.moveToNext());
 			}
@@ -350,6 +455,49 @@ public class CRDB {
 			if ( rs!=null )
 				rs.close();
 		}
+		sortItems(list, new ItemGroupFilenameExtractor());
+		return found;
+	}
+	
+	public boolean loadAuthorsList(FileInfo parent) {
+		Log.i("cr3", "loadAuthorsList()");
+		parent.clear();
+		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
+		String sql = "SELECT author.id, author.name, count(*) as book_count FROM author INNER JOIN book_author ON  book_author.author_fk = author.id GROUP BY author.name, author.id ORDER BY author.name";
+		boolean found = loadItemList(list, sql, FileInfo.AUTHOR_PREFIX);
+		addGroupedItems(parent, list, 0, list.size(), FileInfo.AUTHOR_GROUP_PREFIX, 1, new ItemGroupFilenameExtractor());
+		return found;
+	}
+
+	public boolean loadSeriesList(FileInfo parent) {
+		Log.i("cr3", "loadSeriesList()");
+		parent.clear();
+		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
+		String sql = "SELECT series.id, series.name, count(*) as book_count FROM series INNER JOIN book ON book.series_fk = series.id GROUP BY series.name, series.id ORDER BY series.name";
+		boolean found = loadItemList(list, sql, FileInfo.SERIES_PREFIX);
+		addGroupedItems(parent, list, 0, list.size(), FileInfo.SERIES_GROUP_PREFIX, 1, new ItemGroupFilenameExtractor());
+		return found;
+	}
+	
+	public boolean loadTitleList(FileInfo parent) {
+		Log.i("cr3", "loadTitleList()");
+		parent.clear();
+		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
+		String sql = READ_FILEINFO_SQL + " WHERE b.title IS NOT NULL AND b.title != '' ORDER BY b.title";
+		boolean found = findBooks(sql, list);
+		sortItems(list, new ItemGroupTitleExtractor());
+		// remove duplicate titles
+		for (int i=list.size() - 1; i>0; i--) {
+			String title = list.get(i).title; 
+			if (title == null) {
+				list.remove(i);
+				continue;
+			}
+			String prevTitle = list.get(i - 1).title;
+			if (title.equals(prevTitle))
+				list.remove(i);
+		}
+		addGroupedItems(parent, list, 0, list.size(), FileInfo.TITLE_GROUP_PREFIX, 1, new ItemGroupTitleExtractor());
 		return found;
 	}
 	
@@ -616,53 +764,162 @@ public class CRDB {
 		return found;
 	}
 
+	private final static String LATIN_C0 =
+		// 0xC0 .. 0xFF
+		  "aaaaaaaceeeeiiiidnoooooxouuuuyps" 
+		+ "aaaaaaaceeeeiiiidnoooooxouuuuypy";
+	
+	private char convertCharCaseForSearch(char ch) {
+		if (ch >= 'A' && ch <= 'Z')
+			return (char)(ch - 'A' + 'a');
+		if ( ch>=0xC0 && ch<=0xFF )
+			return LATIN_C0.charAt(ch - 0xC0);
+    	if ( ch>=0x410 && ch<=0x42F )
+    		return (char)(ch + 0x20);
+    	if ( ch>=0x390 && ch<=0x3aF )
+    		return (char)(ch + 0x20);
+    	if ( (ch >> 8)==0x1F ) { // greek
+	        int n = ch & 255;
+	        if (n<0x70) {
+	            return (char)(ch & (~8));
+	        } else if (n<0x80) {
+	
+	        } else if (n<0xF0) {
+	            return (char)(ch & (~8));
+	        }
+	    }
+		return ch;
+	}
+	
+	private boolean matchPattern(String text, String pattern) {
+		if (pattern == null)
+			return true;
+		if (text == null)
+			return false;
+		int textlen = text.length();
+		int patternlen = pattern.length();
+		if (textlen < patternlen)
+			return false;
+		for (int i=0; i <= textlen - patternlen; i++) {
+			if (i > 0 && text.charAt(i-1) != ' ')
+				continue; // match only beginning of words
+			boolean eq = true;
+			for (int j=0; j<patternlen; j++) {
+				if (convertCharCaseForSearch(text.charAt(i + j)) != convertCharCaseForSearch(pattern.charAt(j))) {
+					eq = false;
+					break;
+				}
+			}
+			if (eq)
+				return true;
+		}
+		return false;
+	}
+	
+	private String findAuthors(int maxCount, String authorPattern) {
+		StringBuilder buf = new StringBuilder();
+		String sql = "SELECT id, name FROM author";
+		Cursor rs = null;
+		int count = 0;
+		try {
+			rs = mDB.rawQuery(sql, null);
+			if ( rs.moveToFirst() ) {
+				do {
+					long id = rs.getLong(0);
+					String name = rs.getString(1);
+					if (matchPattern(name, authorPattern)) {
+						if (buf.length() != 0)
+							buf.append(",");
+						buf.append(id);
+						count++;
+						if (count >= maxCount)
+							break;
+					}
+				} while (rs.moveToNext());
+			}
+		} finally {
+			if ( rs!=null )
+				rs.close();
+		}
+		return buf.toString();
+	}
+	
+	private String findSeries(int maxCount, String seriesPattern) {
+		StringBuilder buf = new StringBuilder();
+		String sql = "SELECT id, name FROM series";
+		Cursor rs = null;
+		int count = 0;
+		try {
+			rs = mDB.rawQuery(sql, null);
+			if ( rs.moveToFirst() ) {
+				do {
+					long id = rs.getLong(0);
+					String name = rs.getString(1);
+					if (matchPattern(name, seriesPattern)) {
+						if (buf.length() != 0)
+							buf.append(",");
+						buf.append(id);
+						count++;
+						if (count >= maxCount)
+							break;
+					}
+				} while (rs.moveToNext());
+			}
+		} finally {
+			if ( rs!=null )
+				rs.close();
+		}
+		return buf.toString();
+	}
+	
 	synchronized public FileInfo[] findByPatterns( int maxCount, String author, String title, String series, String filename )
 	{
 		ArrayList<FileInfo> list = new ArrayList<FileInfo>();
 		
 		StringBuilder buf = new StringBuilder();
+		boolean hasCondition = false;
 		if ( author!=null && author.length()>0 ) {
+			String authorIds = findAuthors(maxCount, author);
+			if (authorIds == null || authorIds.length() == 0)
+				return new FileInfo[0];
 			if ( buf.length()>0 )
 				buf.append(" AND ");
-			buf.append(" b.id IN (SELECT ba.book_fk FROM author a JOIN book_author ba ON a.id=ba.author_fk WHERE a.name LIKE ");
-			DatabaseUtils.appendValueToSql(buf, author);
-			buf.append(") ");
+			buf.append(" b.id IN (SELECT ba.book_fk FROM book_author ba WHERE ba.author_fk IN (" + authorIds + ")) ");
+			hasCondition = true;
 		}
 		if ( series!=null && series.length()>0 ) {
+			String seriesIds = findSeries(maxCount, series);
+			if (seriesIds == null || seriesIds.length() == 0)
+				return new FileInfo[0];
 			if ( buf.length()>0 )
 				buf.append(" AND ");
-			buf.append(" b.series_fk IN (SELECT s.name FROM series s WHERE s.name LIKE ");
-			DatabaseUtils.appendValueToSql(buf, series);
-			buf.append(") ");
+			buf.append(" b.series_fk IN (" + seriesIds + ") ");
+			hasCondition = true;
 		}
 		if ( title!=null && title.length()>0 ) {
-			if ( buf.length()>0 )
-				buf.append(" AND ");
-			buf.append(" b.title LIKE ");
-			DatabaseUtils.appendValueToSql(buf, title);
-			buf.append(" ");
+			hasCondition = true;
 		}
 		if ( filename!=null && filename.length()>0 ) {
-			if ( buf.length()>0 )
-				buf.append(" AND ");
-			buf.append(" b.filename LIKE ");
-			DatabaseUtils.appendValueToSql(buf, filename);
-			buf.append(" ");
+			hasCondition = true;
 		}
-		if ( buf.length()==0 )
+		if (!hasCondition)
 			return new FileInfo[0];
 		
-		String condition = " WHERE " + buf.toString();
+		String condition = buf.length()==0 ? "" : " WHERE " + buf.toString();
 		String sql = READ_FILEINFO_SQL + condition;
 		Log.d("cr3", "sql: " + sql );
-		if ( condition.length()==0 )
-			return new FileInfo[] { };
 		Cursor rs = null;
 		try { 
 			rs = mDB.rawQuery(sql, null);
 			if ( rs.moveToFirst() ) {
 				int count = 0;
 				do {
+					if ( title!=null && title.length()>0 )
+						if (!matchPattern(rs.getString(5), title))
+							continue;
+					if ( filename!=null && filename.length()>0 )
+						if (!matchPattern(rs.getString(3), filename))
+							continue;
 					FileInfo fi = new FileInfo(); 
 					readFileInfoFromCursor( fi, rs );
 					list.add(fi);
@@ -701,9 +958,7 @@ public class CRDB {
 		return found;
 	}
 	
-	synchronized public boolean findAuthorBooks(ArrayList<FileInfo> list, long authorId)
-	{
-		String sql = READ_FILEINFO_SQL + " LEFT JOIN book_author ON book_author.book_fk = b.id WHERE book_author.author_fk = " + authorId + " ORDER BY b.title";
+	private boolean findBooks(String sql, ArrayList<FileInfo> list) {
 		Cursor rs = null;
 		boolean found = false;
 		try {
@@ -723,6 +978,18 @@ public class CRDB {
 				rs.close();
 		}
 		return found;
+	}
+
+	synchronized public boolean findAuthorBooks(ArrayList<FileInfo> list, long authorId)
+	{
+		String sql = READ_FILEINFO_SQL + " INNER JOIN book_author ON book_author.book_fk = b.id WHERE book_author.author_fk = " + authorId + " ORDER BY b.title";
+		return findBooks(sql, list);
+	}
+	
+	synchronized public boolean findSeriesBooks(ArrayList<FileInfo> list, long seriesId)
+	{
+		String sql = READ_FILEINFO_SQL + " INNER JOIN series ON series.id = b.series_fk WHERE series.id = " + seriesId + " ORDER BY b.title";
+		return findBooks(sql, list);
 	}
 	
 	private Long longQuery( String sql )
@@ -1090,7 +1357,7 @@ public class CRDB {
 		return res;
 	}
 
-	synchronized public boolean save( BookInfo bookInfo )
+	private boolean saveBookInternal( BookInfo bookInfo )
 	{
 		if ( mDB==null ) {
 			Log.e("cr3db", "cannot save book info : DB is closed");
@@ -1110,6 +1377,48 @@ public class CRDB {
 		}
 		if ( bookInfo.getLastPosition()!=null && bookInfo.getLastPosition().isModified() )
 			res = save(bookInfo.getLastPosition(), bookInfo.getFileInfo().id) || res;
+		return res;
+	}
+
+	synchronized public boolean save(BookInfo bookInfo)
+	{
+		if ( mDB==null ) {
+			Log.e("cr3db", "cannot save book info : DB is closed");
+			return false;
+		}
+		return saveBookInternal(bookInfo);
+	}
+
+	synchronized public boolean save(Collection<BookInfo> list)
+	{
+		Log.v("cr3db", "save BookInfo collection: " + list.size() + " items");
+		if ( mDB==null ) {
+			Log.e("cr3db", "cannot save book info : DB is closed");
+			return false;
+		}
+		boolean res = true;
+		int updateCount = 0;
+		try {
+			mDB.beginTransaction();
+			for (BookInfo bookInfo : list) {
+				if (saveBookInternal(bookInfo))
+					updateCount++;
+			}
+			mDB.setTransactionSuccessful();
+		} catch (SQLiteException e) {
+			L.e("Exception while saving to DB", e);
+			res = false;
+		} finally {
+			try {
+				Log.v("cr3db", "BookInfo : committing " + updateCount + " updated books");
+				long start = android.os.SystemClock.uptimeMillis();
+				mDB.endTransaction();
+				long duration = android.os.SystemClock.uptimeMillis() - start;
+				Log.v("cr3db", "BookInfo collection saved: " + updateCount + " items in " + duration + " ms");
+			} catch (Exception e) {
+				L.e("Exception while committing transaction", e);
+			}
+		}
 		return res;
 	}
 
@@ -1199,6 +1508,39 @@ public class CRDB {
 		} catch (SQLiteException e) {
 			throw new SQLiteException("error while writing to DB " + mDBFile + ": " + e.getMessage());
 		}
+	}
+
+	synchronized public boolean saveFileInfos(Collection<FileInfo> list)
+	{
+		Log.v("cr3db", "save BookInfo collection: " + list.size() + " items");
+		if ( mDB==null ) {
+			Log.e("cr3db", "cannot save book info : DB is closed");
+			return false;
+		}
+		boolean res = true;
+		int updateCount = 0;
+		try {
+			mDB.beginTransaction();
+			for (FileInfo fileInfo : list) {
+				if (save(fileInfo))
+					updateCount++;
+			}
+			mDB.setTransactionSuccessful();
+		} catch (SQLiteException e) {
+			L.e("Exception while saving to DB", e);
+			res = false;
+		} finally {
+			try {
+				Log.v("cr3db", "BookInfo : committing " + updateCount + " updated books");
+				long start = android.os.SystemClock.uptimeMillis();
+				mDB.endTransaction();
+				long duration = android.os.SystemClock.uptimeMillis() - start;
+				Log.v("cr3db", "BookInfo collection saved: " + updateCount + " items in " + duration + " ms");
+			} catch (Exception e) {
+				L.e("Exception while committing transaction", e);
+			}
+		}
+		return res;
 	}
 
 	synchronized public void flush()

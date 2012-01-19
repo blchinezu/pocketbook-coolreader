@@ -20,9 +20,14 @@ public class FileInfo {
 	public final static String ROOT_DIR_TAG = "@root";
 	public final static String OPDS_LIST_TAG = "@opds";
 	public final static String OPDS_DIR_PREFIX = "@opds:";
-	public final static String AUTHORS_TAG = "@authors";
+	public final static String AUTHORS_TAG = "@authorsRoot";
 	public final static String AUTHOR_GROUP_PREFIX = "@authorGroup:";
 	public final static String AUTHOR_PREFIX = "@author:";
+	public final static String SERIES_TAG = "@seriesRoot";
+	public final static String SERIES_GROUP_PREFIX = "@seriesGroup:";
+	public final static String SERIES_PREFIX = "@series:";
+	public final static String TITLE_TAG = "@titlesRoot";
+	public final static String TITLE_GROUP_PREFIX = "@titleGroup:";
 	public final static String SEARCH_SHORTCUT_TAG = "@search";
 	
 	
@@ -229,7 +234,18 @@ public class FileInfo {
 	
 	public boolean isOPDSDir()
 	{
-		return pathname!=null && pathname.startsWith(OPDS_DIR_PREFIX);
+		return pathname!=null && pathname.startsWith(OPDS_DIR_PREFIX) && (getOPDSEntryInfo() == null || getOPDSEntryInfo().getBestAcquisitionLink() == null);
+	}
+	
+	public boolean isOPDSBook()
+	{
+		return pathname!=null && pathname.startsWith(OPDS_DIR_PREFIX) && getOPDSEntryInfo() != null && getOPDSEntryInfo().getBestAcquisitionLink() != null;
+	}
+	
+	private OPDSUtil.EntryInfo getOPDSEntryInfo() {
+		if (tag !=null && tag instanceof OPDSUtil.EntryInfo)
+			return (OPDSUtil.EntryInfo)tag;
+		return null;
 	}
 	
 	public boolean isOPDSRoot()
@@ -247,20 +263,38 @@ public class FileInfo {
 		return AUTHORS_TAG.equals(pathname);
 	}
 	
+	public boolean isBooksBySeriesRoot()
+	{
+		return SERIES_TAG.equals(pathname);
+	}
+	
+	public boolean isBooksByTitleRoot()
+	{
+		return TITLE_TAG.equals(pathname);
+	}
+	
 	public boolean isBooksByAuthorDir()
 	{
 		return pathname!=null && pathname.startsWith(AUTHOR_PREFIX);
+	}
+	
+	public boolean isBooksBySeriesDir()
+	{
+		return pathname!=null && pathname.startsWith(SERIES_PREFIX);
 	}
 	
 	public long getAuthorId()
 	{
 		if (!isBooksByAuthorDir())
 			return 0;
-		try {
-			return Long.parseLong(pathname.substring(AUTHOR_PREFIX.length()));
-		} catch (NumberFormatException e) {
+		return id;
+	}
+	
+	public long getSeriesId()
+	{
+		if (!isBooksBySeriesDir())
 			return 0;
-		}
+		return id;
 	}
 	
 	public boolean isHidden()

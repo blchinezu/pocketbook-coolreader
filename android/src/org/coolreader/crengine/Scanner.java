@@ -2,6 +2,7 @@ package org.coolreader.crengine;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -12,7 +13,6 @@ import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.Engine.EngineTask;
 
-import android.os.Environment;
 import android.util.Log;
 
 public class Scanner {
@@ -240,6 +240,7 @@ public class Scanner {
 		engine.execute(new EngineTask() {
 			long nextProgressTime = startTime + 2000;
 			boolean progressShown = false;
+			final Collection<FileInfo> booksToSave = new ArrayList<FileInfo>();
 			void progress( int percent )
 			{
 				if ( recursiveScan )
@@ -257,6 +258,7 @@ public class Scanner {
 				if ( progressShown )
 					engine.hideProgress();
 				readyCallback.run();
+				
 			}
 
 			public void fail(Exception e) {
@@ -311,8 +313,7 @@ public class Scanner {
 						return;
 					FileInfo item = filesForParsing.get(i);
 					engine.scanBookProperties(item);
-					db.save(item);
-					Log.v("cr3db", "File " + item.pathname + " is added to DB (id="+item.id+", title=" + item.title + ", authors=" + item.authors +")");
+					booksToSave.add(item);
 					progress( 5000 + 5000 * i / count );
 				}
 				if ( recursiveScan ) {
@@ -327,6 +328,7 @@ public class Scanner {
 				// scan (list) directories
 				nextProgressTime = startTime + 1500;
 				scan( baseDir );
+				db.saveFileInfos(booksToSave);
 			}
 		});
 	}
@@ -430,6 +432,28 @@ public class Scanner {
 		dir.isDirectory = true;
 		dir.pathname = FileInfo.AUTHORS_TAG;
 		dir.filename = coolReader.getString(R.string.folder_name_books_by_author);
+		dir.isListed = true;
+		dir.isScanned = true;
+		dir.parent = mRoot;
+		mRoot.addDir(dir);
+	}
+	
+	private void addSeriesRoot() {
+		FileInfo dir = new FileInfo();
+		dir.isDirectory = true;
+		dir.pathname = FileInfo.SERIES_TAG;
+		dir.filename = coolReader.getString(R.string.folder_name_books_by_series);
+		dir.isListed = true;
+		dir.isScanned = true;
+		dir.parent = mRoot;
+		mRoot.addDir(dir);
+	}
+	
+	private void addTitleRoot() {
+		FileInfo dir = new FileInfo();
+		dir.isDirectory = true;
+		dir.pathname = FileInfo.TITLE_TAG;
+		dir.filename = coolReader.getString(R.string.folder_name_books_by_title);
 		dir.isListed = true;
 		dir.isScanned = true;
 		dir.parent = mRoot;
@@ -603,7 +627,8 @@ public class Scanner {
 		"/mnt/external1",
 		"/ext.sd",
 		"/sdcard2",
-	};
+		"/mnt/sdcard2",
+		};
 	
 	public void initRoots(Map<String, String> fsRoots)
 	{
@@ -623,6 +648,10 @@ public class Scanner {
 		
 		// create books by author root
 		addAuthorsRoot();
+		// create books by series root
+		addSeriesRoot();
+		// create books by title root
+		addTitleRoot();
 	}
 	
 	public boolean autoAddRootForFile( File f ) {

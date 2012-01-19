@@ -1,9 +1,12 @@
 package org.coolreader.crengine;
 
+import java.util.Random;
+
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
@@ -53,10 +56,34 @@ public class AboutDialog extends BaseDialog implements TabContentFactory {
 		}
 	}
 	
+	private void setupInAppDonationButton( final Button btn, final double amount ) {
+		btn.setText("$" + amount);
+		btn.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				mCoolReader.makeDonation(amount);
+			}
+		});
+	}
+	
+	private void updateTotalDonations() {
+		double amount = mCoolReader.getTotalDonations();
+		if (isPackageInstalled("org.coolreader.donation.gold"))
+			amount += 10.0;
+		if (isPackageInstalled("org.coolreader.donation.silver"))
+			amount += 3.0;
+		if (isPackageInstalled("org.coolreader.donation.bronze"))
+			amount += 1.0;
+		TextView text = ((TextView)mDonationTab.findViewById(R.id.btn_about_donation_total));
+		if (text != null)
+			text.setText(mCoolReader.getString(R.string.dlg_about_donation_total) + " $" + amount);
+	}
+
 	public AboutDialog( CoolReader activity)
 	{
 		super(activity);
 		mCoolReader = activity;
+		setTitle(R.string.dlg_about);
 		LayoutInflater inflater = LayoutInflater.from(getContext());
 		TabHost tabs = (TabHost)inflater.inflate(R.layout.about_dialog, null);
 		mAppTab = (View)inflater.inflate(R.layout.about_dialog_app, null);
@@ -64,11 +91,34 @@ public class AboutDialog extends BaseDialog implements TabContentFactory {
 		mLicenseTab = (View)inflater.inflate(R.layout.about_dialog_license, null);
 		String license = mCoolReader.getEngine().loadResourceUtf8(R.raw.license);
 		((TextView)mLicenseTab.findViewById(R.id.license)).setText(license);
-		mDonationTab = (View)inflater.inflate(R.layout.about_dialog_donation, null);
+		boolean billingSupported = mCoolReader.isDonationSupported();
+		mDonationTab = (View)inflater.inflate(billingSupported ? R.layout.about_dialog_donation2 : R.layout.about_dialog_donation, null);
 
-		setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_gold), "org.coolreader.donation.gold");
-		setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_silver), "org.coolreader.donation.silver");
-		setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_bronze), "org.coolreader.donation.bronze");
+		if (billingSupported) {
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_vip), 100);
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_platinum), 30);
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_gold), 10);
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_silver), 3);
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_bronze), 1);
+			setupInAppDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_iron), 0.3);
+			updateTotalDonations();
+			mCoolReader.setDonationListener(new CoolReader.DonationListener() {
+				@Override
+		    	public void onDonationTotalChanged(double total) {
+		    		updateTotalDonations();
+		    	}
+		    });
+			setOnDismissListener(new OnDismissListener() {
+				@Override
+				public void onDismiss(DialogInterface dialog) {
+					mCoolReader.setDonationListener(null);
+				}
+			});
+		} else {
+			setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_gold), "org.coolreader.donation.gold");
+			setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_silver), "org.coolreader.donation.silver");
+			setupDonationButton( (Button)mDonationTab.findViewById(R.id.btn_about_donation_install_bronze), "org.coolreader.donation.bronze");
+		}
 		
 		tabs.setup();
 		TabHost.TabSpec tsApp = tabs.newTabSpec("App");
@@ -90,8 +140,15 @@ public class AboutDialog extends BaseDialog implements TabContentFactory {
 		tabs.addTab(tsDonation);
 		
 		setView( tabs );
-	}
 
+		// 50% chance to show Donations tab
+		if (rnd.nextBoolean())
+			tabs.setCurrentTab(2);
+		
+	}
+	private static Random rnd = new Random(android.os.SystemClock.uptimeMillis()); 
+
+	
 	@Override
 	public View createTabContent(String tag) {
 		if ( "App".equals(tag) )

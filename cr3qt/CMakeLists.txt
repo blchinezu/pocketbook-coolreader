@@ -151,8 +151,10 @@ endif(WIN32)
 
 
 IF(MAC)
-    SET(FRAMEWORKS "-framework ApplicationServices -framework Carbon -framework AppKit")
-    SET (EXTRA_LIBS /Developer/Qt/lib/libQtCore.a /Developer/Qt/lib/libQtGui.a ${FRAMEWORKS} ${STD_LIBS} )
+    message("Qt libs = ${QT_LIBRARIES}")
+#    SET(FRAMEWORKS "-framework ApplicationServices -framework Carbon -framework AppKit")
+#/Developer/Qt/lib/libQtCore.a /Developer/Qt/lib/libQtGui.a ${FRAMEWORKS} 
+    SET (EXTRA_LIBS ${QT_LIBRARIES} ${STD_LIBS} )
 #${QT_LIBRARIES} 
 ELSEIF (UNIX)
     SET (EXTRA_LIBS ${QT_LIBRARIES} fontconfig ${STD_LIBS} )
@@ -164,7 +166,7 @@ TARGET_LINK_LIBRARIES(cr3 crengine tinydict ${UNRAR_LIBRARIES} ${EXTRA_LIBS})
 
 IF (MAC)
 
-INSTALL( TARGETS cr3 RUNTIME DESTINATION . )
+INSTALL( TARGETS cr3 RUNTIME DESTINATION Contents/MacOS )
 INSTALL( DIRECTORY data/ DESTINATION Contents/Resources 
    FILES_MATCHING PATTERN "*.css" PATTERN "skins" EXCLUDE PATTERN "docs" EXCLUDE)
 INSTALL( DIRECTORY data/hyph DESTINATION Contents/Resources 
@@ -177,7 +179,8 @@ INSTALL( DIRECTORY data/backgrounds DESTINATION Contents/Resources )
 #INSTALL( FILES ${CR3_MAN_PAGES} DESTINATION share/doc/cr3 )
 INSTALL( FILES ${QM_FILES} DESTINATION Contents/Resources/i18n )
 INSTALL( DIRECTORY ${QT_INCLUDE_DIR}/../src/gui/mac/qt_menu.nib DESTINATION Contents/Resources )
-#INSTALL( FILES src/desktop/cr3.desktop DESTINATION share/applications )
+INSTALL( FILES src/desktop/Info.plist DESTINATION Contents )
+INSTALL( FILES src/desktop/PkgInfo DESTINATION Contents )
 #INSTALL( FILES src/desktop/cr3.png DESTINATION share/pixmaps )
 #INSTALL( FILES src/desktop/cr3.xpm DESTINATION share/pixmaps )
 

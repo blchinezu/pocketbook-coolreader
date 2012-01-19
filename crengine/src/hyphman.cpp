@@ -55,7 +55,7 @@ HyphDictionary * HyphMan::_selectedDictionary = NULL;
 
 HyphDictionaryList * HyphMan::_dictList = NULL;
 
-#define MAX_PATTERN_SIZE  8
+#define MAX_PATTERN_SIZE  9
 #define PATTERN_HASH_SIZE 16384
 class TexPattern;
 class TexHyph : public HyphMethod
@@ -153,10 +153,13 @@ bool HyphMan::activateDictionaryFromStream( LVStreamRef stream )
     return true;
 }
 
-bool HyphMan::initDictionaries( lString16 dir )
+bool HyphMan::initDictionaries(lString16 dir, bool clear)
 {
-	_dictList = new HyphDictionaryList();
-	if ( _dictList->open( dir ) ) {
+    if (clear && _dictList)
+        delete _dictList;
+    if (clear || !_dictList)
+        _dictList = new HyphDictionaryList();
+    if (_dictList->open(dir, clear)) {
 		if ( !_dictList->activate( lString16(DEF_HYPHENATION_DICT) ) )
 	    	if ( !_dictList->activate( lString16(DEF_HYPHENATION_DICT2) ) )
     			_dictList->activate( lString16(HYPH_DICT_ID_ALGORITHM) );
@@ -169,6 +172,8 @@ bool HyphMan::initDictionaries( lString16 dir )
 
 bool HyphDictionary::activate()
 {
+    if (HyphMan::_selectedDictionary == this)
+        return true; // already active
 	if ( getType() == HDT_ALGORITHM ) {
 		CRLog::info("Turn on algorythmic hyphenation" );
         if ( HyphMan::_method != &ALGO_HYPH ) {
@@ -208,6 +213,7 @@ bool HyphDictionary::activate()
 
 bool HyphDictionaryList::activate( lString16 id )
 {
+    CRLog::trace("HyphDictionaryList::activate(%s)", LCSTR(id));
 	HyphDictionary * p = find(id); 
 	if ( p ) 
 		return p->activate(); 
@@ -235,13 +241,15 @@ HyphDictionary * HyphDictionaryList::find( lString16 id )
 	return NULL;
 }
 
-bool HyphDictionaryList::open( lString16 hyphDirectory )
+bool HyphDictionaryList::open(lString16 hyphDirectory, bool clear)
 {
     CRLog::info("HyphDictionaryList::open(%s)", LCSTR(hyphDirectory) );
-    _list.clear();
-    addDefault();
+    if (clear) {
+        _list.clear();
+        addDefault();
+    }
     if ( hyphDirectory.empty() )
-	return true;
+        return true;
     //LVAppendPathDelimiter( hyphDirectory );
     LVContainerRef container;
     LVStreamRef stream;
@@ -404,15 +412,20 @@ public:
     TexPattern( const lString16 &s ) : next( NULL )
     {
         memset( word, 0, sizeof(word) );
-        memset( attr, 0, sizeof(attr) );
+        memset( attr, '0', sizeof(attr) );
+        attr[sizeof(attr)-1] = 0;
         int n = 0;
         for ( int i=0; i<(int)s.length() && n<MAX_PATTERN_SIZE; i++ ) {
             lChar16 ch = s[i];
             if ( ch>='0' && ch<='9' ) {
                 attr[n] = (char)ch;
+//                if (n>0)
+//                    attr[n-1] = (char)ch;
             } else {
                 word[n++] = ch;
             }
+            if (i==(int)s.length()-1)
+                attr[n+1] = 0;
         }
     }
 
@@ -593,9 +606,10 @@ bool TexHyph::load( LVStreamRef stream )
         if ( !data.length() )
             return false;
         for ( int i=0; i<(int)data.length(); i++ ) {
+            data[i].lowercase();
             TexPattern * pattern = new TexPattern( data[i] );
 #if DUMP_PATTERNS==1
-            CRLog::debug("Pattern: '%s' - %s", LCSTR(lString16(pattern->word)), pattern->attr);
+            CRLog::debug("Pattern: (%s) '%s' - %s", LCSTR(data[i]), LCSTR(lString16(pattern->word)), pattern->attr);
 #endif
             addPattern( pattern );
             patternCount++;
@@ -670,6 +684,11 @@ bool TexHyph::hyphenate( const lChar16 * str, int len, lUInt16 * widths, lUInt8 
     word[len+2] = 0;
     word[len+3] = 0;
     word[len+4] = 0;
+
+#if DUMP_HYPHENATION_WORDS==1
+    CRLog::trace("word to hyphenate: '%s'", LCSTR(lString16(word)));
+#endif
+
     memset( mask, '0', len+3 );
     mask[len+3] = 0;
     bool found = false;

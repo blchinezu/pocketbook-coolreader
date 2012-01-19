@@ -51,12 +51,10 @@ public class FileBrowser extends LinearLayout {
 
 	public static final int MAX_SUBDIR_LEN = 32;
 	
-	private class FileBrowserListView extends ListView {
+	private class FileBrowserListView extends BaseListView {
 
 		public FileBrowserListView(Context context) {
 			super(context);
-	        setFocusable(true);
-	        setFocusableInTouchMode(true);
 	        setLongClickable(true);
 	        //registerForContextMenu(this);
 	        //final FileBrowser _this = this;
@@ -96,8 +94,14 @@ public class FileBrowser extends LinearLayout {
 		    if ( isRecentDir() ) {
 			    inflater.inflate(R.menu.cr3_file_browser_recent_context_menu, menu);
 			    menu.setHeaderTitle(mActivity.getString(R.string.context_menu_title_recent_book));
-		    } else if (selectedItem!=null && selectedItem.isOPDSDir()) {
+		    } else if (currDirectory.isOPDSRoot()) {
 			    inflater.inflate(R.menu.cr3_file_browser_opds_context_menu, menu);
+			    menu.setHeaderTitle(mActivity.getString(R.string.menu_title_catalog));
+		    } else if (selectedItem!=null && selectedItem.isOPDSDir()) {
+			    inflater.inflate(R.menu.cr3_file_browser_opds_dir_context_menu, menu);
+			    menu.setHeaderTitle(mActivity.getString(R.string.menu_title_catalog));
+		    } else if (selectedItem!=null && selectedItem.isOPDSBook()) {
+			    inflater.inflate(R.menu.cr3_file_browser_opds_book_context_menu, menu);
 			    menu.setHeaderTitle(mActivity.getString(R.string.menu_title_catalog));
 		    } else if (selectedItem!=null && selectedItem.isDirectory) {
 			    inflater.inflate(R.menu.cr3_file_browser_folder_context_menu, menu);
@@ -134,7 +138,7 @@ public class FileBrowser extends LinearLayout {
 				showDirectory(item, null);
 				return true;
 			}
-			if ( item.isOPDSDir() )
+			if (item.isOPDSDir() || item.isOPDSBook())
 				showOPDSDir(item, null);
 			else
 				mActivity.loadDocument(item);
@@ -241,11 +245,7 @@ public class FileBrowser extends LinearLayout {
 			return true;
 		case R.id.book_delete:
 			log.d("book_delete menu item selected");
-			mActivity.getReaderView().closeIfOpened(selectedItem);
-			if ( selectedItem.deleteFile() ) {
-				mHistory.removeBookInfo(selectedItem, true, true);
-			}
-			showDirectory(currDirectory, null);
+			askDeleteBook();
 			return true;
 		case R.id.book_recent_goto:
 			log.d("book_recent_goto menu item selected");
@@ -253,8 +253,7 @@ public class FileBrowser extends LinearLayout {
 			return true;
 		case R.id.book_recent_remove:
 			log.d("book_recent_remove menu item selected");
-			mActivity.getHistory().removeBookInfo(selectedItem, true, false);
-			showRecentBooks();
+			askDeleteRecent();
 			return true;
 		case R.id.catalog_add:
 			log.d("catalog_add menu item selected");
@@ -262,10 +261,7 @@ public class FileBrowser extends LinearLayout {
 			return true;
 		case R.id.catalog_delete:
 			log.d("catalog_delete menu item selected");
-			if (selectedItem!=null && selectedItem.isOPDSDir()) {
-				mActivity.getDB().removeOPDSCatalog(selectedItem.id);
-				refreshOPDSRootDirectory();
-			}
+			askDeleteCatalog();
 			return true;
 		case R.id.catalog_edit:
 			log.d("catalog_edit menu item selected");
@@ -277,6 +273,44 @@ public class FileBrowser extends LinearLayout {
 			return true;
 		}
 		return false;
+	}
+	
+	private void askDeleteBook()
+	{
+		mActivity.askConfirmation(R.string.win_title_confirm_book_delete, new Runnable() {
+			@Override
+			public void run() {
+				mActivity.getReaderView().closeIfOpened(selectedItem);
+				if ( selectedItem.deleteFile() ) {
+					mHistory.removeBookInfo(selectedItem, true, true);
+				}
+				showDirectory(currDirectory, null);
+			}
+		});
+	}
+	
+	private void askDeleteRecent()
+	{
+		mActivity.askConfirmation(R.string.win_title_confirm_history_record_delete, new Runnable() {
+			@Override
+			public void run() {
+				mActivity.getHistory().removeBookInfo(selectedItem, true, false);
+				showRecentBooks();
+			}
+		});
+	}
+	
+	private void askDeleteCatalog()
+	{
+		mActivity.askConfirmation(R.string.win_title_confirm_catalog_delete, new Runnable() {
+			@Override
+			public void run() {
+				if (selectedItem!=null && selectedItem.isOPDSDir()) {
+					mActivity.getDB().removeOPDSCatalog(selectedItem.id);
+					refreshOPDSRootDirectory();
+				}
+			}
+		});
 	}
 	
 	private void editOPDSCatalog(FileInfo opds) {
@@ -353,11 +387,12 @@ public class FileBrowser extends LinearLayout {
 		for ( String a : list ) {
 			if ( buf.length()>0 )
 				buf.append(", ");
-			String[] items = a.split(" ");
-			if ( items.length==3 && items[1]!=null && items[1].length()>=1 )
-				buf.append(items[0] + " " + items[1].charAt(0) + ". " + items[2]);
-			else
-				buf.append(a);
+			buf.append(Utils.authorNameFileAs(a));
+//			String[] items = a.split(" ");
+//			if ( items.length==3 && items[1]!=null && items[1].length()>=1 )
+//				buf.append(items[0] + " " + items[1].charAt(0) + ". " + items[2]);
+//			else
+//				buf.append(a);
 		}
 		return buf.toString();
 	}
@@ -593,7 +628,7 @@ public class FileBrowser extends LinearLayout {
 								FileInfo file = new FileInfo();
 								file.isDirectory = false;
 								file.pathname = FileInfo.OPDS_DIR_PREFIX + acquisition.href;
-								file.filename = entry.content;
+								file.filename = Utils.cleanupHtmlTags(entry.content);
 								file.title = entry.title;
 								file.format = DocumentFormat.byMimeType(acquisition.type);
 								file.authors = entry.getAuthors();
@@ -707,11 +742,24 @@ public class FileBrowser extends LinearLayout {
 			log.d("Updating authors list");
 			mActivity.getDB().loadAuthorsList(fileOrDir);
 		}
+		if (fileOrDir!=null && fileOrDir.isBooksBySeriesRoot()) {
+			// refresh authors list
+			log.d("Updating series list");
+			mActivity.getDB().loadSeriesList(fileOrDir);
+		}
+		if (fileOrDir!=null && fileOrDir.isBooksByTitleRoot()) {
+			// refresh authors list
+			log.d("Updating title list");
+			mActivity.getDB().loadTitleList(fileOrDir);
+		}
 		if (fileOrDir!=null && fileOrDir.isBooksByAuthorDir()) {
 			log.d("Updating author book list");
 			mActivity.getDB().loadAuthorBooks(fileOrDir);
 		}
-		
+		if (fileOrDir!=null && fileOrDir.isBooksBySeriesDir()) {
+			log.d("Updating series book list");
+			mActivity.getDB().loadSeriesBooks(fileOrDir);
+		}
 		if ( fileOrDir==null && mScanner.getRoot()!=null && mScanner.getRoot().dirCount()>0 ) {
 			if ( mScanner.getRoot().getDir(0).fileCount()>0 ) {
 				fileOrDir = mScanner.getRoot().getDir(0);
@@ -815,7 +863,8 @@ public class FileBrowser extends LinearLayout {
 		public final int VIEW_TYPE_DIRECTORY = 1;
 		public final int VIEW_TYPE_FILE = 2;
 		public final int VIEW_TYPE_FILE_SIMPLE = 3;
-		public final int VIEW_TYPE_COUNT = 4;
+		public final int VIEW_TYPE_OPDS_BOOK = 4;
+		public final int VIEW_TYPE_COUNT = 5;
 		public int getItemViewType(int position) {
 			if (currDirectory == null)
 				return 0;
@@ -828,8 +877,15 @@ public class FileBrowser extends LinearLayout {
 				return VIEW_TYPE_DIRECTORY;
 			start += currDirectory.dirCount();
 			position -= start;
-			if (position < currDirectory.fileCount())
+			if (position < currDirectory.fileCount()) {
+				Object itm = getItem(position);
+				if (itm instanceof FileInfo) {
+					FileInfo fi = (FileInfo)itm;
+					if (fi.isOPDSBook())
+						return VIEW_TYPE_OPDS_BOOK;
+				}
 				return isSimpleViewMode ? VIEW_TYPE_FILE_SIMPLE : VIEW_TYPE_FILE;
+			}
 			return Adapter.IGNORE_ITEM_VIEW_TYPE;
 		}
 
@@ -875,6 +931,10 @@ public class FileBrowser extends LinearLayout {
 				if ( item.isDirectory ) {
 					if (item.isBooksByAuthorRoot())
 						image.setImageResource(R.drawable.cr3_browser_folder_authors);
+					else if (item.isBooksBySeriesRoot())
+						image.setImageResource(R.drawable.cr3_browser_folder_authors);
+					else if (item.isBooksByTitleRoot())
+						image.setImageResource(R.drawable.cr3_browser_folder_authors);
 					else if (item.isOPDSRoot() || item.isOPDSDir())
 						image.setImageResource(R.drawable.cr3_browser_folder_opds);
 					else if (item.isSearchShortcut())
@@ -895,7 +955,15 @@ public class FileBrowser extends LinearLayout {
 							bookCount = (Integer)item.tag;
 						setText(field1, "books: " + String.valueOf(bookCount));
 						setText(field2, "folders: 0");
-					} else  if ( !item.isOPDSDir() && !item.isSearchShortcut() && (!item.isBooksByAuthorRoot() || item.dirCount()>0)) {
+					} else if ( item.isBooksBySeriesDir() ) {
+						int bookCount = 0;
+						if (item.fileCount() > 0)
+							bookCount = item.fileCount();
+						else if (item.tag != null && item.tag instanceof Integer)
+							bookCount = (Integer)item.tag;
+						setText(field1, "books: " + String.valueOf(bookCount));
+						setText(field2, "folders: 0");
+					} else  if ( !item.isOPDSDir() && !item.isSearchShortcut() && ((!item.isBooksByAuthorRoot() && !item.isBooksBySeriesRoot() && !item.isBooksByTitleRoot()) || item.dirCount()>0)) {
 						setText(field1, "books: " + String.valueOf(item.fileCount()));
 						setText(field2, "folders: " + String.valueOf(item.dirCount()));
 					} else {
@@ -973,6 +1041,8 @@ public class FileBrowser extends LinearLayout {
 					view = mInflater.inflate(R.layout.browser_item_folder, null);
 				else if ( vt==VIEW_TYPE_FILE_SIMPLE )
 					view = mInflater.inflate(R.layout.browser_item_book_simple, null);
+				else if (vt == VIEW_TYPE_OPDS_BOOK)
+					view = mInflater.inflate(R.layout.browser_item_opds_book, null);
 				else
 					view = mInflater.inflate(R.layout.browser_item_book, null);
 				holder = new ViewHolder();

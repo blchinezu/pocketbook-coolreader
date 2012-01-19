@@ -32,13 +32,24 @@ import org.coolreader.crengine.TTS;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
 import org.coolreader.crengine.ToastView;
 import org.coolreader.crengine.Utils;
+import org.coolreader.donations.BillingService;
+import org.coolreader.donations.BillingService.RequestPurchase;
+import org.coolreader.donations.BillingService.RestoreTransactions;
+import org.coolreader.donations.Consts;
+import org.coolreader.donations.Consts.PurchaseState;
+import org.coolreader.donations.Consts.ResponseCode;
+import org.coolreader.donations.PurchaseObserver;
+import org.coolreader.donations.ResponseHandler;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -52,10 +63,12 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Debug;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.text.ClipboardManager;
 import android.text.method.DigitsKeyListener;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -685,6 +698,28 @@ public class CoolReader extends Activity
 		if ( initialBatteryState>=0 )
 			mReaderView.setBatteryState(initialBatteryState);
         
+		//==========================================
+		// Donations related code
+		try {
+	        mHandler = new Handler();
+	        mPurchaseObserver = new CRPurchaseObserver(mHandler);
+	        mBillingService = new BillingService();
+	        mBillingService.setContext(this);
+	
+	        //mPurchaseDatabase = new PurchaseDatabase(this);
+	
+	        // Check if billing is supported.
+	        ResponseHandler.register(mPurchaseObserver);
+	        billingSupported = mBillingService.checkBillingSupported();
+		} catch (VerifyError e) {
+			log.e("Exception while trying to initialize billing service for donations");
+		}
+        if (!billingSupported) {
+        	log.i("Billing is not supported");
+        } else {
+        	log.i("Billing is supported");
+        }
+		
         log.i("CoolReader.onCreate() exiting");
     }
     
@@ -890,6 +925,14 @@ public class CoolReader extends Activity
 		mReaderView = null;
 		//mEngine = null;
 		mBackgroundThread = null;
+		
+		//===========================
+		// Donations support code
+		if (billingSupported) {
+			mBillingService.unbind();
+			//mPurchaseDatabase.close();
+		}
+		
 		log.i("CoolReader.onDestroy() exiting");
 		super.onDestroy();
 	}
@@ -1022,6 +1065,10 @@ public class CoolReader extends Activity
 		mPaused = false;
 		
 		backlightControl.onUserActivity();
+
+		// Donations support code
+		if (billingSupported)
+			ResponseHandler.register(mPurchaseObserver);
 		
 		if (!isFirstStart)
 			return;
@@ -1115,6 +1162,11 @@ public class CoolReader extends Activity
 		// will close book at onDestroy()
 		if ( CLOSE_BOOK_ON_STOP )
 			mReaderView.close();
+
+		// Donations support code
+		if (billingSupported)
+			ResponseHandler.unregister(mPurchaseObserver);
+		
 		super.onStop();
 		log.i("CoolReader.onStop() exiting");
 	}
@@ -1603,12 +1655,29 @@ public class CoolReader extends Activity
         props.applyDefault(ReaderView.PROP_APP_BOOK_PROPERTY_SCAN_ENABLED, "1");
         props.applyDefault(ReaderView.PROP_APP_KEY_BACKLIGHT_OFF, DeviceInfo.SAMSUNG_BUTTONS_HIGHLIGHT_PATCH ? "0" : "1");
         // autodetect best initial font size based on display resolution
-        int screenWidth = getWindowManager().getDefaultDisplay().getWidth();
+        DisplayMetrics m = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(m);
+        int screenWidth = m.widthPixels;//getWindowManager().getDefaultDisplay().getWidth();
         int fontSize = 20;
-        if ( screenWidth>=400 )
-        	fontSize = 24;
-        else if ( screenWidth>=600 )
-        	fontSize = 28;
+        String hmargin = "4";
+        String vmargin = "2";
+        if ( screenWidth<=320 ) {
+        	fontSize = 20;
+            hmargin = "4";
+            vmargin = "2";
+        } else if ( screenWidth<=400 ) {
+        	fontSize = 26;
+            hmargin = "10";
+            vmargin = "4";
+        } else if ( screenWidth<=600 ) {
+        	fontSize = 32;
+            hmargin = "20";
+            vmargin = "10";
+        } else {
+        	fontSize = 36;
+            hmargin = "80";
+            vmargin = "25";
+        }
         props.applyDefault(ReaderView.PROP_FONT_SIZE, String.valueOf(fontSize));
         props.applyDefault(ReaderView.PROP_FONT_FACE, "Droid Sans");
         props.applyDefault(ReaderView.PROP_FONT_HINTING, "2");
@@ -1653,16 +1722,16 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_IMG_SCALING_ZOOMOUT_INLINE_SCALE, "0");
 		props.applyDefault(ReaderView.PROP_IMG_SCALING_ZOOMIN_INLINE_SCALE, "0");
 		
-		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_LEFT, densityDpi > 160 ? "10" : DeviceInfo.EINK_NOOK ? "20" : "4");
-		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_RIGHT, densityDpi > 160 ? "10" : DeviceInfo.EINK_NOOK ? "20" : "4");
-		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_TOP, densityDpi > 160 ? "8" : "2");
-		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_BOTTOM, densityDpi > 160 ? "8" : "2");
+		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_LEFT, hmargin);
+		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_RIGHT, hmargin);
+		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_TOP, vmargin);
+		props.applyDefault(ReaderView.PROP_PAGE_MARGIN_BOTTOM, vmargin);
 		
         props.applyDefault(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, "0");
         props.applyDefault(ReaderView.PROP_APP_SCREEN_UPDATE_INTERVAL, "10");
         
         props.applyDefault(ReaderView.PROP_NIGHT_MODE, "0");
-        if (DeviceInfo.EINK_SCREEN) {
+        if (DeviceInfo.FORCE_LIGHT_THEME) {
         	props.applyDefault(ReaderView.PROP_PAGE_BACKGROUND_IMAGE, Engine.NO_TEXTURE.id);
         } else {
         	if ( props.getBool(ReaderView.PROP_NIGHT_MODE, false) )
@@ -1746,6 +1815,7 @@ public class CoolReader extends Activity
 		new DictInfo("ColorDictApi", "ColorDict new / GoldenDict", "com.socialnmobile.colordict", "com.socialnmobile.colordict.activity.Main", Intent.ACTION_SEARCH, 1),
 		new DictInfo("AardDict", "Aard Dictionary", "aarddict.android", "aarddict.android.Article", Intent.ACTION_SEARCH, 0),
 		new DictInfo("AardDictLookup", "Aard Dictionary Lookup", "aarddict.android", "aarddict.android.Lookup", Intent.ACTION_SEARCH, 0),
+		new DictInfo("Dictan", "Dictan Dictionary", "", "", Intent.ACTION_VIEW, 2),
 	};
 
 	public DictInfo[] getDictList() {
@@ -1763,6 +1833,12 @@ public class CoolReader extends Activity
 		}
 	}
 
+	private final static int DICTAN_ARTICLE_REQUEST_CODE = 100;
+	
+	private final static String DICTAN_ARTICLE_WORD = "article.word";
+	
+	private final static String DICTAN_ERROR_MESSAGE = "error.message";
+	
 	private void findInDictionaryInternal(String s) {
 		switch (currentDict.internal) {
 		case 0:
@@ -1800,9 +1876,55 @@ public class CoolReader extends Activity
 				showToast("Dictionary \"" + currentDict.name + "\" is not installed");
 			}
 			break;
+		case 2:
+			// Dictan support
+			Intent intent2 = new Intent("android.intent.action.VIEW");
+			// Add custom category to run the Dictan external dispatcher
+            intent2.addCategory("info.softex.dictan.EXTERNAL_DISPATCHER");
+            
+   	        // Don't include the dispatcher in activity  
+            // because it doesn't have any content view.	      
+            intent2.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		  
+	        intent2.putExtra(DICTAN_ARTICLE_WORD, s);
+			  
+	        try {
+	        	startActivityForResult(intent2, DICTAN_ARTICLE_REQUEST_CODE);
+	        } catch (ActivityNotFoundException e) {
+				showToast("Dictionary \"" + currentDict.name + "\" is not installed");
+	        }
+			break;
 		}
 	}
 
+	@Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        if (requestCode == DICTAN_ARTICLE_REQUEST_CODE) {
+	       	switch (resultCode) {
+	        	
+	        	// The article has been shown, the intent is never expected null
+			case RESULT_OK:
+				break;
+					
+			// Error occured
+			case RESULT_CANCELED: 
+				String errMessage = "Unknown Error.";
+				if (intent != null) {
+					errMessage = "The Requested Word: " + 
+					intent.getStringExtra(DICTAN_ARTICLE_WORD) + 
+					". Error: " + intent.getStringExtra(DICTAN_ERROR_MESSAGE);
+				}
+				showToast(errMessage);
+				break;
+					
+			// Must never occur
+			default: 
+				showToast("Unknown Result Code: " + resultCode);
+				break;
+			}
+        }
+    }
+	
 	public void showDictionary() {
 		findInDictionaryInternal(null);
 	}
@@ -1947,4 +2069,196 @@ public class CoolReader extends Activity
         emailIntent.putExtra(android.content.Intent.EXTRA_TEXT, text);
 		startActivity(Intent.createChooser(emailIntent, null));	
 	}
+
+	public void askConfirmation(int questionResourceId, final Runnable action) {
+		AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+		dlg.setTitle(questionResourceId);
+		dlg.setPositiveButton(R.string.dlg_button_ok, new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				action.run();
+			}
+		});
+		dlg.setNegativeButton(R.string.dlg_button_cancel, new OnClickListener() {
+			public void onClick(DialogInterface arg0, int arg1) {
+				// do nothing
+			}
+		});
+		dlg.show();
+	}
+
+	//==============================================================
+	// 
+	// Donations related code
+	// (from Dungeons sample) 
+    private static final int DIALOG_CANNOT_CONNECT_ID = 1;
+    private static final int DIALOG_BILLING_NOT_SUPPORTED_ID = 2;
+    /**
+     * Used for storing the log text.
+     */
+    private static final String LOG_TEXT_KEY = "DUNGEONS_LOG_TEXT";
+
+    /**
+     * The SharedPreferences key for recording whether we initialized the
+     * database.  If false, then we perform a RestoreTransactions request
+     * to get all the purchases for this user.
+     */
+    private static final String DB_INITIALIZED = "db_initialized";
+
+    /**
+     * Each product in the catalog is either MANAGED or UNMANAGED.  MANAGED
+     * means that the product can be purchased only once per user (such as a new
+     * level in a game). The purchase is remembered by Android Market and
+     * can be restored if this application is uninstalled and then
+     * re-installed. UNMANAGED is used for products that can be used up and
+     * purchased multiple times (such as poker chips). It is up to the
+     * application to keep track of UNMANAGED products for the user.
+     */
+    private enum Managed { MANAGED, UNMANAGED }
+
+    private CRPurchaseObserver mPurchaseObserver;
+    private BillingService mBillingService;
+    private Handler mHandler;
+    private DonationListener mDonationListener = null;
+    private boolean billingSupported = false;
+    private double mTotalDonations = 0;
+    
+    public boolean isDonationSupported() {
+    	return billingSupported;
+    }
+    public void setDonationListener(DonationListener listener) {
+    	mDonationListener = listener;
+    }
+    public static interface DonationListener {
+    	void onDonationTotalChanged(double total);
+    }
+    public double getTotalDonations() {
+    	return mTotalDonations;
+    }
+    public boolean makeDonation(double amount) {
+		final String itemName = "donation" + (amount >= 1 ? String.valueOf((int)amount) : String.valueOf(amount));
+    	log.i("makeDonation is called, itemName=" + itemName);
+    	if (!billingSupported)
+    		return false;
+    	String mPayloadContents = null;
+    	String mSku = itemName;
+        if (!mBillingService.requestPurchase(mSku, mPayloadContents)) {
+        	showToast("Purchase is failed");
+        }
+    	return true;
+    }
+    
+
+	private static String DONATIONS_PREF_FILE = "cr3donations";
+	private static String DONATIONS_PREF_TOTAL_AMOUNT = "total";
+    /**
+     * A {@link PurchaseObserver} is used to get callbacks when Android Market sends
+     * messages to this application so that we can update the UI.
+     */
+    private class CRPurchaseObserver extends PurchaseObserver {
+    	
+    	private String TAG = "cr3Billing";
+        public CRPurchaseObserver(Handler handler) {
+            super(CoolReader.this, handler);
+        }
+
+        @Override
+        public void onBillingSupported(boolean supported) {
+            if (Consts.DEBUG) {
+                Log.i(TAG, "supported: " + supported);
+            }
+            if (supported) {
+            	billingSupported = true;
+        		SharedPreferences pref = getSharedPreferences(DONATIONS_PREF_FILE, 0);
+        		try {
+        			mTotalDonations = pref.getFloat(DONATIONS_PREF_TOTAL_AMOUNT, 0.0f);
+        		} catch (Exception e) {
+        			log.e("exception while reading total donations from preferences", e);
+        		}
+            	// TODO:
+//                restoreDatabase();
+            }
+        }
+
+        @Override
+        public void onPurchaseStateChange(PurchaseState purchaseState, String itemId,
+                int quantity, long purchaseTime, String developerPayload) {
+            if (Consts.DEBUG) {
+                Log.i(TAG, "onPurchaseStateChange() itemId: " + itemId + " " + purchaseState);
+            }
+
+            if (developerPayload == null) {
+                logProductActivity(itemId, purchaseState.toString());
+            } else {
+                logProductActivity(itemId, purchaseState + "\n\t" + developerPayload);
+            }
+
+            if (purchaseState == PurchaseState.PURCHASED) {
+            	double amount = 0;
+            	try {
+	            	if (itemId.startsWith("donation"))
+	            		amount = Double.parseDouble(itemId.substring(8));
+            	} catch (NumberFormatException e) {
+            		//
+            	}
+
+            	mTotalDonations += amount;
+        		SharedPreferences pref = getSharedPreferences(DONATIONS_PREF_FILE, 0);
+        		pref.edit().putString(DONATIONS_PREF_TOTAL_AMOUNT, String.valueOf(mTotalDonations)).commit();
+
+            	if (mDonationListener != null)
+            		mDonationListener.onDonationTotalChanged(mTotalDonations);
+                //mOwnedItems.add(itemId);
+            }
+//            mCatalogAdapter.setOwnedItems(mOwnedItems);
+//            mOwnedItemsCursor.requery();
+        }
+
+        @Override
+        public void onRequestPurchaseResponse(RequestPurchase request,
+                ResponseCode responseCode) {
+            if (Consts.DEBUG) {
+                Log.d(TAG, request.mProductId + ": " + responseCode);
+            }
+            if (responseCode == ResponseCode.RESULT_OK) {
+                if (Consts.DEBUG) {
+                    Log.i(TAG, "purchase was successfully sent to server");
+                }
+                logProductActivity(request.mProductId, "sending purchase request");
+            } else if (responseCode == ResponseCode.RESULT_USER_CANCELED) {
+                if (Consts.DEBUG) {
+                    Log.i(TAG, "user canceled purchase");
+                }
+                logProductActivity(request.mProductId, "dismissed purchase dialog");
+            } else {
+                if (Consts.DEBUG) {
+                    Log.i(TAG, "purchase failed");
+                }
+                logProductActivity(request.mProductId, "request purchase returned " + responseCode);
+            }
+        }
+
+        @Override
+        public void onRestoreTransactionsResponse(RestoreTransactions request,
+                ResponseCode responseCode) {
+            if (responseCode == ResponseCode.RESULT_OK) {
+                if (Consts.DEBUG) {
+                    Log.d(TAG, "completed RestoreTransactions request");
+                }
+                // Update the shared preferences so that we don't perform
+                // a RestoreTransactions again.
+                SharedPreferences prefs = getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor edit = prefs.edit();
+                edit.putBoolean(DB_INITIALIZED, true);
+                edit.commit();
+            } else {
+                if (Consts.DEBUG) {
+                    Log.d(TAG, "RestoreTransactions error: " + responseCode);
+                }
+            }
+        }
+    }
+    private void logProductActivity(String product, String activity) {
+    	// TODO: some logging
+    	Log.i(LOG_TEXT_KEY, activity);
+    }
 }

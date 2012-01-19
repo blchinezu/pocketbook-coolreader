@@ -160,6 +160,37 @@ static const lChar16 __iso8859_2[128] = {
   0x0159, 0x016f, 0x00fa, 0x0171, 0x00fc, 0x00fd, 0x0163, 0x02d9,
 };
 
+/*
+ * ISO-8859-16
+ */
+
+static const lChar16 __iso8859_16[128] = {
+    /* 0x80*/
+    0x0402, 0x0403, 0x201a, 0x0453, 0x201e, 0x2026, 0x2020, 0x2021,
+    0x20ac, 0x2030, 0x0409, 0x2039, 0x040a, 0x040c, 0x040b, 0x040f,
+    /* 0x90*/
+    0x0452, 0x2018, 0x2019, 0x201c, 0x201d, 0x2022, 0x2013, 0x2014,
+    0x0000, 0x2122, 0x0459, 0x203a, 0x045a, 0x045c, 0x045b, 0x045f,
+    /* 0xa0 */
+    0x00a0, 0x0104, 0x0105, 0x0141, 0x20ac, 0x201e, 0x0160, 0x00a7,
+    0x0161, 0x00a9, 0x0218, 0x00ab, 0x0179, 0x00ad, 0x017a, 0x017b,
+    /* 0xb0 */
+    0x00b0, 0x00b1, 0x010c, 0x0142, 0x017d, 0x201d, 0x00b6, 0x00b7,
+    0x017e, 0x010d, 0x0219, 0x00bb, 0x0152, 0x0153, 0x0178, 0x017c,
+    /* 0xc0 */
+    0x00c0, 0x00c1, 0x00c2, 0x0102, 0x00c4, 0x0106, 0x00c6, 0x00c7,
+    0x00c8, 0x00c9, 0x00ca, 0x00cb, 0x00cc, 0x00cd, 0x00ce, 0x00cf,
+    /* 0xd0 */
+    0x0110, 0x0143, 0x00d2, 0x00d3, 0x00d4, 0x0150, 0x00d6, 0x015a,
+    0x0170, 0x00d9, 0x00da, 0x00db, 0x00dc, 0x0118, 0x021a, 0x00df,
+    /* 0xe0 */
+    0x00e0, 0x00e1, 0x00e2, 0x0103, 0x00e4, 0x0107, 0x00e6, 0x00e7,
+    0x00e8, 0x00e9, 0x00ea, 0x00eb, 0x00ec, 0x00ed, 0x00ee, 0x00ef,
+    /* 0xf0 */
+    0x0111, 0x0144, 0x00f2, 0x00f3, 0x00f4, 0x0151, 0x00f6, 0x015b,
+    0x0171, 0x00f9, 0x00fa, 0x00fb, 0x00fc, 0x0119, 0x021b, 0x00ff,
+};
+
 static const lChar16 __cp1257[128] = {
   /* 0x80 */
   0x20ac, 0xfffd, 0x201a, 0xfffd, 0x201e, 0x2026, 0x2020, 0x2021,
@@ -501,6 +532,7 @@ static const lChar16 __cp850[128] = {
 #define CRENC_ID_ISO8859_2 (CRENC_ID_8BIT_START+11)
 #define CRENC_ID_CP1254   (CRENC_ID_8BIT_START+12)
 #define CRENC_ID_CP852   (CRENC_ID_8BIT_START+13)
+#define CRENC_ID_ISO8859_16 (CRENC_ID_8BIT_START+14)
 
 
 /// add other encodings here
@@ -543,6 +575,9 @@ static struct {
     {"iso8859_2", __iso8859_2, CRENC_ID_ISO8859_2},
     {"latin-2", __iso8859_2, CRENC_ID_ISO8859_2},
     {"latin-5", __iso8859_2, CRENC_ID_ISO8859_2},
+    {"iso8859-16", __iso8859_16, CRENC_ID_ISO8859_16},
+    {"iso-8859-16", __iso8859_16, CRENC_ID_ISO8859_16},
+    {"iso8859_16", __iso8859_16, CRENC_ID_ISO8859_16},
     {NULL, NULL, 0}
 };
 
@@ -1405,6 +1440,7 @@ public:
 
 bool isValidUtf8Data( const unsigned char * buf, int buf_size )
 {
+    const unsigned char * start = buf;
     const unsigned char * end_buf = buf + buf_size - 5;
     while ( buf < end_buf ) {
         lUInt8 ch = *buf++;
@@ -1413,8 +1449,10 @@ bool isValidUtf8Data( const unsigned char * buf, int buf_size )
             return false;
         } else if ( (ch & 0xE0) == 0xC0 ) {
             ch = *buf++;
-            if ( (ch & 0xC0) != 0x80 )
+            if ( (ch & 0xC0) != 0x80 ) {
+                CRLog::trace("unexpected char %02x at position %x, str=%s", ch, (buf-1-start), lString8((const char *)(buf-1), 32).c_str());
                 return false;
+            }
         } else if ( (ch & 0xF0) == 0xE0 ) {
             ch = *buf++;
             if ( (ch & 0xC0) != 0x80 )
@@ -1438,14 +1476,30 @@ bool isValidUtf8Data( const unsigned char * buf, int buf_size )
     }
     return true;
 }
-void MakeDblCharStat( const unsigned char * buf, int buf_size, dbl_char_stat_t * stat, int stat_len )
+
+void MakeDblCharStat(const unsigned char * buf, int buf_size, dbl_char_stat_t * stat, int stat_len, bool skipHtml)
 {
    CDoubleCharStat2 maker;
    unsigned char ch1=' ';
    unsigned char ch2=' ';
+   bool insideTag = false;
    for ( int i=1; i<buf_size; i++) {
+      lChar16 ch = buf[i];
+      if (insideTag)
+          continue;
+      if (skipHtml) {
+          if (ch == '<') {
+              insideTag = true;
+              continue;
+          } else if (ch == '>') {
+              insideTag = false;
+              ch = ' ';
+          }
+      }
+      if (insideTag)
+          continue;
       ch1 = ch2;
-      ch2 = buf[i];
+      ch2 = ch;
       if ( ch2<128 && ch2!='\'' && !( (ch2>='a' && ch2<='z') || (ch2>='A' && ch2<='Z')) )
          ch2 = ' ';
       //if (i>0)
@@ -1454,14 +1508,27 @@ void MakeDblCharStat( const unsigned char * buf, int buf_size, dbl_char_stat_t *
    maker.GetData( stat, stat_len );
 }
 
-void MakeCharStat( const unsigned char * buf, int buf_size, short stat_table[256] )
+void MakeCharStat(const unsigned char * buf, int buf_size, short stat_table[256], bool skipHtml)
 {
    int stat[256];
    memset( stat, 0, sizeof(int)*256 );
    int total=0;
    unsigned char ch;
+   bool insideTag = false;
    for (int i=0; i<buf_size; i++) {
       ch = buf[i];
+      if (skipHtml) {
+          if (ch == '<') {
+              insideTag = true;
+              continue;
+          }
+          if (ch == '>') {
+              insideTag = false;
+              continue;
+          }
+      }
+      if (insideTag)
+          continue;
       if ( ch>127 || (ch>='a' && ch<='z') || (ch>='A' && ch<='Z') || ch=='\'') {
          stat[ch]++;
          total++;
@@ -1582,7 +1649,7 @@ int AutodetectCodePageUtf( const unsigned char * buf, int buf_size, char * cp_na
    return 0;
 }
 
-int AutodetectCodePage( const unsigned char * buf, int buf_size, char * cp_name, char * lang_name )
+int AutodetectCodePage(const unsigned char * buf, int buf_size, char * cp_name, char * lang_name, bool skipHtml)
 {
     int res = AutodetectCodePageUtf( buf, buf_size, cp_name, lang_name );
     if ( res )
@@ -1590,8 +1657,8 @@ int AutodetectCodePage( const unsigned char * buf, int buf_size, char * cp_name,
     // use character statistics
    short char_stat[256];
    dbl_char_stat_t dbl_char_stat[DBL_CHAR_STAT_SIZE];
-   MakeCharStat( buf, buf_size, char_stat );
-   MakeDblCharStat( buf, buf_size, dbl_char_stat, DBL_CHAR_STAT_SIZE );
+   MakeCharStat(buf, buf_size, char_stat, skipHtml);
+   MakeDblCharStat(buf, buf_size, dbl_char_stat, DBL_CHAR_STAT_SIZE, skipHtml);
    int bestn = 0;
    double bestq = 1000000;
    for (int i=0; cp_stat_table[i].ch_stat; i++) {
@@ -1613,6 +1680,26 @@ int AutodetectCodePage( const unsigned char * buf, int buf_size, char * cp_name,
    CRLog::debug("Detected codepage:%s lang:%s", cp_name, lang_name);
    return 1;
 }
+
+bool hasXmlTags(const lUInt8 * buf, int size) {
+    int openCount = 0;
+    int closeCount = 0;
+    for (int i=0; i<size; i++) {
+        if (buf[i]=='<')
+            openCount++;
+        else if (buf[i]=='>')
+            closeCount++;
+    }
+    if (openCount > 2 && closeCount > 2) {
+        int diff = openCount - closeCount;
+        if (diff<0)
+            diff = -diff;
+        if (diff < 2)
+            return true;
+    }
+    return false;
+}
+
 void MakeStatsForFile( const char * fname, const char * cp_name, const char * lang_name, int index, FILE * f, lString8 & list )
 {
    FILE * in = fopen( fname, "rb" );
@@ -1625,8 +1712,9 @@ void MakeStatsForFile( const char * fname, const char * cp_name, const char * la
    fread(buf, 1, buf_size, in);
    short char_stat[256];
    dbl_char_stat_t dbl_char_stat[DBL_CHAR_STAT_SIZE];
-   MakeCharStat( buf, buf_size, char_stat );
-   MakeDblCharStat( buf, buf_size, dbl_char_stat, DBL_CHAR_STAT_SIZE );
+   bool skipHtml = hasXmlTags(buf, buf_size);
+   MakeCharStat(buf, buf_size, char_stat, skipHtml);
+   MakeDblCharStat(buf, buf_size, dbl_char_stat, DBL_CHAR_STAT_SIZE, skipHtml);
    fprintf(f, "\n\nstatic const short ch_stat_%s_%s%d[256]={\n", cp_name, lang_name, index);
    int i;
    for (i=0; i<16; i++)

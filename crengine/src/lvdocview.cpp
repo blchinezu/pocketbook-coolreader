@@ -372,11 +372,15 @@ lvPoint LVDocView::rotatePoint(lvPoint & pt, bool winToDoc) {
 /// sets page margins
 void LVDocView::setPageMargins(const lvRect & rc) {
 	if (m_pageMargins.left + m_pageMargins.right != rc.left + rc.right
-			|| m_pageMargins.top + m_pageMargins.bottom != rc.top + rc.bottom)
+            || m_pageMargins.top + m_pageMargins.bottom != rc.top + rc.bottom) {
+
+        m_pageMargins = rc;
+        updateLayout();
         REQUEST_RENDER("setPageMargins")
-	else
+    } else {
 		clearImageCache();
-	m_pageMargins = rc;
+        m_pageMargins = rc;
+    }
 }
 
 void LVDocView::setPageHeaderInfo(int hdrFlags) {
@@ -5188,6 +5192,7 @@ int LVDocView::onSelectionCommand( int cmd, int param )
     if ( sel.length()>0 )
         currSel = *sel[0];
     bool moved = false;
+    bool makeSelStartVisible = true; // true: start, false: end
     if ( !currSel.isNull() && !pageRange->isInside(currSel.getStart()) && !pageRange->isInside(currSel.getEnd()) )
         currSel.clear();
     if ( currSel.isNull() || currSel.getStart().isNull() ) {
@@ -5205,6 +5210,8 @@ int LVDocView::onSelectionCommand( int cmd, int param )
         return 0;
     }
     if (cmd==DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS || cmd==DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS) {
+        if (cmd==DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS)
+            makeSelStartVisible = false;
         int dir = param>0 ? 1 : -1;
         int distance = param>0 ? param : -param;
         CRLog::debug("Changing selection by words: bound=%s dir=%d distance=%d", (cmd==DCMD_SELECT_MOVE_LEFT_BOUND_BY_WORDS?"left":"right"), dir, distance);
@@ -5267,7 +5274,22 @@ int LVDocView::onSelectionCommand( int cmd, int param )
     }
     currSel.setFlags(1);
     selectRange(currSel);
-    goToBookmark(currSel.getStart());
+    lvPoint startPoint = currSel.getStart().toPoint();
+    lvPoint endPoint = currSel.getEnd().toPoint();
+    int y0 = GetPos();
+    int h = m_pageRects[0].height() - m_pageMargins.top
+            - m_pageMargins.bottom - getPageHeaderHeight();
+    int y1 = y0 + h;
+    if (makeSelStartVisible) {
+        // make start of selection visible
+        if (startPoint.y < y0 + m_font_size * 2 || startPoint.y > y0 + h * 3/4)
+            SetPos(startPoint.y - m_font_size * 2);
+        //goToBookmark(currSel.getStart());
+    } else {
+        // make end of selection visible
+        if (endPoint.y > y0 + h * 3/4 - m_font_size * 2)
+            SetPos(endPoint.y - h * 3/4 + m_font_size * 2, false);
+    }
     CRLog::debug("Sel: %s", LCSTR(currSel.getRangeText()));
     return 1;
 }
@@ -5413,8 +5435,6 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
         props->limitValueList(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, bool_options_def_true, 2);
     static int def_status_line[] = { 0, 1, 2 };
 	props->limitValueList(PROP_STATUS_LINE, def_status_line, 3);
-//	props->limitValueList(PROP_TXT_OPTION_PREFORMATTED, bool_options_def_false,
-//			2);
     static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 25, 30, 40, 50, 60, 80, 100, 130};
 	props->limitValueList(PROP_PAGE_MARGIN_TOP, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_BOTTOM, def_margin, sizeof(def_margin)/sizeof(int));
@@ -5449,8 +5469,15 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     props->setStringDef(PROP_SHOW_PAGE_NUMBER, "1");
     props->setStringDef(PROP_SHOW_POS_PERCENT, "0");
     props->setStringDef(PROP_STATUS_CHAPTER_MARKS, "1");
-    //props->setStringDef(PROP_EMBEDDED_STYLES, "1");
     props->setStringDef(PROP_FLOATING_PUNCTUATION, "1");
+
+#ifndef ANDROID
+    props->setStringDef(PROP_EMBEDDED_STYLES, "1");
+    props->setIntDef(PROP_TXT_OPTION_PREFORMATTED, 0);
+    props->limitValueList(PROP_TXT_OPTION_PREFORMATTED, bool_options_def_false,
+            2);
+#endif
+
 
     img_scaling_option_t defImgScaling;
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE, defImgScaling.max_scale);
@@ -5649,7 +5676,8 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
 			// hyphenation dictionary
 			lString16 id = props->getStringDef(PROP_HYPHENATION_DICT,
 					DEF_HYPHENATION_DICT);
-			HyphDictionaryList * list = HyphMan::getDictList();
+            CRLog::debug("PROP_HYPHENATION_DICT = %s", LCSTR(id));
+            HyphDictionaryList * list = HyphMan::getDictList();
 			HyphDictionary * curr = HyphMan::getSelectedDictionary();
 			if (list) {
 				if (!curr || curr->getId() != id) {

@@ -850,10 +850,11 @@ bool LVTextFileBase::AutodetectEncoding( bool utfOnly )
     }
 
     int res = 0;
+    bool hasTags = hasXmlTags(buf, sz);
     if ( utfOnly )
-        res = AutodetectCodePageUtf( buf, sz, enc_name, lang_name );
+        res = AutodetectCodePageUtf(buf, sz, enc_name, lang_name);
     else
-        res = AutodetectCodePage( buf, sz, enc_name, lang_name );
+        res = AutodetectCodePage(buf, sz, enc_name, lang_name, hasTags);
     delete[] buf;
     m_stream->SetPos( oldpos );
     if ( res) {
@@ -1502,7 +1503,7 @@ public:
         int ident_lines_percent = ident_lines * 100 / non_empty_lines;
         int center_lines_percent = center_lines * 100 / non_empty_lines;
         int empty_lines_percent = empty_lines * 100 / length();
-        if ( empty_lines_percent > 5 )
+        if ( empty_lines_percent > 5 && max_right < 80)
             formatFlags |= tftEmptyLineDelimPara;
         if ( ident_lines_percent > 5 && ident_lines_percent<55 ) {
             formatFlags |= tftParaIdents;
@@ -2238,12 +2239,15 @@ public:
         int remainingLines = 0;
         do {
             for ( int i=remainingLines; i<length(); i++ ) {
+                LVTextFileLine * item = get(i);
                 if ( formatFlags & tftDoubleEmptyLineBeforeHeaders ) {
-                    LVTextFileLine * item = get(i);
                     if ( !item->empty() )
                         AddPara( i, i, callback );
                 } else {
-                    AddPara( i, i, callback );
+                    if ( !item->empty() )
+                        AddPara( i, i, callback );
+                    else
+                        AddEmptyLine(callback);
                 }
                 file->updateProgress();
             }
@@ -2286,7 +2290,10 @@ public:
                     }
                 }
             }
-            AddPara( pos, i-1 - (emptyLineFlag?1:0), callback );
+            if (i>pos+1 || !emptyLineFlag)
+                AddPara( pos, i-1 - (emptyLineFlag?1:0), callback );
+            else
+                AddEmptyLine(callback);
             file->updateProgress();
             pos = i;
         }
@@ -2521,11 +2528,16 @@ static bool extractItem( lString16 & dst, const lString16 & src, const char * pr
     return false;
 }
 
-static void postParagraph( LVXMLParserCallback * callback, const char * prefix, lString16 text )
+static void postParagraph(LVXMLParserCallback * callback, const char * prefix, lString16 text, bool allowEmptyLine)
 {
     lString16 title( prefix );
-    if ( text.empty() )
+    if ( text.empty() ) {
+        if (allowEmptyLine) {
+            callback->OnTagOpen( NULL, L"p" );
+            callback->OnTagClose( NULL, L"p" );
+        }
         return;
+    }
     callback->OnTagOpen( NULL, L"p" );
     callback->OnAttribute(NULL, L"style", L"text-indent: 0em");
     callback->OnTagBody();
@@ -2585,12 +2597,12 @@ bool LVTextBookmarkParser::Parse()
       // BODY
       m_callback->OnTagOpenNoAttr( NULL, L"body" );
           m_callback->OnTagOpenNoAttr( NULL, L"title" );
-              postParagraph( m_callback, "", lString16("CoolReader Bookmarks file") );
+              postParagraph( m_callback, "", lString16("CoolReader Bookmarks file"), false );
           m_callback->OnTagClose( NULL, L"title" );
-          postParagraph( m_callback, "file: ", fname );
-          postParagraph( m_callback, "path: ", path );
-          postParagraph( m_callback, "title: ", title );
-          postParagraph( m_callback, "author: ", author );
+          postParagraph( m_callback, "file: ", fname, false );
+          postParagraph( m_callback, "path: ", path, false );
+          postParagraph( m_callback, "title: ", title, false );
+          postParagraph( m_callback, "author: ", author, false );
           m_callback->OnTagOpenAndClose( NULL, L"empty-line" );
           m_callback->OnTagOpenNoAttr( NULL, L"section" );
           // process text
@@ -2613,7 +2625,7 @@ bool LVTextBookmarkParser::Parse()
                             txt = L" ";
                         }
                     }
-                    postParagraph( m_callback, UnicodeToUtf8(prefix).c_str(), txt );
+                    postParagraph( m_callback, UnicodeToUtf8(prefix).c_str(), txt, false );
                 }
             }
         m_callback->OnTagClose( NULL, L"section" );

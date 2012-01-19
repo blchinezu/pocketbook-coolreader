@@ -535,11 +535,28 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 				addKey(listView, ReaderView.KEYCODE_PAGE_TOPRIGHT, "Top right navigation button");
 				addKey(listView, ReaderView.NOOK_12_KEY_NEXT_LEFT, "Bottom right navigation button");
 //				addKey(listView, ReaderView.KEYCODE_PAGE_BOTTOMRIGHT, "Bottom right navigation button");
+
+				// on rooted Nook, side navigation keys may be reassigned on some standard android keycode
+				addKey(listView, KeyEvent.KEYCODE_MENU, "Menu");
+				addKey(listView, KeyEvent.KEYCODE_BACK, "Back");
+				addKey(listView, KeyEvent.KEYCODE_SEARCH, "Search");
+				
+				addKey(listView, KeyEvent.KEYCODE_HOME, "Home");
+				
 			} else if ( DeviceInfo.SONY_NAVIGATION_KEYS ) {
 //				addKey(listView, KeyEvent.KEYCODE_DPAD_UP, "Prev button");
 //				addKey(listView, KeyEvent.KEYCODE_DPAD_DOWN, "Next button");
 				addKey(listView, ReaderView.SONY_DPAD_UP_SCANCODE, "Prev button");
 				addKey(listView, ReaderView.SONY_DPAD_DOWN_SCANCODE, "Next button");
+				addKey(listView, ReaderView.SONY_DPAD_LEFT_SCANCODE, "Left button");
+				addKey(listView, ReaderView.SONY_DPAD_RIGHT_SCANCODE, "Right button");
+//				addKey(listView, ReaderView.SONY_MENU_SCANCODE, "Menu");
+//				addKey(listView, ReaderView.SONY_BACK_SCANCODE, "Back");
+//				addKey(listView, ReaderView.SONY_HOME_SCANCODE, "Home");
+				addKey(listView, KeyEvent.KEYCODE_MENU, "Menu");
+				addKey(listView, KeyEvent.KEYCODE_BACK, "Back");
+
+				addKey(listView, KeyEvent.KEYCODE_HOME, "Home");
 			} else {
 				addKey(listView, KeyEvent.KEYCODE_MENU, "Menu");
 				addKey(listView, KeyEvent.KEYCODE_DPAD_LEFT, "Left");
@@ -845,7 +862,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		public void onSelect() {
 			final BaseDialog dlg = new BaseDialog(mActivity, label, false, false);
 
-			final ListView listView = new ListView(mActivity);
+			final ListView listView = new BaseListView(mActivity);
 			
 			
 			ListAdapter listAdapter = new ListAdapter() {
@@ -977,7 +994,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		public ThemeOptions( OptionOwner owner, String label )
 		{
 			super( owner, label, PROP_APP_THEME );
-			setDefaultValue(DeviceInfo.EINK_SCREEN ? "WHITE" : "LIGHT");
+			setDefaultValue(DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
 			for (InterfaceTheme theme : InterfaceTheme.allThemes)
 				add(theme.getCode(), getString(theme.getDisplayNameResourceId()));
 		}
@@ -1162,7 +1179,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		isTextFormat = readerView.isTextFormat();
 	}
 	
-	class OptionsListView extends ListView {
+	class OptionsListView extends BaseListView {
 		private ArrayList<OptionBase> mOptions = new ArrayList<OptionBase>();
 		private ListAdapter mAdapter;
 		public void refresh()

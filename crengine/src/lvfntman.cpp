@@ -69,6 +69,8 @@
 //DEFINE_NULL_REF( LVFont )
 
 
+inline int myabs(int n) { return n < 0 ? -n : n; }
+
 LVFontManager * fontMan = NULL;
 
 static double gammaLevel = 1.0;
@@ -425,7 +427,7 @@ static LVFontGlyphCacheItem * newItem( LVFontLocalGlyphCache * local_cache, lCha
     }
     item->origin_x =   (lInt8)slot->bitmap_left;
     item->origin_y =   (lInt8)slot->bitmap_top;
-    item->advance =    (lUInt8)(slot->metrics.horiAdvance >> 6);
+    item->advance =    (lUInt8)(myabs(slot->metrics.horiAdvance) >> 6);
     return item;
 }
 
@@ -788,7 +790,7 @@ public:
         glyph->blackBoxY = (lUInt8)(_slot->metrics.height >> 6);
         glyph->originX =   (lInt8)(_slot->metrics.horiBearingX >> 6);
         glyph->originY =   (lInt8)(_slot->metrics.horiBearingY >> 6);
-        glyph->width =     (lUInt8)(_slot->metrics.horiAdvance >> 6);
+        glyph->width =     (lUInt8)(myabs(_slot->metrics.horiAdvance) >> 6);
         return true;
     }
 /*
@@ -2147,7 +2149,9 @@ public:
         if ( name.pos( lString8(".ttf") ) < 0 && name.pos( lString8(".TTF") ) < 0 )
             return false; // load ttf fonts only
 #endif
+        //CRLog::trace("RegisterFont(%s)", name.c_str());
         lString8 fname = makeFontFileName( name );
+        //CRLog::trace("font file name : %s", fname.c_str());
     #if (DEBUG_FONT_MAN==1)
         if ( _log ) {
             fprintf(_log, "RegisterFont( %s ) path=%s\n",
@@ -2164,8 +2168,12 @@ public:
         // for all faces in file
         for ( ;; index++ ) {
             int error = FT_New_Face( _library, fname.c_str(), index, &face ); /* create face object */
-            if ( error )
+            if ( error ) {
+                if (index == 0) {
+                    CRLog::error("FT_New_Face returned error %d", error);
+                }
                 break;
+            }
             bool scal = FT_IS_SCALABLE( face );
             bool charset = checkCharSet( face );
             //bool monospaced = isMonoSpaced( face );
@@ -2208,8 +2216,10 @@ public:
             );
         }
     #endif
-            if ( _cache.findDuplicate( &def ) )
+            if ( _cache.findDuplicate( &def ) ) {
+                CRLog::trace("font definition is duplicate");
                 return false;
+            }
             _cache.update( &def, LVFontRef(NULL) );
             if ( scal && !def.getItalic() ) {
                 LVFontDef newDef( def );

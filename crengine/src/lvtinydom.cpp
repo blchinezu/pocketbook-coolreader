@@ -13,9 +13,9 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.11"
+#define CACHE_FILE_FORMAT_VERSION "3.04.24"
 /// increment following value to force re-formatting of old book after load
-#define FORMATTING_VERSION_ID 0x0002
+#define FORMATTING_VERSION_ID 0x0003
 
 #ifndef DOC_DATA_COMPRESSION_LEVEL
 /// data compression level (0=no compression, 1=fast compressions, 3=normal compression)
@@ -5182,9 +5182,9 @@ lString16 extractDocAuthors( ldomDocument * doc, lString16 delimiter, bool short
             //CRLog::trace( "xpath not found: %s", UnicodeToUtf8(path).c_str() );
             break;
         }
-        lString16 firstName = pauthor.relative( L"/first-name" ).getText();
-        lString16 lastName = pauthor.relative( L"/last-name" ).getText();
-        lString16 middleName = pauthor.relative( L"/middle-name" ).getText();
+        lString16 firstName = pauthor.relative( L"/first-name" ).getText().trim();
+        lString16 lastName = pauthor.relative( L"/last-name" ).getText().trim();
+        lString16 middleName = pauthor.relative( L"/middle-name" ).getText().trim();
         lString16 author = firstName;
         if ( !author.empty() )
             author += L" ";
@@ -5202,7 +5202,7 @@ lString16 extractDocAuthors( ldomDocument * doc, lString16 delimiter, bool short
 
 lString16 extractDocTitle( ldomDocument * doc )
 {
-    return doc->createXPointer(L"/FictionBook/description/title-info/book-title").getText();
+    return doc->createXPointer(L"/FictionBook/description/title-info/book-title").getText().trim();
 }
 
 lString16 extractDocSeries( ldomDocument * doc, int * pSeriesNumber )
@@ -5210,8 +5210,8 @@ lString16 extractDocSeries( ldomDocument * doc, int * pSeriesNumber )
     lString16 res;
     ldomNode * series = doc->createXPointer(L"/FictionBook/description/title-info/sequence").getNode();
     if ( series ) {
-        lString16 sname = series->getAttributeValue( attr_name );
-        lString16 snumber = series->getAttributeValue( attr_number );
+        lString16 sname = lString16(series->getAttributeValue(attr_name)).trim();
+        lString16 snumber = series->getAttributeValue(attr_number);
         if ( !sname.empty() ) {
             if ( pSeriesNumber ) {
                 *pSeriesNumber = snumber.atoi();

@@ -640,6 +640,7 @@ public class Engine {
 		public final static HyphDict SWEDISH = new HyphDict("SWEDISH", HYPH_DICT, R.raw.swedish_hyphen, "Swedish"); 
 		public final static HyphDict POLISH = new HyphDict("POLISH", HYPH_DICT, R.raw.polish_hyphen, "Polish");
 		public final static HyphDict HUNGARIAN = new HyphDict("HUNGARIAN", HYPH_DICT, R.raw.hungarian_hyphen, "Hungarian");
+		public final static HyphDict GREEK = new HyphDict("GREEK", HYPH_DICT, R.raw.greek_hyphen, "Greek");
 		
 		public final String code;
 		public final int type;
@@ -745,7 +746,11 @@ public class Engine {
 		if (!initialized)
 			throw new IllegalStateException("CREngine is not initialized");
 		synchronized(this) {
-			return scanBookPropertiesInternal(info);
+			long start = android.os.SystemClock.uptimeMillis();
+			boolean res = scanBookPropertiesInternal(info);
+			long duration = android.os.SystemClock.uptimeMillis() - start;
+			L.v("scanBookProperties took " + duration + " ms for " + info.getPathName());
+			return res;
 		}
 	}
 
@@ -985,6 +990,8 @@ public class Engine {
 		addMountRoot(map, "/mnt/extsd", "External SD /mnt/extsd");
 		// external SD
 		addMountRoot(map, "/mnt/external1", "External SD /mnt/external1");
+		// external SD
+		addMountRoot(map, "/mnt/sdcard2", "External SD /mnt/sdcard2");
 		// external SD / Galaxy S
 		addMountRoot(map, "/mnt/ext.sd", "External SD /mnt/ext.sd");
 		addMountRoot(map, "/ext.sd", "External SD /ext.sd");

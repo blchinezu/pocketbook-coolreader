@@ -5,8 +5,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -14,6 +16,7 @@ import java.util.concurrent.Callable;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 import org.coolreader.crengine.Engine.HyphDict;
+import org.koekak.android.ebookdownloader.SonyBookSelector;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -23,7 +26,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.text.ClipboardManager;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
@@ -55,7 +57,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     
     public static final int SONY_DPAD_UP_SCANCODE = 105;
     public static final int SONY_DPAD_DOWN_SCANCODE = 106;
+    public static final int SONY_DPAD_LEFT_SCANCODE = 125;
+    public static final int SONY_DPAD_RIGHT_SCANCODE = 126;
     
+//    public static final int SONY_MENU_SCANCODE = 357;
+//    public static final int SONY_BACK_SCANCODE = 158;
+//    public static final int SONY_HOME_SCANCODE = 102;
     
     public static final int PAGE_ANIMATION_NONE = 0;
     public static final int PAGE_ANIMATION_PAPER = 1;
@@ -121,6 +128,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
         DCMD_SELECT_MOVE_RIGHT_BOUND_BY_WORDS(135), // move selection end by words 
 
     	DCMD_SET_TEXT_FORMAT(136),
+
+		DCMD_FONT_NEXT(137),
+		DCMD_FONT_PREVIOUS(138),
         
     	// definitions from android/jni/readerview.h
     	DCMD_OPEN_RECENT_BOOK(2000),
@@ -2452,6 +2462,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
             doEngineCommand( ReaderCommand.DCMD_ZOOM_IN, param);
             syncViewSettings(getSettings(), true);
             break;
+		case DCMD_FONT_NEXT:
+			switchFontFace(1);
+            break;
+		case DCMD_FONT_PREVIOUS:
+			switchFontFace(-1);
+            break;
 		case DCMD_MOVE_BY_CHAPTER:
 			doEngineCommand(cmd, param, onFinishHandler);
             drawPage();
@@ -2582,7 +2598,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		props.remove(PROP_TXT_OPTION_PREFORMATTED);
 		props.remove(PROP_EMBEDDED_STYLES);
 		BackgroundThread.ensureBackground();
-		log.v("applySettings() " + props);
+		log.v("applySettings()");
 		boolean isFullScreen = props.getBool(PROP_APP_FULLSCREEN, false );
 		props.setBool(PROP_SHOW_BATTERY, isFullScreen); 
 		props.setBool(PROP_SHOW_TIME, isFullScreen);
@@ -2767,7 +2783,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	
 	public void setAppSettings(Properties newSettings, Properties oldSettings)
 	{
-		log.v("setAppSettings() " + newSettings.toString());
+		log.v("setAppSettings()"); //|| keyCode == KeyEvent.KEYCODE_DPAD_LEFT 
 		BackgroundThread.ensureGUI();
 		if ( oldSettings==null )
 			oldSettings = mSettings;
@@ -3027,7 +3043,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		if ( state!=mBatteryState ) {
 			log.i("Battery state changed: " + state);
 			mBatteryState = state;
-			if (!DeviceInfo.EINK_SCREEN) {
+			if (!DeviceInfo.EINK_SCREEN && !isAutoScrollActive()) {
 				drawPage();
 			}
 		}
@@ -4462,6 +4478,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	private class LoadDocumentTask extends Task
 	{
 		String filename;
+		String path;
 		Runnable errorHandler;
 		String pos;
 		int profileNumber;
@@ -4473,6 +4490,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			log.v("LoadDocumentTask for " + fileInfo);
 			BackgroundThread.ensureGUI();
 			this.filename = fileInfo.getPathName();
+			this.path = fileInfo.arcname != null ? fileInfo.arcname : fileInfo.pathname;
 			this.errorHandler = errorHandler;
 			//FileInfo fileInfo = new FileInfo(filename);
 			mBookInfo = mActivity.getHistory().getOrCreateBookInfo( fileInfo );
@@ -4549,6 +4567,14 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		        	if (DeviceInfo.EINK_NOOK)
 		        		updateNookTouchCoverpage(mBookInfo.getFileInfo().getPathName(), coverPageBytes);
 		        	//mEngine.setProgressDrawable(coverPageDrawable);
+		        }
+		        if (DeviceInfo.EINK_SONY) {
+		            SonyBookSelector selector = new SonyBookSelector(mActivity);
+		            long l = selector.getContentId(path);
+		            if(l != 0) {
+		                 selector.setReadingTime(l);
+		                 selector.requestBookSelection(l);
+		            }		        	
 		        }
 		        mOpened = true;
 		        
@@ -5347,5 +5373,25 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
         post(new CreateViewTask( props ));
 
     }
+	
+	private void switchFontFace(int direction) {
+		String currentFontFace = mSettings.getProperty(PROP_FONT_FACE, "");
+		String[] mFontFaces = mEngine.getFontFaceList();
+		int index = 0;
+		int countFaces = mFontFaces.length;
+		for (int i = 0; i < countFaces; i++) {
+			if (mFontFaces[i].equals(currentFontFace)) {
+				index = i;
+				break;
+			}
+		}
+		index += direction;
+		if (index < 0)
+			index = countFaces - 1;
+		else if (index >= countFaces)
+			index = 0;
+		saveSetting(PROP_FONT_FACE, mFontFaces[index]);
+        syncViewSettings(getSettings(), true);
+	}
 
 }

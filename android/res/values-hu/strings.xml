@@ -280,7 +280,7 @@
     <string name="options_controls_tap_type_double">Dupla érintés</string>
     <string name="options_controls_tap_type_long">Hosszú érintés</string>
     <string name="mi_bookmark_send">Küldés</string>
-    <string name="folder_name_books_by_author">Könyvek szerzők szerint</string>
+    <string name="folder_name_books_by_author">Könyvek szerzők szerint rendezve</string>
     <string name="options_view_bookmarks_highlight">Könyvjelzők kiemelése</string>
     <string name="options_css_footnotetitle">Lábjegyzet címe</string>
     <string name="options_css_subtitle">Alcím</string>
@@ -295,7 +295,7 @@
     <string name="options_css_title">Cím</string>
     <string name="options_css_def">Alapértelmezett bekezdésformázás</string>
     <string name="options_css_font_size">Betűméret</string>
-    <string name="options_css_margin_bottom">Margó utána</string>
+    <string name="options_css_margin_bottom">Alsó margó</string>
     <string name="options_css_text_color">Szövegszín</string>
     <string name="options_css_font_face">Betűtípus</string>
     <string name="options_css_margin_left">Bal margó</string>
@@ -307,7 +307,7 @@
     <string name="options_css_text_align">Szövegigazítás</string>
     <string name="options_css_text_indent">Első sor behúzása</string>
     <string name="options_css_margin_right">Jobb margó</string>
-    <string name="options_css_margin_top">Margó előtte</string>
+    <string name="options_css_margin_top">Felső margó</string>
     <string name="options_css_inherited">-</string>
     <string name="options_css_text_valign_baseline">Alapvonal</string>
     <string name="options_css_text_decoration_none">Nincs</string>
@@ -380,5 +380,18 @@
     <string name="options_font_hinting">Betű olvashatóság javítása</string>
     <string name="options_font_hinting_disabled">Letiltva</string>
     <string name="options_font_hinting_auto">Automatikus javítás</string>
-<string name="options_font_fallback_face">Másodlagos betűtípus</string>
+    <string name="options_font_fallback_face">Másodlagos betűtípus</string>
+    <string name="win_title_confirm_catalog_delete">Biztosan törli ezt a katalógust?</string>
+    <string name="win_title_confirm_history_record_delete">Biztosan törli ezt a könyvet a listáról?</string>
+    <string name="win_title_confirm_book_delete">Biztosan törli ezt a könyvet?</string>
+    <string name="folder_name_books_by_series">Könyvek sorozat szerint rendezve</string>
+    <string name="folder_name_books_by_title">Könyvek cím szerint rendezve</string>
+    <string name="dlg_about_donation_platinum">$30: Cool Reader Platina Támogatás</string>
+    <string name="mi_donation">Támogatás</string>
+    <string name="dlg_about_donation_inapp_purchase">A Cool Reader ingyenes és az is marad. Ha támogatni kívánja a fejlesztést, akkor az Android Market alkalmazáson belüli vásárlási lehetőségét kihasználva választhat a különböző támogatási csomagok közül:</string>
+    <string name="dlg_about_donation_total">Az Ön által eddig vásárolt támogatások összesen:</string>
+    <string name="mi_font_next">Next font</string>
+    <string name="mi_font_size_decrease">Decrease font size</string>
+    <string name="mi_font_size_increase">Increase font size</string>
+    <string name="mi_font_previous">Previous font</string>
 </resources>
