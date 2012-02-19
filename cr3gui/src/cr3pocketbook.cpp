@@ -77,8 +77,9 @@ private:
     bsSetOpenTimeFuncPtr_t _bsSetOpenTimePtr;
     bsSaveCloseFuncPtr_t _bsClosePtr;
     bsSaveCloseFuncPtr_t _bsSavePtr;
-    bool _initialized;
-    void initialize()
+public:
+    CRPocketBookProStateSaver() : _handle(NULL), _bsLoadPtr(NULL), _bsSetCPagePtr(NULL),
+        _bsSetNPagePtr(NULL), _bsSetOpenTimePtr(NULL), _bsClosePtr(NULL)
     {
         _handle = dlopen("/usr/lib/libbookstate.so", RTLD_LAZY);
         if (_handle)
@@ -102,12 +103,6 @@ private:
                 }
             }
         }
-        _initialized = true;
-    }
-public:
-    CRPocketBookProStateSaver() : _handle(NULL), _bsLoadPtr(NULL), _bsSetCPagePtr(NULL),
-        _bsSetNPagePtr(NULL), _bsSetOpenTimePtr(NULL), _bsClosePtr(NULL), _initialized(false)
-    {
     }
 
     virtual ~CRPocketBookProStateSaver()
@@ -121,8 +116,6 @@ public:
 
     bool isSaveStateSupported()
     {
-        if (!_initialized)
-            initialize();
         return (_bsLoadPtr != NULL && _bsSetCPagePtr != NULL && _bsSetNPagePtr != NULL &&
                 _bsSetOpenTimePtr != NULL && _bsClosePtr != NULL);
     }
@@ -2765,8 +2758,12 @@ int InitDoc(const char *exename, char *fileName)
         return 0;
 
     {
+        lString16 filename16(fileName);
+        lString16 dir = LVExtractPath(filename16);
+
         CRLog::trace("choosing init file...");
         static const lChar16 * dirs[] = {
+            dir.c_str(),
             L""CONFIGPATH"/cr3/",
             L""USERDATA2"/share/cr3/",
             L""USERDATA"/share/cr3/",
@@ -2776,18 +2773,29 @@ int InitDoc(const char *exename, char *fileName)
         lString16 ini;
         CRPropRef props = LVCreatePropsContainer();
         int bpp = 2;
-        for (int i = 0; dirs[i]; i++ ) {
-            ini = lString16(dirs[i]) + ini_fname;
-            LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
-            if ( !stream.isNull() ) {
-                if ( props->loadFromStream( stream.get() ) ) {
-                    bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
-                    if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
-                        bpp = 2;
-                    break;
+
+        int fb2Pos = filename16.pos(lString16(L".fb2"));
+        if (fb2Pos < 0)
+            ini = dir + LVExtractFilenameWithoutExtension(filename16);
+        else
+            ini = filename16.substr(0, fb2Pos);
+        ini.append((lChar16 *)L"_cr3.ini");
+        LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
+        if ( stream.isNull() || !props->loadFromStream( stream.get())) {
+            for (int i = 0; dirs[i]; i++ ) {
+                ini = lString16(dirs[i]) + ini_fname;
+                CRLog::debug("Try %s file", UnicodeToUtf8(ini).c_str());
+                LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
+                if ( !stream.isNull() ) {
+                    if ( props->loadFromStream( stream.get() ) ) {
+                        break;
+                    }
                 }
             }
         }
+        bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
+        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
+            bpp = 2;
         CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
         CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight(), bpp);

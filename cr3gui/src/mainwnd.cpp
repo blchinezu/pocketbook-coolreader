@@ -358,8 +358,17 @@ void V3DocViewWin::OnLoadFileStart( lString16 filename )
 void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
 {
     CRLog::trace("OnLoadFileFormatDetected(%d)", (int)fileFormat);
-    lString16 filename = L"fb2.css";
-    if ( _cssDir.length() > 0 ) {
+    lString16 filename;
+
+    lString16 dir = LVExtractPath(_fileName);
+
+    int fb2Pos = _fileName.pos(lString16(L".fb2"));
+    if (fb2Pos < 0)
+        filename = dir + LVExtractFilenameWithoutExtension(_fileName);
+    else
+        filename = _fileName.substr(0, fb2Pos);
+    filename += L".css";
+    if (!loadCSS(filename)) {
         switch ( fileFormat ) {
         case doc_format_txt:
             filename = L"txt.css";
@@ -377,14 +386,19 @@ void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
             filename = L"chm.css";
             break;
         case doc_format_doc:
-			filename = L"doc.css";
-			break;
+            filename = L"doc.css";
+            break;
         default:
-            // do nothing
+            filename = L"fb2.css"
             ;
         }
+
         CRLog::debug( "CSS file to load: %s", UnicodeToUtf8(filename).c_str() );
-        if ( LVFileExists( _cssDir + filename ) ) {
+        if (LVFileExists(dir + filename)) {
+            loadCSS( dir + filename );
+        } else if (_cssDir.length() <= 0) {
+            CRLog::debug("_cssDir is empty");
+        } if ( LVFileExists( _cssDir + filename ) ) {
             loadCSS( _cssDir + filename );
         } else if ( LVFileExists( _cssDir + L"fb2.css" ) ) {
             loadCSS( _cssDir + L"fb2.css" );
@@ -542,6 +556,7 @@ void V3DocViewWin::closing()
 
 bool V3DocViewWin::loadDocument( lString16 filename )
 {
+    _fileName = filename;
     if ( !_docview->LoadDocument( filename.c_str() ) ) {
     	CRLog::error("V3DocViewWin::loadDocument( %s ) - failed!", UnicodeToUtf8(filename).c_str() );
         return false;
