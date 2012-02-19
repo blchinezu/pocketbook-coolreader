@@ -398,7 +398,7 @@ void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
             loadCSS( dir + filename );
         } else if (_cssDir.length() <= 0) {
             CRLog::debug("_cssDir is empty");
-        } if ( LVFileExists( _cssDir + filename ) ) {
+        } else if ( LVFileExists( _cssDir + filename ) ) {
             loadCSS( _cssDir + filename );
         } else if ( LVFileExists( _cssDir + L"fb2.css" ) ) {
             loadCSS( _cssDir + L"fb2.css" );
