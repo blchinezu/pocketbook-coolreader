@@ -16,6 +16,7 @@
 #include <inkview.h>
 
 #ifdef PB_DB_STATE_SUPPORTED
+#include <dlfcn.h>
 #include <bookstate.h>
 #endif
 
@@ -59,6 +60,93 @@ static void rotate_timer();
 static void paused_rotate_timer();
 static void cache_timer();
 
+#ifdef PB_DB_STATE_SUPPORTED
+typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
+typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
+typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
+typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
+
+
+class CRPocketBookProStateSaver
+{
+private:
+    void *_handle;
+    bsLoadFuncPtr_t _bsLoadPtr;
+    bsSetPageFuncPtr_t _bsSetCPagePtr;
+    bsSetPageFuncPtr_t _bsSetNPagePtr;
+    bsSetOpenTimeFuncPtr_t _bsSetOpenTimePtr;
+    bsSaveCloseFuncPtr_t _bsClosePtr;
+    bsSaveCloseFuncPtr_t _bsSavePtr;
+    bool _initialized;
+    void initialize()
+    {
+        _handle = dlopen("/usr/lib/libbookstate.so", RTLD_LAZY);
+        if (_handle)
+        {
+            _bsLoadPtr = (bsLoadFuncPtr_t)dlsym(_handle, "bsLoad");
+            if (_bsLoadPtr)
+            {
+                _bsSetCPagePtr = (bsSetPageFuncPtr_t)dlsym(_handle, "bsSetCPage");
+                if (_bsSetCPagePtr)
+                {
+                    _bsSetNPagePtr = (bsSetPageFuncPtr_t)dlsym(_handle, "bsSetNPage");
+                    if (_bsSetNPagePtr)
+                    {
+                        _bsSetOpenTimePtr = (bsSetOpenTimeFuncPtr_t)dlsym(_handle, "bsSetOpenTime");
+                        if (_bsSetOpenTimePtr) {
+                            _bsClosePtr = (bsSaveCloseFuncPtr_t)dlsym(_handle, "bsClose");
+                            if (_bsClosePtr)
+                                _bsSavePtr = (bsSaveCloseFuncPtr_t)dlsym(_handle, "bsSave");
+                        }
+                    }
+                }
+            }
+        }
+        _initialized = true;
+    }
+public:
+    CRPocketBookProStateSaver() : _handle(NULL), _bsLoadPtr(NULL), _bsSetCPagePtr(NULL),
+        _bsSetNPagePtr(NULL), _bsSetOpenTimePtr(NULL), _bsClosePtr(NULL), _initialized(false)
+    {
+    }
+
+    virtual ~CRPocketBookProStateSaver()
+    {
+        if (_handle)
+        {
+            dlclose(_handle);
+            _handle = NULL;
+        }
+    }
+
+    bool isSaveStateSupported()
+    {
+        if (!_initialized)
+            initialize();
+        return (_bsLoadPtr != NULL && _bsSetCPagePtr != NULL && _bsSetNPagePtr != NULL &&
+                _bsSetOpenTimePtr != NULL && _bsClosePtr != NULL);
+    }
+
+    bool saveState(char *fileName, int cpage, int npages)
+    {
+        bsHandle bs = _bsLoadPtr(fileName);
+        if (bs)
+        {
+            _bsSetCPagePtr(bs, cpage + 1);
+            _bsSetNPagePtr(bs, npages);
+            _bsSetOpenTimePtr(bs, time(0));
+            if (_bsSavePtr(bs))
+                CRLog::trace("Book(%s) state saved to db successfully", fileName);
+            else
+                CRLog::error("Book(%s) state saving to db failed", fileName);
+            _bsClosePtr(bs);
+            return true;
+        }
+        return false;
+    }
+};
+#endif
+
 class CRPocketBookGlobals
 {
 private :
@@ -69,6 +157,9 @@ private :
     bool _ready_sent;
     bool createFile(char *fName);
     bool _translateTimer;
+#ifdef PB_DB_STATE_SUPPORTED
+    CRPocketBookProStateSaver proStateSaver;
+#endif /* PB_DB_STATE_SUPPORTED */
 public:
     CRPocketBookGlobals(char *fileName);
     lString16 getFileName() { return _fileName ; }
@@ -157,18 +248,8 @@ void CRPocketBookGlobals::saveState(int cpage, int npages)
         }
     }
 #ifdef PB_DB_STATE_SUPPORTED
-    bsHandle bs = bsLoad((char *)cf.c_str());
-    if (bs)
-    {
-        bsSetCPage(bs, cpage);
-        bsSetNPage(bs, npages);
-        bsSetOpenTime(bs, time(0));
-        if (bsSave(bs))
-            CRLog::trace("Book(%s) state saved to db successfully", (char *)cf.c_str());
-        else
-            CRLog::error("Book(%s) state saving to db failed", (char *)cf.c_str());
-        bsClose(bs);
-    }
+    if (proStateSaver.isSaveStateSupported())
+        proStateSaver.saveState((char *)cf.c_str(), cpage, npages);
 #endif
 }
 
