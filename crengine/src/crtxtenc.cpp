@@ -1446,6 +1446,7 @@ bool isValidUtf8Data( const unsigned char * buf, int buf_size )
         lUInt8 ch = *buf++;
         if ( (ch & 0x80) == 0 ) {
         } else if ( (ch & 0xC0) == 0x80 ) {
+            CRLog::trace("unexpected char %02x at position %x, str=%s", ch, (buf-1-start), lString8((const char *)(buf-1), 32).c_str());
             return false;
         } else if ( (ch & 0xE0) == 0xC0 ) {
             ch = *buf++;
@@ -1485,8 +1486,6 @@ void MakeDblCharStat(const unsigned char * buf, int buf_size, dbl_char_stat_t * 
    bool insideTag = false;
    for ( int i=1; i<buf_size; i++) {
       lChar16 ch = buf[i];
-      if (insideTag)
-          continue;
       if (skipHtml) {
           if (ch == '<') {
               insideTag = true;
@@ -1526,9 +1525,9 @@ void MakeCharStat(const unsigned char * buf, int buf_size, short stat_table[256]
               insideTag = false;
               continue;
           }
+          if (insideTag)
+              continue;
       }
-      if (insideTag)
-          continue;
       if ( ch>127 || (ch>='a' && ch<='z') || (ch>='A' && ch<='Z') || ch=='\'') {
          stat[ch]++;
          total++;
@@ -1571,19 +1570,21 @@ double CompareDblCharStats( const dbl_char_stat_t * stat1, const dbl_char_stat_t
    while (len1 && len2) {
       //
       if (stat1->ch1==stat2->ch1 && stat1->ch2==stat2->ch2) {
-         // add stat
-         int delta = (stat1->count - stat2->count);
-         if (delta<0)
-            delta = -delta;
-         sum += delta;
-         psum += ( (double)stat1->count * stat2->count / 0x7000 / 0x7000);
-	     if (stat1->ch1>=128 || stat1->ch2>=128)
-		    psum2 += ( (double)stat1->count * stat2->count / 0x7000 / 0x7000);
-         // move both
-         stat1++;
-         len1--;
-         stat2++;
-         len2--;
+          if (stat1->ch1 != ' ' || stat1->ch2 != ' ') {
+             // add stat
+             int delta = (stat1->count - stat2->count);
+             if (delta<0)
+                delta = -delta;
+             sum += delta;
+             psum += ( (double)stat1->count * stat2->count / 0x7000 / 0x7000);
+             if (stat1->ch1>=128 || stat1->ch2>=128)
+                psum2 += ( (double)stat1->count * stat2->count / 0x7000 / 0x7000);
+          }
+          // move both
+          stat1++;
+          len1--;
+          stat2++;
+          len2--;
       } else if ( stat1->ch1<stat2->ch1 || (stat1->ch1==stat2->ch1 && stat1->ch2<stat2->ch2) ) {
          // add stat
          //int delta = (stat1->count);
@@ -1660,24 +1661,30 @@ int AutodetectCodePage(const unsigned char * buf, int buf_size, char * cp_name, 
    MakeCharStat(buf, buf_size, char_stat, skipHtml);
    MakeDblCharStat(buf, buf_size, dbl_char_stat, DBL_CHAR_STAT_SIZE, skipHtml);
    int bestn = 0;
-   double bestq = 1000000;
+   double bestq = 0; //1000000;
    for (int i=0; cp_stat_table[i].ch_stat; i++) {
 	   double q12, q11;
 	   double q22, q21;
 	   double q1 = CompareCharStats( cp_stat_table[i].ch_stat, char_stat, q11, q12 );
 	   double q2 = CompareDblCharStats( cp_stat_table[i].dbl_ch_stat, dbl_char_stat, DBL_CHAR_STAT_SIZE, q21, q22 );
-	   double q_1 = q11 + 3*q12;
-	   double q_2 = q21 + 5*q22;
-	   double q_ = q_1 * q_2;
-	   double q = (q_>0) ? (q1*2+q2*7) / (q_) : 1000000;
-	   if (q<bestq) {
+//       double q_1 = q11 + 3*q12;
+//	   double q_2 = q21 + 5*q22;
+//	   double q_ = q_1 * q_2;
+       if (q1 < 0.00001)
+           q1 = 0.00001;
+       if (q2 < 0.00001)
+           q2 = 0.00001;
+       double q = q11 * 1 + q12 * 2 + q21 * 3 + q22 * 4; //(q_>0) ? (q1*2+q2*7) / (q_) : 1000000;
+       q = q / (q1 + q2);
+       //CRLog::debug("%d %10s %4s : %lf %lf %lf - %lf %lf %lf  :  %lf", i, cp_stat_table[i].cp_name, cp_stat_table[i].lang_name, q1, q11, q12, q2, q21, q22, q);
+       if (q > bestq) {
 		   bestn = i;
 		   bestq = q;
 	   }
    }
    strcpy(cp_name, cp_stat_table[bestn].cp_name);
    strcpy(lang_name, cp_stat_table[bestn].lang_name);
-   CRLog::debug("Detected codepage:%s lang:%s", cp_name, lang_name);
+   CRLog::debug("Detected codepage:%s lang:%s index:%d %s", cp_name, lang_name, bestn, skipHtml ? "(skipHtml)" : "");
    return 1;
 }
 

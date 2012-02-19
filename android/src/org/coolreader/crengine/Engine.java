@@ -7,6 +7,8 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -23,6 +25,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
+import android.view.View;
 
 /**
  * CoolReader Engine class.
@@ -588,6 +591,8 @@ public class Engine {
 
 	private native boolean scanBookPropertiesInternal(FileInfo info);
 
+	private native byte[] scanBookCoverInternal(String path);
+
     private static native void suspendLongOperationInternal(); // cancel current long operation in engine thread (swapping to cache file) -- call it from GUI thread
     
     public static void suspendLongOperation() {
@@ -754,6 +759,16 @@ public class Engine {
 		}
 	}
 
+	public byte[] scanBookCover(String path) {
+		synchronized(this) {
+			long start = android.os.SystemClock.uptimeMillis();
+			byte[] res = scanBookCoverInternal(path);
+			long duration = android.os.SystemClock.uptimeMillis() - start;
+			L.v("scanBookCover took " + duration + " ms for " + path);
+			return res;
+		}
+	}
+
 	public String[] getFontFaceList() {
 		if (!initialized)
 			throw new IllegalStateException("CREngine is not initialized");
@@ -762,7 +777,31 @@ public class Engine {
 		}
 	}
 
+	private final static int SYSTEM_UI_FLAG_LOW_PROFILE = 1;
+	private final static int SYSTEM_UI_FLAG_VISIBLE = 0;
 	public boolean setKeyBacklight(int value) {
+		// Try ICS way
+		if (DeviceInfo.getSDKLevel() >= DeviceInfo.ICE_CREAM_SANDWICH) {
+			View view = mActivity.getReaderView();
+			Method m;
+			try {
+				m = view.getClass().getMethod("setSystemUiVisibility", int.class);
+				m.invoke(view, value == 0 ? SYSTEM_UI_FLAG_LOW_PROFILE :
+					SYSTEM_UI_FLAG_VISIBLE);
+			} catch (SecurityException e) {
+				// ignore
+			} catch (NoSuchMethodException e) {
+				// ignore
+			} catch (IllegalArgumentException e) {
+				// ignore
+			} catch (IllegalAccessException e) {
+				// ignore
+			} catch (InvocationTargetException e) {
+				// ignore
+			}
+			return true;
+		}
+
 		// thread safe
 		return setKeyBacklightInternal(value);
 	}

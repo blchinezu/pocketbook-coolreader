@@ -100,6 +100,7 @@ public interface Settings {
     public static final String PROP_APP_BOOK_SORT_ORDER = "app.browser.sort.order";
     public static final String PROP_APP_DICTIONARY = "app.dictionary.current";
     public static final String PROP_APP_SELECTION_ACTION = "app.selection.action";
+    public static final String PROP_APP_MULTI_SELECTION_ACTION = "app.multiselection.action";
     public static final String PROP_APP_SELECTION_PERSIST = "app.selection.persist";
     public static final String PROP_APP_HIGHLIGHT_BOOKMARKS = "crengine.highlight.bookmarks";
     public static final String PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS = "app.browser.hide.empty.folders";
@@ -121,6 +122,7 @@ public interface Settings {
     public static final int SELECTION_ACTION_COPY = 1;
     public static final int SELECTION_ACTION_DICTIONARY = 2;
     public static final int SELECTION_ACTION_BOOKMARK = 3;
+    public static final int SELECTION_ACTION_FIND = 4;
     
     // available options for PROP_APP_SECONDARY_TAP_ACTION_TYPE setting
     public static final int TAP_ACTION_TYPE_LONGPRESS = 0;
@@ -160,6 +162,9 @@ public interface Settings {
 
 	    PROP_APP_VIEW_AUTOSCROLL_SPEED,
 	    PROP_APP_VIEW_AUTOSCROLL_TYPE,
+	    
+	    "app.tapzone.*",
+	    PROP_APP_DOUBLE_TAP_SELECTION,
 
 	    "app.ui.theme*",
 	};

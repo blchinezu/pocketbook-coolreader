@@ -76,7 +76,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			50, 60, 70, 80, 90, 100
 		};
 	int[] mMargins = new int[] {
-			0, 1, 2, 3, 4, 5, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 80, 100
+			0, 1, 2, 3, 4, 5, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 80, 100, 200, 300
 		};
 	double[] mGammas = new double[] {
 			0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.3, 1.5, 1.9
@@ -150,11 +150,26 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 			R.string.options_page_animation_paperbook
 		};
 	int[] mSelectionAction = new int[] {
-			ReaderView.SELECTION_ACTION_TOOLBAR, ReaderView.SELECTION_ACTION_COPY, 
+			ReaderView.SELECTION_ACTION_TOOLBAR,
+			ReaderView.SELECTION_ACTION_COPY, 
+			ReaderView.SELECTION_ACTION_DICTIONARY,
+			ReaderView.SELECTION_ACTION_BOOKMARK,
+			ReaderView.SELECTION_ACTION_FIND
+		};
+	int[] mSelectionActionTitles = new int[] {
+			R.string.options_selection_action_toolbar, 
+			R.string.options_selection_action_copy, 
+			R.string.options_selection_action_dictionary, 
+			R.string.options_selection_action_bookmark, 
+			R.string.mi_search, 
+		};
+	int[] mMultiSelectionAction = new int[] {
+			ReaderView.SELECTION_ACTION_TOOLBAR,
+			ReaderView.SELECTION_ACTION_COPY, 
 			ReaderView.SELECTION_ACTION_DICTIONARY,
 			ReaderView.SELECTION_ACTION_BOOKMARK
 		};
-	int[] mSelectionActionTitles = new int[] {
+	int[] mMultiSelectionActionTitles = new int[] {
 			R.string.options_selection_action_toolbar, 
 			R.string.options_selection_action_copy, 
 			R.string.options_selection_action_dictionary, 
@@ -570,6 +585,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 				addKey(listView, KeyEvent.KEYCODE_VOLUME_DOWN, "Volume Down");
 				addKey(listView, KeyEvent.KEYCODE_CAMERA, "Camera");
 				addKey(listView, KeyEvent.KEYCODE_HEADSETHOOK, "Headset Hook");
+				addKey(listView, ReaderView.KEYCODE_ESCAPE, "Escape");
 			}
 
 			dlg.setView(listView);
@@ -1664,7 +1680,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		mOptionsPage.add(new BoolOption(this, getString(R.string.options_app_fullscreen), PROP_APP_FULLSCREEN).setIconId(R.drawable.cr3_option_fullscreen));
 		mOptionsPage.add(new ListOption(this, getString(R.string.options_view_mode), PROP_PAGE_VIEW_MODE).add(mViewModes, mViewModeTitles).setDefaultValue("1").setIconId(R.drawable.cr3_option_view_mode_scroll));
 		//mOptionsPage.add(new ListOption(getString(R.string.options_page_orientation), PROP_ROTATE_ANGLE).add(mOrientations, mOrientationsTitles).setDefaultValue("0"));
-		if (mActivity.getSDKLevel() >= 9)
+		if (DeviceInfo.getSDKLevel() >= 9)
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_orientation), PROP_APP_SCREEN_ORIENTATION).add(mOrientations_API9, mOrientationsTitles_API9).setDefaultValue("0").setIconId(R.drawable.cr3_option_page_orientation_landscape));
 		else
 			mOptionsPage.add(new ListOption(this, getString(R.string.options_page_orientation), PROP_APP_SCREEN_ORIENTATION).add(mOrientations, mOrientationsTitles).setDefaultValue("0").setIconId(R.drawable.cr3_option_page_orientation_landscape));
@@ -1703,6 +1719,7 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		if ( !DeviceInfo.EINK_SCREEN )
 			mOptionsControls.add(new ListOption(this, getString(R.string.options_controls_flick_brightness), PROP_APP_FLICK_BACKLIGHT_CONTROL).add(mFlickBrightness, mFlickBrightnessTitles).setDefaultValue("1"));
 		mOptionsControls.add(new ListOption(this, getString(R.string.options_selection_action), PROP_APP_SELECTION_ACTION).add(mSelectionAction, mSelectionActionTitles).setDefaultValue("0"));
+		mOptionsControls.add(new ListOption(this, getString(R.string.options_multi_selection_action), PROP_APP_MULTI_SELECTION_ACTION).add(mMultiSelectionAction, mMultiSelectionActionTitles).setDefaultValue("0"));
 		mOptionsControls.add(new BoolOption(this, getString(R.string.options_selection_keep_selection_after_dictionary), PROP_APP_SELECTION_PERSIST).setDefaultValue("0"));
 		
 		mOptionsApplication = new OptionsListView(getContext());
@@ -1832,5 +1849,10 @@ public class OptionsDialog extends BaseDialog implements TabContentFactory, Opti
 		super.onStop();
 	}
 
-	
+	@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (((OptionsListView)mTabs.getCurrentView()).onKeyDown(keyCode, event))
+        	return true;
+        return super.onKeyDown(keyCode, event);
+    }	
 }

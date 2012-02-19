@@ -25,6 +25,7 @@ import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
@@ -313,7 +314,7 @@ public class FileBrowser extends LinearLayout {
 		});
 	}
 	
-	private void editOPDSCatalog(FileInfo opds) {
+	public void editOPDSCatalog(FileInfo opds) {
 		if (opds==null) {
 			opds = new FileInfo();
 			opds.isDirectory = true;
@@ -641,6 +642,7 @@ public class FileBrowser extends LinearLayout {
 								FileInfo file = new FileInfo();
 								file.isDirectory = true;
 								file.pathname = FileInfo.OPDS_DIR_PREFIX + entry.link.href;
+								file.title = Utils.cleanupHtmlTags(entry.content);
 								file.filename = entry.title;
 								file.isListed = true;
 								file.isScanned = true;
@@ -963,6 +965,9 @@ public class FileBrowser extends LinearLayout {
 							bookCount = (Integer)item.tag;
 						setText(field1, "books: " + String.valueOf(bookCount));
 						setText(field2, "folders: 0");
+					} else  if (item.isOPDSDir()) {
+						setText(field1, item.title);
+						setText(field2, "");
 					} else  if ( !item.isOPDSDir() && !item.isSearchShortcut() && ((!item.isBooksByAuthorRoot() && !item.isBooksBySeriesRoot() && !item.isBooksByTitleRoot()) || item.dirCount()>0)) {
 						setText(field1, "books: " + String.valueOf(item.fileCount()));
 						setText(field2, "folders: " + String.valueOf(item.dirCount()));
@@ -978,7 +983,7 @@ public class FileBrowser extends LinearLayout {
 						} else {
 							Drawable drawable = null;
 							if ( item.id!=null )
-								drawable = mHistory.getBookCoverpageImage(null, item.id);
+								drawable = mHistory.getBookCoverpageImage(null, item);
 							if ( drawable!=null ) {
 								image.setImageDrawable(drawable);
 							} else {
@@ -1162,5 +1167,8 @@ public class FileBrowser extends LinearLayout {
 			log.e("Task " + this.getClass().getSimpleName() + " is failed with exception " + e.getMessage(), e);
 		}
     }
-    
+
+    public FileInfo getCurrentDir() {
+    	return currDirectory;
+    }
 }

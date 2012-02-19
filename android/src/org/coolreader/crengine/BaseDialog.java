@@ -3,7 +3,6 @@ package org.coolreader.crengine;
 import org.coolreader.CoolReader;
 import org.coolreader.R;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.graphics.PixelFormat;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -212,6 +212,8 @@ public class BaseDialog extends Dialog {
 		// when dialog is closed
 	}
 	
+	
+	
 	/**
 	 * Set View's gesture handlers for LTR and RTL horizontal fling
 	 * @param view
@@ -291,6 +293,18 @@ public class BaseDialog extends Dialog {
 		
 	}
 	
-	
+	@Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			onNegativeButtonClick();
+			return true;
+		}
+        if( this.view != null ) {
+            if (this.view.onKeyDown(keyCode, event))
+            	return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    
 	protected View view;
 }

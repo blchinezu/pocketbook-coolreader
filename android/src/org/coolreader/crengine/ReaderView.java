@@ -3,12 +3,12 @@ package org.coolreader.crengine;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Callable;
@@ -60,7 +60,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     public static final int SONY_DPAD_LEFT_SCANCODE = 125;
     public static final int SONY_DPAD_RIGHT_SCANCODE = 126;
     
-//    public static final int SONY_MENU_SCANCODE = 357;
+    public static final int KEYCODE_ESCAPE = 111; // KeyEvent constant since API 11
+
+    //    public static final int SONY_MENU_SCANCODE = 357;
 //    public static final int SONY_BACK_SCANCODE = 158;
 //    public static final int SONY_HOME_SCANCODE = 102;
     
@@ -758,9 +760,25 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		});
 	}
 
+	public static boolean isMultiSelection(Selection sel){
+		String str = sel.text;
+	    if(str != null){
+	        for(int i = 0; i < str.length(); i++){
+	            if(Character.isWhitespace(str.charAt(i))){
+	                return true;
+	            }
+	        }
+	    }
+	    return false;
+	}	
+	
 	private int mSelectionAction = SELECTION_ACTION_TOOLBAR;
+	private int mMultiSelectionAction = SELECTION_ACTION_TOOLBAR;
 	private void onSelectionComplete( Selection sel ) {
-		switch ( mSelectionAction ) {
+		int iSelectionAction;
+		iSelectionAction = isMultiSelection(sel) ? mMultiSelectionAction : mSelectionAction;
+		
+		switch ( iSelectionAction ) {
 		case SELECTION_ACTION_TOOLBAR:
 			SelectionToolbarDlg.showDialog(mActivity, ReaderView.this, sel);
 			break;
@@ -776,6 +794,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		case SELECTION_ACTION_BOOKMARK:
 			clearSelection();
 			showNewBookmarkDialog( sel );
+			break;
+		case SELECTION_ACTION_FIND:
+			clearSelection();
+			showSearchDialog(sel.text);
 			break;
 		default:
 			clearSelection();
@@ -1524,10 +1546,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		});
 	}
 	
-	public void showSearchDialog()
+	public void showSearchDialog(String initialText)
 	{
+		if (initialText != null && initialText.length() > 40)
+			initialText = initialText.substring(0, 40);
 		BackgroundThread.ensureGUI();
-		SearchDlg dlg = new SearchDlg( mActivity, this );
+		SearchDlg dlg = new SearchDlg( mActivity, this, initialText);
 		dlg.show();
 	}
 
@@ -2355,7 +2379,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		
 	}
 
-	private void redraw() {
+	public void redraw() {
 		//BackgroundThread.instance().executeBackground(new Runnable() {
 		BackgroundThread.instance().executeGUI(new Runnable() {
 			@Override
@@ -2492,7 +2516,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			mActivity.showBrowserRecentBooks();
 			break;
 		case DCMD_SEARCH:
-			showSearchDialog();
+			showSearchDialog(null);
 			break;
 		case DCMD_EXIT:
 			mActivity.finish();
@@ -2539,8 +2563,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 				res = doc.doCommand(cmd.nativeId, param);
 			}
 			public void done() {
-				if ( res )
+				if (res) {
+					invalidImages = true;
 					drawPage( doneHandler, false );
+				}
 				switch (cmd) {
 					case DCMD_BEGIN:
 					case DCMD_LINEUP:
@@ -2774,6 +2800,13 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
         	try {
         		int n = Integer.valueOf(value);
         		mSelectionAction = n;
+        	} catch ( Exception e ) {
+        		// ignore
+        	}
+        } else if ( PROP_APP_MULTI_SELECTION_ACTION.equals(key) ) {
+        	try {
+        		int n = Integer.valueOf(value);
+        		mMultiSelectionAction = n;
         	} catch ( Exception e ) {
         		// ignore
         	}
@@ -3053,6 +3086,65 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		return mBatteryState;
 	}
 	
+	static class VMRuntimeHack {
+		private Object runtime = null;
+		private Method trackAllocation = null;
+		private Method trackFree = null;
+		
+		public boolean trackAlloc(long size) {
+			if (runtime == null)
+				return false;
+			try {
+				Object res = trackAllocation.invoke(runtime, Long.valueOf(size));
+				return (res instanceof Boolean) ? (Boolean)res : true;
+			} catch (IllegalArgumentException e) {
+				return false;
+			} catch (IllegalAccessException e) {
+				return false;
+			} catch (InvocationTargetException e) {
+				return false;
+			}
+		}
+		public boolean trackFree(long size) {
+			if (runtime == null)
+				return false;
+			try {
+				Object res = trackFree.invoke(runtime, Long.valueOf(size));
+				return (res instanceof Boolean) ? (Boolean)res : true;
+			} catch (IllegalArgumentException e) {
+				return false;
+			} catch (IllegalAccessException e) {
+				return false;
+			} catch (InvocationTargetException e) {
+				return false;
+			}
+		}
+		public VMRuntimeHack() {
+			boolean success = false;
+			try {
+				Class cl = Class.forName("dalvik.system.VMRuntime");
+				Method getRt = cl.getMethod("getRuntime", new Class[0]);
+				runtime = getRt.invoke(null, new Object[0]);
+				trackAllocation = cl.getMethod("trackExternalAllocation", new Class[] {long.class});
+				trackFree = cl.getMethod("trackExternalFree", new Class[] {long.class});
+				success = true;
+			} catch (ClassNotFoundException e) {
+			} catch (SecurityException e) {
+			} catch (NoSuchMethodException e) {
+			} catch (IllegalArgumentException e) {
+			} catch (IllegalAccessException e) {
+			} catch (InvocationTargetException e) {
+			}
+			if (!success) {
+				log.i("VMRuntime hack does not work!");
+				runtime = null;
+				trackAllocation = null;
+				trackFree = null;
+			}
+		}
+	}
+	private static final VMRuntimeHack runtime = new VMRuntimeHack();
+	
 	private static class BitmapFactory {
 		public static final int MAX_FREE_LIST_SIZE=2;
 		ArrayList<Bitmap> freeList = new ArrayList<Bitmap>(); 
@@ -3070,10 +3162,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 			}
 			for ( int i=freeList.size()-1; i>=0; i-- ) {
 				Bitmap bmp = freeList.remove(i);
+				runtime.trackAlloc(bmp.getWidth() * bmp.getHeight() * 2);
 				//log.d("Recycling free bitmap "+bmp.getWidth()+"x"+bmp.getHeight());
 				//bmp.recycle(); //20110109 
 			}
 			Bitmap bmp = Bitmap.createBitmap(dx, dy, Bitmap.Config.RGB_565);
+			runtime.trackFree(dx*dy*2);
 			//bmp.setDensity(0);
 			usedList.add(bmp);
 			//log.d("Created new bitmap "+dx+"x"+dy+". New bitmap list size = " + usedList.size());
@@ -3082,7 +3176,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		public synchronized void compact() {
 			while ( freeList.size()>0 ) {
 				//freeList.get(0).recycle();//20110109
-				freeList.remove(0);
+				Bitmap bmp = freeList.remove(0);
+				runtime.trackAlloc(bmp.getWidth() * bmp.getHeight() * 2);
 			}
 		}
 		public synchronized void release( Bitmap bmp ) {
@@ -3092,7 +3187,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 					usedList.remove(i);
 					while ( freeList.size()>MAX_FREE_LIST_SIZE ) {
 						//freeList.get(0).recycle(); //20110109
-						freeList.remove(0);
+						Bitmap b = freeList.remove(0);
+						runtime.trackAlloc(b.getWidth() * b.getHeight() * 2);
+						//b.recycle();
 					}
 					log.d("BitmapFactory: bitmap released, used size = " + usedList.size() + ", free size=" + freeList.size());
 					return;
@@ -4563,7 +4660,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	    		mActivity.getHistory().updateBookAccess(mBookInfo);
 	    		mActivity.getHistory().saveToDB();
 		        if (mBookInfo.getFileInfo().id!=null && coverPageBytes!=null && coverPageDrawable!=null && mBookInfo!=null && mBookInfo.getFileInfo()!=null) {
-		        	mActivity.getHistory().setBookCoverpageData( mBookInfo.getFileInfo().id, coverPageBytes );
+		        	if (mBookInfo.getFileInfo().format.needCoverPageCaching())
+		        		mActivity.getHistory().setBookCoverpageData( mBookInfo.getFileInfo().id, coverPageBytes );
 		        	if (DeviceInfo.EINK_NOOK)
 		        		updateNookTouchCoverpage(mBookInfo.getFileInfo().getPathName(), coverPageBytes);
 		        	//mEngine.setProgressDrawable(coverPageDrawable);
@@ -4592,7 +4690,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		public void fail( Exception e )
 		{
 			BackgroundThread.ensureGUI();
-			log.e("LoadDocumentTask failed for " + mBookInfo);
+			log.v("LoadDocumentTask failed for " + mBookInfo, e);
 			mActivity.getHistory().removeBookInfo( mBookInfo.getFileInfo(), true, false );
 			mBookInfo = null;
 			log.d("LoadDocumentTask is finished with exception " + e.getMessage());
@@ -5102,7 +5200,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     }
     
     private boolean invalidImages = true;
-    private void clearImageCache()
+    public void clearImageCache()
     {
     	BackgroundThread.instance().postBackground( new Runnable() {
     		public void run() {

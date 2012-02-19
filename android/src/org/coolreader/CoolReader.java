@@ -40,6 +40,7 @@ import org.coolreader.donations.Consts.PurchaseState;
 import org.coolreader.donations.Consts.ResponseCode;
 import org.coolreader.donations.PurchaseObserver;
 import org.coolreader.donations.ResponseHandler;
+import org.koekak.android.ebookdownloader.SonyBookSelector;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -238,29 +239,6 @@ public class CoolReader extends Activity
 		}
 	}
 	
-	private int sdkInt = 0;
-	public int getSDKLevel() {
-		if (sdkInt > 0)
-			return sdkInt;
-		// hack for Android 1.5
-		sdkInt = 3;
-		Field fld;
-		try {
-			Class<?> cl = android.os.Build.VERSION.class;
-			fld = cl.getField("SDK_INT");
-			sdkInt = fld.getInt(cl);
-			log.i("API LEVEL " + sdkInt + " detected");
-		} catch (SecurityException e) {
-			// ignore
-		} catch (NoSuchFieldException e) {
-			// ignore
-		} catch (IllegalArgumentException e) {
-			// ignore
-		} catch (IllegalAccessException e) {
-			// ignore
-		}
-		return sdkInt;
-	}
 	
 	public boolean isWakeLockEnabled() {
 		return screenBacklightDuration > 0;
@@ -327,7 +305,7 @@ public class CoolReader extends Activity
 	public void setScreenOrientation( int angle )
 	{
 		int newOrientation = screenOrientation;
-		boolean level9 = getSDKLevel() >= 9;
+		boolean level9 = DeviceInfo.getSDKLevel() >= 9;
 		switch (angle) {
 		case 0:
 			newOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT; // level9 ? ActivityInfo_SCREEN_ORIENTATION_SENSOR_PORTRAIT : ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
@@ -829,7 +807,7 @@ public class CoolReader extends Activity
         }
     }
 
-    private final static int MIN_BACKLIGHT_LEVEL_PERCENT = DeviceInfo.AMOLED_SCREEN ? 2 : 16;
+    private final static int MIN_BACKLIGHT_LEVEL_PERCENT = DeviceInfo.MIN_SCREEN_BRIGHTNESS_PERCENT;
     
     public void onUserActivity()
     {
@@ -1039,6 +1017,18 @@ public class CoolReader extends Activity
 		
 		if (DeviceInfo.EINK_SCREEN) {
 			setScreenUpdateMode(props.getInt(ReaderView.PROP_APP_SCREEN_UPDATE_MODE, 0), mReaderView);
+            if (DeviceInfo.EINK_SONY) {
+                SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
+                String res = pref.getString(PREF_LAST_BOOK, null);
+                if( res != null && res.length() > 0 ) {
+                    SonyBookSelector selector = new SonyBookSelector(this);
+                    long l = selector.getContentId(res);
+                    if(l != 0) {
+                       selector.setReadingTime(l);
+                       selector.requestBookSelection(l);
+                    }
+                }
+            }
 		}
 		
 		backlightControl.onUserActivity();
@@ -1278,7 +1268,8 @@ public class CoolReader extends Activity
 	    			menu.removeItem(item.getItemId());
 	    	}
 	    } else {
-	    	inflater.inflate(R.menu.cr3_browser_menu, menu);
+	    	FileInfo currDir = mBrowser.getCurrentDir();
+	    	inflater.inflate(currDir!=null && currDir.isOPDSRoot() ? R.menu.cr3_browser_menu : R.menu.cr3_browser_menu, menu);
 	    	if ( !isBookOpened() ) {
 	    		MenuItem item = menu.findItem(R.id.book_back_to_reading);
 	    		if ( item!=null )
@@ -1466,6 +1457,9 @@ public class CoolReader extends Activity
 		case R.id.book_opds_root:
 			mBrowser.showOPDSRootDirectory();
 			return true;
+		case R.id.catalog_add:
+			mBrowser.editOPDSCatalog(null);
+			return true;
 		case R.id.book_recent_books:
 			mBrowser.showRecentBooks();
 			return true;
@@ -1587,6 +1581,10 @@ public class CoolReader extends Activity
 		new DefKeyAction(ReaderView.SONY_DPAD_DOWN_SCANCODE, ReaderAction.LONG, ReaderAction.PAGE_DOWN_10),
 		new DefKeyAction(ReaderView.SONY_DPAD_UP_SCANCODE, ReaderAction.LONG, ReaderAction.PAGE_UP_10),
 
+		
+		new DefKeyAction(ReaderView.KEYCODE_ESCAPE, ReaderAction.NORMAL, ReaderAction.PAGE_DOWN),
+		new DefKeyAction(ReaderView.KEYCODE_ESCAPE, ReaderAction.LONG, ReaderAction.REPEAT),
+		
 //	    public static final int KEYCODE_PAGE_BOTTOMLEFT = 0x5d; // fwd
 //	    public static final int KEYCODE_PAGE_BOTTOMRIGHT = 0x5f; // fwd
 //	    public static final int KEYCODE_PAGE_TOPLEFT = 0x5c; // back
@@ -1666,17 +1664,17 @@ public class CoolReader extends Activity
             hmargin = "4";
             vmargin = "2";
         } else if ( screenWidth<=400 ) {
-        	fontSize = 26;
+        	fontSize = 24;
             hmargin = "10";
             vmargin = "4";
         } else if ( screenWidth<=600 ) {
-        	fontSize = 32;
+        	fontSize = 28;
             hmargin = "20";
-            vmargin = "10";
+            vmargin = "8";
         } else {
-        	fontSize = 36;
-            hmargin = "80";
-            vmargin = "25";
+        	fontSize = 32;
+            hmargin = "25";
+            vmargin = "15";
         }
         props.applyDefault(ReaderView.PROP_FONT_SIZE, String.valueOf(fontSize));
         props.applyDefault(ReaderView.PROP_FONT_FACE, "Droid Sans");
@@ -1710,6 +1708,7 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_APP_DICTIONARY, dicts[0].id);
 		props.applyDefault(ReaderView.PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS, "0");
 		props.applyDefault(ReaderView.PROP_APP_SELECTION_ACTION, "0");
+		props.applyDefault(ReaderView.PROP_APP_MULTI_SELECTION_ACTION, "0");
 		//props.applyDefault(ReaderView.PROP_FALLBACK_FONT_FACE, "Droid Fallback");
 		props.put(ReaderView.PROP_FALLBACK_FONT_FACE, "Droid Sans Fallback");
 
@@ -1838,13 +1837,15 @@ public class CoolReader extends Activity
 	private final static String DICTAN_ARTICLE_WORD = "article.word";
 	
 	private final static String DICTAN_ERROR_MESSAGE = "error.message";
+
+	private final static int FLAG_ACTIVITY_CLEAR_TASK = 0x00008000;
 	
 	private void findInDictionaryInternal(String s) {
 		switch (currentDict.internal) {
 		case 0:
 			Intent intent0 = new Intent(currentDict.action).setComponent(new ComponentName(
 				currentDict.packageName, currentDict.className
-				)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+				)).addFlags(DeviceInfo.getSDKLevel() >= 11 ? FLAG_ACTIVITY_CLEAR_TASK : Intent.FLAG_ACTIVITY_NEW_TASK);
 			if (s!=null)
 				intent0.putExtra(SearchManager.QUERY, s);
 			try {

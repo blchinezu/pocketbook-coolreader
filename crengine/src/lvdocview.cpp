@@ -2417,7 +2417,7 @@ void LVDocView::Render(int dx, int dy, LVRendPageList * pages) {
 				m_font_size);
 		//CRLog::trace("calling render() for document %08X font=%08X", (unsigned int)m_doc, (unsigned int)m_font.get() );
 		m_doc->render(pages, isDocumentOpened() ? m_callback : NULL, dx, dy,
-				m_showCover, m_showCover ? dy + m_pageMargins.bottom * 4 : 0,
+                m_showCover, m_showCover ? dy + m_pageMargins.bottom * 4 : 0,
                 m_font, m_def_interline_space, m_props);
 
 #if 0
@@ -4974,6 +4974,7 @@ CRBookmark * LVDocView::findBookmarkByPoint(lvPoint pt) {
 
 // execute command
 int LVDocView::doCommand(LVDocCmd cmd, int param) {
+	CRLog::trace("doCommand(%d, %d)", (int)cmd, param);
 	switch (cmd) {
     case DCMD_SET_INTERNAL_STYLES:
         CRLog::trace("DCMD_SET_INTERNAL_STYLES(%d)", param);
@@ -5096,7 +5097,10 @@ int LVDocView::doCommand(LVDocCmd cmd, int param) {
 		break;
 	case DCMD_SCROLL_BY: {
 		if (m_view_mode == DVM_SCROLL) {
+			CRLog::trace("DCMD_SCROLL_BY %d", param);
 			return SetPos(GetPos() + param);
+		} else {
+			CRLog::trace("DCMD_SCROLL_BY ignored: not in SCROLL mode");
 		}
 	}
 		break;
@@ -5435,7 +5439,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
         props->limitValueList(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, bool_options_def_true, 2);
     static int def_status_line[] = { 0, 1, 2 };
 	props->limitValueList(PROP_STATUS_LINE, def_status_line, 3);
-    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 25, 30, 40, 50, 60, 80, 100, 130};
+    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 25, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
 	props->limitValueList(PROP_PAGE_MARGIN_TOP, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_BOTTOM, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_LEFT, def_margin, sizeof(def_margin)/sizeof(int));
@@ -5618,8 +5622,9 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
 				== PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT
 				|| name == PROP_PAGE_MARGIN_BOTTOM) {
 			lUInt32 margin = props->getIntDef(name.c_str(), 8);
-			if (margin > 130)
-				margin = 130;
+            int maxmargin = (name == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT) ? m_dx / 3 : m_dy / 3;
+            if (margin > maxmargin)
+                margin = maxmargin;
 			lvRect rc = getPageMargins();
 			if (name == PROP_PAGE_MARGIN_TOP)
 				rc.top = margin;
