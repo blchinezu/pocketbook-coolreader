@@ -401,6 +401,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 		{NULL, NULL},
 	};
 
+	item_def_t embedded_fonts[] = {
+		{_("On"), "1"},
+		{_("Off"), "0"},
+		{NULL, NULL},
+	};
+
 	item_def_t bookmark_icons[] = {
 		{_("On"), "1"},
 		{_("Off"), "0"},
@@ -557,12 +563,17 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     {"14", "14"},
     {"16", "16"},
     {"20", "20"},
+    {"22", "22"},
+    {"24", "24"},
+    {"26", "26"},
     {"30", "30"},
     {"50", "50"},
     {"60", "60"},
     {"80", "80"},
     {"100", "100"},
     {"130", "130"},
+    {"200", "200"},
+    {"300", "300"},
 #else
         {"0", "0"},
 		{"5", "5"},
@@ -810,6 +821,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_EMBEDDED_STYLES );
         addMenuItems( embeddedStylesMenu, embedded_styles );
         mainMenu->addItem( embeddedStylesMenu );
+
+        CRMenu * embeddedFontsMenu = new CRMenu(_wm, mainMenu, mm_EmbeddedFonts,
+                _("Document embedded fonts"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_EMBEDDED_FONTS );
+        addMenuItems( embeddedFontsMenu, embedded_fonts );
+        mainMenu->addItem( embeddedFontsMenu );
 
         CRMenu * inverseModeMenu = new CRMenu(_wm, mainMenu, mm_Inverse,
                 _("Inverse display"),

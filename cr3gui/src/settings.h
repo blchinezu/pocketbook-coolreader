@@ -35,6 +35,7 @@ enum MainMenuItems_t {
     mm_InterlineSpace,
     mm_Orientation,
     mm_EmbeddedStyles,
+    mm_EmbeddedFonts,
     mm_Inverse,
     mm_StatusMenu,
     mm_StatusLine,

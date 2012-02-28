@@ -5447,7 +5447,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
         props->limitValueList(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, bool_options_def_true, 2);
     static int def_status_line[] = { 0, 1, 2 };
 	props->limitValueList(PROP_STATUS_LINE, def_status_line, 3);
-    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 25, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
+    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 22, 24, 25, 26, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
 	props->limitValueList(PROP_PAGE_MARGIN_TOP, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_BOTTOM, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_LEFT, def_margin, sizeof(def_margin)/sizeof(int));
@@ -5485,6 +5485,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 
 #ifndef ANDROID
     props->setStringDef(PROP_EMBEDDED_STYLES, "1");
+    props->setStringDef(PROP_EMBEDDED_FONTS, "1");
     props->setIntDef(PROP_TXT_OPTION_PREFORMATTED, 0);
     props->limitValueList(PROP_TXT_OPTION_PREFORMATTED, bool_options_def_false,
             2);
