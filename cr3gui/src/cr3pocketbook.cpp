@@ -787,7 +787,8 @@ public:
         : CRPocketBookInkViewWindow( wm )	{}
     virtual void showWindow()
     {
-        OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+//        OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+	OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
     }
 };
 
@@ -2903,6 +2904,14 @@ const char * getEventName(int evt)
         return "EVT_NEXTPAGE";
     case EVT_OPENDIC:
         return "EVT_OPENDIC";
+#ifdef POCKETBOOK_PRO
+    case EVT_BACKGROUND:
+        return "EVT_BACKGROUND";
+    case EVT_FOREGROUND:
+        return "EVT_FOREGROUND";
+    case EVT_ACTIVATE:
+        return "EVT_ACTIVATE";
+#endif 
     default:
         sprintf(buffer, "%d", evt);
         return buffer;
@@ -2957,6 +2966,12 @@ int main_handler(int type, int par1, int par2)
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
         break;
+#ifdef POCKETBOOK_PRO
+    case EVT_BACKGROUND:
+//    case EVT_HIDE:
+	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
+        break;
+#endif 
     case EVT_EXIT:
         exiting = true;
         if (CRPocketBookWindowManager::instance->getWindowCount() != 0)
