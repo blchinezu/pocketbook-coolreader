@@ -467,6 +467,164 @@ LVStreamRef GetEpubCoverpage(LVContainerRef arc)
     return coverPageImageStream;
 }
 
+
+class EmbeddedFontStyleParser {
+    LVEmbeddedFontList & _fontList;
+    lString16 _basePath;
+    int _state;
+    lString8 _face;
+    bool _italic;
+    bool _bold;
+    lString16 _url;
+public:
+    EmbeddedFontStyleParser(LVEmbeddedFontList & fontList) : _fontList(fontList) { }
+    void onToken(char token) {
+        // 4,5:  font-family:
+        // 6,7:  font-weight:
+        // 8,9:  font-style:
+        //10,11: src:
+        //   10   11    12   13
+        //   src   :   url    (
+        //CRLog::trace("state==%d: %c ", _state, token);
+        switch (token) {
+        case ':':
+            if (_state < 2) {
+                _state = 0;
+            } else if (_state == 4 || _state == 6 || _state == 8 || _state == 10) {
+                _state++;
+            } else if (_state != 3) {
+                _state = 2;
+            }
+            break;
+        case ';':
+            if (_state < 2) {
+                _state = 0;
+            } else if (_state != 3) {
+                _state = 2;
+            }
+            break;
+        case '{':
+            if (_state == 1) {
+                _state = 2; // inside @font {
+                _face.clear();
+                _italic = false;
+                _bold = false;
+                _url.clear();
+            } else
+                _state = 3; // inside other {
+            break;
+        case '}':
+            if (_state == 2) {
+                if (!_url.empty()) {
+//                    CRLog::trace("@font { face: %s; bold: %s; italic: %s; url: %s", _face.c_str(), _bold ? "yes" : "no",
+//                                 _italic ? "yes" : "no", LCSTR(_url));
+                    _fontList.add(_url, _face, _bold, _italic);
+                }
+            }
+            _state = 0;
+            break;
+        case '(':
+            if (_state == 12) {
+                _state = 13;
+            } else {
+                if (_state > 3)
+                    _state = 2;
+            }
+            break;
+        }
+    }
+    void onToken(lString8 & token) {
+        if (token.empty())
+            return;
+        lString8 t = token;
+        token.clear();
+        //CRLog::trace("state==%d: %s", _state, t.c_str());
+        if (t == "@font-face") {
+            if (_state == 0)
+                _state = 1; // right after @font
+            return;
+        }
+        if (_state == 1)
+            _state = 0;
+        if (_state == 2) {
+            if (t == "font-family")
+                _state = 4;
+            else if (t == "font-weight")
+                _state = 6;
+            else if (t == "font-style")
+                _state = 8;
+            else if (t == "src")
+                _state = 10;
+        } else if (_state == 5) {
+            _face = t;
+            _state = 2;
+        } else if (_state == 7) {
+            if (t == "bold")
+                _bold = true;
+            _state = 2;
+        } else if (_state == 9) {
+            if (t == "italic")
+                _italic = true;
+            _state = 2;
+        } else if (_state == 11) {
+            if (t == "url")
+                _state = 12;
+            else
+                _state = 2;
+        }
+    }
+    void onQuotedText(lString8 & token) {
+        //CRLog::trace("state==%d: \"%s\"", _state, token.c_str());
+        if (_state == 11 || _state == 13) {
+            if (!token.empty()) {
+                _url = LVCombinePaths(_basePath, Utf8ToUnicode(token));
+            }
+            _state = 2;
+        } else if (_state == 5) {
+            if (!token.empty()) {
+                _face = token;
+            }
+            _state = 2;
+        }
+        token.clear();
+    }
+
+    void parse(lString16 basePath, const lString8 & css) {
+        _state = 0;
+        _basePath = basePath;
+        lString8 token;
+        char insideQuotes = 0;
+        for (int i=0; i<css.length(); i++) {
+            char ch = css[i];
+            if (insideQuotes || _state == 13) {
+                if (ch == insideQuotes || (_state == 13 && ch == ')')) {
+                    onQuotedText(token);
+                    insideQuotes =  0;
+                    if (_state == 13)
+                        onToken(ch);
+                } else {
+                    if (_state == 13 && token.empty() && (ch == '\'' || ch=='\"')) {
+                        insideQuotes = ch;
+                    } else if (ch != ' ' || _state != 13)
+                        token << ch;
+                }
+                continue;
+            }
+            if (ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n') {
+                onToken(token);
+            } else if (ch == '@' || ch=='-' || ch=='_' || ch=='.' || ch>='a' && ch <='z' || ch>='A' && ch <='Z' || ch>='0' && ch <='9') {
+                token << ch;
+            } else if (ch == ':' || ch=='{' || ch == '}' || ch=='(' || ch == ')' || ch == ';') {
+                onToken(token);
+                onToken(ch);
+            } else if (ch == '\'' || ch == '\"') {
+                onToken(token);
+                insideQuotes = ch;
+            }
+        }
+    }
+};
+
 bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCallback * progressCallback, CacheLoadingCallback * formatCallback )
 {
     LVContainerRef arc = LVOpenArchieve( stream );
@@ -515,6 +673,7 @@ bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCall
     lString16 coverId;
 
     LVEmbeddedFontList fontList;
+    EmbeddedFontStyleParser styleParser(fontList);
 
     // reading content stream
     {
@@ -582,22 +741,25 @@ bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCall
                 epubItem->mediaType = mediaType;
                 epubItems.add( epubItem );
 
-                // register embedded document fonts
-                if (mediaType == L"application/vnd.ms-opentype"
-                        || mediaType == L"application/x-font-otf"
-                        || mediaType == L"application/x-font-ttf") { // TODO: more media types?
-                    // TODO:
-                    fontList.add(codeBase + href);
+//                // register embedded document fonts
+//                if (mediaType == L"application/vnd.ms-opentype"
+//                        || mediaType == L"application/x-font-otf"
+//                        || mediaType == L"application/x-font-ttf") { // TODO: more media types?
+//                    // TODO:
+//                    fontList.add(codeBase + href);
+//                }
+            }
+            if ( mediaType==L"text/css" ) {
+                lString16 name = LVCombinePaths(codeBase, href);
+                LVStreamRef cssStream = m_arc->OpenStream(name.c_str(), LVOM_READ);
+                if (!cssStream.isNull()) {
+                    lString8 cssFile = UnicodeToUtf8(LVReadTextFile(cssStream));
+                    lString16 base = name;
+                    LVExtractLastPathElement(base);
+                    CRLog::trace("style: %s", cssFile.c_str());
+                    styleParser.parse(base, cssFile);
                 }
             }
-//            if ( mediaType==L"text/css" ) {
-//                lString16 name = codeBase + href;
-//                LVStreamRef cssStream = m_arc->OpenStream(name.c_str(), LVOM_READ);
-//                if ( !cssStream.isNull() ) {
-//                    css << L"\n";
-//                    css << LVReadTextFile( cssStream );
-//                }
-//            }
         }
 
         // spine == itemrefs
@@ -668,25 +830,23 @@ bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCall
                 LVStreamRef stream = m_arc->OpenStream(name.c_str(), LVOM_READ);
                 if ( !stream.isNull() ) {
                     appender.setCodeBase( name );
+                    lString16 base = name;
+                    LVExtractLastPathElement(base);
+                    //CRLog::trace("base: %s", LCSTR(base));
                     //LVXMLParser
                     LVHTMLParser parser(stream, &appender);
                     if ( parser.CheckFormat() && parser.Parse() ) {
                         // valid
                         fragmentCount++;
+                        lString8 headCss = appender.getHeadStyleText();
+                        //CRLog::trace("style: %s", headCss.c_str());
+                        styleParser.parse(base, headCss);
                     } else {
                         CRLog::error("Document type is not XML/XHTML for fragment %s", LCSTR(name));
                     }
                 }
             }
         }
-    }
-
-    // TODO: fill font properties from CSS @font
-
-    if (!fontList.empty()) {
-        // set document font list, and register fonts
-        m_doc->getEmbeddedFontList().set(fontList);
-        m_doc->registerEmbeddedFonts();
     }
 
     ldomDocument * ncxdoc = NULL;
@@ -710,6 +870,13 @@ bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCall
     writer.OnTagClose(L"", L"body");
     writer.OnStop();
     CRLog::debug("EPUB: %d documents merged", fragmentCount);
+
+    if (!fontList.empty()) {
+        // set document font list, and register fonts
+        m_doc->getEmbeddedFontList().set(fontList);
+        m_doc->registerEmbeddedFonts();
+        m_doc->forceReinitStyles();
+    }
 
     if ( fragmentCount==0 )
         return false;

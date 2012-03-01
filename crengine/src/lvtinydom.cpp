@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.32"
+#define CACHE_FILE_FORMAT_VERSION "3.04.33"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -271,12 +271,12 @@ static lUInt64 calcHash64( const lUInt8 * s, int len )
     return hval;
 }
 
-lUInt32 calcGlobalSettingsHash()
+lUInt32 calcGlobalSettingsHash(int documentId)
 {
     lUInt32 hash = FORMATTING_VERSION_ID;
     if ( fontMan->getKerning() )
         hash += 127365;
-    hash = hash * 31 + fontMan->GetFontListHash();
+    hash = hash * 31 + fontMan->GetFontListHash(documentId);
     hash = hash * 31 + (int)fontMan->GetHintingMode();
     if ( LVRendGetFontEmbolden() )
         hash = hash * 75 + 2384761;
@@ -867,7 +867,7 @@ bool CacheFile::write( lUInt16 type, lUInt16 dataIndex, const lUInt8 * buf, int 
         }
     }
 
-#if 1
+#if 0
     if (existingblock)
         CRLog::trace("*    oldsz=%d oldhash=%08x", (int)existingblock->_uncompressedSize, (int)existingblock->_dataHash);
     CRLog::trace("* wr block t=%d[%d] sz=%d hash=%08x", type, dataIndex, size, newhash);
@@ -3184,7 +3184,7 @@ void ldomDocument::applyDocumentStyleSheet()
 
 int ldomDocument::render( LVRendPageList * pages, LVDocViewCallback * callback, int width, int dy, bool showCover, int y0, font_ref_t def_font, int def_interline_space, CRPropRef props )
 {
-    CRLog::info("Render is called for width %d, pageHeight=%d, fontFace=%s", width, dy, def_font->getTypeFace().c_str() );
+    CRLog::info("Render is called for width %d, pageHeight=%d, fontFace=%s, docFlags=%d", width, dy, def_font->getTypeFace().c_str(), getDocFlags() );
     CRLog::trace("initializing default style...");
     //persist();
 //    {
@@ -5004,20 +5004,28 @@ ldomXPointer ldomDocument::createXPointer( ldomNode * baseNode, const lString16 
             // element of type 'name' with 'index'        /elemname[N]/
             {
                 lUInt16 id = getElementNameIndex( name.c_str() );
-                ldomNode * foundItem = NULL;
-                int foundCount = 0;
-                for (unsigned i=0; i<currNode->getChildCount(); i++) {
-                    ldomNode * p = currNode->getChildNode(i);
-                    //CRLog::trace( "        node[%d] = %d %s", i, p->getNodeId(), LCSTR(p->getNodeName()) );
-                    if ( p && p->isElement() && p->getNodeId()==id ) {
-                        foundCount++;
-                        if ( foundCount==index || index==-1 ) {
-                            foundItem = p;
-                            break; // DON'T CHECK WHETHER OTHER ELEMENTS EXIST
-                        }
-                    }
+                ldomNode * foundItem = currNode->findChildElement(LXML_NS_ANY, id, index > 0 ? index - 1 : -1);
+                if (foundItem == NULL && currNode->getChildCount() == 1) {
+                    // make saved pointers work properly even after moving of some part of path one element deeper
+                    foundItem = currNode->getChildNode(0)->findChildElement(LXML_NS_ANY, id, index > 0 ? index - 1 : -1);
                 }
-                if ( foundItem==NULL || (index==-1 && foundCount>1) ) {
+//                int foundCount = 0;
+//                for (unsigned i=0; i<currNode->getChildCount(); i++) {
+//                    ldomNode * p = currNode->getChildNode(i);
+//                    //CRLog::trace( "        node[%d] = %d %s", i, p->getNodeId(), LCSTR(p->getNodeName()) );
+//                    if ( p && p->isElement() && p->getNodeId()==id ) {
+//                        foundCount++;
+//                        if ( foundCount==index || index==-1 ) {
+//                            foundItem = p;
+//                            break; // DON'T CHECK WHETHER OTHER ELEMENTS EXIST
+//                        }
+//                    }
+//                }
+//                if ( foundItem==NULL || (index==-1 && foundCount>1) ) {
+//                    //CRLog::trace("    Element %d is not found. foundCount=%d", id, foundCount);
+//                    return ldomXPointer(); // node not found
+//                }
+                if (foundItem == NULL) {
                     //CRLog::trace("    Element %d is not found. foundCount=%d", id, foundCount);
                     return ldomXPointer(); // node not found
                 }
@@ -7246,6 +7254,8 @@ ldomNode * ldomDocumentFragmentWriter::OnTagOpen( const lChar16 * nsname, const 
     } else {
         if ( !lStr_cmp(tagname, L"link") )
             styleDetectionState = 1;
+        if ( !lStr_cmp(tagname, L"style") )
+            headStyleState = 1;
     }
     if ( !insideTag && baseTag==tagname ) {
         insideTag = true;
@@ -7259,6 +7269,9 @@ ldomNode * ldomDocumentFragmentWriter::OnTagOpen( const lChar16 * nsname, const 
             if ( !codeBasePrefix.empty() )
                 parent->OnAttribute(L"", L"id", codeBasePrefix.c_str() );
             parent->OnTagBody();
+            // add base tag, too (e.g., in CSS, styles are often defined for body tag"
+            parent->OnTagOpen(L"", baseTag.c_str());
+            parent->OnTagBody();
             return baseElement;
         }
     }
@@ -7268,10 +7281,11 @@ ldomNode * ldomDocumentFragmentWriter::OnTagOpen( const lChar16 * nsname, const 
 /// called on closing tag
 void ldomDocumentFragmentWriter::OnTagClose( const lChar16 * nsname, const lChar16 * tagname )
 {
-    styleDetectionState = 0;
+    styleDetectionState = headStyleState = 0;
     if ( insideTag && baseTag==tagname ) {
         insideTag = false;
         if ( !baseTagReplacement.empty() ) {
+            parent->OnTagClose(L"", baseTag.c_str());
             parent->OnTagClose(L"", baseTagReplacement.c_str());
         }
         baseElement = NULL;
@@ -8188,7 +8202,7 @@ lUInt32 tinyNodeCollection::calcStyleHash()
 //    int maxlog = 20;
     int count = ((_elemCount+TNC_PART_LEN-1) >> TNC_PART_SHIFT);
     lUInt32 res = 0; //_elemCount;
-    lUInt32 globalHash = calcGlobalSettingsHash();
+    lUInt32 globalHash = calcGlobalSettingsHash(getFontContextDocIndex());
     lUInt32 docFlags = getDocFlags();
     //CRLog::info("Calculating style hash...  elemCount=%d, globalHash=%08x, docFlags=%08x", _elemCount, globalHash, docFlags);
     for ( int i=0; i<count; i++ ) {
@@ -8296,7 +8310,7 @@ bool tinyNodeCollection::updateLoadedStyles( bool enabled )
                     if ( !s.isNull() ) {
                         lUInt16 fntIndex = _fontMap.get( style );
                         if ( fntIndex==0 ) {
-                            LVFontRef fnt = getFont( s.get() );
+                            LVFontRef fnt = getFont(s.get(), getFontContextDocIndex());
                             fntIndex = _fonts.cache( fnt );
                             if ( fnt.isNull() ) {
                                 CRLog::error("font not found for style!");
@@ -8785,12 +8799,17 @@ void ldomDocument::updateRenderContext()
 /// check document formatting parameters before render - whether we need to reformat; returns false if render is necessary
 bool ldomDocument::checkRenderContext()
 {
+    bool res = true;
+    ldomNode * node = getRootNode();
+    if (node != NULL && node->getFont().isNull()) {
+        CRLog::info("checkRenderContext: style is not set for root node");
+        res = false;
+    }
     int dx = _page_width;
     int dy = _page_height;
     lUInt32 styleHash = calcStyleHash();
     lUInt32 stylesheetHash = (((_stylesheet.getHash() * 31) + calcHash(_def_style))*31 + calcHash(_def_font));
     //calcStyleHash( getRootNode(), styleHash );
-    bool res = true;
     if ( styleHash != _hdr.render_style_hash ) {
         CRLog::info("checkRenderContext: Style hash doesn't match %x!=%x", styleHash, _hdr.render_style_hash);
         res = false;
@@ -10060,7 +10079,7 @@ bool ldomNode::initNodeFont()
             CRLog::error("style not found for index %d", style);
             s = getDocument()->_styles.get( style );
         }
-        LVFontRef fnt = ::getFont( s.get() );
+        LVFontRef fnt = ::getFont(s.get(), getDocument()->getFontContextDocIndex());
         fntIndex = getDocument()->_fonts.cache( fnt );
         if ( fnt.isNull() ) {
             CRLog::error("font not found for style!");
@@ -10369,12 +10388,14 @@ ldomNode * ldomNode::findChildElement( lUInt16 nsid, lUInt16 id, int index )
             continue;
         if ( p->getNodeId() == id && ( (p->getNodeNsId() == nsid) || (nsid==LXML_NS_ANY) ) )
         {
-            if ( k==index || index==-1 )
+            if ( k==index || index==-1 ) {
                 res = p;
+                break;
+            }
             k++;
         }
     }
-    if ( !res || (index==-1 && k>1) )
+    if (!res) //  || (index==-1 && k>1)  // DON'T CHECK WHETHER OTHER ELEMENTS EXIST
         return NULL;
     return res;
 }
@@ -10641,9 +10662,13 @@ LVImageSourceRef ldomNode::getObjectImageSource()
 /// register embedded document fonts in font manager, if any exist in document
 void ldomDocument::registerEmbeddedFonts()
 {
+    if (_fontList.empty())
+        return;
     for (int i=0; i<_fontList.length(); i++) {
         LVEmbeddedFontDef * item =  _fontList.get(i);
-        fontMan->RegisterDocumentFont(getDocIndex(), _container, item->getUrl(), item->getFace(), item->getBold(), item->getItalic());
+        if (!fontMan->RegisterDocumentFont(getDocIndex(), _container, item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
+            CRLog::error("Failed to register document font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
+        }
     }
 }
 

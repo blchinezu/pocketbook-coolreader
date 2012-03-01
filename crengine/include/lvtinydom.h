@@ -52,8 +52,10 @@
 #define DOC_FLAG_ENABLE_FOOTNOTES       2
 /// docFlag mask, enable paperbook-like footnotes
 #define DOC_FLAG_PREFORMATTED_TEXT      4
+/// docFlag mask, enable document embedded fonts (EPUB)
+#define DOC_FLAG_ENABLE_DOC_FONTS       8
 /// default docFlag set
-#define DOC_FLAG_DEFAULTS (DOC_FLAG_ENABLE_INTERNAL_STYLES|DOC_FLAG_ENABLE_FOOTNOTES)
+#define DOC_FLAG_DEFAULTS (DOC_FLAG_ENABLE_INTERNAL_STYLES|DOC_FLAG_ENABLE_FOOTNOTES|DOC_FLAG_ENABLE_DOC_FONTS)
 
 
 
@@ -507,6 +509,11 @@ public:
     inline int getDocIndex()
     {
         return _docIndex;
+    }
+
+    inline int getFontContextDocIndex()
+    {
+        return (_docFlags & DOC_FLAG_ENABLE_DOC_FONTS) && (_docFlags & DOC_FLAG_ENABLE_INTERNAL_STYLES) ? _docIndex : -1;
     }
 
     void setDocFlags( lUInt32 value );
@@ -1949,6 +1956,12 @@ protected:
 
 public:
 
+    void forceReinitStyles() {
+        dropStyles();
+        _hdr.render_style_hash = 0;
+        _rendered = false;
+    }
+
 #if BUILD_LITE!=1
     ListNumberingPropsRef getNodeNumberingProps( lUInt32 nodeDataIndex );
     void setNodeNumberingProps( lUInt32 nodeDataIndex, ListNumberingPropsRef v );
@@ -2215,8 +2228,14 @@ private:
     ldomNode * baseElement;
     ldomNode * lastBaseElement;
 
+    lString8 headStyleText;
+    int headStyleState;
 
 public:
+
+    /// return content of html/head/style element
+    lString8 getHeadStyleText() { return headStyleText; }
+
     ldomNode * getBaseElement() { return lastBaseElement; }
 
     lString16 convertId( lString16 id );
@@ -2240,6 +2259,8 @@ public:
     virtual void OnStart(LVFileFormatParser *)
     {
         insideTag = false;
+        headStyleText.clear();
+        headStyleState = 0;
     }
     /// called on parsing end
     virtual void OnStop()
@@ -2265,6 +2286,10 @@ public:
     /// called on text
     virtual void OnText( const lChar16 * text, int len, lUInt32 flags )
     {
+        if (headStyleState == 1) {
+            headStyleText << UnicodeToUtf8(lString16(text));
+            return;
+        }
         if ( insideTag )
             parent->OnText( text, len, flags );
     }
@@ -2275,7 +2300,7 @@ public:
     /// constructor
     ldomDocumentFragmentWriter( LVXMLParserCallback * parentWriter, lString16 baseTagName, lString16 baseTagReplacementName, lString16 fragmentFilePath )
     : parent(parentWriter), baseTag(baseTagName), baseTagReplacement(baseTagReplacementName),
-    insideTag(false), styleDetectionState(0), pathSubstitutions(100), baseElement(NULL), lastBaseElement(NULL)
+    insideTag(false), styleDetectionState(0), pathSubstitutions(100), baseElement(NULL), lastBaseElement(NULL), headStyleState(0)
     {
         setCodeBase( fragmentFilePath );
     }

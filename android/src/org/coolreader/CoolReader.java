@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.lang.reflect.Field;
+import java.util.Locale;
 
 import org.coolreader.crengine.AboutDialog;
 import org.coolreader.crengine.BackgroundThread;
@@ -28,6 +29,7 @@ import org.coolreader.crengine.ReaderAction;
 import org.coolreader.crengine.ReaderView;
 import org.coolreader.crengine.Scanner;
 import org.coolreader.crengine.Settings;
+import org.coolreader.crengine.Settings.Lang;
 import org.coolreader.crengine.TTS;
 import org.coolreader.crengine.TTS.OnTTSCreatedListener;
 import org.coolreader.crengine.ToastView;
@@ -58,6 +60,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.PixelFormat;
 import android.media.AudioManager;
@@ -588,7 +591,9 @@ public class CoolReader extends Activity
 		// load settings
 		Properties props = loadSettings();
 		String theme = props.getProperty(ReaderView.PROP_APP_THEME, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
+		String lang = props.getProperty(ReaderView.PROP_APP_LOCALE, Lang.DEFAULT.code);
 		setCurrentTheme(theme);
+		setLanguage(lang);
     	
 		mFrame = new FrameLayout(this);
 		mBackgroundThread.setGUI(mFrame);
@@ -974,6 +979,7 @@ public class CoolReader extends Activity
 //		setScreenUpdateMode(-1, mReaderView);
 		releaseBacklightControl();
 		mReaderView.saveCurrentPositionBookmarkSync(true);
+		mReaderView.onAppPause();
 		super.onPause();
 	}
 	
@@ -1055,6 +1061,14 @@ public class CoolReader extends Activity
 		mPaused = false;
 		
 		backlightControl.onUserActivity();
+		
+		PhoneStateReceiver.setPhoneActivityHandler(new Runnable() {
+			@Override
+			public void run() {
+				if (tts != null)
+					tts.stop();
+			}
+		});
 
 		// Donations support code
 		if (billingSupported)
@@ -1642,6 +1656,8 @@ public class CoolReader extends Activity
         } else {
     		props.applyDefault(ReaderView.PROP_PAGE_ANIMATION, ReaderView.PAGE_ANIMATION_SLIDE2);
         }
+
+        props.applyDefault(ReaderView.PROP_APP_LOCALE, Lang.DEFAULT.code);
         
         props.applyDefault(ReaderView.PROP_APP_THEME, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
         props.applyDefault(ReaderView.PROP_APP_THEME_DAY, DeviceInfo.FORCE_LIGHT_THEME ? "WHITE" : "LIGHT");
@@ -1700,6 +1716,7 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_SHOW_PAGE_COUNT, "1"); 
 		props.applyDefault(ReaderView.PROP_SHOW_TIME, "1");
 		props.applyDefault(ReaderView.PROP_FONT_ANTIALIASING, "2");
+		props.applyDefault(ReaderView.PROP_APP_GESTURE_PAGE_FLIPPING, "1");
 		props.applyDefault(ReaderView.PROP_APP_SHOW_COVERPAGES, "1");
 		props.applyDefault(ReaderView.PROP_APP_SCREEN_ORIENTATION, "0"); // DeviceInfo.EINK_SCREEN ? "0" : "4"
 		props.applyDefault(ReaderView.PROP_CONTROLS_ENABLE_VOLUME_KEYS, "1");
@@ -1845,7 +1862,7 @@ public class CoolReader extends Activity
 		case 0:
 			Intent intent0 = new Intent(currentDict.action).setComponent(new ComponentName(
 				currentDict.packageName, currentDict.className
-				)).addFlags(DeviceInfo.getSDKLevel() >= 11 ? FLAG_ACTIVITY_CLEAR_TASK : Intent.FLAG_ACTIVITY_NEW_TASK);
+				)).addFlags(DeviceInfo.getSDKLevel() >= 7 ? FLAG_ACTIVITY_CLEAR_TASK : Intent.FLAG_ACTIVITY_NEW_TASK);
 			if (s!=null)
 				intent0.putExtra(SearchManager.QUERY, s);
 			try {
@@ -2087,6 +2104,25 @@ public class CoolReader extends Activity
 		dlg.show();
 	}
 
+	public void setLanguage(String lang) {
+		setLanguage(Lang.byCode(lang));
+	}
+	
+	public void setLanguage(Lang lang) {
+		try {
+			Resources res = getResources();
+		    // Change locale settings in the app.
+		    DisplayMetrics dm = res.getDisplayMetrics();
+		    android.content.res.Configuration conf = res.getConfiguration();
+		    conf.locale = (lang == Lang.DEFAULT) ? defaultLocale : new Locale(lang.code);
+		    res.updateConfiguration(conf, dm);
+		} catch (Exception e) {
+			log.e("error while setting locale " + lang, e);
+		}
+	}
+	
+	private static final Locale defaultLocale = Locale.getDefault();
+	
 	//==============================================================
 	// 
 	// Donations related code

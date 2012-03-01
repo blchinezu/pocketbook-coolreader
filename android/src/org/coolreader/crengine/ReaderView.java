@@ -131,9 +131,10 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 
     	DCMD_SET_TEXT_FORMAT(136),
 
-		DCMD_FONT_NEXT(137),
-		DCMD_FONT_PREVIOUS(138),
+    	DCMD_SET_DOC_FONTS(137),
+
         
+		
     	// definitions from android/jni/readerview.h
     	DCMD_OPEN_RECENT_BOOK(2000),
     	DCMD_CLOSE_BOOK(2001),
@@ -170,6 +171,9 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     	DCMD_START_SELECTION(2029),
     	DCMD_SWITCH_PROFILE(2030),
     	DCMD_TOGGLE_TEXT_AUTOFORMAT(2031),
+
+    	DCMD_FONT_NEXT(2032),
+		DCMD_FONT_PREVIOUS(2033),
     	;
     	
     	private final int nativeId;
@@ -527,6 +531,12 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		super.onFocusChanged(gainFocus, direction, previouslyFocusedRect);
 	}
 	
+	public void onAppPause() {
+		stopTracking();
+		if (currentAutoScrollAnimation != null)
+			stopAutoScroll();
+	}
+	
 	private boolean startTrackingKey( KeyEvent event ) {
 		if ( event.getRepeatCount()==0 ) {
 			stopTracking();
@@ -862,6 +872,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 //	private int selectionEndX = 0;
 //	private int selectionEndY = 0;
 	private boolean doubleTapSelectionEnabled = false;
+	private boolean gesturePageFlippingEnabled = true;
 	private int secondaryTapActionType = TAP_ACTION_TYPE_LONGPRESS;
 	private boolean selectionModeActive = false;
 	
@@ -1450,13 +1461,15 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 					}
 					boolean isPageMode = mSettings.getInt(PROP_PAGE_VIEW_MODE, 1) == 1;
 					int dir = isPageMode ? x - start_x : y - start_y;
-					if (pageFlipAnimationSpeedMs == 0 || DeviceInfo.EINK_SCREEN) {
-						// no animation
-						return performAction(dir < 0 ? ReaderAction.PAGE_DOWN : ReaderAction.PAGE_UP, false);
+					if (gesturePageFlippingEnabled) {
+						if (pageFlipAnimationSpeedMs == 0 || DeviceInfo.EINK_SCREEN) {
+							// no animation
+							return performAction(dir < 0 ? ReaderAction.PAGE_DOWN : ReaderAction.PAGE_UP, false);
+						}
+						startAnimation(start_x, start_y, width, height);
+						updateAnimation(x, y);
+						state = STATE_FLIPPING;
 					}
-					startAnimation(start_x, start_y, width, height);
-					updateAnimation(x, y);
-					state = STATE_FLIPPING;
 					return true;
 				case STATE_FLIPPING:
 					updateAnimation(x, y);
@@ -1855,7 +1868,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 					String chapter = bm.getTitleText();
 					if (chapter!=null && chapter.length()>100)
 						chapter = chapter.substring(0, 100) + "...";
-					if (chapter!=null)
+					if (chapter != null && chapter.length() > 0)
 			 			buf.append("\n" + chapter);
 				}
 			}
@@ -1886,6 +1899,18 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		}
 	}
 	
+	public void toggleEmbeddedFonts() {
+		if ( mOpened && mBookInfo!=null ) {
+			log.d("toggleEmbeddedFonts()");
+			boolean disableInternalFonts = mBookInfo.getFileInfo().getFlag(FileInfo.DONT_USE_DOCUMENT_FONTS_FLAG);
+			disableInternalFonts = !disableInternalFonts;
+			mBookInfo.getFileInfo().setFlag(FileInfo.DONT_USE_DOCUMENT_FONTS_FLAG, disableInternalFonts);
+            doEngineCommand( ReaderCommand.DCMD_SET_DOC_FONTS, disableInternalFonts ? 0 : 1);
+            doEngineCommand( ReaderCommand.DCMD_REQUEST_RENDER, 1);
+    		mActivity.getDB().save(mBookInfo);
+		}
+	}
+	
 	public boolean isTextAutoformatEnabled() {
 		if ( mOpened && mBookInfo!=null ) {
 			boolean disableTextReflow = mBookInfo.getFileInfo().getFlag(FileInfo.DONT_REFLOW_TXT_FILES_FLAG);
@@ -1898,6 +1923,14 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		if ( mOpened && mBookInfo!=null ) {
 			DocumentFormat fmt = mBookInfo.getFileInfo().format;
 			return fmt == DocumentFormat.TXT || fmt == DocumentFormat.HTML || fmt == DocumentFormat.PDB;
+		}
+		return false;
+	}
+
+	public boolean isFormatWithEmbeddedFonts() {
+		if ( mOpened && mBookInfo!=null ) {
+			DocumentFormat fmt = mBookInfo.getFileInfo().format;
+			return fmt == DocumentFormat.EPUB;
 		}
 		return false;
 	}
@@ -1918,6 +1951,14 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 	public boolean getDocumentStylesEnabled() {
 		if ( mOpened && mBookInfo!=null ) {
 			boolean flg = !mBookInfo.getFileInfo().getFlag(FileInfo.DONT_USE_DOCUMENT_STYLES_FLAG);
+			return flg;
+		}
+		return true;
+	}
+	
+	public boolean getDocumentFontsEnabled() {
+		if ( mOpened && mBookInfo!=null ) {
+			boolean flg = !mBookInfo.getFileInfo().getFlag(FileInfo.DONT_USE_DOCUMENT_FONTS_FLAG);
 			return flg;
 		}
 		return true;
@@ -2623,6 +2664,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		props = new Properties(props); // make a copy
 		props.remove(PROP_TXT_OPTION_PREFORMATTED);
 		props.remove(PROP_EMBEDDED_STYLES);
+		props.remove(PROP_EMBEDDED_FONTS);
 		BackgroundThread.ensureBackground();
 		log.v("applySettings()");
 		boolean isFullScreen = props.getBool(PROP_APP_FULLSCREEN, false );
@@ -2699,6 +2741,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
 		boolean flg = "1".equals(value);
         if ( key.equals(PROP_APP_FULLSCREEN) ) {
 			this.mActivity.setFullscreen( "1".equals(value) );
+        } else if ( key.equals(PROP_APP_LOCALE) ) {
+			mActivity.setLanguage(value);
         } else if ( key.equals(PROP_APP_SHOW_COVERPAGES) ) {
 			mActivity.getHistory().setCoverPagesEnabled(flg);
         } else if ( key.equals(PROP_APP_BOOK_PROPERTY_SCAN_ENABLED) ) {
@@ -2730,6 +2774,8 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
         	mActivity.setCurrentTheme(value);
         } else if ( key.equals(PROP_APP_DOUBLE_TAP_SELECTION) ) {
         	doubleTapSelectionEnabled = flg;
+        } else if ( key.equals(PROP_APP_GESTURE_PAGE_FLIPPING) ) {
+        	gesturePageFlippingEnabled = flg;
         } else if ( key.equals(PROP_APP_SECONDARY_TAP_ACTION_TYPE) ) {
         	secondaryTapActionType = flg ? TAP_ACTION_TYPE_DOUBLE : TAP_ACTION_TYPE_LONGPRESS;
         } else if ( key.equals(PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS) ) {
@@ -2846,6 +2892,7 @@ public class ReaderView extends SurfaceView implements android.view.SurfaceHolde
     				|| PROP_APP_FILE_BROWSER_HIDE_EMPTY_FOLDERS.equals(key)
     				|| PROP_APP_SELECTION_ACTION.equals(key)
     				|| PROP_APP_FILE_BROWSER_SIMPLE_MODE.equals(key)
+    				|| PROP_APP_GESTURE_PAGE_FLIPPING.equals(key)
     				// TODO: redesign all this mess!
     				) {
     			newSettings.setProperty(key, value);
