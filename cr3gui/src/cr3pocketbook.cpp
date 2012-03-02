@@ -150,6 +150,7 @@ private :
     bool _ready_sent;
     bool createFile(char *fName);
     bool _translateTimer;
+    int _saved_page;
 #ifdef PB_DB_STATE_SUPPORTED
     CRPocketBookProStateSaver proStateSaver;
 #endif /* PB_DB_STATE_SUPPORTED */
@@ -199,6 +200,7 @@ CRPocketBookGlobals::CRPocketBookGlobals(char *fileName)
     _fileName = lString16(fileName);
     _ready_sent = false;
     _translateTimer = false;
+    _saved_page = -1;
     iconfig *gc = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
     _lang = ReadString(gc, const_cast<char *>("language"), const_cast<char *>("en"));
     CRLog::trace("language=%s", _lang.c_str());
@@ -231,19 +233,22 @@ bool CRPocketBookGlobals::createFile(char *fName)
 
 void CRPocketBookGlobals::saveState(int cpage, int npages)
 {
-    lString8 cf = UnicodeToLocal(_fileName);
-    char *af0 = GetAssociatedFile((char *)cf.c_str(), 0);
+    if (cpage != _saved_page) {
+        _saved_page = cpage;
+        lString8 cf = UnicodeToLocal(_fileName);
+        char *af0 = GetAssociatedFile((char *)cf.c_str(), 0);
 
-    if (createFile(af0)) {
-        if (npages - cpage < 3 && cpage >= 5) {
-            char *afz = GetAssociatedFile((char *)cf.c_str(), 'z');
-            createFile(afz);
+        if (createFile(af0)) {
+            if (npages - cpage < 3 && cpage >= 5) {
+                char *afz = GetAssociatedFile((char *)cf.c_str(), 'z');
+                createFile(afz);
+            }
         }
+    #ifdef PB_DB_STATE_SUPPORTED
+        if (proStateSaver.isSaveStateSupported())
+            proStateSaver.saveState((char *)cf.c_str(), cpage, npages);
+    #endif
     }
-#ifdef PB_DB_STATE_SUPPORTED
-    if (proStateSaver.isSaveStateSupported())
-        proStateSaver.saveState((char *)cf.c_str(), cpage, npages);
-#endif
 }
 
 class CRPocketBookGlobals * pbGlobals = NULL;
@@ -1308,7 +1313,6 @@ public:
 
     virtual void closing()
     {
-        pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
         CRLog::trace("V3DocViewWin::closing();");
         readingOff();
         if (_restore_globOrientation) {
@@ -1316,6 +1320,7 @@ public:
             _restore_globOrientation = false;
         }
         V3DocViewWin::closing();
+        pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
         if (!exiting)
             CloseApp();
     }
@@ -2968,11 +2973,10 @@ int main_handler(int type, int par1, int par2)
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
-//    case EVT_HIDE:
 	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
         break;
 #endif 
-    case EVT_EXIT:
+    case EVT_HIDE:
         exiting = true;
         if (CRPocketBookWindowManager::instance->getWindowCount() != 0)
             CRPocketBookWindowManager::instance->closeAllWindows();
