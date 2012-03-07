@@ -792,8 +792,7 @@ public:
         : CRPocketBookInkViewWindow( wm )	{}
     virtual void showWindow()
     {
-//        OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
-	OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
+        OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
     }
 };
 
@@ -2012,7 +2011,9 @@ void CRPbDictionaryView::setCurItem(int index)
 void CRPbDictionaryView::searchDictinary()
 {
     _searchPattern.clear();
-    OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+//    OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+    OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
+
 }
 
 void CRPbDictionaryView::closeDictionary()
@@ -2976,7 +2977,7 @@ int main_handler(int type, int par1, int par2)
 	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
         break;
 #endif 
-    case EVT_HIDE:
+    case EVT_EXIT:
         exiting = true;
         if (CRPocketBookWindowManager::instance->getWindowCount() != 0)
             CRPocketBookWindowManager::instance->closeAllWindows();
