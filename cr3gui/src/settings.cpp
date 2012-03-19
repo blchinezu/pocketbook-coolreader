@@ -395,6 +395,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 		{NULL, NULL},
 	};
 
+        item_def_t fonthinting_modes[] = {
+                {_("Autohinting"), "2"},
+                {_("Use bytecode"), "1"},
+                {_("Disable"), "0"},
+                {NULL, NULL},
+        };
+
 	item_def_t embedded_styles[] = {
 		{_("On"), "1"},
 		{_("Off"), "0"},
@@ -406,6 +413,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 		{_("Off"), "0"},
 		{NULL, NULL},
 	};
+
+        item_def_t highlight_bookmark[] = {
+                {_("On"), "1"},
+                {_("Off"), "0"},
+                {NULL, NULL},
+        };
 
 	item_def_t bookmark_icons[] = {
 		{_("On"), "1"},
@@ -738,11 +751,28 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         //lString8 fontFace = UnicodeToUtf8(props->getStringDef( PROP_FONT_FACE, UnicodeToUtf8(list[0]).c_str() ));
         mainMenu->addItem( fontFaceMenu );
 
+        CRMenu * fontFallbackFaceMenu = new CRMenu(_wm, mainMenu, mm_FontFallbackFace,
+                                            _("Fallback font face"),
+                                                    LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FALLBACK_FONT_FACE );
+        fontFallbackFaceMenu->setSkinName(lString16(L"#settings"));
+
+        for ( i=0; i<(int)list.length(); i++ ) {
+            fontFallbackFaceMenu->addItem( new OnDemandFontMenuItem( fontFallbackFaceMenu, i,
+                                    list[i], LVImageSourceRef(), list[i].c_str(),
+                                    MENU_FONT_FACE_SIZE, 400,
+                                    false, css_ff_sans_serif, UnicodeToUtf8(list[i]), defFont) );
+            fontFallbackFaceMenu->setFullscreen( true );
+        }
+
+        fontFallbackFaceMenu->setAccelerators( _menuAccelerators );
+        fontFallbackFaceMenu->reconfigure( 0 );
+        mainMenu->addItem( fontFallbackFaceMenu );
+
         CRMenu * fontSizeMenu = createFontSizeMenu( _wm, mainMenu, props );
         mainMenu->addItem( fontSizeMenu );
 
         CRMenu * fontHintingMenu = new CRMenu(_wm, mainMenu, mm_FontHinting,
-                _("Font Hinting"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_HINTING );
+                _("Font hinting"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_HINTING );
         addMenuItems( fontHintingMenu, font_hinting );
         mainMenu->addItem( fontHintingMenu );
 
@@ -753,7 +783,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         mainMenu->addItem( emboldenModeMenu );
 
         CRMenu * fontGammaMenu = new CRMenu(_wm, mainMenu, mm_fontGamma,
-                _("Font gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
+                _("Font Gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
         addMenuItems( fontGammaMenu, font_gammas );
         mainMenu->addItem( fontGammaMenu );
 
@@ -905,6 +935,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         statusMenu->reconfigure( 0 );
         mainMenu->addItem( statusMenu );
 	//====== End of Status line  ========
+
+        CRMenu * highlightbookmarksMenu = new CRMenu(_wm, mainMenu, mm_HighlightBookmarks,
+                _("Highlight bookmarks"),
+                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_HIGHLIGHT_COMMENT_BOOKMARKS );
+        addMenuItems( highlightbookmarksMenu, highlight_bookmark );
+        mainMenu->addItem( highlightbookmarksMenu );
 
         CRMenu * spaceCondensingMenu = new CRMenu(_wm, mainMenu, mm_SpaceCondensing,
                 _("Space condensing percent"),

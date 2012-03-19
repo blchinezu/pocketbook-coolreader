@@ -50,6 +50,7 @@ img {
 .section_image { text-align: center; }
 .coverpage { text-align: center; }
 p image { display: inline }
+li image { display: inline }
 
 a { display:inline; $link.all }
 p { $def.all }
@@ -64,6 +65,9 @@ sup { vertical-align: super; font-size: 70% }
 li { display: list-item; text-indent: 0em;  }
 ul { display: block; list-style-type: disc; margin-left: 1em }
 ol { display: block; list-style-type: decimal; margin-left: 1em }
+
+span { display: inline }
+div { display: block }
 
 .citation p { $cite.all }
 .epigraph p { $epigraph.all }

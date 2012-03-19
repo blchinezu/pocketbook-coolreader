@@ -123,6 +123,7 @@ formatted_text_fragment_t * lvtextAllocFormatter( lUInt16 width )
     pbuffer->img_zoom_out_mode_inline = defMode; /**< can zoom out inline images: 0=disabled, 1=integer scale, 2=free scale */
     pbuffer->img_zoom_out_scale_inline = defMult; /**< max scale for inline images zoom out: 1, 2, 3 */
     pbuffer->min_space_condensing_percent = MIN_SPACE_CONDENSING_PERCENT; // 50%
+
     return pbuffer;
 }
 
@@ -367,6 +368,7 @@ public:
 
     void resizeImage( int & width, int & height, int maxw, int maxh, bool isInline )
     {
+        //CRLog::trace("Resize image (%dx%d) max %dx%d %s", width, height, maxw, maxh, isInline ? "inline" : "block");
         bool arbitraryImageScaling = false;
         int maxScale = 1;
         bool zoomIn = width<maxw && height<maxh;
@@ -400,6 +402,7 @@ public:
 
     void resizeImage( int & width, int & height, int maxw, int maxh, bool arbitraryImageScaling, int maxScaleMult )
     {
+        //CRLog::trace("Resize image (%dx%d) max %dx%d %s  *%d", width, height, maxw, maxh, arbitraryImageScaling ? "arbitrary" : "integer", maxScaleMult);
         if ( maxScaleMult<1 )
             maxScaleMult = 1;
         if ( arbitraryImageScaling ) {
@@ -484,14 +487,17 @@ public:
                 tabIndex = i;
             }
             bool isObject = false;
+            bool prevCharIsObject = false;
             if ( i<m_length ) {
                 newSrc = m_srcs[i];
-                isObject = m_charindex[i]==OBJECT_CHAR_INDEX;
+                isObject = m_charindex[i] == OBJECT_CHAR_INDEX;
                 newFont = isObject ? NULL : (LVFont *)newSrc->t.font;
             }
+            if (i > 0)
+                prevCharIsObject = m_charindex[i - 1] == OBJECT_CHAR_INDEX;
             if ( !lastFont )
                 lastFont = newFont;
-            if ( i>start && (newFont!=lastFont || isObject || i>=start+MAX_TEXT_CHUNK_SIZE || (m_flags[i]&LCHAR_MANDATORY_NEWLINE)) ) {
+            if ( i>start && (newFont!=lastFont || isObject || prevCharIsObject || i>=start+MAX_TEXT_CHUNK_SIZE || (m_flags[i]&LCHAR_MANDATORY_NEWLINE)) ) {
                 // measure start..i-1 chars
                 if ( m_charindex[i-1]!=OBJECT_CHAR_INDEX ) {
                     // measure text
@@ -530,14 +536,16 @@ public:
                     }
 
                     lastWidth += widths[len-1]; //len<m_length ? len : len-1];
-                    m_flags[len] = 0;
+
+                    // ?????? WTF
+                    //m_flags[len] = 0;
                     // TODO: letter spacing letter_spacing
                 } else {
                     // measure object
                     // assume i==start+1
                     int width = m_srcs[start]->o.width;
                     int height = m_srcs[start]->o.height;
-                    resizeImage( width, height, m_pbuffer->width, m_pbuffer->page_height, m_length>1 );
+                    resizeImage(width, height, m_pbuffer->width, m_pbuffer->page_height, m_length>1);
                     lastWidth += width;
                     m_widths[start] = lastWidth;
                 }
@@ -712,12 +720,13 @@ public:
 
                     int width = lastSrc->o.width;
                     int height = lastSrc->o.height;
-                    resizeImage( width, height, m_pbuffer->width - x, m_pbuffer->page_height, m_length>1 );
+                    resizeImage(width, height, m_pbuffer->width - x, m_pbuffer->page_height, m_length>1);
                     word->width = width;
                     word->o.height = height;
 
                     b = word->o.height;
                     h = 0;
+                    //frmline->width += width;
                 } else {
                     // word
                     src_text_fragment_t * srcline = m_srcs[wstart];
@@ -1127,27 +1136,52 @@ void LFormattedText::setMinSpaceCondensingPercent(int minSpaceWidthPercent)
         m_pbuffer->min_space_condensing_percent = minSpaceWidthPercent;
 }
 
-void DrawBookmarkTextUnderline(LVDrawBuf & drawbuf, int x0, int x1, int y, int style) {
-    lUInt32 cl = drawbuf.GetTextColor();
-    cl = (cl & 0xFFFFFF) | 0x20000000; // semitransparent
-    lUInt32 cl2 = (cl & 0xFFFFFF) | 0x40000000; // semitransparent
-    int step = 4;
-    int index = 0;
-    for (int x = x0; x < x1; x += step ) {
-        int x2 = x + step;
-        if (x2 > x1)
-            x2 = x1;
-        if (style & 8) {
-            // correction
-            int yy = (index & 1) ? y - 1 : y;
-            drawbuf.FillRect(x, yy-1, x+1, yy, cl2);
-            drawbuf.FillRect(x+1, yy-1, x2-1, yy, cl);
-            drawbuf.FillRect(x2-1, yy-1, x2, yy, cl2);
-        } else if (style & 4) {
-            if (index & 1)
-                drawbuf.FillRect(x, y-1, x2 + 1, y, cl);
+/// set colors for selection and bookmarks
+void LFormattedText::setHighlightOptions(text_highlight_options_t * v)
+{
+    m_pbuffer->highlight_options.selectionColor = v->selectionColor;
+    m_pbuffer->highlight_options.commentColor = v->commentColor;
+    m_pbuffer->highlight_options.correctionColor = v->correctionColor;
+    m_pbuffer->highlight_options.bookmarkHighlightMode = v->bookmarkHighlightMode;
+}
+
+
+void DrawBookmarkTextUnderline(LVDrawBuf & drawbuf, int x0, int y0, int x1, int y1, int y, int flags, text_highlight_options_t * options) {
+    if (!(flags & (4 | 8)))
+        return;
+    lUInt32 cl = (flags & 4) ? options->commentColor : options->correctionColor;
+    if (options->bookmarkHighlightMode == highlight_mode_none)
+        return;
+
+    if (options->bookmarkHighlightMode == highlight_mode_solid) {
+        // solid fill
+        lUInt32 cl2 = (cl & 0xFFFFFF) | 0xA0000000;
+        drawbuf.FillRect(x0, y0, x1, y1, cl2);
+    }
+
+    if (options->bookmarkHighlightMode == highlight_mode_underline) {
+        // underline
+        cl = (cl & 0xFFFFFF);
+        lUInt32 cl2 = cl | 0x80000000;
+        int step = 4;
+        int index = 0;
+        for (int x = x0; x < x1; x += step ) {
+
+            int x2 = x + step;
+            if (x2 > x1)
+                x2 = x1;
+            if (flags & 8) {
+                // correction
+                int yy = (index & 1) ? y - 1 : y;
+                drawbuf.FillRect(x, yy-1, x+1, yy, cl2);
+                drawbuf.FillRect(x+1, yy-1, x2-1, yy, cl);
+                drawbuf.FillRect(x2-1, yy-1, x2, yy, cl2);
+            } else if (flags & 4) {
+                if (index & 1)
+                    drawbuf.FillRect(x, y-1, x2 + 1, y, cl);
+            }
+            index++;
         }
-        index++;
     }
 }
 
@@ -1211,7 +1245,8 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     lvRect mark;
                     ldomMarkedRange * range = marks->get(i);
                     if ( range->intersects( lineRect, mark ) ) {
-                        buf->FillRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y, 0xAAAAAA );
+                        //
+                        buf->FillRect(mark.left + x, mark.top + y, mark.right + x, mark.bottom + y, m_pbuffer->highlight_options.selectionColor);
                     }
                 }
             }
@@ -1222,7 +1257,8 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     ldomMarkedRange * range = bookmarks->get(i);
                     if ( range->intersects( lineRect, mark ) ) {
                         //
-                        DrawBookmarkTextUnderline(*buf, mark.left + x, mark.right + x, mark.bottom + y - 2, range->flags);
+                        DrawBookmarkTextUnderline(*buf, mark.left + x, mark.top + y, mark.right + x, mark.bottom + y, mark.bottom + y - 2, range->flags,
+                                                  &m_pbuffer->highlight_options);
                     }
                 }
             }

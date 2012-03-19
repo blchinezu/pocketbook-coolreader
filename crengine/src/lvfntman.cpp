@@ -279,6 +279,10 @@ static lChar16 getReplacementChar( lUInt16 code ) {
         return '>';
     case 0x2044:
         return '/';
+    case 0x2022: // css_lst_disc:
+        return '*';
+    case 0x26AA: // css_lst_disc:
+    case 0x25E6: // css_lst_disc:
     case 0x25CF: // css_lst_disc:
         return 'o';
     case 0x25CB: // css_lst_circle:
@@ -1938,7 +1942,7 @@ public:
                 lString8 fn( (const char *)s );
                 lString16 fn16( fn.c_str() );
                 fn16.lowercase();
-                if ( !fn16.endsWith(L".ttf") && !fn16.endsWith(L".odf") && !fn16.endsWith(L".pfb") && !fn16.endsWith(L".pfa")  ) {
+                if ( !fn16.endsWith(L".ttf") && !fn16.endsWith(L".odf") && !fn16.endsWith(L".otf") && !fn16.endsWith(L".pfb") && !fn16.endsWith(L".pfa")  ) {
                     continue;
                 }
                 int weight = FC_WEIGHT_MEDIUM;

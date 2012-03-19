@@ -2390,6 +2390,12 @@ void LVDocView::setRenderProps(int dx, int dy) {
 
     m_doc->setRenderProps(dx, dy, m_showCover, m_showCover ? dy
             + m_pageMargins.bottom * 4 : 0, m_font, m_def_interline_space, m_props);
+    text_highlight_options_t h;
+    h.bookmarkHighlightMode = m_props->getIntDef(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, highlight_mode_underline);
+    h.selectionColor = (m_props->getColorDef(PROP_HIGHLIGHT_SELECTION_COLOR, 0xC0C0C0) & 0xFFFFFF);
+    h.commentColor = (m_props->getColorDef(PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT, 0xA08000) & 0xFFFFFF);
+    h.correctionColor = (m_props->getColorDef(PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION, 0xA00000) & 0xFFFFFF);
+    m_doc->setHightlightOptions(h);
 }
 
 void LVDocView::Render(int dx, int dy, LVRendPageList * pages) {
@@ -5421,6 +5427,9 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	if (list.length() > 0 && !list.contains(props->getStringDef(PROP_FONT_FACE,
 			defFontFace.c_str())))
 		props->setString(PROP_FONT_FACE, list[0]);
+	props->setStringDef(PROP_FALLBACK_FONT_FACE, props->getStringDef(PROP_FONT_FACE,
+                        defFontFace.c_str()));
+
 	props->setIntDef(PROP_FONT_SIZE,
 			m_font_sizes[m_font_sizes.length() * 2 / 3]);
 	props->limitValueList(PROP_FONT_SIZE, m_font_sizes.ptr(),
@@ -5435,6 +5444,12 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	static int bool_options_def_false[] = { 0, 1 };
 
 	props->limitValueList(PROP_FONT_WEIGHT_EMBOLDEN, bool_options_def_false, 2);
+#ifndef ANDROID
+	props->limitValueList(PROP_EMBEDDED_STYLES, bool_options_def_true, 2);
+	props->limitValueList(PROP_EMBEDDED_FONTS, bool_options_def_true, 2);
+#endif
+	static int int_option_hinting[] = { 0, 1, 2 };
+	props->limitValueList(PROP_FONT_HINTING, int_option_hinting, 3);
     static int int_options_1_2[] = { 2, 1 };
 	props->limitValueList(PROP_LANDSCAPE_PAGES, int_options_1_2, 2);
 	props->limitValueList(PROP_PAGE_VIEW_MODE, bool_options_def_true, 2);
@@ -5444,7 +5459,13 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	props->limitValueList(PROP_BOOKMARK_ICONS, bool_options_def_false, 2);
 	props->limitValueList(PROP_FONT_KERNING_ENABLED, bool_options_def_false, 2);
     //props->limitValueList(PROP_FLOATING_PUNCTUATION, bool_options_def_true, 2);
-        props->limitValueList(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, bool_options_def_true, 2);
+    static int def_bookmark_highlight_modes[] = { 0, 1, 2 };
+    props->setIntDef(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, highlight_mode_underline);
+    props->limitValueList(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, def_bookmark_highlight_modes, sizeof(def_bookmark_highlight_modes)/sizeof(int));
+    props->setColorDef(PROP_HIGHLIGHT_SELECTION_COLOR, 0xC0C0C0); // silver
+    props->setColorDef(PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT, 0xA08020); // yellow
+    props->setColorDef(PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION, 0xA04040); // red
+
     static int def_status_line[] = { 0, 1, 2 };
 	props->limitValueList(PROP_STATUS_LINE, def_status_line, 3);
     static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 22, 24, 25, 26, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
@@ -5472,25 +5493,26 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 					HYPH_DICT_ID_ALGORITHM));
 	}
 #endif
-	props->setStringDef(PROP_STATUS_LINE, "0");
-	props->setStringDef(PROP_SHOW_TITLE, "1");
-	props->setStringDef(PROP_SHOW_TIME, "1");
-	props->setStringDef(PROP_SHOW_BATTERY, "1");
-    props->setStringDef(PROP_SHOW_BATTERY_PERCENT, "0");
-    props->setStringDef(PROP_SHOW_PAGE_COUNT, "1");
-    props->setStringDef(PROP_SHOW_PAGE_NUMBER, "1");
-    props->setStringDef(PROP_SHOW_POS_PERCENT, "0");
-    props->setStringDef(PROP_STATUS_CHAPTER_MARKS, "1");
-    props->setStringDef(PROP_FLOATING_PUNCTUATION, "1");
+	props->setIntDef(PROP_STATUS_LINE, 0);
+	props->setIntDef(PROP_SHOW_TITLE, 1);
+	props->setIntDef(PROP_SHOW_TIME, 1);
+	props->setIntDef(PROP_SHOW_BATTERY, 1);
+    props->setIntDef(PROP_SHOW_BATTERY_PERCENT, 0);
+    props->setIntDef(PROP_SHOW_PAGE_COUNT, 1);
+    props->setIntDef(PROP_SHOW_PAGE_NUMBER, 1);
+    props->setIntDef(PROP_SHOW_POS_PERCENT, 0);
+    props->setIntDef(PROP_STATUS_CHAPTER_MARKS, 1);
+    props->setIntDef(PROP_FLOATING_PUNCTUATION, 1);
 
 #ifndef ANDROID
-    props->setStringDef(PROP_EMBEDDED_STYLES, "1");
-    props->setStringDef(PROP_EMBEDDED_FONTS, "1");
+    props->setIntDef(PROP_EMBEDDED_STYLES, 1);
+    props->setIntDef(PROP_EMBEDDED_FONTS, 1);
     props->setIntDef(PROP_TXT_OPTION_PREFORMATTED, 0);
     props->limitValueList(PROP_TXT_OPTION_PREFORMATTED, bool_options_def_false,
             2);
 #endif
 
+    props->setStringDef(PROP_FONT_GAMMA, "1.00");
 
     img_scaling_option_t defImgScaling;
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE, defImgScaling.max_scale);
@@ -5577,6 +5599,8 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                 fontMan->SetHintingMode((hinting_mode_t)mode);
                 requestRender();
             }
+        } else if (name == PROP_HIGHLIGHT_SELECTION_COLOR || name == PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT || name == PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT) {
+            REQUEST_RENDER("propsApply - highlight")
         } else if (name == PROP_LANDSCAPE_PAGES) {
             int pages = props->getIntDef(PROP_LANDSCAPE_PAGES, 2);
 			setVisiblePageCount(pages);
@@ -5742,6 +5766,7 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                 m_highlightBookmarks = value;
                 updateBookMarksRanges();
             }
+            REQUEST_RENDER("propsApply - PROP_HIGHLIGHT_COMMENT_BOOKMARKS")
         } else if (name == PROP_PAGE_VIEW_MODE) {
 			LVDocViewMode m =
 					props->getIntDef(PROP_PAGE_VIEW_MODE, 1) ? DVM_PAGES

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2012-02-28 23:21+0200\n"
+"POT-Creation-Date: 2012-03-15 01:51+0200\n"
 "PO-Revision-Date: 2011-05-08 16:02+0700\n"
 "Last-Translator: Vladimir <v@v>\n"
 "Language-Team: Russian\n"
@@ -422,424 +422,436 @@ msgstr "Во всех шрифтах"
 msgid "On for big fonts only"
 msgstr "В больших шрифтах"
 
-#: ../src/settings.cpp:394 ../src/settings.cpp:400 ../src/settings.cpp:406
-#: ../src/settings.cpp:412 ../src/settings.cpp:418 ../src/settings.cpp:424
-#: ../src/settings.cpp:430 ../src/settings.cpp:436 ../src/settings.cpp:442
-#: ../src/settings.cpp:448 ../src/settings.cpp:454 ../src/settings.cpp:460
-#: ../src/settings.cpp:466 ../src/settings.cpp:472 ../src/settings.cpp:498
-#: ../src/settings.cpp:523
+#: ../src/settings.cpp:394 ../src/settings.cpp:407 ../src/settings.cpp:413
+#: ../src/settings.cpp:419 ../src/settings.cpp:425 ../src/settings.cpp:431
+#: ../src/settings.cpp:437 ../src/settings.cpp:443 ../src/settings.cpp:449
+#: ../src/settings.cpp:455 ../src/settings.cpp:461 ../src/settings.cpp:467
+#: ../src/settings.cpp:473 ../src/settings.cpp:479 ../src/settings.cpp:485
+#: ../src/settings.cpp:511 ../src/settings.cpp:536
 msgid "Off"
 msgstr "Выкл."
 
-#: ../src/settings.cpp:399 ../src/settings.cpp:405 ../src/settings.cpp:411
-#: ../src/settings.cpp:417 ../src/settings.cpp:423 ../src/settings.cpp:429
-#: ../src/settings.cpp:435 ../src/settings.cpp:441 ../src/settings.cpp:447
-#: ../src/settings.cpp:453 ../src/settings.cpp:459 ../src/settings.cpp:465
-#: ../src/settings.cpp:471 ../src/settings.cpp:497
-msgid "On"
-msgstr "Вкл."
-
-#: ../src/settings.cpp:503 ../src/settings.cpp:509
-msgid "Normal"
-msgstr "Обычный"
-
-#: ../src/settings.cpp:504
-msgid "Inverse"
-msgstr "Инвертировано"
-
-#: ../src/settings.cpp:510
-msgid "Bold"
-msgstr "Жирный"
-
-#: ../src/settings.cpp:515
-msgid "One"
-msgstr "Одна"
-
-#: ../src/settings.cpp:516
-msgid "Two"
-msgstr "Две"
-
-#: ../src/settings.cpp:521
-msgid "Top"
-msgstr "Сверху"
-
-#: ../src/settings.cpp:528
-msgid "70%"
-msgstr "70%"
-
-#: ../src/settings.cpp:529
-msgid "75%"
-msgstr "75%"
-
-#: ../src/settings.cpp:530
-msgid "80%"
-msgstr "80%"
-
-#: ../src/settings.cpp:531
-msgid "85%"
-msgstr "85%"
-
-#: ../src/settings.cpp:532
-msgid "90%"
-msgstr "90%"
-
-#: ../src/settings.cpp:533
-msgid "95%"
-msgstr "95%"
-
-#: ../src/settings.cpp:534
-msgid "100%"
-msgstr "100%"
-
-#: ../src/settings.cpp:535
-msgid "105%"
-msgstr "105%"
-
-#: ../src/settings.cpp:536
-msgid "110%"
-msgstr "110%"
-
-#: ../src/settings.cpp:537
-msgid "115%"
-msgstr "115%"
-
-#: ../src/settings.cpp:538
-msgid "120%"
-msgstr "120%"
-
-#: ../src/settings.cpp:539
-msgid "125%"
-msgstr "125%"
-
-#: ../src/settings.cpp:540
-msgid "130%"
-msgstr "130%"
-
-#: ../src/settings.cpp:541
-msgid "135%"
-msgstr "135%"
-
-#: ../src/settings.cpp:542
-msgid "140%"
-msgstr "140%"
-
-#: ../src/settings.cpp:543
-msgid "145%"
-msgstr "145%"
-
-#: ../src/settings.cpp:544
-msgid "150%"
-msgstr "150%"
-
-#: ../src/settings.cpp:545
-msgid "160%"
-msgstr "160%"
-
-#: ../src/settings.cpp:546
-msgid "180%"
-msgstr "180%"
-
-#: ../src/settings.cpp:547
-msgid "200%"
-msgstr "200%"
-
-#: ../src/settings.cpp:591
-msgid "Always use fast updates"
-msgstr "Никогда"
-
-#: ../src/settings.cpp:592
-msgid "Don't use fast updates"
-msgstr "Всегда"
-
-#: ../src/settings.cpp:593
-msgid "Full updates every 2 pages"
-msgstr "раз в 2 страницы"
-
-#: ../src/settings.cpp:594
-msgid "Full updates every 3 pages"
-msgstr "раз в 3 страницы"
-
-#: ../src/settings.cpp:595
-msgid "Full updates every 4 pages"
-msgstr "раз в 4 страницы"
-
-#: ../src/settings.cpp:596
-msgid "Full updates every 5 pages"
-msgstr "раз в 5 страниц"
-
-#: ../src/settings.cpp:597
-msgid "Full updates every 6 pages"
-msgstr "раз в 6 страниц"
-
-#: ../src/settings.cpp:598
-msgid "Full updates every 8 pages"
-msgstr "раз в 8 страниц"
-
-#: ../src/settings.cpp:599
-msgid "Full updates every 10 pages"
-msgstr "раз в 10 страниц"
-
-#: ../src/settings.cpp:600
-msgid "Full updates every 14 pages"
-msgstr "раз в 14 страниц"
-
-#: ../src/settings.cpp:605
-msgid "Turbo mode disabled"
-msgstr "Турбо режим отключен"
-
-#: ../src/settings.cpp:606
-msgid "Turbo mode enabled"
-msgstr "Турбо режим включен"
-
-#: ../src/settings.cpp:613
-msgid "180+slow next page"
-msgstr "180°+вперед медленно"
-
-#: ../src/settings.cpp:614
-msgid "180+slow prev/next page"
-msgstr "180°+вперед/назад медленно"
-
-#: ../src/settings.cpp:615
-msgid "180+FAST next page"
-msgstr "180°+вперед быстро"
-
-#: ../src/settings.cpp:616
-msgid "180+FAST prev/next page"
-msgstr "180°+вперед/назад быстро"
-
-#: ../src/settings.cpp:617
-msgid "180+FAST next/prev page"
-msgstr "180°+назад/вперед быстро"
-
-#: ../src/settings.cpp:635
-msgid "2 BPP"
-msgstr "2 бита на пиксель"
-
-#: ../src/settings.cpp:636
-msgid "3 BPP"
-msgstr "3 бита на пиксель"
-
-#: ../src/settings.cpp:637
-msgid "4 BPP"
-msgstr "4 бита на пиксель"
-
-#: ../src/settings.cpp:638
-msgid "8 BPP"
-msgstr "8 бит на пиксель"
-
-#: ../src/settings.cpp:644
-msgid "Disabled (1:1)"
-msgstr "Не масштабировать (1:1)"
-
-#: ../src/settings.cpp:645
-msgid "Integer scale"
-msgstr "В целое число раз"
-
-#: ../src/settings.cpp:646
-msgid "Arbitrary scale"
-msgstr "Произвольное масштабирование"
-
-#: ../src/settings.cpp:651
-msgid "Auto"
-msgstr "Авто"
-
-#: ../src/settings.cpp:652
-msgid "*1"
-msgstr "*1"
-
-#: ../src/settings.cpp:653
-msgid "*2"
-msgstr "*2"
-
-#: ../src/settings.cpp:654
-msgid "*3"
-msgstr "*3"
-
-#: ../src/settings.cpp:702
-msgid "No hinting"
-msgstr "Отключен"
-
-#: ../src/settings.cpp:703
-msgid "Use bytecode"
-msgstr "Использовать байт-код"
-
-#: ../src/settings.cpp:704
+#: ../src/settings.cpp:399 ../src/settings.cpp:717
 msgid "Autohinting"
 msgstr "Автохинтинг"
 
-#: ../src/settings.cpp:719
+#: ../src/settings.cpp:400 ../src/settings.cpp:716
+msgid "Use bytecode"
+msgstr "Использовать байт-код"
+
+#: ../src/settings.cpp:401
+msgid "Disable"
+msgstr "Не масштабировать (1:1)"
+
+#: ../src/settings.cpp:406 ../src/settings.cpp:412 ../src/settings.cpp:418
+#: ../src/settings.cpp:424 ../src/settings.cpp:430 ../src/settings.cpp:436
+#: ../src/settings.cpp:442 ../src/settings.cpp:448 ../src/settings.cpp:454
+#: ../src/settings.cpp:460 ../src/settings.cpp:466 ../src/settings.cpp:472
+#: ../src/settings.cpp:478 ../src/settings.cpp:484 ../src/settings.cpp:510
+msgid "On"
+msgstr "Вкл."
+
+#: ../src/settings.cpp:516 ../src/settings.cpp:522
+msgid "Normal"
+msgstr "Обычный"
+
+#: ../src/settings.cpp:517
+msgid "Inverse"
+msgstr "Инвертировано"
+
+#: ../src/settings.cpp:523
+msgid "Bold"
+msgstr "Жирный"
+
+#: ../src/settings.cpp:528
+msgid "One"
+msgstr "Одна"
+
+#: ../src/settings.cpp:529
+msgid "Two"
+msgstr "Две"
+
+#: ../src/settings.cpp:534
+msgid "Top"
+msgstr "Сверху"
+
+#: ../src/settings.cpp:541
+msgid "70%"
+msgstr "70%"
+
+#: ../src/settings.cpp:542
+msgid "75%"
+msgstr "75%"
+
+#: ../src/settings.cpp:543
+msgid "80%"
+msgstr "80%"
+
+#: ../src/settings.cpp:544
+msgid "85%"
+msgstr "85%"
+
+#: ../src/settings.cpp:545
+msgid "90%"
+msgstr "90%"
+
+#: ../src/settings.cpp:546
+msgid "95%"
+msgstr "95%"
+
+#: ../src/settings.cpp:547
+msgid "100%"
+msgstr "100%"
+
+#: ../src/settings.cpp:548
+msgid "105%"
+msgstr "105%"
+
+#: ../src/settings.cpp:549
+msgid "110%"
+msgstr "110%"
+
+#: ../src/settings.cpp:550
+msgid "115%"
+msgstr "115%"
+
+#: ../src/settings.cpp:551
+msgid "120%"
+msgstr "120%"
+
+#: ../src/settings.cpp:552
+msgid "125%"
+msgstr "125%"
+
+#: ../src/settings.cpp:553
+msgid "130%"
+msgstr "130%"
+
+#: ../src/settings.cpp:554
+msgid "135%"
+msgstr "135%"
+
+#: ../src/settings.cpp:555
+msgid "140%"
+msgstr "140%"
+
+#: ../src/settings.cpp:556
+msgid "145%"
+msgstr "145%"
+
+#: ../src/settings.cpp:557
+msgid "150%"
+msgstr "150%"
+
+#: ../src/settings.cpp:558
+msgid "160%"
+msgstr "160%"
+
+#: ../src/settings.cpp:559
+msgid "180%"
+msgstr "180%"
+
+#: ../src/settings.cpp:560
+msgid "200%"
+msgstr "200%"
+
+#: ../src/settings.cpp:604
+msgid "Always use fast updates"
+msgstr "Никогда"
+
+#: ../src/settings.cpp:605
+msgid "Don't use fast updates"
+msgstr "Всегда"
+
+#: ../src/settings.cpp:606
+msgid "Full updates every 2 pages"
+msgstr "раз в 2 страницы"
+
+#: ../src/settings.cpp:607
+msgid "Full updates every 3 pages"
+msgstr "раз в 3 страницы"
+
+#: ../src/settings.cpp:608
+msgid "Full updates every 4 pages"
+msgstr "раз в 4 страницы"
+
+#: ../src/settings.cpp:609
+msgid "Full updates every 5 pages"
+msgstr "раз в 5 страниц"
+
+#: ../src/settings.cpp:610
+msgid "Full updates every 6 pages"
+msgstr "раз в 6 страниц"
+
+#: ../src/settings.cpp:611
+msgid "Full updates every 8 pages"
+msgstr "раз в 8 страниц"
+
+#: ../src/settings.cpp:612
+msgid "Full updates every 10 pages"
+msgstr "раз в 10 страниц"
+
+#: ../src/settings.cpp:613
+msgid "Full updates every 14 pages"
+msgstr "раз в 14 страниц"
+
+#: ../src/settings.cpp:618
+msgid "Turbo mode disabled"
+msgstr "Турбо режим отключен"
+
+#: ../src/settings.cpp:619
+msgid "Turbo mode enabled"
+msgstr "Турбо режим включен"
+
+#: ../src/settings.cpp:626
+msgid "180+slow next page"
+msgstr "180°+вперед медленно"
+
+#: ../src/settings.cpp:627
+msgid "180+slow prev/next page"
+msgstr "180°+вперед/назад медленно"
+
+#: ../src/settings.cpp:628
+msgid "180+FAST next page"
+msgstr "180°+вперед быстро"
+
+#: ../src/settings.cpp:629
+msgid "180+FAST prev/next page"
+msgstr "180°+вперед/назад быстро"
+
+#: ../src/settings.cpp:630
+msgid "180+FAST next/prev page"
+msgstr "180°+назад/вперед быстро"
+
+#: ../src/settings.cpp:648
+msgid "2 BPP"
+msgstr "2 бита на пиксель"
+
+#: ../src/settings.cpp:649
+msgid "3 BPP"
+msgstr "3 бита на пиксель"
+
+#: ../src/settings.cpp:650
+msgid "4 BPP"
+msgstr "4 бита на пиксель"
+
+#: ../src/settings.cpp:651
+msgid "8 BPP"
+msgstr "8 бит на пиксель"
+
+#: ../src/settings.cpp:657
+msgid "Disabled (1:1)"
+msgstr "Не масштабировать (1:1)"
+
+#: ../src/settings.cpp:658
+msgid "Integer scale"
+msgstr "В целое число раз"
+
+#: ../src/settings.cpp:659
+msgid "Arbitrary scale"
+msgstr "Произвольное масштабирование"
+
+#: ../src/settings.cpp:664
+msgid "Auto"
+msgstr "Авто"
+
+#: ../src/settings.cpp:665
+msgid "*1"
+msgstr "*1"
+
+#: ../src/settings.cpp:666
+msgid "*2"
+msgstr "*2"
+
+#: ../src/settings.cpp:667
+msgid "*3"
+msgstr "*3"
+
+#: ../src/settings.cpp:715
+msgid "No hinting"
+msgstr "Отключен"
+
+#: ../src/settings.cpp:732
 msgid "Default font face"
 msgstr "Шрифт"
 
-#: ../src/settings.cpp:745
-msgid "Font Hinting"
+#: ../src/settings.cpp:755
+msgid "Fallback font face"
+msgstr "Резервный шрифт"
+
+#: ../src/settings.cpp:775
+msgid "Font hinting"
 msgstr "Хинтинг шрифта"
 
-#: ../src/settings.cpp:750
+#: ../src/settings.cpp:780
 msgid "Font weight"
 msgstr "Насыщенность шрифта"
 
-#: ../src/settings.cpp:756
-msgid "Font gamma"
+#: ../src/settings.cpp:786
+msgid "Font Gamma"
 msgstr "Гамма-коррекция шрифта"
 
-#: ../src/settings.cpp:761
+#: ../src/settings.cpp:791
 msgid "Font antialiasing"
 msgstr "Сглаживание букв"
 
-#: ../src/settings.cpp:767
+#: ../src/settings.cpp:797
 msgid "Font kerning"
 msgstr "Кернинг шрифта"
 
-#: ../src/settings.cpp:773
+#: ../src/settings.cpp:803
 msgid "Interline space"
 msgstr "Межстрочный интервал"
 
-#: ../src/settings.cpp:784
+#: ../src/settings.cpp:814
 msgid "Rotate"
 msgstr "Управление G-сенсором"
 
-#: ../src/settings.cpp:789
+#: ../src/settings.cpp:819
 msgid "Page turn angle"
 msgstr "Наклон для перелистывания"
 
-#: ../src/settings.cpp:795
+#: ../src/settings.cpp:825
 msgid "Footnotes at page bottom"
 msgstr "Сноски внизу страницы"
 
-#: ../src/settings.cpp:806
+#: ../src/settings.cpp:836
 msgid "Landscape pages"
 msgstr "Колонки в альбомной странице"
 
-#: ../src/settings.cpp:812
+#: ../src/settings.cpp:842
 msgid "Preformatted text"
 msgstr "Форматированный текст"
 
-#: ../src/settings.cpp:820
+#: ../src/settings.cpp:850
 msgid "Document embedded styles"
 msgstr "Использовать стили документа"
 
-#: ../src/settings.cpp:826
+#: ../src/settings.cpp:856
 msgid "Document embedded fonts"
 msgstr "Встроенные шрифты документа"
 
-#: ../src/settings.cpp:832
+#: ../src/settings.cpp:862
 msgid "Inverse display"
 msgstr "Инверсное отображение"
 
-#: ../src/settings.cpp:839
+#: ../src/settings.cpp:869
 msgid "Display update mode"
 msgstr "Полное обновление"
 
-#: ../src/settings.cpp:846
+#: ../src/settings.cpp:876
 msgid "Turbo update mode"
 msgstr "Турбо режим"
 
-#: ../src/settings.cpp:854
+#: ../src/settings.cpp:884
 msgid "Show bookmark icons"
 msgstr "Показывать закладки"
 
-#: ../src/settings.cpp:862
+#: ../src/settings.cpp:892
 msgid "Status line menu"
 msgstr "Настройка колонтитула"
 
-#: ../src/settings.cpp:864
+#: ../src/settings.cpp:894
 msgid "Status line"
 msgstr "Колонтитул"
 
-#: ../src/settings.cpp:869
+#: ../src/settings.cpp:899
 msgid "Show time"
 msgstr "Отображение часов в колонтитуле"
 
-#: ../src/settings.cpp:874
+#: ../src/settings.cpp:904
 msgid "Show title"
 msgstr "Показывать заголовок"
 
-#: ../src/settings.cpp:879
+#: ../src/settings.cpp:909
 msgid "Show Battery"
 msgstr "Показывать заряд батареи"
 
-#: ../src/settings.cpp:884
+#: ../src/settings.cpp:914
 msgid "Show Battery Persent"
 msgstr "Заряд батареи в процентах"
 
-#: ../src/settings.cpp:889
+#: ../src/settings.cpp:919
 msgid "Show Position Persent"
 msgstr "Показывать позицию в процентах"
 
-#: ../src/settings.cpp:894
+#: ../src/settings.cpp:924
 msgid "Show Page Count"
 msgstr "Показывать общее кол-во страниц"
 
-#: ../src/settings.cpp:899
+#: ../src/settings.cpp:929
 msgid "Show Page Number"
 msgstr "Показывать номер текущей страницы"
 
-#: ../src/settings.cpp:910
+#: ../src/settings.cpp:940
+msgid "Highlight bookmarks"
+msgstr "Подсвечивать закладки"
+
+#: ../src/settings.cpp:946
 msgid "Space condensing percent"
 msgstr "Сжимать пробелы до"
 
-#: ../src/settings.cpp:918
+#: ../src/settings.cpp:954
 msgid "[No Hyphenation]"
 msgstr "[Отключить переносы]"
 
-#: ../src/settings.cpp:919
+#: ../src/settings.cpp:955
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Алгоритмические переносы]"
 
-#: ../src/settings.cpp:921
+#: ../src/settings.cpp:957
 msgid "Hyphenation"
 msgstr "Переносы"
 
-#: ../src/settings.cpp:937
+#: ../src/settings.cpp:973
 msgid "Floating punctuation"
 msgstr "Висячая пунктуация"
 
-#: ../src/settings.cpp:945
+#: ../src/settings.cpp:981
 msgid "Page margins"
 msgstr "Поля страницы"
 
-#: ../src/settings.cpp:948
+#: ../src/settings.cpp:984
 msgid "Top margin"
 msgstr "Верхний отступ"
 
-#: ../src/settings.cpp:953
+#: ../src/settings.cpp:989
 msgid "Bottom margin"
 msgstr "Нижний отступ"
 
-#: ../src/settings.cpp:958
+#: ../src/settings.cpp:994
 msgid "Left margin"
 msgstr "Левый отступ"
 
-#: ../src/settings.cpp:963
+#: ../src/settings.cpp:999
 msgid "Right margin"
 msgstr "Правый отступ"
 
-#: ../src/settings.cpp:986
+#: ../src/settings.cpp:1022
 msgid "Image scaling"
 msgstr "Масштабирование картинок"
 
-#: ../src/settings.cpp:988
+#: ../src/settings.cpp:1024
 msgid "Block image scaling mode"
 msgstr "Режим для обычных картинок"
 
-#: ../src/settings.cpp:993
+#: ../src/settings.cpp:1029
 msgid "Block image max zoom"
 msgstr "Макс. увеличение для обычных картинок"
 
-#: ../src/settings.cpp:999
+#: ../src/settings.cpp:1035
 msgid "Inline image scaling mode"
 msgstr "Режим для inline картинок"
 
-#: ../src/settings.cpp:1004
+#: ../src/settings.cpp:1040
 msgid "Inline image max zoom"
 msgstr "Макс. увеличение для inline картинок"
 
-#: ../src/settings.cpp:1021
+#: ../src/settings.cpp:1057
 msgid "Gray buffer depth(need restart)"
 msgstr "Глубина фреймбуфера(нужен перезапуск)"
 
-#: ../src/settings.cpp:1041
+#: ../src/settings.cpp:1077
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1175,7 +1187,7 @@ msgstr "Клавиша"
 msgid "Assigned function"
 msgstr "Действие"
 
-#: ../src/cr3pocketbook.cpp:2546
+#: ../src/cr3pocketbook.cpp:2553
 msgid "Press $1 to translate"
 msgstr "Нажмите чтобы перевести"
 

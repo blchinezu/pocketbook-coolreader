@@ -138,6 +138,7 @@ public class CoolReader extends Activity
 	
 	private static String PREF_FILE = "CR3LastBook";
 	private static String PREF_LAST_BOOK = "LastBook";
+	private static String PREF_HELP_FILE = "HelpFile";
 	public String getLastSuccessfullyOpenedBook()
 	{
 		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
@@ -150,6 +151,19 @@ public class CoolReader extends Activity
 	{
 		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
 		pref.edit().putString(PREF_LAST_BOOK, filename).commit();
+	}
+	
+	public String getLastGeneratedHelpFileSignature()
+	{
+		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
+		String res = pref.getString(PREF_HELP_FILE, null);
+		return res;
+	}
+	
+	public void setLastGeneratedHelpFileSignature(String v)
+	{
+		SharedPreferences pref = getSharedPreferences(PREF_FILE, 0);
+		pref.edit().putString(PREF_HELP_FILE, v).commit();
 	}
 	
 	private int mScreenUpdateMode = 0;
@@ -345,9 +359,13 @@ public class CoolReader extends Activity
 		public ScreenBacklightControl() {
 		}
 
-
+		long lastUpdateTimeStamp;
+		
 		public void onUserActivity() {
 			lastUserActivityTime = Utils.timeStamp();
+			if (Utils.timeInterval(lastUpdateTimeStamp) < 5000)
+				return;
+			lastUpdateTimeStamp = android.os.SystemClock.uptimeMillis();
 			if (!isWakeLockEnabled())
 				return;
 			if (wl == null) {
@@ -385,6 +403,7 @@ public class CoolReader extends Activity
 				wl.release();
 			}
 			backlightTimerTask = null;
+			lastUpdateTimeStamp = 0;
 		}
 
 		private class BacklightTimerTask implements Runnable {
@@ -1065,8 +1084,10 @@ public class CoolReader extends Activity
 		PhoneStateReceiver.setPhoneActivityHandler(new Runnable() {
 			@Override
 			public void run() {
-				if (tts != null)
-					tts.stop();
+				if (mReaderView != null) {
+					mReaderView.stopTTS();
+					mReaderView.save();
+				}
 			}
 		});
 
@@ -1099,6 +1120,7 @@ public class CoolReader extends Activity
         //engine.waitTasksCompletion();
 //		restarted = false;
 		stopped = false;
+		
 		final String fileName = fileToLoadOnStart;
 		mBackgroundThread.postGUI(new Runnable() {
 			public void run() {
@@ -1480,6 +1502,10 @@ public class CoolReader extends Activity
 		case R.id.book_find:
 			mBrowser.showFindBookDialog();
 			return true;
+		case R.id.cr3_mi_user_manual:
+			showReader();
+			mReaderView.showManual();
+			return true;
 		case R.id.book_scan_recursive:
 			mBrowser.scanCurrentDirectoryRecursive();
 			return true;
@@ -1765,7 +1791,23 @@ public class CoolReader extends Activity
 		props.applyDefault(ReaderView.PROP_HYPHENATION_DICT, Engine.HyphDict.RUSSIAN.toString());
 		props.applyDefault(ReaderView.PROP_APP_FILE_BROWSER_SIMPLE_MODE, "0");
 		
-		props.applyDefault(ReaderView.PROP_APP_HIGHLIGHT_BOOKMARKS, "1");
+		if (!DeviceInfo.EINK_SCREEN) {
+			props.applyDefault(ReaderView.PROP_APP_HIGHLIGHT_BOOKMARKS, "1");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_SELECTION_COLOR, "#AAAAAA");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT, "#AAAA55");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION, "#C07070");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_SELECTION_COLOR_DAY, "#AAAAAA");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT_DAY, "#AAAA55");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION_DAY, "#C07070");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_SELECTION_COLOR_NIGHT, "#808080");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT_NIGHT, "#A09060");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION_NIGHT, "#906060");
+		} else {
+			props.applyDefault(ReaderView.PROP_APP_HIGHLIGHT_BOOKMARKS, "2");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_SELECTION_COLOR, "#808080");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_COMMENT, "#000000");
+			props.applyDefault(ReaderView.PROP_HIGHLIGHT_BOOKMARK_COLOR_CORRECTION, "#000000");
+		}
         
         return props;
 	}
@@ -2104,6 +2146,13 @@ public class CoolReader extends Activity
 		dlg.show();
 	}
 
+	
+	private String currentLanguage;
+	
+	public String getCurrentLanguage() {
+		return currentLanguage;
+	}
+	
 	public void setLanguage(String lang) {
 		setLanguage(Lang.byCode(lang));
 	}
@@ -2115,6 +2164,7 @@ public class CoolReader extends Activity
 		    DisplayMetrics dm = res.getDisplayMetrics();
 		    android.content.res.Configuration conf = res.getConfiguration();
 		    conf.locale = (lang == Lang.DEFAULT) ? defaultLocale : new Locale(lang.code);
+		    currentLanguage = (lang == Lang.DEFAULT) ? defaultLocale.getLanguage() : lang.code;
 		    res.updateConfiguration(conf, dm);
 		} catch (Exception e) {
 			log.e("error while setting locale " + lang, e);

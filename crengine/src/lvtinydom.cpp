@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.33"
+#define CACHE_FILE_FORMAT_VERSION "3.04.34"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -2846,6 +2846,7 @@ LFormattedText * lxmlDocBase::createFormattedText()
     LFormattedText * p = new LFormattedText();
     p->setImageScalingOptions(&_imgScalingOptions);
     p->setMinSpaceCondensingPercent(_minSpaceCondensingPercent);
+    p->setHighlightOptions(&_highlightOptions);
     return p;
 }
 
@@ -4838,6 +4839,11 @@ bool ldomXPointer::getRect(lvRect & rect) const
     if ( finalNode!=NULL ) {
         lvRect rc;
         finalNode->getAbsRect( rc );
+        if (rc.height() == 0 && rc.width() > 0) {
+            rect = rc;
+            rect.bottom++;
+            return true;
+        }
         RenderRectAccessor r( finalNode );
         //if ( !r )
         //    return false;
@@ -7170,6 +7176,17 @@ lString16 ldomDocumentFragmentWriter::convertHref( lString16 href )
     if ( href.pos(L"://")>=0 )
         return href; // fully qualified href: no conversion
 
+    //CRLog::trace("convertHref(%s, codeBase=%s, filePathName=%s)", LCSTR(href), LCSTR(codeBase), LCSTR(filePathName));
+
+    if (href[0] == '#') {
+        lString16 replacement = pathSubstitutions.get(filePathName);
+        if (replacement.empty())
+            return href;
+        lString16 p = lString16("#") + replacement + L"_" + href.substr(1);
+        //CRLog::trace("href %s -> %s", LCSTR(href), LCSTR(p));
+        return p;
+    }
+
     href = LVCombinePaths(codeBase, href);
 
     // resolve relative links
@@ -7177,11 +7194,13 @@ lString16 ldomDocumentFragmentWriter::convertHref( lString16 href )
     if ( !href.split2(lString16("#"), p, id) )
         p = href;
     if ( p.empty() ) {
+        //CRLog::trace("codebase = %s -> href = %s", LCSTR(codeBase), LCSTR(href));
         if ( codeBasePrefix.empty() )
             return href;
         p = codeBasePrefix;
     } else {
         lString16 replacement = pathSubstitutions.get(p);
+        //CRLog::trace("href %s -> %s", LCSTR(p), LCSTR(replacement));
         if ( !replacement.empty() )
             p = replacement;
         else
@@ -8624,9 +8643,19 @@ public:
     // dir/filename.{crc32}.cr3
     lString16 makeFileName( lString16 filename, lUInt32 crc, lUInt32 docFlags )
     {
+        lString16 fn;
+        for (int i=0; i<filename.length(); i++) {
+            lChar16 ch = filename[i];
+            if ((ch >= 'A' && ch <= 'Z') || (ch >= 'a' && ch <= 'z') || (ch >= '0' && ch <= '9') || ch == '.' || ch == '-')
+                fn << ch;
+            else
+                fn << L"_";
+        }
+        if (fn.length() > 25)
+            fn = fn.substr(0, 12) + L"-" + fn.substr(fn.length()-12, 12);
         char s[16];
         sprintf(s, ".%08x.%d.cr3", (unsigned)crc, (int)docFlags);
-        return filename + lString16( s ); //_cacheDir + 
+        return fn + lString16( s ); //_cacheDir +
     }
 
     /// open existing cache file stream
@@ -10173,10 +10202,10 @@ bool ldomNode::getNodeListMarker( int & counterValue, lString16 & marker, int & 
     default:
         // treat default as disc
     case css_lst_disc:
-        marker = L"\x25CF";
+        marker = L"\x2022"; //L"\x25CF"; // 25e6
         break;
     case css_lst_circle:
-        marker = L"\x25CB";
+        marker = L"\x2022"; //L"\x25CB";
         break;
     case css_lst_square:
         marker = L"\x25A0";

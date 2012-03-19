@@ -398,4 +398,13 @@
     <string name="options_font_embedded_document_font_enabled">Встроенные шрифты документа</string>
     <string name="options_app_locale_system">Системный</string>
     <string name="options_app_locale">Язык интерфейса</string>
+    <string name="mi_goto_manual">Руководство пользователя</string>
+    <string name="options_view_bookmarks_highlight_underline">Подчеркивание</string>
+    <string name="options_view_color_selection">Цвет выделения</string>
+    <string name="options_view_color_bookmark_comment">Цвет комментария</string>
+    <string name="options_view_bookmarks_highlight_none">Нет</string>
+    <string name="options_view_color_bookmark_correction">Цвет исправления</string>
+    <string name="options_view_bookmarks_highlight_solid">Цвет фона</string>
+    <string name="win_title_confirm_bookmark_delete">Вы действительно хотите удалить эту закладку?</string>
+    <string name="option_controls_gesture_page_flipping_enabled">Листание жестами</string>
 </resources>
