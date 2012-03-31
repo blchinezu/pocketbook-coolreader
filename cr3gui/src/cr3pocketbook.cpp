@@ -1637,13 +1637,15 @@ public:
     {
         _pauseRotationTimer = false;
         int orient = GetOrientation();
-        if (orient == _pausedRotation)
-            return;
-        SetOrientation(_pausedRotation);
+        if (orient != _pausedRotation)
+            SetOrientation(_pausedRotation);
+        cr_rotate_angle_t oldOrientation = CRPocketBookWindowManager::instance->getScreenOrientation();
+        cr_rotate_angle_t newOrientation = pocketbook_orientations[GetOrientation()];
+        CRLog::trace("onPausedRotation(), oldOrient = %d, newOrient = %d", oldOrientation, newOrientation);
         int dx = _wm->getScreen()->getWidth();
         int dy = _wm->getScreen()->getHeight();
-        cr_rotate_angle_t oldOrientation = pocketbook_orientations[orient];
-        cr_rotate_angle_t newOrientation = pocketbook_orientations[GetOrientation()];
+        if (oldOrientation == newOrientation)
+            return;
         if ((oldOrientation & 1) == (newOrientation & 1))
             _wm->reconfigure(dx, dy, newOrientation);
         else {
