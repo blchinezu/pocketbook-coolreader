@@ -1718,6 +1718,14 @@ public:
 #ifdef BACKGROUND_CACHE_FILE_CREATION
         CRPocketBookWindowManager::instance->cancelCacheSwap();
 #endif
+        if (!_restore_globOrientation) {
+            CRPropRef props = CRPocketBookDocView::instance->getProps();
+            int rotate_mode = props->getIntDef(PROP_POCKETBOOK_ROTATE_MODE, PB_ROTATE_MODE_180);
+            if (PB_ROTATE_MODE_360 == rotate_mode && -1 == GetGlobalOrientation()) {
+                SetGlobalOrientation(GetOrientation());
+                _restore_globOrientation = true;
+            }
+        }
         V3DocViewWin::OnFormatStart();
     }
     void OnFormatEnd()
