@@ -6,11 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-<<<<<<< HEAD
-"POT-Creation-Date: 2012-03-15 01:51+0200\n"
-=======
 "POT-Creation-Date: 2012-04-12 22:34+0000\n"
->>>>>>> master
 "PO-Revision-Date: 2011-06-17 02:51+0200\n"
 "Last-Translator: Vitalii Stopchans'kyi <stopchanПЕСgmail.com>\n"
 "Language-Team: Ukrainian\n"
@@ -18,11 +14,6 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: uk\n"
-<<<<<<< HEAD
-"Language: \n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
-"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-=======
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
 "10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
@@ -97,7 +88,6 @@ msgstr "Цитати"
 #: ../src/bmkdlg.cpp:444 ../src/viewdlg.cpp:560
 msgid "Cite selection dialog"
 msgstr "Нова цитата"
->>>>>>> master
 
 #: ../src/citedlg.cpp:80
 msgid "Select next/prev paragraph"
@@ -162,10 +152,6 @@ msgstr "Словник"
 #: ../src/mainwnd.cpp:907
 msgid "Cite"
 msgstr "Цитата"
-
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "Закладки"
 
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
@@ -271,85 +257,6 @@ msgstr "Дата"
 msgid "Genres"
 msgstr "Жанр(и)"
 
-<<<<<<< HEAD
-#: ../src/mainwnd.cpp:1073
-msgid "Translator"
-msgstr "Перекладач"
-
-#: ../src/mainwnd.cpp:1074
-msgid "Book info"
-msgstr "Відомості про книгу"
-
-#: ../src/mainwnd.cpp:1077
-msgid "Document author"
-msgstr "Автор документу"
-
-#: ../src/mainwnd.cpp:1078
-msgid "Document date"
-msgstr "Дата створення"
-
-#: ../src/mainwnd.cpp:1079
-msgid "Document source URL"
-msgstr "URL книги-джерела"
-
-#: ../src/mainwnd.cpp:1080
-msgid "OCR by"
-msgstr "Оцифровано"
-
-#: ../src/mainwnd.cpp:1081
-msgid "Document version"
-msgstr "Версія документу"
-
-#: ../src/mainwnd.cpp:1082
-msgid "Change history"
-msgstr "Історія змін"
-
-#: ../src/mainwnd.cpp:1083
-msgid "Document info"
-msgstr "Інформація про документ"
-
-#: ../src/mainwnd.cpp:1086
-msgid "Publication name"
-msgstr "Назва видання"
-
-#: ../src/mainwnd.cpp:1087
-msgid "Publisher"
-msgstr "Видавництво"
-
-#: ../src/mainwnd.cpp:1088
-msgid "Publisher city"
-msgstr "Місто видання"
-
-#: ../src/mainwnd.cpp:1089
-msgid "Publication year"
-msgstr "Рік видання"
-
-#: ../src/mainwnd.cpp:1090
-msgid "ISBN"
-msgstr "ISBN"
-
-#: ../src/mainwnd.cpp:1091
-msgid "Publication info"
-msgstr "Відомості про видання"
-
-#: ../src/mainwnd.cpp:1093
-msgid "Custom info"
-msgstr "Додаткова інформація"
-
-#: ../src/mainwnd.cpp:1097
-msgid "CoolReader for PocketBook"
-msgstr "CoolReader для PocketBook"
-
-#: ../src/mainwnd.cpp:1098
-msgid "Build date"
-msgstr "Дата компіляції"
-
-#: ../src/mainwnd.cpp:1099
-msgid "About program"
-msgstr "Про програму"
-
-#: ../src/mainwnd.cpp:1220
-=======
 #: ../src/mainwnd.cpp:1046
 msgid "Language"
 msgstr "Мова"
@@ -443,7 +350,6 @@ msgid "About program"
 msgstr "Про програму"
 
 #: ../src/mainwnd.cpp:1197
->>>>>>> master
 msgid "Loading: please wait..."
 msgstr "Завантажується: зачекайте..."
 
@@ -470,74 +376,6 @@ msgstr "Поточна сторінка: $1 з $2\n"
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
 msgstr "Вкажіть номер сторінки:"
-
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "Немає закладок"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr "Сторінка $1 ($2%)"
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-msgid "Go to bookmark"
-msgstr "Відкрити закладку"
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-"$1 — відкрити поточну закладку,\n"
-"$2 — режим додавання закладок"
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-"Коротке натискання $1 — відкрити поточну закладку,\n"
-"довге натискання — додати закладку"
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-msgid "Set bookmark"
-msgstr "Додати закладку"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-"$1 — додати закладку,\n"
-"$2 — режим відкривання закладок"
-
-#: ../src/bmkdlg.cpp:88
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr ""
-"Коротке натискання $1 — додати закладку,\n"
-"довге натискання — відкрити закладку"
-
-#: ../src/bmkdlg.cpp:169
-msgid "Delete bookmark"
-msgstr "Видалити закладку"
-
-#: ../src/bmkdlg.cpp:322
-msgid "Go to citation"
-msgstr "Перейти на позицію"
-
-#: ../src/bmkdlg.cpp:323
-msgid "Delete citation"
-msgstr "Видалити запис"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr "Цитати"
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr "Нова цитата"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "

@@ -174,10 +174,6 @@ msgstr "Речник"
 msgid "Cite"
 msgstr "Цитати"
 
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "Отбелязки"
-
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
 msgstr "Търсене"
@@ -386,83 +382,6 @@ msgstr "Текуща страница: $1 of $2\n"
 msgid "Enter page number:"
 msgstr "Въведете номер на страница:"
 
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "(Празно)"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr "Страница $1 ($2%)"
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-msgid "Go to bookmark"
-msgstr "Преход към отбелязка по номер"
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-"Късо натискане $1 - преход към отбелязка,\n"
-"$2 - задаване на отбелязки"
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-"Късо натискане $1 - преход към отбелязка,\n"
-"дълго натискане - поставяне на отбелязка"
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-msgid "Set bookmark"
-msgstr "Поставяне на отбелязка"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-"$1 - поставяне на отбелязка,\n"
-"$2 - режим на преход към отбелязки"
-
-#: ../src/bmkdlg.cpp:88
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr ""
-"Късо натискане $1 - поставяне на отбелязка,\n"
-"дълго натискане - преход към отбелязка"
-
-#: ../src/bmkdlg.cpp:169
-msgid "Delete bookmark"
-msgstr "Изтриете на отбелязка"
-
-#: ../src/bmkdlg.cpp:322
-msgid "Go to citation"
-msgstr "Преход на цитати"
-
-#: ../src/bmkdlg.cpp:323
-#, fuzzy
-msgid "Delete citation"
-msgstr "Изтриване на запис"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr "Избор на цитат"
-
-#: ../src/dictdlg.cpp:80
-msgid "From dictionary "
-msgstr "Търсене в речника"
-
-#: ../src/dictdlg.cpp:89
-msgid "[cannot read article]"
-msgstr "[не мога да прочета темата]"
-
 #: ../src/settings.cpp:82
 msgid "choose command"
 msgstr "изберете команда"
@@ -535,14 +454,6 @@ msgstr "Изполвай bytecode"
 #: ../src/settings.cpp:401
 msgid "Disable"
 msgstr "Отмяна"
-
-#: ../src/settings.cpp:406 ../src/settings.cpp:412 ../src/settings.cpp:418
-#: ../src/settings.cpp:424 ../src/settings.cpp:430 ../src/settings.cpp:436
-#: ../src/settings.cpp:442 ../src/settings.cpp:448 ../src/settings.cpp:454
-#: ../src/settings.cpp:460 ../src/settings.cpp:466 ../src/settings.cpp:472
-#: ../src/settings.cpp:478 ../src/settings.cpp:484 ../src/settings.cpp:510
-msgid "On"
-msgstr "Да"
 
 #: ../src/settings.cpp:516 ../src/settings.cpp:522
 msgid "Normal"
@@ -777,18 +688,9 @@ msgstr "Шрифт"
 msgid "Fallback font face"
 msgstr "Fallback шрифт"
 
-#: ../src/settings.cpp:775
-#, fuzzy
-msgid "Font hinting"
-msgstr "Кърнинг"
-
 #: ../src/settings.cpp:780
 msgid "Font weight"
 msgstr "Удебеляване"
-
-#: ../src/settings.cpp:786
-msgid "Font Gamma"
-msgstr ""
 
 #: ../src/settings.cpp:791
 msgid "Font antialiasing"
@@ -890,11 +792,6 @@ msgstr ""
 #, fuzzy
 msgid "Show Page Number"
 msgstr "Въведете номер на страница"
-
-#: ../src/settings.cpp:940
-#, fuzzy
-msgid "Highlight bookmarks"
-msgstr "Изтриете на отбелязка"
 
 #: ../src/settings.cpp:946
 #, fuzzy
@@ -1297,10 +1194,6 @@ msgstr "Бутон"
 msgid "Assigned function"
 msgstr "Асоциирана команда"
 
-#: ../src/cr3pocketbook.cpp:2553
-msgid "Press $1 to translate"
-msgstr "Натиснете $1 за да преведат"
-
 #~ msgid "Remove phrase from selection"
 #~ msgstr "Премахване на фраза от цитат"
 
@@ -1315,9 +1208,6 @@ msgstr "Натиснете $1 за да преведат"
 
 #~ msgid "Enter page number to go: "
 #~ msgstr " Въведете номер на страница:"
-
-#~ msgid "About..."
-#~ msgstr "Информация"
 
 #~ msgid "Open recent book..."
 #~ msgstr "Последно четени..."

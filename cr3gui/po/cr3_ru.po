@@ -154,10 +154,6 @@ msgstr "Словарь"
 msgid "Cite"
 msgstr "Цитатник"
 
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "Закладки"
-
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
 msgstr "Поиск"
@@ -381,74 +377,6 @@ msgstr "Текущая страница: $1 из $2\n"
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
 msgstr "Введите номер страницы:"
-
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "Нет закладок"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr "Стр. $1 ($2%)"
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-msgid "Go to bookmark"
-msgstr "Перейти на закладку"
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-"Короткое нажатие $1 - перейти на закладку,\n"
-"$2 - режим установки закладок"
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-"Короткое нажатие $1 - перейти на закладку,\n"
-"длинное нажатие - установить закладку"
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-msgid "Set bookmark"
-msgstr "Установка закладки"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-"$1 - установить закладку,\n"
-"$2 - переключиться в режим перехода"
-
-#: ../src/bmkdlg.cpp:88
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr ""
-"Короткое нажатие $1 - установить закладку,\n"
-"длинное нажатие - перейти на закладку"
-
-#: ../src/bmkdlg.cpp:169
-msgid "Delete bookmark"
-msgstr "Удалить закладку"
-
-#: ../src/bmkdlg.cpp:322
-msgid "Go to citation"
-msgstr "Перейти к цитате"
-
-#: ../src/bmkdlg.cpp:323
-msgid "Delete citation"
-msgstr "Удалить цитату"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr "Цитаты"
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr "Новая цитата"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "

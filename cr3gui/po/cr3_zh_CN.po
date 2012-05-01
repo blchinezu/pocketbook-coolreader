@@ -152,10 +152,6 @@ msgstr "词典"
 msgid "Cite"
 msgstr "引用"
 
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "书签"
-
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
 msgstr "查找"
@@ -379,74 +375,6 @@ msgstr "当前页: $1 ，共 $2\n"
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
 msgstr "输入页码:"
-
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "空位"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr "页 $1 ($2%)"
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-msgid "Go to bookmark"
-msgstr "跳到书签"
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-"短按 $1 - 跳到书签,\n"
-"$2 - 切换到设置模式"
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-"短按 $1 - 跳到书签,\n"
-"长按 - 设置书签"
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-msgid "Set bookmark"
-msgstr "设置书签"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-"$1 - 设置书签,\n"
-"$2 - 切换到跳转到模式"
-
-#: ../src/bmkdlg.cpp:88
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr ""
-"短按 $1 - 设置书签,\n"
-"长按 - 跳到书签"
-
-#: ../src/bmkdlg.cpp:169
-msgid "Delete bookmark"
-msgstr "删除书签"
-
-#: ../src/bmkdlg.cpp:322
-msgid "Go to citation"
-msgstr "跳到引用"
-
-#: ../src/bmkdlg.cpp:323
-msgid "Delete citation"
-msgstr "删除引用"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr "引用"
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr "引用选择对话框"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "

@@ -6,7 +6,6 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr 3gui\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2012-03-15 01:51+0200\n"
 "POT-Creation-Date: 2012-04-12 22:34+0000\n"
 "PO-Revision-Date: 2010-02-24 21:50+0300\n"
 "Last-Translator: Stanislovas Zacharovas\n"
@@ -155,10 +154,6 @@ msgstr "Žodynas"
 #: ../src/mainwnd.cpp:907
 msgid "Cite"
 msgstr "Citatos"
-
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "Žymės"
 
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
@@ -383,76 +378,6 @@ msgstr "Esamas puslapis: $1 of $2\n"
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
 msgstr "Įveskite puslapio numerį"
-
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "Nėra žymių"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr "Psl. $1 ($2%)"
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-msgid "Go to bookmark"
-msgstr "Eiti prie žymės Nr."
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-"Trumpas paspaudimas $1 - pereiti prie žymės,\n"
-"$2 - žymės nustatymo būsena"
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-"Trumpas paspaudimas $1 - pereiti prie žymės,\n"
-"ilgas paspaudimas - nustatyti žymę"
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-msgid "Set bookmark"
-msgstr "Žymės nustatymas"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-"$1 - nustatyti žymę,\n"
-"$2 - persijungti į perėjimo režimą"
-
-#: ../src/bmkdlg.cpp:88
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr ""
-"Trumpas paspaudimas $1 - nustatyti žymę,\n"
-"ilgas paspaudimas - eiti prie žymės"
-
-#: ../src/bmkdlg.cpp:169
-msgid "Delete bookmark"
-msgstr "Ištrinti žymes"
-
-#: ../src/bmkdlg.cpp:322
-#, fuzzy
-msgid "Go to citation"
-msgstr "Prie pozicijos"
-
-#: ../src/bmkdlg.cpp:323
-#, fuzzy
-msgid "Delete citation"
-msgstr "Ištrinti įrašą"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr "Išskirti citatą"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "

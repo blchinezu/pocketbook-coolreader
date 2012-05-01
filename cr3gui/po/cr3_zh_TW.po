@@ -152,10 +152,6 @@ msgstr "词典"
 msgid "Cite"
 msgstr "列举..."
 
-#: ../src/mainwnd.cpp:911 ../src/bmkdlg.cpp:188
-msgid "Bookmarks"
-msgstr "书签"
-
 #: ../src/mainwnd.cpp:915 ../src/viewdlg.cpp:224
 msgid "Search"
 msgstr "查找"
@@ -384,72 +380,6 @@ msgstr ""
 #, fuzzy
 msgid "Enter page number:"
 msgstr "输入页数"
-
-#: ../src/bmkdlg.cpp:19
-msgid "Empty slot"
-msgstr "空的存档位置"
-
-#: ../src/bmkdlg.cpp:51
-msgid "Page $1 ($2%)"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:75 ../src/bmkdlg.cpp:168
-#, fuzzy
-msgid "Go to bookmark"
-msgstr "书签"
-
-#: ../src/bmkdlg.cpp:79
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"$2 - switch to SET mode"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:80
-msgid ""
-"Short press $1 - go to bookmark,\n"
-"long press - set bookmark"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:83 ../src/bmkdlg.cpp:167
-#, fuzzy
-msgid "Set bookmark"
-msgstr "书签"
-
-#: ../src/bmkdlg.cpp:87
-msgid ""
-"$1 - set bookmark,\n"
-"$2 - switch to GO mode"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:88
-#, fuzzy
-msgid ""
-"Short press $1 - set bookmark,\n"
-"long press - go to bookmark"
-msgstr "长按1...8键 = 设置, 正常按键 = 跳转到"
-
-#: ../src/bmkdlg.cpp:169
-#, fuzzy
-msgid "Delete bookmark"
-msgstr "书签"
-
-#: ../src/bmkdlg.cpp:322
-#, fuzzy
-msgid "Go to citation"
-msgstr "跳转到页..."
-
-#: ../src/bmkdlg.cpp:323
-#, fuzzy
-msgid "Delete citation"
-msgstr "书签"
-
-#: ../src/bmkdlg.cpp:337
-msgid "Citations"
-msgstr ""
-
-#: ../src/bmkdlg.cpp:454 ../src/viewdlg.cpp:560
-msgid "Cite selection dialog"
-msgstr ""
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "
