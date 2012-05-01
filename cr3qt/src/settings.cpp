@@ -24,8 +24,8 @@ static void findImagesFromDirectory( lString16 dir, lString16Collection & files 
             if ( !item->IsContainer() ) {
                 lString16 name = item->GetName();
                 name.lowercase();
-                if ( name.endsWith(lString16(L".png")) || name.endsWith(lString16(L".jpg")) || name.endsWith(lString16(L".gif"))
-                    || name.endsWith(lString16(L".jpeg")) ) {
+                if ( name.endsWith(".png") || name.endsWith(".jpg") || name.endsWith(".gif")
+                    || name.endsWith(".jpeg") ) {
                     files.add(dir + item->GetName());
                 }
             }
@@ -34,16 +34,16 @@ static void findImagesFromDirectory( lString16 dir, lString16Collection & files 
 }
 
 static void findBackgrounds( lString16Collection & baseDirs, lString16Collection & files ) {
-	unsigned i;
+    int i;
     for ( i=0; i<baseDirs.length(); i++ ) {
         lString16 baseDir = baseDirs[i];
         LVAppendPathDelimiter(baseDir);
-        findImagesFromDirectory( baseDir + L"backgrounds", files );
+        findImagesFromDirectory( baseDir + "backgrounds", files );
     }
     for ( i=0; i<baseDirs.length(); i++ ) {
         lString16 baseDir = baseDirs[i];
         LVAppendPathDelimiter(baseDir);
-        findImagesFromDirectory( baseDir + L"textures", files );
+        findImagesFromDirectory( baseDir + "textures", files );
     }
 }
 
@@ -104,7 +104,7 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     m_backgroundFiles.append("[NONE]");
     bgFileLabels.append("[NONE]");
     QString bgFile = m_props->getStringDef(PROP_BACKGROUND_IMAGE, "");
-    for ( unsigned i=0; i<bgFiles.length(); i++ ) {
+    for ( int i=0; i<bgFiles.length(); i++ ) {
         lString16 fn = bgFiles[i];
         QString f = cr2qt(fn);
         if ( f==bgFile )
@@ -172,8 +172,8 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
 
     int n = m_props->getIntDef( PROP_PAGE_MARGIN_LEFT, 8 );
     int mi = 0;
-    for ( unsigned i=0; i<MAX_MARGIN_INDEX; i++ ) {
-        if ( n <= def_margins[i] ) {
+    for (int i=0; i <  (int)MAX_MARGIN_INDEX; i++) {
+        if (n <= def_margins[i]) {
             mi = i;
             break;
         }
@@ -232,7 +232,7 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     //PROP_HYPHENATION_DICT
     QString v = QString("%1").arg(m_props->getIntDef(PROP_INTERLINE_SPACE, 100)) + "%";
     QStringList isitems;
-    for ( int i=0; i<sizeof(interline_spaces)/sizeof(int); i++ )
+    for (int i = 0; i < (int)(sizeof(interline_spaces) / sizeof(int)); i++)
         isitems.append(QString("%1").arg(interline_spaces[i]) + "%");
     m_ui->cbInterlineSpace->addItems(isitems);
     int isi = m_ui->cbInterlineSpace->findText(v);
@@ -258,7 +258,7 @@ SettingsDlg::SettingsDlg(QWidget *parent, CR3View * docView ) :
     m_ui->crSample->getDocView()->setShowCover( false );
     m_ui->crSample->getDocView()->setViewMode( DVM_SCROLL, 1 );
     QString testPhrase = tr("The quick brown fox jumps over the lazy dog. ");
-    m_ui->crSample->getDocView()->createDefaultDocument( lString16(), qt2cr(testPhrase+testPhrase+testPhrase) );
+    m_ui->crSample->getDocView()->createDefaultDocument(lString16::empty_str, qt2cr(testPhrase+testPhrase+testPhrase));
 
     updateStyleSample();
 

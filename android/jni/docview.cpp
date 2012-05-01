@@ -144,7 +144,7 @@ CRTimerUtil _timeoutControl;
 
 #define DECL_DEF_CR_FONT_SIZES static int cr_font_sizes[] = \
  { 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
-   32, 34, 36, 38, 40, 42, 44, 48, 52, 56, 60, 64, 68, 72 }
+   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 44, 48, 52, 56, 60, 64, 68, 72 }
 
 DECL_DEF_CR_FONT_SIZES;
 
@@ -429,7 +429,10 @@ DocViewNative::DocViewNative()
 
 static DocViewNative * getNative(JNIEnv * env, jobject _this)
 {
-    return (DocViewNative *)env->GetIntField(_this, gNativeObjectID);
+	DocViewNative * res = (DocViewNative *)env->GetIntField(_this, gNativeObjectID);
+	if (res == NULL)
+		CRLog::warn("Native DocView is NULL");
+	return res;
 }
 
 bool DocViewNative::loadDocument( lString16 filename )
@@ -478,7 +481,7 @@ bool DocViewNative::closeBook()
 	if ( _docview->isDocumentOpened() ) {
 	    _docview->savePosition();
         _docview->getDocument()->updateMap();
-	    saveHistory(lString16());
+        saveHistory(lString16::empty_str);
 	    _docview->close();
 	    return true;
 	}
@@ -972,7 +975,7 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_isRenderedIntern
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
-	if ( !p->_docview->isDocumentOpened() )
+	if (p == NULL || !p->_docview->isDocumentOpened())
 		return JNI_FALSE;
 	return p->_docview->IsRendered() ? JNI_TRUE : JNI_FALSE;
 }
@@ -987,7 +990,7 @@ JNIEXPORT jobject JNICALL Java_org_coolreader_crengine_DocView_getCurrentPageBoo
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
-	if ( !p->_docview->isDocumentOpened() )
+	if (p == NULL || !p->_docview->isDocumentOpened())
 		return NULL;
 	DocViewCallback callback( _env, p->_docview, _this );
 	
@@ -1045,18 +1048,30 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_updateBookInfoIntern
 	DocViewCallback callback( _env, p->_docview, _this );
     CRObjectAccessor bookinfo(_env, _info);
     CRObjectAccessor fileinfo(_env, CRFieldAccessor(bookinfo, "fileInfo", "Lorg/coolreader/crengine/FileInfo;").getObject() );
-    CRStringField(fileinfo,"title").set(p->_docview->getTitle());
-    CRStringField(fileinfo,"authors").set(p->_docview->getAuthors());
-    CRStringField(fileinfo,"series").set(p->_docview->getSeries());
+    CRStringField titleField(fileinfo,"title");
+    if (titleField.get().empty())
+    	titleField.set(p->_docview->getTitle());
+    CRStringField authorsField(fileinfo,"authors");
+    if (authorsField.get().empty())
+    	authorsField.set(p->_docview->getAuthors());
+    CRStringField seriesField(fileinfo,"series");
+    if (seriesField.get().empty()) {
+    	seriesField.set(p->_docview->getSeriesName());
+    	CRIntField seriesNumberField(fileinfo,"seriesNumber");
+    	seriesNumberField.set(p->_docview->getSeriesNumber());
+    }
+    CRStringField languageField(fileinfo,"language");
+    if (languageField.get().empty())
+    	languageField.set(p->_docview->getLanguage());
 }
 
 /*
  * Class:     org_coolreader_crengine_DocView
  * Method:    goToPositionInternal
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Ljava/lang/String;Z)Z
  */
 JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_goToPositionInternal
-  (JNIEnv * _env, jobject _this, jstring jstr)
+  (JNIEnv * _env, jobject _this, jstring jstr, jboolean saveToHistory)
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
@@ -1067,7 +1082,9 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_goToPositionInte
     ldomXPointer bm = p->_docview->getDocument()->createXPointer(str);
 	if ( bm.isNull() )
 		return JNI_FALSE;
-	p->_docview->goToBookmark(bm); 
+	if (saveToHistory)
+		p->_docview->savePosToNavigationHistory();
+	p->_docview->goToBookmark(bm);
 	return JNI_TRUE;
 }
 

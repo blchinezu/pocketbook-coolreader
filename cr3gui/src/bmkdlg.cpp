@@ -50,8 +50,8 @@ void CRBookmarkMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin,
     }
     lString16 postext(_("Page $1 ($2%)"));
     postext.replaceIntParam(1, _page+1);
-    postext.replaceParam(2, lString16::itoa( _bookmark->getPercent()/100 ) + L"." + lString16::itoa( _bookmark->getPercent()%100 ));
-    postext << L"  " << _bookmark->getTitleText();
+    postext.replaceParam(2, lString16::itoa( _bookmark->getPercent()/100 ) << "." << fmt::decimal(_bookmark->getPercent()%100));
+    postext << "  " << _bookmark->getTitleText();
     skin->drawText( buf, posRect, postext );
     if ( !text.empty() )
         valueSkin->drawText( buf, textRect, text );
@@ -193,7 +193,7 @@ CRBookmarkMenu::CRBookmarkMenu(CRGUIWindowManager * wm, LVDocView * docview, int
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16(L"#bookmarks"));
+    setSkinName(lString16("#bookmarks"));
     int mc = getSkin()->getMinItemCount();
     if ( _pageItems < mc )
         _pageItems = mc;
@@ -341,7 +341,7 @@ CRCitesMenu::CRCitesMenu(CRGUIWindowManager * wm, LVDocView * docview, int numIt
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16(L"#bookmarks"));
+    setSkinName(lString16("#bookmarks"));
     int mc = getSkin()->getMinItemCount();
     if ( _pageItems < mc )
         _pageItems = mc;

@@ -76,6 +76,7 @@
 // document property names
 #define DOC_PROP_AUTHORS         "doc.authors"
 #define DOC_PROP_TITLE           "doc.title"
+#define DOC_PROP_LANGUAGE        "doc.language"
 #define DOC_PROP_SERIES_NAME     "doc.series.name"
 #define DOC_PROP_SERIES_NUMBER   "doc.series.number"
 #define DOC_PROP_ARC_NAME        "doc.archive.name"
@@ -115,14 +116,14 @@ xpath_step_t ParseXPathStep( const lChar8 * &path, lString8 & name, int & index 
 typedef enum {
     CR_DONE,    ///< operation is finished successfully
     CR_TIMEOUT, ///< operation is incomplete - interrupted by timeout
-    CR_ERROR   ///< error while executing operation
+    CR_ERROR    ///< error while executing operation
 } ContinuousOperationResult;
 
 /// type of image scaling
 typedef enum {
-    IMG_NO_SCALE, /// scaling is disabled
+    IMG_NO_SCALE,        /// scaling is disabled
     IMG_INTEGER_SCALING, /// integer multipier/divisor scaling -- *2, *3 only
-    IMG_FREE_SCALING, /// free scaling, non-integer factor
+    IMG_FREE_SCALING     /// free scaling, non-integer factor
 } img_scaling_mode_t;
 
 /// image scaling option
@@ -178,25 +179,25 @@ public:
     /// on starting file loading
     virtual void OnLoadFileStart( lString16 filename ) { }
     /// format detection finished
-    virtual void OnLoadFileFormatDetected( doc_format_t fileFormat ) { }
+    virtual void OnLoadFileFormatDetected( doc_format_t /*fileFormat*/) { }
     /// file loading is finished successfully - drawCoveTo() may be called there
     virtual void OnLoadFileEnd() { }
     /// first page is loaded from file an can be formatted for preview
     virtual void OnLoadFileFirstPagesReady() { }
     /// file progress indicator, called with values 0..100
-    virtual void OnLoadFileProgress( int percent ) { }
+    virtual void OnLoadFileProgress( int /*percent*/) { }
     /// document formatting started
     virtual void OnFormatStart() { }
     /// document formatting finished
     virtual void OnFormatEnd() { }
     /// format progress, called with values 0..100
-    virtual void OnFormatProgress( int percent ) { }
+    virtual void OnFormatProgress(int /*percent*/) { }
     /// format progress, called with values 0..100
-    virtual void OnExportProgress( int percent ) { }
+    virtual void OnExportProgress(int /*percent*/) { }
     /// file load finiished with error
-    virtual void OnLoadFileError( lString16 message ) { }
+    virtual void OnLoadFileError(lString16 /*message*/) { }
     /// Override to handle external links
-    virtual void OnExternalLink( lString16 url, ldomNode * node ) { }
+    virtual void OnExternalLink(lString16 /*url*/, ldomNode * /*node*/) { }
     /// Called when page images should be invalidated (clearImageCache() called in LVDocView)
     virtual void OnImageCacheClear() { }
     /// return true if reload will be processed by external code, false to let internal code process it
@@ -210,6 +211,7 @@ class CacheLoadingCallback
 public:
     /// called when format of document being loaded from cache became known
     virtual void OnCacheFileFormatDetected( doc_format_t ) = 0;
+    virtual ~CacheLoadingCallback() { }
 };
 
 
@@ -359,11 +361,11 @@ public:
     /// set raw data bytes
     void setRaw( int offset, int size, const lUInt8 * buf );
     /// create empty buffer
-    ldomTextStorageChunk( ldomDataStorageManager * manager, int index );
+    ldomTextStorageChunk(ldomDataStorageManager * manager, lUInt16 index);
     /// create chunk to be read from cache file
-    ldomTextStorageChunk( ldomDataStorageManager * manager, int index, int compsize, int uncompsize );
+    ldomTextStorageChunk(ldomDataStorageManager * manager, lUInt16 index, int compsize, int uncompsize);
     /// create with preallocated buffer, for raw access
-    ldomTextStorageChunk( int preAllocSize, ldomDataStorageManager * manager, int index );
+    ldomTextStorageChunk(int preAllocSize, ldomDataStorageManager * manager, lUInt16 index);
     ~ldomTextStorageChunk();
 };
 
@@ -611,10 +613,11 @@ private:
     // types for _handle._type
     enum {
         NT_TEXT=0,       // mutable text node
-        NT_ELEMENT=1,    // mutable element node
+        NT_ELEMENT=1    // mutable element node
 #if BUILD_LITE!=1
+        ,
         NT_PTEXT=2,      // immutable (persistent) text node
-        NT_PELEMENT=3,   // immutable (persistent) element node
+        NT_PELEMENT=3   // immutable (persistent) element node
 #endif
     };
 
@@ -645,7 +648,7 @@ private:
     void onCollectionDestroy();
     inline ldomNode * getTinyNode( lUInt32 index ) const { return ((tinyNodeCollection*)getDocument())->getTinyNode(index); }
 
-    void operator delete( void * p )
+    void operator delete(void *)
     {
         // Do nothing. Just to disable delete.
     }
@@ -720,9 +723,9 @@ public:
     inline bool hasAttributes() const { return getAttrCount()!=0; }
 
     /// returns element child count
-    lUInt32 getChildCount() const;
+    int getChildCount() const;
     /// returns element attribute count
-    lUInt32 getAttrCount() const;
+    int getAttrCount() const;
     /// returns attribute value by attribute name id and namespace id
     const lString16 & getAttributeValue( lUInt16 nsid, lUInt16 id ) const;
     /// returns attribute value by attribute name
@@ -730,8 +733,15 @@ public:
     {
         return getAttributeValue( NULL, attrName );
     }
+    /// returns attribute value by attribute name
+    inline const lString16 & getAttributeValue( const lChar8 * attrName ) const
+    {
+        return getAttributeValue( NULL, attrName );
+    }
     /// returns attribute value by attribute name and namespace
     const lString16 & getAttributeValue( const lChar16 * nsName, const lChar16 * attrName ) const;
+    /// returns attribute value by attribute name and namespace
+    const lString16 & getAttributeValue( const lChar8 * nsName, const lChar8 * attrName ) const;
     /// returns attribute by index
     const lxmlAttribute * getAttribute( lUInt32 ) const;
     /// returns true if element node has attribute with specified name id and namespace id
@@ -756,6 +766,8 @@ public:
     void setNodeId( lUInt16 );
     /// returns element name
     const lString16 & getNodeName() const;
+    /// compares node name with value, returns true if matches
+    bool isNodeName(const char * name) const;
     /// returns element namespace name
     const lString16 & getNodeNsName() const;
 
@@ -924,6 +936,13 @@ public:
     */
     lUInt16 getNsNameIndex( const lChar16 * name );
 
+    /// Get namespace id by name
+    /**
+        \param name is string value of namespace (ASCII only)
+        \return id of namespace
+    */
+    lUInt16 getNsNameIndex( const lChar8 * name );
+
     /// Get attribute name by id
     /**
         \param id is numeric value of attribute
@@ -940,6 +959,13 @@ public:
         \return id of attribute
     */
     lUInt16 getAttrNameIndex( const lChar16 * name );
+
+    /// Get attribute id by name
+    /**
+        \param name is string value of attribute (8bit ASCII only)
+        \return id of attribute
+    */
+    lUInt16 getAttrNameIndex( const lChar8 * name );
 
     /// helper: returns attribute value
     inline const lString16 & getAttrValue( lUInt16 index ) const
@@ -975,6 +1001,20 @@ public:
         \return id of element
     */
     lUInt16 getElementNameIndex( const lChar16 * name );
+
+    /// Get element id by name
+    /**
+        \param name is string value of element name (8bit ASCII only)
+        \return id of element, allocates new ID if not found
+    */
+    lUInt16 getElementNameIndex( const lChar8 * name );
+
+    /// Get element id by name
+    /**
+        \param name is string value of element name (8bit ASCII only)
+        \return id of element, 0 if not found
+    */
+    lUInt16 findElementNameIndex( const lChar8 * name );
 
     /// Get element type properties structure by id
     /**
@@ -1289,7 +1329,7 @@ public:
     {
         ldomNode * node = getNode();
         if ( !node )
-            return lString16();
+            return lString16::empty_str;
         return node->getText( blockDelimiter );
     }
     /// returns href attribute of <A> element, null string if not found
@@ -1518,7 +1558,7 @@ public:
     lString16 getText()
     {
         if ( isNull() )
-            return lString16();
+            return lString16::empty_str;
         lString16 txt = _node->getText();
         return txt.substr( _start, _end-_start );
     }
@@ -1648,7 +1688,7 @@ enum MoveDirection {
     DIR_LEFT,
     DIR_RIGHT,
     DIR_UP,
-    DIR_DOWN,
+    DIR_DOWN
 };
 
 /// range in document, marked with specified flags
@@ -1699,7 +1739,7 @@ class ldomWordEx : public ldomWord
     lString16 _text;
 public:
     ldomWordEx( ldomWord & word )
-        :  _word(word), _range(word), _mark(word)
+        :  _word(word), _mark(word), _range(word)
     {
         _text = _word.getText();
     }
@@ -1888,13 +1928,13 @@ class ldomNavigationHistory
         lString16 back()
         {
             if (_pos==0)
-                return lString16();
+                return lString16::empty_str;
             return _links[--_pos];
         }
         lString16 forward()
         {
             if (_pos>=(int)_links.length()-1)
-                return lString16();
+                return lString16::empty_str;
             return _links[++_pos];
         }
         int backCount()
@@ -1924,10 +1964,11 @@ class ldomDocument : public lxmlDocBase
     friend class ldomDocumentWriter;
     friend class ldomDocumentWriterFilter;
 private:
+    LVTocItem m_toc;
 #if BUILD_LITE!=1
     font_ref_t _def_font; // default font
     css_style_ref_t _def_style;
-    int _last_docflags;
+    lUInt32 _last_docflags;
     int _page_height;
     int _page_width;
     bool _rendered;
@@ -1954,8 +1995,6 @@ private:
 #endif
 
 protected:
-
-    LVTocItem m_toc;
 
 #if BUILD_LITE!=1
     void applyDocumentStyleSheet();
@@ -2068,7 +2107,7 @@ public:
     {
         ldomNode * node = nodeFromXPath( xPointerStr );
         if ( !node )
-            return lString16();
+            return lString16::empty_str;
         return node->getText();
     }
 
@@ -2317,8 +2356,9 @@ public:
 
 //utils
 /// extract authors from FB2 document, delimiter is lString16 by default
-lString16 extractDocAuthors( ldomDocument * doc, lString16 delimiter=lString16(), bool shortMiddleName=true );
+lString16 extractDocAuthors( ldomDocument * doc, lString16 delimiter=lString16::empty_str, bool shortMiddleName=true );
 lString16 extractDocTitle( ldomDocument * doc );
+lString16 extractDocLanguage( ldomDocument * doc );
 /// returns "(Series Name #number)" if pSeriesNumber is NULL, separate name and number otherwise
 lString16 extractDocSeries( ldomDocument * doc, int * pSeriesNumber=NULL );
 

@@ -109,17 +109,17 @@ class CRFileProperties {
             if ( !container_stream.isNull() ) {
                 ldomDocument * doc = LVParseXMLStream( container_stream );
                 if ( doc ) {
-                    ldomNode * rootfile = doc->nodeFromXPath( lString16(L"container/rootfiles/rootfile") );
+                    ldomNode * rootfile = doc->nodeFromXPath( lString16("container/rootfiles/rootfile") );
                     if ( rootfile && rootfile->isElement() ) {
-                        rootfilePath = rootfile->getAttributeValue(L"full-path");
-                        rootfileMediaType = rootfile->getAttributeValue(L"media-type");
+                        rootfilePath = rootfile->getAttributeValue("full-path");
+                        rootfileMediaType = rootfile->getAttributeValue("media-type");
                     }
                     delete doc;
                 }
             }
         }
         lString16 codeBase;
-        if ( !rootfilePath.empty() && rootfileMediaType==L"application/oebps-package+xml" ) {
+        if (!rootfilePath.empty() && rootfileMediaType == "application/oebps-package+xml") {
             //
             {
                 int lastSlash = -1;
@@ -133,8 +133,8 @@ class CRFileProperties {
             if ( !content_stream.isNull() ) {
                 ldomDocument * doc = LVParseXMLStream( content_stream );
                 if ( doc ) {
-                    lString16 title = doc->textFromXPath( lString16(L"package/metadata/title") );
-                    lString16 authors = doc->textFromXPath( lString16(L"package/metadata/creator") );
+                    lString16 title = doc->textFromXPath( lString16("package/metadata/title") );
+                    lString16 authors = doc->textFromXPath( lString16("package/metadata/creator") );
                     delete doc;
                 }
             }
@@ -159,7 +159,7 @@ class CRFileProperties {
                 }
             }
         }
-        if ( _mimeType==L"application/epub+zip" )
+        if (_mimeType == "application/epub+zip")
             return readEpub( arc );
         // todo: add more mime types support here
         for ( int i=0; i<arc->GetObjectCount(); i++ ) {
@@ -263,7 +263,7 @@ void testHyphen( const char * str )
     HyphMan::hyphenate( s16.c_str(), s16.length(), widths, flags, 1, 15 );
     lString8 buf( str );
     buf << " = ";
-    for ( unsigned i=0; i<s16.length(); i++ ) {
+    for ( int i=0; i<s16.length(); i++ ) {
         buf << str[i];
         if ( flags[i] & LCHAR_ALLOW_HYPH_WRAP_AFTER )
             buf << '-';
@@ -383,7 +383,7 @@ ResourceContainer * resources = NULL;
 
 static lChar16 detectSlash( lString16 path )
 {
-    for ( unsigned i=0; i<path.length(); i++ )
+    for ( int i=0; i<path.length(); i++ )
         if ( path[i]=='\\' || path[i]=='/' )
             return path[i];
 #ifdef _WIN32
@@ -400,7 +400,7 @@ lString16 GetConfigFileName()
         ::wxMkdir( wxString( cfgdir.c_str() ) );
     lChar16 slash = detectSlash( cfgdir );
     cfgdir << slash;
-    return cfgdir + L"cr3.ini";
+    return cfgdir + "cr3.ini";
 }
 
 void cr3Frame::OnUpdateUI( wxUpdateUIEvent& event )
@@ -522,12 +522,12 @@ wxBitmap cr3Frame::getIcon16x16( const lChar16 * name )
 {
     lString16 dir;
     if ( _toolbarSize==2 )
-        dir = lString16(L"icons/22x22/");
+        dir = "icons/22x22/";
     else if ( _toolbarSize==1 )
-        dir = lString16(L"icons/16x16/");
+        dir = "icons/16x16/";
     else
-        dir = lString16(L"icons/32x32/");
-    wxBitmap icon = resources->GetBitmap( (dir + name + L".png").c_str() );
+        dir = "icons/32x32/";
+    wxBitmap icon = resources->GetBitmap( (dir + name + ".png").c_str() );
     if ( icon.IsOk() )
         return icon;
     return wxNullBitmap;
@@ -538,7 +538,7 @@ bool getDirectoryFonts( lString16Collection & pathList, lString16 ext, lString16
 {
     int foundCount = 0;
     lString16 path;
-    for ( unsigned di=0; di<pathList.length();di++ ) {
+    for ( int di=0; di<pathList.length();di++ ) {
         path = pathList[di];
         LVContainerRef dir = LVOpenDirectory(path.c_str());
         if ( !dir.isNull() ) {
@@ -662,12 +662,12 @@ cr3app::OnInit()
         }
 */
     }
-    lString16 fontDir = appPath + L"fonts";
+    lString16 fontDir = appPath + "fonts";
     fontDir << slashChar;
     lString8 fontDir8 = UnicodeToLocal(fontDir);
     const char * fontDir8s = fontDir8.c_str();
     //InitFontManager( fontDir8 );
-    InitFontManager( lString8() );
+    InitFontManager(lString8::empty_str);
 
     // Load font definitions into font manager
     // fonts are in files font1.lbf, font2.lbf, ... font32.lbf
@@ -701,20 +701,20 @@ cr3app::OnInit()
         fonts.add( sysFontDir + lString16(msfonts[fi]) );
 #endif
 #ifdef _LINUX
-    fontDirs.add( lString16(L"/usr/local/share/cr3/fonts") );
-    fontDirs.add( lString16(L"/usr/local/share/fonts/truetype/freefont") );
-    fontDirs.add( lString16(L"/usr/share/cr3/fonts") );
-    fontDirs.add( lString16(L"/usr/share/fonts/truetype/freefont") );
+    fontDirs.add("/usr/local/share/cr3/fonts");
+    fontDirs.add("/usr/local/share/fonts/truetype/freefont");
+    fontDirs.add("/usr/share/cr3/fonts");
+    fontDirs.add("/usr/share/fonts/truetype/freefont");
     //fontDirs.add( lString16(L"/usr/share/fonts/truetype/msttcorefonts") );
     for ( int fi=0; msfonts[fi]; fi++ )
-        fonts.add( lString16(L"/usr/share/fonts/truetype/msttcorefonts/") + lString16(msfonts[fi]) );
+        fonts.add( lString16("/usr/share/fonts/truetype/msttcorefonts/") + lString16(msfonts[fi]) );
 #endif
     getDirectoryFonts( fontDirs, fontExt, fonts, true );
 
     // load fonts from file
     CRLog::debug("%d font files found", fonts.length());
     if (!fontMan->GetFontCount()) {
-        for ( unsigned fi=0; fi<fonts.length(); fi++ ) {
+        for ( int fi=0; fi<fonts.length(); fi++ ) {
             lString8 fn = UnicodeToLocal(fonts[fi]);
             CRLog::trace("loading font: %s", fn.c_str());
             if ( !fontMan->RegisterFont(fn) ) {
@@ -1128,7 +1128,7 @@ void cr3Frame::OnInitDialog(wxInitDialogEvent& event)
     //sprintf( cssfn, "fb2.css"); //, exedir
     //lString8 css = readFileToString( (UnicodeToLocal(_appDir) + cssfn).c_str() );
     lString8 css;
-    LVLoadStylesheetFile( _appDir + L"fb2.css", css );
+    LVLoadStylesheetFile( _appDir + "fb2.css", css );
 #ifdef _LINUX
     if ( css.empty() )
         LVLoadStylesheetFile( L"/usr/share/cr3/fb2.css", css );
@@ -1196,11 +1196,11 @@ void cr3Frame::OnInitDialog(wxInitDialogEvent& event)
         lString16 param = lString16( wxGetApp().argv[i] );
         if ( param[0]!='-' )
             fnameToOpen = param;
-        else if ( param.startsWith(lString16(L"--convert") ) )
+        else if (param.startsWith("--convert"))
             convert = true;
-        else if ( param.startsWith(lString16(L"--format=") ) ) {
+        else if (param.startsWith("--format=")) {
             formatName = param.substr(9);
-        } else if ( param.startsWith(lString16(L"--out=") ) ) {
+        } else if (param.startsWith("--out=")) {
             outFile = param.substr(6);
         }
     }
@@ -1212,7 +1212,7 @@ void cr3Frame::OnInitDialog(wxInitDialogEvent& event)
             formatName = L"wol";
         //==L"wol"
         if ( outFile.empty() )
-            outFile = fnameToOpen + L".wol";
+            outFile = fnameToOpen + ".wol";
         // convertor
         if ( !_view->LoadDocument( wxString( fnameToOpen.c_str() ) ) )
             exit(1);

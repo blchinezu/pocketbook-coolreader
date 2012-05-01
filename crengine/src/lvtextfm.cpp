@@ -76,7 +76,7 @@ void lvtextFreeFormattedLine( formatted_line_t * pline )
 
 formatted_word_t * lvtextAddFormattedWord( formatted_line_t * pline )
 {
-    lUInt32 size = (pline->word_count + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
+    int size = (pline->word_count + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
     if ( pline->word_count >= size)
     {
         size += FRM_ALLOC_SIZE;
@@ -87,8 +87,8 @@ formatted_word_t * lvtextAddFormattedWord( formatted_line_t * pline )
 
 formatted_line_t * lvtextAddFormattedLine( formatted_text_fragment_t * pbuffer )
 {
-    lUInt32 size = (pbuffer->frmlinecount + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
-    if ( pbuffer->frmlinecount >= size)
+    int size = (pbuffer->frmlinecount + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
+    if (pbuffer->frmlinecount >= size)
     {
         size += FRM_ALLOC_SIZE;
         pbuffer->frmlines = (formatted_line_t**)realloc( pbuffer->frmlines, sizeof(formatted_line_t*)*(size) );
@@ -98,7 +98,7 @@ formatted_line_t * lvtextAddFormattedLine( formatted_text_fragment_t * pbuffer )
 
 formatted_line_t * lvtextAddFormattedLineCopy( formatted_text_fragment_t * pbuffer, formatted_word_t * words, int words_count )
 {
-    lUInt32 size = (pbuffer->frmlinecount + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
+    int size = (pbuffer->frmlinecount + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
     if ( pbuffer->frmlinecount >= size)
     {
         size += FRM_ALLOC_SIZE;
@@ -131,7 +131,7 @@ void lvtextFreeFormatter( formatted_text_fragment_t * pbuffer )
 {
     if (pbuffer->srctext)
     {
-        for (lUInt32 i=0; i<pbuffer->srctextlen; i++)
+        for (int i=0; i<pbuffer->srctextlen; i++)
         {
             if (pbuffer->srctext[i].flags & LTEXT_FLAG_OWNTEXT)
                 free( (void*)pbuffer->srctext[i].t.text );
@@ -140,7 +140,7 @@ void lvtextFreeFormatter( formatted_text_fragment_t * pbuffer )
     }
     if (pbuffer->frmlines)
     {
-        for (lUInt32 i=0; i<pbuffer->frmlinecount; i++)
+        for (int i=0; i<pbuffer->frmlinecount; i++)
         {
             lvtextFreeFormattedLine( pbuffer->frmlines[i] );
         }
@@ -164,7 +164,7 @@ void lvtextAddSourceLine( formatted_text_fragment_t * pbuffer,
    lInt8           letter_spacing
                          )
 {
-    lUInt32 srctextsize = (pbuffer->srctextlen + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
+    int srctextsize = (pbuffer->srctextlen + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
     if ( pbuffer->srctextlen >= srctextsize)
     {
         srctextsize += FRM_ALLOC_SIZE;
@@ -172,6 +172,14 @@ void lvtextAddSourceLine( formatted_text_fragment_t * pbuffer,
     }
     src_text_fragment_t * pline = &pbuffer->srctext[ pbuffer->srctextlen++ ];
     pline->t.font = font;
+//    if (font) {
+//        // DEBUG: check for crash
+//        CRLog::trace("c font = %08x  txt = %08x", (lUInt32)font, (lUInt32)text);
+//        ((LVFont*)font)->getVisualAligmentWidth();
+//    }
+//    if (font == NULL && ((flags & LTEXT_WORD_IS_OBJECT) == 0)) {
+//        CRLog::fatal("No font specified for text");
+//    }
     if (!len) for (len=0; text[len]; len++) ;
     if (flags & LTEXT_FLAG_OWNTEXT)
     {
@@ -206,7 +214,7 @@ void lvtextAddSourceObject(
    lInt8           letter_spacing
                          )
 {
-    lUInt32 srctextsize = (pbuffer->srctextlen + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
+    int srctextsize = (pbuffer->srctextlen + FRM_ALLOC_SIZE-1) / FRM_ALLOC_SIZE * FRM_ALLOC_SIZE;
     if ( pbuffer->srctextlen >= srctextsize)
     {
         srctextsize += FRM_ALLOC_SIZE;
@@ -288,7 +296,7 @@ public:
     void allocate( int start, int end )
     {
         int pos = 0;
-        unsigned i;
+        int i;
         // PASS 1: calculate total length (characters + objects)
         for ( i=start; i<end; i++ ) {
             src_text_fragment_t * src = &m_pbuffer->srctext[i];
@@ -339,7 +347,7 @@ public:
     void copyText( int start, int end )
     {
         int pos = 0;
-        unsigned i;
+        int i;
         for ( i=start; i<end; i++ ) {
             src_text_fragment_t * src = &m_pbuffer->srctext[i];
             if ( src->flags & LTEXT_SRC_IS_OBJECT ) {
@@ -441,6 +449,8 @@ public:
         if (m_text[pos]==0) // object
             return 0; // no additional space
         LVFont * font = (LVFont*)m_srcs[pos]->t.font;
+        if (!font)
+            return 0; // no font
         if ( !font->getItalic() )
             return 0; // not italic
         if ( pos<maxpos-1 && m_srcs[pos+1]==m_srcs[pos] )
@@ -462,7 +472,7 @@ public:
             return 0; // not italic
         // need to measure
         LVFont::glyph_info_t glyph;
-        if ( !font->getGlyphInfo(m_text[pos], &glyph, '?') )
+        if (!font->getGlyphInfo(m_text[pos], &glyph, '?'))
             return 0;
         int delta = -glyph.originX;
         return delta > 0 ? delta : 0;
@@ -473,7 +483,7 @@ public:
     {
         int i;
         LVFont * lastFont = NULL;
-        src_text_fragment_t * lastSrc = NULL;
+        //src_text_fragment_t * lastSrc = NULL;
         int start = 0;
         int lastWidth = 0;
 #define MAX_TEXT_CHUNK_SIZE 4096
@@ -555,7 +565,7 @@ public:
             //
             if (newFont)
                 lastFont = newFont;
-            lastSrc = newSrc;
+            //lastSrc = newSrc;
         }
         if ( tabIndex>=0 ) {
             int tabPosition = -m_srcs[0]->margin;
@@ -688,16 +698,16 @@ public:
         int wstart = start;
         bool lastIsSpace = false;
         bool lastWord = false;
-        bool isObject = false;
+        //bool isObject = false;
         bool isSpace = false;
-        bool nextIsSpace = false;
+        //bool nextIsSpace = false;
         bool space = false;
         for ( int i=start; i<=end; i++ ) {
             src_text_fragment_t * newSrc = i<end ? m_srcs[i] : NULL;
             if ( i<end ) {
-                isObject = (m_flags[i] & LCHAR_IS_OBJECT)!=0;
+                //isObject = (m_flags[i] & LCHAR_IS_OBJECT)!=0;
                 isSpace = (m_flags[i] & LCHAR_IS_SPACE)!=0;
-                nextIsSpace = i<end-1 && (m_flags[i+1] & LCHAR_IS_SPACE);
+                //nextIsSpace = i<end-1 && (m_flags[i+1] & LCHAR_IS_SPACE);
                 space = splitBySpaces && lastIsSpace && !isSpace && i<lastnonspace;
             } else {
                 lastWord = true;
@@ -908,8 +918,8 @@ public:
         if ( visualAlignmentEnabled ) {
             LVFont * font = NULL;
             for ( int i=start; i<end; i++ ) {
-                if ( !(m_srcs[i]->flags & LTEXT_SRC_IS_OBJECT) ) {
-                    font = (LVFont*)m_srcs[i]->t.font;
+                if ( !(m_pbuffer->srctext[i].flags & LTEXT_SRC_IS_OBJECT) ) {
+                    font = (LVFont*)m_pbuffer->srctext[i].t.font;
                     if (font) {
                         int dx = font->getVisualAligmentWidth();
                         if ( dx>visialAlignmentWidth )
@@ -1093,7 +1103,7 @@ static void freeFrmLines( formatted_text_fragment_t * m_pbuffer )
     // clear existing formatted data, if any
     if (m_pbuffer->frmlines)
     {
-        for (lUInt32 i=0; i<m_pbuffer->frmlinecount; i++)
+        for (int i=0; i<m_pbuffer->frmlinecount; i++)
         {
             lvtextFreeFormattedLine( m_pbuffer->frmlines[i] );
         }
@@ -1149,9 +1159,16 @@ void LFormattedText::setHighlightOptions(text_highlight_options_t * v)
 void DrawBookmarkTextUnderline(LVDrawBuf & drawbuf, int x0, int y0, int x1, int y1, int y, int flags, text_highlight_options_t * options) {
     if (!(flags & (4 | 8)))
         return;
-    lUInt32 cl = (flags & 4) ? options->commentColor : options->correctionColor;
     if (options->bookmarkHighlightMode == highlight_mode_none)
         return;
+    bool isGray = drawbuf.GetBitsPerPixel() <= 8;
+    lUInt32 cl = 0x000000;
+    if (isGray) {
+        if (options->bookmarkHighlightMode == highlight_mode_solid)
+            cl = (flags & 4) ? 0xCCCCCC : 0xAAAAAA;
+    } else {
+        cl = (flags & 4) ? options->commentColor : options->correctionColor;
+    }
 
     if (options->bookmarkHighlightMode == highlight_mode_solid) {
         // solid fill
@@ -1187,7 +1204,7 @@ void DrawBookmarkTextUnderline(LVDrawBuf & drawbuf, int x0, int y0, int x1, int 
 
 void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * marks, ldomMarkedRangeList *bookmarks )
 {
-    lUInt32 i, j;
+    int i, j;
     formatted_line_t * frmline;
     src_text_fragment_t * srcline;
     formatted_word_t * word;
@@ -1205,7 +1222,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
         {
             // process background
 
-            lUInt32 bgcl = buf->GetBackgroundColor();
+            //lUInt32 bgcl = buf->GetBackgroundColor();
             //buf->FillRect( x+frmline->x, y + frmline->y, x+frmline->x + frmline->width, y + frmline->y + frmline->height, bgcl );
 
             // draw background for each word

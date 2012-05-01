@@ -518,19 +518,19 @@ lString8 WOLReader::readTag()
     for (;;)
     {
         if (_stream->Read(&ch, 1, NULL)!=LVERR_OK)
-            return lString8();
+            return lString8::empty_str;
         if (ch==' '||ch=='\r'||ch=='\n')
             continue;
         if (ch!='<')
-            return lString8();
+            return lString8::empty_str;
         break;
     }
     for (;;)
     {
         if (_stream->Read(&ch, 1, NULL)!=LVERR_OK)
-            return lString8();
+            return lString8::empty_str;
         if (ch==0 || buf.length()>100)
-            return lString8();
+            return lString8::empty_str;
         if (ch=='>')
             return buf;
         buf.append(1, ch);
@@ -825,13 +825,13 @@ void WOLWriter::addImage(
     lString8 buf;
     buf.reserve(128);
     buf << "<img bitcount=" 
-        << lString8::itoa(num_bits) 
+        << fmt::decimal(num_bits)
         << " compact=1 width="
-        << lString8::itoa(width)
+        << fmt::decimal(width)
         << " height="
-        << lString8::itoa(height)
+        << fmt::decimal(height)
         << " length="
-        << lString8::itoa((int)compressed_len)
+        << fmt::decimal((int)compressed_len)
         << ">";
     *_stream << buf; 
 

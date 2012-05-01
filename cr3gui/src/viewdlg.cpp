@@ -181,7 +181,7 @@ void CRViewDialog::showGoToPageDialog()
     } else {
         dlg = new CRNumberEditDialog( _wm,
             lString16( _("Enter page number") ),
-            lString16(),
+            lString16::empty_str,
             MCMD_GO_PAGE_APPLY, 1, _docview->getPageCount() );
     }
 #endif
@@ -195,7 +195,7 @@ void CRViewDialog::showGoToPercentDialog()
     CRNumberEditDialog * dlg;
     dlg = new CRNumberEditDialog( _wm,
         lString16( _("Enter position percent") ),
-        lString16(),
+        lString16::empty_str,
         MCMD_GO_PERCENT_APPLY, 0, 100 );
     dlg->setAccelerators( getDialogAccelerators() );
     _wm->activateWindow( dlg );
@@ -623,7 +623,7 @@ void CRViewDialog::showKeymapDialog()
 	lString8 txt;
 	txt << "<table><tr><th>";
 	txt << "<b>" << _("Key") << "</b></th><th><b>"<< _("Assigned function") <<"</b></th></tr>";
-	for ( unsigned i=0; i<_acceleratorTable->length(); i++ ) {
+    for ( int i=0; i<_acceleratorTable->length(); i++ ) {
 		const CRGUIAccelerator * acc = _acceleratorTable->get( i );
 		txt << "<tr><td>";
 		txt << getKeyName( acc->keyCode, acc->keyFlags );

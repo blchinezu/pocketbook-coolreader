@@ -124,6 +124,10 @@ class LVDocImageHolder
 private:
     LVRef<LVDrawBuf> _drawbuf;
     LVMutex & _mutex;
+	LVDocImageHolder & operator = (LVDocImageHolder&) {
+		// no assignment
+        return *this;
+    }
 public:
     LVDrawBuf * getDrawBuf() { return _drawbuf.get(); }
     LVRef<LVDrawBuf> getDrawBufRef() { return _drawbuf; }
@@ -329,7 +333,7 @@ enum LVDocCmd
 enum LVDocViewMode
 {
     DVM_SCROLL,
-    DVM_PAGES,
+    DVM_PAGES
 };
 
 /// document scroll position info
@@ -357,7 +361,7 @@ enum {
     PGHDR_CLOCK=16,
     PGHDR_BATTERY=32,
     PGHDR_CHAPTER_MARKS=64,
-    PGHDR_PERCENT=128,
+    PGHDR_PERCENT=128
 };
 
 
@@ -424,7 +428,7 @@ private:
     LVImageSourceRef m_backgroundImage;
     LVRef<LVColorDrawBuf> m_backgroundImageScaled;
     bool m_backgroundTiled;
-    bool m_highlightBookmarks;
+    int m_highlightBookmarks;
     LVPtrVector<LVBookMarkPercentInfo> m_bookmarksPercents;
 
 protected:
@@ -844,6 +848,8 @@ public:
     CRPropRef getDocProps() { return m_doc_props; }
     /// returns book title
     lString16 getTitle() { return m_doc_props->getStringDef(DOC_PROP_TITLE); }
+    /// returns book language
+    lString16 getLanguage() { return m_doc_props->getStringDef(DOC_PROP_LANGUAGE); }
     /// returns book author(s)
     lString16 getAuthors() { return m_doc_props->getStringDef(DOC_PROP_AUTHORS); }
     /// returns book series name and number (series name #1)
@@ -852,8 +858,23 @@ public:
         lString16 name = m_doc_props->getStringDef(DOC_PROP_SERIES_NAME);
         lString16 number = m_doc_props->getStringDef(DOC_PROP_SERIES_NUMBER);
         if ( !name.empty() && !number.empty() )
-            name << L" #" << number;
+            name << " #" << number;
         return name;
+    }
+    /// returns book series name and number (series name #1)
+    lString16 getSeriesName()
+    {
+        lString16 name = m_doc_props->getStringDef(DOC_PROP_SERIES_NAME);
+        return name;
+    }
+    /// returns book series name and number (series name #1)
+    int getSeriesNumber()
+    {
+        lString16 name = m_doc_props->getStringDef(DOC_PROP_SERIES_NAME);
+        lString16 number = m_doc_props->getStringDef(DOC_PROP_SERIES_NUMBER);
+        if (!name.empty() && !number.empty())
+            return number.atoi();
+        return 0;
     }
 
     /// export to WOL format
@@ -985,5 +1006,7 @@ public:
     virtual ~LVDocView();
 };
 
+/// draw book cover, either from image, or generated from title/authors
+void LVDrawBookCover(LVDrawBuf & buf, LVImageSourceRef image, lString8 fontFace, lString16 title, lString16 authors, lString16 seriesName, int seriesNumber);
 
 #endif

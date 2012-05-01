@@ -98,7 +98,7 @@ public:
         }
     }
 	/// returns number of entries
-	unsigned length() { return _items.length(); }
+    int length() { return _items.length(); }
     /// remove accelerator from table
     bool remove( int keyCode, int keyFlags )
     {
@@ -248,7 +248,7 @@ public:
 	lString16 get( int i )
 	{
 		if ( i<0 || i>= (int)_items.length() )
-			return lString16();
+            return lString16::empty_str;
 		return _items[i];
 	}
 	void set( int index, lString16 chars )
@@ -256,7 +256,7 @@ public:
 		if ( index<0 || index>20 )
 			return;
 		while ( (int)_items.length() <= index )
-			_items.add(lString16());
+            _items.add(lString16::empty_str);
 		_items[ index ] = chars;
 	}
 };
@@ -326,7 +326,7 @@ enum CRGUIEventType {
 
     CREV_WM_EVENTS_START=100,
     CREV_UPDATE = 100,
-    CREV_RESIZE,
+    CREV_RESIZE
 
 };
 
@@ -377,7 +377,7 @@ class CRGUIScreen
         // for turbo updates
         enum UpdateMode {
             NormalMode,
-            PrepareMode,
+            PrepareMode
         };
         virtual void setTurboUpdateEnabled( bool flg ) { }
         virtual bool getTurboUpdateEnabled() {  return false; }
@@ -770,7 +770,7 @@ class CRGUIWindowBase : public CRGUIWindow
         {
             // fullscreen visible by default
             _rect = _wm->getScreen()->getRect();
-            //_statusText = L"Sample status text";
+            //_statusText = "Sample status text";
         }
         virtual ~CRGUIWindowBase() { }
 };
@@ -1047,7 +1047,7 @@ enum CRMenuControlCmd {
 };
 
 enum CRGUICmd {
-	GCMD_PASS_TO_PARENT = 550,
+    GCMD_PASS_TO_PARENT = 550
 };
 
 class CRMenu;
@@ -1091,7 +1091,7 @@ class CRMenuItem
         virtual int onSelect() { return 0; }
         virtual ~CRMenuItem() { }
         /// submenu for options dialog support
-        virtual lString16 getSubmenuValue() { return lString16(); }
+        virtual lString16 getSubmenuValue() { return lString16::empty_str; }
         /// property value, for options editor support
         virtual lString16 getPropValue() { return _propValue; }
         virtual bool isItemDirty() { return _itemDirty; }

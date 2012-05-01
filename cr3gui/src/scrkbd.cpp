@@ -44,9 +44,9 @@ bool CRScreenKeyboard::digitEntered( lChar16 c )
 void CRScreenKeyboard::setLayout( CRKeyboardLayoutRef layout )
 {
 	_keymap.clear();
-	unsigned maxcols = 0;
+    int maxcols = 0;
 	if ( !layout.isNull() ) {
-		for ( unsigned i=1; i<layout->vKeyboard->getItems().length(); i++ ) {
+        for ( int i=1; i<layout->vKeyboard->getItems().length(); i++ ) {
 			lString16 s = layout->vKeyboard->get( i );
 			if ( !s.empty() )
 				_keymap.add( s );
@@ -63,11 +63,11 @@ void CRScreenKeyboard::setLayout( CRKeyboardLayoutRef layout )
 
 void CRScreenKeyboard::setDefaultLayout()
 {
-    _keymap.add(lString16(L"1234567890"));
-    _keymap.add(lString16(L"abcdefghij"));
-    _keymap.add(lString16(L"klmnopqrst"));
-    _keymap.add(lString16(L"uvwxyz.,!?"));
-    _keymap.add(lString16(L"+-'\":;   "));
+    _keymap.add("1234567890");
+    _keymap.add("abcdefghij");
+    _keymap.add("klmnopqrst");
+    _keymap.add("uvwxyz.,!?");
+    _keymap.add("+-'\":;   ");
     _rows = _keymap.length();
 }
 
@@ -121,7 +121,7 @@ void CRScreenKeyboard::draw()
                 if ( x-1 < (int)s.length() )
                     txt = lString16(&s[ x - 1 ], 1);
                 else
-                    txt = L" ";
+                    txt = " ";
             }
             lvRect rc = kbdRect;
             rc.top += dy * y;
@@ -144,7 +144,7 @@ void CRScreenKeyboard::draw()
     }
     // draw input area
     clientSkin->draw( *drawbuf, inputRect );
-    clientSkin->drawText( *drawbuf, inputRect, lString16(" ") + _value+L"_" );
+    clientSkin->drawText(*drawbuf, inputRect, lString16(" ") << _value << "_");
 }
 
 /// returns true if command is processed

@@ -19,7 +19,7 @@ enum bmk_type {
     bmkt_lastpos,
     bmkt_pos,
     bmkt_comment,
-    bmkt_correction,
+    bmkt_correction
 };
 
 class CRBookmark {
@@ -44,9 +44,9 @@ public:
     , _percent(0)
     , _type(0)
         , _shortcut(0)
-    , _postext(lString16())
-    , _titletext(lString16())
-    , _commenttext(lString16())
+    , _postext(lString16::empty_str)
+    , _titletext(lString16::empty_str)
+    , _commenttext(lString16::empty_str)
     , _timestamp(time_t(0))
     ,_page(0)
     {
@@ -100,6 +100,54 @@ public:
     void setTimestamp( time_t t ) { _timestamp = t; }
     void setBookmarkPage( int page ) { _page = page; }
     int getBookmarkPage() { return _page; }
+    bool isValid() {
+        if (_type < bmkt_lastpos || _type >bmkt_correction)
+            return false;
+        if (_startpos.empty())
+            return false;
+        if ((_type == bmkt_comment || _type == bmkt_correction) && _endpos.empty())
+            return false;
+        return true;
+    }
+};
+
+/// bookmark/position change info for synchronization/replication
+class ChangeInfo {
+    CRBookmark * _bookmark;
+    lString16 _fileName;
+    bool _deleted;
+    time_t _timestamp;
+
+public:
+    ChangeInfo() : _bookmark(NULL), _deleted(false), _timestamp(0) {
+    }
+
+    ChangeInfo(CRBookmark * bookmark, lString16 fileName, bool deleted);
+
+    ~ChangeInfo() {
+        if (_bookmark)
+            delete _bookmark;
+    }
+
+    CRBookmark * getBookmark() { return _bookmark; }
+
+    lString16 getFileName() { return _fileName; }
+
+    bool isDeleted() { return _deleted; }
+
+    time_t getTimestamp() { return _timestamp; }
+
+    lString8 toString();
+
+    static ChangeInfo * fromString(lString8 s);
+
+    static ChangeInfo * fromBytes(lChar8 * buf, int start, int end);
+
+    static bool findNextRecordBounds(lChar8 * buf, int start, int end, int & recordStart, int & recordEnd);
+};
+
+class ChangeInfoList : public LVPtrVector<ChangeInfo> {
+
 };
 
 class CRFileHistRecord {

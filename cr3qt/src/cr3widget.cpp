@@ -430,7 +430,7 @@ void CR3View::setDocumentText( QString text )
 {
     _docview->savePosition();
     clearSelection();
-    _docview->createDefaultDocument( lString16(), qt2cr(text) );
+    _docview->createDefaultDocument(lString16::empty_str, qt2cr(text));
 }
 
 bool CR3View::loadLastDocument()
@@ -452,7 +452,7 @@ bool CR3View::loadDocument( QString fileName )
         CRLog::debug( "Trying to restore position for %s", utf8.constData() );
         _docview->restorePosition();
     } else {
-        _docview->createDefaultDocument( lString16(), qt2cr(tr("Error while opening document ") + fileName) );
+        _docview->createDefaultDocument(lString16::empty_str, qt2cr(tr("Error while opening document ") + fileName));
     }
     update();
     return res;
@@ -523,7 +523,76 @@ void CR3View::paintEvent ( QPaintEvent * event )
     LVDrawBuf * buf = ref->getDrawBuf();
     int dx = buf->GetWidth();
     int dy = buf->GetHeight();
-    if ( buf->GetBitsPerPixel()==16 ) {
+    int bpp = buf->GetBitsPerPixel();
+    if (bpp == 4 || bpp == 3) {
+        QImage img(dx, dy, QImage::Format_RGB16 );
+        for ( int i=0; i<dy; i++ ) {
+            unsigned char * dst = img.scanLine( i );
+            unsigned char * src = buf->GetScanLine(i);
+            for ( int x=0; x<dx; x++ ) {
+                lUInt16 cl = *src; //(*src << (8 - bpp)) & 0xF8;
+                cl = (cl << 8) | (cl << 3) | (cl >> 3);
+                src++;
+                *dst++ = (cl & 255);
+                *dst++ = ((cl >> 8) & 255);
+//                *dst++ = *src++;
+//                *dst++ = 0xFF;
+//                src++;
+            }
+        }
+        painter.drawImage( rc, img );
+    } else if (bpp == 2) {
+        QImage img(dx, dy, QImage::Format_RGB16 );
+        for ( int i=0; i<dy; i++ ) {
+            unsigned char * dst = img.scanLine( i );
+            unsigned char * src = buf->GetScanLine(i);
+            int shift = 0;
+            for ( int x=0; x<dx; x++ ) {
+                lUInt16 cl = *src; //(*src << (8 - bpp)) & 0xF8;
+                lUInt16 cl2 = (cl << shift) & 0xC0;
+                cl2 = cl2 | (cl2 >> 2);
+                cl2 = (cl2 << 8) | (cl2 << 3) | (cl2 >> 3);
+                if ((x & 3) == 3) {
+                    src++;
+                    shift = 0;
+                } else {
+                    shift += 2;
+                }
+                *dst++ = (cl2 & 255);
+                *dst++ = ((cl2 >> 8) & 255);
+//                *dst++ = *src++;
+//                *dst++ = 0xFF;
+//                src++;
+            }
+        }
+        painter.drawImage( rc, img );
+
+    } else if (bpp == 1) {
+        QImage img(dx, dy, QImage::Format_RGB16 );
+        for ( int i=0; i<dy; i++ ) {
+            unsigned char * dst = img.scanLine( i );
+            unsigned char * src = buf->GetScanLine(i);
+            int shift = 0;
+            for ( int x=0; x<dx; x++ ) {
+                lUInt16 cl = *src; //(*src << (8 - bpp)) & 0xF8;
+                lUInt16 cl2 = (cl << shift) & 0x80;
+                cl2 = cl2 ? 0xffff : 0x0000;
+                if ((x & 7) == 7) {
+                    src++;
+                    shift = 0;
+                } else {
+                    shift++;
+                }
+                *dst++ = (cl2 & 255);
+                *dst++ = ((cl2 >> 8) & 255);
+//                *dst++ = *src++;
+//                *dst++ = 0xFF;
+//                src++;
+            }
+        }
+        painter.drawImage( rc, img );
+
+    } else if (bpp == 16) {
         QImage img(dx, dy, QImage::Format_RGB16 );
         for ( int i=0; i<dy; i++ ) {
             unsigned char * dst = img.scanLine( i );
@@ -537,7 +606,7 @@ void CR3View::paintEvent ( QPaintEvent * event )
             }
         }
         painter.drawImage( rc, img );
-    } else if ( buf->GetBitsPerPixel()==32 ) {
+    } else if (bpp == 32) {
         QImage img(dx, dy, QImage::Format_RGB32 );
         for ( int i=0; i<dy; i++ ) {
             unsigned char * dst = img.scanLine( i );
@@ -582,19 +651,19 @@ void CR3View::updateScroll()
     if ( _scroll!=NULL ) {
         // TODO: set scroll range
         const LVScrollInfo * si = _docview->getScrollInfo();
-        bool changed = false;
+        //bool changed = false;
         if ( si->maxpos != _scroll->maximum() ) {
             _scroll->setMaximum( si->maxpos );
             _scroll->setMinimum(0);
-            changed = true;
+            //changed = true;
         }
         if ( si->pagesize != _scroll->pageStep() ) {
             _scroll->setPageStep( si->pagesize );
-            changed = true;
+            //changed = true;
         }
         if ( si->pos != _scroll->value() ) {
             _scroll->setValue( si-> pos );
-            changed = true;
+            //changed = true;
         }
     }
 }
@@ -1053,9 +1122,9 @@ CRBookmark * CR3View::createBookmark()
 {
     CRBookmark * bm = NULL;
     if ( getSelectionText().length()>0 && !_selRange.isNull() ) {
-        bm = getDocView()->saveRangeBookmark( _selRange, bmkt_comment, lString16() );
+        bm = getDocView()->saveRangeBookmark(_selRange, bmkt_comment, lString16::empty_str);
     } else {
-        bm = getDocView()->saveCurrentPageBookmark(lString16());
+        bm = getDocView()->saveCurrentPageBookmark(lString16::empty_str);
     }
 
     return bm;
@@ -1287,7 +1356,7 @@ void CR3View::OnLoadFileFirstPagesReady()
     //update();
     repaint();
     CRLog::info( "OnLoadFileFirstPagesReady() - painting done" );
-    _docview->setPageHeaderOverride(lString16());
+    _docview->setPageHeaderOverride(lString16::empty_str);
     _docview->requestRender();
     // TODO: remove debug sleep
     //sleep(5);

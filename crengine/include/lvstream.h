@@ -58,7 +58,7 @@ enum lverror_t {
     LVERR_FAIL,         ///< failed (unknown error)
     LVERR_EOF,          ///< end of file reached
     LVERR_NOTFOUND,     ///< file not found
-    LVERR_NOTIMPL,      ///< method is not implemented
+    LVERR_NOTIMPL       ///< method is not implemented
 };
 
 /// File open modes enum
@@ -134,8 +134,8 @@ public:
     /** \return LVERR_OK if change is ok */
     virtual lverror_t SetMode( lvopen_mode_t ) { return LVERR_NOTIMPL; }
     /// flushes unsaved data from buffers to file, with optional flush of OS buffers
-    virtual lverror_t Flush( bool sync ) { return LVERR_OK; }
-    virtual lverror_t Flush( bool sync, CRTimerUtil & timeout ) { return Flush(sync); }
+    virtual lverror_t Flush( bool /*sync*/ ) { return LVERR_OK; }
+    virtual lverror_t Flush( bool sync, CRTimerUtil & /*timeout*/ ) { return Flush(sync); }
 
     /// Seek (change file pos)
     /**
@@ -266,7 +266,7 @@ public:
     inline lUInt32 crc32() { lUInt32 res = 0; crc32( res ); return res; }
 
     /// set write bytes limit to call flush(true) automatically after writing of each sz bytes
-    virtual void setAutoSyncSize(lvsize_t sz) { }
+    virtual void setAutoSyncSize(lvsize_t /*sz*/) { }
 
     /// Constructor
     LVStream() { }

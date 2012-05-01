@@ -62,7 +62,7 @@ enum css_decl_code {
     cssd_list_style_type,
     cssd_list_style_position,
     cssd_list_style_image,
-    cssd_stop,
+    cssd_stop
 };
 
 static const char * css_decl_name[] = {
@@ -164,15 +164,25 @@ static int substr_icompare( const char * sub, const char * & str )
 
 static bool skip_spaces( const char * & str )
 {
-    while (*str==' ' || *str=='\t' || *str=='\n' || *str == '\r')
-        str++;
-    if ( *str=='/' && str[1]=='*' ) {
-        // comment found
-        while ( *str && str[1] && (str[0]!='*' || str[1]!='/') )
+    const char * oldpos = str;
+    for (;;) {
+        while (*str==' ' || *str=='\t' || *str=='\n' || *str == '\r')
             str++;
+        if ( *str=='/' && str[1]=='*' ) {
+            // comment found
+            while ( *str && str[1] && (str[0]!='*' || str[1]!='/') )
+                str++;
+            if ( *str=='*' && str[1]=='/' )
+                str +=2;
+        }
+        while (*str==' ' || *str=='\t' || *str=='\n' || *str == '\r')
+            str++;
+        if (oldpos == str)
+            break;
+        if (*str == 0)
+            return false;
+        oldpos = str;
     }
-    while (*str==' ' || *str=='\t' || *str=='\n' || *str == '\r')
-        str++;
     return *str != 0;
 }
 
@@ -256,12 +266,22 @@ static bool parse_number_value( const char * & str, css_length_t & value )
     else if ( substr_compare( "pt", str ) )
         value.type = css_val_pt;
     else if ( substr_compare( "ex", str ) )
-        value.type = css_val_pt;
+        value.type = css_val_ex;
     else if ( substr_compare( "px", str ) )
         value.type = css_val_px;
+    else if ( substr_compare( "in", str ) )
+        value.type = css_val_in;
+    else if ( substr_compare( "cm", str ) )
+        value.type = css_val_cm;
+    else if ( substr_compare( "mm", str ) )
+        value.type = css_val_mm;
+    else if ( substr_compare( "pc", str ) )
+        value.type = css_val_pc;
     else if ( substr_compare( "%", str ) )
         value.type = css_val_percent;
-    if ( value.type == css_val_unspecified )
+    else if (n == 0 && frac == 0)
+        value.type = css_val_px;
+    else
         return false;
     if ( value.type == css_val_px || value.type == css_val_percent )
         value.value = n;                               // normal
@@ -337,9 +357,12 @@ bool parse_color_value( const char * & str, css_length_t & value )
             value.value = (((r + r*16) * 256) | (g + g*16)) * 256 | (b + b*16);
             return true;
         } else if ( nDigits==6 ) {
-            int r = hexDigit( *str++ ) * 16 + hexDigit( *str++ );
-            int g = hexDigit( *str++ ) * 16 + hexDigit( *str++ );
-            int b = hexDigit( *str++ ) * 16 + hexDigit( *str++ );
+            int r = hexDigit( *str++ ) * 16;
+            r += hexDigit( *str++ );
+            int g = hexDigit( *str++ ) * 16;
+            g += hexDigit( *str++ );
+            int b = hexDigit( *str++ ) * 16;
+            b += hexDigit( *str++ );
             value.type = css_val_color;
             value.value = ((r * 256) | g) * 256 | b;
             return true;
@@ -659,12 +682,10 @@ bool LVCssDeclaration::parse( const char * &decl )
             case cssd_margin_right:
             case cssd_margin_top:
             case cssd_margin_bottom:
-            case cssd_margin:
             case cssd_padding_left:
             case cssd_padding_right:
             case cssd_padding_top:
             case cssd_padding_bottom:
-            case cssd_padding:
                 {
                     css_length_t len;
                     if ( parse_number_value( decl, len ) )
@@ -675,6 +696,31 @@ bool LVCssDeclaration::parse( const char * &decl )
                     }
                 }
                 break;
+            case cssd_margin:
+            case cssd_padding:
+		{
+		    css_length_t len[4];
+		    int i;
+		    for (i = 0; i < 4; ++i)
+			if (!parse_number_value( decl, len[i]))
+			    break;
+		    if (i)
+		    {
+			switch (i)
+			{
+			    case 1: len[1] = len[0]; /* fall through */
+			    case 2: len[2] = len[0]; /* fall through */
+			    case 3: len[3] = len[1];
+			}
+			buf[ buf_pos++ ] = prop_code;
+			for (i = 0; i < 4; ++i)
+			{
+			    buf[ buf_pos++ ] = len[i].type;
+			    buf[ buf_pos++ ] = len[i].value;
+			}
+		    }
+		}
+		break;
             case cssd_color:
             case cssd_background_color:
             {
@@ -706,7 +752,7 @@ bool LVCssDeclaration::parse( const char * &decl )
                     // font names
                     buf[buf_pos++] = cssd_font_names;
                     buf[buf_pos++] = strValue.length();
-                    for (unsigned i=0; i<strValue.length(); i++)
+                    for (int i=0; i < strValue.length(); i++)
                         buf[buf_pos++] = strValue[i];
                 }
             }
@@ -847,8 +893,10 @@ void LVCssDeclaration::apply( css_style_rec_t * style )
             style->margin[3] = read_length( p );
             break;
         case cssd_margin:
-            style->margin[3] = style->margin[2] = 
-                style->margin[1] = style->margin[0] = read_length( p );
+            style->margin[2] = read_length( p );
+            style->margin[1] = read_length( p );
+            style->margin[3] = read_length( p );
+            style->margin[0] = read_length( p );
             break;
         case cssd_padding_left:
             style->padding[0] = read_length( p );
@@ -863,8 +911,10 @@ void LVCssDeclaration::apply( css_style_rec_t * style )
             style->padding[3] = read_length( p );
             break;
         case cssd_padding:
-            style->padding[3] = style->padding[2] = 
-                style->padding[1] = style->padding[0] = read_length( p );
+            style->padding[2] = read_length( p );
+            style->padding[1] = read_length( p );
+            style->padding[3] = read_length( p );
+            style->padding[0] = read_length( p );
             break;
         case cssd_stop:
             return;
@@ -1244,7 +1294,6 @@ bool LVCssSelector::parse( const char * &str, lxmlDocBase * doc )
         else if ( *str == ',' || *str == '{' )
             return true;
     }
-    return false; // error: end of selector expected
 }
 
 static bool skip_until_end_of_rule( const char * &str )

@@ -145,7 +145,7 @@ bool HyphMan::activateDictionaryFromStream( LVStreamRef stream )
     CRLog::debug("Dictionary is loaded successfully. Activating.");
     HyphMan::_method = method;
     if ( HyphMan::_dictList->find(lString16(HYPH_DICT_ID_DICTIONARY))==NULL ) {
-        HyphDictionary * dict = new HyphDictionary( HDT_DICT_ALAN, lString16("Dictionary"), lString16(HYPH_DICT_ID_DICTIONARY), lString16() );
+        HyphDictionary * dict = new HyphDictionary( HDT_DICT_ALAN, lString16("Dictionary"), lString16(HYPH_DICT_ID_DICTIONARY), lString16::empty_str );
         HyphMan::_dictList->add(dict);
     	HyphMan::_selectedDictionary = dict;
     }
@@ -253,7 +253,7 @@ bool HyphDictionaryList::open(lString16 hyphDirectory, bool clear)
     //LVAppendPathDelimiter( hyphDirectory );
     LVContainerRef container;
     LVStreamRef stream;
-    if ( (hyphDirectory.endsWith(lString16(L"/")) || hyphDirectory.endsWith(lString16(L"\\"))) && LVDirectoryExists(hyphDirectory) ) {
+    if ( (hyphDirectory.endsWith("/") || hyphDirectory.endsWith("\\")) && LVDirectoryExists(hyphDirectory) ) {
         container = LVOpenDirectory( hyphDirectory.c_str(), L"*.*" );
     } else if ( LVFileExists(hyphDirectory) ) {
         stream = LVOpenFileStream( hyphDirectory.c_str(), LVOM_READ );
@@ -270,11 +270,11 @@ bool HyphDictionaryList::open(lString16 hyphDirectory, bool clear)
 			lString16 name = item->GetName();
             lString16 suffix;
             HyphDictType t = HDT_NONE;
-            if ( name.endsWith(lString16(".pdb")) ) {
-                suffix = L"_hyphen_(Alan).pdb";
+            if ( name.endsWith(".pdb") ) {
+                suffix = "_hyphen_(Alan).pdb";
                 t = HDT_DICT_ALAN;
-            } else if ( name.endsWith(lString16(".pattern")) ) {
-                suffix = L".pattern";
+            } else if ( name.endsWith(".pattern") ) {
+                suffix = ".pattern";
                 t = HDT_DICT_TEX;
             } else
                 continue;
@@ -458,7 +458,7 @@ public:
     /// called on opening tag
     virtual ldomNode * OnTagOpen( const lChar16 * nsname, const lChar16 * tagname)
     {
-        if ( !lStr_cmp(tagname, L"pattern") ) {
+        if (!lStr_cmp(tagname, "pattern")) {
             insidePatternTag = true;
         }
         return NULL;
@@ -649,25 +649,26 @@ bool TexHyph::match( const lChar16 * str, char * mask )
     return found;
 }
 
-/// returns false if there is rule disabling hyphenation at specified point
-static bool checkHyphenRules( const lChar16 * str, int len, int pos )
-{
-    if ( pos<1 || pos>len-3 )
-        return false;
-    lUInt16 props[2] = { 0, 0 };
-    lStr_getCharProps( str+pos+1, 1, props);
-    if ( props[0]&CH_PROP_ALPHA_SIGN )
-        return false;
-    if ( pos==len-3 ) {
-        lStr_getCharProps( str+len-2, 2, props);
-        return (props[0]&CH_PROP_VOWEL) || (props[1]&CH_PROP_VOWEL);
-    }
-    if ( pos==1 ) {
-        lStr_getCharProps( str, 2, props);
-        return (props[0]&CH_PROP_VOWEL) || (props[1]&CH_PROP_VOWEL);
-    }
-    return true;
-}
+//TODO: do we need it?
+///// returns false if there is rule disabling hyphenation at specified point
+//static bool checkHyphenRules( const lChar16 * str, int len, int pos )
+//{
+//    if ( pos<1 || pos>len-3 )
+//        return false;
+//    lUInt16 props[2] = { 0, 0 };
+//    lStr_getCharProps( str+pos+1, 1, props);
+//    if ( props[0]&CH_PROP_ALPHA_SIGN )
+//        return false;
+//    if ( pos==len-3 ) {
+//        lStr_getCharProps( str+len-2, 2, props);
+//        return (props[0]&CH_PROP_VOWEL) || (props[1]&CH_PROP_VOWEL);
+//    }
+//    if ( pos==1 ) {
+//        lStr_getCharProps( str, 2, props);
+//        return (props[0]&CH_PROP_VOWEL) || (props[1]&CH_PROP_VOWEL);
+//    }
+//    return true;
+//}
 
 bool TexHyph::hyphenate( const lChar16 * str, int len, lUInt16 * widths, lUInt8 * flags, lUInt16 hyphCharWidth, lUInt16 maxWidth )
 {

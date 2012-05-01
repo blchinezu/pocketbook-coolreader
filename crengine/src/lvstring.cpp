@@ -163,73 +163,73 @@ void lstring_chunk_t::free( lstring_chunk_t * pChunk )
 // Utility functions
 ////////////////////////////////////////////////////////////////////////////
 
-inline size_t _lStr_len(const lChar16 * str)
+inline int _lStr_len(const lChar16 * str)
 {
-    size_t len;
+    int len;
     for (len=0; *str; str++)
         len++;
     return len;
 }
 
-inline size_t _lStr_len(const lChar8 * str)
+inline int _lStr_len(const lChar8 * str)
 {
-    size_t len;
+    int len;
     for (len=0; *str; str++)
         len++;
     return len;
 }
 
-inline size_t _lStr_nlen(const lChar16 * str, size_t maxcount)
+inline int _lStr_nlen(const lChar16 * str, int maxcount)
 {
-    size_t len;
+    int len;
     for (len=0; len<maxcount && *str; str++)
         len++;
     return len;
 }
 
-inline size_t _lStr_nlen(const lChar8 * str, size_t maxcount)
+inline int _lStr_nlen(const lChar8 * str, int maxcount)
 {
-    size_t len;
+    int len;
     for (len=0; len<maxcount && *str; str++)
         len++;
     return len;
 }
 
-inline size_t _lStr_cpy(lChar16 * dst, const lChar16 * src)
+inline int _lStr_cpy(lChar16 * dst, const lChar16 * src)
 {
-    size_t count;
+    int count;
     for ( count=0; (*dst++ = *src++); count++ )
         ;
     return count;
 }
 
-inline size_t _lStr_cpy(lChar8 * dst, const lChar8 * src)
+inline int _lStr_cpy(lChar8 * dst, const lChar8 * src)
 {
-    size_t count;
+    int count;
     for ( count=0; (*dst++ = *src++); count++ )
         ;
     return count;
 }
 
-inline size_t _lStr_cpy(lChar16 * dst, const lChar8 * src)
+inline int _lStr_cpy(lChar16 * dst, const lChar8 * src)
 {
-    size_t count;
+    int count;
     for ( count=0; (*dst++ = *src++); count++ )
         ;
     return count;
 }
 
-inline size_t _lStr_cpy(lChar8 * dst, const lChar16 * src)
+inline int _lStr_cpy(lChar8 * dst, const lChar16 * src)
 {
-    size_t count;
+    int count;
     for ( count=0; (*dst++ = (lChar8)*src++); count++ )
         ;
     return count;
 }
 
-inline size_t _lStr_ncpy(lChar16 * dst, const lChar16 * src, size_t maxcount)
+inline int _lStr_ncpy(lChar16 * dst, const lChar16 * src, int maxcount)
 {
-    size_t count = 0;
+    int count = 0;
     do
     {
         if (++count > maxcount)
@@ -241,9 +241,23 @@ inline size_t _lStr_ncpy(lChar16 * dst, const lChar16 * src, size_t maxcount)
     return count;
 }
 
-inline size_t _lStr_ncpy(lChar8 * dst, const lChar8 * src, size_t maxcount)
+inline int _lStr_ncpy(lChar16 * dst, const lChar8 * src, int maxcount)
 {
-    size_t count = 0;
+    int count = 0;
+    do
+    {
+        if (++count > maxcount)
+        {
+            *dst = 0;
+            return count;
+        }
+    } while ((*dst++ = (unsigned char)*src++));
+    return count;
+}
+
+inline int _lStr_ncpy(lChar8 * dst, const lChar8 * src, int maxcount)
+{
+    int count = 0;
     do
     {
         if (++count > maxcount)
@@ -255,91 +269,91 @@ inline size_t _lStr_ncpy(lChar8 * dst, const lChar8 * src, size_t maxcount)
     return count;
 }
 
-inline void _lStr_memcpy(lChar16 * dst, const lChar16 * src, size_t count)
+inline void _lStr_memcpy(lChar16 * dst, const lChar16 * src, int count)
 {
     while ( count-- > 0)
         (*dst++ = *src++);
 }
 
-inline void _lStr_memcpy(lChar8 * dst, const lChar8 * src, size_t count)
+inline void _lStr_memcpy(lChar8 * dst, const lChar8 * src, int count)
 {
     while ( count-- > 0)
         (*dst++ = *src++);
 }
 
-inline void _lStr_memset(lChar16 * dst, lChar16 value, size_t count)
+inline void _lStr_memset(lChar16 * dst, lChar16 value, int count)
 {
     while ( count-- > 0)
         *dst++ = value;
 }
 
-inline void _lStr_memset(lChar8 * dst, lChar8 value, size_t count)
+inline void _lStr_memset(lChar8 * dst, lChar8 value, int count)
 {
     while ( count-- > 0)
         *dst++ = value;
 }
 
-size_t lStr_len(const lChar16 * str)
+int lStr_len(const lChar16 * str)
 {
     return _lStr_len(str);
 }
 
-size_t lStr_len(const lChar8 * str)
+int lStr_len(const lChar8 * str)
 {
     return _lStr_len(str);
 }
 
-size_t lStr_nlen(const lChar16 * str, size_t maxcount)
+int lStr_nlen(const lChar16 * str, int maxcount)
 {
     return _lStr_nlen(str, maxcount);
 }
 
-size_t lStr_nlen(const lChar8 * str, size_t maxcount)
+int lStr_nlen(const lChar8 * str, int maxcount)
 {
     return _lStr_nlen(str, maxcount);
 }
 
-size_t lStr_cpy(lChar16 * dst, const lChar16 * src)
+int lStr_cpy(lChar16 * dst, const lChar16 * src)
 {
     return _lStr_cpy(dst, src);
 }
 
-size_t lStr_cpy(lChar8 * dst, const lChar8 * src)
+int lStr_cpy(lChar8 * dst, const lChar8 * src)
 {
     return _lStr_cpy(dst, src);
 }
 
-size_t lStr_cpy(lChar16 * dst, const lChar8 * src)
+int lStr_cpy(lChar16 * dst, const lChar8 * src)
 {
     return _lStr_cpy(dst, src);
 }
 
-size_t lStr_ncpy(lChar16 * dst, const lChar16 * src, size_t maxcount)
+int lStr_ncpy(lChar16 * dst, const lChar16 * src, int maxcount)
 {
     return _lStr_ncpy(dst, src, maxcount);
 }
 
-size_t lStr_ncpy(lChar8 * dst, const lChar8 * src, size_t maxcount)
+int lStr_ncpy(lChar8 * dst, const lChar8 * src, int maxcount)
 {
     return _lStr_ncpy(dst, src, maxcount);
 }
 
-void lStr_memcpy(lChar16 * dst, const lChar16 * src, size_t count)
+void lStr_memcpy(lChar16 * dst, const lChar16 * src, int count)
 {
     _lStr_memcpy(dst, src, count);
 }
 
-void lStr_memcpy(lChar8 * dst, const lChar8 * src, size_t count)
+void lStr_memcpy(lChar8 * dst, const lChar8 * src, int count)
 {
     _lStr_memcpy(dst, src, count);
 }
 
-void lStr_memset(lChar16 * dst, lChar16 value, size_t count)
+void lStr_memset(lChar16 * dst, lChar16 value, int count)
 {
     _lStr_memset(dst, value, count);
 }
 
-void lStr_memset(lChar8 * dst, lChar8 value, size_t count)
+void lStr_memset(lChar8 * dst, lChar8 value, int count)
 {
     _lStr_memset(dst, value, count);
 }
@@ -427,7 +441,7 @@ void lString16::free()
 #endif
 }
 
-void lString16::alloc(size_t sz)
+void lString16::alloc(int sz)
 {
 #if (LDOM_USE_OWN_MEM_MAN == 1)
     pchunk = lstring_chunk_t::alloc();
@@ -548,7 +562,65 @@ lString16 & lString16::assign(const lChar16 * str)
     return *this;
 }
 
+lString16 & lString16::assign(const lChar8 * str)
+{
+    if (!str || !(*str))
+    {
+        clear();
+    }
+    else
+    {
+        size_type len = _lStr_len(str);
+        if (pchunk->nref==1)
+        {
+            if (pchunk->size<=len)
+            {
+                // resize is necessary
+                pchunk->buf16 = (lChar16*) ::realloc( pchunk->buf16, sizeof(lChar16)*(len+1) );
+                pchunk->size = len+1;
+            }
+        }
+        else
+        {
+            release();
+            alloc(len);
+        }
+        _lStr_cpy( pchunk->buf16, str );
+        pchunk->len = len;
+    }
+    return *this;
+}
+
 lString16 & lString16::assign(const lChar16 * str, size_type count)
+{
+    if ( !str || !(*str) || count<=0 )
+    {
+        clear();
+    }
+    else
+    {
+        size_type len = _lStr_nlen(str, count);
+        if (pchunk->nref==1)
+        {
+            if (pchunk->size<=len)
+            {
+                // resize is necessary
+                pchunk->buf16 = (lChar16*) ::realloc( pchunk->buf16, sizeof(lChar16)*(len+1) );
+                pchunk->size = len+1;
+            }
+        }
+        else
+        {
+            release();
+            alloc(len);
+        }
+        _lStr_ncpy( pchunk->buf16, str, count );
+        pchunk->len = len;
+    }
+    return *this;
+}
+
+lString16 & lString16::assign(const lChar8 * str, size_type count)
 {
     if ( !str || !(*str) || count<=0 )
     {
@@ -733,6 +805,24 @@ lString16 & lString16::append(const lChar16 * str, size_type count)
     return *this;
 }
 
+lString16 & lString16::append(const lChar8 * str)
+{
+    size_type len = _lStr_len(str);
+    reserve( pchunk->len+len );
+    _lStr_ncpy(pchunk->buf16+pchunk->len, str, len+1);
+    pchunk->len += len;
+    return *this;
+}
+
+lString16 & lString16::append(const lChar8 * str, size_type count)
+{
+    size_type len = _lStr_nlen(str, count);
+    reserve( pchunk->len+len );
+    _lStr_ncpy(pchunk->buf16+pchunk->len, str, len);
+    pchunk->len += len;
+    return *this;
+}
+
 lString16 & lString16::append(const lString16 & str)
 {
     size_type len2 = pchunk->len + str.pchunk->len;
@@ -781,7 +871,7 @@ lString16 & lString16::insert(size_type p0, size_type count, lChar16 ch)
 lString16 lString16::substr(size_type pos, size_type n) const
 {
     if (pos>=length())
-        return lString16();
+        return lString16::empty_str;
     if (pos+n>length())
         n = length() - pos;
     return lString16( pchunk->buf16+pos, n );
@@ -807,7 +897,7 @@ lString16 & lString16::pack()
 lString16 & lString16::trim()
 {
     //
-    size_t firstns;
+    int firstns;
     for (firstns = 0; firstns<pchunk->len &&
         (pchunk->buf16[firstns]==' ' || pchunk->buf16[firstns]=='\t'); ++firstns)
         ;
@@ -816,11 +906,11 @@ lString16 & lString16::trim()
         clear();
         return *this;
     }
-    size_t lastns;
+    int lastns;
     for (lastns = pchunk->len-1; lastns>0 &&
         (pchunk->buf16[lastns]==' ' || pchunk->buf16[lastns]=='\t'); --lastns)
         ;
-    size_t newlen = lastns-firstns+1;
+    int newlen = lastns-firstns+1;
     if (newlen == pchunk->len)
         return *this;
     if (pchunk->nref == 1)
@@ -962,14 +1052,14 @@ bool lString16::atoi( lInt64 &n ) const
 lUInt32 lString16::getHash() const
 {
     lUInt32 res = 0;
-    for (lUInt32 i=0; i<pchunk->len; i++)
+    for (lInt32 i=0; i<pchunk->len; i++)
         res = res * STRING_HASH_MULT + pchunk->buf16[i];
     return res;
 }
 
 
 
-void lString16Collection::reserve( size_t space )
+void lString16Collection::reserve(int space)
 {
     if ( count + space > size )
     {
@@ -1004,7 +1094,7 @@ void lString16Collection::sort()
     qsort(chunks,count,sizeof(lstring_chunk_t*), str16_comparator);
 }
 
-size_t lString16Collection::add( const lString16 & str )
+int lString16Collection::add( const lString16 & str )
 {
     reserve( 1 );
     chunks[count] = str.pchunk;
@@ -1013,7 +1103,7 @@ size_t lString16Collection::add( const lString16 & str )
 }
 void lString16Collection::clear()
 {
-    for (size_t i=0; i<count; i++)
+    for (int i=0; i<count; i++)
     {
         ((lString16 *)chunks)[i].release();
     }
@@ -1028,34 +1118,60 @@ void lString16Collection::erase(int offset, int cnt)
 {
     if (count<=0)
         return;
-    if (offset<0 || offset+cnt>=(int)count)
+    if (offset < 0 || offset + cnt >= count)
         return;
     int i;
-    for (i=offset; i<offset+cnt; i++)
+    for (i = offset; i < offset + cnt; i++)
     {
         ((lString16 *)chunks)[i].release();
     }
-    for (i=offset+cnt; i<(int)count; i++)
+    for (i = offset + cnt; i < count; i++)
     {
         chunks[i-cnt] = chunks[i];
     }
     count -= cnt;
     if (!count)
         clear();
+}
+
+void lString8Collection::split( const lString8 & str, const lString8 & delimiter )
+{
+    if (str.empty())
+        return;
+    for (int startpos = 0; startpos < str.length(); ) {
+        int pos = str.pos(delimiter, startpos);
+        if (pos < 0)
+            pos = str.length();
+        add(str.substr(startpos, pos - startpos));
+        startpos = pos + delimiter.length();
+    }
+}
+
+void lString16Collection::split( const lString16 & str, const lString16 & delimiter )
+{
+    if (str.empty())
+        return;
+    for (int startpos = 0; startpos < str.length(); ) {
+        int pos = str.pos(delimiter, startpos);
+        if (pos < 0)
+            pos = str.length();
+        add(str.substr(startpos, pos - startpos));
+        startpos = pos + delimiter.length();
+    }
 }
 
 void lString8Collection::erase(int offset, int cnt)
 {
-    if (count<=0)
+    if (count <= 0)
         return;
-    if (offset<0 || offset+cnt>(int)count)
+    if (offset < 0 || offset + cnt > count)
         return;
     int i;
-    for (i=offset; i<offset+cnt; i++)
+    for (i = offset; i < offset + cnt; i++)
     {
         ((lString8 *)chunks)[i].release();
     }
-    for (i=offset+cnt; i<(int)count; i++)
+    for (i = offset + cnt; i < count; i++)
     {
         chunks[i-cnt] = chunks[i];
     }
@@ -1064,7 +1180,7 @@ void lString8Collection::erase(int offset, int cnt)
         clear();
 }
 
-void lString8Collection::reserve( size_t space )
+void lString8Collection::reserve(int space)
 {
     if ( count + space > size )
     {
@@ -1072,7 +1188,8 @@ void lString8Collection::reserve( size_t space )
         chunks = (lstring_chunk_t * *)realloc( chunks, sizeof(lstring_chunk_t *) * size );
     }
 }
-size_t lString8Collection::add( const lString8 & str )
+
+int lString8Collection::add( const lString8 & str )
 {
     reserve( 1 );
     chunks[count] = str.pchunk;
@@ -1081,7 +1198,7 @@ size_t lString8Collection::add( const lString8 & str )
 }
 void lString8Collection::clear()
 {
-    for (size_t i=0; i<count; i++)
+    for (int i=0; i<count; i++)
     {
         ((lString8 *)chunks)[i].release();
     }
@@ -1113,7 +1230,7 @@ void lString16HashedCollection::serialize( SerialBuf & buf )
     buf.putMagic( str_hash_magic );
     lUInt32 count = length();
     buf << count;
-    for ( unsigned i=0; i<length(); i++ )
+    for ( int i=0; i<length(); i++ )
     {
         buf << at(i);
     }
@@ -1141,7 +1258,7 @@ void SerialBuf::putCRC( int size )
         seterror();
     }
     lUInt32 n = 0;
-    n = lStr_crc32( n, _buf + _pos-size, (int)(size) );
+    n = lStr_crc32( n, _buf + _pos-size, size );
     *this << n;
 }
 
@@ -1155,8 +1272,8 @@ bool SerialBuf::checkCRC( int size )
         return false;
     }
     lUInt32 n0 = 0;
-    n0 = lStr_crc32( n0, _buf + _pos-size, (int)(size) );
-    lUInt32 n;
+    n0 = lStr_crc32(n0, _buf + _pos-size, size);
+    lUInt32 n = 0;
     *this >> n;
     if ( error() )
         return false;
@@ -1173,9 +1290,9 @@ bool lString16HashedCollection::deserialize( SerialBuf & buf )
     clear();
     int start = buf.pos();
     buf.putMagic( str_hash_magic );
-    lUInt32 count = 0;
+    lInt32 count = 0;
     buf >> count;
-    for ( unsigned i=0; i<count; i++ ) {
+    for ( int i=0; i<count; i++ ) {
         lString16 s;
         buf >> s;
         if ( buf.error() )
@@ -1192,7 +1309,7 @@ lString16HashedCollection::lString16HashedCollection( lString16HashedCollection 
 , hash( NULL )
 {
     hash = (HashPair *)malloc( sizeof(HashPair) * hashSize );
-    for ( unsigned i=0; i<hashSize; i++ ) {
+    for ( int i=0; i<hashSize; i++ ) {
         hash[i].clear();
         hash[i].index = v.hash[i].index;
         HashPair * next = v.hash[i].next;
@@ -1218,7 +1335,7 @@ void lString16HashedCollection::addHashItem( int hashIndex, int storageIndex )
 void lString16HashedCollection::clearHash()
 {
     if ( hash ) {
-        for ( unsigned i=0; i<hashSize; i++) {
+        for ( int i=0; i<hashSize; i++) {
             HashPair * p = hash[i].next;
             while ( p ) {
                 HashPair * tmp = p->next;
@@ -1236,7 +1353,7 @@ lString16HashedCollection::lString16HashedCollection( lUInt32 hash_size )
 {
 
     hash = (HashPair *)malloc( sizeof(HashPair) * hashSize );
-    for ( unsigned i=0; i<hashSize; i++ )
+    for ( int i=0; i<hashSize; i++ )
         hash[i].clear();
 }
 
@@ -1245,10 +1362,10 @@ lString16HashedCollection::~lString16HashedCollection()
     clearHash();
 }
 
-size_t lString16HashedCollection::find( const lChar16 * s )
+int lString16HashedCollection::find( const lChar16 * s )
 {
     if ( !hash || !length() )
-        return (size_t)-1;
+        return -1;
     lUInt32 h = calcStringHash( s );
     lUInt32 n = h % hashSize;
     if ( hash[n].index!=-1 )
@@ -1263,31 +1380,31 @@ size_t lString16HashedCollection::find( const lChar16 * s )
                 return p->index;
         }
     }
-    return (size_t)-1;
+    return -1;
 }
 
 void lString16HashedCollection::reHash( int newSize )
 {
-    if ( hashSize == (lUInt32)newSize )
+    if (hashSize == newSize)
         return;
     clearHash();
     hashSize = newSize;
-    if ( hashSize>0 ) {
+    if (hashSize > 0) {
         hash = (HashPair *)malloc( sizeof(HashPair) * hashSize );
-        for ( unsigned i=0; i<hashSize; i++ )
+        for ( int i=0; i<hashSize; i++ )
             hash[i].clear();
     }
-    for ( unsigned i=0; i<length(); i++ ) {
+    for ( int i=0; i<length(); i++ ) {
         lUInt32 h = calcStringHash( at(i).c_str() );
         lUInt32 n = h % hashSize;
         addHashItem( n, i );
     }
 }
 
-size_t lString16HashedCollection::add( const lChar16 * s )
+int lString16HashedCollection::add( const lChar16 * s )
 {
     if ( !hash || hashSize < length()*2 ) {
-        unsigned sz = 16;
+        int sz = 16;
         while ( sz<length() )
             sz <<= 1;
         sz <<= 1;
@@ -1337,7 +1454,7 @@ void lString8::free()
 #endif
 }
 
-void lString8::alloc(size_t sz)
+void lString8::alloc(int sz)
 {
 #if (LDOM_USE_OWN_MEM_MAN == 1)
     pchunk = lstring_chunk_t::alloc();
@@ -1618,6 +1735,88 @@ lString8 & lString8::append(const lChar8 * str)
     return *this;
 }
 
+lString8 & lString8::appendDecimal(lInt64 n)
+{
+    lChar8 buf[24];
+    int i=0;
+    int negative = 0;
+    if (n==0)
+        return append(1, '0');
+    else if (n<0)
+    {
+        negative = 1;
+        n = -n;
+    }
+    for ( ; n; n/=10 )
+    {
+        buf[i++] = '0' + (n % 10);
+    }
+    reserve(length() + i + negative);
+    if (negative)
+        append(1, '-');
+    for (int j=i-1; j>=0; j--)
+        append(1, buf[j]);
+    return *this;
+}
+
+lString8 & lString8::appendHex(lUInt64 n)
+{
+    if (n == 0)
+        return append(1, '0');
+    reserve(length() + 16);
+    bool foundNz = false;
+    for (int i=0; i<16; i++) {
+        int digit = (n >> 60) & 0x0F;
+        if (digit)
+            foundNz = true;
+        if (foundNz)
+            append(1, (lChar8)toHexDigit(digit));
+        n >>= 4;
+    }
+    return *this;
+}
+
+lString16 & lString16::appendDecimal(lInt64 n)
+{
+    lChar16 buf[24];
+    int i=0;
+    int negative = 0;
+    if (n==0)
+        return append(1, '0');
+    else if (n<0)
+    {
+        negative = 1;
+        n = -n;
+    }
+    for ( ; n; n/=10 )
+    {
+        buf[i++] = '0' + (n % 10);
+    }
+    reserve(length() + i + negative);
+    if (negative)
+        append(1, '-');
+    for (int j=i-1; j>=0; j--)
+        append(1, buf[j]);
+    return *this;
+}
+
+lString16 & lString16::appendHex(lUInt64 n)
+{
+    if (n == 0)
+        return append(1, '0');
+    reserve(length() + 16);
+    bool foundNz = false;
+    for (int i=0; i<16; i++) {
+        int digit = (n >> 60) & 0x0F;
+        if (digit)
+            foundNz = true;
+        if (foundNz)
+            append(1, toHexDigit(digit));
+        n >>= 4;
+    }
+    return *this;
+}
+
 lString8 & lString8::append(const lChar8 * str, size_type count)
 {
     size_type len = _lStr_nlen(str, count);
@@ -1677,13 +1876,13 @@ lString8 & lString8::insert(size_type p0, size_type count, lChar8 ch)
 lString8 lString8::substr(size_type pos, size_type n) const
 {
     if (pos>=length())
-        return lString8();
+        return lString8::empty_str;
     if (pos+n>length())
         n = length() - pos;
     return lString8( pchunk->buf8+pos, n );
 }
 
-int lString8::pos(lString8 subStr) const
+int lString8::pos(const lString8 & subStr) const
 {
     if (subStr.length()>length())
         return -1;
@@ -1694,6 +1893,116 @@ int lString8::pos(lString8 subStr) const
         int flg = 1;
         for (int j=0; j<l; j++)
             if (pchunk->buf8[i+j]!=subStr.pchunk->buf8[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString8::pos(const char * subStr) const
+{
+    if (!subStr || !subStr[0])
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length())
+        return -1;
+    int dl = length() - l;
+    for (int i=0; i<=dl; i++)
+    {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf8[i+j] != subStr[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+int lString8::pos(const lString8 & subStr, int startPos) const
+{
+    if (subStr.length() > length() - startPos)
+        return -1;
+    int l = subStr.length();
+    int dl = length() - l;
+    for (int i = startPos; i <= dl; i++) {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf8[i+j]!=subStr.pchunk->buf8[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+int lString16::pos(const lString16 & subStr, int startPos) const
+{
+    if (subStr.length() > length() - startPos)
+        return -1;
+    int l = subStr.length();
+    int dl = length() - l;
+    for (int i = startPos; i <= dl; i++) {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf16[i+j]!=subStr.pchunk->buf16[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString8::pos(const char * subStr, int startPos) const
+{
+    if (!subStr || !subStr[0])
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length() - startPos)
+        return -1;
+    int dl = length() - l;
+    for (int i = startPos; i <= dl; i++) {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf8[i+j] != subStr[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString16::pos(const lChar16 * subStr, int startPos) const
+{
+    if (!subStr || !subStr[0])
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length() - startPos)
+        return -1;
+    int dl = length() - l;
+    for (int i = startPos; i <= dl; i++) {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf16[i+j] != subStr[j])
             {
                 flg = 0;
                 break;
@@ -1716,6 +2025,78 @@ int lString16::rpos(lString16 subStr) const
         int flg = 1;
         for (int j=0; j<l; j++)
             if (pchunk->buf16[i+j]!=subStr.pchunk->buf16[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString16::pos(const lChar16 * subStr) const
+{
+    if (!subStr)
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length())
+        return -1;
+    int dl = length() - l;
+    for (int i=0; i <= dl; i++)
+    {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf16[i+j] != subStr[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString16::pos(const lChar8 * subStr) const
+{
+    if (!subStr)
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length())
+        return -1;
+    int dl = length() - l;
+    for (int i=0; i <= dl; i++)
+    {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf16[i+j] != subStr[j])
+            {
+                flg = 0;
+                break;
+            }
+        if (flg)
+            return i;
+    }
+    return -1;
+}
+
+/// find position of substring inside string, -1 if not found
+int lString16::pos(const lChar8 * subStr, int start) const
+{
+    if (!subStr)
+        return -1;
+    int l = lStr_len(subStr);
+    if (l > length() - start)
+        return -1;
+    int dl = length() - l;
+    for (int i = start; i <= dl; i++)
+    {
+        int flg = 1;
+        for (int j=0; j<l; j++)
+            if (pchunk->buf16[i+j] != subStr[j])
             {
                 flg = 0;
                 break;
@@ -1767,11 +2148,11 @@ lString8 & lString8::pack()
 lString8 & lString8::trim()
 {
     //
-    size_t firstns;
+    int firstns;
     for (firstns = 0;
-            firstns<pchunk->len &&
-            (pchunk->buf8[firstns]==' ' ||
-            pchunk->buf8[firstns]=='\t');
+            firstns < pchunk->len &&
+            (pchunk->buf8[firstns] == ' ' ||
+            pchunk->buf8[firstns] == '\t');
             ++firstns)
         ;
     if (firstns >= pchunk->len)
@@ -1785,7 +2166,7 @@ lString8 & lString8::trim()
             (pchunk->buf8[lastns]==' ' || pchunk->buf8[lastns]=='\t');
             --lastns)
         ;
-    size_t newlen = lastns-firstns+1;
+    int newlen = lastns-firstns+1;
     if (newlen == pchunk->len)
         return *this;
     if (pchunk->nref == 1)
@@ -1828,6 +2209,29 @@ int lString8::atoi() const
         n = n * 10 + ( (*s)-'0' );
     }
     return (sgn>0)?n:-n;
+}
+
+lInt64 lString8::atoi64() const
+{
+    int sgn = 1;
+    lInt64 n = 0;
+    const lChar8 * s = c_str();
+    while (*s == ' ' || *s == '\t')
+        s++;
+    if (*s == '-')
+    {
+        sgn = -1;
+        s++;
+    }
+    else if (*s == '+')
+    {
+        s++;
+    }
+    while (*s>='0' && *s<='9')
+    {
+        n = n * 10 + ( (*s)-'0' );
+    }
+    return (sgn>0) ? n : -n;
 }
 
 // constructs string representation of integer
@@ -1983,7 +2387,7 @@ void lStr_lowercase( lChar16 * str, int len )
 void lString16Collection::parse( lString16 string, lChar16 delimiter, bool flgTrim )
 {
     int wstart=0;
-    for ( unsigned i=0; i<=string.length(); i++ ) {
+    for ( int i=0; i<=string.length(); i++ ) {
         if ( i==string.length() || string[i]==delimiter ) {
             lString16 s( string.substr( wstart, i-wstart) );
             if ( flgTrim )
@@ -2005,9 +2409,9 @@ void lString16Collection::parse( lString16 string, lString16 delimiter, bool flg
         return;
     }
     int wstart=0;
-    for ( unsigned i=0; i<=string.length(); i++ ) {
+    for ( int i=0; i<=string.length(); i++ ) {
         bool matched = true;
-        for ( unsigned j=0; j<delimiter.length() && i+j<string.length(); j++ ) {
+        for ( int j=0; j<delimiter.length() && i+j<string.length(); j++ ) {
             if ( string[i+j]!=delimiter[j] ) {
                 matched = false;
                 break;
@@ -2100,7 +2504,7 @@ lString16 lString16::itoa( lUInt64 n )
 lUInt32 lString8::getHash() const
 {
     lUInt32 res = 0;
-    for (lUInt32 i=0; i<pchunk->len; i++)
+    for (int i=0; i < pchunk->len; i++)
         res = res * STRING_HASH_MULT + pchunk->buf8[i];
     return res;
 }
@@ -2276,7 +2680,7 @@ lString8 UnicodeTo8Bit( const lString16 & str, const lChar8 * * table )
 {
     lString8 buf;
     buf.reserve( str.length() );
-    for ( int i=0; i<(int)str.length(); i++ ) {
+    for (int i=0; i < str.length(); i++) {
         lChar16 ch = str[i];
         const lChar8 * p = table[ (ch>>8) & 255 ];
         if ( p ) {
@@ -2292,8 +2696,8 @@ lString16 ByteToUnicode( const lString8 & str, const lChar16 * table )
 {
     lString16 buf;
     buf.reserve( str.length() );
-    for ( int i=0; i<(int)str.length(); i++ ) {
-        int ch = (unsigned char)str[i];
+    for (int i=0; i < str.length(); i++) {
+        lChar16 ch = (unsigned char)str[i];
         lChar16 ch16 = ((ch & 0x80) && table) ? table[ (ch&0x7F) ] : ch;
         buf += ch16;
     }
@@ -2392,12 +2796,83 @@ static const char * russian_small[32] =
 "a", "b", "v", "g", "d", "e", "zh", "z", "i", "j", "k", "l", "m", "n", "o", "p", "r",
 "s", "t", "u", "f", "h", "ts", "ch", "sh", "sh", "\'", "y", "\'", "e", "yu", "ya"
 };
+
+static const char * latin_1[64] =
+{
+"A", // U+00C0	LATIN CAPITAL LETTER A WITH GRAVE
+"A", // U+00C1	LATIN CAPITAL LETTER A WITH ACUTE
+"A", // U+00C2	LATIN CAPITAL LETTER A WITH CIRCUMFLEX
+"A", // U+00C3	LATIN CAPITAL LETTER A WITH TILDE
+"AE",// U+00C4	LATIN CAPITAL LETTER A WITH DIAERESIS
+"A", // U+00C5	LATIN CAPITAL LETTER A WITH RING ABOVE
+"AE",// U+00C6	LATIN CAPITAL LETTER AE
+"C", // U+00C7	LATIN CAPITAL LETTER C WITH CEDILLA
+"E", // U+00C8	LATIN CAPITAL LETTER E WITH GRAVE
+"E", // U+00C9	LATIN CAPITAL LETTER E WITH ACUTE
+"E", // U+00CA	LATIN CAPITAL LETTER E WITH CIRCUMFLEX
+"E", // U+00CB	LATIN CAPITAL LETTER E WITH DIAERESIS
+"I", // U+00CC	LATIN CAPITAL LETTER I WITH GRAVE
+"I", // U+00CD	LATIN CAPITAL LETTER I WITH ACUTE
+"I", // U+00CE	LATIN CAPITAL LETTER I WITH CIRCUMFLEX
+"I", // U+00CF	LATIN CAPITAL LETTER I WITH DIAERESIS
+"D", // U+00D0	LATIN CAPITAL LETTER ETH
+"N", // U+00D1	LATIN CAPITAL LETTER N WITH TILDE
+"O", // U+00D2	LATIN CAPITAL LETTER O WITH GRAVE
+"O", // U+00D3	LATIN CAPITAL LETTER O WITH ACUTE
+"O", // U+00D4	LATIN CAPITAL LETTER O WITH CIRCUMFLEX
+"O", // U+00D5	LATIN CAPITAL LETTER O WITH TILDE
+"OE",// U+00D6	LATIN CAPITAL LETTER O WITH DIAERESIS
+"x", // U+00D7	MULTIPLICATION SIGN
+"O", // U+00D8	LATIN CAPITAL LETTER O WITH STROKE
+"U", // U+00D9	LATIN CAPITAL LETTER U WITH GRAVE
+"U", // U+00DA	LATIN CAPITAL LETTER U WITH ACUTE
+"U", // U+00DB	LATIN CAPITAL LETTER U WITH CIRCUMFLEX
+"UE",// U+00DC	LATIN CAPITAL LETTER U WITH DIAERESIS
+"Y", // U+00DD	LATIN CAPITAL LETTER Y WITH ACUTE
+"p", // U+00DE	LATIN CAPITAL LETTER THORN
+"SS",// U+00DF	LATIN SMALL LETTER SHARP S
+"a", // U+00E0	LATIN SMALL LETTER A WITH GRAVE
+"a", // U+00E1	LATIN SMALL LETTER A WITH ACUTE
+"a", // U+00E2	LATIN SMALL LETTER A WITH CIRCUMFLEX
+"a", // U+00E3	LATIN SMALL LETTER A WITH TILDE
+"ae",// U+00E4	LATIN SMALL LETTER A WITH DIAERESIS
+"a", // U+00E5	LATIN SMALL LETTER A WITH RING ABOVE
+"ae",// U+00E6	LATIN SMALL LETTER AE
+"c", // U+00E7	LATIN SMALL LETTER C WITH CEDILLA
+"e", // U+00E8	LATIN SMALL LETTER E WITH GRAVE
+"e", // U+00E9	LATIN SMALL LETTER E WITH ACUTE
+"e", // U+00EA	LATIN SMALL LETTER E WITH CIRCUMFLEX
+"e", // U+00EB	LATIN SMALL LETTER E WITH DIAERESIS
+"i", // U+00EC	LATIN SMALL LETTER I WITH GRAVE
+"i", // U+00ED	LATIN SMALL LETTER I WITH ACUTE
+"i", // U+00EE	LATIN SMALL LETTER I WITH CIRCUMFLEX
+"i", // U+00EF	LATIN SMALL LETTER I WITH DIAERESIS
+"d", // U+00F0	LATIN SMALL LETTER ETH
+"n", // U+00F1	LATIN SMALL LETTER N WITH TILDE
+"o", // U+00F2	LATIN SMALL LETTER O WITH GRAVE
+"o", // U+00F3	LATIN SMALL LETTER O WITH ACUTE
+"o", // U+00F4	LATIN SMALL LETTER O WITH CIRCUMFLEX
+"oe",// U+00F5	LATIN SMALL LETTER O WITH TILDE
+"o", // U+00F6	LATIN SMALL LETTER O WITH DIAERESIS
+"x", // U+00F7	DIVISION SIGN
+"o", // U+00F8	LATIN SMALL LETTER O WITH STROKE
+"u", // U+00F9	LATIN SMALL LETTER U WITH GRAVE
+"u", // U+00FA	LATIN SMALL LETTER U WITH ACUTE
+"u", // U+00FB	LATIN SMALL LETTER U WITH CIRCUMFLEX
+"ue",// U+00FC	LATIN SMALL LETTER U WITH DIAERESIS
+"y", // U+00FD	LATIN SMALL LETTER Y WITH ACUTE
+"p", // U+00FE	LATIN SMALL LETTER THORN
+"y", // U+00FF	LATIN SMALL LETTER Y WITH DIAERESIS
+};
+
 static const char * getCharTranscript( lChar16 ch )
 {
     if ( ch>=0x410 && ch<0x430 )
         return russian_capital[ch-0x410];
     else if (ch>=0x430 && ch<0x450)
         return russian_small[ch-0x430];
+    else if (ch>=0xC0 && ch<0xFF)
+        return latin_1[ch-0xC0];
     else if (ch==0x450)
         return "E";
     else if ( ch==0x451 )
@@ -2412,7 +2887,7 @@ lString8  UnicodeToTranslit( const lString16 & str )
 	if ( str.empty() )
 		return buf;
     buf.reserve( str.length()*5/4 );
-    for ( unsigned i=0; i<str.length(); i++ ) {
+    for ( int i=0; i<str.length(); i++ ) {
 		lChar16 ch = str[i];
         if ( ch>=32 && ch<=127 ) {
             buf.append( 1, (lChar8)ch );
@@ -3364,9 +3839,9 @@ void lStr_findWordBounds( const lChar16 * str, int sz, int pos, int & start, int
     for (; hwStart>0; hwStart--)
     {
         lChar16 ch = str[hwStart];
-        int lastAlpha = -1;
+        //int lastAlpha = -1;
         if (getCharProp(ch) & CH_PROP_ALPHA) {
-            lastAlpha = hwStart;
+            //lastAlpha = hwStart;
         } else {
             hwStart++;
             break;
@@ -3610,12 +4085,12 @@ bool lString8::startsWith( const lString8 & substring ) const
 {
     if ( substring.empty() )
         return true;
-    unsigned len = substring.length();
-    if ( length() < len )
+    int len = substring.length();
+    if (length() < len)
         return false;
     const lChar8 * s1 = c_str();
     const lChar8 * s2 = substring.c_str();
-    for ( unsigned i=0; i<len; i++ )
+    for (int i=0; i<len; i++ )
         if ( s1[i] != s2[i] )
             return false;
     return true;
@@ -3626,7 +4101,7 @@ bool lString8::endsWith( const lChar8 * substring ) const
 {
 	if ( !substring || !*substring )
 		return true;
-	unsigned len = strlen(substring);
+    int len = strlen(substring);
     if ( length() < len )
         return false;
     const lChar8 * s1 = c_str() + (length()-len);
@@ -3639,7 +4114,7 @@ bool lString16::endsWith( const lChar16 * substring ) const
 {
 	if ( !substring || !*substring )
 		return true;
-	unsigned len = lStr_len(substring);
+    int len = lStr_len(substring);
     if ( length() < len )
         return false;
     const lChar16 * s1 = c_str() + (length()-len);
@@ -3648,11 +4123,24 @@ bool lString16::endsWith( const lChar16 * substring ) const
 }
 
 /// returns true if string ends with specified substring
+bool lString16::endsWith( const lChar8 * substring ) const
+{
+    if ( !substring || !*substring )
+        return true;
+    int len = lStr_len(substring);
+    if ( length() < len )
+        return false;
+    const lChar16 * s1 = c_str() + (length()-len);
+    const lChar8 * s2 = substring;
+    return lStr_cmp( s1, s2 )==0;
+}
+
+/// returns true if string ends with specified substring
 bool lString16::endsWith ( const lString16 & substring ) const
 {
     if ( substring.empty() )
         return true;
-    unsigned len = substring.length();
+    int len = substring.length();
     if ( length() < len )
         return false;
     const lChar16 * s1 = c_str() + (length()-len);
@@ -3665,13 +4153,45 @@ bool lString16::startsWith( const lString16 & substring ) const
 {
     if ( substring.empty() )
         return true;
-    unsigned len = substring.length();
+    int len = substring.length();
     if ( length() < len )
         return false;
     const lChar16 * s1 = c_str();
     const lChar16 * s2 = substring.c_str();
-    for ( unsigned i=0; i<len; i++ )
+    for ( int i=0; i<len; i++ )
         if ( s1[i]!=s2[i] )
+            return false;
+    return true;
+}
+
+/// returns true if string starts with specified substring
+bool lString16::startsWith(const lChar16 * substring) const
+{
+    if (!substring || !substring[0])
+        return true;
+    int len = _lStr_len(substring);
+    if ( length() < len )
+        return false;
+    const lChar16 * s1 = c_str();
+    const lChar16 * s2 = substring;
+    for ( int i=0; i<len; i++ )
+        if ( s1[i] != s2[i] )
+            return false;
+    return true;
+}
+
+/// returns true if string starts with specified substring
+bool lString16::startsWith(const lChar8 * substring) const
+{
+    if (!substring || !substring[0])
+        return true;
+    int len = _lStr_len(substring);
+    if ( length() < len )
+        return false;
+    const lChar16 * s1 = c_str();
+    const lChar8 * s2 = substring;
+    for ( int i=0; i<len; i++ )
+        if (s1[i] != s2[i])
             return false;
     return true;
 }
@@ -3961,11 +4481,37 @@ bool lString16::split2( const lString16 & delim, lString16 & value1, lString16 &
 {
     if ( empty() )
         return false;
-    unsigned p = pos(delim);
+    int p = pos(delim);
     if ( p<=0 || p>=length()-delim.length() )
         return false;
     value1 = substr(0, p);
     value2 = substr(p+delim.length());
+    return true;
+}
+
+bool lString16::split2( const lChar16 * delim, lString16 & value1, lString16 & value2 )
+{
+    if (empty())
+        return false;
+    int p = pos(delim);
+    int l = lStr_len(delim);
+    if (p<=0 || p >= length() - l)
+        return false;
+    value1 = substr(0, p);
+    value2 = substr(p + l);
+    return true;
+}
+
+bool lString16::split2( const lChar8 * delim, lString16 & value1, lString16 & value2 )
+{
+    if (empty())
+        return false;
+    int p = pos(delim);
+    int l = lStr_len(delim);
+    if (p<=0 || p >= length() - l)
+        return false;
+    value1 = substr(0, p);
+    value2 = substr(p + l);
     return true;
 }
 
@@ -3989,7 +4535,7 @@ bool splitIntegerList( lString16 s, lString16 delim, int &value1, int &value2 )
 lString16 & lString16::replace(size_type p0, size_type n0, const lString16 & str)
 {
     lString16 s1 = substr( 0, p0 );
-    lString16 s2 = (int)length()-(int)p0-(int)n0 > 0 ? substr( p0+n0, length()-p0-n0 ) : lString16(L"");
+    lString16 s2 = length() - p0 - n0 > 0 ? substr( p0+n0, length()-p0-n0 ) : lString16::empty_str;
     *this = s1 + str + s2;
     return *this;
 }
@@ -4006,7 +4552,7 @@ bool lString16::replace(const lString16 & findStr, const lString16 & replaceStr)
 
 bool lString16::replaceParam(int index, const lString16 & replaceStr)
 {
-    return replace( lString16("$") + lString16::itoa(index), replaceStr );
+    return replace( lString16("$") + fmt::decimal(index), replaceStr );
 }
 
 /// replaces first found occurence of "$N" pattern with itoa of integer, where N=index
@@ -4028,12 +4574,12 @@ static int decodeHex( lChar16 ch )
 
 static lChar16 decodeHTMLChar( const lChar16 * s )
 {
-    if ( s[0]=='%' ) {
+    if (s[0] == '%') {
         int d1 = decodeHex( s[1] );
-        if ( d1>=0 ) {
+        if (d1 >= 0) {
             int d2 = decodeHex( s[2] );
-            if ( d2>=0 ) {
-                return d1*16 + d2;
+            if (d2 >= 0) {
+                return (lChar16)(d1*16 + d2);
             }
         }
     }
@@ -4046,7 +4592,7 @@ lString16 DecodeHTMLUrlString( lString16 s )
     const lChar16 * str = s.c_str();
     for ( int i=0; str[i]; i++ ) {
         if ( str[i]=='%'  ) {
-            int ch = decodeHTMLChar( str + i );
+            lChar16 ch = decodeHTMLChar( str + i );
             if ( ch==0 ) {
                 continue;
             }
@@ -4078,7 +4624,7 @@ lString16 DecodeHTMLUrlString( lString16 s )
 }
 
 void limitStringSize(lString16 & str, int maxSize) {
-	if ((int) str.length() < maxSize)
+    if (str.length() < maxSize)
 		return;
 	int lastSpace = -1;
 	for (int i = str.length() - 1; i > 0; i--)
@@ -4090,6 +4636,6 @@ void limitStringSize(lString16 & str, int maxSize) {
 		}
 	int split = lastSpace > 0 ? lastSpace : maxSize;
 	str = str.substr(0, split);
-	str += L"...";
+    str += "...";
 }
 

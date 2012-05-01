@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2012-03-15 01:51+0200\n"
+"POT-Creation-Date: 2012-04-12 22:34+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -185,83 +185,99 @@ msgstr ""
 msgid "Genres"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1073
+#: ../src/mainwnd.cpp:1046
+msgid "Language"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1047
 msgid "Translator"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1074
+#: ../src/mainwnd.cpp:1048
+msgid "Source language"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1049
 msgid "Book info"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1077
+#: ../src/mainwnd.cpp:1052
 msgid "Document author"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1078
+#: ../src/mainwnd.cpp:1053
 msgid "Document date"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1079
+#: ../src/mainwnd.cpp:1054
 msgid "Document source URL"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1080
+#: ../src/mainwnd.cpp:1055
 msgid "OCR by"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1081
+#: ../src/mainwnd.cpp:1056
 msgid "Document version"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1082
+#: ../src/mainwnd.cpp:1057
 msgid "Change history"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1083
+#: ../src/mainwnd.cpp:1058
+msgid "ID"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1059
+msgid "Program used"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1060
 msgid "Document info"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1086
+#: ../src/mainwnd.cpp:1063
 msgid "Publication name"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1087
+#: ../src/mainwnd.cpp:1064
 msgid "Publisher"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1088
+#: ../src/mainwnd.cpp:1065
 msgid "Publisher city"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1089
+#: ../src/mainwnd.cpp:1066
 msgid "Publication year"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1090
+#: ../src/mainwnd.cpp:1067
 msgid "ISBN"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1091
+#: ../src/mainwnd.cpp:1068
 msgid "Publication info"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1093
+#: ../src/mainwnd.cpp:1070
 msgid "Custom info"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1097
+#: ../src/mainwnd.cpp:1074
 msgid "CoolReader for PocketBook"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1098
+#: ../src/mainwnd.cpp:1075
 msgid "Build date"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1099
+#: ../src/mainwnd.cpp:1076
 msgid "About program"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1220
+#: ../src/mainwnd.cpp:1197
 msgid "Loading: please wait..."
 msgstr ""
 

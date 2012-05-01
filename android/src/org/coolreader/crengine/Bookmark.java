@@ -19,9 +19,108 @@ public class Bookmark {
 		posText=v.posText;
 		commentText=v.commentText;
 		timeStamp=v.timeStamp;
-		modified=v.modified;
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((commentText == null) ? 0 : commentText.hashCode());
+		result = prime * result + ((endPos == null) ? 0 : endPos.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + percent;
+		result = prime * result + ((posText == null) ? 0 : posText.hashCode());
+		result = prime * result + shortcut;
+		result = prime * result
+				+ ((startPos == null) ? 0 : startPos.hashCode());
+		result = prime * result + (int) (timeStamp ^ (timeStamp >>> 32));
+		result = prime * result
+				+ ((titleText == null) ? 0 : titleText.hashCode());
+		result = prime * result + type;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Bookmark other = (Bookmark) obj;
+		if (commentText == null) {
+			if (other.commentText != null)
+				return false;
+		} else if (!commentText.equals(other.commentText))
+			return false;
+		if (endPos == null) {
+			if (other.endPos != null)
+				return false;
+		} else if (!endPos.equals(other.endPos))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (percent != other.percent)
+			return false;
+		if (posText == null) {
+			if (other.posText != null)
+				return false;
+		} else if (!posText.equals(other.posText))
+			return false;
+		if (shortcut != other.shortcut)
+			return false;
+		if (startPos == null) {
+			if (other.startPos != null)
+				return false;
+		} else if (!startPos.equals(other.startPos))
+			return false;
+		if (timeStamp != other.timeStamp)
+			return false;
+		if (titleText == null) {
+			if (other.titleText != null)
+				return false;
+		} else if (!titleText.equals(other.titleText))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
+
+	public String getUniqueKey() {
+		switch (type) {
+		case TYPE_LAST_POSITION:
+			return "l";
+		case TYPE_POSITION:
+			return shortcut > 0 ? String.valueOf(shortcut) : "p" + startPos;
+		case TYPE_COMMENT:
+			return "c" + startPos + "-" + endPos;
+		case TYPE_CORRECTION:
+			return "r" + startPos + "-" + endPos;
+		default:
+			return "unknown";
+		}
+	}
+	
+	public boolean equalUniqueKey(Bookmark bm) {
+		if (type != bm.type)
+			return false;
+		switch (type) {
+		case TYPE_LAST_POSITION:
+			return true;
+		case TYPE_POSITION:
+			return shortcut > 0 ? shortcut == bm.shortcut : Utils.eq(startPos, bm.startPos);
+		case TYPE_COMMENT:
+		case TYPE_CORRECTION:
+			return Utils.eq(startPos, bm.startPos) && Utils.eq(endPos, bm.endPos);
+		default:
+			return false;
+		}
+	}
 	
 	public int getType() {
 		return type;
@@ -30,7 +129,6 @@ public class Bookmark {
 		if (this.type == type)
 			return false;
 		this.type = type;
-		modified = true;
 		return true;
 	}
 	public int getPercent() {
@@ -38,21 +136,18 @@ public class Bookmark {
 	}
 	public void setPercent(int percent) {
 		this.percent = percent;
-		modified = true;
 	}
 	public String getStartPos() {
 		return startPos;
 	}
 	public void setStartPos(String startPos) {
 		this.startPos = startPos;
-		modified = true;
 	}
 	public String getEndPos() {
 		return endPos;
 	}
 	public void setEndPos(String endPos) {
 		this.endPos = endPos;
-		modified = true;
 	}
 	public String getCommentText() {
 		return commentText;
@@ -68,7 +163,6 @@ public class Bookmark {
 		if ( !changed(this.commentText, commentText) )
 			return false;
 		this.commentText = commentText;
-		modified = true;
 		return true;
 	}
 	public String getTitleText() {
@@ -80,17 +174,14 @@ public class Bookmark {
 	
 	public void setTitleText(String titleText) {
 		this.titleText = titleText;
-		modified = true;
 	}
 	public void setPosText(String posText) {
 		this.posText = posText;
-		modified = true;
 	}
 	public int getShortcut() {
 		return shortcut;
 	}
 	public void setShortcut(int shortcut) {
-		modified = true;
 		this.shortcut = shortcut;
 	}
 	public long getTimeStamp() {
@@ -100,7 +191,6 @@ public class Bookmark {
 		if ( this.timeStamp == timeStamp )
 			return;
 		this.timeStamp = timeStamp;
-		modified = true;
 	}
 	
 	public Long getId() {
@@ -110,11 +200,14 @@ public class Bookmark {
 		this.id = id;
 	}
 
-	public boolean isModified() {
-		return modified || id==null;
-	}
-	public void setModified(boolean modified) {
-		this.modified = modified;
+	public boolean isValid() {
+		if (startPos == null || startPos.length() == 0)
+			return false;
+		if (type < TYPE_LAST_POSITION || type > TYPE_CORRECTION)
+			return false;
+		if ((endPos == null || endPos.length() == 0) && (type == TYPE_COMMENT || type == TYPE_CORRECTION))
+			return false;
+		return true;
 	}
 
 	public static final int TYPE_LAST_POSITION = 0;
@@ -131,6 +224,9 @@ public class Bookmark {
 	private String posText;
 	private String commentText;
 	private long timeStamp = System.currentTimeMillis(); // UTC timestamp
-	private boolean modified;
+	@Override
+	public String toString() {
+		return "Bookmark[t=" + type + ", start=" + startPos + "]";
+	}
 	
 }

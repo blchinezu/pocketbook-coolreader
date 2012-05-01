@@ -332,7 +332,22 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;libjpeg - JPEG image format support&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Hyphenation dictionaries - from AlReader&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:&apos;MS Shell Dlg 2&apos;; font-size:8.25pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;CoolReader это свободная программа с открытым исходным кодом для просмотра електронных книг основана на движке CoolReader.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Исходный код доступен на SourceForge &lt;/span&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; text-decoration: underline;&quot;&gt;http://sourceforge.net/projects/crengine &lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;под лицензией GNU GPL2.&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt; text-decoration: underline;&quot;&gt;Использованы следующие компоненты:&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Qt4.5 - библиотека ГПИ&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;FreeType - шрифтовой движок&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;ZLib - библиотека сжатия&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;libpng - библиотека поддержки изображений формата PNG&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;libjpeg - библиотека поддержки изображений формата JPEG&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;Словари переносов - из AlReader&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:&apos;DejaVu Sans&apos;; font-size:9pt;&quot;&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Source code may be downloaded from sourceforge crengine project page:
@@ -674,8 +689,48 @@ http://sourceforge.net/projects/crengine/
         <translation>Экспортировать в WOL формат</translation>
     </message>
     <message>
-        <source>All supported formats (*.fb2 *.txt *.tcr *.rtf *.doc *.epub *.html *.htm *.chm *.zip *.pdb *.pml *.prc *.pml *.mobi);;FB2 books (*.fb2 *.fb2.zip);;Text files (*.txt);;Rich text (*.rtf);;MS Word document (*.doc);;HTML files (*.htm *.html);;EPUB files (*.epub);;CHM files (*.chm);;MOBI files (*.mobi *.prc *.azw);;PalmDOC files (*.pdb *.pml);;ZIP archives (*.zip)</source>
-        <translation>Все поддерживаемые форматы (*.fb2 *.txt *.tcr *.rtf *.doc *.epub *.html *.htm *.chm *.zip *.pdb *.pml *.prc *.pml *.mobi);;Книги FB2 (*.fb2 *.fb2.zip);;Текстовые файлы (*.txt);;Rich text (*.rtf);;Документы MS Word (*.doc);;Файлы HTML (*.htm *.html);;Файлы EPUB (*.epub);;Файлы CHM (*.chm);;Файлы MOBI (*.mobi *.prc *.azw);;Файлы PalmDOC (*.pdb *.pml);;ZIP архивы (*.zip)</translation>
+        <source>All supported formats</source>
+        <translation>Все форматы</translation>
+    </message>
+    <message>
+        <source>FB2 books</source>
+        <translation>Книги FB2</translation>
+    </message>
+    <message>
+        <source>Text files</source>
+        <translation>Текстовые файлы</translation>
+    </message>
+    <message>
+        <source>Rich text</source>
+        <translation>Текст RTF</translation>
+    </message>
+    <message>
+        <source>MS Word document</source>
+        <translation>Документы MS Word</translation>
+    </message>
+    <message>
+        <source>HTML files</source>
+        <translation>Файлы HTML</translation>
+    </message>
+    <message>
+        <source>EPUB files</source>
+        <translation>Книги EPUB</translation>
+    </message>
+    <message>
+        <source>CHM files</source>
+        <translation>Файлы CHM</translation>
+    </message>
+    <message>
+        <source>MOBI files</source>
+        <translation>Файлы MOBI</translation>
+    </message>
+    <message>
+        <source>PalmDOC files</source>
+        <translation>Файлы PDB/PalmDoc</translation>
+    </message>
+    <message>
+        <source>ZIP archives</source>
+        <translation>Архивы ZIP</translation>
     </message>
 </context>
 <context>
@@ -1019,14 +1074,6 @@ http://sourceforge.net/projects/crengine/
     <message>
         <source>Ctrl+F</source>
         <translation>Ctrl+F</translation>
-    </message>
-    <message>
-        <source>Toggle Edit Mode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Toggle edit mode</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Ctrl+E</source>
@@ -1868,6 +1915,78 @@ http://sourceforge.net/projects/crengine/
     <message>
         <source>Stylesheet</source>
         <translation>Таблицы стилей</translation>
+    </message>
+    <message>
+        <source>Selection color</source>
+        <translation>Цвет выделения</translation>
+    </message>
+    <message>
+        <source>Comment bookmark color</source>
+        <translation>Цвет комментариев</translation>
+    </message>
+    <message>
+        <source>Correction bookmark color</source>
+        <translation>Цвет исправлений</translation>
+    </message>
+    <message>
+        <source>Comment color</source>
+        <translation>Цвет комментариев</translation>
+    </message>
+    <message>
+        <source>Correction color</source>
+        <translation>Цвет исправлений</translation>
+    </message>
+    <message>
+        <source>Bookmark highlight</source>
+        <translation>Подсветка закладок</translation>
+    </message>
+    <message>
+        <source>Disabled</source>
+        <translation>Отключить</translation>
+    </message>
+    <message>
+        <source>Solid fill</source>
+        <translation>Цвет фона</translation>
+    </message>
+    <message>
+        <source>Inline images zoom in</source>
+        <translation>Инлайн картинки, увеличение</translation>
+    </message>
+    <message>
+        <source>Integer scale</source>
+        <translation>В целое число раз</translation>
+    </message>
+    <message>
+        <source>Arbitrary scale</source>
+        <translation>Произвольный масштаб</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation>х1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation>х2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation>х3</translation>
+    </message>
+    <message>
+        <source>Block images zoom in</source>
+        <translation>Обычные картинки, увеличеие</translation>
+    </message>
+    <message>
+        <source>Block images zoom out</source>
+        <translation>Обычные картинки, уменьшение</translation>
+    </message>
+    <message>
+        <source>Inline images zoom out</source>
+        <translation>Инлайн картинки, уменьшение</translation>
+    </message>
+    <message>
+        <source>Image scaling options</source>
+        <translation>Масштабирование картинок</translation>
     </message>
 </context>
 <context>

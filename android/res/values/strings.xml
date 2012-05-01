@@ -275,7 +275,7 @@
     <string name="dlg_catalog_edit_url">URL</string>
     <string name="dlg_catalog_edit_title">OPDS Catalog</string>
     <string name="dlg_catalog_add_title">Add Catalog</string>
-    <string name="options_format_min_space_width_percent">Min space width %</string>
+    <string formatted="false" name="options_format_min_space_width_percent">Min space width %</string>
     <string name="options_selection_keep_selection_after_dictionary">Keep selection after dictionary</string>
     <string name="action_toggle_autoscroll">Autoscroll</string>
     <string name="lbl_autoscroll_speed">Speed: $1 chars/minute</string>
@@ -336,18 +336,18 @@
     <string name="options_css_text_indent_big_outdent">Big outdent</string>
     <string name="options_css_font_face_sans_serif">[Default sans-serif font]</string>
     <string name="options_css_margin_05em">0.5 of line height</string>
-    <string name="options_css_margin_10p">10% of line width</string>
-    <string name="options_css_margin_20p">20% of line width</string>
-    <string name="options_css_margin_30p">30% of line width</string>
+    <string formatted="false" name="options_css_margin_10p">10% of line width</string>
+    <string formatted="false" name="options_css_margin_20p">20% of line width</string>
+    <string formatted="false" name="options_css_margin_30p">30% of line width</string>
     <string name="options_css_margin_0">0</string>
     <string name="options_css_margin_03em">0.3 of line height</string>
-    <string name="options_css_margin_15p">15% of line width</string>
+    <string formatted="false" name="options_css_margin_15p">15% of line width</string>
     <string name="options_css_margin_02em">0.2 of line height</string>
     <string name="options_css_margin_4em">4 of line height</string>
     <string name="options_css_margin_1em">1 line height</string>
     <string name="options_css_margin_2em">2 of line height</string>
     <string name="options_css_margin_15em">1.5 of line height</string>
-    <string name="options_css_margin_5p">5% of line width</string>
+    <string formatted="false" name="options_css_margin_5p">5% of line width</string>
     <string name="options_css_font_size_130p">Bigger (130%)</string>
     <string name="options_css_font_size_120p">Bigger (120%)</string>
     <string name="options_css_font_size_110p">Bigger (110%)</string>
@@ -389,6 +389,7 @@
     <string name="win_title_confirm_catalog_delete">Do you really want to delete this catalog?</string>
     <string name="win_title_confirm_history_record_delete">Do you really want to remove this book from recent list?</string>
     <string name="win_title_confirm_book_delete">Do you really want to delete this book?</string>
+    <string name="book_info_book_language">Language</string>
     <string name="folder_name_books_by_series">Books by series</string>
     <string name="folder_name_books_by_title">Books by title</string>
     <string name="dlg_about_donation_platinum">$30: buy Cool Reader Platinum Donation</string>
@@ -399,19 +400,20 @@
     <string name="options_font_embedded_document_font_enabled">Document embedded fonts</string>
     <string name="options_app_locale_system">System</string>
     <string name="options_app_locale">Interface language</string>
-    <string name="options_app_locale_zh_cn">Chinese</string>
-    <string name="options_app_locale_uk">Ukrainian</string>
-    <string name="options_app_locale_tr">Turkish</string>
-    <string name="options_app_locale_bg">Bulgarian</string>
-    <string name="options_app_locale_hu">Hungarian</string>
-    <string name="options_app_locale_it">Italian</string>
-    <string name="options_app_locale_de">German</string>
-    <string name="options_app_locale_es">Spanish</string>
+    <string name="options_app_locale_bg">Български</string>
+    <string name="options_app_locale_de">Deutsch</string>
     <string name="options_app_locale_en">English</string>
-    <string name="options_app_locale_ru">Russian</string>
+    <string name="options_app_locale_es">Español</string>
+    <string name="options_app_locale_fr">Français</string>
+    <string name="options_app_locale_hu">Magyar</string>
+    <string name="options_app_locale_it">Italiano</string>
+    <string name="options_app_locale_lt">Lietuvos</string>
+    <string name="options_app_locale_nl">Nederlands</string>
+    <string name="options_app_locale_ru">Русский</string>
     <string name="options_app_locale_sk">Slovak</string>
-    <string name="options_app_locale_nl">Dutch</string>
-    <string name="options_app_locale_lt">Lithuanian</string>
+    <string name="options_app_locale_tr">Türkçe</string>
+    <string name="options_app_locale_uk">Українська</string>
+    <string name="options_app_locale_zh_cn">中文</string>
     <string name="mi_goto_manual">Show manual</string>
     <string name="options_view_bookmarks_highlight_underline">Underline</string>
     <string name="options_view_color_selection">Selection color</string>
@@ -420,4 +422,16 @@
     <string name="options_view_color_bookmark_correction">Correction color</string>
     <string name="options_view_bookmarks_highlight_solid">Solid color</string>
     <string name="win_title_confirm_bookmark_delete">Do you really want to delete this bookmark?</string>
+    <string name="options_app_cover_page_size_big">Big</string>
+    <string name="options_app_cover_page_size_medium">Medium</string>
+    <string name="options_app_cover_page_size_small">Small</string>
+    <string name="options_app_cover_page_size">Cover page size</string>
+    <string name="dlg_goto_current_position">Current page:</string>
+    <string name="dlg_goto_input_page_number">Input page number to go:</string>
+    <string name="dlg_goto_input_percent">Input position percent to go:</string>
+    <string name="book_state_toread">To read</string>
+    <string name="book_state_reading">Reading</string>
+    <string name="book_state_none">No mark</string>
+    <string name="book_state_finished">Finished</string>
+    <string name="book_info_rating">Rate</string>
 </resources>

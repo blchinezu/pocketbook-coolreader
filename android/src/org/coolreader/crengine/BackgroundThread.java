@@ -9,6 +9,7 @@ import org.coolreader.crengine.ReaderView.Sync;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.View;
 
 /**
@@ -33,19 +34,19 @@ public class BackgroundThread extends Thread {
 		}
 		return instance;
 	}
+	
+	public static Handler getBackgroundHandler() {
+		if (instance == null)
+			return null;
+		return instance.handler;
+	}
 
-	public final static Executor backgroundExecutor = new Executor() {
-		public void execute(Runnable task) {
-			instance().postBackground(task);
-		}
-	};
-	
-	public final static Executor guiExecutor = new Executor() {
-		public void execute(Runnable task) {
-			instance().postGUI(task);
-		}
-	};
-	
+	public static Handler getGUIHandler() {
+		if (instance().guiTarget == null)
+			return null;
+		return instance().guiTarget.getHandler();
+	}
+
 	public final static boolean CHECK_THREAD_CONTEXT = true; 
 
 	/**
@@ -64,7 +65,7 @@ public class BackgroundThread extends Thread {
 	 */
 	public final static void ensureGUI()
 	{
-		if ( CHECK_THREAD_CONTEXT && instance().isBackgroundThread() ) {
+		if ( CHECK_THREAD_CONTEXT && isBackgroundThread() ) {
 			L.e("not in GUI thread", new Exception("ensureGUI() is failed"));
 			throw new RuntimeException("ensureGUI() is failed");
 		}
@@ -98,29 +99,31 @@ public class BackgroundThread extends Thread {
 	private BackgroundThread() {
 		super();
 		setName("BackgroundThread" + Integer.toHexString(hashCode()));
+		Log.i("cr3", "Created new background thread instance");
 	}
 
 	@Override
 	public void run() {
-		L.i("Entering background thread");
+		Log.i("cr3", "Entering background thread");
 		Looper.prepare();
 		handler = new Handler() {
 			public void handleMessage( Message message )
 			{
-				L.d("message: " + message);
+				Log.d("cr3", "message: " + message);
 			}
 		};
-		L.i("Background thread handler is created");
+		Log.i("cr3", "Background thread handler is created");
 		synchronized(posted) {
 			for ( Runnable task : posted ) {
-				L.i("Copying posted bg task to handler : " + task);
+				Log.i("cr3", "Copying posted bg task to handler : " + task);
 				handler.post(task);
 			}
 			posted.clear();
 		}
 		Looper.loop();
 		handler = null;
-		L.i("Exiting background thread");
+		instance = null;
+		Log.i("cr3", "Exiting background thread");
 	}
 
 	private final static boolean USE_LOCK = false;
@@ -169,21 +172,30 @@ public class BackgroundThread extends Thread {
 		postGUI(task, 0);
 	}
 
+	static int delayedTaskId = 0;
 	/**
 	 * Post runnable to be executed in GUI thread
 	 * @param task is runnable to execute in GUI thread
 	 * @param delay is delay before running task, in millis
 	 */
-	public void postGUI( Runnable task, long delay )
+	public void postGUI(final Runnable task, final long delay)
 	{
 		if ( guiTarget==null ) {
 			synchronized( postedGUI ) {
 				postedGUI.add(task);
 			}
 		} else {
-			if ( delay>0 )
-				guiTarget.postDelayed(task, delay);
-			else
+			if ( delay>0 ) {
+				final int id = ++delayedTaskId;
+				//L.v("posting delayed (" + delay + ") task " + id + " " + task);
+				guiTarget.postDelayed(new Runnable() {
+					@Override
+					public void run() {
+						task.run();
+						//L.v("finished delayed (" + delay + ") task " + id + " " + task);
+					}
+				}, delay);
+			} else
 				guiTarget.post(task);
 		}
 	}
@@ -196,28 +208,28 @@ public class BackgroundThread extends Thread {
 	{
 		Engine.suspendLongOperation();
 		task = guard(task);
-		if ( isBackgroundThread() || mStopped )
+		if (isBackgroundThread() || mStopped)
 			task.run(); // run in this thread
 		else 
 			postBackground(task); // post
 	}
 
 	// assume there are only two threads: main GUI and background
-	public boolean isGUIThread()
+	public static boolean isGUIThread()
 	{
 		return !isBackgroundThread();
 	}
 
-	public boolean isBackgroundThread()
+	public static boolean isBackgroundThread()
 	{
-		return ( Thread.currentThread()==this );
+		return (Thread.currentThread() == instance);
 	}
 
 	public void executeGUI( Runnable task )
 	{
 		//Handler guiHandler = guiTarget.getHandler();
 		//if ( guiHandler!=null && guiHandler.getLooper().getThread()==Thread.currentThread() )
-		if ( isGUIThread() )
+		if (isGUIThread())
 			task.run(); // run in this thread
 		else
 			postGUI(task);
@@ -317,8 +329,7 @@ public class BackgroundThread extends Thread {
 	
 	private boolean mStopped = false;
 	
-	public void waitForBackgroundCompletion()
-	{
+	public void waitForBackgroundCompletion() {
 		Engine.suspendLongOperation();
 		callBackground(new Callable<Object>() {
 			public Object call() {
@@ -327,14 +338,15 @@ public class BackgroundThread extends Thread {
 		});
 	}
 	
-//	public void quit()
-//	{
-//		callBackground(new Callable<Object>() {
-//			public Object call() {
-//				mStopped = true;
-//				Looper.myLooper().quit();
-//				return null;
-//			}
-//		});
-//	}
+	public void quit() {
+		postBackground(new Runnable() {
+			@Override
+			public void run() {
+				if (handler != null) {
+					L.i("Calling quit() on background thread looper.");
+					handler.getLooper().quit();
+				}
+			}
+		});
+	}
 }

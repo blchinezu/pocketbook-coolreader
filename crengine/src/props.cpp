@@ -312,7 +312,7 @@ void CRPropAccessor::setInt( const char * propName, int value )
 /// get color (#xxxxxx) property by name, returns false if not found
 bool CRPropAccessor::getColor( const char * propName, lUInt32 &result ) const
 {
-    unsigned n = 0;
+    int n = 0;
     lString16 value;
     if ( !getString( propName, value ) ) {
         //CRLog::debug("%s is not found", propName);
@@ -322,7 +322,7 @@ bool CRPropAccessor::getColor( const char * propName, lUInt32 &result ) const
 //        CRLog::debug("%s = %s", propName, LCSTR(value));
         return false;
     }
-    for ( unsigned i=value[0]=='#' ? 1 : 2; i<value.length(); i++ ) {
+    for ( int i=value[0]=='#' ? 1 : 2; i<value.length(); i++ ) {
         lChar16 ch = value[i];
         if ( ch>='0' && ch<='9' )
             n = (n << 4) | (ch - '0');
@@ -436,13 +436,13 @@ void CRPropAccessor::setPoint( const char * propName, const lvPoint & value )
 bool CRPropAccessor::getBool( const char * propName, bool &result ) const
 {
     lString16 value;
-    if ( !getString( propName, value ) )
+    if (!getString(propName, value))
         return false;
-    if ( value == L"true" || value == L"TRUE" || value == L"yes" || value == L"YES" || value == L"1" ) {
+    if (value == "true" || value == "TRUE" || value == "yes" || value == "YES" || value == "1") {
         result = true;
         return true;
     }
-    if ( value == L"false" || value == L"FALSE" || value == L"no" || value == L"NO" || value == L"0" ) {
+    if (value == "false" || value == "FALSE" || value == "no" || value == "NO" || value == "0") {
         result = false;
         return true;
     }
@@ -460,7 +460,7 @@ bool CRPropAccessor::getBoolDef( const char * propName, bool defValue ) const
 
 void CRPropAccessor::setBool( const char * propName, bool value )
 {
-    setString( propName, lString16( value ? L"1" : L"0" ) );
+    setString( propName, lString16( value ? "1" : "0" ) );
 }
 
 bool CRPropAccessor::getInt64( const char * propName, lInt64 &result ) const
@@ -491,7 +491,7 @@ CRPropAccessor::~CRPropAccessor()
 
 static lString8 addBackslashChars( lString8 str )
 {
-    unsigned i;
+    int i;
     bool found = false;
     for ( i=0; i<str.length(); i++ ) {
         char ch = str[i];
@@ -528,7 +528,7 @@ static lString8 addBackslashChars( lString8 str )
 
 static lString8 removeBackslashChars( lString8 str )
 {
-    unsigned i;
+    int i;
     bool found = false;
     for ( i=0; i<str.length(); i++ ) {
         char ch = str[i];

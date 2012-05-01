@@ -314,9 +314,9 @@
     <string name="options_css_text_decoration_overlineline">Надкреслений</string>
     <string name="options_css_font_face_serif">[Шрифт із засічками]</string>
     <string name="options_css_margin_05em">0.5 висоти рядка</string>
-    <string name="options_css_margin_10p">10% ширини рядка</string>
-    <string name="options_css_margin_20p">20% ширини рядка</string>
-    <string name="options_css_margin_30p">30% ширини рядка</string>
+    <string formatted="false" name="options_css_margin_10p">10% ширини рядка</string>
+    <string formatted="false" name="options_css_margin_20p">20% ширини рядка</string>
+    <string formatted="false" name="options_css_margin_30p">30% ширини рядка</string>
     <string name="options_css_font_weight_bold">Жирний</string>
     <string name="options_css_text_indent_small_outdent">Маленький відступ вліво</string>
     <string name="options_css_font_weight_bolder">Жирніше</string>
@@ -327,10 +327,10 @@
     <string name="options_css_text_decoration_underline">Підкреслений</string>
     <string name="options_css_text_indent_small_indent">Маленький відступ</string>
     <string name="options_css_text_decoration_line_through">Закреслений</string>
-    <string name="options_css_text_valign_subscript">Верхній індекс</string>
+    <string name="options_css_text_valign_subscript">Нижній індекс</string>
     <string name="options_css_margin_03em">0.3 висоти рядка</string>
     <string name="options_css_font_style_italic">Похилий</string>
-    <string name="options_css_margin_15p">15% ширини рядка</string>
+    <string formatted="false" name="options_css_margin_15p">15% ширини рядка</string>
     <string name="options_css_font_face_monospace">[Моноширинний шрифт]</string>
     <string name="options_css_font_weight_lighter">Тьмяніше</string>
     <string name="options_css_font_weight_normal">Нормальний</string>
@@ -338,11 +338,11 @@
     <string name="options_css_margin_4em">4 висоти рядка</string>
     <string name="options_css_margin_1em">1 висота рядка</string>
     <string name="options_css_margin_2em">2 висоти рядка</string>
-    <string name="options_css_text_valign_superscript">Нижній індекс</string>
+    <string name="options_css_text_valign_superscript">Верхній індекс</string>
     <string name="options_css_text_indent_big_outdent">Великий відступ вліво</string>
     <string name="options_css_font_face_sans_serif">[Шрифт без засічок]</string>
     <string name="options_css_margin_15em">1.5 висоти рядка</string>
-    <string name="options_css_margin_5p">5% ширини рядка</string>
+    <string formatted="false" name="options_css_margin_5p">5%% ширини рядка</string>
     <string name="options_css_font_size_130p">Збільшити (130%)</string>
     <string name="options_css_font_size_120p">Збільшити (120%)</string>
     <string name="options_css_font_size_110p">Збільшити (110%)</string>
@@ -398,13 +398,40 @@
     <string name="dlg_about_donation_total">Усього: </string>
     <string name="options_font_embedded_document_font_enabled">Вбудовані шрифти документу</string>
     <string name="options_app_locale_system">Системний</string>
-    <string name="options_app_locale">Мова інтерфейсу</string>
+    <string name="options_app_locale">Мова інтерфейсу (Interface language)</string>
     <string name="mi_goto_manual">Порадник користувача</string>
-    <string name="options_view_bookmarks_highlight_underline">Underline</string>
-    <string name="options_view_color_selection">Selection color</string>
-    <string name="options_view_color_bookmark_comment">Comment color</string>
+    <string name="options_view_bookmarks_highlight_underline">Підкреслення</string>
+    <string name="options_view_color_selection">Колір виділення</string>
+    <string name="options_view_color_bookmark_comment">Колір коментаря</string>
     <string name="options_view_bookmarks_highlight_none">None</string>
-    <string name="options_view_color_bookmark_correction">Correction color</string>
-    <string name="options_view_bookmarks_highlight_solid">Solid color</string>
-    <string name="win_title_confirm_bookmark_delete">Do you really want to delete this bookmark?</string>
+    <string name="options_view_color_bookmark_correction">Колір виправлення</string>
+    <string name="options_view_bookmarks_highlight_solid">Суцільний колір</string>
+    <string name="win_title_confirm_bookmark_delete">Ви дійсно бажаєте видалити закладку?</string>
+    <string name="options_app_locale_bg">Български</string>
+    <string name="options_app_locale_de">Deutsch</string>
+    <string name="options_app_locale_en">English</string>
+    <string name="options_app_locale_es">Español</string>
+    <string name="options_app_locale_fr">Français</string>
+    <string name="options_app_locale_hu">Magyar</string>
+    <string name="options_app_locale_it">Italiano</string>
+    <string name="options_app_locale_lt">Lietuvos</string>
+    <string name="options_app_locale_nl">Nederlands</string>
+    <string name="options_app_locale_ru">Русский</string>
+    <string name="options_app_locale_sk">Slovak</string>
+    <string name="options_app_locale_tr">Türkçe</string>
+    <string name="options_app_locale_uk">Українська</string>
+    <string name="options_app_locale_zh_cn">中文</string>
+    <string name="options_app_cover_page_size_big">Великий</string>
+    <string name="options_app_cover_page_size_medium">Середній</string>
+    <string name="options_app_cover_page_size_small">Малий</string>
+    <string name="options_app_cover_page_size">Розмір обкладинки</string>
+    <string name="dlg_goto_current_position">Поточна сторінка:</string>
+    <string name="dlg_goto_input_page_number">Введіть сторінку для переходу:</string>
+    <string name="dlg_goto_input_percent">Введіть позицію для переходу (у відсотках):</string>
+    <string name="book_info_book_language">Мова</string>
+    <string name="book_state_toread">Читати</string>
+    <string name="book_state_reading">Читання</string>
+    <string name="book_state_none">Без позначки</string>
+    <string name="book_state_finished">Завершено</string>
+    <string name="book_info_rating">Rate</string>
 </resources>

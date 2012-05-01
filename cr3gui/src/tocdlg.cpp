@@ -19,7 +19,7 @@ lString16 limitTextWidth( lString16 s, int width, LVFontRef font )
     int w = font->getTextWidth(s.c_str(), s.length());
     if ( w<width )
         return s;
-    lString16 sss = L"...";
+    lString16 sss("...");
     int www = font->getTextWidth(sss.c_str(), sss.length());
     while (s.length()>0) {
         s.erase(s.length()-1, 1);
@@ -50,9 +50,9 @@ void CRTOCDialog::draw()
     tocRect.shrinkBy(borders);
     int curPage = _docview->getCurPage();
     // draw toc
-    for ( int i=0; i<_pageItems && i+_topItem<(int)_items.length(); i++ ) {
+    for (int i=0; i < _pageItems && i + _topItem < _items.length(); i++) {
         LVTocItem * item = _items[ i + _topItem];
-        LVTocItem * nextitem = (i+_topItem+1)<(int)_items.length()
+        LVTocItem * nextitem = (i+_topItem+1) < _items.length()
                                ? _items[ i + _topItem + 1] : NULL;
 
         //lvRect margins( 10, 10, 10, 10 );
@@ -111,11 +111,11 @@ void CRTOCDialog::draw()
 }
 
 CRTOCDialog::CRTOCDialog( CRGUIWindowManager * wm, lString16 title, int resultCmd, int pageCount, LVDocView * docview )
-: CRNumberEditDialog( wm, title, lString16(), resultCmd, 1, pageCount )
+: CRNumberEditDialog( wm, title, lString16::empty_str, resultCmd, 1, pageCount )
 ,_docview(docview)
 {
     docview->getFlatToc( _items );
-    _skinName = L"#toc";
+    _skinName = "#toc";
     _skin = _wm->getSkin()->getMenuSkin(_skinName.c_str());
     CRRectSkinRef clientSkin = _skin->getClientSkin();
     CRRectSkinRef itemSkin = _skin->getItemSkin();
@@ -144,14 +144,14 @@ CRTOCDialog::CRTOCDialog( CRGUIWindowManager * wm, lString16 title, int resultCm
     int curItem = getCurItemIndex();
     _topItem = curItem>=0 ? curItem / _pageItems * _pageItems : 0;
     _page = _topItem / _pageItems + 1;
-    _pages = (_items.length()+(_pageItems-1))/ _pageItems;
+    _pages = (_items.length() + (_pageItems - 1)) / _pageItems;
     int curPage = _docview->getCurPage();
     int docPages = _docview->getPageCount();
     lString16 pageString(_("Current page: $1 of $2\n"));
     pageString.replaceIntParam(1, curPage+1);
     pageString.replaceIntParam(2, docPages);
     _statusText = pageString + lString16(_("Enter page number:"));
-    _inputText = L"_";
+    _inputText = "_";
 }
 
 bool CRTOCDialog::digitEntered( lChar16 c )
@@ -161,7 +161,7 @@ bool CRTOCDialog::digitEntered( lChar16 c )
     int n = v.atoi();
     if ( n<=_maxvalue ) {
         _value = v;
-        _inputText = _value + L"_";
+        _inputText = _value + "_";
         setDirty();
         return true;
     }
@@ -174,7 +174,7 @@ int CRTOCDialog::getCurItemIndex()
     int curPage = _docview->getCurPage();
     for ( int i=0; i<_items.length(); i++ ) {
         LVTocItem * item = _items[ i ];
-        LVTocItem * nextitem = (i+1)<(int)_items.length()
+        LVTocItem * nextitem = (i+1) < _items.length()
                                ? _items[ i + 1] : NULL;
         bool isSelected = true;
         if ( curPage < item->getPage() )
@@ -201,7 +201,7 @@ bool CRTOCDialog::onCommand( int command, int params )
     case MCMD_CANCEL:
         if ( _value.length()>0 ) {
             _value.erase( _value.length()-1, 1 );
-            _inputText = _value + L"_";
+            _inputText = _value + "_";
             setDirty();
         } else {
             _wm->closeWindow( this );

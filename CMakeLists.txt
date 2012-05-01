@@ -20,6 +20,18 @@ ELSE()
   ADD_DEFINITIONS( -DNDEBUG=1 )
 ENDIF(${CMAKE_BUILD_TYPE} STREQUAL Debug)
 
+if(MSVC)
+  # Force to always compile with W4
+  if(CMAKE_CXX_FLAGS MATCHES "/W[0-4]")
+    string(REGEX REPLACE "/W[0-4]" "/W4" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+  else()
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
+  endif()
+elseif(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX)
+  # Update if necessary
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wno-long-long -pedantic")
+endif()
+
 if (NOT DEFINED GUI)
   SET(GUI QT)
   message("GUI type is not specified!")
@@ -122,7 +134,7 @@ else()
   SET(UNRAR_LIBRARIES)
   ADD_DEFINITIONS(-DUSE_UNRAR=0)
   SET(USE_UNRAR 0)
-endif(NOT DEFINED NO_UNRAR)
+endif(DEFINED USE_UNRAR)
 
 if (MAC)
   message("will use zlib, libpng, libjpeg, freetype from Qt static library")

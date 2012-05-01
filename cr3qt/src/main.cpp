@@ -106,34 +106,34 @@ int main(int argc, char *argv[])
         lString16 datadir = lString16(CR3_DATA_DIR);
         LVAppendPathDelimiter(exedir);
         LVAppendPathDelimiter(datadir);
-        lString16 exefontpath = exedir + L"fonts";
+        lString16 exefontpath = exedir + "fonts";
         CRLog::info("main()");
         lString16Collection fontDirs;
 
         lString16 home = Utf8ToUnicode(lString8(( getenv("HOME") ) ));
         lString16 homecr3 = home;
         LVAppendPathDelimiter(homecr3);
-        homecr3 << L".cr3";
+        homecr3 << ".cr3";
         LVAppendPathDelimiter(homecr3);
         //~/.cr3/
         lString16 homefonts = homecr3;
-        homefonts << L"fonts";
+        homefonts << "fonts";
 
         //fontDirs.add( lString16(L"/usr/local/share/crengine/fonts") );
         //fontDirs.add( lString16(L"/usr/local/share/fonts/truetype/freefont") );
         //fontDirs.add( lString16(L"/mnt/fonts") );
         fontDirs.add(homefonts);
 #if MAC==1
-        fontDirs.add( lString16(L"/Library/Fonts") );
+        fontDirs.add( lString16("/Library/Fonts") );
 #endif
 #if 0
         fontDirs.add( exefontpath );
-        fontDirs.add( lString16(L"/usr/share/fonts/truetype") );
-        fontDirs.add( lString16(L"/usr/share/fonts/truetype/liberation") );
-        fontDirs.add( lString16(L"/usr/share/fonts/truetype/freefont") );
+        fontDirs.add( lString16("/usr/share/fonts/truetype") );
+        fontDirs.add( lString16("/usr/share/fonts/truetype/liberation") );
+        fontDirs.add( lString16("/usr/share/fonts/truetype/freefont") );
 #endif
         // TODO: use fontconfig instead
-        //fontDirs.add( lString16(L"/root/fonts/truetype") );
+        //fontDirs.add( lString16("/root/fonts/truetype") );
         if ( !InitCREngine( argv[0], fontDirs ) ) {
             printf("Cannot init CREngine - exiting\n");
             return 2;
@@ -266,7 +266,7 @@ bool getDirectoryFonts( lString16Collection & pathList, lString16Collection & ex
 {
     int foundCount = 0;
     lString16 path;
-    for ( unsigned di=0; di<pathList.length();di++ ) {
+    for ( int di=0; di<pathList.length();di++ ) {
         path = pathList[di];
         LVContainerRef dir = LVOpenDirectory(path.c_str());
         if ( !dir.isNull() ) {
@@ -280,7 +280,7 @@ bool getDirectoryFonts( lString16Collection & pathList, lString16Collection & ex
                     bool found = false;
                     lString16 lc = fileName;
                     lc.lowercase();
-                    for ( unsigned j=0; j<ext.length(); j++ ) {
+                    for ( int j=0; j<ext.length(); j++ ) {
                         if ( lc.endsWith(ext[j]) ) {
                             found = true;
                             break;
@@ -330,7 +330,7 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
 #else
     lString16 datadir = lString16(CR3_DATA_DIR);
 #endif
-    lString16 fontDir = datadir + L"fonts";
+    lString16 fontDir = datadir + "fonts";
 	lString8 fontDir8_ = UnicodeToUtf8(fontDir);
 
     fontDirs.add( fontDir );
@@ -340,13 +340,13 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
     lString8 fontDir8 = UnicodeToLocal(fontDir);
     //const char * fontDir8s = fontDir8.c_str();
     //InitFontManager( fontDir8 );
-    InitFontManager( lString8() );
+    InitFontManager(lString8::empty_str);
 
 #ifdef _WIN32
     lChar16 sysdir[MAX_PATH+1];
     GetWindowsDirectoryW(sysdir, MAX_PATH);
     lString16 fontdir( sysdir );
-    fontdir << L"\\Fonts\\";
+    fontdir << "\\Fonts\\";
     lString8 fontdir8( UnicodeToUtf8(fontdir) );
     const char * fontnames[] = {
         "arial.ttf",
@@ -398,10 +398,10 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
     // use fontconfig
 
     lString16Collection fontExt;
-    fontExt.add(lString16(L".ttf"));
-    fontExt.add(lString16(L".otf"));
-    fontExt.add(lString16(L".pfa"));
-    fontExt.add(lString16(L".pfb"));
+    fontExt.add(lString16(".ttf"));
+    fontExt.add(lString16(".otf"));
+    fontExt.add(lString16(".pfa"));
+    fontExt.add(lString16(".pfb"));
     lString16Collection fonts;
 
     getDirectoryFonts( fontDirs, fontExt, fonts, true );
@@ -409,7 +409,7 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
     // load fonts from file
     CRLog::debug("%d font files found", fonts.length());
     //if (!fontMan->GetFontCount()) {
-	for ( unsigned fi=0; fi<fonts.length(); fi++ ) {
+    for ( int fi=0; fi<fonts.length(); fi++ ) {
 	    lString8 fn = UnicodeToLocal(fonts[fi]);
 	    CRLog::trace("loading font: %s", fn.c_str());
 	    if ( !fontMan->RegisterFont(fn) ) {
@@ -470,26 +470,26 @@ void InitCREngineLog( const char * cfgfile )
         }
     }
     CRLog::log_level level = CRLog::LL_INFO;
-    if ( loglevelstr==L"OFF" ) {
+    if (loglevelstr == "OFF") {
         level = CRLog::LL_FATAL;
         logfname.clear();
-    } else if ( loglevelstr==L"FATAL" ) {
+    } else if (loglevelstr == "FATAL") {
         level = CRLog::LL_FATAL;
-    } else if ( loglevelstr==L"ERROR" ) {
+    } else if (loglevelstr == "ERROR") {
         level = CRLog::LL_ERROR;
-    } else if ( loglevelstr==L"WARN" ) {
+    } else if (loglevelstr == "WARN") {
         level = CRLog::LL_WARN;
-    } else if ( loglevelstr==L"INFO" ) {
+    } else if (loglevelstr == "INFO") {
         level = CRLog::LL_INFO;
-    } else if ( loglevelstr==L"DEBUG" ) {
+    } else if (loglevelstr == "DEBUG") {
         level = CRLog::LL_DEBUG;
-    } else if ( loglevelstr==L"TRACE" ) {
+    } else if (loglevelstr == "TRACE") {
         level = CRLog::LL_TRACE;
     }
     if ( !logfname.empty() ) {
-        if ( logfname==L"stdout" )
+        if (logfname == "stdout")
             CRLog::setStdoutLogger();
-        else if ( logfname==L"stderr" )
+        else if (logfname == "stderr")
             CRLog::setStderrLogger();
         else
             CRLog::setFileLogger( UnicodeToUtf8( logfname ).c_str(), autoFlush );

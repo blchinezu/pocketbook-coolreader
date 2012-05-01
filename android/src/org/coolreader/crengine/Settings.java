@@ -1,6 +1,10 @@
 package org.coolreader.crengine;
 
+import java.util.Locale;
+
 import org.coolreader.R;
+
+import android.util.Log;
 
 public interface Settings {
     public static final String PROP_PAGE_BACKGROUND_IMAGE       ="background.image";
@@ -65,7 +69,6 @@ public interface Settings {
     public static final String PROP_APP_SETTINGS_SHOW_ICONS ="app.settings.show.icons";
     public static final String PROP_APP_KEY_BACKLIGHT_OFF   ="app.key.backlight.disabled";
 
-    
 	 // image scaling settings
 	 // mode: 0=disabled, 1=integer scaling factors, 2=free scaling
 	 // scale: 0=auto based on font size, 1=no zoom, 2=scale up to *2, 3=scale up to *3
@@ -89,6 +92,7 @@ public interface Settings {
     public static final String PROP_APP_FULLSCREEN          ="app.fullscreen";
     public static final String PROP_APP_BOOK_PROPERTY_SCAN_ENABLED ="app.browser.fileprops.scan.enabled";
     public static final String PROP_APP_SHOW_COVERPAGES     ="app.browser.coverpages";
+    public static final String PROP_APP_COVERPAGE_SIZE     ="app.browser.coverpage.size"; // 0==small, 2==BIG
     public static final String PROP_APP_SCREEN_ORIENTATION  ="app.screen.orientation";
     public static final String PROP_APP_SCREEN_BACKLIGHT    ="app.screen.backlight";
     public static final String PROP_APP_SCREEN_BACKLIGHT_DAY   ="app.screen.backlight.day";
@@ -136,6 +140,9 @@ public interface Settings {
 
     public static final String PROP_APP_LOCALE = "app.locale.name";
     
+    public static final String PROP_APP_STARTUP_ACTION="app.startup.action";
+    
+
     // available options for PROP_APP_SELECTION_ACTION setting
     public static final int SELECTION_ACTION_TOOLBAR = 0;
     public static final int SELECTION_ACTION_COPY = 1;
@@ -153,11 +160,17 @@ public interface Settings {
     public static final int BACKLIGHT_CONTROL_FLICK_LEFT = 1;
     public static final int BACKLIGHT_CONTROL_FLICK_RIGHT = 2;
 
+    public static final int APP_STARTUP_ACTION_LAST_BOOK = 0;
+    public static final int APP_STARTUP_ACTION_ROOT = 1;
+    public static final int APP_STARTUP_ACTION_RECENT_BOOKS = 2;
+    public static final int APP_STARTUP_ACTION_LAST_BOOK_FOLDER = 3;
+    
     public enum Lang {
     	DEFAULT("system", R.string.options_app_locale_system, R.raw.help_template_en),
     	EN("en", R.string.options_app_locale_en, R.raw.help_template_en),
     	DE("de", R.string.options_app_locale_de, 0),
     	ES("es", R.string.options_app_locale_es, 0),
+    	FR("fr", R.string.options_app_locale_fr, 0),
     	RU("ru", R.string.options_app_locale_ru, R.raw.help_template_ru),
     	UK("uk", R.string.options_app_locale_uk, R.raw.help_template_ru),
     	BG("bg", R.string.options_app_locale_bg, 0),
@@ -170,10 +183,36 @@ public interface Settings {
     	ZH_CN("zh_CN", R.string.options_app_locale_zh_cn, R.raw.help_template_zh_cn),
     	;
     	
+    	public Locale getLocale() {
+   			return getLocale(code);
+    	}
+    	
+    	static public Locale getLocale(String code) {
+    		if (code.length() == 2)
+    			return new Locale(code);
+    		if (code.length() == 5)
+    			return new Locale(code.substring(0, 2), code.substring(3, 5));
+    		return null;
+    	}
+
+    	static public String getCode(Locale locale) {
+    		String country = locale.getCountry();
+    		if (country == null || country.length()==0)
+    			return locale.getLanguage();
+			return locale.getLanguage() + "_" + country;
+    	}
+    	
     	static public Lang byCode(String code) {
     		for (Lang lang : values())
     			if (lang.code.equals(code))
     				return lang;
+    		if (code.length() > 2) {
+    			code = code.substring(0, 2);
+        		for (Lang lang : values())
+        			if (lang.code.equals(code))
+        				return lang;
+    		}
+    		Log.w("cr3", "language not found by code " + code);
     		return DEFAULT;
     	}
     	

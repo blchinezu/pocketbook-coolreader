@@ -98,6 +98,7 @@ xml:base="http://lib.ololo.cc/opds/">
 		public String title;
 		public String subtitle;
 		public String icon;
+		public String language;
 		public LinkInfo selfLink;
 		public LinkInfo alternateLink;
 		public LinkInfo nextLink;
@@ -296,6 +297,9 @@ xml:base="http://lib.ololo.cc/opds/">
 				} else if ( "subtitle".equals(currentElement) ) {
 					if ( !insideEntry )
 						docInfo.subtitle = s;
+				} else if ( "language".equals(currentElement) ) {
+					if ( !insideEntry )
+						docInfo.language = s;
 				}
 			}
 		}
@@ -444,7 +448,7 @@ xml:base="http://lib.ololo.cc/opds/">
 				progressMessage = progressMessage + " (" + totalSize + ")";
 		}
 		private void onError(final String msg) {
-			BackgroundThread.guiExecutor.execute(new Runnable() {
+			BackgroundThread.instance().executeGUI(new Runnable() {
 				@Override
 				public void run() {
 					if ( delayedProgress!=null ) {
@@ -785,7 +789,7 @@ xml:base="http://lib.ololo.cc/opds/">
 			if ( progressShown )
 				coolReader.getEngine().hideProgress();
 			if (itemsLoadedPartially)
-				BackgroundThread.guiExecutor.execute(new Runnable() {
+				BackgroundThread.instance().executeGUI(new Runnable() {
 					@Override
 					public void run() {
 						L.d("Parsing is finished successfully. " + handler.entries.size() + " entries found");
@@ -795,7 +799,7 @@ xml:base="http://lib.ololo.cc/opds/">
 		}
 
 		public void run() {
-			BackgroundThread.backgroundExecutor.execute(new Runnable() {
+			BackgroundThread.instance().postBackground(new Runnable() {
 				@Override
 				public void run() {
 					try {

@@ -26,7 +26,7 @@ public:
 };
 
 CRRecentBookMenuItem::CRRecentBookMenuItem( CRMenu * menu, int index, CRFileHistRecord * book )
-: CRMenuItem(menu, index, lString16(L""), LVImageSourceRef(), LVFontRef() ), _book( book )
+: CRMenuItem(menu, index, lString16::empty_str, LVImageSourceRef(), LVFontRef() ), _book( book )
 {
 }
 
@@ -57,7 +57,7 @@ void CRRecentBookMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef ski
     if ( title.empty() )
         title = _book->getFileName();
     else if ( !series.empty() )
-        title << L" - " << series;
+        title << " - " << series;
 
     lvRect posRect = textRect;
     if ( !author.empty() ) {
@@ -129,13 +129,13 @@ CRRecentBooksMenu::CRRecentBooksMenu(CRGUIWindowManager * wm, LVDocView * docvie
         CRRecentBookMenuItem * item = new CRRecentBookMenuItem( this, i, file );
         addItem( item );
     }
-    //_helpText = L"Long press 1..8 = set, short press = go to";
+    //_helpText = "Long press 1..8 = set, short press = go to";
     //_helpHeight = 36;
     CRGUIAcceleratorTableRef acc = _wm->getAccTables().get("bookmarks");
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16(L"#bookmarks"));
+    setSkinName(lString16("#bookmarks"));
     lString16 pattern(_("$1 - open book\n$2, $3 - close"));
 #ifdef CR_POCKETBOOK
 	pattern.replaceParam(1, getCommandKeyName( MCMD_SELECT ));

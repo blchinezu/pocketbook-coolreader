@@ -69,7 +69,7 @@ lString16 cr3view::GetLastRecentFileName()
 {
     if ( getDocView() && getDocView()->getHistory()->getRecords().length()>0 )
         return getDocView()->getHistory()->getRecords()[0]->getFilePathName();
-    return lString16();
+    return lString16::empty_str;
 }
 
 cr3view::cr3view(CRPropRef props, lString16 exeDirPath )
@@ -85,7 +85,7 @@ cr3view::cr3view(CRPropRef props, lString16 exeDirPath )
     _wm.activateWindow( (_docwin = new CRDocViewWindow(&_wm)) );
     getDocView()->setCallback( this );
     IMAGE_SOURCE_FROM_BYTES(defCover, cr3_def_cover_gif);
-    LVImageSourceRef cover = LVCreateFileCopyImageSource( exeDirPath + L"cr3_def_cover.png" );
+    LVImageSourceRef cover = LVCreateFileCopyImageSource( exeDirPath + "cr3_def_cover.png" );
     if ( !cover.isNull() )
         getDocView()->setDefaultCover( cover );
     else
@@ -358,7 +358,7 @@ lString16 cr3view::GetHistoryFileName()
         ::wxMkdir( wxString( cfgdir.c_str() ) );
     lChar16 slash = detectSlash( cfgdir );
     cfgdir << slash;
-    return cfgdir + L"cr3hist.bmk";
+    return cfgdir + "cr3hist.bmk";
 }
 
 void cr3view::CloseDocument()
@@ -673,7 +673,7 @@ bool cr3view::LoadDocument( const wxString & fname )
 	//_docview->exportWolFile( "test.wol", true );
 	//_docview->SetPos(0);
     if ( !res )
-        getDocView()->createDefaultDocument(lString16(L"File open error"), lString16(L"Cannot open file ") + fname.c_str() );
+        getDocView()->createDefaultDocument(lString16("File open error"), lString16("Cannot open file ") + fname.c_str() );
     lString16 title = getDocView()->getAuthors();
     if ( !title.empty() && !getDocView()->getTitle().empty() )
         title << L". ";

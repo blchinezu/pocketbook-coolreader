@@ -1233,7 +1233,6 @@ public:
     }
     lverror_t OpenFile( lString16 fname, int mode )
     {
-        bool use_sync = (mode & LVOM_FLAG_SYNC)!=0;
         mode = mode & LVOM_MASK;
 #if defined(_WIN32)
         lUInt32 m = 0;
@@ -1295,6 +1294,7 @@ public:
         if (mode==LVOM_APPEND)
             Seek( 0, LVSEEK_END, NULL );
 #else
+        bool use_sync = (mode & LVOM_FLAG_SYNC)!=0;
         m_fd = -1;
 
         int flags = (mode==LVOM_READ) ? O_RDONLY : O_RDWR | O_CREAT | (use_sync ? O_SYNC : 0) | (mode==LVOM_WRITE ? O_TRUNC : 0);
@@ -1544,7 +1544,7 @@ public:
 
         if (unicode) {
             // unicode
-            while (1) {
+            for (;;) {
                 lUInt32 dwAttrs = data.dwFileAttributes;
                 wchar_t * pfn = data.cFileName;
                 for (int i=0; data.cFileName[i]; i++) {
@@ -1580,7 +1580,7 @@ public:
             }
         } else {
             // ANSI
-            while (1) {
+            for (;;) {
                 lUInt32 dwAttrs = dataa.dwFileAttributes;
                 char * pfn = dataa.cFileName;
                 for (int i=0; dataa.cFileName[i]; i++) {
@@ -1765,7 +1765,7 @@ private:
         //if ( m_stream->SetPos( item->start )==(lvpos_t)(~0) )
         if ( m_stream->SetPos( item->start )!=(lvpos_t)item->start )
             return false;
-        int streamSize=m_stream->GetSize(); int bytesLeft = m_stream->GetSize() - m_stream->GetPos();
+        //int streamSize=m_stream->GetSize(); int bytesLeft = m_stream->GetSize() - m_stream->GetPos();
         lvsize_t bytesRead = 0;
         if ( m_stream->Read( item->buf, item->size, &bytesRead )!=LVERR_OK || bytesRead!=item->size )
             return false;
@@ -2451,7 +2451,7 @@ public:
 class LVZipArc : public LVArcContainerBase
 {
 public:
-    virtual LVStreamRef OpenStream( const wchar_t * fname, lvopen_mode_t mode )
+    virtual LVStreamRef OpenStream( const wchar_t * fname, lvopen_mode_t /*mode*/ )
     {
         if ( fname[0]=='/' )
             fname++;
@@ -2497,7 +2497,7 @@ public:
     virtual int ReadContents()
     {
         lvByteOrderConv cnv;
-        bool arcComment = false;
+        //bool arcComment = false;
         bool truncated = false;
 
         m_list.clear();
@@ -2564,7 +2564,7 @@ public:
         unsigned ZipHd1_size = 0x1E; //sizeof(ZipHd1); //sizeof(ZipHd1)
           //lUInt32 ReadSize;
 
-        while (1) {
+        for (;;) {
 
             if (m_stream->Seek( NextPosition, LVSEEK_SET, NULL )!=LVERR_OK)
                 return 0;
@@ -2613,8 +2613,8 @@ public:
             if (ReadSize==0 || ZipHeader.Mark==0x06054b50 ||
                     (truncated && ZipHeader.Mark==0x02014b50) )
             {
-                if (!truncated && *(lUInt16 *)((char *)&ZipHeader+20)!=0)
-                    arcComment=true;
+//                if (!truncated && *(lUInt16 *)((char *)&ZipHeader+20)!=0)
+//                    arcComment=true;
                 break; //(GETARC_EOF);
             }
 
@@ -3137,7 +3137,7 @@ lvsize_t LVPumpStream( LVStream * out, LVStream * in )
 
 LVContainerRef LVOpenDirectory( const wchar_t * path, const wchar_t * mask )
 {
-    LVContainerRef dir( LVDirectoryContainer::OpenDirectory( path ) );
+    LVContainerRef dir(LVDirectoryContainer::OpenDirectory(path, mask));
     return dir;
 }
 
@@ -3472,7 +3472,7 @@ LVStreamRef LVCreateTCRDecoderStream( LVStreamRef stream )
 lString16 LVExtractPath( lString16 pathName, bool appendEmptyPath )
 {
     int last_delim_pos = -1;
-    for ( unsigned i=0; i<pathName.length(); i++ )
+    for ( int i=0; i<pathName.length(); i++ )
         if ( pathName[i]=='/' || pathName[i]=='\\' )
             last_delim_pos = i;
     if ( last_delim_pos==-1 )
@@ -3488,7 +3488,7 @@ lString16 LVExtractPath( lString16 pathName, bool appendEmptyPath )
 lString16 LVExtractFilename( lString16 pathName )
 {
     int last_delim_pos = -1;
-    for ( unsigned i=0; i<pathName.length(); i++ )
+    for ( int i=0; i<pathName.length(); i++ )
         if ( pathName[i]=='/' || pathName[i]=='\\' )
             last_delim_pos = i;
     if ( last_delim_pos==-1 )
@@ -3501,7 +3501,7 @@ lString16 LVExtractFilenameWithoutExtension( lString16 pathName )
 {
     lString16 s = LVExtractFilename( pathName );
     int lastDot = -1;
-    for ( unsigned i=0; i<s.length(); i++ )
+    for ( int i=0; i<s.length(); i++ )
         if ( s[i]=='.' )
             lastDot = i;
     if ( lastDot<=0 || lastDot<(int)s.length()-7 )
@@ -3529,11 +3529,11 @@ bool LVIsAbsolutePath( lString16 pathName )
 lString16 LVExtractFirstPathElement( lString16 & pathName )
 {
     if ( pathName.empty() )
-        return lString16();
+        return lString16::empty_str;
     if ( pathName[0]=='/' || pathName[0]=='\\' )
         pathName.erase(0, 1);
     int first_delim_pos = -1;
-    for ( unsigned i=0; i<pathName.length(); i++ )
+    for ( int i=0; i<pathName.length(); i++ )
         if ( pathName[i]=='/' || pathName[i]=='\\' ) {
             first_delim_pos = i;
             break;
@@ -3575,14 +3575,14 @@ lString16 LVCombinePaths( lString16 basePath, lString16 newPath )
     lChar16 separator = 0;
     if (!basePath.empty())
         LVAppendPathDelimiter(basePath);
-    for ( unsigned i=0; i<basePath.length(); i++ ) {
+    for ( int i=0; i<basePath.length(); i++ ) {
         if ( basePath[i]=='/' || basePath[i]=='\\' ) {
             separator = basePath[i];
             break;
         }
     }
     if ( separator == 0 )
-        for ( unsigned i=0; i<newPath.length(); i++ ) {
+        for ( int i=0; i<newPath.length(); i++ ) {
             if ( newPath[i]=='/' || newPath[i]=='\\' ) {
                 separator = newPath[i];
                 break;
@@ -3596,7 +3596,7 @@ lString16 LVCombinePaths( lString16 basePath, lString16 newPath )
     //LVAppendPathDelimiter( s );
     LVReplacePathSeparator( s, separator );
     lString16 pattern;
-    pattern << separator << L".." << separator;
+    pattern << separator << ".." << separator;
     bool changed;
     do {
         changed = false;
@@ -3629,11 +3629,11 @@ lString16 LVExtractLastPathElement( lString16 & pathName )
 {
     int l = pathName.length();
     if ( l==0 )
-        return lString16();
+        return lString16::empty_str;
     if ( pathName[l-1]=='/' || pathName[l-1]=='\\' )
         pathName.erase(l-1, 1);
     int last_delim_pos = -1;
-    for ( unsigned i=0; i<pathName.length(); i++ )
+    for ( int i=0; i<pathName.length(); i++ )
         if ( pathName[i]=='/' || pathName[i]=='\\' )
             last_delim_pos = i;
     if ( last_delim_pos==-1 ) {
@@ -3649,7 +3649,7 @@ lString16 LVExtractLastPathElement( lString16 & pathName )
 /// returns path delimiter character
 lChar16 LVDetectPathDelimiter( lString16 pathName )
 {
-    for ( unsigned i=0; i<pathName.length(); i++ )
+    for ( int i=0; i<pathName.length(); i++ )
         if ( pathName[i]=='/' || pathName[i]=='\\' )
             return pathName[i];
 #ifdef _LINUX
@@ -3670,9 +3670,9 @@ lString16 LVMakeRelativeFilename( lString16 basePath, lString16 pathName )
     lString16 dstpath = LVExtractPath( pathName );
     while ( !dstpath.empty() ) {
         lString16 element = LVExtractFirstPathElement( dstpath );
-        if ( element==L"." )
+        if (element == ".")
             ;
-        else if ( element==L".." )
+        else if (element == "..")
             LVExtractLastPathElement( path );
         else
             path << element << delim;
@@ -3831,10 +3831,10 @@ class LVBlockWriteStream : public LVNamedStream
             CRLog::trace("block %x save %x, %x", (int)block_start, (int)pos, (int)len);
 #endif
             int offset = (int)(pos - block_start);
-            if ( offset>size || (int)offset < 0 || len > size || (int)offset + (int)len > size ) {
+            if (offset > size || offset < 0 || (int)len > size || offset + (int)len > size) {
                 CRLog::error("Unaligned access to block %x", (int)block_start);
             }
-            for ( unsigned i=0; i<len; i++ ) {
+            for (unsigned i = 0; i < len; i++ ) {
                 lUInt8 ch1 = buf[offset+i];
                 if ( pos+i>block_end || ch1!=ptr[i] ) {
                     buf[offset+i] = ptr[i];

@@ -70,7 +70,7 @@ public:
     {
         lString16 res = _settingKey;
         if ( key!=0 )
-            res = res + L"." + lString16::itoa(key) + L"." + lString16::itoa(flags);
+            res << "." << fmt::decimal(key) << "." << fmt::decimal(flags);
         return res;
     }
     lString16 getSettingLabel( int key, int flags )
@@ -79,18 +79,18 @@ public:
     }
     CRMenu * createCommandsMenu(int key, int flags)
     {
-        lString16 label = getSettingLabel( key, flags ) + L" - " + lString16(_("choose command"));
+        lString16 label = getSettingLabel( key, flags ) + " - " + lString16(_("choose command"));
         lString16 keyid = getSettingKey( key, flags );
         CRMenu * menu = new CRMenu(_wm, this, _id, label, LVImageSourceRef(), LVFontRef(), LVFontRef(), _props, LCSTR(keyid), 8);
         for ( int i=0; i<_overrideCommands->length(); i++ ) {
             const CRGUIAccelerator * acc = _overrideCommands->get(i);
             lString16 cmdLabel = lString16( getCommandName(acc->commandId, acc->commandParam) );
-            lString16 cmdValue = lString16::itoa(acc->commandId) + L"," + lString16::itoa(acc->commandParam);
+            lString16 cmdValue = lString16::itoa(acc->commandId) << "," << lString16::itoa(acc->commandParam);
             CRMenuItem * item = new CRMenuItem( menu, i, cmdLabel, LVImageSourceRef(), LVFontRef(), cmdValue.c_str());
             menu->addItem(item);
         }
         menu->setAccelerators( getAccelerators() );
-        menu->setSkinName(lString16(L"#settings"));
+        menu->setSkinName(lString16("#settings"));
         menu->setValueFont(_valueFont);
         menu->setFullscreen(true);
         menu->reconfigure( 0 );
@@ -106,12 +106,12 @@ public:
             CRLog::error("CRControlsMenu: No accelerators %s", LCSTR(_accelTableId) );
         }
         _accelTableId = accelTableId;
-        CRGUIAcceleratorTableRef _overrideKeys = _wm->getAccTables().get( accelTableId + L"-override-keys" );
+        CRGUIAcceleratorTableRef _overrideKeys = _wm->getAccTables().get( accelTableId + "-override-keys" );
         if ( _overrideKeys.isNull() ) {
             CRLog::error("CRControlsMenu: No table of allowed keys for override accelerators %s", LCSTR(_accelTableId) );
             return;
         }
-        _overrideCommands = _wm->getAccTables().get( accelTableId + L"-override-commands" );
+        _overrideCommands = _wm->getAccTables().get( accelTableId + "-override-commands" );
         if ( _overrideCommands.isNull() ) {
             CRLog::error("CRControlsMenu: No table of allowed commands to override accelerators %s", LCSTR(_accelTableId) );
             return;
@@ -360,8 +360,8 @@ CRMenu * CRSettingsMenu::createFontSizeMenu( CRGUIWindowManager * wm, CRMenu * m
     }
     fontSizeMenu->setAccelerators( _wm->getAccTables().get("menu") );
     //fontSizeMenu->setAccelerators( _menuAccelerators );
-    fontSizeMenu->setSkinName(lString16(L"#settings"));
-    //fontSizeMenu->setSkinName(lString16(L"#main"));
+    fontSizeMenu->setSkinName(lString16("#settings"));
+    //fontSizeMenu->setSkinName(lString16("#main"));
     fontSizeMenu->reconfigure( 0 );
     return fontSizeMenu;
 }
@@ -384,7 +384,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
   props( newProps ),
   _menuAccelerators( menuAccelerators )
 {
-    setSkinName(lString16(L"#settings"));
+    setSkinName(lString16("#settings"));
 
     _fullscreen = true;
 
@@ -415,8 +415,9 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 	};
 
         item_def_t highlight_bookmark[] = {
-                {_("On"), "1"},
-                {_("Off"), "0"},
+                {_("None"), "0"},
+                {_("Solid"), "1"},
+                {_("Underline"), "2"},
                 {NULL, NULL},
         };
 
@@ -721,7 +722,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
     CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
 
-        setSkinName(lString16(L"#settings"));
+        setSkinName(lString16("#settings"));
         //setSkinName(lString16(L"#main"));
 
         LVFontRef valueFont( fontMan->GetFont( VALUE_FONT_SIZE, 400, true, css_ff_sans_serif, lString8("Arial")) );
@@ -731,7 +732,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         CRMenu * fontFaceMenu = new CRMenu(_wm, mainMenu, mm_FontFace,
                                             _("Default font face"),
                                                     LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_FACE );
-        fontFaceMenu->setSkinName(lString16(L"#settings"));
+        fontFaceMenu->setSkinName(lString16("#settings"));
         CRLog::trace("getting font face list");
         lString16Collection list;
         fontMan->getFaceList( list );
@@ -754,7 +755,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         CRMenu * fontFallbackFaceMenu = new CRMenu(_wm, mainMenu, mm_FontFallbackFace,
                                             _("Fallback font face"),
                                                     LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FALLBACK_FONT_FACE );
-        fontFallbackFaceMenu->setSkinName(lString16(L"#settings"));
+        fontFallbackFaceMenu->setSkinName(lString16("#settings"));
 
         for ( i=0; i<(int)list.length(); i++ ) {
             fontFallbackFaceMenu->addItem( new OnDemandFontMenuItem( fontFallbackFaceMenu, i,
@@ -964,7 +965,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 					LVFontRef(), item->getId().c_str() ) );
 			}
 			hyphMenu->setAccelerators( _menuAccelerators );
-			hyphMenu->setSkinName(lString16(L"#settings"));
+            hyphMenu->setSkinName(lString16("#settings"));
             hyphMenu->reconfigure( 0 );
             mainMenu->addItem( hyphMenu );
 		}
@@ -1003,7 +1004,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
         marginsMenu->addItem( marginsMenuRight );
 		marginsMenu->setAccelerators( _menuAccelerators );
-		marginsMenu->setSkinName(lString16(L"#settings"));
+        marginsMenu->setSkinName(lString16("#settings"));
         marginsMenu->reconfigure( 0 );
         mainMenu->addItem( marginsMenu );
 
@@ -1011,7 +1012,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         CRControlsMenu * controlsMenu =
                 new CRControlsMenu(this, mm_Controls, props, lString16("main"), 8, _rect);
         controlsMenu->setAccelerators( _menuAccelerators );
-        controlsMenu->setSkinName(lString16(L"#settings"));
+        controlsMenu->setSkinName(lString16("#settings"));
         controlsMenu->setValueFont(valueFont);
         controlsMenu->reconfigure( 0 );
         mainMenu->addItem( controlsMenu );
@@ -1042,7 +1043,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         addMenuItems( inlineImagesZoominScaleMenu, image_scaling_factors );
         scalingMenu->addItem( inlineImagesZoominScaleMenu );
         scalingMenu->setAccelerators( _menuAccelerators );
-        scalingMenu->setSkinName(lString16(L"#settings"));
+        scalingMenu->setSkinName(lString16("#settings"));
         scalingMenu->reconfigure( 0 );
         mainMenu->addItem( scalingMenu );
 

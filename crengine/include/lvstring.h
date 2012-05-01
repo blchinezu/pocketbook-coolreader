@@ -29,31 +29,31 @@
 
 
 /// strlen for lChar16
-size_t lStr_len(const lChar16 * str);
+int lStr_len(const lChar16 * str);
 /// strlen for lChar8
-size_t lStr_len(const lChar8 * str);
+int lStr_len(const lChar8 * str);
 /// strnlen for lChar16
-size_t lStr_nlen(const lChar16 * str, size_t maxcount);
+int lStr_nlen(const lChar16 * str, int maxcount);
 /// strnlen for lChar8
-size_t lStr_nlen(const lChar8 * str, size_t maxcount);
+int lStr_nlen(const lChar8 * str, int maxcount);
 /// strcpy for lChar16
-size_t lStr_cpy(lChar16 * dst, const lChar16 * src);
+int lStr_cpy(lChar16 * dst, const lChar16 * src);
 /// strcpy for lChar16 -> lChar8
-size_t lStr_cpy(lChar16 * dst, const lChar8 * src);
+int lStr_cpy(lChar16 * dst, const lChar8 * src);
 /// strcpy for lChar8
-size_t lStr_cpy(lChar8 * dst, const lChar8 * src);
+int lStr_cpy(lChar8 * dst, const lChar8 * src);
 /// strncpy for lChar16
-size_t lStr_ncpy(lChar16 * dst, const lChar16 * src, size_t maxcount);
+int lStr_ncpy(lChar16 * dst, const lChar16 * src, int maxcount);
 /// strncpy for lChar8
-size_t lStr_ncpy(lChar8 * dst, const lChar8 * src, size_t maxcount);
+int lStr_ncpy(lChar8 * dst, const lChar8 * src, int maxcount);
 /// memcpy for lChar16
-void   lStr_memcpy(lChar16 * dst, const lChar16 * src, size_t count);
+void   lStr_memcpy(lChar16 * dst, const lChar16 * src, int count);
 /// memcpy for lChar8
-void   lStr_memcpy(lChar8 * dst, const lChar8 * src, size_t count);
+void   lStr_memcpy(lChar8 * dst, const lChar8 * src, int count);
 /// memset for lChar16
-void   lStr_memset(lChar16 * dst, lChar16 value, size_t count);
+void   lStr_memset(lChar16 * dst, lChar16 value, int count);
 /// memset for lChar8
-void   lStr_memset(lChar8 * dst, lChar8 value, size_t count);
+void   lStr_memset(lChar8 * dst, lChar8 value, int count);
 /// strcmp for lChar16
 int    lStr_cmp(const lChar16 * str1, const lChar16 * str2);
 /// strcmp for lChar16 <> lChar8
@@ -113,8 +113,8 @@ public:
     const lChar16 * data16() const { return buf16; }
     const lChar8 * data8() const { return buf8; }
 private:
-    lUInt32 size;   // 0 for free chunk
-    lUInt32 len;    // count of chars in string
+    lInt32 size;   // 0 for free chunk
+    lInt32 len;    // count of chars in string
     int nref;      // reference counter
     union {
         lstring_chunk_t * nextfree;
@@ -130,6 +130,22 @@ private:
 
 };
 
+namespace fmt {
+    class decimal {
+        lInt64 value;
+    public:
+        explicit decimal(lInt64 v) : value(v) { }
+        lInt64 get() const { return value; }
+    };
+
+    class hex {
+        lUInt64 value;
+    public:
+        explicit hex(lInt64 v) : value(v) { }
+        lUInt64 get() const { return value; }
+    };
+}
+
 /**
     \brief lChar8 string
 
@@ -143,12 +159,26 @@ class lString8
 public:
     // typedefs for STL compatibility
     typedef lChar8              value_type;      ///< character type
-    typedef size_t              size_type;       ///< size type
+    typedef int                 size_type;       ///< size type
     typedef int                 difference_type; ///< difference type
     typedef value_type *        pointer;         ///< pointer to char type
     typedef value_type &        reference;       ///< reference to char type
     typedef const value_type *  const_pointer;   ///< pointer to const char type
     typedef const value_type &  const_reference; ///< reference to const char type
+
+    class decimal {
+        lInt64 value;
+    public:
+        explicit decimal(lInt64 v) : value(v) { }
+        lInt64 get() { return value; }
+    };
+
+    class hex {
+        lUInt64 value;
+    public:
+        explicit hex(lInt64 v) : value(v) { }
+        lUInt64 get() { return value; }
+    };
 
 private:
     lstring_chunk_t * pchunk;
@@ -209,6 +239,10 @@ public:
     lString8 & append(const lString8 & str, size_type offset, size_type count);
     /// append repeated character
     lString8 & append(size_type count, value_type ch);
+    /// append decimal number
+    lString8 & appendDecimal(lInt64 v);
+    /// append hex number
+    lString8 & appendHex(lUInt64 v);
     /// insert C-string
     lString8 & insert(size_type p0, const value_type * str);
     /// insert C-string fragment
@@ -242,10 +276,18 @@ public:
     /// compare part of string with C-string fragment
     int compare(size_type p0, size_type n0, const value_type *s, size_type pos) const;
     /// find position of substring inside string, -1 if not found
-    int pos(lString8 subStr) const;
+    int pos(const lString8 & subStr) const;
+    /// find position of substring inside string, -1 if not found
+    int pos(const char * subStr) const;
+    /// find position of substring inside string starting from specified position, -1 if not found
+    int pos(const lString8 & subStr, int startPos) const;
+    /// find position of substring inside string starting from specified position, -1 if not found
+    int pos(const char * subStr, int startPos) const;
 
     /// substring
     lString8 substr(size_type pos, size_type n) const;
+    /// substring from position to end of string
+    lString8 substr(size_type pos) const { return substr(pos, length() - pos); }
 
     /// append single character
     lString8 & operator << (value_type ch) { return append(1, ch); }
@@ -253,6 +295,10 @@ public:
     lString8 & operator << (const value_type * str) { return append(str); }
     /// append string
     lString8 & operator << (const lString8 & str) { return append(str); }
+    /// append decimal number
+    lString8 & operator << (const fmt::decimal v) { return appendDecimal(v.get()); }
+    /// append hex number
+    lString8 & operator << (const fmt::hex v) { return appendHex(v.get()); }
 
     /// returns true if string starts with specified substring
     bool startsWith ( const lString8 & substring ) const;
@@ -302,6 +348,8 @@ public:
     lString8 & trim();
     /// convert to integer
     int atoi() const;
+    /// convert to 64 bit integer
+    lInt64 atoi64() const;
 
     /// returns C-string
     const value_type * c_str() const { return pchunk->buf8; }
@@ -314,6 +362,10 @@ public:
     lString8 & operator += ( const value_type * s ) { return append(s); }
     /// append single character
     lString8 & operator += ( value_type ch ) { return append(1, ch); }
+    /// append decimal
+    lString8 & operator += ( fmt::decimal v ) { return appendDecimal(v.get()); }
+    /// append hex
+    lString8 & operator += ( fmt::hex v ) { return appendHex(v.get()); }
 
     /// returns true if string ends with specified substring
     bool endsWith( const lChar8 * substring ) const;
@@ -340,7 +392,7 @@ class lString16
 public:
     // typedefs for STL compatibility
     typedef lChar16             value_type;
-    typedef size_t              size_type;
+    typedef int                 size_type;
     typedef int                 difference_type;
     typedef value_type *        pointer;
     typedef value_type &        reference;
@@ -362,9 +414,9 @@ public:
     lString16(const lString16 & str) : pchunk(str.pchunk) { addref(); }
     /// constructor from wide c-string
     lString16(const value_type * str);
-    /// constructor from utf8 c-string
+    /// constructor from 8bit c-string (ASCII only)
     explicit lString16(const lChar8 * str);
-    /// constructor from utf8 character array fragment
+    /// constructor from 8bit (ASCII only) character array fragment
     explicit lString16(const lChar8 * str, size_type count);
     /// constructor from wide character array fragment
     explicit lString16(const value_type * str, size_type count);
@@ -386,20 +438,33 @@ public:
     }
     /// assignment from c-string
     lString16 & assign(const value_type * str);
+    /// assignment from 8bit c-string (ASCII only)
+    lString16 & assign(const lChar8 * str);
     /// assignment from character array fragment
     lString16 & assign(const value_type * str, size_type count);
+    /// assignment from 8-bit character array fragment (ASCII only)
+    lString16 & assign(const lChar8 * str, size_type count);
     /// assignment from string fragment
     lString16 & assign(const lString16 & str, size_type offset, size_type count);
     /// assignment from c-string
     lString16 & operator = (const value_type * str) { return assign(str); }
+    /// assignment from string 8bit ASCII only
+    lString16 & operator = (const lChar8 * str) { return assign(str); }
     /// assignment from string
     lString16 & operator = (const lString16 & str) { return assign(str); }
     lString16 & erase(size_type offset, size_type count);
+
     lString16 & append(const value_type * str);
     lString16 & append(const value_type * str, size_type count);
+    lString16 & append(const lChar8 * str);
+    lString16 & append(const lChar8 * str, size_type count);
     lString16 & append(const lString16 & str);
     lString16 & append(const lString16 & str, size_type offset, size_type count);
     lString16 & append(size_type count, value_type ch);
+    /// append decimal number
+    lString16 & appendDecimal(lInt64 v);
+    /// append hex number
+    lString16 & appendHex(lUInt64 v);
     lString16 & insert(size_type p0, const value_type * str);
     lString16 & insert(size_type p0, const value_type * str, size_type count);
     lString16 & insert(size_type p0, const lString16 & str);
@@ -428,6 +493,10 @@ public:
 
     /// split string into two strings using delimiter
     bool split2( const lString16 & delim, lString16 & value1, lString16 & value2 );
+    /// split string into two strings using delimiter
+    bool split2( const lChar16 * delim, lString16 & value1, lString16 & value2 );
+    /// split string into two strings using delimiter
+    bool split2( const lChar8 * delim, lString16 & value1, lString16 & value2 );
 
     /// returns n characters beginning with pos
     lString16 substr(size_type pos, size_type n) const;
@@ -442,6 +511,16 @@ public:
 
     /// find position of substring inside string, -1 if not found
     int pos(lString16 subStr) const;
+    /// find position of substring inside string starting from specified position, -1 if not found
+    int pos(const lString16 & subStr, int start) const;
+    /// find position of substring inside string, -1 if not found
+    int pos(const lChar16 * subStr) const;
+    /// find position of substring inside string (8bit ASCII only), -1 if not found
+    int pos(const lChar8 * subStr) const;
+    /// find position of substring inside string starting from specified position, -1 if not found
+    int pos(const lChar16 * subStr, int start) const;
+    /// find position of substring inside string (8bit ASCII only) starting from specified position, -1 if not found
+    int pos(const lChar8 * subStr, int start) const;
 
     /// find position of substring inside string, right to left, return -1 if not found
     int rpos(lString16 subStr) const;
@@ -450,17 +529,29 @@ public:
     lString16 & operator << (value_type ch) { return append(1, ch); }
     /// append c-string
     lString16 & operator << (const value_type * str) { return append(str); }
+    /// append 8-bit c-string (ASCII only)
+    lString16 & operator << (const lChar8 * str) { return append(str); }
     /// append string
     lString16 & operator << (const lString16 & str) { return append(str); }
+    /// append decimal number
+    lString16 & operator << (const fmt::decimal v) { return appendDecimal(v.get()); }
+    /// append hex number
+    lString16 & operator << (const fmt::hex v) { return appendHex(v.get()); }
 
     /// returns true if string starts with specified substring
-    bool startsWith ( const lString16 & substring ) const;
+    bool startsWith (const lString16 & substring) const;
+    /// returns true if string starts with specified substring
+    bool startsWith (const lChar16 * substring) const;
+    /// returns true if string starts with specified substring (8bit ASCII only)
+    bool startsWith (const lChar8 * substring) const;
     /// returns true if string ends with specified substring
-    bool endsWith( const lChar16 * substring ) const;
+    bool endsWith(const lChar16 * substring) const;
+    /// returns true if string ends with specified substring (8-bit ASCII only)
+    bool endsWith(const lChar8 * substring) const;
     /// returns true if string ends with specified substring
-    bool endsWith ( const lString16 & substring ) const;
+    bool endsWith (const lString16 & substring) const;
     /// returns true if string starts with specified substring, case insensitive
-    bool startsWithNoCase ( const lString16 & substring ) const;
+    bool startsWithNoCase (const lString16 & substring) const;
 
     /// returns last character
     value_type lastChar() { return empty() ? 0 : at(length()-1); }
@@ -521,8 +612,14 @@ public:
     lString16 & operator += ( lString16 s ) { return append(s); }
     /// appends c-string
     lString16 & operator += ( const value_type * s ) { return append(s); }
+    /// append C-string
+    lString16 & operator += ( const lChar8 * s ) { return append(s); }
     /// appends single character
     lString16 & operator += ( value_type ch ) { return append(1, ch); }
+    /// append decimal
+    lString16 & operator += ( fmt::decimal v ) { return appendDecimal(v.get()); }
+    /// append hex
+    lString16 & operator += ( fmt::hex v ) { return appendHex(v.get()); }
 
     /// constructs string representation of integer
     static lString16 itoa( int i );
@@ -556,8 +653,8 @@ class lString16Collection
 {
 private:
     lstring_chunk_t * * chunks;
-    size_t count;
-    size_t size;
+    int count;
+    int size;
 public:
     lString16Collection()
         : chunks(NULL), count(0), size(0)
@@ -566,32 +663,36 @@ public:
     void parse( lString16 string, lChar16 delimiter, bool flgTrim );
     /// parse delimiter-separated string
     void parse( lString16 string, lString16 delimiter, bool flgTrim );
-    void reserve( size_t space );
-    size_t add( const lString16 & str );
+    void reserve(int space);
+    int add( const lString16 & str );
+    int add(const lChar16 * str) { return add(lString16(str)); }
+    int add(const lChar8 * str) { return add(lString16(str)); }
     void addAll( const lString16Collection & v )
 	{
-		for ( unsigned i=0; i<v.length(); i++ )
+        for (int i=0; i<v.length(); i++)
 			add( v[i] );
 	}
     void erase(int offset, int count);
-    const lString16 & at( size_t index )
+    /// split into several lines by delimiter
+    void split(const lString16 & str, const lString16 & delimiter);
+    const lString16 & at(int index)
     {
         return ((lString16 *)chunks)[index];
     }
-    const lString16 & operator [] ( size_t index ) const
+    const lString16 & operator [] (int index) const
     {
         return ((lString16 *)chunks)[index];
     }
-    lString16 & operator [] ( size_t index )
+    lString16 & operator [] (int index)
     {
         return ((lString16 *)chunks)[index];
     }
-    size_t length() const { return count; }
+    int length() const { return count; }
     void clear();
     bool contains( lString16 value )
     {
-        for ( unsigned i=0; i<count; i++ )
-            if ( value.compare(at(i))==0 )
+        for (int i = 0; i < count; i++)
+            if (value.compare(at(i)) == 0)
                 return true;
         return false;
     }
@@ -608,28 +709,35 @@ class lString8Collection
 {
 private:
     lstring_chunk_t * * chunks;
-    size_t count;
-    size_t size;
+    int count;
+    int size;
 public:
     lString8Collection()
         : chunks(NULL), count(0), size(0)
     { }
-    void reserve( size_t space );
-    size_t add( const lString8 & str );
+    lString8Collection(const lString8 & str, const lString8 & delimiter)
+        : chunks(NULL), count(0), size(0)
+    {
+        split(str, delimiter);
+    }
+    void reserve(int space);
+    int add(const lString8 & str);
+    /// split string by delimiters, and add all substrings to collection
+    void split(const lString8 & str, const lString8 & delimiter);
     void erase(int offset, int count);
-    const lString8 & at( size_t index )
+    const lString8 & at(int index)
     {
         return ((lString8 *)chunks)[index];
     }
-    const lString8 & operator [] ( size_t index ) const
+    const lString8 & operator [] (int index) const
     {
         return ((lString8 *)chunks)[index];
     }
-    lString8 & operator [] ( size_t index )
+    lString8 & operator [] (int index)
     {
         return ((lString8 *)chunks)[index];
     }
-    size_t length() const { return count; }
+    int length() const { return count; }
     void clear();
     ~lString8Collection()
     {
@@ -646,7 +754,7 @@ class SerialBuf;
 class lString16HashedCollection : public lString16Collection
 {
 private:
-    size_t hashSize;
+    int hashSize;
     struct HashPair {
         int index;
         HashPair * next;
@@ -666,8 +774,8 @@ public:
     lString16HashedCollection( lString16HashedCollection & v );
     lString16HashedCollection( lUInt32 hashSize );
     ~lString16HashedCollection();
-    size_t add( const lChar16 * s );
-    size_t find( const lChar16 * s );
+    int add( const lChar16 * s );
+    int find( const lChar16 * s );
 };
 
 /// returns true if two wide strings are equal
@@ -677,15 +785,28 @@ inline bool operator == (const lString16& s1, const lString16& s2 )
 inline bool operator == (const lString16& s1, const lChar16 * s2 )
     { return s1.compare(s2)==0; }
 /// returns true if wide strings is equal to wide c-string
+inline bool operator == (const lString16& s1, const lChar8 * s2 )
+    { return s1.compare(s2)==0; }
+/// returns true if wide strings is equal to wide c-string
 inline bool operator == (const lChar16 * s1, const lString16& s2 )
     { return s2.compare(s1)==0; }
 inline bool operator != (const lString16& s1, const lString16& s2 )
     { return s1.compare(s2)!=0; }
 inline bool operator != (const lString16& s1, const lChar16 * s2 )
     { return s1.compare(s2)!=0; }
+inline bool operator != (const lString16& s1, const lChar8 * s2 )
+    { return s1.compare(s2)!=0; }
 inline bool operator != (const lChar16 * s1, const lString16& s2 )
     { return s2.compare(s1)!=0; }
+inline bool operator != (const lChar8 * s1, const lString16& s2 )
+    { return s2.compare(s1)!=0; }
 inline lString16 operator + (const lString16 &s1, const lString16 &s2) { lString16 s(s1); s.append(s2); return s; }
+inline lString16 operator + (const lString16 &s1, const lChar16 * s2) { lString16 s(s1); s.append(s2); return s; }
+inline lString16 operator + (const lString16 &s1, const lChar8 * s2) { lString16 s(s1); s.append(s2); return s; }
+inline lString16 operator + (const lChar16 * s1,  const lString16 &s2) { lString16 s(s1); s.append(s2); return s; }
+inline lString16 operator + (const lChar8 * s1,  const lString16 &s2) { lString16 s(s1); s.append(s2); return s; }
+inline lString16 operator + (const lString16 &s1, fmt::decimal v) { lString16 s(s1); s.appendDecimal(v.get()); return s; }
+inline lString16 operator + (const lString16 &s1, fmt::hex v) { lString16 s(s1); s.appendHex(v.get()); return s; }
 
 inline bool operator == (const lString8& s1, const lString8& s2 )
     { return s1.compare(s2)==0; }
@@ -703,6 +824,10 @@ inline lString8 operator + (const lString8 &s1, const lString8 &s2)
     { lString8 s(s1); s.append(s2); return s; }
 inline lString8 operator + (const lString8 &s1, const lChar8 * s2)
     { lString8 s(s1); s.append(s2); return s; }
+inline lString8 operator + (const lString8 &s1, fmt::decimal v)
+    { lString8 s(s1); s.appendDecimal(v.get()); return s; }
+inline lString8 operator + (const lString8 &s1, fmt::hex v)
+    { lString8 s(s1); s.appendHex(v.get()); return s; }
 
 
 /// fast 16-bit string character appender
@@ -710,6 +835,10 @@ template <int BUFSIZE> class lStringBuf16 {
     lString16 & str;
     lChar16 buf[BUFSIZE];
     int pos;
+	lStringBuf16 & operator = (lStringBuf16 & v)
+	{
+		// not available
+	}
 public:
     lStringBuf16( lString16 & s )
     : str(s), pos(0)
@@ -906,7 +1035,7 @@ public:
         LL_WARN,
         LL_INFO,
         LL_DEBUG,
-        LL_TRACE,
+        LL_TRACE
     };
     /// set current log level
     static void setLogLevel( log_level level );

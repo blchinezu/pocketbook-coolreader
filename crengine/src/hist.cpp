@@ -42,7 +42,7 @@ protected:
         in_series,
         in_filename,
         in_filepath,
-        in_filesize,
+        in_filesize
     };
     state_t state;
 public:
@@ -72,39 +72,39 @@ public:
     /// called on opening tag
     virtual ldomNode * OnTagOpen( const lChar16 * nsname, const lChar16 * tagname)
     {
-        if ( lStr_cmp(tagname, L"FictionBookMarks")==0 && state==in_xml ) {
+        if ( lStr_cmp(tagname, "FictionBookMarks")==0 && state==in_xml ) {
             state = in_fbm;
-        } else if ( lStr_cmp(tagname, L"file")==0 && state==in_fbm ) {
+        } else if ( lStr_cmp(tagname, "file")==0 && state==in_fbm ) {
             state = in_file;
             _curr_file = new CRFileHistRecord();
-        } else if ( lStr_cmp(tagname, L"file-info")==0 && state==in_file ) {
+        } else if ( lStr_cmp(tagname, "file-info")==0 && state==in_file ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"bookmark-list")==0 && state==in_file ) {
+        } else if ( lStr_cmp(tagname, "bookmark-list")==0 && state==in_file ) {
             state = in_bm_list;
-        } else if ( lStr_cmp(tagname, L"doc-title")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-title")==0 && state==in_file_info ) {
             state = in_title;
-        } else if ( lStr_cmp(tagname, L"doc-author")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-author")==0 && state==in_file_info ) {
             state = in_author;
-        } else if ( lStr_cmp(tagname, L"doc-series")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-series")==0 && state==in_file_info ) {
             state = in_series;
-        } else if ( lStr_cmp(tagname, L"doc-filename")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-filename")==0 && state==in_file_info ) {
             state = in_filename;
-        } else if ( lStr_cmp(tagname, L"doc-filepath")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-filepath")==0 && state==in_file_info ) {
             state = in_filepath;
-        } else if ( lStr_cmp(tagname, L"doc-filesize")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "doc-filesize")==0 && state==in_file_info ) {
             state = in_filesize;
-        } else if ( lStr_cmp(tagname, L"bookmark")==0 && state==in_bm_list ) {
+        } else if ( lStr_cmp(tagname, "bookmark")==0 && state==in_bm_list ) {
             state = in_bm;
             _curr_bookmark = new CRBookmark();
-        } else if ( lStr_cmp(tagname, L"start-point")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "start-point")==0 && state==in_bm ) {
             state = in_start_point;
-        } else if ( lStr_cmp(tagname, L"end-point")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "end-point")==0 && state==in_bm ) {
             state = in_end_point;
-        } else if ( lStr_cmp(tagname, L"header-text")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "header-text")==0 && state==in_bm ) {
             state = in_header_txt;
-        } else if ( lStr_cmp(tagname, L"selection-text")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "selection-text")==0 && state==in_bm ) {
             state = in_selection_txt;
-        } else if ( lStr_cmp(tagname, L"comment-text")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "comment-text")==0 && state==in_bm ) {
             state = in_comment_txt;
         }
         return NULL;
@@ -112,30 +112,30 @@ public:
     /// called on closing
     virtual void OnTagClose( const lChar16 * nsname, const lChar16 * tagname )
     {
-        if ( lStr_cmp(nsname, L"FictionBookMarks")==0 && state==in_fbm ) {
+        if ( lStr_cmp(nsname, "FictionBookMarks")==0 && state==in_fbm ) {
             state = in_xml;
-        } else if ( lStr_cmp(tagname, L"file")==0 && state==in_file ) {
+        } else if ( lStr_cmp(tagname, "file")==0 && state==in_file ) {
             state = in_fbm;
             if ( _curr_file )
                 _hist->getRecords().add( _curr_file );
             _curr_file = NULL;
-        } else if ( lStr_cmp(tagname, L"file-info")==0 && state==in_file_info ) {
+        } else if ( lStr_cmp(tagname, "file-info")==0 && state==in_file_info ) {
             state = in_file;
-        } else if ( lStr_cmp(tagname, L"bookmark-list")==0 && state==in_bm_list ) {
+        } else if ( lStr_cmp(tagname, "bookmark-list")==0 && state==in_bm_list ) {
             state = in_file;
-        } else if ( lStr_cmp(tagname, L"doc-title")==0 && state==in_title ) {
+        } else if ( lStr_cmp(tagname, "doc-title")==0 && state==in_title ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"doc-author")==0 && state==in_author ) {
+        } else if ( lStr_cmp(tagname, "doc-author")==0 && state==in_author ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"doc-series")==0 && state==in_series ) {
+        } else if ( lStr_cmp(tagname, "doc-series")==0 && state==in_series ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"doc-filename")==0 && state==in_filename ) {
+        } else if ( lStr_cmp(tagname, "doc-filename")==0 && state==in_filename ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"doc-filepath")==0 && state==in_filepath ) {
+        } else if ( lStr_cmp(tagname, "doc-filepath")==0 && state==in_filepath ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"doc-filesize")==0 && state==in_filesize ) {
+        } else if ( lStr_cmp(tagname, "doc-filesize")==0 && state==in_filesize ) {
             state = in_file_info;
-        } else if ( lStr_cmp(tagname, L"bookmark")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(tagname, "bookmark")==0 && state==in_bm ) {
             state = in_bm_list;
             if ( _curr_bookmark ) {
                 if ( _curr_bookmark->getType() == bmkt_lastpos ) {
@@ -146,22 +146,22 @@ public:
                 }
                 _curr_bookmark = NULL;
             }
-        } else if ( lStr_cmp(tagname, L"start-point")==0 && state==in_start_point ) {
+        } else if ( lStr_cmp(tagname, "start-point")==0 && state==in_start_point ) {
             state = in_bm;
-        } else if ( lStr_cmp(tagname, L"end-point")==0 && state==in_end_point ) {
+        } else if ( lStr_cmp(tagname, "end-point")==0 && state==in_end_point ) {
             state = in_bm;
-        } else if ( lStr_cmp(tagname, L"header-text")==0 && state==in_header_txt ) {
+        } else if ( lStr_cmp(tagname, "header-text")==0 && state==in_header_txt ) {
             state = in_bm;
-        } else if ( lStr_cmp(tagname, L"selection-text")==0 && state==in_selection_txt ) {
+        } else if ( lStr_cmp(tagname, "selection-text")==0 && state==in_selection_txt ) {
             state = in_bm;
-        } else if ( lStr_cmp(tagname, L"comment-text")==0 && state==in_comment_txt ) {
+        } else if ( lStr_cmp(tagname, "comment-text")==0 && state==in_comment_txt ) {
             state = in_bm;
         }
     }
     /// called on element attribute
     virtual void OnAttribute( const lChar16 * nsname, const lChar16 * attrname, const lChar16 * attrvalue )
     {
-        if ( lStr_cmp(attrname, L"type")==0 && state==in_bm ) {
+        if ( lStr_cmp(attrname, "type")==0 && state==in_bm ) {
             static const char * tnames[] = {"lastpos", "position", "comment", "correction"};
             for ( int i=0; i<4; i++) {
                 if ( lStr_cmp(attrvalue, tnames[i])==0 ) {
@@ -169,10 +169,10 @@ public:
                     return;
                 }
             }
-        } else if ( lStr_cmp(attrname, L"shortcut")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(attrname, "shortcut")==0 && state==in_bm ) {
             int n = lString16( attrvalue ).atoi();
             _curr_bookmark->setShortcut( n );
-        } else if ( lStr_cmp(attrname, L"percent")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(attrname, "percent")==0 && state==in_bm ) {
             int n1=0, n2=0;
             int i=0;
             for ( ; attrvalue[i]>='0' && attrvalue[i]<='9'; i++)
@@ -185,13 +185,13 @@ public:
                     n2 = (attrvalue[i++]-'0');
             }
             _curr_bookmark->setPercent( n1*100 + n2 );
-        } else if ( lStr_cmp(attrname, L"timestamp")==0 && state==in_bm ) {
+        } else if ( lStr_cmp(attrname, "timestamp")==0 && state==in_bm ) {
             time_t n1=0;
             int i=0;
             for ( ; attrvalue[i]>='0' && attrvalue[i]<='9'; i++)
                 n1 = n1*10 + (attrvalue[i]-'0');
             _curr_bookmark->setTimestamp( n1 );
-        } else if (lStr_cmp(attrname, L"page")==0 && state==in_bm) {
+        } else if (lStr_cmp(attrname, "page")==0 && state==in_bm) {
             _curr_bookmark->setBookmarkPage(lString16( attrvalue ).atoi());
         }
     }
@@ -388,7 +388,7 @@ int CRFileHistRecord::getLastShortcutBookmark()
 /// returns first available placeholder for new bookmark, -1 if no more space
 int CRFileHistRecord::getFirstFreeShortcutBookmark()
 {
-    int last = -1;
+    //int last = -1;
     char flags[MAX_SHORTCUT_BOOKMARKS+1];
     memset( flags, 0, sizeof(flags) );
     for ( int i=0; i<_bookmarks.length(); i++ ) {
@@ -447,17 +447,17 @@ lString16 CRBookmark::getChapterName( ldomXPointer ptr )
 			if ( !p.prevElement() )
 				break;
             bool foundSection = p.findElementInPath( section_id ) > 0;
-            //(p.toString().pos(lString16(L"section")) >=0 );
+            //(p.toString().pos("section") >=0 );
             foundAnySection = foundAnySection || foundSection;
             if ( !foundSection && foundAnySection )
                 continue;
 			lString16 nname = p.getNode()->getNodeName();
-			if ( !nname.compare(L"title") || !nname.compare(L"h1") || !nname.compare("h2")  || !nname.compare("h3") ) {
+            if ( !nname.compare("title") || !nname.compare("h1") || !nname.compare("h2")  || !nname.compare("h3") ) {
 				if ( lastLevel!=-1 && p.getLevel()>=lastLevel )
 					continue;
 				lastLevel = p.getLevel();
 				if ( !chapter.empty() )
-					chapter = lString16(L" / ") + chapter;
+                    chapter = " / " + chapter;
 				chapter = p.getText(' ') + chapter;
 				if ( !p.parent() )
 					break;
@@ -560,4 +560,187 @@ lString16 CRFileHistRecord::getLastTimeString( bool longFormat )
     else
         sprintf(str, "%02d.%02d.%04d %02d:%02d", bt->tm_mday, 1+bt->tm_mon, 1900+bt->tm_year, bt->tm_hour, bt->tm_min);
     return Utf8ToUnicode( lString8( str ) );
+}
+
+
+#define START_TAG            "# start record"
+#define END_TAG              "# end record"
+#define START_TAG_BYTES      "# start record\n"
+#define END_TAG_BYTES        "# end record\n"
+#define ACTION_TAG           "ACTION"
+#define ACTION_DELETE_TAG    "DELETE"
+#define ACTION_UPDATE_TAG    "UPDATE"
+#define FILE_TAG             "FILE"
+#define TYPE_TAG             "TYPE"
+#define START_POS_TAG        "STARTPOS"
+#define END_POS_TAG          "ENDPOS"
+#define TIMESTAMP_TAG        "TIMESTAMP"
+#define PERCENT_TAG          "PERCENT"
+#define SHORTCUT_TAG         "SHORTCUT"
+#define TITLE_TEXT_TAG       "TITLETEXT"
+#define POS_TEXT_TAG         "POSTEXT"
+#define COMMENT_TEXT_TAG     "COMMENTTEXT"
+
+static lString8 encodeText(lString16 text16) {
+    if (text16.empty())
+        return lString8::empty_str;
+    lString8 text = UnicodeToUtf8(text16);
+    lString8 buf;
+    for (int i=0; i<text.length(); i++) {
+        char ch = text[i];
+        switch (ch) {
+        case '\\':
+            buf << "\\\\";
+            break;
+        case '\n':
+            buf << "\\n";
+            break;
+        case '\r':
+            buf << "\\r";
+            break;
+        case '\t':
+            buf << "\\t";
+            break;
+        default:
+            buf << ch;
+        }
+    }
+    return buf;
+}
+
+static lString16 decodeText(lString8 text) {
+    if (text.empty())
+        return lString16::empty_str;
+    lString8 buf;
+    bool lastControl = false;
+    for (int i=0; i<text.length(); i++) {
+        char ch = buf[i];
+        if (lastControl) {
+            switch (ch) {
+            case 'r':
+                buf.append(1, '\r');
+                break;
+            case 'n':
+                buf.append(1, '\n');
+                break;
+            case 't':
+                buf.append(1, '\t');
+                break;
+            default:
+                buf.append(1, ch);
+            }
+            lastControl = false;
+            continue;
+        }
+        if (ch == '\\') {
+            lastControl = true;
+            continue;
+        }
+        buf.append(1, ch);
+    }
+    return Utf8ToUnicode(buf);
+}
+
+static int findBytes(lChar8 * buf, int start, int end, const lChar8 * pattern) {
+    int len = lStr_len(pattern);
+    for (int i = start; i <= end - len; i++) {
+        int j = 0;
+        for (; j < len; j++) {
+            if (buf[i+j] != pattern[j])
+                break;
+        }
+        if (j == len)
+            return i;
+    }
+    return -1;
+}
+
+ChangeInfo::ChangeInfo(CRBookmark * bookmark, lString16 fileName, bool deleted)
+    : _bookmark(bookmark ? new CRBookmark(*bookmark) : NULL), _fileName(fileName), _deleted(deleted)
+{
+    _timestamp = bookmark && bookmark->getTimestamp() > 0 ? bookmark->getTimestamp() : (time_t)time(0);
+}
+
+lString8 ChangeInfo::toString() {
+    lString8 buf;
+    buf << START_TAG << "\n";
+    buf << FILE_TAG << "=" << encodeText(_fileName) << "\n";
+    buf << ACTION_TAG << "=" << (_deleted ? ACTION_DELETE_TAG : ACTION_UPDATE_TAG) << "\n";
+    buf << TIMESTAMP_TAG << "=" << fmt::decimal(_timestamp * 1000) << "\n";
+    if (_bookmark) {
+        buf << TYPE_TAG << "=" << fmt::decimal(_bookmark->getType()) << "\n";
+        buf << START_POS_TAG << "=" << encodeText(_bookmark->getStartPos()) << "\n";
+        buf << END_POS_TAG << "=" << encodeText(_bookmark->getEndPos()) << "\n";
+        buf << PERCENT_TAG << "=" << fmt::decimal(_bookmark->getPercent()) << "\n";
+        buf << SHORTCUT_TAG << "=" << fmt::decimal(_bookmark->getShortcut()) << "\n";
+        buf << TITLE_TEXT_TAG << "=" << encodeText(_bookmark->getTitleText()) << "\n";
+        buf << POS_TEXT_TAG << "=" << encodeText(_bookmark->getPosText()) << "\n";
+        buf << COMMENT_TEXT_TAG << "=" << encodeText(_bookmark->getCommentText()) << "\n";
+    }
+    buf << END_TAG << "\n";
+    return buf;
+}
+
+ChangeInfo * ChangeInfo::fromString(lString8 s) {
+    lString8Collection rows(s, lString8("\n"));
+    if (rows.length() < 3 || rows[0] != START_TAG || rows[rows.length() - 1] != END_TAG)
+        return NULL;
+    ChangeInfo * ci = new ChangeInfo();
+    CRBookmark bmk;
+    for (int i=1; i<rows.length() - 1; i++) {
+        lString8 row = rows[i];
+        int p = row.pos("=");
+        if (p<1)
+            continue;
+        lString8 name = row.substr(0, p);
+        lString8 value = row.substr(p + 1);
+        if (name == ACTION_TAG) {
+            ci->_deleted = (value == ACTION_DELETE_TAG);
+        } else if (name == FILE_TAG) {
+            ci->_fileName = decodeText(value);
+        } else if (name == TYPE_TAG) {
+            bmk.setType(value.atoi());
+        } else if (name == START_POS_TAG) {
+            bmk.setStartPos(decodeText(value));
+        } else if (name == END_POS_TAG) {
+            bmk.setEndPos(decodeText(value));
+        } else if (name == TIMESTAMP_TAG) {
+            ci->_timestamp = value.atoi64() / 1000;
+            bmk.setTimestamp(ci->_timestamp);
+        } else if (name == PERCENT_TAG) {
+            bmk.setPercent(value.atoi());
+        } else if (name == SHORTCUT_TAG) {
+            bmk.setShortcut(value.atoi());
+        } else if (name == TITLE_TEXT_TAG) {
+            bmk.setTitleText(decodeText(value));
+        } else if (name == POS_TEXT_TAG) {
+            bmk.setPosText(decodeText(value));
+        } else if (name == COMMENT_TEXT_TAG) {
+            bmk.setCommentText(decodeText(value));
+        }
+    }
+    if (bmk.isValid())
+        ci->_bookmark = new CRBookmark(bmk);
+    if (ci->_fileName.empty() || ci->_timestamp == 0 || (!ci->_bookmark && !ci->_deleted)) {
+        delete ci;
+        return NULL;
+    }
+    return ci;
+}
+
+ChangeInfo * ChangeInfo::fromBytes(lChar8 * buf, int start, int end) {
+    lString8 s(buf + start, end - start);
+    return fromString(s);
+}
+
+bool ChangeInfo::findNextRecordBounds(lChar8 * buf, int start, int end, int & recordStart, int & recordEnd) {
+    int startTagPos = findBytes(buf, start, end, START_TAG_BYTES);
+    if (startTagPos < 0)
+        return false;
+    int endTagPos = findBytes(buf, startTagPos, end, END_TAG_BYTES);
+    if (endTagPos < 0)
+        return false;
+    recordStart = startTagPos;
+    recordEnd = endTagPos + lStr_len(END_TAG_BYTES);
+    return true;
 }

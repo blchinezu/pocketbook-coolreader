@@ -134,7 +134,7 @@ CRGUIAcceleratorTableRef CRGUIAcceleratorTableList::get( const lString16 & name,
     CRGUIAcceleratorTableRef prev = get(name);
     if ( !prev )
         return prev;
-    CRPropRef keymaps = keyRemappingOptions->getSubProps(LCSTR(lString16("keymap.") + name + L"."));
+    CRPropRef keymaps = keyRemappingOptions->getSubProps(LCSTR(lString16("keymap.") + name + "."));
     if ( keymaps.isNull() || keymaps->getCount()==0 )
         return prev;
     CRGUIAcceleratorTableRef acc( new CRGUIAcceleratorTable( *prev ));
@@ -618,7 +618,7 @@ bool CRGUIWindowBase::getClientRect( lvRect & rc )
 /// formats scroll label (like "1 of 2")
 lString16 CRGUIWindowBase::getScrollLabel( int page, int pages )
 {
-    return lString16::itoa(page) + L" of " + lString16::itoa(pages);
+    return lString16::itoa(page) << " of " << fmt::decimal(pages);
 }
 
 /// calculates minimum scroll size
@@ -1371,10 +1371,10 @@ CRMenuSkinRef CRMenu::getSkin()
         return _skin;
     lString16 path = getSkinName();
     lString16 path2;
-    if ( !path.startsWith( L"#" ) )
-        path = lString16(L"/CR3Skin/") + path;
+    if (!path.startsWith("#"))
+        path = lString16("/CR3Skin/") + path;
     else if ( _wm->getScreenOrientation()&1 )
-        _skin = _wm->getSkin()->getMenuSkin( (path + L"-rotated").c_str() );
+        _skin = _wm->getSkin()->getMenuSkin( (path + "-rotated").c_str() );
     if ( !_skin )
         _skin = _wm->getSkin()->getMenuSkin( path.c_str() );
     return _skin;
@@ -1491,7 +1491,7 @@ lvPoint CRMenu::getSize()
 lString16 CRMenu::getSubmenuValue()
 {
     if ( !isSubmenu() || _propName.empty() || _props.isNull() )
-        return lString16();
+        return lString16::empty_str;
     lString16 value = getProps()->getStringDef(
                                UnicodeToUtf8(getPropName()).c_str(), "");
     for ( int i=0; i<_items.length(); i++ ) {
@@ -1499,7 +1499,7 @@ lString16 CRMenu::getSubmenuValue()
                 value==(_items[i]->getPropValue()) )
             return _items[i]->getLabel();
     }
-    return lString16();
+    return lString16::empty_str;
 }
 
 void CRMenu::toggleSubmenuValue()
@@ -1616,7 +1616,7 @@ void CRMenu::drawClient()
     if ( !separatorSkin.isNull() )
         separatorHeight = separatorSkin->getMinSize().y;
 
-    lvRect itemBorders = itemSkin->getBorderWidths();
+    //lvRect itemBorders = itemSkin->getBorderWidths();
 
     bool showShortcuts = skin->getShowShortcuts();
 
@@ -1630,7 +1630,7 @@ void CRMenu::drawClient()
 
     lvPoint itemSize = getMaxItemSize();
     //int hdrHeight = itemSize.y; // + ITEM_MARGIN + ITEM_MARGIN;
-    lvPoint sz = getSize();
+    //lvPoint sz = getSize();
 
     //int nItems = _items.length();
     //int scrollHeight = getScrollHeight();
@@ -2044,7 +2044,7 @@ static bool readNextLine( const LVStreamRef & stream, lString16 & dst )
 static bool splitLine( lString16 line, const lString16 & delimiter, lString16 & key, lString16 & value )
 {
     if ( !line.empty() ) {
-        unsigned n = line.pos(delimiter);
+        int n = line.pos(delimiter);
         value.clear();
         key = line;
         if ( n>0 && n <line.length()-1 ) {
@@ -2074,7 +2074,7 @@ static int decodeKey( lString16 name )
     if ( name.length() == 1 )
         key = name[0];
     if ( key == 0 && name.length()>=4 && name[0]=='0' && name[1]=='x' ) {
-        for ( unsigned i=2; i<name.length(); i++ ) {
+        for ( int i=2; i<name.length(); i++ ) {
             lChar16 ch = name[i];
             if ( ch>='0' && ch<='9' )
                 key = key*16 + (ch-'0');
@@ -2108,7 +2108,7 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
     while ( readNextLine(defStream, line) ) {
         lString16 name;
         lString16 value;
-        if ( splitLine( line, lString16(L"="), name, value ) )  {
+        if ( splitLine( line, lString16("="), name, value ) )  {
             int key = decodeKey( value );
             if ( key!=0 )
                 defs.set( name, key );
@@ -2139,7 +2139,7 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             // begin new section
             if ( !eof ) {
                 table = CRGUIAcceleratorTableRef( new CRGUIAcceleratorTable() );
-                int endbracket = line.pos( lString16(L"]") );
+                int endbracket = line.pos( lString16("]") );
                 if ( endbracket<=0 )
                     endbracket = line.length();
                 if ( endbracket >= 2 )
@@ -2151,12 +2151,12 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             // read definition
             lString16 name;
             lString16 value;
-            if ( splitLine( line, lString16(L"="), name, value ) ) {
+            if ( splitLine( line, lString16("="), name, value ) ) {
                 int flag = 0;
                 int key = 0;
                 lString16 keyName;
                 lString16 flagName;
-                splitLine( name, lString16(L","), keyName, flagName );
+                splitLine( name, lString16(","), keyName, flagName );
                 if ( !flagName.empty() ) {
                     flag = decodeKey( flagName );
                     if ( !flag )
@@ -2174,7 +2174,7 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
                 int cmdParam = 0;
                 lString16 cmdName;
                 lString16 paramName;
-                splitLine( value, lString16(L","), cmdName, paramName );
+                splitLine( value, lString16(","), cmdName, paramName );
                 if ( !paramName.empty() ) {
                     cmdParam = decodeKey( paramName );
                     if ( !cmdParam )
@@ -2202,7 +2202,7 @@ CRKeyboardLayoutRef CRKeyboardLayoutList::getCurrentLayout()
 {
 	if ( !_current.isNull() )
 		return _current;
-	_current = get( lString16( L"english" ) );
+    _current = get(lString16("english"));
 	if ( !_current )
 		nextLayout();
 	return _current;
@@ -2300,7 +2300,7 @@ bool CRKeyboardLayoutList::openFromFile( const char  * layoutFile )
             }
             // begin new section
             if ( !eof ) {
-                int endbracket = line.pos( lString16(L"]") );
+                int endbracket = line.pos( lString16("]") );
                 if ( endbracket<=0 )
                     endbracket = line.length();
                 if ( endbracket >= 2 )
@@ -2309,13 +2309,13 @@ bool CRKeyboardLayoutList::openFromFile( const char  * layoutFile )
                     section.clear(); // wrong sectino
 				lString16 langname;
 				lString16 layouttype;
-				if ( !section.empty() && splitLine( section, lString16(L"."), langname, layouttype ) ) {
+                if ( !section.empty() && splitLine( section, lString16("."), langname, layouttype ) ) {
 					table = _table.get( langname );
 					if ( table.isNull() ) {
 						table = CRKeyboardLayoutRef( new CRKeyboardLayoutSet() );
 						_table.set( langname, table );
 					}
-					if ( layouttype == L"tx" )
+                    if (layouttype == "tx")
 						layout = table->tXKeyboard;
 					else
 						layout = table->vKeyboard;
@@ -2326,8 +2326,8 @@ bool CRKeyboardLayoutList::openFromFile( const char  * layoutFile )
             // read definition
             lString16 name;
             lString16 value;
-            if ( splitLine( line, lString16(L"="), name, value ) ) {
-				if ( name == L"enabled" ) {
+            if ( splitLine( line, lString16("="), name, value ) ) {
+                if (name == "enabled") {
 					//if ( value == L"0" )
 					//	; //TODO:set disabled flag
 					continue;
@@ -2344,6 +2344,7 @@ bool CRKeyboardLayoutList::openFromFile( const char  * layoutFile )
 
 
 
+#if CR_INTERNAL_PAGE_ORIENTATION==1
 static int inv_control_table[] = {
     // old cmd, new cmd, param multiplier
     DCMD_LINEUP, DCMD_LINEDOWN, 1,
@@ -2353,6 +2354,7 @@ static int inv_control_table[] = {
     DCMD_MOVE_BY_CHAPTER, DCMD_MOVE_BY_CHAPTER, -1,
     0, 0, 0, 0,
 };
+#endif
 
 /// returns true if command is processed
 bool CRDocViewWindow::onCommand( int command, int params )

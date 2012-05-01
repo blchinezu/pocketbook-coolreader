@@ -32,7 +32,7 @@ enum cr_rotate_angle_t {
     CR_ROTATE_ANGLE_0 = 0,
     CR_ROTATE_ANGLE_90,
     CR_ROTATE_ANGLE_180,
-    CR_ROTATE_ANGLE_270,
+    CR_ROTATE_ANGLE_270
 };
 
 class LVFont;
@@ -75,6 +75,10 @@ public:
     virtual void Clear( lUInt32 color ) = 0;
     /// get pixel value
     virtual lUInt32 GetPixel( int x, int y ) = 0;
+    /// get average pixel value for area (coordinates are fixed floating points *16)
+    virtual lUInt32 GetAvgColor(lvRect & rc16) = 0;
+    /// get linearly interpolated pixel value (coordinates are fixed floating points *16)
+    virtual lUInt32 GetInterpolatedColor(int x16, int y16) = 0;
     /// fills rectangle with specified color
     virtual void FillRect( int x0, int y0, int x1, int y1, lUInt32 color ) = 0;
     /// fills rectangle with specified color
@@ -122,6 +126,8 @@ public:
     virtual void Draw( LVImageSourceRef img, int x, int y, int width, int height, bool dither=true ) = 0;
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( LVDrawBuf * buf, int x, int y, int options, lUInt32 * palette ) = 0;
+    /// draws rescaled buffer content to another buffer doing color conversion if necessary
+    virtual void DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, int options) = 0;
 #if !defined(__SYMBIAN32__) && defined(_WIN32)
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( HDC dc, int x, int y, int options, lUInt32 * palette ) = 0;
@@ -169,6 +175,10 @@ public:
     virtual void GetClipRect( lvRect * clipRect ) { *clipRect = _clip; }
     /// sets clip rect
     virtual void SetClipRect( const lvRect * clipRect );
+    /// get average pixel value for area (coordinates are fixed floating points *16)
+    virtual lUInt32 GetAvgColor(lvRect & rc16);
+    /// get linearly interpolated pixel value (coordinates are fixed floating points *16)
+    virtual lUInt32 GetInterpolatedColor(int x16, int y16);
     /// get buffer width, pixels
     virtual int  GetWidth();
     /// get buffer height, pixels
@@ -196,6 +206,10 @@ class LVDrawStateSaver
     lUInt32 _textColor;
     lUInt32 _backgroundColor;
     lvRect _clipRect;
+	LVDrawStateSaver & operator = (LVDrawStateSaver &) {
+		// no assignment
+        return *this;
+	}
 public:
     /// save settings
     LVDrawStateSaver( LVDrawBuf & buf )
@@ -228,7 +242,7 @@ enum DrawBufPixelFormat
     DRAW_BUF_4_BPP = 4, /// 4 bpp, 1 pixel per byte, higher 4 bits are significant
     DRAW_BUF_8_BPP = 8, /// 8 bpp, 1 pixel per byte, all 8 bits are significant
     DRAW_BUF_16_BPP = 16, /// color 16bit RGB 565
-    DRAW_BUF_32_BPP = 32, /// color 32bit RGB 888
+    DRAW_BUF_32_BPP = 32  /// color 32bit RGB 888
 };
 
 /**
@@ -255,6 +269,8 @@ public:
     virtual lUInt32 GetBlackColor();
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( LVDrawBuf * buf, int x, int y, int options, lUInt32 * palette );
+    /// draws rescaled buffer content to another buffer doing color conversion if necessary
+    virtual void DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, int options);
 #if !defined(__SYMBIAN32__) && defined(_WIN32)
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( HDC dc, int x, int y, int options, lUInt32 * palette );
@@ -321,6 +337,8 @@ public:
     virtual lUInt32 GetBlackColor();
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( LVDrawBuf * buf, int x, int y, int options, lUInt32 * palette );
+    /// draws rescaled buffer content to another buffer doing color conversion if necessary
+    virtual void DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, int options);
 #if !defined(__SYMBIAN32__) && defined(_WIN32)
     /// draws buffer content to another buffer doing color conversion if necessary
     virtual void DrawTo( HDC dc, int x, int y, int options, lUInt32 * palette );

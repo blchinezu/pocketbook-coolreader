@@ -25,7 +25,10 @@ public class DeviceInfo {
 	public final static boolean NOFLIBUSTA;
 	public final static boolean NAVIGATE_LEFTRIGHT; // map left/right keys to single page flip
 	public final static boolean REVERT_LANDSCAPE_VOLUME_KEYS; // revert volume keys in landscape mode
-
+	public final static android.graphics.Bitmap.Config BUFFER_COLOR_FORMAT;
+	public final static String  DEF_FONT_FACE;
+	public final static boolean USE_BITMAP_MEMORY_HACK; // revert volume keys in landscape mode
+	
 	// minimal screen backlight level percent for different devices
 	private static final String[] MIN_SCREEN_BRIGHTNESS_DB = {
 		"LGE;LG-P500",       "6", // LG Optimus One
@@ -41,10 +44,12 @@ public class DeviceInfo {
 		"Samsung;GT-S5830",  "6",
 		"HUAWEI;U8800",      "6",
 		"Motorola;Milestone XT720", "6",
+		"Foxconn;PocketBook A10", "3",
 		// TODO: more devices here
 	};
 
 	public final static int ICE_CREAM_SANDWICH = 14;
+	public final static int HONEYCOMB = 11;
 
 	private static int sdkInt = 0;
 	public static int getSDKLevel() {
@@ -94,6 +99,13 @@ public class DeviceInfo {
 		NAVIGATE_LEFTRIGHT = POCKETBOOK && DEVICE.startsWith("EP10");
 		REVERT_LANDSCAPE_VOLUME_KEYS = POCKETBOOK && DEVICE.startsWith("EP5A");
 		MIN_SCREEN_BRIGHTNESS_PERCENT = getMinBrightness(AMOLED_SCREEN ? 2 : 16);
+		//BUFFER_COLOR_FORMAT = getSDKLevel() >= HONEYCOMB ? android.graphics.Bitmap.Config.ARGB_8888 : android.graphics.Bitmap.Config.RGB_565;
+		//BUFFER_COLOR_FORMAT = android.graphics.Bitmap.Config.ARGB_8888;
+		BUFFER_COLOR_FORMAT = android.graphics.Bitmap.Config.RGB_565;
+		
+		DEF_FONT_FACE = getSDKLevel() >= ICE_CREAM_SANDWICH ? "Roboto" : "Droid Sans";
+		
+		USE_BITMAP_MEMORY_HACK = getSDKLevel() < ICE_CREAM_SANDWICH;
 	}
 	
 	private static String getBuildField(String fieldName) {
@@ -121,7 +133,7 @@ public class DeviceInfo {
 			return false;
 		value = value.toLowerCase();
 		pattern = pattern.toLowerCase();
-		String[] patterns = pattern.split("|");
+		String[] patterns = pattern.split("\\|");
 		for (String p : patterns) {
 			boolean startingWildcard = false;
 			boolean endingWildcard = false;
@@ -165,6 +177,28 @@ public class DeviceInfo {
 				return false;
 		return true;
 	}
+
+//	// TEST
+//	private static boolean testMatchDevice(String manufacturer, String model, String device, String pattern) {
+//		String[] patterns = pattern.split(";");
+//		if (patterns.length >= 1)
+//			if (!match(manufacturer, patterns[0]))
+//				return false;
+//		if (patterns.length >= 2)
+//			if (!match(model, patterns[1]))
+//				return false;
+//		if (patterns.length >= 3)
+//			if (!match(device, patterns[2]))
+//				return false;
+//		Log.v("cr3", "matched : " + pattern + " == " + manufacturer + "," + model + "," + device);
+//		return true;
+//	}
+//	
+//	static {
+//		testMatchDevice("Archos", "A70S", "A70S", "Archos;A70S");
+//		testMatchDevice("MegaMan", "A70S", "A70S", "mega*;A70*");
+//		testMatchDevice("MegaMan", "A70", "A70S", "*man;A70*");
+//	}
 
 	private static int getMinBrightness(int defValue) {
 		try {

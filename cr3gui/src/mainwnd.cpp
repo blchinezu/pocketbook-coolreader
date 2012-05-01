@@ -58,7 +58,7 @@ DECL_DEF_CR_FONT_SIZES;
 
 
 V3DocViewWin::V3DocViewWin( CRGUIWindowManager * wm, lString16 dataDir )
-: CRViewDialog ( wm, lString16(), lString8(), lvRect(), false, false ), _dataDir(dataDir), _loadFileStart(0)
+: CRViewDialog ( wm, lString16::empty_str, lString8::empty_str, lvRect(), false, false ), _dataDir(dataDir), _loadFileStart(0)
 {
     CRLog::trace("V3DocViewWin()");
     LVArray<int> sizes( cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int) );
@@ -371,22 +371,22 @@ void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
     if (!loadCSS(filename)) {
         switch ( fileFormat ) {
         case doc_format_txt:
-            filename = L"txt.css";
+            filename = "txt.css";
             break;
         case doc_format_rtf:
-            filename = L"rtf.css";
+            filename = "rtf.css";
             break;
         case doc_format_epub:
-            filename = L"epub.css";
+            filename = "epub.css";
             break;
         case doc_format_html:
-            filename = L"htm.css";
+            filename = "htm.css";
             break;
         case doc_format_chm:
-            filename = L"chm.css";
+            filename = "chm.css";
             break;
         case doc_format_doc:
-            filename = L"doc.css";
+            filename = "doc.css";
             break;
         default:
             filename = L"fb2.css"
@@ -400,8 +400,8 @@ void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
             CRLog::debug("_cssDir is empty");
         } else if ( LVFileExists( _cssDir + filename ) ) {
             loadCSS( _cssDir + filename );
-        } else if ( LVFileExists( _cssDir + L"fb2.css" ) ) {
-            loadCSS( _cssDir + L"fb2.css" );
+        } else if ( LVFileExists( _cssDir + "fb2.css" ) ) {
+            loadCSS( _cssDir + "fb2.css" );
         }
     }
 }
@@ -551,7 +551,7 @@ void V3DocViewWin::closing()
 	_dict = NULL;
     _docview->savePosition();
     CRLog::trace("after docview->savePosition()");
-    saveHistory( lString16(), _props->getBoolDef( PROP_AUTOSAVE_BOOKMARKS, true ) );
+    saveHistory( lString16::empty_str, _props->getBoolDef( PROP_AUTOSAVE_BOOKMARKS, true ) );
 }
 
 bool V3DocViewWin::loadDocument( lString16 filename )
@@ -847,11 +847,11 @@ VIEWER_MENU_GOTOINDEX=Go to index
 VIEWER_MENU_5ABOUT=About...
 VIEWER_MENU_4ABOUT=About...
 */
-    menu_win->setSkinName(lString16(L"#main"));
+    menu_win->setSkinName(lString16("#main"));
 	CRGUIAcceleratorTableRef menuItems = _wm->getAccTables().get(lString16("mainMenuItems"));
 	if ( !menuItems.isNull() && menuItems->length()>1 ) {
 		// get menu from file
-		for ( unsigned i=0; i<menuItems->length(); i++ ) {
+        for (int i=0; i < menuItems->length(); i++) {
 			const CRGUIAccelerator * acc = menuItems->get( i );
 			int cmd = acc->commandId;
 			int param = acc->commandParam;
@@ -988,25 +988,25 @@ lString16 getDocAuthors( ldomDocument * doc, const char * path, const char * del
         lString16 email = getDocText( doc, (p + "/email").c_str(), " " );
         lString16 s = firstName;
         if ( !middleName.empty() )
-            s << L" " << middleName;
+            s << " " << middleName;
         if ( !lastName.empty() ) {
             if ( !s.empty() )
-                s << L" ";
+                s << " ";
             s << lastName;
         }
         if ( !nickName.empty() ) {
             if ( !s.empty() )
-                s << L" ";
+                s << " ";
             s << nickName;
         }
         if ( !homePage.empty() ) {
             if ( !s.empty() )
-                s << L" ";
+                s << " ";
             s << homePage;
         }
         if ( !email.empty() ) {
             if ( !s.empty() )
-                s << L" ";
+                s << " ";
             s << email;
         }
         if ( s.empty() )
@@ -1028,7 +1028,7 @@ void V3DocViewWin::showAboutDialog()
 {
 	_docview->savePosition();
 	CRFileHistRecord * hist = _docview->getCurrentFileHistRecord();
-    lString16 title = L"Cool Reader ";
+    lString16 title("Cool Reader ");
 #ifndef PACKAGE_VERSION
 #define PACKAGE_VERSION CR_ENGINE_VERSION
 #endif
@@ -1042,7 +1042,7 @@ void V3DocViewWin::showAboutDialog()
     lString8 statusInfo;
 	addPropLine( statusInfo, _("Current page"), lString16::itoa(_docview->getCurPage()+1) );
 	addPropLine( statusInfo, _("Total pages"), lString16::itoa(_docview->getPageCount()) );
-    addPropLine( statusInfo, _("Battery state"), _docview->getBatteryState()==-1 ? lString16(_("charging...")) : lString16::itoa(_docview->getBatteryState()) + L"%" );
+    addPropLine( statusInfo, _("Battery state"), _docview->getBatteryState()==-1 ? lString16(_("charging...")) : lString16::itoa(_docview->getBatteryState()) + "%" );
 	addPropLine( statusInfo, _("Current Time"), _docview->getTimeString() );
 	// TODO:
 	if ( hist ) {
@@ -1070,7 +1070,9 @@ void V3DocViewWin::showAboutDialog()
     addPropLine( bookInfo, _("Series number"), props->getStringDef(DOC_PROP_SERIES_NUMBER) );
     addPropLine( bookInfo, _("Date"), getDocText( getDocView()->getDocument(), "/FictionBook/description/title-info/date", ", " ) );
     addPropLine( bookInfo, _("Genres"), getDocText( getDocView()->getDocument(), "/FictionBook/description/title-info/genre", ", " ) );
+    addPropLine( bookInfo, _("Language"), props->getStringDef(DOC_PROP_LANGUAGE) );
     addPropLine( bookInfo, _("Translator"), getDocText( getDocView()->getDocument(), "/FictionBook/description/title-info/translator", ", " ) );
+    addPropLine( bookInfo, _("Source language"), getDocText( getDocView()->getDocument(), "/FictionBook/description/title-info/src-lang", ", " ) );
     addInfoSection( txt, bookInfo, _("Book info") );
 
     lString8 docInfo;
@@ -1080,6 +1082,8 @@ void V3DocViewWin::showAboutDialog()
     addPropLine( docInfo, _("OCR by"), getDocText( getDocView()->getDocument(), "/FictionBook/description/document-info/src-ocr", " " ) );
     addPropLine( docInfo, _("Document version"), getDocText( getDocView()->getDocument(), "/FictionBook/description/document-info/version", " " ) );
     addPropLine( docInfo, _("Change history"), getDocText( getDocView()->getDocument(), "/FictionBook/description/document-info/history", " " ) );
+    addPropLine( docInfo, _("ID"), getDocText( getDocView()->getDocument(), "/FictionBook/description/document-info/id", " " ) );
+    addPropLine( docInfo, _("Program used"), getDocText( getDocView()->getDocument(), "/FictionBook/description/document-info/program-used", " " ) );
     addInfoSection( txt, docInfo, _("Document info") );
 
     lString8 pubInfo;
@@ -1165,12 +1169,12 @@ bool V3DocViewWin::onCommand( int command, int params )
 #endif
     case mm_FontSize:
         applySettings();
-        saveSettings( lString16() );
+        saveSettings(lString16::empty_str);
         _wm->getSkin()->gc();
         return true;
     case DCMD_SAVE_HISTORY:
-        saveHistory( lString16() );
-        saveSettings( lString16() );
+        saveHistory(lString16::empty_str);
+        saveSettings(lString16::empty_str);
         return true;
     case DCMD_SAVE_TO_CACHE:
         _docview->swapToCache();
@@ -1191,7 +1195,7 @@ bool V3DocViewWin::onCommand( int command, int params )
         showWaitIcon();
 		CRViewDialog::onCommand( command, params );
         _props->setInt( PROP_FONT_SIZE, _docview->getFontSize() );
-        saveSettings( lString16() );
+        saveSettings(lString16::empty_str);
         return true;
     case MCMD_HELP:
         showHelpDialog();
@@ -1199,7 +1203,7 @@ bool V3DocViewWin::onCommand( int command, int params )
     case DCMD_BOOKMARK_SAVE_N:
         _docview->doCommand( DCMD_BOOKMARK_SAVE_N, params );
         if ( _props->getBoolDef( PROP_AUTOSAVE_BOOKMARKS, true ) )
-            saveHistory( lString16() );
+            saveHistory(lString16::empty_str);
         return true;
     default:
         // do nothing
@@ -1221,7 +1225,7 @@ void V3DocViewWin::OnLoadFileFirstPagesReady()
     //update();
     _wm->update(true);
     CRLog::info( "OnLoadFileFirstPagesReady() - painting done" );
-    _docview->setPageHeaderOverride(lString16());
+    _docview->setPageHeaderOverride(lString16::empty_str);
     _docview->requestRender();
     // TODO: remove debug sleep
     //sleep(5);

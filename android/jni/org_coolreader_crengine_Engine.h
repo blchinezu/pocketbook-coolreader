@@ -82,10 +82,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_setHyphenationMet
 /*
  * Class:     org_coolreader_crengine_Engine
  * Method:    isLink
- * Signature: (Ljava/lang/String;)Z
+ * Signature: (Ljava/lang/String;)Ljava/lang/String;
  */
-JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_isLink
-  (JNIEnv *, jobject, jstring);
+JNIEXPORT jstring JNICALL Java_org_coolreader_crengine_Engine_isLink
+  (JNIEnv *, jclass, jstring);
 
 /*
  * Class:     org_coolreader_crengine_Engine
@@ -103,6 +103,13 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_Engine_suspendLongOperationI
 JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_Engine_setKeyBacklightInternal
   (JNIEnv *, jobject, jint);
 
+/*
+ * Class:     org_coolreader_crengine_Engine
+ * Method:    drawBookCoverInternal
+ * Signature: (Landroid/graphics/Bitmap;[BLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)V
+ */
+JNIEXPORT void JNICALL Java_org_coolreader_crengine_Engine_drawBookCoverInternal
+  (JNIEnv *, jobject, jobject bmp, jbyteArray data, jstring fontFace, jstring title, jstring authors, jstring seriesName, jint seriesNumber, jint bpp);
 
 
 #ifdef __cplusplus
