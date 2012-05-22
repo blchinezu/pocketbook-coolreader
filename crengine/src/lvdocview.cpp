@@ -4545,7 +4545,7 @@ void LVDocView::getCurrentPageLinks(ldomXRangeList & list) {
 			virtual bool onElement(ldomXPointerEx * ptr) {
 				//
 				ldomNode * elem = ptr->getNode();
-				if (elem->getNodeId() == el_a) {
+                                if (elem->getNodeId() == el_a && elem->hasChildren()) {
 					for (int i = 0; i < _list.length(); i++) {
 						if (_list[i]->getStart().getNode() == elem)
 							return true; // don't add, duplicate found!
