@@ -2974,6 +2974,12 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
     return CRTOUCH_MOVE;
 }
 
+#ifdef POCKETBOOK_PRO
+void SetSaveStateTimer(){
+	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
+}
+#endif 
+
 int main_handler(int type, int par1, int par2)
 {
     bool process_events = false;
@@ -2986,7 +2992,7 @@ int main_handler(int type, int par1, int par2)
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
-	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
+	SetWeakTimer("SaveStateTimer", SetSaveStateTimer, 500);
         break;
 #endif 
     case EVT_EXIT:
