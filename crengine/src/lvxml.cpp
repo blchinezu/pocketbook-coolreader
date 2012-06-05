@@ -44,6 +44,11 @@ typedef unsigned int ucs4_t;
 #define CP_AUTODETECT_BUF_SIZE 0x20000
 
 
+
+int CalcTabCount(const lChar16 * str, int nlen);
+void ExpandTabs(lString16 & s);
+void ExpandTabs(lString16 & buf, const lChar16 * str, int len);
+
 /// virtual destructor
 LVFileFormatParser::~LVFileFormatParser()
 {
@@ -379,7 +384,7 @@ static lChar16 cr3_ksc5601_mbtowc(lChar16 c1, lChar16 c2)
 /// reads several characters from buffer
 int LVTextFileBase::ReadChars( lChar16 * buf, int maxsize )
 {
-    if ( m_buf_pos>=m_buf_len )
+    if (m_buf_pos >= m_buf_len)
         return 0;
     int count = 0;
     switch ( m_enc_type ) {
@@ -392,67 +397,14 @@ int LVTextFileBase::ReadChars( lChar16 * buf, int maxsize )
             }
             return count;
         } else  {
-            for ( ; count<maxsize && m_buf_pos<m_buf_len; count++ ) {
-                lUInt16 ch = m_buf[m_buf_pos];
-                // support only 11 and 16 bit UTF8 chars
-                if ( (ch & 0x80) == 0 ) {
-                    buf[count] = ch;
-                    m_buf_pos++;
-                } else if ( (ch & 0xE0) == 0xC0 ) {
-                    // 11 bits
-                    if ( m_buf_pos+1>=m_buf_len ) {
-                        checkEof();
-                        return count;
-                    }
-                    ch = (ch&0x1F);
-#ifdef _DEBUG
-//#define CHECK_UTF8_CODE 1
-#endif
-#if CHECK_UTF8_CODE==1
-                    if ( (m_buf[m_buf_pos+1] & 0xC0) != 0x80 ) {
-                        CRLog::error("Wrong utf8 character at position %08x", (int)(m_buf_fpos+m_buf_pos));
-                    }
-#endif
-                    m_buf_pos++;
-                    lUInt16 ch2 = m_buf[m_buf_pos++]&0x3F;
-                    buf[count] = (ch<<6) | ch2;
-                    //buf[count] = ((lUInt16)(ch&0x1F)<<6) | ((lUInt16)m_buf[m_buf_pos++]&0x3F);
-                } else if ( (ch & 0xF0) == 0xE0 ) {
-                    // 16 bits
-                    if ( m_buf_pos+2>=m_buf_len ) {
-                        checkEof();
-                        return count;
-                    }
-                    ch = (ch&0x0F);
-#if CHECK_UTF8_CODE==1
-                    if ( (m_buf[m_buf_pos+1] & 0xC0) != 0x80 || (m_buf[m_buf_pos+2] & 0xC0) != 0x80 ) {
-                        CRLog::error("Wrong utf8 character at position %08x", (int)(m_buf_fpos+m_buf_pos));
-                    }
-#endif
-                    m_buf_pos++;
-                    lUInt16 ch2 = m_buf[m_buf_pos++]&0x3F;
-                    lUInt16 ch3 = m_buf[m_buf_pos++]&0x3F;
-                    buf[count] = (ch<<12) | (ch2<<6) | ch3;
-                } else {
-                    // 20 bits
-                    if ( m_buf_pos+3>=m_buf_len ) {
-                        checkEof();
-                        return count;
-                    }
-                    ch = (ch&0x07);
-#if CHECK_UTF8_CODE==1
-                    if ( (m_buf[m_buf_pos+1] & 0xC0) != 0x80 || (m_buf[m_buf_pos+2] & 0xC0) != 0x80  || (m_buf[m_buf_pos+3] & 0xC0) != 0x80 ) {
-                        CRLog::error("Wrong utf8 character at position %08x", (int)(m_buf_fpos+m_buf_pos));
-                    }
-#endif
-                    m_buf_pos++;
-                    lUInt16 ch2 = m_buf[m_buf_pos++]&0x3F;
-                    lUInt16 ch3 = m_buf[m_buf_pos++]&0x3F;
-                    lUInt16 ch4 = m_buf[m_buf_pos++]&0x3F;
-                    buf[count] = ((lChar16)ch<<18) | (ch2<12) | (ch3<<6) | ch4;
-                }
+            int srclen = m_buf_len - m_buf_pos;
+            int dstlen = maxsize;
+            Utf8ToUnicode(m_buf + m_buf_pos, srclen, buf, dstlen);
+            m_buf_pos += srclen;
+            if (dstlen == 0) {
+                checkEof();
             }
-            return count;
+            return dstlen;
         }
     case ce_utf16_be:
         {
@@ -1870,7 +1822,7 @@ public:
         }
 
         void onImage( lString16 url ) {
-            //url = lString16("book_img/") + url;
+            //url = cs16("book_img/") + url;
             callback->OnTagOpen(L"", L"img");
             callback->OnAttribute(L"", L"src", url.c_str());
             callback->OnTagBody();
@@ -1914,7 +1866,7 @@ public:
                 return;
             sectionId++;
             callback->OnTagOpen(NULL, L"section");
-            callback->OnAttribute(NULL, L"id", (lString16("_section") + fmt::decimal(sectionId)).c_str() );
+            callback->OnAttribute(NULL, L"id", (cs16("_section") + fmt::decimal(sectionId)).c_str() );
             callback->OnTagBody();
             inSection = true;
             endOfParagraph();
@@ -2498,7 +2450,7 @@ bool LVTextBookmarkParser::CheckFormat()
 {
     Reset();
     // encoding test
-    m_lang_name = lString16("en");
+    m_lang_name = cs16("en");
     SetCharset( L"utf8" );
 
     #define TEXT_PARSER_DETECT_SIZE 16384
@@ -2598,7 +2550,7 @@ bool LVTextBookmarkParser::Parse()
       // BODY
       m_callback->OnTagOpenNoAttr( NULL, L"body" );
           m_callback->OnTagOpenNoAttr( NULL, L"title" );
-              postParagraph( m_callback, "", lString16("CoolReader Bookmarks file"), false );
+              postParagraph( m_callback, "", cs16("CoolReader Bookmarks file"), false );
           m_callback->OnTagClose( NULL, L"title" );
           postParagraph( m_callback, "file: ", fname, false );
           postParagraph( m_callback, "path: ", path, false );
@@ -3427,11 +3379,9 @@ static const ent_def_t def_entity_table[] = {
 {NULL, 0},
 };
 
-// returns new length
-void PreProcessXmlString( lString16 & s, lUInt32 flags, const lChar16 * enc_table )
+/// in-place XML string decoding, don't expand tabs, returns new length (may be less than initial len)
+int PreProcessXmlString(lChar16 * str, int len, lUInt32 flags, const lChar16 * enc_table)
 {
-    lChar16 * str = s.modify();
-    int len = s.length();
     int state = 0;
     lChar16 nch = 0;
     lChar16 lch = 0;
@@ -3441,45 +3391,38 @@ void PreProcessXmlString( lString16 & s, lUInt32 flags, const lChar16 * enc_tabl
     if ( pre_para_splitting )
         pre = false;
     //CRLog::trace("before: '%s' %s", LCSTR(s), pre ? "pre ":" ");
-    int tabCount = 0;
     int j = 0;
-    for (int i=0; i<len; ++i )
-    {
+    for (int i=0; i<len; ++i ) {
         lChar16 ch = str[i];
-        if ( pre && ch=='\t' )
-            tabCount++;
-        if ( !pre && (ch=='\r' || ch=='\n' || ch=='\t') )
-            ch = ' ';
-        if (ch=='\r')
-        {
-            if ((i==0 || lch!='\n') && (i==len-1 || str[i+1]!='\n'))
+        if (pre) {
+            if (ch == '\r') {
+                if ((i==0 || lch!='\n') && (i==len-1 || str[i+1]!='\n')) {
+                    str[j++] = '\n';
+                    lch = '\n';
+                }
+                continue;
+            } else if (ch == '\n') {
                 str[j++] = '\n';
+                lch = ch;
+                continue;
+            }
+        } else {
+            if (ch=='\r' || ch=='\n' || ch=='\t')
+                ch = ' ';
         }
-        else if (ch=='\n')
-        {
-            str[j++] = '\n';
-        }
-        else if (ch=='&')
-        {
+        if (ch == '&') {
             state = 1;
             nch = 0;
-        }
-        else if (state==0)
-        {
-            if (ch==' ')
-            {
+        } else if (state == 0) {
+            if (ch == ' ') {
                 if ( pre || !nsp )
                     str[j++] = ch;
                 nsp++;
-            }
-            else
-            {
+            } else {
                 str[j++] = ch;
                 nsp = 0;
             }
-        }
-        else
-        {
+        } else {
             if (state == 2 && ch=='x')
                 state = 22;
             else if (state == 22 && hexDigit(ch)>=0)
@@ -3519,48 +3462,76 @@ void PreProcessXmlString( lString16 & s, lUInt32 flags, const lChar16 * enc_tabl
                     state = 0;
                 }
 
-            } else if (ch == ';')
-            {
+            } else if (ch == ';') {
                 if (nch)
                     str[j++] = nch;
                 state = 0;
                 nsp = 0;
-            }
-            else
-            {
+            } else {
                 // error: return to normal mode
                 state = 0;
             }
         }
         lch = ch;
     }
+    return j;
+}
 
+int CalcTabCount(const lChar16 * str, int nlen) {
+    int tabCount = 0;
+    for (int i=0; i<nlen; i++) {
+        if (str[i] == '\t')
+            tabCount++;
+    }
+    return tabCount;
+}
 
-    // remove extra characters from end of line
-    s.limit( j );
+void ExpandTabs(lString16 & buf, const lChar16 * str, int len)
+{
+    // check for tabs
+    int x = 0;
+    for (int i = 0; i < len; i++) {
+        lChar16 ch = str[i];
+        if ( ch=='\r' || ch=='\n' )
+            x = 0;
+        if ( ch=='\t' ) {
+            int delta = 8 - (x & 7);
+            x += delta;
+            while ( delta-- )
+                buf << L' ';
+        } else {
+            buf << ch;
+            x++;
+        }
+    }
+}
 
+void ExpandTabs(lString16 & s)
+{
+    // check for tabs
+    int nlen = s.length();
+    int tabCount = CalcTabCount(s.c_str(), nlen);
     if ( tabCount > 0 ) {
         // expand tabs
         lString16 buf;
-
-        buf.reserve( j + tabCount * 8 );
-        int x = 0;
-        for ( int i=0; i<j; i++ ) {
-            lChar16 ch = str[i];
-            if ( ch=='\r' || ch=='\n' )
-                x = 0;
-            if ( ch=='\t' ) {
-                int delta = 8 - (x & 7);
-                x += delta;
-                while ( delta-- )
-                    buf << L' ';
-            } else {
-                buf << ch;
-                x++;
-            }
-        }
+        buf.reserve(nlen + tabCount * 8);
+        ExpandTabs(buf, s.c_str(), s.length());
         s = buf;
     }
+}
+
+// returns new length
+void PreProcessXmlString( lString16 & s, lUInt32 flags, const lChar16 * enc_table )
+{
+    lChar16 * str = s.modify();
+    int len = s.length();
+    int nlen = PreProcessXmlString(str, len, flags, enc_table);
+    // remove extra characters from end of line
+    if (nlen < len)
+        s.limit(nlen);
+
+    if (flags & TXTFLG_PRE)
+        ExpandTabs(s);
     //CRLog::trace(" after: '%s'", LCSTR(s));
 }
 
@@ -3650,19 +3621,40 @@ bool LVXMLParser::ReadText()
         if ( tlen > TEXT_SPLIT_SIZE || flgBreak || splitParas)
         {
             //=====================================================
-            lString16 nextText = m_txt_buf.substr( last_split_txtlen );
-            m_txt_buf.limit( last_split_txtlen );
+            lChar16 * buf = m_txt_buf.modify();
+
             const lChar16 * enc_table = NULL;
             if ( flags & TXTFLG_CONVERT_8BIT_ENTITY_ENCODING )
                 enc_table = this->m_conv_table;
-            PreProcessXmlString( m_txt_buf, flags, enc_table );
+
+            int nlen = PreProcessXmlString(buf, last_split_txtlen, flags, enc_table);
             if ( (flags & TXTFLG_TRIM) && (!(flags & TXTFLG_PRE) || (flags & TXTFLG_PRE_PARA_SPLITTING)) ) {
-                m_txt_buf.trimDoubleSpaces(
+                nlen = TrimDoubleSpaces(buf, nlen,
                     ((flags & TXTFLG_TRIM_ALLOW_START_SPACE) || pre_para_splitting)?true:false,
                     (flags & TXTFLG_TRIM_ALLOW_END_SPACE)?true:false,
                     (flags & TXTFLG_TRIM_REMOVE_EOL_HYPHENS)?true:false );
             }
-            m_callback->OnText(m_txt_buf.c_str(), m_txt_buf.length(), flags );
+
+            if (flags & TXTFLG_PRE) {
+                // check for tabs
+                int tabCount = CalcTabCount(buf, nlen);
+                if ( tabCount > 0 ) {
+                    // expand tabs
+                    lString16 tmp;
+                    tmp.reserve(nlen + tabCount * 8);
+                    ExpandTabs(tmp, buf, nlen);
+                    m_callback->OnText(tmp.c_str(), tmp.length(), flags);
+                } else {
+                    m_callback->OnText(buf, nlen, flags);
+                }
+            } else {
+                m_callback->OnText(buf, nlen, flags);
+            }
+
+            m_txt_buf.erase(0, last_split_txtlen);
+            tlen = m_txt_buf.length();
+            last_split_txtlen = 0;
+
             //=====================================================
             if (flgBreak)
             {
@@ -3673,11 +3665,8 @@ bool LVXMLParser::ReadText()
                 //    m_read_buffer_pos++;
                 break;
             }
-            m_txt_buf = nextText;
-            tlen = m_txt_buf.length();
             //text_start_pos = last_split_fpos; //m_buf_fpos + m_buf_pos;
             //last_split_fpos = 0;
-            last_split_txtlen = 0;
         }
     }
 

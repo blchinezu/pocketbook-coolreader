@@ -802,11 +802,11 @@ public:
                                 if (stream->Read(buf2.get(), recLen - 8, NULL) != LVERR_OK)
                                     break;
                                 if (recType == 100) {
-                                    lString8 author((const char *)buf2.get());
+                                    lString8 author((const char *)buf2.get(), recLen - 8);
                                     CRLog::trace("MOBI author: %s", author.c_str());
                                     m_doc_props->setString(DOC_PROP_AUTHORS, Utf8ToUnicode(author));
                                 } else if (recType == 105) {
-                                    lString8 s((const char *)buf2.get());
+                                    lString8 s((const char *)buf2.get(), recLen - 8);
                                     CRLog::trace("MOBI subject: %s", s.c_str());
                                     m_doc_props->setString(DOC_PROP_TITLE, Utf8ToUnicode(s));
                                 }
@@ -1252,8 +1252,8 @@ bool ImportPDBDocument( LVStreamRef & stream, ldomDocument * doc, LVDocViewCallb
             continue;
         lString16 fn = item->GetName();
         if (fn.empty())
-            fn = lString16("pdb_item_") + lString16::itoa(i);
-        fn = lString16("/tmp/") + fn;
+            fn = cs16("pdb_item_") + lString16::itoa(i);
+        fn = cs16("/tmp/") + fn;
         LVStreamRef in = container->OpenStream(item->GetName(), LVOM_READ);
         if (in.isNull())
             continue;

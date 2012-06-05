@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.35"
+#define CACHE_FILE_FORMAT_VERSION "3.04.36"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -3043,7 +3043,7 @@ bool ldomDocument::saveToStream( LVStreamRef stream, const char *, bool treeLayo
     if (!stream || !getRootNode()->getChildCount())
         return false;
 
-    *stream.get() << UnicodeToLocal(lString16(L"\xFEFF"));
+    *stream.get() << UnicodeToLocal(cs16(L"\xFEFF"));
     writeNode( stream.get(), getRootNode(), treeLayout );
     return true;
 }
@@ -3201,7 +3201,7 @@ void ldomDocument::applyDocumentStyleSheet()
         }
         CRLog::error("applyDocumentStyleSheet() : cannot load link/stylesheet from %s", LCSTR(_docStylesheetFileName));
     } else {
-        ldomXPointer ss = createXPointer(lString16("/FictionBook/stylesheet"));
+        ldomXPointer ss = createXPointer(cs16("/FictionBook/stylesheet"));
         if ( !ss.isNull() ) {
             lString16 css = ss.getText('\n');
             if ( !css.empty() ) {
@@ -3270,7 +3270,7 @@ int ldomDocument::render( LVRendPageList * pages, LVDocViewCallback * callback, 
         updateRenderContext();
 
         // DEBUG dump of render methods
-        //dumpRendMethods( getRootNode(), lString16(" - ") );
+        //dumpRendMethods( getRootNode(), cs16(" - ") );
 //        lUInt32 styleHash = calcStyleHash();
 //        styleHash = styleHash * 31 + calcGlobalSettingsHash();
 //        CRLog::debug("Style hash: %x", styleHash);
@@ -3390,6 +3390,21 @@ static const char * attr_value_map_magic = "ATTV";
 static const char * ns_id_map_magic =   "NMSP";
 static const char * node_by_id_map_magic = "NIDM";
 
+typedef struct {
+    lUInt16 key;
+    lUInt32 value;
+} id_node_map_item;
+
+int compare_id_node_map_items(const void * item1, const void * item2) {
+    id_node_map_item * v1 = (id_node_map_item*)item1;
+    id_node_map_item * v2 = (id_node_map_item*)item2;
+    if (v1->key > v2->key)
+        return 1;
+    if (v1->key < v2->key)
+        return -1;
+    return 0;
+}
+
 /// serialize to byte array (pointer will be incremented by number of bytes written)
 void lxmlDocBase::serializeMaps( SerialBuf & buf )
 {
@@ -3422,11 +3437,21 @@ void lxmlDocBase::serializeMaps( SerialBuf & buf )
     if ( (int)cnt!=_idNodeMap.length() )
         CRLog::error("_idNodeMap.length=%d doesn't match real item count %d", _idNodeMap.length(), cnt);
     buf << cnt;
+    if (cnt > 0)
     {
+        // sort items before serializing!
+        id_node_map_item * array = new id_node_map_item[cnt];
+        int i = 0;
         LVHashTable<lUInt16,lInt32>::iterator ii = _idNodeMap.forwardIterator();
         for ( LVHashTable<lUInt16,lInt32>::pair * p = ii.next(); p!=NULL; p = ii.next() ) {
-            buf << (lUInt16)p->key << (lUInt32)p->value;
+            array[i].key = (lUInt16)p->key;
+            array[i].value = (lUInt32)p->value;
+            i++;
         }
+        qsort(array, cnt, sizeof(id_node_map_item), &compare_id_node_map_items);
+        for (i = 0; i < (int)cnt; i++)
+            buf << array[i].key << array[i].value;
+        delete[] array;
     }
     buf.putMagic( node_by_id_map_magic );
     buf.putCRC( buf.pos() - start );
@@ -3858,7 +3883,7 @@ int initTableRendMethods( ldomNode * enode, int state )
         }
     }
 //    if ( state==0 ) {
-//        dumpRendMethods( enode, lString16("   ") );
+//        dumpRendMethods( enode, cs16("   ") );
 //    }
     return cellCount;
 }
@@ -4025,9 +4050,10 @@ void ldomElementWriter::onText( const lChar16 * text, int len, lUInt32 )
     {
         // normal mode: store text copy
         // add text node, if not first empty space string of block node
-        if ( !_isBlock || _element->getChildCount()!=0 || !IsEmptySpace( text, len ) || (_flags&TXTFLG_PRE) )
-            _element->insertChildText(lString16(text, len));
-        else {
+        if ( !_isBlock || _element->getChildCount()!=0 || !IsEmptySpace( text, len ) || (_flags&TXTFLG_PRE) ) {
+            lString8 s8 = UnicodeToUtf8(text, len);
+            _element->insertChildText(s8);
+        } else {
             //CRLog::trace("ldomElementWriter::onText: Ignoring first empty space of block item");
         }
     }
@@ -5182,13 +5208,13 @@ lString16 ldomXPointer::toString()
                 }
             }
             if ( count>1 )
-                path = lString16("/") + name + "[" + fmt::decimal(index) + "]" + path;
+                path = cs16("/") + name + "[" + fmt::decimal(index) + "]" + path;
             else
-                path = lString16("/") + name + path;
+                path = cs16("/") + name + path;
         } else {
             // text
             if ( !parent )
-                return lString16("/text()") + path;
+                return cs16("/text()") + path;
             int index = -1;
             int count = 0;
             for ( int i=0; i<parent->getChildCount(); i++ ) {
@@ -5200,7 +5226,7 @@ lString16 ldomXPointer::toString()
                 }
             }
             if ( count>1 )
-                path = lString16("/text()") + "[" + fmt::decimal(index) + "]" + path;
+                path = cs16("/text()") + "[" + fmt::decimal(index) + "]" + path;
             else
                 path = "/text()" + path;
         }
@@ -5226,7 +5252,7 @@ lString16 extractDocAuthors( ldomDocument * doc, lString16 delimiter, bool short
         delimiter = ", ";
     lString16 authors;
     for ( int i=0; i<16; i++) {
-        lString16 path = lString16("/FictionBook/description/title-info/author[") + fmt::decimal(i+1) + "]";
+        lString16 path = cs16("/FictionBook/description/title-info/author[") + fmt::decimal(i+1) + "]";
         ldomXPointer pauthor = doc->createXPointer(path);
         if ( !pauthor ) {
             //CRLog::trace( "xpath not found: %s", UnicodeToUtf8(path).c_str() );
@@ -7232,7 +7258,7 @@ lString16 ldomDocumentFragmentWriter::convertHref( lString16 href )
         lString16 replacement = pathSubstitutions.get(filePathName);
         if (replacement.empty())
             return href;
-        lString16 p = lString16("#") + replacement + "_" + href.substr(1);
+        lString16 p = cs16("#") + replacement + "_" + href.substr(1);
         //CRLog::trace("href %s -> %s", LCSTR(href), LCSTR(p));
         return p;
     }
@@ -7241,7 +7267,7 @@ lString16 ldomDocumentFragmentWriter::convertHref( lString16 href )
 
     // resolve relative links
     lString16 p, id;
-    if ( !href.split2(lString16("#"), p, id) )
+    if ( !href.split2(cs16("#"), p, id) )
         p = href;
     if ( p.empty() ) {
         //CRLog::trace("codebase = %s -> href = %s", LCSTR(codeBase), LCSTR(href));
@@ -7262,7 +7288,7 @@ lString16 ldomDocumentFragmentWriter::convertHref( lString16 href )
     if ( !id.empty() )
         p = p + "_" + id;
 
-    p = lString16("#") + p;
+    p = cs16("#") + p;
 
     //CRLog::debug("converted href=%s to %s", LCSTR(href), LCSTR(p) );
 
@@ -7861,6 +7887,7 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
             formatCallback->OnCacheFileFormatDetected((doc_format_t)fmt);
         }
 
+        CRLog::trace("ldomDocument::loadCacheFileContent() - ID data");
         SerialBuf idbuf(0, true);
         if ( !_cacheFile->read( CBT_MAPS_DATA, idbuf ) ) {
             CRLog::error("Error while reading Id data");
@@ -7889,6 +7916,7 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
         CRLog::info("%d pages read from cache file", pages.length());
         //_pagesData.setPos( 0 );
 
+        CRLog::trace("ldomDocument::loadCacheFileContent() - embedded font data");
         {
             SerialBuf buf(0, true);
             if ( !_cacheFile->read(CBT_FONT_DATA, buf)) {
@@ -8158,14 +8186,6 @@ ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
             CRLog::error("Error while writing style data");
             return CR_ERROR;
         }
-        CRLog::trace("ldomDocument::saveChanges() - flush");
-        {
-            CRTimerUtil infinite;
-            if ( !_cacheFile->flush(true, infinite) ) {
-                CRLog::error("Error while updating index of cache file");
-                return CR_ERROR;
-            }
-        }
         // fall through
     case 11:
         _mapSavingStage = 11;
@@ -8177,10 +8197,23 @@ ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
                 CRLog::error("Error while saving embedded font data");
                 return CR_ERROR;
             }
+            CHECK_EXPIRATION("saving embedded fonts")
         }
         // fall through
     case 12:
         _mapSavingStage = 12;
+        CRLog::trace("ldomDocument::saveChanges() - flush");
+        {
+            CRTimerUtil infinite;
+            if ( !_cacheFile->flush(true, infinite) ) {
+                CRLog::error("Error while updating index of cache file");
+                return CR_ERROR;
+            }
+            CHECK_EXPIRATION("flushing")
+        }
+        // fall through
+    case 13:
+        _mapSavingStage = 13;
     }
     CRLog::trace("ldomDocument::saveChanges() - done");
     return CR_DONE;
@@ -8436,9 +8469,11 @@ bool tinyNodeCollection::updateLoadedStyles( bool enabled )
 /// swaps to cache file or saves changes, limited by time interval
 ContinuousOperationResult ldomDocument::swapToCache( CRTimerUtil & maxTime )
 {
+    CRLog::trace("ldomDocument::swapToCache entered");
     if ( _maperror )
         return CR_ERROR;
     if ( !_mapped ) {
+        CRLog::trace("ldomDocument::swapToCache creating cache file");
         if ( !createCacheFile() ) {
             CRLog::error("ldomDocument::swapToCache: failed: cannot create cache file");
             _maperror = true;
@@ -8490,6 +8525,8 @@ class ldomDocCacheImpl : public ldomDocCache
 {
     lString16 _cacheDir;
     lvsize_t _maxSize;
+    lUInt32 _oldStreamSize;
+    lUInt32 _oldStreamCRC;
 
     struct FileItem {
         lString16 filename;
@@ -8498,7 +8535,7 @@ class ldomDocCacheImpl : public ldomDocCache
     LVPtrVector<FileItem> _files;
 public:
     ldomDocCacheImpl( lString16 cacheDir, lvsize_t maxSize )
-        : _cacheDir( cacheDir ), _maxSize( maxSize )
+        : _cacheDir( cacheDir ), _maxSize( maxSize ), _oldStreamSize(0), _oldStreamCRC(0)
     {
         LVAppendPathDelimiter( _cacheDir );
     }
@@ -8506,12 +8543,18 @@ public:
     bool writeIndex()
     {
         lString16 filename = _cacheDir + "cr3cache.inx";
-        LVStreamRef stream = LVOpenFileStream( filename.c_str(), LVOM_WRITE );
-        if ( !stream )
-            return false;
+        if (_oldStreamSize == 0)
+        {
+            LVStreamRef oldStream = LVOpenFileStream(filename.c_str(), LVOM_READ);
+            if (!oldStream.isNull()) {
+                _oldStreamSize = (lUInt32)oldStream->GetSize();
+                _oldStreamCRC = (lUInt32)oldStream->crc32();
+            }
+        }
+
+        // fill buffer
         SerialBuf buf( 16384, true );
         buf.putMagic( doccache_magic );
-
         lUInt32 start = buf.pos();
         int count = _files.length();
         buf << (lUInt32)count;
@@ -8521,11 +8564,23 @@ public:
             buf << item->size;
         }
         buf.putCRC( buf.pos() - start );
-
         if ( buf.error() )
             return false;
-        if ( stream->Write( buf.buf(), buf.pos(), NULL )!=LVERR_OK )
-            return false;
+        lUInt32 newCRC = buf.getCRC();
+        lUInt32 newSize = buf.pos();
+
+        // check to avoid rewritting of identical file
+        if (newCRC != _oldStreamCRC || newSize != _oldStreamSize) {
+            // changed: need to write
+            CRLog::trace("Writing cache index");
+            LVStreamRef stream = LVOpenFileStream(filename.c_str(), LVOM_WRITE);
+            if ( !stream )
+                return false;
+            if ( stream->Write( buf.buf(), buf.pos(), NULL )!=LVERR_OK )
+                return false;
+            _oldStreamCRC = newCRC;
+            _oldStreamSize = newSize;
+        }
         return true;
     }
 
@@ -10391,7 +10446,7 @@ bool ldomNode::getNodeListMarker( int & counterValue, lString16 & marker, int & 
     }
     return res;
 #else
-    marker = lString16("*");
+    marker = cs16("*");
     return true;
 #endif
 }
@@ -10619,6 +10674,28 @@ ldomNode * ldomNode::insertChildText( const lString16 & value )
 #else
         ldomNode * node = getDocument()->allocTinyNode( NT_PTEXT );
         lString8 s8 = UnicodeToUtf8(value);
+        node->_data._ptext_addr = getDocument()->_textStorage.allocText( node->_handle._dataIndex, _handle._dataIndex, s8 );
+#endif
+        me->_children.insert( me->_children.length(), node->getDataIndex() );
+        return node;
+    }
+    readOnlyError();
+    return NULL;
+}
+
+/// inserts child text
+ldomNode * ldomNode::insertChildText(const lString8 & s8)
+{
+    ASSERT_NODE_NOT_NULL;
+    if  ( isElement() ) {
+        if ( isPersistent() )
+            modify();
+        tinyElement * me = NPELEM;
+#if !defined(USE_PERSISTENT_TEXT) || BUILD_LITE==1
+        ldomNode * node = getDocument()->allocTinyNode( NT_TEXT );
+        node->_data._text_ptr = new ldomTextNode(_handle._dataIndex, s8);
+#else
+        ldomNode * node = getDocument()->allocTinyNode( NT_PTEXT );
         node->_data._ptext_addr = getDocument()->_textStorage.allocText( node->_handle._dataIndex, _handle._dataIndex, s8 );
 #endif
         me->_children.insert( me->_children.length(), node->getDataIndex() );
@@ -11173,7 +11250,7 @@ void testCacheFile()
     // write
     {
         CacheFile f;
-        MYASSERT(f.open(lString16("/tmp/blabla-not-exits-file-name"))==false, "Wrong failed open result");
+        MYASSERT(f.open(cs16("/tmp/blabla-not-exits-file-name"))==false, "Wrong failed open result");
         MYASSERT(f.create( fn )==true, "new file created");
         MYASSERT(f.write(CBT_TEXT_DATA, 1, data1, sizeof(data1), true)==true, "write 1");
         MYASSERT(f.write(CBT_ELEM_DATA, 3, data2, sizeof(data2), false)==true, "write 2");
@@ -11213,7 +11290,7 @@ void runFileCacheTest()
     CRLog::info("====Cache test started =====");
 
     // init and clear cache
-    ldomDocCache::init(lString16("/tmp/cr3cache"), 100);
+    ldomDocCache::init(cs16("/tmp/cr3cache"), 100);
     MYASSERT(ldomDocCache::enabled(), "clear cache");
 
     {
@@ -11364,7 +11441,7 @@ void runBasicTinyDomUnitTests()
         style1->font_family = css_ff_sans_serif;
         style1->font_size.type = css_val_px;
         style1->font_size.value = 24;
-        style1->font_name = lString8("Arial");
+        style1->font_name = cs8("Arial");
         style1->font_weight = css_fw_400;
         style1->font_style = css_fs_normal;
         style1->text_indent.type = css_val_px;
@@ -11391,7 +11468,7 @@ void runBasicTinyDomUnitTests()
         style2->font_family = css_ff_sans_serif;
         style2->font_size.type = css_val_px;
         style2->font_size.value = 24;
-        style2->font_name = lString8("Arial");
+        style2->font_name = cs8("Arial");
         style2->font_weight = css_fw_400;
         style2->font_style = css_fs_normal;
         style2->text_indent.type = css_val_px;
@@ -11418,7 +11495,7 @@ void runBasicTinyDomUnitTests()
         style3->font_family = css_ff_sans_serif;
         style3->font_size.type = css_val_px;
         style3->font_size.value = 24;
-        style3->font_name = lString8("Arial");
+        style3->font_name = cs8("Arial");
         style3->font_weight = css_fw_400;
         style3->font_style = css_fs_normal;
         style3->text_indent.type = css_val_px;
@@ -11439,9 +11516,9 @@ void runBasicTinyDomUnitTests()
 
     CRLog::info("* font cache");
     {
-        font_ref_t font1 = fontMan->GetFont(24, 400, false, css_ff_sans_serif, lString8("DejaVu Sans"));
-        font_ref_t font2 = fontMan->GetFont(24, 400, false, css_ff_sans_serif, lString8("DejaVu Sans"));
-        font_ref_t font3 = fontMan->GetFont(28, 800, false, css_ff_serif, lString8("DejaVu Sans Condensed"));
+        font_ref_t font1 = fontMan->GetFont(24, 400, false, css_ff_sans_serif, cs8("DejaVu Sans"));
+        font_ref_t font2 = fontMan->GetFont(24, 400, false, css_ff_sans_serif, cs8("DejaVu Sans"));
+        font_ref_t font3 = fontMan->GetFont(28, 800, false, css_ff_serif, cs8("DejaVu Sans Condensed"));
         MYASSERT(el1->getFont().isNull(), "font is not set");
         el1->setFont(font1);
         MYASSERT(!el1->getFont().isNull(), "font is set");
@@ -11499,8 +11576,8 @@ void runBasicTinyDomUnitTests()
     MYASSERT(!el21->isPersistent(), "mutable after insertChildElement");
     el211->persist();
     MYASSERT(el211->isPersistent(), "persistent before insertChildText");
-    el211->insertChildText(lString16(L"bla bla bla"));
-    el211->insertChildText(lString16(L"bla bla blaw"));
+    el211->insertChildText(cs16(L"bla bla bla"));
+    el211->insertChildText(cs16(L"bla bla blaw"));
     MYASSERT(!el211->isPersistent(), "modifable after insertChildText");
     //el21->insertChildElement(el_strong);
     MYASSERT(el211->getChildCount()==2, "child count, in mutable");

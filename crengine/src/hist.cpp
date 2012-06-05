@@ -279,11 +279,10 @@ static void putBookmark( LVStream * stream, CRBookmark * bmk )
 {
     static const char * tnames[] = {"lastpos", "position", "comment", "correction"};
     const char * tname = bmk->getType()>=bmkt_lastpos && bmk->getType()<=bmkt_correction ? tnames[bmk->getType()] : "unknown";
-    char percent[32];
-    sprintf( percent, "%d.%02d%%", bmk->getPercent()/100, bmk->getPercent()%100 );
-    char bmktag[255];
-    sprintf(bmktag, "bookmark type=\"%s\" percent=\"%s\" timestamp=\"%d\" shortcut=\"%d\" page=\"%d\"", tname, percent,
-            (int)bmk->getTimestamp(), (int)bmk->getShortcut(), (int)bmk->getBookmarkPage() );
+    char bmktag[256];
+    sprintf(bmktag, "bookmark type=\"%s\" percent=\"%d.%02d%%\" timestamp=\"%d\" shortcut=\"%d\" page=\"%d\"", tname,
+            bmk->getPercent()/100, bmk->getPercent()%100,
+            (int)bmk->getTimestamp(), (int)bmk->getShortcut(), (int)bmk->getBookmarkPage());
     putTag(stream, 3, bmktag);
     putTagValue( stream, 4, "start-point", bmk->getStartPos() );
     putTagValue( stream, 4, "end-point", bmk->getEndPos() );
@@ -516,7 +515,16 @@ ldomXPointer CRFileHist::restorePosition( ldomDocument * doc, lString16 fpathnam
 }
 
 CRBookmark::CRBookmark (ldomXPointer ptr )
-: _percent(0), _type(0), _shortcut(0), _timestamp(0)
+: _startpos(lString16::empty_str)
+, _endpos(lString16::empty_str)
+, _percent(0)
+, _type(0)
+, _shortcut(0)
+, _postext(lString16::empty_str)
+, _titletext(lString16::empty_str)
+, _commenttext(lString16::empty_str)
+, _timestamp(time_t(0))
+, _page(0)
 {
     //
     if ( ptr.isNull() )
@@ -682,7 +690,7 @@ lString8 ChangeInfo::toString() {
 }
 
 ChangeInfo * ChangeInfo::fromString(lString8 s) {
-    lString8Collection rows(s, lString8("\n"));
+    lString8Collection rows(s, cs8("\n"));
     if (rows.length() < 3 || rows[0] != START_TAG || rows[rows.length() - 1] != END_TAG)
         return NULL;
     ChangeInfo * ci = new ChangeInfo();

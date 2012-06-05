@@ -100,35 +100,53 @@ lUInt16 lGetCharProps( lChar16 ch );
 void lStr_findWordBounds( const lChar16 * str, int sz, int pos, int & start, int & end );
 
 
+// must be power of 2
+#define CONST_STRING_BUFFER_SIZE 4096
+#define CONST_STRING_BUFFER_MASK (CONST_STRING_BUFFER_SIZE - 1)
+#define CONST_STRING_BUFFER_HASH_MULT 31
 
 
-
-struct lstring_chunk_t {
+struct lstring8_chunk_t {
     friend class lString8;
     friend class lString16;
     friend struct lstring_chunk_slice_t;
 public:
-    lstring_chunk_t(lChar16 * _buf16) : size(1), len(0), nref(1), buf16(_buf16) {}
-    lstring_chunk_t(lChar8 * _buf8) : size(1), len(0), nref(1), buf8(_buf8) {}
-    const lChar16 * data16() const { return buf16; }
+    lstring8_chunk_t(lChar8 * _buf8) : buf8(_buf8), size(1), len(0), nref(1) {}
     const lChar8 * data8() const { return buf8; }
 private:
+    lChar8  * buf8; // z-string
     lInt32 size;   // 0 for free chunk
     lInt32 len;    // count of chars in string
     int nref;      // reference counter
-    union {
-        lstring_chunk_t * nextfree;
-        lChar16 * buf16;
-        lChar8  * buf8;
-    };
 
-    lstring_chunk_t() {}
+    lstring8_chunk_t() {}
 
     // chunk allocation functions
-    static lstring_chunk_t * alloc();
-    static void free( lstring_chunk_t * pChunk );
+    static lstring8_chunk_t * alloc();
+    static void free( lstring8_chunk_t * pChunk );
 
 };
+
+struct lstring16_chunk_t {
+    friend class lString8;
+    friend class lString16;
+    friend struct lstring_chunk_slice_t;
+public:
+    lstring16_chunk_t(lChar16 * _buf16) : buf16(_buf16), size(1), len(0), nref(1) {}
+    const lChar16 * data16() const { return buf16; }
+private:
+    lChar16 * buf16; // z-string
+    lInt32 size;   // 0 for free chunk
+    lInt32 len;    // count of chars in string
+    int nref;      // reference counter
+
+    lstring16_chunk_t() {}
+
+    // chunk allocation functions
+    static lstring16_chunk_t * alloc();
+    static void free( lstring16_chunk_t * pChunk );
+};
+
 
 namespace fmt {
     class decimal {
@@ -156,6 +174,7 @@ namespace fmt {
 class lString8
 {
     friend class lString8Collection;
+    friend const lString8 & cs8(const char * str);
 public:
     // typedefs for STL compatibility
     typedef lChar8              value_type;      ///< character type
@@ -165,6 +184,8 @@ public:
     typedef value_type &        reference;       ///< reference to char type
     typedef const value_type *  const_pointer;   ///< pointer to const char type
     typedef const value_type &  const_reference; ///< reference to const char type
+
+    typedef lstring8_chunk_t    lstring_chunk_t; ///< data container
 
     class decimal {
         lInt64 value;
@@ -389,6 +410,8 @@ public:
 */
 class lString16
 {
+    friend const lString16 & cs16(const char * str);
+    friend const lString16 & cs16(const lChar16 * str);
 public:
     // typedefs for STL compatibility
     typedef lChar16             value_type;
@@ -398,6 +421,8 @@ public:
     typedef value_type &        reference;
     typedef const value_type *  const_pointer;
     typedef const value_type &  const_reference;
+
+    typedef lstring16_chunk_t    lstring_chunk_t; ///< data container
 
 private:
     lstring_chunk_t * pchunk;
@@ -648,11 +673,19 @@ inline lUInt32 getHash( const lString8 & s )
     return s.getHash();
 }
 
+
+/// get reference to atomic constant string for string literal e.g. cs8("abc") -- fast and memory effective replacement of lString8("abc")
+const lString8 & cs8(const char * str);
+/// get reference to atomic constant wide string for string literal e.g. cs16("abc") -- fast and memory effective replacement of lString16("abc")
+const lString16 & cs16(const char * str);
+/// get reference to atomic constant wide string for string literal e.g. cs16(L"abc") -- fast and memory effective replacement of lString16(L"abc")
+const lString16 & cs16(const lChar16 * str);
+
 /// collection of wide strings
 class lString16Collection
 {
 private:
-    lstring_chunk_t * * chunks;
+    lstring16_chunk_t * * chunks;
     int count;
     int size;
 public:
@@ -708,7 +741,7 @@ public:
 class lString8Collection
 {
 private:
-    lstring_chunk_t * * chunks;
+    lstring8_chunk_t * * chunks;
     int count;
     int size;
 public:
@@ -907,6 +940,8 @@ lString8  UnicodeToTranslit( const lString16 & str );
 lString8  UnicodeToLocal( const lString16 & str );
 /// converts wide unicode string to utf-8 string
 lString8  UnicodeToUtf8( const lString16 & str );
+/// converts wide unicode string to utf-8 string
+lString8 UnicodeToUtf8(const lChar16 * s, int count);
 /// converts unicode string to 8-bit string using specified conversion table
 lString8  UnicodeTo8Bit( const lString16 & str, const lChar8 * * table );
 /// converts 8-bit string to unicode string using specified conversion table for upper 128 characters
@@ -919,10 +954,15 @@ lString16 Utf8ToUnicode( const lString8 & str );
 lString16 Utf8ToUnicode( const char * s );
 /// converts utf-8 string fragment to wide unicode string
 lString16 Utf8ToUnicode( const char * s, int sz );
+/// converts utf-8 string fragment to wide unicode string
+void Utf8ToUnicode(const lUInt8 * src,  int &srclen, lChar16 * dst, int &dstlen);
 /// decodes path like "file%20name" to "file name"
 lString16 DecodeHTMLUrlString( lString16 s );
 /// truncates string by specified size, appends ... if truncated, prefers to wrap whole words
 void limitStringSize(lString16 & str, int maxSize);
+
+int TrimDoubleSpaces(lChar16 * buf, int len,  bool allowStartSpace, bool allowEndSpace, bool removeEolHyphens);
+
 
 #define LCSTR(x) (UnicodeToUtf8(x).c_str())
 bool splitIntegerList( lString16 s, lString16 delim, int & value1, int & value2 );
@@ -977,6 +1017,9 @@ public:
 
     /// add CRC32 for last N bytes
     void putCRC( int N );
+
+    /// returns CRC32 for the whole buffer
+    lUInt32 getCRC();
 
     /// add contents of another buffer
     SerialBuf & operator << ( const SerialBuf & v );
