@@ -204,6 +204,8 @@ bool getDirectoryFonts( lString16Collection & pathList, lString16Collection & ex
 bool InitCREngine( const char * exename, lString16Collection & fontDirs )
 {
     CRLog::trace("InitCREngine(%s)", exename);
+
+    crSetSignalHandler();
     for ( int k=0; k<fontDirs.length(); k++ )
         CRLog::trace(" fontDir: %s", LCSTR(fontDirs[k]));
     lString16 appname( exename );
