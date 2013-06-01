@@ -75,6 +75,7 @@
 #define PROP_FILE_PROPS_FONT_SIZE    "cr3.file.props.font.size"
 
 
+#define PROP_CACHE_VALIDATION_ENABLED  "crengine.cache.validation.enabled"
 #define PROP_MIN_FILE_SIZE_TO_CACHE  "crengine.cache.filesize.min"
 #define PROP_FORCED_MIN_FILE_SIZE_TO_CACHE  "crengine.cache.forced.filesize.min"
 #define PROP_PROGRESS_SHOW_FIRST_PAGE  "crengine.progress.show.first.page"
@@ -527,8 +528,6 @@ protected:
     int getNextPageOffset();
     /// returns document offset for previous page
     int getPrevPageOffset();
-    /// ensure current position is set to current bookmark value
-    void checkPos();
     /// selects link on page, if any (delta==0 - current, 1-next, -1-previous). returns selected link range, null if no links.
     virtual ldomXRange * selectPageLink( int delta, bool wrapAround);
     /// set status bar and clock mode
@@ -540,6 +539,8 @@ protected:
     /// get screen rectangle for specified cursor position, returns false if not visible
     bool getCursorRect( ldomXPointer ptr, lvRect & rc, bool scrollToCursor = false );
 public:
+    /// ensure current position is set to current bookmark value
+    void checkPos();
     LVFontRef getBatteryFont() { return m_batteryFont; }
     void setBatteryFont( LVFontRef font ) { m_batteryFont=font; }
 

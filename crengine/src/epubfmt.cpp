@@ -116,6 +116,7 @@ void ReadEpubToc( ldomDocument * doc, ldomNode * mapRoot, LVTocItem * baseToc, l
         if ( href.empty() || title.empty() )
             continue;
         //CRLog::trace("TOC href before convert: %s", LCSTR(href));
+	href = DecodeHTMLUrlString(href);
         href = appender.convertHref(href);
         //CRLog::trace("TOC href after convert: %s", LCSTR(href));
         if ( href.empty() || href[0]!='#' )
@@ -731,6 +732,7 @@ bool ImportEpubDocument( LVStreamRef stream, ldomDocument * m_doc, LVDocViewCall
             lString16 mediaType = item->getAttributeValue("media-type");
             lString16 id = item->getAttributeValue("id");
             if ( !href.empty() && !id.empty() ) {
+                href = DecodeHTMLUrlString(href);
                 if ( id==coverId ) {
                     // coverpage file
                     lString16 coverFileName = codeBase + href;

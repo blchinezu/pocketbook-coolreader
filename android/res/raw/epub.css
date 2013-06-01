@@ -99,10 +99,15 @@ del, s, strike, strikethrough { text-decoration: line-through; }
 small { font-size: 80%; } 
 big { font-size: 130%; } 
 
-.code, pre { 
+pre { 
    display: block; 
    white-space: pre; 
-   $code.all
+   $pre.all
+} 
+
+.code, code { 
+   display: inline; 
+   $pre.all
 } 
 
 nobr { display: inline; hyphenate: none; white-space: nowrap; } 
