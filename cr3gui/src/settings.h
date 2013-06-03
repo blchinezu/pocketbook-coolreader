@@ -45,8 +45,8 @@ enum MainMenuItems_t {
     mm_ShowTime,
     mm_ShowTitle,
     mm_ShowBattery,
-    mm_ShowBatteryPersent,
-    mm_ShowPosPersent,
+    mm_ShowBatteryPercent,
+    mm_ShowPosPercent,
     mm_ShowPageCount,
     mm_ShowPageNumber,
     mm_BookmarkIcons,
@@ -78,7 +78,8 @@ enum MainMenuItems_t {
     mm_inlineImagesZoominMode,
     mm_inlineImagesZoominScale,
     mm_fontGamma,
-    mm_touchScreenZones
+    mm_touchScreenZones,
+    mm_Last
 };
 
 
@@ -95,6 +96,7 @@ class CRSettingsMenu : public CRFullScreenMenu
         CRPropRef props;
         CRGUIAcceleratorTableRef _menuAccelerators;
         void addMenuItems( CRMenu * menu, item_def_t values[] );
+
         lString16 getStatusText();
     public:
         CRMenu * createFontSizeMenu( CRGUIWindowManager * wm, CRMenu * mainMenu, CRPropRef props );
@@ -109,6 +111,12 @@ class CRSettingsMenu : public CRFullScreenMenu
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Settings menu destroy");
         }
+    private:
+        CRMenu * createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label, lString8 property, item_def_t values[]);
+        CRMenu * createSettingsMenuItem(CRMenu * menu, int id, const char * label, LVFontRef valueFont, const char * propName, item_def_t values[]);
+        CRMenu * createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label, const char * propName);
+        void createStyleMenuItems( CRMenu * menu, LVFontRef valueFont, const char * prefix );
+        int _menuItemId;
 };
 
 

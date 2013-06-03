@@ -681,8 +681,8 @@ class CRGUIWindowBase : public CRGUIWindow
         lString16 _inputText;
         LVImageSourceRef _icon; // window title icon
         LVPtrVector<CRGUIControl> _controls;
-        CRGUIControl *_selectedControl;
         bool _controlsCreated;
+        CRGUIControl *_selectedControl;
         // draws frame, title, status and client
         virtual void draw();
 
@@ -778,8 +778,8 @@ class CRGUIWindowBase : public CRGUIWindow
 class CRGUIControl
 {
 protected:
-    lvRect _rect;
     CRGUIWindowBase *_parent;
+    lvRect _rect;
 public:
     CRGUIControl(CRGUIWindowBase *parent, lvRect rc) : _parent(parent), _rect(rc) {}
     virtual bool hitTest(lvPoint &pt) { return _rect.isPointInside(pt); }

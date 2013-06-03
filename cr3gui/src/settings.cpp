@@ -21,7 +21,6 @@
 
 #include <cri18n.h>
 
-
 class CRControlsMenu;
 class CRControlsMenuItem : public CRMenuItem
 {
@@ -378,146 +377,373 @@ void CRSettingsMenu::addMenuItems( CRMenu * menu, item_def_t values[] )
     menu->reconfigure( 0 );
 }
 
+//This is to avoid toggleSubmenuValue() when number of items <= 3 in CRMenu,
+//because it doesn't work well when style value is empty (inherited)
+class CRStyleMenu : public CRMenu
+{
+public:
+    CRStyleMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, const char * label, LVFontRef valueFont, CRPropRef props, const char * propName=NULL)
+        : CRMenu(wm, parentMenu, id, label, LVImageSourceRef(), LVFontRef(), valueFont, props, propName)
+    {
+    }
+
+    int onSelect()
+    {
+        if (isSubmenu()) {
+            // show menu
+            _wm->activateWindow( (CRMenu *)this );
+            return 1;
+        }
+        return 0;
+    }
+
+#if 0
+    void toggleSubmenuValue()
+    {
+        if ( !isSubmenu() || _propName.empty() || _props.isNull() )
+            return;
+        lString16 value = getProps()->getStringDef(
+                                   UnicodeToUtf8(getPropName()).c_str(), "");
+        for ( int i=0; i<_items.length(); i++ ) {
+            if ( value==(_items[i]->getPropValue()) ) {
+                int n = (i + 1) % _items.length();
+                getProps()->setString(UnicodeToUtf8(getPropName()).c_str(), _items[n]->getPropValue() );
+                return;
+            }
+        }
+    }
+#endif
+
+    bool onItemSelect(int itemId, int param = 0 )
+    {
+        if (itemId < 0 || itemId >= _items.length()) {
+                CRLog::error( "CRMenu::onItemSelect() - invalid selection: %d", itemId);
+                return true;
+        }
+
+        CRMenuItem * item = _items[itemId];
+
+        if (item->onSelect() > 0)
+            return true;
+
+        if (item->isSubmenu()) {
+            // show menu
+            _wm->activateWindow( (CRMenu *)item );
+        } else {
+            if ( !getPropName().empty() ) {
+                // set property
+                _props->setString( UnicodeToUtf8(getPropName()).c_str(), item->getPropValue() );
+                doCloseMenu(getId());
+            } else
+                // command menu item
+                doCloseMenu(item->getId(), true, param);
+        }
+        return true;
+    }
+};
+
+CRMenu * CRSettingsMenu::createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label, const char * propName)
+{
+    CRMenu * fontFaceMenu = new CRMenu(_wm, mainMenu, id,
+                                       label,
+                                       LVImageSourceRef(), LVFontRef(), valueFont, props, propName );
+    fontFaceMenu->setSkinName(lString16("#settings"));
+    CRLog::trace("getting font face list");
+    lString16Collection list;
+    fontMan->getFaceList( list );
+    CRLog::trace("faces found: %d", list.length());
+    int i;
+    lString8 defFont = UnicodeToUtf8(getSkin()->getItemSkin()->getFontFace());
+    for ( i=0; i<(int)list.length(); i++ ) {
+        fontFaceMenu->addItem( new OnDemandFontMenuItem( fontFaceMenu, i,
+                                                        list[i], LVImageSourceRef(), list[i].c_str(),
+                                                        MENU_FONT_FACE_SIZE, 400,
+                                                        false, css_ff_sans_serif, UnicodeToUtf8(list[i]), defFont) );
+    }
+    fontFaceMenu->setFullscreen( true );
+    fontFaceMenu->setAccelerators( _menuAccelerators );
+    fontFaceMenu->reconfigure( 0 );
+    mainMenu->addItem(fontFaceMenu);
+}
+
+CRMenu * CRSettingsMenu::createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label, lString8 property, item_def_t values[])
+{
+    CRMenu * menuItem;
+    menuItem = new CRStyleMenu(_wm, menu, _menuItemId++,
+                               label, valueFont, props,  property.c_str());
+    addMenuItems(menuItem, values);
+    menu->addItem( menuItem );
+    return menuItem;
+}
+
+void CRSettingsMenu::createStyleMenuItems(CRMenu * menu, LVFontRef valueFont, const char *prefix )
+{
+    item_def_t css_align_options[] = {
+        {"-", ""}, // inherited
+        {_("Justify"), "text-align: justify"},
+        {_("Left"), "text-align: left"},
+        {_("Center"), "text-align: center"},
+        {_("Right"), "text-align: right"},
+        {NULL, NULL}
+    };
+
+    item_def_t ident_options[] = {
+        {"-", ""}, // inherited
+        {_("No indent"), "text-indent: 0em"},
+        {_("Small indent"), "text-indent: 1.2em"},
+        {_("Big indent"), "text-indent: 2em"},
+        {_("Small outdent"), "text-indent: -1.2em"},
+        {_("Big outdent"), "text-indent: -2em"},
+        {NULL, NULL}
+    };
+
+    item_def_t font_face_options[] = {
+        {"-", ""}, // inherited
+        {_("[Default sans-serif font]"), "font-family: sans-serif"},
+        {_("[Default serif font]"), "font-family: serif"},
+        {_("[Default monospace font]"), "font-family: \"Courier New\", \"Courier\", monospace"},
+        {NULL, NULL}
+    };
+
+    item_def_t font_size_options[] = {
+        {"-", ""}, // inherited
+        {_("Bigger (110%)"), "font-size: 110%"},
+        {_("Bigger (120%)"), "font-size: 120%"},
+        {_("Bigger (150%)"), "font-size: 150%"},
+        {_("Smaller (90%)"), "font-size: 90%"},
+        {_("Smaller (80%)"), "font-size: 80%"},
+        {_("Smaller (70%)"), "font-size: 70%"},
+        {_("Smaller (60%)"), "font-size: 60%"},
+        {NULL, NULL}
+    };
+
+    item_def_t font_weight_options[] = {
+        {"-", ""}, // inherited
+        {_("Normal"), "font-weight: normal"},
+        {_("Bold"), "font-weight: bold"},
+        {_("Bolder"), "font-weight: bolder"},
+        {_("Lighter"), "font-weight: lighter"},
+        {NULL, NULL}
+    };
+
+    item_def_t font_style_options[] = {
+        {"-", ""}, // inherited
+        {_("Normal"), "font-style: normal"},
+        {_("Italic"), "font-style: italic"},
+        {NULL, NULL}
+    };
+
+    item_def_t line_height_options[] = {
+        {"-", ""}, // inherited
+        {"75%", "line-height: 75%"},
+        {"80%", "line-height: 80%"},
+        {"85%", "line-height: 85%"},
+        {"90%", "line-height: 90%"},
+        {"95%", "line-height: 95%"},
+        {"100%", "line-height: 100%"},
+        {"110%", "line-height: 110%"},
+        {"120%", "line-height: 120%"},
+        {"130%", "line-height: 130%"},
+        {"140%", "line-height: 140%"},
+        {"150%", "line-height: 150%"},
+        {NULL, NULL}
+    };
+
+    item_def_t text_decoration_options[] = {
+        {"-", ""}, // inherited
+        {_("None"), "text-decoration: none"},
+        {_("Underline"), "text-decoration: underline"},
+        {_("Line through"), "text-decoration: line-through"},
+        {_("Overline"), "text-decoration: overline"},
+        {NULL, NULL}
+    };
+
+    item_def_t vertical_align_options[] = {
+        {"-", ""}, // inherited
+        {_("Baseline"), "vertical-align: baseline"},
+        {_("Subscript"), "vertical-align: sub"},
+        {_("Superscript"), "vertical-align: super"},
+        {NULL, NULL}
+    };
+
+    item_def_t font_color_options[] = {
+        {"-", ""}, // inherited
+        {_("Black"), "color: black"},
+        {_("Gray"), "color: gray"},
+        {_("White"), "color: white"},
+        {NULL, NULL}
+    };
+
+    item_def_t background_color_options[] = {
+        {"-", ""}, // inherited
+        {_("Black"), "background-color: black"},
+        {_("Gray"), "background-color: gray"},
+        {_("White"), "background-color: white"},
+        {NULL, NULL}
+    };
+
+    item_def_t margin_top_options[] = {
+        {"-", ""}, // inherited
+        {"0", "margin-top: 0em"},
+        {_("0.2 of line height"), "margin-top: 0.2em"},
+        {_("0.3 of line height"), "margin-top: 0.3em"},
+        {_("0.5 of line height"), "margin-top: 0.5em"},
+        {_("1 line height"), "margin-top: 1em"},
+        {_("2 of line height"), "margin-top: 2em"},
+        {NULL, NULL}
+    };
+
+    item_def_t margin_bottom_options[] = {
+        {"-", ""}, // inherited
+        {"0", "margin-bottom: 0em"},
+        {_("0.2 of line height"), "margin-bottom: 0.2em"},
+        {_("0.3 of line height"), "margin-bottom: 0.3em"},
+        {_("0.5 of line height"), "margin-bottom: 0.5em"},
+        {_("1 line height"), "margin-bottom: 1em"},
+        {_("2 of line height"), "margin-bottom: 2em"},
+        {NULL, NULL}
+    };
+
+    item_def_t margin_left_options[] = {
+        {"-", ""}, // inherited
+        {"0", "margin-left: 0em"},
+        {_("0.5 of line height"), "margin-left: 0.5em"},
+        {_("1 line height"), "margin-left: 1em"},
+        {_("1.5 of line height"), "margin-left: 1.5em"},
+        {_("2 of line height"), "margin-left: 2em"},
+        {_("4 of line height"), "margin-left: 4em"},
+        {_("5% of line width"), "margin-left: 5%"},
+        {_("10% of line width"), "margin-left: 10%"},
+        {_("15% of line width"), "margin-left: 15%"},
+        {_("20% of line width"), "margin-left: 20%"},
+        {_("30% of line width"), "margin-left: 30%"},
+        {NULL, NULL}
+    };
+
+    item_def_t margin_right_options[] = {
+        {"-", ""}, // inherited
+        {"0", "margin-right: 0em"},
+        {_("0.5 of line height"), "margin-right: 0.5em"},
+        {_("1 line height"), "margin-right: 1em"},
+        {_("1.5 of line height"), "margin-right: 1.5em"},
+        {_("2 of line height"), "margin-right: 2em"},
+        {_("4 of line height"), "margin-right: 4em"},
+        {_("5% of line width"), "margin-right: 5%"},
+        {_("10% of line width"), "margin-right: 10%"},
+        {_("15% of line width"), "margin-right: 15%"},
+        {_("20% of line width"), "margin-right: 20%"},
+        {_("30% of line width"), "margin-right: 30%"},
+        {NULL, NULL}
+    };
+    createStyleMenuItem(menu, valueFont, _("Text alignment"),
+                    lString8(prefix) + ".align", css_align_options);
+    createStyleMenuItem(menu, valueFont, _("First line indent"),
+                    lString8(prefix) + ".text-indent", ident_options);
+
+    CRMenu * menuItem = createStyleMenuItem(menu, valueFont, _("Font face"),
+                                        lString8(prefix) + ".font-face", font_face_options);
+    lString16Collection list;
+    fontMan->getFaceList( list );
+    lString8 defFont = UnicodeToUtf8(getSkin()->getItemSkin()->getFontFace());
+
+    for ( int i=0; i<(int)list.length(); i++ ) {
+        lString16 fontFamily = lString16("font-family: ") + list[i];
+        menuItem->addItem( new OnDemandFontMenuItem( menuItem, i,
+                                                    list[i], LVImageSourceRef(), fontFamily.c_str(),
+                                                    MENU_FONT_FACE_SIZE, 400,
+                                                    false, css_ff_sans_serif, UnicodeToUtf8(list[i]), defFont) );
+    }
+
+    createStyleMenuItem(menu, valueFont, _("Font size"),
+                    lString8(prefix) + ".font-size", font_size_options);
+    createStyleMenuItem(menu, valueFont, _("Font weight"),
+                    lString8(prefix) + ".font-weight", font_weight_options);
+    createStyleMenuItem(menu, valueFont, _("Font style"),
+                    lString8(prefix) + ".font-style", font_style_options);
+    createStyleMenuItem(menu, valueFont, _("Interline space"),
+                    lString8(prefix) + ".line-height", line_height_options);
+    createStyleMenuItem(menu, valueFont, _("Text decoration"),
+                    lString8(prefix) + ".text-decoration", text_decoration_options);
+    createStyleMenuItem(menu, valueFont, _("Text vertical alignment"),
+                    lString8(prefix) + ".vertical-align", vertical_align_options);
+    createStyleMenuItem(menu, valueFont, _("Text color"),
+                    lString8(prefix) + ".color", font_color_options);
+    createStyleMenuItem(menu, valueFont, _("Background color"),
+                    lString8(prefix) + ".background-color", background_color_options);
+    createStyleMenuItem(menu, valueFont, _("Margin before"),
+                    lString8(prefix) + ".margin-top", margin_top_options);
+    createStyleMenuItem(menu, valueFont, _("Margin after"),
+                    lString8(prefix) + ".margin-bottom", margin_bottom_options);
+    createStyleMenuItem(menu, valueFont, _("Margin left"),
+                    lString8(prefix) + ".margin-left",  margin_left_options);
+    createStyleMenuItem(menu, valueFont, _("Margin right"),
+                    lString8(prefix) + ".margin-right", margin_right_options);
+}
+
+CRMenu * CRSettingsMenu::createSettingsMenuItem(CRMenu * menu, int id, const char * label, LVFontRef valueFont, const char * propName, item_def_t values[])
+{
+    CRMenu * menuItem;
+    menuItem = new CRMenu(_wm, menu, id, label,
+                          LVImageSourceRef(), LVFontRef(), valueFont, props, propName);
+    addMenuItems(menuItem, values);
+    menu->addItem( menuItem );
+    return menuItem;
+}
 
 CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id, LVFontRef font, CRGUIAcceleratorTableRef menuAccelerators, lvRect &rc )
 : CRFullScreenMenu( wm, id, lString16(_("Settings")), 8, rc ),
   props( newProps ),
-  _menuAccelerators( menuAccelerators )
+  _menuAccelerators( menuAccelerators ), _menuItemId(mm_Last)
 {
     setSkinName(lString16("#settings"));
 
     _fullscreen = true;
 
-	item_def_t antialiasing_modes[] = {
-		{_("On for all fonts"), "2"},
-		{_("On for big fonts only"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
+    item_def_t antialiasing_modes[] = {
+        {_("On for all fonts"), "2"},
+        {_("On for big fonts only"), "1"},
+        {_("Off"), "0"},
+        {NULL, NULL},
+    };
 
-        item_def_t fonthinting_modes[] = {
-                {_("Autohinting"), "2"},
-                {_("Use bytecode"), "1"},
-                {_("Disable"), "0"},
-                {NULL, NULL},
-        };
-
-	item_def_t embedded_styles[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t embedded_fonts[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-        item_def_t highlight_bookmark[] = {
-                {_("None"), "0"},
-                {_("Solid"), "1"},
-                {_("Underline"), "2"},
-                {NULL, NULL},
-        };
-
-	item_def_t bookmark_icons[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t kerning_options[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-    item_def_t floating_punctuation_options[] = {
+    item_def_t on_off_option[] = {
         {_("On"), "1"},
         {_("Off"), "0"},
         {NULL, NULL},
     };
 
-    item_def_t footnotes[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
+    item_def_t highlight_bookmark[] = {
+        {_("None"), "0"},
+        {_("Solid"), "1"},
+        {_("Underline"), "2"},
+        {NULL, NULL},
+    };
 
-	item_def_t showtime[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
+    item_def_t space_condensing_percent[] = {
+        {"25%", "25"},
+        {"30%", "30"},
+        {"35%", "35"},
+        {"40%", "40"},
+        {"45%", "45"},
+        {"50%", "50"},
+        {"55%", "55"},
+        {"60%", "60"},
+        {"65%", "65"},
+        {"70%", "70"},
+        {"75%", "75"},
+        {"80%", "80"},
+        {"85%", "85"},
+        {"90%", "90"},
+        {"95%", "95"},
+        {"100%", "100"},
+        {NULL, NULL}
+    };
 
-	item_def_t show_title[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t show_battery[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t show_battery_persent[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t show_pos_persent[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t show_page_count[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t show_page_number[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t space_condensing_percent[] = {
-		{"25%", "25"},
-		{"30%", "30"},
-		{"35%", "35"},
-		{"40%", "40"},
-		{"45%", "45"},
-		{"50%", "50"},
-		{"55%", "55"},
-		{"60%", "60"},
-		{"65%", "65"},
-		{"70%", "70"},
-		{"75%", "75"},
-		{"80%", "80"},
-		{"85%", "85"},
-		{"90%", "90"},
-		{"95%", "95"},
-		{"100%", "100"},
-		{NULL, NULL}
-	};
-
-	item_def_t preformatted_text[] = {
-		{_("On"), "1"},
-		{_("Off"), "0"},
-		{NULL, NULL},
-	};
-
-	item_def_t inverse_mode[] = {
-		{_("Normal"), "0"},
-		{_("Inverse"), "1"},
-		{NULL, NULL},
-	};
+    item_def_t inverse_mode[] = {
+        {_("Normal"), "0"},
+        {_("Inverse"), "1"},
+        {NULL, NULL},
+    };
 
     item_def_t embolden_mode[] = {
         {_("Normal"), "0"},
@@ -526,19 +752,19 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     };
 
     item_def_t landscape_pages[] = {
-		{_("One"), "1"},
-		{_("Two"), "2"},
-		{NULL, NULL},
-	};
+        {_("One"), "1"},
+        {_("Two"), "2"},
+        {NULL, NULL},
+    };
 
-	item_def_t status_line[] = {
-		{_("Top"), "0"},
+    item_def_t status_line[] = {
+        {_("Top"), "0"},
 	//    {"VIEWER_DLG_STATUS_LINE_BOTTOM", "Bottom", "1"},
-		{_("Off"), "2"},
-		{NULL, NULL},
-	};
+        {_("Off"), "2"},
+        {NULL, NULL},
+    };
 
-	item_def_t interline_spaces[] = {
+    item_def_t interline_spaces[] = {
         {_("70%"), "70"},
         {_("75%"), "75"},
         {_("80%"), "80"},
@@ -560,47 +786,47 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("180%"), "180"},
         {_("200%"), "200"},
         {NULL, NULL},
-	};
+    };
 
-	item_def_t page_margins[] = {
-#if BIG_PAGE_MARGINS==1
-    //static int def_margin[] = { 8, 0, 5, 10, 20, 30, 50, 60 };
-    {"0", "0"},
-    {"1", "1"},
-    {"2", "2"},
-    {"3", "3"},
-    {"4", "4"},
-    {"5", "5"},
-    {"8", "8"},
-    {"10", "10"},
-    {"12", "12"},
-    {"14", "14"},
-    {"16", "16"},
-    {"20", "20"},
-    {"22", "22"},
-    {"24", "24"},
-    {"26", "26"},
-    {"30", "30"},
-    {"50", "50"},
-    {"60", "60"},
-    {"80", "80"},
-    {"100", "100"},
-    {"130", "130"},
-    {"200", "200"},
-    {"300", "300"},
-#else
+    item_def_t page_margins[] = {
+    #if BIG_PAGE_MARGINS==1
+        //static int def_margin[] = { 8, 0, 5, 10, 20, 30, 50, 60 };
         {"0", "0"},
-		{"5", "5"},
-		{"8", "8"},
-		{"10", "10"},
-		{"15", "15"},
-		{"20", "20"},
-		{"25", "25"},
-		{"30", "30"},
-#endif
-		{NULL, NULL},
-	};
-
+        {"1", "1"},
+        {"2", "2"},
+        {"3", "3"},
+        {"4", "4"},
+        {"5", "5"},
+        {"8", "8"},
+        {"10", "10"},
+        {"12", "12"},
+        {"14", "14"},
+        {"16", "16"},
+        {"20", "20"},
+        {"22", "22"},
+        {"24", "24"},
+        {"26", "26"},
+        {"30", "30"},
+        {"50", "50"},
+        {"60", "60"},
+        {"80", "80"},
+        {"100", "100"},
+        {"130", "130"},
+        {"200", "200"},
+        {"300", "300"},
+    #else
+        {"0", "0"},
+        {"5", "5"},
+        {"8", "8"},
+        {"10", "10"},
+        {"15", "15"},
+        {"20", "20"},
+        {"25", "25"},
+        {"30", "30"},
+    #endif
+        {NULL, NULL},
+    };
+#if ENABLE_UPDATE_MODE_SETTING==1
     item_def_t screen_update_options[] = {
         {_("Always use fast updates"), "0"},
         {_("Don't use fast updates"), "1"},
@@ -614,7 +840,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("Full updates every 14 pages"), "14"},
         {NULL, NULL},
     };
-
+#endif
     item_def_t turbo_update_options[] = {
         {_("Turbo mode disabled"), "0"},
         {_("Turbo mode enabled"), "1"},
@@ -719,349 +945,265 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t css_styles[] = {
+        {_("Default paragraph formatting"), "styles.def"},
+        {_("Title"), "styles.title"},
+        {_("Subtitle"), "styles.subtitle"},
+        {_("Preformatted text / code"), "styles.pre"},
+        {_("Link"), "styles.link"},
+        {_("Cite"), "styles.cite"},
+        {_("Epigraph"), "styles.epigraph"},
+        {_("Poem"), "styles.poem"},
+        {_("Text / Cite / Epigraph author"), "styles.text-author"},
+        {_("Footnote"), "styles.footnote"},
+        {_("Footnote link"), "styles.footnote-link"},
+        {_("Footnote title"), "styles.footnote-title"},
+        {_("Annotation"), "styles.annotation"},
+        {NULL, NULL}
+    };
 
     CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
 
-        setSkinName(lString16("#settings"));
-        //setSkinName(lString16(L"#main"));
+    setSkinName(lString16("#settings"));
+    //setSkinName(lString16(L"#main"));
 
-        LVFontRef valueFont( fontMan->GetFont( VALUE_FONT_SIZE, 400, true, css_ff_sans_serif, lString8("Arial")) );
-        CRMenu * mainMenu = this;
-        mainMenu->setAccelerators( _menuAccelerators );
+    LVFontRef valueFont( fontMan->GetFont( VALUE_FONT_SIZE, 400, true, css_ff_sans_serif, lString8("Arial")) );
+    CRMenu * mainMenu = this;
+    mainMenu->setAccelerators( _menuAccelerators );
 
-        CRMenu * fontFaceMenu = new CRMenu(_wm, mainMenu, mm_FontFace,
-                                            _("Default font face"),
-                                                    LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_FACE );
-        fontFaceMenu->setSkinName(lString16("#settings"));
-        CRLog::trace("getting font face list");
-        lString16Collection list;
-        fontMan->getFaceList( list );
-        CRLog::trace("faces found: %d", list.length());
-        int i;
-        lString8 defFont = UnicodeToUtf8(getSkin()->getItemSkin()->getFontFace());//( fontMan->GetFont( VALUE_FONT_SIZE, 400, true, css_ff_sans_serif, lString8("Arial")) );
-        for ( i=0; i<(int)list.length(); i++ ) {
-            fontFaceMenu->addItem( new OnDemandFontMenuItem( fontFaceMenu, i,
-                                    list[i], LVImageSourceRef(), list[i].c_str(),
-                                    MENU_FONT_FACE_SIZE, 400,
-                                    false, css_ff_sans_serif, UnicodeToUtf8(list[i]), defFont) );
-            fontFaceMenu->setFullscreen( true );
+    createFontFaceMenuItem(mainMenu, valueFont, mm_FontFace, _("Default font face"),  PROP_FONT_FACE);
+
+    CRMenu * fontSizeMenu = createFontSizeMenu( _wm, mainMenu, props );
+    mainMenu->addItem( fontSizeMenu );
+
+
+    CRMenu * fontSettingsMenu = new CRMenu( _wm, mainMenu, _menuItemId++, _("Font settings"),
+                                           LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef());
+    fontSettingsMenu->setSkinName(lString16("#settings"));
+    fontSettingsMenu->setAccelerators( _menuAccelerators );
+
+    createSettingsMenuItem(fontSettingsMenu, mm_Embolden, _("Font weight"),
+                           valueFont, PROP_FONT_WEIGHT_EMBOLDEN, embolden_mode);
+    createSettingsMenuItem(fontSettingsMenu, mm_FontAntiAliasing, _("Font antialiasing"),
+                           valueFont, PROP_FONT_ANTIALIASING, antialiasing_modes);
+    createSettingsMenuItem(fontSettingsMenu, mm_FontHinting, _("Font hinting"),
+                           valueFont, PROP_FONT_HINTING, font_hinting);
+    createSettingsMenuItem(fontSettingsMenu, mm_Kerning, _("Font kerning"),
+                           valueFont, PROP_FONT_KERNING_ENABLED, on_off_option);
+    createSettingsMenuItem(fontSettingsMenu, mm_fontGamma, _("Font Gamma"),
+                           valueFont, PROP_FONT_GAMMA, font_gammas);
+    createSettingsMenuItem(fontSettingsMenu, mm_EmbeddedFonts, _("Document embedded fonts"),
+                           valueFont, PROP_EMBEDDED_FONTS, on_off_option);
+    createFontFaceMenuItem(fontSettingsMenu, valueFont, mm_FontFallbackFace, _("Fallback font face"),
+                           PROP_FALLBACK_FONT_FACE);
+
+    fontSettingsMenu->reconfigure( 0 );
+    mainMenu->addItem( fontSettingsMenu );
+
+    CRMenu * formatSettingsMenu = new CRMenu( _wm, mainMenu, _menuItemId++, _("Formatting settings"),
+                                             LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef());
+    formatSettingsMenu->setSkinName(lString16("#settings"));
+    formatSettingsMenu->setAccelerators( _menuAccelerators );
+
+    createSettingsMenuItem(formatSettingsMenu, mm_InterlineSpace, _("Interline space"),
+                           valueFont, PROP_INTERLINE_SPACE, interline_spaces);
+
+    //====== Hyphenation ==========
+    if ( HyphMan::getDictList() ) {
+        // strings from CREngine - just to catch by gettext tools
+        _("[No Hyphenation]");
+        _("[Algorythmic Hyphenation]");
+        CRMenu * hyphMenu = new CRMenu(_wm, formatSettingsMenu, mm_Hyphenation,
+                                       _("Hyphenation"),
+                                       LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_HYPHENATION_DICT );
+        for ( int i=0; i<HyphMan::getDictList()->length(); i++ ) {
+            HyphDictionary * item = HyphMan::getDictList()->get( i );
+            hyphMenu->addItem( new CRMenuItem( hyphMenu, i,
+                                              item->getTitle(),
+                                              LVImageSourceRef(),
+                                              LVFontRef(), item->getId().c_str() ) );
         }
-        fontFaceMenu->setAccelerators( _menuAccelerators );
-        fontFaceMenu->reconfigure( 0 );
+        hyphMenu->setAccelerators( _menuAccelerators );
+        hyphMenu->setSkinName(lString16("#settings"));
+        hyphMenu->reconfigure( 0 );
+        formatSettingsMenu->addItem( hyphMenu );
+    }
+    createSettingsMenuItem(formatSettingsMenu, mm_PreformattedText, _("Preformatted text"),
+                           valueFont, PROP_TXT_OPTION_PREFORMATTED, on_off_option);
+    createSettingsMenuItem(formatSettingsMenu, mm_SpaceCondensing, _("Space condensing percent"),
+                           valueFont, PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, space_condensing_percent);
+    createSettingsMenuItem(formatSettingsMenu, mm_FloatingPunctuation, _("Floating punctuation"),
+                           valueFont, PROP_FLOATING_PUNCTUATION, on_off_option);
 
-        //lString8 fontFace = UnicodeToUtf8(props->getStringDef( PROP_FONT_FACE, UnicodeToUtf8(list[0]).c_str() ));
-        mainMenu->addItem( fontFaceMenu );
+    //====== Image scaling ==============
+    CRMenu * scalingMenu = new CRMenu(_wm, formatSettingsMenu, mm_ImageScaling,
+                                      _("Image scaling"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+    scalingMenu->setAccelerators( _menuAccelerators );
+    scalingMenu->setSkinName(lString16("#settings"));
 
-        CRMenu * fontFallbackFaceMenu = new CRMenu(_wm, mainMenu, mm_FontFallbackFace,
-                                            _("Fallback font face"),
-                                                    LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FALLBACK_FONT_FACE );
-        fontFallbackFaceMenu->setSkinName(lString16("#settings"));
+    createSettingsMenuItem(scalingMenu, mm_blockImagesZoominMode, _("Block image scaling mode"),
+                           valueFont, PROP_IMG_SCALING_ZOOMIN_BLOCK_MODE, image_scaling_modes);
+    createSettingsMenuItem(scalingMenu, mm_blockImagesZoominScale, _("Block image max zoom"),
+                           valueFont, PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE, image_scaling_factors);
+    createSettingsMenuItem(scalingMenu, mm_inlineImagesZoominMode, _("Inline image scaling mode"),
+                           valueFont, PROP_IMG_SCALING_ZOOMIN_INLINE_MODE, image_scaling_modes);
+    createSettingsMenuItem(scalingMenu, mm_inlineImagesZoominScale, _("Inline image max zoom"),
+                           valueFont, PROP_IMG_SCALING_ZOOMIN_INLINE_SCALE, image_scaling_factors);
 
-        for ( i=0; i<(int)list.length(); i++ ) {
-            fontFallbackFaceMenu->addItem( new OnDemandFontMenuItem( fontFallbackFaceMenu, i,
-                                    list[i], LVImageSourceRef(), list[i].c_str(),
-                                    MENU_FONT_FACE_SIZE, 400,
-                                    false, css_ff_sans_serif, UnicodeToUtf8(list[i]), defFont) );
-            fontFallbackFaceMenu->setFullscreen( true );
-        }
+    scalingMenu->reconfigure( 0 );
+    formatSettingsMenu->addItem( scalingMenu );
+    formatSettingsMenu->reconfigure( 0 );
+    mainMenu->addItem( formatSettingsMenu );
 
-        fontFallbackFaceMenu->setAccelerators( _menuAccelerators );
-        fontFallbackFaceMenu->reconfigure( 0 );
-        mainMenu->addItem( fontFallbackFaceMenu );
+    CRMenu * pageSettingsMenu = new CRMenu( _wm, mainMenu, _menuItemId++, _("Page settings"),
+                                           LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef());
+    pageSettingsMenu->setSkinName(lString16("#settings"));
+    pageSettingsMenu->setAccelerators( _menuAccelerators );
 
-        CRMenu * fontSizeMenu = createFontSizeMenu( _wm, mainMenu, props );
-        mainMenu->addItem( fontSizeMenu );
+    createSettingsMenuItem(pageSettingsMenu, mm_StatusLine, _("Status line"),
+                           valueFont, PROP_STATUS_LINE, status_line);
 
-        CRMenu * fontHintingMenu = new CRMenu(_wm, mainMenu, mm_FontHinting,
-                _("Font hinting"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_HINTING );
-        addMenuItems( fontHintingMenu, font_hinting );
-        mainMenu->addItem( fontHintingMenu );
+    //====== Status line settings ========
+    CRMenu * statusMenu = new CRMenu(_wm, pageSettingsMenu, mm_StatusMenu,
+                                     _("Status line settings"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+    statusMenu->setAccelerators( _menuAccelerators );
+    statusMenu->setSkinName(lString16(L"#settings"));
 
-        CRMenu * emboldenModeMenu = new CRMenu(_wm, mainMenu, mm_Embolden,
-                _("Font weight"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_WEIGHT_EMBOLDEN );
-        addMenuItems( emboldenModeMenu, embolden_mode );
-        mainMenu->addItem( emboldenModeMenu );
+    createFontFaceMenuItem(statusMenu, valueFont, _menuItemId++, _("Font face"),
+                           PROP_STATUS_FONT_FACE);
+    createSettingsMenuItem(statusMenu, mm_ShowTime, _("Show time"),
+                           valueFont, PROP_SHOW_TIME, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowTitle, _("Show title"),
+                           valueFont, PROP_SHOW_TITLE, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowBattery, _("Show battery"),
+                           valueFont, PROP_SHOW_BATTERY, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowBatteryPercent, _("Show battery percent"),
+                           valueFont, PROP_SHOW_BATTERY_PERCENT, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowPosPercent, _("Show position percent"),
+                           valueFont, PROP_SHOW_POS_PERCENT, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowPageCount, _("Show page count"),
+                           valueFont, PROP_SHOW_PAGE_COUNT, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_ShowPageNumber, _("Show page number"),
+                           valueFont, PROP_SHOW_PAGE_NUMBER, on_off_option);
+    statusMenu->reconfigure( 0 );
+    pageSettingsMenu->addItem( statusMenu );
+    //====== End of Status line  ========
 
-        CRMenu * fontGammaMenu = new CRMenu(_wm, mainMenu, mm_fontGamma,
-                _("Font Gamma"), LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_GAMMA );
-        addMenuItems( fontGammaMenu, font_gammas );
-        mainMenu->addItem( fontGammaMenu );
+    //====== Margins ==============
+    CRMenu * marginsMenu = new CRMenu(_wm, pageSettingsMenu, mm_PageMargins,
+                                      _("Page margins"),
+                                      LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+    marginsMenu->setAccelerators( _menuAccelerators );
+    marginsMenu->setSkinName(lString16("#settings"));
 
-        CRMenu * fontAntialiasingMenu = new CRMenu(_wm, mainMenu, mm_FontAntiAliasing,
-                _("Font antialiasing"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_ANTIALIASING );
-        addMenuItems( fontAntialiasingMenu, antialiasing_modes );
-        mainMenu->addItem( fontAntialiasingMenu );
+    createSettingsMenuItem(marginsMenu, mm_PageMarginTop, _("Top margin"),
+                           valueFont, PROP_PAGE_MARGIN_TOP, page_margins);
+    createSettingsMenuItem(marginsMenu, mm_PageMarginBottom, _("Bottom margin"),
+                           valueFont, PROP_PAGE_MARGIN_BOTTOM, page_margins);
+    createSettingsMenuItem(marginsMenu, mm_PageMarginLeft, _("Left margin"),
+                           valueFont, PROP_PAGE_MARGIN_LEFT, page_margins);
+    createSettingsMenuItem(marginsMenu, mm_PageMarginRight, _("Right margin"),
+                           valueFont, PROP_PAGE_MARGIN_RIGHT, page_margins);
+    marginsMenu->reconfigure( 0 );
+    pageSettingsMenu->addItem( marginsMenu );
+    //====== End of Margins ==============
+    createSettingsMenuItem(pageSettingsMenu, mm_Footnotes, _("Footnotes at page bottom"),
+                           valueFont, PROP_FOOTNOTES, on_off_option);
 
-        CRMenu * kerningMenu = new CRMenu(_wm, mainMenu, mm_Kerning,
-                _("Font kerning"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_KERNING_ENABLED );
-        addMenuItems( kerningMenu, kerning_options );
-        mainMenu->addItem( kerningMenu );
+    pageSettingsMenu->reconfigure( 0 );
+    mainMenu->addItem( pageSettingsMenu );
 
-        CRMenu * interlineSpaceMenu = new CRMenu(_wm, mainMenu, mm_InterlineSpace,
-                _("Interline space"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_INTERLINE_SPACE );
-        addMenuItems( interlineSpaceMenu, interline_spaces );
-        mainMenu->addItem( interlineSpaceMenu );
+    CRMenu * displaySettingsMenu = new CRMenu( _wm, mainMenu, _menuItemId++, _("Display settings"),
+                                              LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef());
+    displaySettingsMenu->setSkinName(lString16("#settings"));
+    displaySettingsMenu->setAccelerators( _menuAccelerators );
 
 #if CR_INTERNAL_PAGE_ORIENTATION==1 || defined(CR_POCKETBOOK)
-        CRMenu * orientationMenu = createOrientationMenu(mainMenu, props);
-        mainMenu->addItem( orientationMenu );
+    CRMenu * orientationMenu = createOrientationMenu(displaySettingsMenu, props);
+    displaySettingsMenu->addItem( orientationMenu );
 #endif
+    createSettingsMenuItem(displaySettingsMenu, mm_LandscapePages, _("Landscape pages"),
+                           valueFont, PROP_LANDSCAPE_PAGES, landscape_pages);
+    createSettingsMenuItem(displaySettingsMenu, mm_Inverse, _("Inverse display"),
+                           valueFont, PROP_DISPLAY_INVERSE, inverse_mode);
+#if 0
+    createSettingsMenuItem(displaySettingsMenu, mm_BookmarkIcons, _("Show bookmark icons"),
+                           valueFont, PROP_BOOKMARK_ICONS, bookmark_icons);
+#endif
+    createSettingsMenuItem(displaySettingsMenu, mm_HighlightBookmarks, _("Highlight bookmarks"),
+                           valueFont, PROP_HIGHLIGHT_COMMENT_BOOKMARKS, highlight_bookmark);
+#if ENABLE_UPDATE_MODE_SETTING==1
+    createSettingsMenuItem(displaySettingsMenu, mm_FastUpdates, _("Display update mode"),
+                           valueFont, PROP_DISPLAY_FULL_UPDATE_INTERVAL, screen_update_options);
+#endif
+    if ( _wm->getScreen()->getTurboUpdateSupported() ) {
+        createSettingsMenuItem(displaySettingsMenu, mm_TurboUpdateMode, _("Turbo update mode"),
+                               valueFont, PROP_DISPLAY_TURBO_UPDATE_MODE, turbo_update_options);
+    }
 #ifdef CR_POCKETBOOK
-        CRMenu * rotateModeMenu = new CRMenu(_wm, mainMenu, mm_rotateMode,
-                _("Rotate"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_POCKETBOOK_ROTATE_MODE );
-        addMenuItems( rotateModeMenu, rotate_mode_options );
-        mainMenu->addItem( rotateModeMenu );
-        CRMenu * rotateAngleMenu = new CRMenu(_wm, mainMenu, mm_rotateAngle,
-                _("Page turn angle"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_POCKETBOOK_ROTATE_ANGLE );
-        addMenuItems( rotateAngleMenu, rotate_angle_options );
-        mainMenu->addItem( rotateAngleMenu );
+    createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth(need restart)"),
+                           valueFont, PROP_POCKETBOOK_GRAYBUFFER_BPP, gray_buffer_bpp);
 #endif
-        CRMenu * footnotesMenu = new CRMenu(_wm, mainMenu, mm_Footnotes,
-                _("Footnotes at page bottom"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FOOTNOTES );
-        addMenuItems( footnotesMenu, footnotes );
-        mainMenu->addItem( footnotesMenu );
+    displaySettingsMenu->reconfigure( 0 );
+    mainMenu->addItem( displaySettingsMenu );
 
-/*
+    CRMenu * controlSettingsMenu = new CRStyleMenu( _wm, mainMenu, _menuItemId++, _("Control settings"),
+                                              valueFont, CRPropRef());
+    //style menu doesn't toggle when number of items <= 3, we don't need toggling
+    controlSettingsMenu->setSkinName(lString16("#settings"));
+    controlSettingsMenu->setAccelerators( _menuAccelerators );
+#ifdef CR_POCKETBOOK
+    createSettingsMenuItem(controlSettingsMenu, mm_rotateMode, _("Rotate"),
+                           valueFont, PROP_POCKETBOOK_ROTATE_MODE, rotate_mode_options);
+    createSettingsMenuItem(controlSettingsMenu, mm_rotateAngle, _("Page turn angle"),
+                           valueFont, PROP_POCKETBOOK_ROTATE_ANGLE, rotate_angle_options);
+#endif
+#ifndef CR_POCKETBOOK
+    CRControlsMenu * controlsMenu =
+            new CRControlsMenu(controlSettingsMenu, mm_Controls, props, lString16("main"), 8, _rect);
+    controlsMenu->setAccelerators( _menuAccelerators );
+    controlsMenu->setSkinName(lString16("#settings"));
+    controlsMenu->setValueFont(valueFont);
+    controlsMenu->reconfigure( 0 );
+    controlSettingsMenu->addItem( controlsMenu );
+#endif
+#if 0
+    if (getWindowManager()->getScreen()->isTouchSupported()) {
+        CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(controlSettingsMenu, props);
+        controlSettingsMenu->addItem(touchMenu);
+    }
+#endif
+    controlSettingsMenu->reconfigure( 0 );
+    mainMenu->addItem( controlSettingsMenu );
+
+    /*
         SetTimeMenuItem * setTime = new SetTimeMenuItem( mainMenu, mm_SetTime, _wm->translateString("VIEWER_MENU_SET_TIME", "Set time"),
                 LVImageSourceRef(), menuFont, L"bla" );
         mainMenu->addItem( setTime );
 */
-        CRMenu * landscapePagesMenu = new CRMenu(_wm, mainMenu, mm_LandscapePages,
-                _("Landscape pages"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_LANDSCAPE_PAGES );
-        addMenuItems( landscapePagesMenu, landscape_pages );
-        mainMenu->addItem( landscapePagesMenu );
 
-        CRMenu * preformattedTextMenu = new CRMenu(_wm, mainMenu, mm_PreformattedText,
-                _("Preformatted text"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_TXT_OPTION_PREFORMATTED );
-        addMenuItems( preformattedTextMenu, preformatted_text );
-        mainMenu->addItem( preformattedTextMenu );
+    CRMenu * stylesMenu = new CRMenu(_wm, mainMenu, _menuItemId++,
+                                     _("Style settings"),
+                                     LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+    stylesMenu->setAccelerators( _menuAccelerators );
+    stylesMenu->setSkinName(lString16("#settings"));
 
-        //
+    createSettingsMenuItem(stylesMenu, mm_EmbeddedStyles, _("Document embedded styles"),
+                           valueFont, PROP_EMBEDDED_STYLES, on_off_option);
+    for ( int i=0; css_styles[i].translate_default; i++) {
+        CRMenu * styleMenu = new CRMenu(_wm, stylesMenu, _menuItemId++,
+                                        lString16(css_styles[i].translate_default),
+                                        LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
+        styleMenu->setAccelerators( _menuAccelerators );
+        styleMenu->setSkinName(lString16("#settings"));
+        createStyleMenuItems(styleMenu, valueFont, css_styles[i].value );
+        styleMenu->reconfigure( 0 );
+        stylesMenu->addItem( styleMenu );
+    }
+    stylesMenu->reconfigure( 0 );
+    mainMenu->addItem( stylesMenu );
 
-        CRMenu * embeddedStylesMenu = new CRMenu(_wm, mainMenu, mm_EmbeddedStyles,
-                _("Document embedded styles"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_EMBEDDED_STYLES );
-        addMenuItems( embeddedStylesMenu, embedded_styles );
-        mainMenu->addItem( embeddedStylesMenu );
-
-        CRMenu * embeddedFontsMenu = new CRMenu(_wm, mainMenu, mm_EmbeddedFonts,
-                _("Document embedded fonts"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_EMBEDDED_FONTS );
-        addMenuItems( embeddedFontsMenu, embedded_fonts );
-        mainMenu->addItem( embeddedFontsMenu );
-
-        CRMenu * inverseModeMenu = new CRMenu(_wm, mainMenu, mm_Inverse,
-                _("Inverse display"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_DISPLAY_INVERSE );
-        addMenuItems( inverseModeMenu, inverse_mode );
-        mainMenu->addItem( inverseModeMenu );
-
-#if ENABLE_UPDATE_MODE_SETTING==1
-        CRMenu * fastUpdatesMenu = new CRMenu(_wm, mainMenu, mm_FastUpdates,
-                _("Display update mode"),
-                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_DISPLAY_FULL_UPDATE_INTERVAL );
-        addMenuItems( fastUpdatesMenu, screen_update_options );
-        mainMenu->addItem( fastUpdatesMenu );
-#endif
-        if ( _wm->getScreen()->getTurboUpdateSupported() ) {
-            CRMenu * turboUpdatesMenu = new CRMenu(_wm, mainMenu, mm_TurboUpdateMode,
-                    _("Turbo update mode"),
-                    LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_DISPLAY_TURBO_UPDATE_MODE );
-            addMenuItems( turboUpdatesMenu, turbo_update_options );
-            mainMenu->addItem( turboUpdatesMenu );
-        }
-
-#if 0
-        CRMenu * bookmarkIconsMenu = new CRMenu(_wm, mainMenu, mm_BookmarkIcons,
-                _("Show bookmark icons"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_BOOKMARK_ICONS );
-        addMenuItems( bookmarkIconsMenu, bookmark_icons );
-        mainMenu->addItem( bookmarkIconsMenu );
-#endif
-
-	//====== Status line settings ========
-	CRMenu * statusMenu = new CRMenu(_wm, mainMenu, mm_StatusMenu,
-                _("Status line menu"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
-        CRMenu * statusLineMenu = new CRMenu(_wm, statusMenu, mm_StatusLine,
-                _("Status line"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_STATUS_LINE );
-        addMenuItems( statusLineMenu, status_line );
-        statusMenu->addItem( statusLineMenu );
-        CRMenu * showTimeMenu = new CRMenu(_wm, statusMenu, mm_ShowTime,
-                _("Show time"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_TIME );
-        addMenuItems( showTimeMenu, showtime );
-        statusMenu->addItem( showTimeMenu );
-        CRMenu * showTitleMenu = new CRMenu(_wm, statusMenu, mm_ShowTitle,
-                _("Show title"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_TITLE );
-        addMenuItems( showTitleMenu, show_title );
-        statusMenu->addItem( showTitleMenu );
-        CRMenu * showBatteryMenu = new CRMenu(_wm, statusMenu, mm_ShowBattery,
-                _("Show Battery"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_BATTERY );
-        addMenuItems( showBatteryMenu, show_battery );
-        statusMenu->addItem( showBatteryMenu );
-        CRMenu * showBatteryPersentMenu = new CRMenu(_wm, statusMenu, mm_ShowBatteryPersent,
-                _("Show Battery Persent"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_BATTERY_PERCENT );
-        addMenuItems( showBatteryPersentMenu, show_battery_persent );
-        statusMenu->addItem( showBatteryPersentMenu );
-        CRMenu * showPosPersentMenu = new CRMenu(_wm, statusMenu, mm_ShowPosPersent,
-                _("Show Position Persent"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_POS_PERCENT );
-        addMenuItems( showPosPersentMenu, show_pos_persent );
-        statusMenu->addItem( showPosPersentMenu );
-        CRMenu * showPageCountMenu = new CRMenu(_wm, statusMenu, mm_ShowPageCount,
-                _("Show Page Count"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_PAGE_COUNT );
-        addMenuItems( showPageCountMenu, show_page_count );
-        statusMenu->addItem( showPageCountMenu );
-        CRMenu * showPageNumberMenu = new CRMenu(_wm, statusMenu, mm_ShowPageNumber,
-                _("Show Page Number"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SHOW_PAGE_NUMBER );
-        addMenuItems( showPageNumberMenu, show_page_number );
-        statusMenu->addItem( showPageNumberMenu );
-	statusMenu->setAccelerators( _menuAccelerators );
-	statusMenu->setSkinName(lString16(L"#settings"));
-        statusMenu->reconfigure( 0 );
-        mainMenu->addItem( statusMenu );
-	//====== End of Status line  ========
-
-        CRMenu * highlightbookmarksMenu = new CRMenu(_wm, mainMenu, mm_HighlightBookmarks,
-                _("Highlight bookmarks"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_HIGHLIGHT_COMMENT_BOOKMARKS );
-        addMenuItems( highlightbookmarksMenu, highlight_bookmark );
-        mainMenu->addItem( highlightbookmarksMenu );
-
-        CRMenu * spaceCondensingMenu = new CRMenu(_wm, mainMenu, mm_SpaceCondensing,
-                _("Space condensing percent"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT );
-        addMenuItems( spaceCondensingMenu, space_condensing_percent );
-        mainMenu->addItem( spaceCondensingMenu );
-
-        //====== Hyphenation ==========
-		if ( HyphMan::getDictList() ) {
-            // strings from CREngine - just to catch by gettext tools
-            _("[No Hyphenation]");
-            _("[Algorythmic Hyphenation]");
-			CRMenu * hyphMenu = new CRMenu(_wm, mainMenu, mm_Hyphenation,
-					_("Hyphenation"),
-					LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_HYPHENATION_DICT );
-			for ( i=0; i<HyphMan::getDictList()->length(); i++ ) {
-				HyphDictionary * item = HyphMan::getDictList()->get( i );
-				hyphMenu->addItem( new CRMenuItem( hyphMenu, i,
-					item->getTitle(),
-					LVImageSourceRef(),
-					LVFontRef(), item->getId().c_str() ) );
-			}
-			hyphMenu->setAccelerators( _menuAccelerators );
-            hyphMenu->setSkinName(lString16("#settings"));
-            hyphMenu->reconfigure( 0 );
-            mainMenu->addItem( hyphMenu );
-		}
-
-        CRMenu * floatingPunctuationMenu = new CRMenu(_wm, mainMenu, mm_FloatingPunctuation,
-                _("Floating punctuation"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FLOATING_PUNCTUATION );
-        addMenuItems( floatingPunctuationMenu, floating_punctuation_options );
-        mainMenu->addItem( floatingPunctuationMenu );
-
-
-        //====== Margins ==============
-        CRMenu * marginsMenu = new CRMenu(_wm, mainMenu, mm_PageMargins,
-                _("Page margins"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
-        CRMenu * marginsMenuTop = new CRMenu(_wm, marginsMenu, mm_PageMarginTop,
-                _("Top margin"),
-                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_PAGE_MARGIN_TOP );
-        addMenuItems( marginsMenuTop, page_margins );
-        marginsMenu->addItem( marginsMenuTop );
-        CRMenu * marginsMenuBottom = new CRMenu(_wm, marginsMenu, mm_PageMarginBottom,
-                _("Bottom margin"),
-                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_PAGE_MARGIN_BOTTOM );
-        addMenuItems( marginsMenuBottom, page_margins );
-        marginsMenu->addItem( marginsMenuBottom );
-        CRMenu * marginsMenuLeft = new CRMenu(_wm, marginsMenu, mm_PageMarginLeft,
-                _("Left margin"),
-                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_PAGE_MARGIN_LEFT );
-        addMenuItems( marginsMenuLeft, page_margins );
-        marginsMenu->addItem( marginsMenuLeft );
-        CRMenu * marginsMenuRight = new CRMenu(_wm, marginsMenu, mm_PageMarginRight,
-                _("Right margin"),
-                 LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_PAGE_MARGIN_RIGHT );
-        addMenuItems( marginsMenuRight, page_margins );
-
-
-        marginsMenu->addItem( marginsMenuRight );
-		marginsMenu->setAccelerators( _menuAccelerators );
-        marginsMenu->setSkinName(lString16("#settings"));
-        marginsMenu->reconfigure( 0 );
-        mainMenu->addItem( marginsMenu );
-
-#ifndef CR_POCKETBOOK
-        CRControlsMenu * controlsMenu =
-                new CRControlsMenu(this, mm_Controls, props, lString16("main"), 8, _rect);
-        controlsMenu->setAccelerators( _menuAccelerators );
-        controlsMenu->setSkinName(lString16("#settings"));
-        controlsMenu->setValueFont(valueFont);
-        controlsMenu->reconfigure( 0 );
-        mainMenu->addItem( controlsMenu );
-#endif
-
-        //====== Image scaling ==============
-        CRMenu * scalingMenu = new CRMenu(_wm, mainMenu, mm_ImageScaling,
-                _("Image scaling"), LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef() );
-        CRMenu * blockImagesZoominModeMenu = new CRMenu(_wm, scalingMenu, mm_blockImagesZoominMode,
-                _("Block image scaling mode"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_IMG_SCALING_ZOOMIN_BLOCK_MODE );
-        addMenuItems( blockImagesZoominModeMenu, image_scaling_modes );
-        scalingMenu->addItem( blockImagesZoominModeMenu );
-        CRMenu * blockImagesZoominScaleMenu = new CRMenu(_wm, scalingMenu, mm_blockImagesZoominScale,
-                _("Block image max zoom"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE );
-        addMenuItems( blockImagesZoominScaleMenu, image_scaling_factors );
-        scalingMenu->addItem( blockImagesZoominScaleMenu );
-
-        CRMenu * inlineImagesZoominModeMenu = new CRMenu(_wm, scalingMenu, mm_inlineImagesZoominMode,
-                _("Inline image scaling mode"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_IMG_SCALING_ZOOMIN_INLINE_MODE );
-        addMenuItems( inlineImagesZoominModeMenu, image_scaling_modes );
-        scalingMenu->addItem( inlineImagesZoominModeMenu );
-        CRMenu * inlineImagesZoominScaleMenu = new CRMenu(_wm, scalingMenu, mm_inlineImagesZoominScale,
-                _("Inline image max zoom"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_IMG_SCALING_ZOOMIN_INLINE_SCALE );
-        addMenuItems( inlineImagesZoominScaleMenu, image_scaling_factors );
-        scalingMenu->addItem( inlineImagesZoominScaleMenu );
-        scalingMenu->setAccelerators( _menuAccelerators );
-        scalingMenu->setSkinName(lString16("#settings"));
-        scalingMenu->reconfigure( 0 );
-        mainMenu->addItem( scalingMenu );
-
-#if 0
-        if (getWindowManager()->getScreen()->isTouchSupported()) {
-            CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(mainMenu, props);
-            mainMenu->addItem(touchMenu);
-        }
-#endif
-#ifdef CR_POCKETBOOK
-        CRMenu * grayBufferModeMenu = new CRMenu(_wm, mainMenu, mm_grayBufferMode,
-                _("Gray buffer depth(need restart)"),
-                                LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_POCKETBOOK_GRAYBUFFER_BPP );
-        addMenuItems( grayBufferModeMenu, gray_buffer_bpp );
-        mainMenu->addItem( grayBufferModeMenu );
-#endif
-
-        reconfigure(0);
+    reconfigure(0);
 }
 
 /// use to override status text
