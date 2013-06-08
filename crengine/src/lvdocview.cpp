@@ -1437,7 +1437,7 @@ int LVDocView::getPosPercent() {
         int fh = m_pages.length();
         if ( (getVisiblePageCount()==2 && (fh&1)) )
             fh++;
-        int p = getCurPage();// + 1;
+        int p = getCurPage() + 1;
 //        if ( getVisiblePageCount()>1 )
 //            p++;
 		if (fh > 0)
