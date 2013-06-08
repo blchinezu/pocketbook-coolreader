@@ -1064,7 +1064,7 @@ void V3DocViewWin::showAboutDialog()
     addInfoSection( txt, fileInfo, _("File info") );
 
     lString8 bookInfo;
-    addPropLine( bookInfo, _("Title"), props->getStringDef(DOC_PROP_TITLE) );
+    addPropLine( bookInfo, C_("Book", "Title"), props->getStringDef(DOC_PROP_TITLE) );
     addPropLine( bookInfo, _("Author(s)"), props->getStringDef(DOC_PROP_AUTHORS) );
     addPropLine( bookInfo, _("Series name"), props->getStringDef(DOC_PROP_SERIES_NAME) );
     addPropLine( bookInfo, _("Series number"), props->getStringDef(DOC_PROP_SERIES_NUMBER) );

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cool Reader 3 Catalan translation\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-06-02 17:10+0700\n"
+"POT-Creation-Date: 2013-06-08 13:20+0700\n"
 "PO-Revision-Date: 2011-09-15 17:53+0100\n"
 "Last-Translator: Ferran Rius Riu <friusriu@infonegocio.com>\n"
 "Language-Team: Catalan LoCo Team\n"
@@ -168,7 +168,9 @@ msgstr "Format"
 msgid "File info"
 msgstr "Quant al fitxer"
 
-#: ../src/mainwnd.cpp:1067 ../src/settings.cpp:950
+#: ../src/mainwnd.cpp:1067
+#, fuzzy
+msgctxt "Book"
 msgid "Title"
 msgstr "Títol"
 
@@ -436,7 +438,9 @@ msgstr "Setze jutges d'un jutjat mengen fetge d'un penjat"
 msgid "Justify"
 msgstr ""
 
-#: ../src/settings.cpp:484 ../src/viewdlg.cpp:481
+#: ../src/settings.cpp:484
+#, fuzzy
+msgctxt "CSS"
 msgid "Left"
 msgstr "Esquerra"
 
@@ -444,7 +448,9 @@ msgstr "Esquerra"
 msgid "Center"
 msgstr ""
 
-#: ../src/settings.cpp:486 ../src/viewdlg.cpp:483
+#: ../src/settings.cpp:486
+#, fuzzy
+msgctxt "CSS"
 msgid "Right"
 msgstr "Dreta"
 
@@ -951,6 +957,12 @@ msgstr ""
 msgid "Default paragraph formatting"
 msgstr "Desfés la selecció de paràgraf"
 
+#: ../src/settings.cpp:950
+#, fuzzy
+msgctxt "CSS"
+msgid "Title"
+msgstr "Títol"
+
 #: ../src/settings.cpp:951
 #, fuzzy
 msgid "Subtitle"
@@ -1272,6 +1284,18 @@ msgstr "Avall"
 #: ../src/viewdlg.cpp:479
 msgid "C"
 msgstr "C"
+
+#: ../src/viewdlg.cpp:481
+#, fuzzy
+msgctxt "Key"
+msgid "Left"
+msgstr "Esquerra"
+
+#: ../src/viewdlg.cpp:483
+#, fuzzy
+msgctxt "Key"
+msgid "Right"
+msgstr "Dreta"
 
 #: ../src/viewdlg.cpp:485
 msgid "Side Up"

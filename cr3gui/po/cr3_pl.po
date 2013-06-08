@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr 3gui\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-06-02 17:10+0700\n"
+"POT-Creation-Date: 2013-06-08 13:20+0700\n"
 "PO-Revision-Date: 2009-11-18 22:36+0100\n"
 "Last-Translator: Tomasz Długosz <tomek3d@gmail.com>\n"
 "Language-Team: Polish\n"
@@ -167,7 +167,9 @@ msgstr "Format pliku"
 msgid "File info"
 msgstr "Informacje o pliku"
 
-#: ../src/mainwnd.cpp:1067 ../src/settings.cpp:950
+#: ../src/mainwnd.cpp:1067
+#, fuzzy
+msgctxt "Book"
 msgid "Title"
 msgstr "Tytuł"
 
@@ -438,7 +440,9 @@ msgstr "W Szczebrzeszynie chrząszcz brzmi w trzcinie"
 msgid "Justify"
 msgstr ""
 
-#: ../src/settings.cpp:484 ../src/viewdlg.cpp:481
+#: ../src/settings.cpp:484
+#, fuzzy
+msgctxt "CSS"
 msgid "Left"
 msgstr "w lewo"
 
@@ -446,7 +450,9 @@ msgstr "w lewo"
 msgid "Center"
 msgstr ""
 
-#: ../src/settings.cpp:486 ../src/viewdlg.cpp:483
+#: ../src/settings.cpp:486
+#, fuzzy
+msgctxt "CSS"
 msgid "Right"
 msgstr "w prawo"
 
@@ -946,6 +952,12 @@ msgstr ""
 msgid "Default paragraph formatting"
 msgstr ""
 
+#: ../src/settings.cpp:950
+#, fuzzy
+msgctxt "CSS"
+msgid "Title"
+msgstr "Tytuł"
+
 #: ../src/settings.cpp:951
 #, fuzzy
 msgid "Subtitle"
@@ -1263,6 +1275,18 @@ msgstr "w dół"
 #: ../src/viewdlg.cpp:479
 msgid "C"
 msgstr "C"
+
+#: ../src/viewdlg.cpp:481
+#, fuzzy
+msgctxt "Key"
+msgid "Left"
+msgstr "w lewo"
+
+#: ../src/viewdlg.cpp:483
+#, fuzzy
+msgctxt "Key"
+msgid "Right"
+msgstr "w prawo"
 
 #: ../src/viewdlg.cpp:485
 msgid "Side Up"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-06-02 17:10+0700\n"
+"POT-Creation-Date: 2013-06-08 13:20+0700\n"
 "PO-Revision-Date: 2011-05-08 16:02+0700\n"
 "Last-Translator: Vladimir <v@v>\n"
 "Language-Team: Russian\n"
@@ -166,7 +166,8 @@ msgstr "Формат"
 msgid "File info"
 msgstr "Информация о файле"
 
-#: ../src/mainwnd.cpp:1067 ../src/settings.cpp:950
+#: ../src/mainwnd.cpp:1067
+msgctxt "Book"
 msgid "Title"
 msgstr "Название"
 
@@ -435,24 +436,18 @@ msgid "Justify"
 msgstr "По ширине"
 
 #: ../src/settings.cpp:484
+msgctxt "CSS"
 msgid "Left"
 msgstr "По левому краю"
-
-#: ../src/viewdlg.cpp:481
-msgid " Left"
-msgstr "Влево"
 
 #: ../src/settings.cpp:485
 msgid "Center"
 msgstr "По центру"
 
 #: ../src/settings.cpp:486
+msgctxt "CSS"
 msgid "Right"
 msgstr "По правому краю"
-
-#: ../src/viewdlg.cpp:483
-msgid " Right"
-msgstr "Вправо"
 
 #: ../src/settings.cpp:492
 msgid "No indent"
@@ -930,6 +925,11 @@ msgstr "Автохинтинг"
 msgid "Default paragraph formatting"
 msgstr "Формат параграфа по умолчанию"
 
+#: ../src/settings.cpp:950
+msgctxt "CSS"
+msgid "Title"
+msgstr "Заголовок"
+
 #: ../src/settings.cpp:951
 msgid "Subtitle"
 msgstr "Подзаголовок"
@@ -1230,6 +1230,16 @@ msgstr "Вниз"
 msgid "C"
 msgstr "С"
 
+#: ../src/viewdlg.cpp:481
+msgctxt "Key"
+msgid "Left"
+msgstr "Влево"
+
+#: ../src/viewdlg.cpp:483
+msgctxt "Key"
+msgid "Right"
+msgstr "Вправо"
+
 #: ../src/viewdlg.cpp:485
 msgid "Side Up"
 msgstr "Боковая Вверх"
@@ -1497,6 +1507,12 @@ msgstr "Действие"
 #: ../src/cr3pocketbook.cpp:2565
 msgid "Press $1 to translate"
 msgstr "Нажмите чтобы перевести"
+
+#~ msgid " Left"
+#~ msgstr "Влево"
+
+#~ msgid " Right"
+#~ msgstr "Вправо"
 
 #~ msgid "Disable"
 #~ msgstr "Не масштабировать (1:1)"

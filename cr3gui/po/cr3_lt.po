@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr 3gui\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-06-02 17:10+0700\n"
+"POT-Creation-Date: 2013-06-08 13:20+0700\n"
 "PO-Revision-Date: 2010-02-24 21:50+0300\n"
 "Last-Translator: Stanislovas Zacharovas\n"
 "Language-Team: Lithuanian\n"
@@ -165,7 +165,9 @@ msgstr "Failo formatas"
 msgid "File info"
 msgstr "Informacija apie failą"
 
-#: ../src/mainwnd.cpp:1067 ../src/settings.cpp:950
+#: ../src/mainwnd.cpp:1067
+#, fuzzy
+msgctxt "Book"
 msgid "Title"
 msgstr "Pavadinimas"
 
@@ -435,7 +437,9 @@ msgstr "Įlinkdama fechtuotojo špaga sublykčiojusi pragręžė apvalų arbūz�
 msgid "Justify"
 msgstr ""
 
-#: ../src/settings.cpp:484 ../src/viewdlg.cpp:481
+#: ../src/settings.cpp:484
+#, fuzzy
+msgctxt "CSS"
 msgid "Left"
 msgstr "Į kairė"
 
@@ -443,7 +447,9 @@ msgstr "Į kairė"
 msgid "Center"
 msgstr ""
 
-#: ../src/settings.cpp:486 ../src/viewdlg.cpp:483
+#: ../src/settings.cpp:486
+#, fuzzy
+msgctxt "CSS"
 msgid "Right"
 msgstr "Į dešinę"
 
@@ -943,6 +949,12 @@ msgstr ""
 msgid "Default paragraph formatting"
 msgstr ""
 
+#: ../src/settings.cpp:950
+#, fuzzy
+msgctxt "CSS"
+msgid "Title"
+msgstr "Pavadinimas"
+
 #: ../src/settings.cpp:951
 #, fuzzy
 msgid "Subtitle"
@@ -1263,6 +1275,18 @@ msgstr "Į apačią"
 #: ../src/viewdlg.cpp:479
 msgid "C"
 msgstr "C"
+
+#: ../src/viewdlg.cpp:481
+#, fuzzy
+msgctxt "Key"
+msgid "Left"
+msgstr "Į kairė"
+
+#: ../src/viewdlg.cpp:483
+#, fuzzy
+msgctxt "Key"
+msgid "Right"
+msgstr "Į dešinę"
 
 #: ../src/viewdlg.cpp:485
 msgid "Side Up"

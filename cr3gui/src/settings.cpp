@@ -481,9 +481,9 @@ void CRSettingsMenu::createStyleMenuItems(CRMenu * menu, LVFontRef valueFont, co
     item_def_t css_align_options[] = {
         {"-", ""}, // inherited
         {_("Justify"), "text-align: justify"},
-        {_("Left"), "text-align: left"},
+        {C_("CSS", "Left"), "text-align: left"},
         {_("Center"), "text-align: center"},
-        {_("Right"), "text-align: right"},
+        {C_("CSS", "Right"), "text-align: right"},
         {NULL, NULL}
     };
 
@@ -947,7 +947,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
     item_def_t css_styles[] = {
         {_("Default paragraph formatting"), "styles.def"},
-        {_("Title"), "styles.title"},
+        {C_("CSS", "Title"), "styles.title"},
         {_("Subtitle"), "styles.subtitle"},
         {_("Preformatted text / code"), "styles.pre"},
         {_("Link"), "styles.link"},
