@@ -733,6 +733,13 @@ public:
         }
         return true;
     }
+    virtual bool onTouch( int x, int y, CRGUITouchEventType evType )
+    {
+        _wm->postEvent( new CRGUITouchEvent(x, y, evType) );
+        _wm->closeWindow( this );
+        return true;
+
+    }
     virtual bool onKeyPressed( int key, int flags )
     {
         _wm->postEvent( new CRGUIKeyDownEvent(key, flags) );
