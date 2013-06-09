@@ -855,6 +855,7 @@ public:
     virtual lString8 createArticle(const char *word, const char *translation);
     virtual bool onCommand( int command, int params );
     void doActivate();
+    void doDeactivate();
     int getCurItem() { return _selectedIndex; }
     void setTranslation(lString8 translation);
     void setCurItem(int index);
@@ -1000,22 +1001,29 @@ public:
     {
         return (!_autoTranslate && !_wordTranslated);
     }
-    virtual bool isClickableElement(int x, int y, bool moveEvent)
+    virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType )
     {
         lvPoint pt (x, y);
+
+        if (_dictView->getRect().isPointInside(pt)) {
+            if (!_dictViewActive) {
+                activateDictView(true);
+                _dictView->doActivate();
+            }
+            return _dictView->onTouchEvent(x, y, evType);
+        } else if (CRTOUCH_DOWN == evType && _dictViewActive) {
+            _dictView->doDeactivate();
+        }
         ldomXPointer p = _docview->getNodeByPoint( pt );
         if ( !p.isNull() ) {
             pt = p.toPoint();
             _wordSelector->selectWord(pt.x, pt.y);
-            onWordSelection(false);
+            onWordSelection( false );
+            if ( CRTOUCH_UP == evType )
+                _wm->onCommand(PB_CMD_TRANSLATE, 0);
             return true;
         }
         return false;
-    }
-
-    virtual bool handleTouchUpEvent()
-    {
-        return _wm->onCommand(PB_CMD_TRANSLATE, 0);
     }
 };
 
@@ -2054,8 +2062,7 @@ bool CRPbDictionaryView::onItemSelect()
     case PB_DICT_ARTICLE_LIST:
         return true;
     case PB_DICT_DEACTIVATE:
-        setDirty();
-        _parent->activateDictView(_active = false);
+        doDeactivate();
         return true;
     case PB_DICT_SEARCH:
         searchDictinary();
@@ -2231,6 +2238,12 @@ void CRPbDictionaryView::doActivate()
 {
     _active = true;
     setCurItem(getCurItem());
+}
+
+void CRPbDictionaryView::doDeactivate()
+{
+    setDirty();
+    _parent->activateDictView(_active = false);
 }
 
 int CRPbDictionaryView::getDesiredHeight()
