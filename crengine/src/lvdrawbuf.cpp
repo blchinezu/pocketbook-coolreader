@@ -2072,7 +2072,7 @@ void LVGrayDrawBuf::DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, 
                             int shift = ((x+xx) & 3) * 2;
                             lUInt32 dithered = Dither2BitColor(cl, xx, yy) << 6;
                             lUInt8 b = *dst & ~(0xC0 >> shift);
-                            *dst = b | (dithered >> shift);
+                            *dst = (lUInt8)(b | (dithered >> shift));
                         }
 #ifdef CR_POCKETBOOK
                         else if (_bpp==8)
@@ -2086,7 +2086,7 @@ void LVGrayDrawBuf::DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, 
                         {
                             lUInt8 * dst = dst0 + x + xx;
                             lUInt32 dithered = DitherNBitColor(cl, xx, yy, _bpp); // << (8 - _bpp);
-                            *dst = dithered;
+                            *dst = (lUInt8)dithered;
                         }
                     }
                 }

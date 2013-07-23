@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.37"
+#define CACHE_FILE_FORMAT_VERSION "3.04.38"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -2037,7 +2037,7 @@ bool ldomDataStorageManager::load()
             _chunks.clear();
             return false;
         }
-        _chunks.add( new ldomTextStorageChunk( this, i,compsize, uncompsize ) );
+        _chunks.add( new ldomTextStorageChunk( this, (lUInt16)i,compsize, uncompsize ) );
     }
     return true;
 #else
@@ -3637,7 +3637,6 @@ ldomElementWriter::ldomElementWriter(ldomDocument * document, lUInt16 nsid, lUIn
         _element = _parent->getElement()->insertChildElement( (lUInt32)-1, nsid, id );
     else
         _element = _document->getRootNode(); //->insertChildElement( (lUInt32)-1, nsid, id );
-    //CRLog::trace("ldomElementWriter created for element 0x%04x %s", _element->getDataIndex(), LCSTR(_element->getNodeName()));
     if ( IS_FIRST_BODY && id==el_body ) {
         _tocItem = _document->getToc();
         //_tocItem->clear();
