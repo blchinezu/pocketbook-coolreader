@@ -971,7 +971,7 @@ void renderFinalBlock( ldomNode * enode, LFormattedText * txform, RenderRectAcce
     if ( enode->isElement() )
     {
         lvdom_element_render_method rm = enode->getRendMethod();
-        if ( rm == erm_invisible )
+        if ( rm == erm_invisible || ( enode->getNodeId()==el_a && 0==enode->getChildCount()) )
             return; // don't draw invisible
         //RenderRectAccessor fmt2( enode );
         //fmt = &fmt2;
@@ -1150,10 +1150,15 @@ void renderFinalBlock( ldomNode * enode, LFormattedText * txform, RenderRectAcce
             bool thisIsRunIn = enode->getStyle()->display==css_d_run_in;
             if ( thisIsRunIn )
                 flags |= LTEXT_RUNIN_FLAG;
+            int saved_ident = ident;
             for (int i=0; i<cnt; i++)
             {
                 ldomNode * child = enode->getChildNode( i );
                 renderFinalBlock( child, txform, fmt, flags, ident, line_h );
+                if ( child->getNodeId()==el_br )
+                    ident = 0;
+                else
+                    ident = saved_ident;
             }
             if ( thisIsRunIn ) {
                 // append space to run-in object
@@ -1198,7 +1203,6 @@ void renderFinalBlock( ldomNode * enode, LFormattedText * txform, RenderRectAcce
                 break;
             case css_ta_justify:
                 baseflags |= LTEXT_ALIGN_WIDTH;
-                ident = 0;
                 break;
             case css_ta_inherit:
                 break;
