@@ -1267,6 +1267,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     }
                 }
             }
+#endif
             if (bookmarks!=NULL && bookmarks->length()>0) {
                 lvRect lineRect( frmline->x, frmline->y, frmline->x + frmline->width, frmline->y + frmline->height );
                 for ( int i=0; i<bookmarks->length(); i++ ) {
@@ -1279,20 +1280,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     }
                 }
             }
-#endif
-#ifdef CR_USE_INVERT_FOR_SELECTION_MARKS
-            // process bookmarks
-            if ( bookmarks != NULL && bookmarks->length() > 0 ) {
-                lvRect lineRect( frmline->x, frmline->y, frmline->x + frmline->width, frmline->y + frmline->height );
-                for ( int i=0; i<bookmarks->length(); i++ ) {
-                    lvRect bookmark_rc;
-                    ldomMarkedRange * range = bookmarks->get(i);
-                    if ( range->intersects( lineRect, bookmark_rc ) ) {
-                        buf->FillRect( bookmark_rc.left + x, bookmark_rc.top + y, bookmark_rc.right + x, bookmark_rc.bottom + y, 0xAAAAAA );
-                    }
-                }
-            }
-#endif
+
             for (j=0; j<frmline->word_count; j++)
             {
                 word = &frmline->words[j];
