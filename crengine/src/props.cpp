@@ -266,6 +266,14 @@ void CRPropAccessor::limitValueList( const char * propName, int values[], int va
     setString( propName, defValue );
 }
 
+void CRPropAccessor::limitValueRange( const char * propName, int defValue, int minValue, int maxValue )
+{
+    int value = 0;
+    if ( !(getInt( propName, value ) && (value >= minValue && value <= maxValue))) {
+        setInt( propName, defValue );
+    }
+}
+
 //============================================================================
 // CRPropAccessor methods
 //============================================================================

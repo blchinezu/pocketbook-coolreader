@@ -47,9 +47,12 @@ public:
         int cmd;
         int params;
         bool isSet = getCommand( cmd, params );
-        lString16 res = Utf8ToUnicode(lString8(getCommandName( cmd, params )));
-        // TODO: use default flag
-        return res;
+        if(isSet) {
+            lString16 res = Utf8ToUnicode(lString8(getCommandName( cmd, params )));
+            // TODO: use default flag
+            return res;
+        }
+        return lString16::empty_str;
     }
     /// called on item selection
     virtual int onSelect();
@@ -287,14 +290,15 @@ CRMenu * CRSettingsMenu::createOrientationMenu( CRMenu * mainMenu, CRPropRef pro
 #endif
 
 DECL_DEF_CR_FONT_SIZES;
+static int cr_status_font_sizes[MAX_STATUS_FONT_SIZE - MIN_STATUS_FONT_SIZE + 1];
 
 class FontSizeMenu : public CRMenu
 {
 public:
-    FontSizeMenu(  CRGUIWindowManager * wm, CRMenu * parentMenu, LVFontRef valueFont, CRPropRef props  )
+    FontSizeMenu(  CRGUIWindowManager * wm, CRMenu * parentMenu, LVFontRef valueFont, CRPropRef props, const char * propName  )
     : CRMenu( wm, parentMenu, mm_FontSize,
                                 _("Default font size"),
-                                        LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_FONT_SIZE, 10 )
+                                        LVImageSourceRef(), LVFontRef(), valueFont, props, propName, 10 )
     {
         _fullscreen = true;
     }
@@ -337,31 +341,31 @@ class OnDemandFontMenuItem : public CRMenuItem
     }
 };
 
-CRMenu * CRSettingsMenu::createFontSizeMenu( CRGUIWindowManager * wm, CRMenu * mainMenu, CRPropRef props )
+CRMenu * CRSettingsMenu::createFontSizeMenu( CRMenu * mainMenu, int *fontSizes, unsigned sizesCount,
+                                            CRPropRef props, const char * propName )
 {
     lString16Collection list;
     fontMan->getFaceList( list );
     lString8 fontFace = UnicodeToUtf8(props->getStringDef( PROP_FONT_FACE, UnicodeToUtf8(list[0]).c_str() ));
-    //LVFontRef menuFont( fontMan->GetFont( MENU_FONT_SIZE, 600, false, css_ff_sans_serif, lString8("Arial")) );
-    CRMenuSkinRef skin = wm->getSkin()->getMenuSkin(L"#settings");
-    LVFontRef valueFont = skin->getValueSkin()->getFont();//( fontMan->GetFont( VALUE_FONT_SIZE, 400, true, css_ff_sans_serif, lString8("Arial")) );
+    CRMenuSkinRef skin = _wm->getSkin()->getMenuSkin(L"#settings");
+    LVFontRef valueFont = skin->getValueSkin()->getFont();
     CRMenu * fontSizeMenu;
-    fontSizeMenu = new FontSizeMenu(_wm, mainMenu, valueFont, props );
-    for ( unsigned i=0; i<sizeof(cr_font_sizes)/sizeof(int); i++ ) {
-        //char name[32];
+    fontSizeMenu = new FontSizeMenu(_wm, mainMenu, valueFont, props, propName );
+    for ( unsigned i=0; i<sizesCount; i++ ) {
         char defvalue[400];
-        //sprintf( name, "VIEWER_DLG_FONT_SIZE_%d", cr_font_sizes[i] );
-        sprintf( defvalue, "%d %s", cr_font_sizes[i], _("The quick brown fox jumps over lazy dog") );
+        sprintf( defvalue, "%d %s", fontSizes[i], _("The quick brown fox jumps over lazy dog") );
         fontSizeMenu->addItem( new OnDemandFontMenuItem( fontSizeMenu, 0,
                         lString16(defvalue),
-                        LVImageSourceRef(), lString16::itoa(cr_font_sizes[i]).c_str(),
-                        cr_font_sizes[i], 400, false, css_ff_sans_serif, fontFace, UnicodeToUtf8(skin->getItemSkin()->getFontFace())) );
+                        LVImageSourceRef(), lString16::itoa(fontSizes[i]).c_str(),
+                        fontSizes[i], 400, false, css_ff_sans_serif, fontFace, UnicodeToUtf8(skin->getItemSkin()->getFontFace())) );
     }
     fontSizeMenu->setAccelerators( _wm->getAccTables().get("menu") );
     //fontSizeMenu->setAccelerators( _menuAccelerators );
     fontSizeMenu->setSkinName(lString16("#settings"));
     //fontSizeMenu->setSkinName(lString16("#main"));
     fontSizeMenu->reconfigure( 0 );
+    if(NULL != mainMenu)
+        mainMenu->addItem(fontSizeMenu);
     return fontSizeMenu;
 }
 
@@ -464,6 +468,7 @@ CRMenu * CRSettingsMenu::createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef va
     fontFaceMenu->setAccelerators( _menuAccelerators );
     fontFaceMenu->reconfigure( 0 );
     mainMenu->addItem(fontFaceMenu);
+    return fontFaceMenu;
 }
 
 CRMenu * CRSettingsMenu::createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label, lString8 property, item_def_t values[])
@@ -507,10 +512,14 @@ void CRSettingsMenu::createStyleMenuItems(CRMenu * menu, LVFontRef valueFont, co
 
     item_def_t font_size_options[] = {
         {"-", ""}, // inherited
+        {_("Bigger (105%)"), "font-size: 105%"},
         {_("Bigger (110%)"), "font-size: 110%"},
+        {_("Bigger (115%)"), "font-size: 115%"},
         {_("Bigger (120%)"), "font-size: 120%"},
         {_("Bigger (150%)"), "font-size: 150%"},
+        {_("Smaller (95%)"), "font-size: 95%"},
         {_("Smaller (90%)"), "font-size: 90%"},
+        {_("Smaller (85%)"), "font-size: 85%"},
         {_("Smaller (80%)"), "font-size: 80%"},
         {_("Smaller (70%)"), "font-size: 70%"},
         {_("Smaller (60%)"), "font-size: 60%"},
@@ -972,10 +981,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     mainMenu->setAccelerators( _menuAccelerators );
 
     createFontFaceMenuItem(mainMenu, valueFont, mm_FontFace, _("Default font face"),  PROP_FONT_FACE);
-
-    CRMenu * fontSizeMenu = createFontSizeMenu( _wm, mainMenu, props );
-    mainMenu->addItem( fontSizeMenu );
-
+    createFontSizeMenu( mainMenu, cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int), props, PROP_FONT_SIZE);
 
     CRMenu * fontSettingsMenu = new CRMenu( _wm, mainMenu, _menuItemId++, _("Font settings"),
                                            LVImageSourceRef(), LVFontRef(), valueFont, CRPropRef());
@@ -1071,6 +1077,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
     createFontFaceMenuItem(statusMenu, valueFont, _menuItemId++, _("Font face"),
                            PROP_STATUS_FONT_FACE);
+
+    unsigned sizesCount = sizeof(cr_status_font_sizes)/sizeof(cr_status_font_sizes[0]);
+    for(unsigned i = 0; i < sizesCount; i++) {
+        cr_status_font_sizes[i] = MIN_STATUS_FONT_SIZE + i;
+    }
+    createFontSizeMenu(statusMenu, cr_status_font_sizes, sizesCount, props, PROP_STATUS_FONT_SIZE);
     createSettingsMenuItem(statusMenu, mm_ShowTime, _("Show time"),
                            valueFont, PROP_SHOW_TIME, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowTitle, _("Show title"),

@@ -93,12 +93,6 @@ static css_font_family_t DEFAULT_FONT_FAMILY = css_ff_sans_serif;
 //    css_ff_fantasy,
 //    css_ff_monospace
 
-#ifdef LBOOK
-#define INFO_FONT_SIZE      22
-#else
-#define INFO_FONT_SIZE      22
-#endif
-
 #if defined(__SYMBIAN32__)
 #include <e32std.h>
 #define DEFAULT_PAGE_MARGIN 2
@@ -125,7 +119,7 @@ LVDocView::LVDocView(int bitsPerPixel) :
 #else
 			, m_font_size(24)
 #endif
-			, m_status_font_size(INFO_FONT_SIZE),
+                        , m_status_font_size(DEF_STATUS_FONT_SIZE),
 			m_def_interline_space(100),
 			m_font_sizes(def_font_sizes, sizeof(def_font_sizes) / sizeof(int)),
 			m_font_sizes_cyclic(false),
@@ -5510,12 +5504,8 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	props->limitValueList(PROP_PAGE_MARGIN_RIGHT, def_margin, sizeof(def_margin)/sizeof(int));
 	static int def_updates[] = { 1, 0, 2, 3, 4, 5, 6, 7, 8, 10, 14 };
 	props->limitValueList(PROP_DISPLAY_FULL_UPDATE_INTERVAL, def_updates, 11);
-	int fs = props->getIntDef(PROP_STATUS_FONT_SIZE, INFO_FONT_SIZE);
-    if (fs < 8)
-        fs = 8;
-    else if (fs > 32)
-        fs = 32;
-	props->setIntDef(PROP_STATUS_FONT_SIZE, fs);
+        props->limitValueRange(PROP_STATUS_FONT_SIZE, DEF_STATUS_FONT_SIZE,
+                               MIN_STATUS_FONT_SIZE, MAX_STATUS_FONT_SIZE);
 	lString16 hyph = props->getStringDef(PROP_HYPHENATION_DICT,
 			DEF_HYPHENATION_DICT);
 #if !defined(ANDROID)
@@ -5737,12 +5727,8 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
 			value = lString16::itoa(m_font_size);
 		} else if (name == PROP_STATUS_FONT_SIZE) {
 			int fontSize = props->getIntDef(PROP_STATUS_FONT_SIZE,
-					INFO_FONT_SIZE);
-			if (fontSize < 8)
-				fontSize = 8;
-			else if (fontSize > 28)
-				fontSize = 28;
-			setStatusFontSize(fontSize);//cr_font_sizes
+                                        DEF_STATUS_FONT_SIZE);
+                        setStatusFontSize(fontSize);
 			value = lString16::itoa(fontSize);
 #if !defined(ANDROID)
 		} else if (name == PROP_HYPHENATION_DICT) {

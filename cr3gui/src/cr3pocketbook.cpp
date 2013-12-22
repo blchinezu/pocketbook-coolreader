@@ -58,7 +58,9 @@ static const int angles_measured[] = { 19, 24, 29, 33, 38, 43, 47, 50, 52, 55, 5
 static void translate_timer();
 static void rotate_timer();
 static void paused_rotate_timer();
+#ifdef BACKGROUND_CACHE_FILE_CREATION
 static void cache_timer();
+#endif
 
 #ifdef PB_DB_STATE_SUPPORTED
 typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
@@ -411,7 +413,7 @@ public:
     }
 
     CRPocketBookWindowManager(int dx, int dy, int bpp)
-        : CRGUIWindowManager(NULL), _pbTable(32), m_incommand(false)
+        : CRGUIWindowManager(NULL), m_incommand(false), _pbTable(32)
     {
         CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy, bpp);
         _orientation = pocketbook_orientations[GetOrientation()];

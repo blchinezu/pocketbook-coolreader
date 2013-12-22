@@ -365,6 +365,12 @@ enum {
     PGHDR_PERCENT=128
 };
 
+/// page header font sizes
+enum {
+    MIN_STATUS_FONT_SIZE = 8,
+    MAX_STATUS_FONT_SIZE = 32,
+    DEF_STATUS_FONT_SIZE = 22
+};
 
 //typedef lUInt64 LVPosBookmark;
 
@@ -995,7 +1001,6 @@ public:
         m_props->setInt(PROP_MIN_FILE_SIZE_TO_CACHE, size);
     }
 #endif
-
     /// render (format) document
     void Render( int dx=0, int dy=0, LVRendPageList * pages=NULL );
     /// set properties before rendering

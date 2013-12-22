@@ -62,9 +62,8 @@ void CRBookmarkMenu::setMode( bool goToMode )
     //if ( _goToMode==goToMode )
     //    return;
     CRLog::trace("CRBookmarkMenu::setMode");
-    int k, f;
 #ifdef CR_POCKETBOOK
-	lString16 selKeyName = getCommandKeyName( MCMD_SELECT );
+    lString16 selKeyName = getCommandKeyName( MCMD_SELECT );
 #else
     lString16 selKeyName = getItemNumberKeysName();
 #endif
@@ -438,7 +437,6 @@ void CRCitesMenu::goToCitePage(int selecteditem)
 
 int CRCitesMenu::getSelectedItemIndex()
 {
-    CRFileHistRecord * bookmarks = _docview->getCurrentFileHistRecord();
     int curPage = _docview->getCurPage();
     for (int i = 0; i < _items.length(); i++) {
         CRBookmarkMenuItem *item = static_cast<CRBookmarkMenuItem *>(_items[i]);

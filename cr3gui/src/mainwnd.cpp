@@ -56,6 +56,7 @@
 
 DECL_DEF_CR_FONT_SIZES;
 
+static const lString16 PROGRESS_ICON_FILE("cr3_wait_icon.png");
 
 V3DocViewWin::V3DocViewWin( CRGUIWindowManager * wm, lString16 dataDir )
 : CRViewDialog ( wm, lString16::empty_str, lString8::empty_str, lvRect(), false, false ), _dataDir(dataDir), _loadFileStart(0)
@@ -417,7 +418,7 @@ void V3DocViewWin::OnLoadFileProgress( int percent )
     CRLog::trace("OnLoadFileProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 10+percent/2);
+        _wm->showProgress(PROGRESS_ICON_FILE, 10+percent/2);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -429,7 +430,7 @@ void V3DocViewWin::OnFormatStart()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 60);
+        _wm->showProgress(PROGRESS_ICON_FILE, 60);
 }
 
 /// document formatting finished
@@ -437,7 +438,7 @@ void V3DocViewWin::OnFormatEnd()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 100);
+        _wm->showProgress(PROGRESS_ICON_FILE, 100);
     // Background cache file saving is disabled when _docview->updateCache(infinite) is called here.
     // To implement background cache file saving, schedule on Idle state following task:
     // in each idle cycle call _docview->updateCache(timeOut) while it returns CR_TIMEOUT
@@ -452,7 +453,7 @@ void V3DocViewWin::OnFormatProgress( int percent )
     CRLog::trace("OnFormatProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 60+percent*4/10);
+        _wm->showProgress(PROGRESS_ICON_FILE, 60+percent*4/10);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -739,7 +740,7 @@ void V3DocViewWin::showFontSizeMenu()
     _newProps = LVClonePropsContainer( _props );
     lvRect rc = _wm->getScreen()->getRect();
     CRSettingsMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont, getMenuAccelerators(), rc );
-    CRMenu * menu = mainMenu->createFontSizeMenu( _wm, NULL, _newProps );
+    CRMenu * menu = mainMenu->createFontSizeMenu( NULL, cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int), _newProps, PROP_FONT_SIZE );
     _wm->activateWindow( menu );
 }
 

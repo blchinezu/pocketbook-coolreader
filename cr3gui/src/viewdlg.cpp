@@ -169,7 +169,6 @@ bool CRViewDialog::hasDictionaries()
 
 void CRViewDialog::showGoToPageDialog()
 {
-    LVTocItem * toc = _docview->getToc();
     CRNumberEditDialog * dlg;
 #if USE_SEPARATE_GO_TO_PAGE_DIALOG==1
     if ( toc && toc->getChildCount()>0 ) {
@@ -191,7 +190,6 @@ void CRViewDialog::showGoToPageDialog()
 
 void CRViewDialog::showGoToPercentDialog()
 {
-    LVTocItem * toc = _docview->getToc();
     CRNumberEditDialog * dlg;
     dlg = new CRNumberEditDialog( _wm,
         lString16( _("Enter position percent") ),
