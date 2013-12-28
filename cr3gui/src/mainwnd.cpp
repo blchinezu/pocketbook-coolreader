@@ -418,7 +418,7 @@ void V3DocViewWin::OnLoadFileProgress( int percent )
     CRLog::trace("OnLoadFileProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(PROGRESS_ICON_FILE, 10+percent/2);
+        showProgress(PROGRESS_ICON_FILE, 10+percent/2);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -430,7 +430,7 @@ void V3DocViewWin::OnFormatStart()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(PROGRESS_ICON_FILE, 60);
+        showProgress(PROGRESS_ICON_FILE, 60);
 }
 
 /// document formatting finished
@@ -438,7 +438,7 @@ void V3DocViewWin::OnFormatEnd()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(PROGRESS_ICON_FILE, 100);
+        showProgress(PROGRESS_ICON_FILE, 100);
     // Background cache file saving is disabled when _docview->updateCache(infinite) is called here.
     // To implement background cache file saving, schedule on Idle state following task:
     // in each idle cycle call _docview->updateCache(timeOut) while it returns CR_TIMEOUT
@@ -453,7 +453,7 @@ void V3DocViewWin::OnFormatProgress( int percent )
     CRLog::trace("OnFormatProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(PROGRESS_ICON_FILE, 60+percent*4/10);
+        showProgress(PROGRESS_ICON_FILE, 60+percent*4/10);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -1230,4 +1230,9 @@ void V3DocViewWin::OnLoadFileFirstPagesReady()
     _docview->requestRender();
     // TODO: remove debug sleep
     //sleep(5);
+}
+
+void V3DocViewWin::showProgress(lString16 filename, int progressPercent)
+{
+    _wm->showProgress(filename, progressPercent);
 }

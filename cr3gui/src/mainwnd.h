@@ -146,7 +146,7 @@ public:
 	virtual void OnLoadFileError( lString16 message );
     /// Override to handle external links
     virtual void OnExternalLink( lString16 url, ldomNode * node );
-
+    virtual void showProgress( lString16 filename, int progressPercent );
     /// returns current properties
     CRPropRef getProps() { return _props; }
 

@@ -1341,6 +1341,15 @@ public:
             CloseApp();
     }
 
+    void showProgress( lString16 filename, int progressPercent )
+    {
+        CRGUIWindowBase *wnd = new CRGUIWindowBase(_wm);
+        // this is to avoid flashing when updating progressbar
+        _wm->activateWindow(wnd);
+        V3DocViewWin::showProgress(filename, progressPercent);
+        _wm->closeWindow(wnd);
+    }
+
     bool onCommand(int command, int params)
     {
         switch(command) {
