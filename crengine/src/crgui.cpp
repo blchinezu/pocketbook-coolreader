@@ -474,7 +474,7 @@ void CRGUIWindowManager::showWaitIcon( lString16 filename, int progressPercent )
         int dy = img->GetHeight();
         int x = (_screen->getWidth() - dx) / 2;
         int y = (_screen->getHeight() - dy) / 2;
-        CRLog::debug("Drawing wait image %s %dx%d  progress=%d%%", UnicodeToUtf8(filename).c_str(), dx, dy, progressPercent );
+        CRLog::debug("Drawing wait image %s [%d,%d %dx%d]  progress=%d%%", UnicodeToUtf8(filename).c_str(), x, y, dx, dy, progressPercent );
         _screen->getCanvas()->Draw( img, x, y, dx, dy, true );
         int gaugeH = 0;
         if ( progressPercent>=0 && progressPercent<=100 ) {
@@ -488,7 +488,7 @@ void CRGUIWindowManager::showWaitIcon( lString16 filename, int progressPercent )
         }
         _screen->invalidateRect( lvRect(x, y, x+dx, y+dy+gaugeH) );
         _screen->flush(firstWaitUpdate);
-        firstWaitUpdate = false;
+        firstWaitUpdate = (progressPercent == 100);
     } else {
         CRLog::error("CRGUIWindowManager::showWaitIcon(%s): image not found in current skin", UnicodeToUtf8(filename).c_str() );
     }

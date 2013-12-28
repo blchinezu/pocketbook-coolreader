@@ -688,7 +688,7 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
         draw(0, 0, _front->GetWidth(), _front->GetHeight());
         FullUpdate();
     } else {
-        draw(rc.left, rc.top, rc.width(), rc.height());
+        draw(0, rc.top, _front->GetWidth(), rc.height());
         if (!isDocWnd && rc.height() < 300) {
             if (_update_gray) {
                 PartialUpdate(rc.left, rc.top, rc.right, rc.bottom);
