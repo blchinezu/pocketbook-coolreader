@@ -56,7 +56,7 @@
 
 DECL_DEF_CR_FONT_SIZES;
 
-static const lString16 PROGRESS_ICON_FILE("cr3_wait_icon.png");
+#define PROGRESS_ICON_FILE lString16("cr3_wait_icon.png")
 
 V3DocViewWin::V3DocViewWin( CRGUIWindowManager * wm, lString16 dataDir )
 : CRViewDialog ( wm, lString16::empty_str, lString8::empty_str, lvRect(), false, false ), _dataDir(dataDir), _loadFileStart(0)
