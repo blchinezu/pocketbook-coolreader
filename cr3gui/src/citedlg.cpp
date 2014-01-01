@@ -23,10 +23,18 @@ class CiteWindow : public BackgroundFitWindow
 #ifdef CR_POCKETBOOK
 	int _selectedIndex;
 	int _itemsCount;
+	lvPoint _lvBtnP;
+        bool _bTouchImgs;
+        int _shiftX;
+        bool _noClose;
 
 	int getCommandFromIndex(int command) 
 	{
-		switch (_selectedIndex) {
+		int index= _selectedIndex;
+		if ( _bTouchImgs )
+		   index -= 1;
+//		switch (_selectedIndex) {
+		switch ( index) {
 		case 0:
 			//move
 			if (command == MCMD_SCROLL_BACK)
@@ -94,22 +102,44 @@ protected:
 
         }
         lvRect keyRect = _rect;
+//        CRLog::trace("CiteWindow::draw() keyRect ( %d, %d, %d, %d )", keyRect.left, keyRect.top, keyRect.right, keyRect.bottom );
+
         int promptWidth = skin->measureText(prompt).x;
         keyRect.right = keyRect.left + promptWidth + borders.left + borders.right;
-        if ( !keyRect.isEmpty() ) {
+        if ( !keyRect.isEmpty() ) 
+        {
             skin->draw( *_wm->getScreen()->getCanvas(), keyRect );
-            skin->drawText( *_wm->getScreen()->getCanvas(), keyRect, prompt );
+            if ( !_bTouchImgs )
+               skin->drawText( *_wm->getScreen()->getCanvas(), keyRect, prompt );
+//            CRLog::trace("CiteWindow::draw() drawText keyRect ( %d, %d, %d, %d )", keyRect.left, keyRect.top, keyRect.right, keyRect.bottom );
         }
-        CRToolBarSkinRef tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar" );
-        if (!tbSkin.isNull()) {
-            keyRect.left += (borders.right + _wm->getScreen()->getWidth() * 2/3/*promptWidth*/);
+
+//        CRToolBarSkinRef tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar" );
+        CRToolBarSkinRef tbSkin;
+        if ( !_bTouchImgs )
+           tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar" );
+       else
+           tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar-touch" );
+           
+        if (!tbSkin.isNull()) 
+        {
+            if ( !_bTouchImgs )
+               keyRect.left += (borders.right + _wm->getScreen()->getWidth() * 2/3/*promptWidth*/);
+            else            
+               keyRect.left += _shiftX;
+            
             keyRect.right = _rect.right;
+
             CRButtonListRef buttons = tbSkin->getButtons();
-            if (!(buttons.isNull() || _itemsCount != buttons->length()))
+//            CRLog::trace("CiteWindow::draw() tbSkin keyRect ( %d, %d, %d, %d ) buttons.isNull()=%d _itemsCount=%d buttons->length()= %d", keyRect.left, keyRect.top, keyRect.right, keyRect.bottom, buttons.isNull(), _itemsCount, buttons->length() );
+            if ( !( buttons.isNull() || _itemsCount != buttons->length() ) )
+            {
                 tbSkin->drawToolBar(*_wm->getScreen()->getCanvas(), keyRect, true, _selectedIndex);
+                CRLog::trace("CiteWindow::draw() tbSkin->drawToolBar keyRect ( %d, %d, %d, %d ) _selectedIndex=%d buttons.isNull()=%d _itemsCount=%d buttons->length()= %d", keyRect.left, keyRect.top, keyRect.right, keyRect.bottom, _selectedIndex, buttons.isNull(), _itemsCount, buttons->length() );
+            }
         }
 #else
-                lString16 prompt(_("Select text"));
+    lString16 prompt(_("Select text"));
 		buf->FillRect( _rect, 0xAAAAAA );
 		lvRect keyRect = _rect;
 		LVFontRef font = fontMan->GetFont( 20, 600, false, css_ff_sans_serif, lString8("Arial")); //skin->getFont();
@@ -140,8 +170,57 @@ public:
         selector_.highlight();
         setDirty();
 #ifdef CR_POCKETBOOK
-		_itemsCount = 5;
-                _selectedIndex = 0;
+      _itemsCount =5;
+      _selectedIndex = 0;
+
+      _bTouchImgs= false;
+      _noClose= true;
+      _shiftX= 0;
+      lvPoint pnmax;
+
+      CRRectSkinRef skin = _wm->getSkin()->getWindowSkin( L"#dialog" )->getClientSkin();
+      if ( !skin.isNull() )
+        _shiftX = skin->getBorderWidths().left;
+
+      CRToolBarSkinRef tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar-touch" );
+      if ( !tbSkin.isNull() ) 
+      {
+        _shiftX += tbSkin->getBorderWidths().left;
+
+        CRButtonListRef buttons = tbSkin->getButtons();
+        LVRef<CRButtonSkin> button;
+        LVImageSourceRef barImg;
+        if ( !buttons.isNull() ) 
+          button = buttons->get( 0 );
+
+        if ( !button.isNull() ) 
+          barImg= button->getNormalImage();
+
+        if ( !barImg.isNull() ) 
+          _lvBtnP= lvPoint( barImg->GetWidth(), barImg->GetHeight() );
+        
+        CRLog::trace("CiteWindow  barImg= (%d, %d) _shiftX= %d", _lvBtnP.x, _lvBtnP.y, _shiftX );
+//        _lvBtnP= tbSkin->getMinSize();// Load image 
+//        pnmax= tbSkin->getMaxSize();
+//        CRLog::trace("CiteWindow  MinSize()  %d, %d MaxSize() %d, %d  _shiftX=%d ", _lvBtnP.x, _lvBtnP.y, pnmax.x, pnmax.y, _shiftX );
+//      if ( _lvBtnP.y < pnmax.y )
+//        _lvBtnP.y=  pnmax.y;
+        
+        if ( _lvBtnP.y > 40 )
+        {
+          _lvBtnP.y += 16;//for border
+          _rect.top = _rect.bottom - _lvBtnP.y;
+        }
+
+        if ( _lvBtnP.y && _lvBtnP.x && buttons->length() == 7 )
+        {
+          _itemsCount = buttons->length();
+          _selectedIndex = 1;
+          _bTouchImgs= true;
+          CRLog::trace( "CiteWindow  TouchImgs present" );
+        }
+      }
+      
 #endif
 	}
 
@@ -232,7 +311,28 @@ public:
 		return true;
 	}
 
+#ifdef CR_POCKETBOOK
+    virtual void covered() 
+    {
+       if ( _noClose )
+       {
+//         CRLog::trace( "CiteWindow::covered(). Lost focus, set activate this window.");
+         CRGUIWindowManager * wm = 0;
+         if ( this && ( wm = mainwin_->getWindowManager() ) )
+           wm->activateWindow( this );
+         else
+           close();
+       }
+    }
+
+    virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType );
+    int getTapItem( int x, int y );
+
+#endif
+
+
     void close() {
+        _noClose= false;
         CRLog::info("Closing cite");
         _mainwin->getDocView()->clearSelection();
         _mainwin->getDocView()->updateBookMarksRanges();
@@ -243,7 +343,104 @@ protected:
     CiteWindow(const CiteWindow&); //non-copyable
 };
 
+#ifdef CR_POCKETBOOK
 
+int CiteWindow::getTapItem( int x, int y )
+{
+  int item= -1;
+  lvPoint pn( x, y );
+  lvRect keyRect = _rect;
+
+  keyRect.left += _shiftX;
+  if ( _rect.right < keyRect.left + _lvBtnP.x * _itemsCount )
+    keyRect.right += keyRect.left + _lvBtnP.x * _itemsCount;
+
+  if ( !keyRect.isPointInside( pn ) || !_bTouchImgs )
+    return item;
+
+  if ( _itemsCount )
+  {
+    int xp= x - _shiftX;
+    if ( xp >= 0 )
+      item= xp/_lvBtnP.x;
+
+//    CRLog::trace("CiteWindow::getTapItem() keyRect ( %d, %d, %d, %d ) xp=%d keyRect.width()=%d _lvBtnP.x=%d item=%d", keyRect.left, keyRect.top, keyRect.right, keyRect.bottom, xp, keyRect.width(), _lvBtnP.x, item );
+
+    if ( item >= _itemsCount )
+      item= -1;
+  }
+
+  CRLog::trace("CiteWindow::getTapItem() item= %d", item );
+
+  return item;
+}
+
+bool CiteWindow::onTouchEvent( int x, int y, CRGUITouchEventType evType )
+{
+      CRLog::trace("CiteWindow::onTouchEvent() x=%d  y= %d evType= %d", x, y, int( evType ) );
+
+      int item= -1;
+
+      switch ( evType )
+      {
+      //case CRTOUCH_DOWN:
+      //CRLog::trace("CiteWindow::onTouchEvent() DOWN %d",  evType );
+      //break;
+      //
+      //case CRTOUCH_DOWN_LONG:
+      //CRLog::trace("CiteWindow::onTouchEvent() DOWN_LONG %d",  evType );
+      //break;
+      
+      case CRTOUCH_UP:
+        {
+          CRLog::trace("CiteWindow::onTouchEvent() x=%d  y= %d evType= %d", x, y, int( evType ) );
+
+          item= getTapItem( x, y );
+          if ( item < 0 ) 
+            return true;
+
+          switch ( item )
+          {
+          case 0:
+            {
+              ldomXRange range;
+              selector_.getRange(range);
+              if ( !range.isNull() ) {
+                mainwin_->getDocView()->saveRangeBookmark( range, bmkt_comment, lString16::empty_str);
+                mainwin_->saveHistory(lString16::empty_str);
+              }
+              close();
+            };
+            break;
+          case 6:
+            close();
+            break;
+
+          case 1:
+          case 2:
+          case 3:
+          case 4:
+          case 5:
+              _selectedIndex = item;
+              setDirty();
+              CRLog::trace("CiteWindow::onTouchEvent() _selectedIndex %d",  _selectedIndex );
+            break;
+
+          default:
+            break;
+          }//switch item
+        }
+        break;
+
+      default:
+        break;
+
+      }
+
+      return true;
+}
+
+#endif
 
 void activate_cite( CRGUIWindowManager *wm, V3DocViewWin * mainwin)
 {

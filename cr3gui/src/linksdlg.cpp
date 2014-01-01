@@ -16,7 +16,8 @@
 static const char * link_back_active[] = {
     "30 27 5 1",
     "0 c #000000",
-    "o c #A1A1A1",
+//    "o c #A1A1A1",
+    "o c #000000",
     ". c #FFFFFF",
     "x c #A1A1A1",
     "  c None",
@@ -51,7 +52,8 @@ static const char * link_back_active[] = {
 static const char * link_forward_active[] = {
     "30 27 5 1",
     "0 c #000000",
-    "o c #A1A1A1",
+//    "o c #A1A1A1",
+    "o c #000000",
     ". c #FFFFFF",
     "x c #A1A1A1",
     "  c None",
@@ -86,7 +88,8 @@ static const char * link_forward_active[] = {
 static const char * link_back_normal[] = {
     "30 27 5 1",
     "0 c #515151",
-    "o c #FFFFFF",
+    "o c #A1A1A1",
+//    "o c #FFFFFF",
     ". c #FFFFFF",
     "x c #A1A1A1",
     "  c None",
@@ -121,7 +124,8 @@ static const char * link_back_normal[] = {
 static const char * link_forward_normal[] = {
     "30 27 5 1",
     "0 c #515151",
-    "o c #FFFFFF",
+    "o c #A1A1A1",
+//    "o c #FFFFFF",
     ". c #FFFFFF",
     "x c #A1A1A1",
     "  c None",
@@ -370,4 +374,101 @@ void CRLinksDialog::invalidateCurrentSelection()
     } else {
         CRLog::debug("invalidateCurrentSelection() : getRect failed for link!");
     }
+}
+
+
+int CRLinksDialog::getTapZonePB( int x, int y )
+{
+        lvRect rc;
+    
+        getClientRect(rc);
+        
+        int dx = rc.width();
+        int dy = rc.height();
+                
+        int x1 = dx / 3;
+        int x2 = dx * 2 / 3;
+        int y1 = dy / 4;
+        int y2 = dy * 3 / 4;
+        int zone = 0;
+        if ( y<y1 ) 
+       {
+          if ( x<x1 )
+             zone = 1;
+          else 
+          if ( x<x2 )
+             zone = 2;
+          else
+             zone = 3;
+       } 
+       else 
+       if ( y<y2 ) 
+       {
+          if ( x<x1 )
+             zone = 4;
+          else 
+          if ( x<x2 )
+             zone = 5;
+          else
+            zone = 6;
+       } 
+
+  return zone;
+}
+
+bool CRLinksDialog::onTouchEvent( int x, int y, CRGUITouchEventType evType )
+{
+//      CRLog::trace("CRLinksDialog::onTouchEvent() x=%d  y= %d evType= %d", x, y, int( evType ) );
+      int tapZone= getTapZonePB( x, y );
+      int command = 0, param = 0;
+      
+      switch ( evType )
+      {
+      case CRTOUCH_UP:
+        {
+          switch ( tapZone )
+          {
+          case 4:
+           command= MCMD_SCROLL_FORWARD;
+            break;
+
+          case 5:
+           command= MCMD_OK;
+          break;
+
+          case 6:
+           command= MCMD_SCROLL_BACK;
+            break;
+
+          default:
+            break;
+          }//switch item
+        }
+        break;
+
+      case CRTOUCH_DOWN_LONG:
+      {
+        switch (tapZone) 
+        {
+        case 5:
+           command= MCMD_CANCEL;
+        break;
+
+       default:
+        break;
+        }
+      }            
+
+      default:
+        break;
+
+      }
+  
+    if ( command != 0 ) 
+    {
+        _wm->postCommand( command, param );
+        return true;
+    }
+
+    return false;
 }

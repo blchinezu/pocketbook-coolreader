@@ -856,6 +856,13 @@ public:
     virtual void translate(const lString16 &w);
     virtual lString8 createArticle(const char *word, const char *translation);
     virtual bool onCommand( int command, int params );
+
+    virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType );
+    //{
+    //  CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+    //  return CRViewDialog::onTouchEvent( x, y, evType );
+    //}
+
     void doActivate();
     void doDeactivate();
     int getCurItem() { return _selectedIndex; }
@@ -910,6 +917,16 @@ public:
     bool newPage(const char *word, const char *translation);
     bool nextPage();
     bool prevPage();
+    int getTopItem() { return _topItem; }
+    int getSelectedItem() { return _selectedItem; }
+    int getPageInItemCount()
+    {  
+        CRMenuSkinRef skin = getSkin();
+        if ( !skin.isNull() )
+           return skin->getMinItemCount();
+           
+        return 0;
+    }
     virtual void draw() { CRMenu::draw(); _dirty = false; }
     void invalidateMenu()
     {
@@ -1005,19 +1022,30 @@ public:
     }
     virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType )
     {
+      CRLog::trace("CRPbDictionaryDialog::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+
         lvPoint pt (x, y);
 
-        if (_dictView->getRect().isPointInside(pt)) {
-            if (!_dictViewActive) {
+        if (_dictView->getRect().isPointInside(pt)) 
+        {
+            if (!_dictViewActive) 
+            {
                 activateDictView(true);
                 _dictView->doActivate();
             }
+            CRLog::trace(" CRPbDictionaryDialog::onTouchEvent(...) _dictView->onTouchEvent()" );
+
             return _dictView->onTouchEvent(x, y, evType);
-        } else if (CRTOUCH_DOWN == evType && _dictViewActive) {
+        } 
+        else 
+        if (CRTOUCH_DOWN == evType && _dictViewActive) 
+        {
             _dictView->doDeactivate();
         }
+
         ldomXPointer p = _docview->getNodeByPoint( pt );
-        if ( !p.isNull() ) {
+        if ( !p.isNull() ) 
+        {
             pt = p.toPoint();
             _wordSelector->selectWord(pt.x, pt.y);
             onWordSelection( false );
@@ -1276,15 +1304,78 @@ protected:
         return res;
     }
 
+///////////////////////////////////////////////////
+    int getTapZonePB( int x, int y )
+    {
+        lvRect rc;
+    
+        getClientRect(rc);
+        
+        int dx = rc.width();
+        int dy = rc.height();
+                
+        int x1 = dx / 3;
+        int x2 = dx * 2 / 3;
+//        int y1 = dy / 3;
+//        int y2 = dy * 2 / 3;
+        int y1 = dy / 4;
+        int y2 = dy * 3 / 4;
+        int zone = 0;
+        if ( y<y1 ) 
+       {
+          if ( x<x1 )
+             zone = 1;
+          else 
+          if ( x<x2 )
+             zone = 2;
+          else
+             zone = 3;
+       } 
+       else 
+       if ( y<y2 ) 
+       {
+          if ( x<x1 )
+             zone = 4;
+          else 
+          if ( x<x2 )
+             zone = 5;
+          else
+            zone = 6;
+       } 
+       else 
+       {
+          if ( x<x1 )
+            zone = 7;
+          else 
+          if ( x<x2 )
+            zone = 8;
+          else
+            zone = 9;
+       }
+       return zone;
+    }
+
+
     virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
-        int tapZone = getTapZone(pt.x, pt.y);
+//        int tapZone = getTapZone(pt.x, pt.y);
+        int tapZone = getTapZonePB(pt.x, pt.y);
         int command = 0, param = 0;
         // TODO: for now hardcoded, add touch zones settings dialog
         if (CRTOUCH_UP == evType) {
             switch (tapZone) {
+            case 1:
+              command = MCMD_GO_LINK;
+                break;
+            case 2:
+              command = MCMD_DICT;
+                break;
+            case 3:
+//              command = MCMD_BOOKMARK_LIST;
+                break;
             case 4:
                 command = DCMD_PAGEUP;
+//                command = DCMD_PAGEDOWN;
                 break;
             case 5:
                 command = PB_QUICK_MENU;
@@ -1292,11 +1383,29 @@ protected:
             case 6:
                 command = DCMD_PAGEDOWN;
                 break;
+            case 7:
+                 command = MCMD_CITE;
+                break;
+            case 8:
+              command = MCMD_BOOKMARK_LIST;
+                break;
+            case 9:
+//              command = MCMD_BOOKMARK_LIST;
+                break;
             default:
                 ;
             }
         } else if (CRTOUCH_DOWN_LONG == evType) {
             switch (tapZone) {
+            case 1:
+//              command = MCMD_GO_LINK;
+                break;
+            case 2:
+//              command = MCMD_DICT;
+                break;
+            case 3:
+              command = MCMD_BOOKMARK_LIST;
+                break;
             case 4:
                 command = DCMD_PAGEUP;
                 param = 10;
@@ -1307,6 +1416,15 @@ protected:
             case 6:
                 command = DCMD_PAGEDOWN;
                 param = 10;
+                break;
+            case 7:
+                command = MCMD_CITES_LIST;
+                break;
+            case 8:
+//              command = MCMD_;
+                break;
+            case 9:
+//              command = MCMD_;
                 break;
             default:
                 ;
@@ -1901,8 +2019,11 @@ void CRPbDictionaryView::drawTitleBar()
     CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef titleSkin = skin->getTitleSkin();
     lvRect titleRc;
+
     if ( !getTitleRect( titleRc ) )
         return;
+
+//    CRLog::trace("CRPbDictionaryView::drawTitleBar() titleRc ( %d, %d, %d, %d ) w= %d", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom, titleRc.width() );
     titleSkin->draw( buf, titleRc );
     lvRect borders = titleSkin->getBorderWidths();
     buf.SetTextColor( skin->getTextColor() );
@@ -1914,18 +2035,22 @@ void CRPbDictionaryView::drawTitleBar()
         int h = _icon->GetHeight();
         buf.Draw( _icon, titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
         imgWidth = w + 8;
+//        CRLog::trace("CRPbDictionaryView::drawTitleBar() _icon ( %d, %d, %d, %d )", titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
     }
     int tbWidth = 0;
-    if (!_toolBarImg.isNull()) {
+    if (!_toolBarImg.isNull()) 
+    {
         tbWidth = _toolBarImg->GetWidth();
         int h = _toolBarImg->GetHeight();
         titleRc.right -= (tbWidth + titleSkin->getBorderWidths().right);
         buf.Draw(_toolBarImg, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
+//        CRLog::trace("CRPbDictionaryView::drawTitleBar() _toolBarImg tbWidth=%d, h=%d ( %d, %d, %d, %d )", tbWidth, h, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
     }
     lvRect textRect = titleRc;
     textRect.left += imgWidth;
     titleSkin->drawText( buf, textRect, _caption );	
-    if (_active) {
+    if (_active) 
+    {
         lvRect selRc;
 
         if (_selectedIndex != 0 && tbWidth > 0) {
@@ -1933,13 +2058,16 @@ void CRPbDictionaryView::drawTitleBar()
             selRc = titleRc;
             selRc.left = titleRc.right + itemWidth * (_selectedIndex -1);
             selRc.right = selRc.left + itemWidth;
+            CRLog::trace("CRPbDictionaryView::drawTitleBar() _selectedIndex=%d, ( %d, %d, %d, %d )", _selectedIndex, selRc.left, selRc.top, selRc.right, selRc.bottom );
         } else {
             selRc = textRect;
             selRc.left += borders.left;
+            CRLog::trace("CRPbDictionaryView::drawTitleBar() else textRect _selectedIndex=%d, ( %d, %d, %d, %d )", _selectedIndex, selRc.left, selRc.top, selRc.right, selRc.bottom );
         }
         selRc.top += borders.top;
         selRc.bottom -= borders.bottom;
         buf.InvertRect(selRc.left, selRc.top, selRc.right, selRc.bottom);
+//        CRLog::trace("CRPbDictionaryView::drawTitleBar() InvertRect ( %d, %d, %d, %d )", selRc.left, selRc.top, selRc.right, selRc.bottom );
     }
 }
 
@@ -2073,7 +2201,7 @@ bool CRPbDictionaryView::onItemSelect()
     case PB_DICT_ARTICLE_LIST:
         return true;
     case PB_DICT_DEACTIVATE:
-        doDeactivate();
+      doDeactivate();
         return true;
     case PB_DICT_SEARCH:
         searchDictinary();
@@ -2091,12 +2219,12 @@ bool CRPbDictionaryView::onCommand( int command, int params )
 
     switch (command) {
     case MCMD_CANCEL:
-        closeDictionary();
+      closeDictionary();
         return true;
     case MCMD_OK:
         return onItemSelect();
     case PB_CMD_RIGHT:
-        setCurItem(getCurItem() + 1);
+      setCurItem(getCurItem() + 1);
         return true;
     case PB_CMD_LEFT:
         setCurItem(getCurItem() - 1);
@@ -2126,6 +2254,236 @@ bool CRPbDictionaryView::onCommand( int command, int params )
         return true;
     }
     return false;
+}
+
+bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType )
+{
+//  CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+
+  if (_active) 
+  {
+//    CRLog::trace("CRPbDictionaryView::onTouchEvent _active %d ( %d, %d, %d )",  _active, x, y, int( evType ) );
+    switch ( evType )
+    {
+    case CRTOUCH_UP:
+      CRLog::trace("CRPbDictionaryView::onTouchEvent( x=%d, y=%d,evType= %d )", x, y, int( evType ) );
+
+      CRLog::trace("CRPbDictionaryView::onTouchEvent _selectedIndex=%d )", _selectedIndex );
+      {
+
+        lvPoint pn( x, y );
+        CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+        CRRectSkinRef titleSkin = skin->getTitleSkin();
+        lvRect titleRc;
+        lvRect clientRc= _dictMenu->getRect();
+        lvPoint pnItm= _dictMenu->getMaxItemSize();
+        //pnItm= _dictMenu->getItemSize();
+        if ( _toolBarImg.isNull() || !getTitleRect( titleRc ) || !getClientRect( titleRc ) || !pnItm.y )
+          return true;
+
+//        CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+//        CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+
+        titleRc.bottom= titleRc.top;
+        titleRc.top= clientRc.top;
+        clientRc.top= titleRc.bottom;
+
+        CRLog::trace("===========================================================================================" );
+//        CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+//        CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+
+        int command = 0;
+        lvRect tmpRc;
+        if ( titleRc.isPointInside( pn ) )
+        {
+          CRLog::trace("onTouchEvent() point inside title" );
+
+          int tbWidth = _toolBarImg->GetWidth();
+          tmpRc= titleRc;
+          tmpRc.right -= ( tbWidth + titleSkin->getBorderWidths().right );
+          CRLog::trace("CRDV::onTouchEvent() PB_DICT_SELECT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+          if ( tmpRc.isPointInside( pn ) )
+          {
+            _selectedIndex= PB_DICT_SELECT;
+            selectDictionary();
+            CRLog::trace("onTouchEvent() PB_DICT_SELECT %d", _selectedIndex );
+            return true;
+          }
+          
+          tmpRc= titleRc;
+          tmpRc.left += tmpRc.right - ( tbWidth + titleSkin->getBorderWidths().right );
+          CRLog::trace("CRDV::onTouchEvent() toolBar tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+          if ( tmpRc.isPointInside( pn ) )// in toolBar
+          {
+            CRLog::trace("onTouchEvent() point inside toolbar" );
+
+            tmpRc.right = tmpRc.left + tbWidth/4;
+           CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+              _selectedIndex= PB_DICT_EXIT;
+              CRLog::trace("onTouchEvent() PB_DICT_EXIT %d", _selectedIndex );
+              closeDictionary();
+              return true;
+            }
+
+            tmpRc.left  += tbWidth/4;
+            tmpRc.right += tbWidth/4;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+              if ( _selectedIndex == PB_DICT_DEACTIVATE )
+              {
+//                 return this->onCommand( PB_CMD_LEFT, 1 );
+                   _wm->postCommand( PB_CMD_LEFT, 0 );
+                   return true;
+              }
+              else
+              if ( _selectedIndex == PB_DICT_EXIT )
+              {
+//                 return this->onCommand( PB_CMD_RIGHT, 1 );
+                   _wm->postCommand( PB_CMD_RIGHT, 0 );
+                   return true;
+              }
+              
+              _selectedIndex= PB_DICT_ARTICLE_LIST;
+              CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", _selectedIndex );
+              setCurItem( _selectedIndex );
+              onItemSelect();
+              Update();
+              return true;
+            }
+
+            tmpRc.left  += tbWidth/4;
+            tmpRc.right += tbWidth/4;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+              if ( _selectedIndex == PB_DICT_ARTICLE_LIST )
+              {
+//                return this->onCommand( PB_CMD_RIGHT, 1 );
+//                  return _wm->postCommand( PB_CMD_RIGHT, 0 );
+                    _wm->postCommand( PB_CMD_RIGHT, 0 );
+                   return true;
+              }
+              else
+              if ( _selectedIndex == PB_DICT_SEARCH )
+              {
+//                 return this->onCommand( PB_CMD_LEFT, 1 );
+                   _wm->postCommand( PB_CMD_LEFT, 0 );
+                   return true;
+              }
+//              _selectedIndex= PB_DICT_DEACTIVATE;
+              CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", _selectedIndex );
+              return true;
+            }
+
+            tmpRc.left  += tbWidth/4;
+            tmpRc.right += tbWidth/4;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_SEARCH tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+              CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", _selectedIndex );
+              _selectedIndex= PB_DICT_SEARCH;
+              setCurItem( PB_DICT_SEARCH );
+              searchDictinary();
+              Update();
+              return true;
+            }
+          }
+        }//if ( titleRc.isPointInside
+
+        if ( clientRc.isPointInside( pn ) )
+        {
+          CRLog::trace("onTouchEvent() point inside client" );
+
+          switch ( _selectedIndex )
+          {
+          case PB_DICT_SELECT:
+            break;
+
+          case PB_DICT_EXIT:
+            tmpRc= clientRc;
+            tmpRc.bottom -= clientRc.height()/2;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+              command = PB_CMD_UP;
+            else
+              command = PB_CMD_DOWN;
+
+             _wm->postCommand( command, 0 );
+             return true;
+            break;
+
+          case PB_DICT_ARTICLE_LIST:
+            tmpRc= clientRc;
+            tmpRc.left += clientRc.width() * 2/3; 
+            if ( tmpRc.isPointInside( pn ) )//PgUp, PgDn
+            {
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+              tmpRc.bottom -= clientRc.height()/2;
+              if ( tmpRc.isPointInside( pn ) )
+                command = PB_CMD_UP;
+              else
+                command = PB_CMD_DOWN;
+
+//             _wm->postCommand( command, 0 );
+//             return true;
+              return _dictMenu->onCommand( command, 1 );
+            }
+            else//select item
+            {
+              tmpRc= clientRc;
+              tmpRc.right  -= clientRc.width() * 1/3; 
+              tmpRc.bottom -= clientRc.height()/2;
+
+              int strcount= clientRc.height()/pnItm.y;
+              int pgitcount= _dictMenu->getPageInItemCount();
+              int nselect= ( y - clientRc.top ) / pnItm.y;
+                
+              if ( nselect != _dictMenu->getSelectedItem() && nselect >= 0 && nselect <= pgitcount )
+                _dictMenu->setCurItem( nselect );
+              
+              CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d ) _SelectedItem=%d _topItem=%d strcount%d  pgitcount=%d  nselect= %d" , tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom, _dictMenu->getSelectedItem(), _dictMenu->getTopItem(), strcount, _dictMenu->getPageInItemCount(),  nselect );
+
+              return true;
+            }
+
+            break;
+
+          case PB_DICT_DEACTIVATE:
+            tmpRc= clientRc;
+            tmpRc.bottom -= clientRc.height()/2;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+              command = PB_CMD_UP;
+            else
+              command = PB_CMD_DOWN;
+
+             _wm->postCommand( command, 0 );
+             return true;
+//            return this->onCommand( command, 1 );
+
+            break;
+
+          case PB_DICT_SEARCH:
+            break;
+          }
+        }//if ( clientRc.isPointInside ..
+      }
+
+    break;
+    
+    default:
+    break;
+
+    }
+    return true;
+  }
+
+//  return true;
+  return false;
+  //return CRViewDialog::onTouchEvent( x, y, evType );
 }
 
 lString8 CRPbDictionaryView::createArticle(const char *word, const char *translation)
@@ -2433,13 +2791,19 @@ bool CRPbDictionaryMenu::onCommand( int command, int params )
         break;
     case PB_CMD_UP:
         if (params > 0)
+        {
             prevPage();
+            setCurItem( _selectedItem );
+        }
         else
             setCurItem(_selectedItem - 1);
         return true;
     case PB_CMD_DOWN:
         if (params > 0)
+        {
             nextPage();
+            setCurItem( _selectedItem );
+        }
         else
             setCurItem(_selectedItem + 1);
         return true;

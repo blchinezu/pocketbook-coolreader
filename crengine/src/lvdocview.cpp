@@ -1372,6 +1372,50 @@ void LVDocView::drawBatteryState(LVDrawBuf * drawbuf, const lvRect & batteryRc,
 #endif
 }
 
+void LVDocView::addBounds( ldomNode * lsection, int fh, int pc, lUInt16 section_id )
+{
+  int cnt = lsection->getChildCount();
+//        lString8 title1 = UnicodeTo8Bit( getSectionHeader( lsection ), table );
+//        CRLog::trace(" ||| l1section cnt2 = %d %s", cnt, title1.c_str() );
+
+  for ( int i= 0; i < cnt; i++ ) 
+  {//следующий уровень вложений оглавления
+    ldomNode * l1section = lsection->getChildElementNode( i, section_id );
+              
+    if ( !l1section )
+     continue;
+
+//          lString8 title = UnicodeTo8Bit( getSectionHeader( l2section ), table );
+//          CRLog::trace("       --- i=%d l2section  N=%d %s ", i,  i2, title.c_str() );
+
+    lvRect rc;
+    l1section->getAbsRect(rc);
+    if ( getViewMode() == DVM_SCROLL ) 
+    {
+      int p = (int) ( ((lInt64) rc.top * 10000) / fh );
+      m_section_bounds.add(p);
+    } else 
+    {
+      int fh = m_pages.length();
+      if ( ( pc==2 && (fh&1) ) )
+        fh++;
+      int p = m_pages.FindNearestPage(rc.top, 0);
+//          int p100= 0;
+//          if (fh > 1)
+//             p100= (int) (((lInt64) p * 10000) / fh);
+
+//          CRLog::trace("       --- p=%d  fh=%d p100=%d pf=%d", p,  fh, p100, (int) (((lInt64) p100 * fh)/10000) );
+
+              if ( fh > 1 )
+                m_section_bounds.add((int) (((lInt64) p * 10000) / fh));
+            }
+            
+    addBounds( l1section, fh, pc, section_id );
+            
+  }//for i
+
+}
+
 /// returns section bounds, in 1/100 of percent
 LVArray<int> & LVDocView::getSectionBounds() {
 	if (m_section_bounds_valid)
@@ -1386,16 +1430,125 @@ LVArray<int> & LVDocView::getSectionBounds() {
         body = m_doc->nodeFromXPath(cs16("/body[1]"));
         section_id = m_doc->getElementNameIndex(L"DocFragment");
     }
-	int fh = GetFullHeight();
+    int fh = GetFullHeight();
     int pc = getVisiblePageCount();
-	if (body && fh > 0) {
-		int cnt = body->getChildCount();
-		for (int i = 0; i < cnt; i++) {
+    if (body && fh > 0) 
+    {
+      addBounds( body, fh, pc, section_id );
 
-            ldomNode * l1section = body->getChildElementNode(i, section_id);
-            if (!l1section)
-				continue;
+//    const lChar8 * * table = GetCharsetUnicode2ByteTable(L"windows-1251");
+/*
+      int cnt = body->getChildCount();
+//      CRLog::trace(" || body cnt = %d", cnt );
+      for (int i = 0; i < cnt; i++) 
+      {
+        ldomNode * l1section = body->getChildElementNode(i, section_id);
+        if (!l1section)
+           continue;
 
+      
+        lvRect rc;
+        l1section->getAbsRect(rc);
+        if (getViewMode() == DVM_SCROLL) 
+        {
+          int p = (int) (((lInt64) rc.top * 10000) / fh);
+          m_section_bounds.add(p);
+        } else 
+        {
+          int fh = m_pages.length();
+          if ( (pc==2 && (fh&1)) )
+            fh++;
+          int p = m_pages.FindNearestPage(rc.top, 0);
+
+//          int p100= 0;
+//          if (fh > 1)
+//             p100= (int) (((lInt64) p * 10000) / fh);
+
+//          CRLog::trace("       --- p=%d  fh=%d p100=%d pf=%d", p,  fh, p100, (int) (((lInt64) p100 * fh)/10000) );
+
+          if (fh > 1)
+            m_section_bounds.add((int) (((lInt64) p * 10000) / fh));
+        }
+      
+
+        int cnt2 = l1section->getChildCount();
+//        lString8 title1 = UnicodeTo8Bit( getSectionHeader( l1section ), table );
+//        CRLog::trace(" ||| l1section cnt2 = %d %s", cnt2, title1.c_str() );
+
+        for ( int i2 = 0; i2 < cnt2; i2++ ) 
+        {//второй уровень вложений оглавления
+          ldomNode * l2section = l1section->getChildElementNode( i2, section_id );
+             
+          if ( !l2section )
+           continue;
+
+//          lString8 title = UnicodeTo8Bit( getSectionHeader( l2section ), table );
+//          CRLog::trace("       --- i=%d l2section  N=%d %s ", i,  i2, title.c_str() );
+
+          lvRect rc;
+          l2section->getAbsRect(rc);
+          if (getViewMode() == DVM_SCROLL) 
+          {
+            int p = (int) (((lInt64) rc.top * 10000) / fh);
+            m_section_bounds.add(p);
+          } else 
+          {
+            int fh = m_pages.length();
+            if ( (pc==2 && (fh&1)) )
+              fh++;
+            int p = m_pages.FindNearestPage(rc.top, 0);
+
+//          int p100= 0;
+//          if (fh > 1)
+//             p100= (int) (((lInt64) p * 10000) / fh);
+
+//          CRLog::trace("       --- p=%d  fh=%d p100=%d pf=%d", p,  fh, p100, (int) (((lInt64) p100 * fh)/10000) );
+
+            if (fh > 1)
+              m_section_bounds.add((int) (((lInt64) p * 10000) / fh));
+          }
+
+          int cnt3 = l2section->getChildCount();
+//        lString8 title1 = UnicodeTo8Bit( getSectionHeader( l1section ), table );
+//        CRLog::trace(" ||| l1section cnt2 = %d %s", cnt2, title1.c_str() );
+
+          for ( int i3 = 0; i3 < cnt3; i3++ ) 
+          {//третий уровень вложений оглавления
+            ldomNode * l3section = l2section->getChildElementNode( i3, section_id );
+              
+            if ( !l3section )
+             continue;
+
+//          lString8 title = UnicodeTo8Bit( getSectionHeader( l2section ), table );
+//          CRLog::trace("       --- i=%d l2section  N=%d %s ", i,  i2, title.c_str() );
+
+            lvRect rc;
+            l3section->getAbsRect(rc);
+            if (getViewMode() == DVM_SCROLL) 
+            {
+              int p = (int) (((lInt64) rc.top * 10000) / fh);
+              m_section_bounds.add(p);
+            } else 
+            {
+              int fh = m_pages.length();
+              if ( (pc==2 && (fh&1)) )
+                fh++;
+              int p = m_pages.FindNearestPage(rc.top, 0);
+
+//          int p100= 0;
+//          if (fh > 1)
+//             p100= (int) (((lInt64) p * 10000) / fh);
+
+//          CRLog::trace("       --- p=%d  fh=%d p100=%d pf=%d", p,  fh, p100, (int) (((lInt64) p100 * fh)/10000) );
+
+              if (fh > 1)
+                m_section_bounds.add((int) (((lInt64) p * 10000) / fh));
+            }
+          }//for i3
+        }//for i2
+
+/ *
+            //old code
             lvRect rc;
             l1section->getAbsRect(rc);
             if (getViewMode() == DVM_SCROLL) {
@@ -1409,12 +1562,13 @@ LVArray<int> & LVDocView::getSectionBounds() {
                 if (fh > 1)
                     m_section_bounds.add((int) (((lInt64) p * 10000) / fh));
             }
-
-		}
-	}
-	m_section_bounds.add(10000);
-	m_section_bounds_valid = true;
-	return m_section_bounds;
+* /
+     }//for i
+*/
+   }//if
+   m_section_bounds.add(10000);
+   m_section_bounds_valid = true;
+   return m_section_bounds;
 }
 
 int LVDocView::getPosPercent() {
@@ -1549,8 +1703,31 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
         //      drawbuf->FillRect(info.left + percent_pos, gpos - 2, info.right, gpos - 2
         //                      + 1, cl1); // cl3
 
+        //страниц до конца главы 
+        int pageToBorder= 0;
+	int lenght_index= sbounds.length();
+//        CRLog::trace(" !!! pageIndex=%d pageCount =%d pageToBorder=%d sz=%d ", pageIndex, pageCount, pageToBorder, sbounds.length() );
+        if ( /*enablepgtoborder &&*/pageCount )
+	for ( int sbound_index= 0; sbound_index < lenght_index; sbound_index++ )
+	{
+	  int pTB= (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+//          CRLog::trace(" !!! pageIndex=%d pageCount =%d pageToBorder=%d brdr=%d sbound_index=%d lenght_index=%d", pageIndex, pageCount, pTB, (int) sbounds[sbound_index], sbound_index, lenght_index );
+	  if ( pTB >= pageIndex )
+	  {
+	    pageToBorder= pTB - pageIndex;//не переваривет pTB - pageIndex + 1;
+	    //последняя глава
+	    if ( sbound_index != lenght_index - 1 )
+              pageToBorder++;
+            
+//           CRLog::trace(" ---!!!--- pageIndex=%d pageCount =%d pageToBorder=%d brdr=%d ", pageIndex, pageCount, pageToBorder, sbounds[sbound_index] );
+	    break;
+	  }
+	}
+
+        int boundCategoryOld= 0;
 	int sbound_index = 0;
 	bool enableMarks = !leftPage && (phi & PGHDR_CHAPTER_MARKS) && sbounds.length()<info.width()/5;
+//	for ( int x = info.left; x<info.right; x++ ) {
 	for ( int x = info.left; x<info.right; x++ ) {
 		int cl = -1;
 		int sz = 1;
@@ -1568,23 +1745,41 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
 		}
 		if ( leftPage ) {
 			cl = cl1;
-			sz = 1;
+			sz = 1;//1
 		} else {
             if ( x < info.left + percent_pos ) {
-				sz = 3;
+				sz = 4;//3
 				if ( boundCategory==0 )
 					cl = cl1;
                 else
                     sz = 0;
             } else {
 				if ( boundCategory!=0 )
-					sz = 3;
+					sz = 4;//3
 				cl = cl1;
 			}
 		}
         if ( cl!=-1 && sz>0 )
-			drawbuf->FillRect(x, gpos - 2 - sz/2, x+1, gpos - 2
-					+ sz/2 + 1, cl);
+        {
+//	drawbuf->FillRect( x,     gpos - 2 - sz/2,
+//	                   x + 1, gpos - 2 + sz/2 + 1, cl );
+          if ( boundCategory )
+          {//тупо растягиваем штрих категории
+            boundCategoryOld= 2;
+            drawbuf->FillRect( x,     gpos - 0 - sz/1,
+	                       x + 2, gpos - 0 + sz/1 + 1, cl );
+	  }
+	  
+          if ( boundCategoryOld )
+              boundCategoryOld--;
+          else
+	    drawbuf->FillRect( x,     gpos - 0 - sz/1,
+	                       x + 1, gpos - 0 + sz/1 + 1, cl );
+        
+	 }
+	 else//пропуски штриха белым на прочитанном
+	 boundCategoryOld= 1;
+	 
 	}
 
 	lString16 text;
@@ -1653,6 +1848,10 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
             if (phi & PGHDR_PAGE_COUNT) {
                 if ( !pageinfo.empty() )
                     pageinfo += " / ";
+                //serg
+                pageinfo += fmt::decimal( pageToBorder );
+                pageinfo += " / ";
+                //
                 pageinfo += fmt::decimal(pageCount);
             }
             if (phi & PGHDR_PERCENT) {

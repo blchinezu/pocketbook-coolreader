@@ -49,6 +49,8 @@ class CRLinksDialog : public CRGUIWindowBase
         /// returns true if command is processed
         virtual bool onCommand( int command, int params );
         void invalidateCurrentSelection();
+        int getTapZonePB( int x, int y );
+        virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType );
 };
 
 #endif

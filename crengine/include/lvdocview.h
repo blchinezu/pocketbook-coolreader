@@ -385,6 +385,7 @@ typedef LVArray<int> LVBookMarkPercentInfo;
 
     Supports scroll view of document.
 */
+
 class LVDocView : public CacheLoadingCallback
 {
     friend class LVDrawThread;
@@ -517,6 +518,8 @@ private:
     void insertBookmarkPercentInfo(int start_page, int end_y, int percent);
 
     void updateDocStyleSheet();
+    //serg
+    void addBounds( ldomNode * lsection, int fh, int pc, lUInt16 section_id );
 
 protected:
     /// draw to specified buffer by either Y pos or page number (unused param should be -1)
