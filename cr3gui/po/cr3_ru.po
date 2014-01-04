@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-12-21 19:49+0700\n"
+"POT-Creation-Date: 2014-01-04 09:11+0700\n"
 "PO-Revision-Date: 2011-05-08 16:02+0700\n"
 "Last-Translator: Vladimir <v@v>\n"
 "Language-Team: Russian\n"
@@ -18,27 +18,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/citedlg.cpp:80
+#: ../src/citedlg.cpp:88
 msgid "Select next/prev paragraph"
 msgstr "Выделить абзац"
 
-#: ../src/citedlg.cpp:83
+#: ../src/citedlg.cpp:91
 msgid "Select one more paragraph"
 msgstr "Добавить абзац"
 
-#: ../src/citedlg.cpp:86
+#: ../src/citedlg.cpp:94
 msgid "Deselect paragraph"
 msgstr "Убрать абзац"
 
-#: ../src/citedlg.cpp:89
+#: ../src/citedlg.cpp:97
 msgid "Select one more phrase"
 msgstr "Добавить предложение"
 
-#: ../src/citedlg.cpp:92
+#: ../src/citedlg.cpp:100
 msgid "Deselect phrase"
 msgstr "Убрать предложение"
 
-#: ../src/citedlg.cpp:112
+#: ../src/citedlg.cpp:142
 msgid "Select text"
 msgstr "Выделите текст"
 
@@ -482,18 +482,16 @@ msgid "[Default monospace font]"
 msgstr "[Моноширинный шрифт]"
 
 #: ../src/settings.cpp:515
-#, fuzzy
 msgid "Bigger (105%)"
-msgstr "Увеличить (110%)"
+msgstr "Увеличить (105%)"
 
 #: ../src/settings.cpp:516
 msgid "Bigger (110%)"
 msgstr "Увеличить (110%)"
 
 #: ../src/settings.cpp:517
-#, fuzzy
 msgid "Bigger (115%)"
-msgstr "Увеличить (110%)"
+msgstr "Увеличить (115%)"
 
 #: ../src/settings.cpp:518
 msgid "Bigger (120%)"
@@ -1105,86 +1103,90 @@ msgid "Show page count"
 msgstr "Показывать общее кол-во страниц"
 
 #: ../src/settings.cpp:1098
+msgid "Show page count till chapter end"
+msgstr "Показывать кол-во страниц до конца главы"
+
+#: ../src/settings.cpp:1100
 msgid "Show page number"
 msgstr "Показывать номер текущей страницы"
 
-#: ../src/settings.cpp:1106
+#: ../src/settings.cpp:1108
 msgid "Page margins"
 msgstr "Поля страницы"
 
-#: ../src/settings.cpp:1111
+#: ../src/settings.cpp:1113
 msgid "Top margin"
 msgstr "Верхний отступ"
 
-#: ../src/settings.cpp:1113
+#: ../src/settings.cpp:1115
 msgid "Bottom margin"
 msgstr "Нижний отступ"
 
-#: ../src/settings.cpp:1115
+#: ../src/settings.cpp:1117
 msgid "Left margin"
 msgstr "Левый отступ"
 
-#: ../src/settings.cpp:1117
+#: ../src/settings.cpp:1119
 msgid "Right margin"
 msgstr "Правый отступ"
 
-#: ../src/settings.cpp:1122
+#: ../src/settings.cpp:1124
 msgid "Footnotes at page bottom"
 msgstr "Сноски внизу страницы"
 
-#: ../src/settings.cpp:1128
+#: ../src/settings.cpp:1130
 msgid "Display settings"
 msgstr "Настройки отображения"
 
-#: ../src/settings.cpp:1137
+#: ../src/settings.cpp:1139
 msgid "Landscape pages"
 msgstr "Колонки в альбомной странице"
 
-#: ../src/settings.cpp:1139
+#: ../src/settings.cpp:1141
 msgid "Inverse display"
 msgstr "Инверсное отображение"
 
-#: ../src/settings.cpp:1142
+#: ../src/settings.cpp:1144
 msgid "Show bookmark icons"
 msgstr "Показывать закладки"
 
-#: ../src/settings.cpp:1145
+#: ../src/settings.cpp:1147
 msgid "Highlight bookmarks"
 msgstr "Подсвечивать закладки"
 
-#: ../src/settings.cpp:1148
+#: ../src/settings.cpp:1150
 msgid "Display update mode"
 msgstr "Полное обновление"
 
-#: ../src/settings.cpp:1152
+#: ../src/settings.cpp:1154
 msgid "Turbo update mode"
 msgstr "Турбо режим"
 
-#: ../src/settings.cpp:1156
+#: ../src/settings.cpp:1158
 msgid "Gray buffer depth(need restart)"
 msgstr "Глубина фреймбуфера(нужен перезапуск)"
 
-#: ../src/settings.cpp:1162
+#: ../src/settings.cpp:1164
 msgid "Control settings"
 msgstr "Настройки управления"
 
-#: ../src/settings.cpp:1168
+#: ../src/settings.cpp:1170
 msgid "Rotate"
 msgstr "Управление G-сенсором"
 
-#: ../src/settings.cpp:1170
+#: ../src/settings.cpp:1172
 msgid "Page turn angle"
 msgstr "Наклон для перелистывания"
 
-#: ../src/settings.cpp:1198
+#: ../src/settings.cpp:1200
 msgid "Style settings"
 msgstr "Настройки стилей"
 
-#: ../src/settings.cpp:1203
+#: ../src/settings.cpp:1205
 msgid "Document embedded styles"
 msgstr "Использовать стили документа"
 
-#: ../src/settings.cpp:1232
+#: ../src/settings.cpp:1234
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1522,7 +1524,7 @@ msgstr "Клавиша"
 msgid "Assigned function"
 msgstr "Действие"
 
-#: ../src/cr3pocketbook.cpp:2587
+#: ../src/cr3pocketbook.cpp:2960
 msgid "Press $1 to translate"
 msgstr "Нажмите чтобы перевести"
 

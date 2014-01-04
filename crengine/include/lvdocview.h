@@ -64,6 +64,7 @@
 #define PROP_SHOW_PAGE_COUNT         "window.status.pos.page.count"
 #define PROP_SHOW_PAGE_NUMBER        "window.status.pos.page.number"
 #define PROP_SHOW_BATTERY_PERCENT    "window.status.battery.percent"
+#define PROP_SHOW_CHAPTER_PAGES_REMAIN "window.status.pos.chapter.page.remains"
 #define PROP_FONT_KERNING_ENABLED    "font.kerning.enabled"
 #define PROP_LANDSCAPE_PAGES         "window.landscape.pages"
 #define PROP_HYPHENATION_DICT        "crengine.hyphenation.directory"
@@ -362,7 +363,8 @@ enum {
     PGHDR_CLOCK=16,
     PGHDR_BATTERY=32,
     PGHDR_CHAPTER_MARKS=64,
-    PGHDR_PERCENT=128
+    PGHDR_PERCENT=128,
+    PGHDR_CHAPTER_PAGE_REM=256
 };
 
 /// page header font sizes
@@ -519,7 +521,7 @@ private:
 
     void updateDocStyleSheet();
     //serg
-    void addBounds( ldomNode * lsection, int fh, int pc, lUInt16 section_id );
+    void addBounds( ldomNode * lsection, int fh, lUInt16 section_id );
 
 protected:
     /// draw to specified buffer by either Y pos or page number (unused param should be -1)
@@ -540,7 +542,8 @@ protected:
     /// selects link on page, if any (delta==0 - current, 1-next, -1-previous). returns selected link range, null if no links.
     virtual ldomXRange * selectPageLink( int delta, bool wrapAround);
     /// set status bar and clock mode
-    void setStatusMode( int newMode, bool showClock, bool showTitle, bool showBattery, bool showChapterMarks, bool showPercent, bool showPageNumber, bool showPageCount );
+    void setStatusMode( int newMode, bool showClock, bool showTitle, bool showBattery, bool showChapterMarks,
+                       bool showPercent, bool showPageNumber, bool showPageCount, bool showChapterPagesRemain );
     /// create document and set flags
     void createEmptyDocument();
     /// get document rectangle for specified cursor position, returns false if not visible

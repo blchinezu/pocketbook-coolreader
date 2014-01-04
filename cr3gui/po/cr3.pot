@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2013-12-21 19:40+0700\n"
+"POT-Creation-Date: 2014-01-04 09:11+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,27 +16,27 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/citedlg.cpp:80
+#: ../src/citedlg.cpp:88
 msgid "Select next/prev paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:83
+#: ../src/citedlg.cpp:91
 msgid "Select one more paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:86
+#: ../src/citedlg.cpp:94
 msgid "Deselect paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:89
+#: ../src/citedlg.cpp:97
 msgid "Select one more phrase"
 msgstr ""
 
-#: ../src/citedlg.cpp:92
+#: ../src/citedlg.cpp:100
 msgid "Deselect phrase"
 msgstr ""
 
-#: ../src/citedlg.cpp:112
+#: ../src/citedlg.cpp:142
 msgid "Select text"
 msgstr ""
 
@@ -1094,86 +1094,90 @@ msgid "Show page count"
 msgstr ""
 
 #: ../src/settings.cpp:1098
+msgid "Show page count till chapter end"
+msgstr ""
+
+#: ../src/settings.cpp:1100
 msgid "Show page number"
 msgstr ""
 
-#: ../src/settings.cpp:1106
+#: ../src/settings.cpp:1108
 msgid "Page margins"
 msgstr ""
 
-#: ../src/settings.cpp:1111
+#: ../src/settings.cpp:1113
 msgid "Top margin"
 msgstr ""
 
-#: ../src/settings.cpp:1113
+#: ../src/settings.cpp:1115
 msgid "Bottom margin"
 msgstr ""
 
-#: ../src/settings.cpp:1115
+#: ../src/settings.cpp:1117
 msgid "Left margin"
 msgstr ""
 
-#: ../src/settings.cpp:1117
+#: ../src/settings.cpp:1119
 msgid "Right margin"
 msgstr ""
 
-#: ../src/settings.cpp:1122
+#: ../src/settings.cpp:1124
 msgid "Footnotes at page bottom"
 msgstr ""
 
-#: ../src/settings.cpp:1128
+#: ../src/settings.cpp:1130
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1137
+#: ../src/settings.cpp:1139
 msgid "Landscape pages"
 msgstr ""
 
-#: ../src/settings.cpp:1139
+#: ../src/settings.cpp:1141
 msgid "Inverse display"
 msgstr ""
 
-#: ../src/settings.cpp:1142
+#: ../src/settings.cpp:1144
 msgid "Show bookmark icons"
 msgstr ""
 
-#: ../src/settings.cpp:1145
+#: ../src/settings.cpp:1147
 msgid "Highlight bookmarks"
 msgstr ""
 
-#: ../src/settings.cpp:1148
+#: ../src/settings.cpp:1150
 msgid "Display update mode"
 msgstr ""
 
-#: ../src/settings.cpp:1152
+#: ../src/settings.cpp:1154
 msgid "Turbo update mode"
 msgstr ""
 
-#: ../src/settings.cpp:1156
+#: ../src/settings.cpp:1158
 msgid "Gray buffer depth(need restart)"
 msgstr ""
 
-#: ../src/settings.cpp:1162
+#: ../src/settings.cpp:1164
 msgid "Control settings"
 msgstr ""
 
-#: ../src/settings.cpp:1168
+#: ../src/settings.cpp:1170
 msgid "Rotate"
 msgstr ""
 
-#: ../src/settings.cpp:1170
+#: ../src/settings.cpp:1172
 msgid "Page turn angle"
 msgstr ""
 
-#: ../src/settings.cpp:1198
+#: ../src/settings.cpp:1200
 msgid "Style settings"
 msgstr ""
 
-#: ../src/settings.cpp:1203
+#: ../src/settings.cpp:1205
 msgid "Document embedded styles"
 msgstr ""
 
-#: ../src/settings.cpp:1232
+#: ../src/settings.cpp:1234
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1507,6 +1511,6 @@ msgstr ""
 msgid "Assigned function"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:2587
+#: ../src/cr3pocketbook.cpp:2960
 msgid "Press $1 to translate"
 msgstr ""
