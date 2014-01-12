@@ -31,7 +31,8 @@ enum CRPbCommands {
         PB_CMD_UPDATE_WINDOW,
         PB_CMD_PAGEUP_REPEAT,
         PB_CMD_PAGEDOWN_REPEAT,
-        PB_CMD_REPEAT_FINISH
+        PB_CMD_REPEAT_FINISH,
+        PB_CMD_NONE
 };
 
 #define PB_QUICK_MENU_BMP_ID "fbreader_menu"

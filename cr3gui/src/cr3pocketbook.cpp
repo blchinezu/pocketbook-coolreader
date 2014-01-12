@@ -330,7 +330,7 @@ static const struct {
     int commandId;
     int commandParam;
 } pbActions[] = {
-    { "@KA_none", -1, 0},
+    { "@KA_none", PB_CMD_NONE, 0},
     { "@KA_menu", PB_QUICK_MENU, 0},
     { "@KA_prev", DCMD_PAGEUP, 0},
     { "@KA_next", DCMD_PAGEDOWN, 0},
@@ -400,7 +400,8 @@ public:
         instance = NULL;
     }
 
-    void getPocketBookCommand(char *name, int &commandId, int &commandParam) {
+    void getPocketBookCommand(char *name, int &commandId, int &commandParam)
+    {
         int index = _pbTable.get(lString8(name));
         commandId = pbActions[index].commandId;
         commandParam = pbActions[index].commandParam;
@@ -408,8 +409,22 @@ public:
                      name, index, commandId, commandParam);
     }
 
-    int getPocketBookCommandIndex(char *name) {
+    int getPocketBookCommandIndex(char *name)
+    {
         return _pbTable.get(lString8(name));
+    }
+
+    int getPocketBookCommandIndex(int command, int param)
+    {
+        int ret = 0;
+        for( int i=0; i < sizeof(pbActions)/sizeof(pbActions[0]); i++) {
+            if( pbActions[i].commandId == command &&
+                pbActions[i].commandParam == param) {
+                ret = i;
+                break;
+            }
+        }
+        return ret;
     }
 
     CRPocketBookWindowManager(int dx, int dy, int bpp)
@@ -1202,16 +1217,30 @@ protected:
 
             if (_bm3x3 == NULL)
                 _bm3x3 = NewBitmap(128, 128);
-            lString8 menuTextId(PB_QUICK_MENU_TEXT_ID);
-            for (int i = 0; i < 9; i++) {
-                menuTextId[PB_QUICK_MENU_TEXT_ID_IDX] = '0' + i;
-                _strings3x3[i] = GetThemeString((char *)menuTextId.c_str(), (char *)def_menutext[i]);
+            CRGUIAcceleratorTableRef menuItems = _wm->getAccTables().get(lString16("quickMenuItems"));
+            int count = 0;
+            if ( !menuItems.isNull() && menuItems->length()>1 ) {
+                for (int i=0; i < menuItems->length(); i++) {
+                    const CRGUIAccelerator * acc = menuItems->get( i );
+                    int cmd = acc->commandId;
+                    int param = acc->commandParam;
+                    _strings3x3[count] = const_cast<char *>(getCommandName( cmd, param ));
+                    _quick_menuactions[count++] =
+                            CRPocketBookWindowManager::instance->getPocketBookCommandIndex( cmd, param );
+                }
             }
-            lString8 menuActionId(PB_QUICK_MENU_ACTION_ID);
-            for (int i = 0; i < 9; i++) {
-                menuActionId[PB_QUICK_MENU_ACTION_ID_IDX] = '0' + i;
-                char *action = GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
-                _quick_menuactions[i] = CRPocketBookWindowManager::instance->getPocketBookCommandIndex(action);
+            if ( 9 != count) {
+                lString8 menuTextId(PB_QUICK_MENU_TEXT_ID);
+                for (int i = 0; i < 9; i++) {
+                    menuTextId[PB_QUICK_MENU_TEXT_ID_IDX] = '0' + i;
+                    _strings3x3[i] = GetThemeString((char *)menuTextId.c_str(), (char *)def_menutext[i]);
+                }
+                lString8 menuActionId(PB_QUICK_MENU_ACTION_ID);
+                for (int i = 0; i < 9; i++) {
+                    menuActionId[PB_QUICK_MENU_ACTION_ID_IDX] = '0' + i;
+                    char *action = GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
+                    _quick_menuactions[i] = CRPocketBookWindowManager::instance->getPocketBookCommandIndex(action);
+                }
             }
         }
         return _bm3x3;
