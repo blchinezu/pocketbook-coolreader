@@ -1,6 +1,7 @@
 #ifndef CRLOCKS_H
 #define CRLOCKS_H
 
+#if CR3_CONCURRENCY_SUPPORTED
 #include "lvautoptr.h"
 
 class CRMutex {
@@ -70,5 +71,12 @@ extern CRMutex * _fontLocalGlyphCacheMutex;
 
 /// call to create mutexes for different parts of CoolReader engine
 void CRSetupEngineConcurrency();
+#else
+#define REF_GUARD
+#define FONT_GUARD
+#define FONT_MAN_GUARD
+#define FONT_GLYPH_CACHE_GUARD
+#define FONT_LOCAL_GLYPH_CACHE_GUARD
+#endif
 
 #endif // CRLOCKS_H
