@@ -1307,6 +1307,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         cr_status_font_sizes[i] = MIN_STATUS_FONT_SIZE + i;
     }
     createFontSizeMenu(statusMenu, cr_status_font_sizes, sizesCount, props, PROP_STATUS_FONT_SIZE);
+    createSettingsMenuItem(statusMenu, mm_StatusFontEmbolden, _("Font weight"),
+                           valueFont, PROP_STATUS_FONT_EMBOLDEN, embolden_mode);
     createSettingsMenuItem(statusMenu, mm_ShowTime, _("Show time"),
                            valueFont, PROP_SHOW_TIME, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowTitle, _("Show title"),

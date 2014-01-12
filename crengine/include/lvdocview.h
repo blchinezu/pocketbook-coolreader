@@ -39,6 +39,7 @@
 #define PROP_STATUS_FONT_COLOR       "crengine.page.header.font.color"
 #define PROP_STATUS_FONT_FACE        "crengine.page.header.font.face"
 #define PROP_STATUS_FONT_SIZE        "crengine.page.header.font.size"
+#define PROP_STATUS_FONT_EMBOLDEN    "crengine.page.header.font.embolden"
 #define PROP_PAGE_MARGIN_TOP         "crengine.page.margin.top"
 #define PROP_PAGE_MARGIN_BOTTOM      "crengine.page.margin.bottom"
 #define PROP_PAGE_MARGIN_LEFT        "crengine.page.margin.left"
@@ -485,7 +486,8 @@ private:
 
 
     lString8 m_defaultFontFace;
-	lString8 m_statusFontFace;
+    lString8 m_statusFontFace;
+    int m_statusFontEmbolden;
     ldomNavigationHistory _navigationHistory;
 
     doc_format_t m_doc_format;
@@ -712,6 +714,10 @@ public:
     lString8 getStatusFontFace() { return m_statusFontFace; }
     /// set status bar font face
     void setStatusFontFace( const lString8 & newFace );
+    /// get status bar font weight
+    int getStatusFontEmbolden() { return m_statusFontEmbolden; }
+    /// set status bar font weight
+    void setStatusFontEmbolden( int addWidth );
     /// invalidate formatted data, request render
     void requestRender();
     /// invalidate document data, request reload

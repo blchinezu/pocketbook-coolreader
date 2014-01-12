@@ -81,6 +81,7 @@ enum MainMenuItems_t {
     mm_touchScreenZones,
     mm_ShowPagesTillChapterEnd,
     mm_showChapterMarks,
+    mm_StatusFontEmbolden,
     mm_Last
 };
 

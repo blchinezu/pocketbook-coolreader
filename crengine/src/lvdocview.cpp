@@ -147,7 +147,9 @@ LVDocView::LVDocView(int bitsPerPixel) :
 #if CR_INTERNAL_PAGE_ORIENTATION==1
 			, m_rotateAngle(CR_ROTATE_ANGLE_0)
 #endif
-			, m_section_bounds_valid(false), m_doc_format(doc_format_none),
+                        , m_section_bounds_valid(false)
+                        , m_statusFontEmbolden(STYLE_FONT_EMBOLD_MODE_NORMAL)
+                        , m_doc_format(doc_format_none),
 			m_callback(NULL), m_swapDone(false), m_drawBufferBits(
 					GRAY_BACKBUFFER_BITS) {
 #if (COLOR_BACKBUFFER==1)
@@ -2428,7 +2430,7 @@ void LVDocView::setRenderProps(int dx, int dy) {
 	m_font = fontMan->GetFont(m_font_size, 400 + LVRendGetFontEmbolden(),
 			false, DEFAULT_FONT_FAMILY, m_defaultFontFace);
 	//m_font = LVCreateFontTransform( m_font, LVFONT_TRANSFORM_EMBOLDEN );
-	m_infoFont = fontMan->GetFont(m_status_font_size, 400, false,
+        m_infoFont = fontMan->GetFont(m_status_font_size, 400 + getStatusFontEmbolden(), false,
 			DEFAULT_FONT_FAMILY, m_statusFontFace);
 	if (!m_font || !m_infoFont)
 		return;
@@ -3153,6 +3155,18 @@ void LVDocView::setDefaultFontFace(const lString8 & newFace) {
 void LVDocView::setStatusFontFace(const lString8 & newFace) {
 	m_statusFontFace = newFace;
     REQUEST_RENDER("setStatusFontFace")
+}
+
+void LVDocView::setStatusFontEmbolden( int addWidth )
+{
+    if ( addWidth < 0 )
+        addWidth = 0;
+    else if ( addWidth>STYLE_FONT_EMBOLD_MODE_EMBOLD )
+        addWidth = STYLE_FONT_EMBOLD_MODE_EMBOLD;
+
+    m_statusFontEmbolden = addWidth;
+
+    REQUEST_RENDER("setStatusFontEmbolden")
 }
 
 /// sets posible base font sizes (for ZoomFont feature)
@@ -5510,6 +5524,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	static int bool_options_def_false[] = { 0, 1 };
 
 	props->limitValueList(PROP_FONT_WEIGHT_EMBOLDEN, bool_options_def_false, 2);
+        props->limitValueList(PROP_STATUS_FONT_EMBOLDEN, bool_options_def_false, 2);
 #ifndef ANDROID
 	props->limitValueList(PROP_EMBEDDED_STYLES, bool_options_def_true, 2);
 	props->limitValueList(PROP_EMBEDDED_FONTS, bool_options_def_true, 2);
@@ -5765,6 +5780,12 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                     );
 			//} else if ( name==PROP_BOOKMARK_ICONS ) {
 			//    enableBookmarkIcons( value==L"1" );
+                } else if (name == PROP_STATUS_FONT_EMBOLDEN) {
+                    bool embolden = props->getBoolDef(PROP_STATUS_FONT_EMBOLDEN, false);
+                    int v = embolden ? STYLE_FONT_EMBOLD_MODE_EMBOLD
+                                    : STYLE_FONT_EMBOLD_MODE_NORMAL;
+                    if (v != getStatusFontEmbolden())
+                        setStatusFontEmbolden(v);
 		} else if (name == PROP_FONT_SIZE) {
 			int fontSize = props->getIntDef(PROP_FONT_SIZE, m_font_sizes[0]);
 			setFontSize(fontSize);//cr_font_sizes
