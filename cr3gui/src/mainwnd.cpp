@@ -45,6 +45,7 @@
 
 #ifdef CR_POCKETBOOK
 #include "cr3pocketbook.h"
+#include <inkview.h>
 #endif
 
 
@@ -1104,6 +1105,10 @@ void V3DocViewWin::showAboutDialog()
     lString8 progInfo;
     addPropLine( progInfo, _("CoolReader for PocketBook"), Utf8ToUnicode(lString8(CR_PB_VERSION)));
     addPropLine( progInfo, _("Build date"), Utf8ToUnicode(lString8(CR_PB_BUILD_DATE)));
+    addPropLine( progInfo, _("Model"), Utf8ToUnicode(lString8(GetDeviceModel())) );
+    addPropLine( progInfo, _("Hardware type"), Utf8ToUnicode(lString8(GetHardwareType())));
+    addPropLine( progInfo, _("Firmware version"), Utf8ToUnicode(lString8(GetSoftwareVersion())));
+
     addInfoSection( txt, progInfo, _("About program") );
 #endif
     txt << "</table>\n";
