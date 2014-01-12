@@ -274,6 +274,10 @@ public:
         case MCMD_OK:
             doCloseMenu(getId(), false, params);
             return true;
+        case MCMD_NEXT_ITEM:
+        case MCMD_PREV_ITEM:
+        case MCMD_NEXT_PAGE:
+            return true;
         }
         return CRMenu::onCommand( command, params );
     }

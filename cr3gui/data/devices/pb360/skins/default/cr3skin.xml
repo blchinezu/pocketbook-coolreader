@@ -269,6 +269,7 @@
         <border widths="6,3,3,3"/>
     </closebutton>
   </window>
+  <window id="tapSettings-rotated" base="#tapSettings"/>
   <menu id="main" min-item-count="8" max-item-count="8" show-shortcuts="false" fullscreen="true" >
         <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="center"/>
         <background color="#AAAAAA"/>
