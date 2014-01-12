@@ -3334,7 +3334,9 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
 
 #ifdef POCKETBOOK_PRO
 void SetSaveStateTimer(){
-	pbGlobals->saveState(main_win->getDocView()->getCurPage(), main_win->getDocView()->getPageCount());
+    exiting = true;
+    CRPocketBookDocView::instance->closing();
+    exiting = false;
 }
 #endif 
 
