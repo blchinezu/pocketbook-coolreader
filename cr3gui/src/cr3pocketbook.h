@@ -54,8 +54,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-9"
-#define CR_PB_BUILD_DATE "2014-01-04"
+#define CR_PB_VERSION "0.0.6-10"
+#define CR_PB_BUILD_DATE "2014-01-12"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
