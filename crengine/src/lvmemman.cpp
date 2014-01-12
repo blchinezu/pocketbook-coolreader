@@ -16,7 +16,9 @@
 #include "../include/lvref.h"
 #include "../include/lvtinydom.h"
 #ifdef _LINUX
+#ifndef _XOPEN_SOURCE
 #define _XOPEN_SOURCE
+#endif
 #include <signal.h>
 #include <unistd.h>
 #endif
@@ -86,6 +88,8 @@ void crSetFatalErrorHandler( lv_FatalErrorHandler_t * handler )
 }
 
 ref_count_rec_t ref_count_rec_t::null_ref(NULL);
+ref_count_rec_t ref_count_rec_t::protected_null_ref(NULL);
+
 
 #if (LDOM_USE_OWN_MEM_MAN==1)
 ldomMemManStorage * pmsREF = NULL;

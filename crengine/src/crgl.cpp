@@ -12,16 +12,9 @@
 *******************************************************/
 #include "../include/crengine.h"
 #include "../include/crgl.h"
-#include <GLES/gl.h>
-#include <EGL/egl.h>
+#include "glwrapper.h"
 
-struct PageImageTextureInfo {
-	int dx;
-	int dy;
-	int tdx;
-	int tdy;
-	int textureId;
-};
+
 
 int crCreateTextureRGBA(int dx, int dy, lUInt32 * pixels) {
     GLuint textureId = 0;
