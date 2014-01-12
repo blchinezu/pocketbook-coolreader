@@ -79,6 +79,8 @@ enum MainMenuItems_t {
     mm_inlineImagesZoominScale,
     mm_fontGamma,
     mm_touchScreenZones,
+    mm_ShowPagesTillChapterEnd,
+    mm_showChapterMarks,
     mm_Last
 };
 

@@ -1319,10 +1319,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            valueFont, PROP_SHOW_POS_PERCENT, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowPageCount, _("Show page count"),
                            valueFont, PROP_SHOW_PAGE_COUNT, on_off_option);
-    createSettingsMenuItem(statusMenu, mm_ShowPageCount, _("Show page count till chapter end"),
+    createSettingsMenuItem(statusMenu, mm_ShowPagesTillChapterEnd, _("Show page count till chapter end"),
                            valueFont, PROP_SHOW_CHAPTER_PAGES_REMAIN, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowPageNumber, _("Show page number"),
                            valueFont, PROP_SHOW_PAGE_NUMBER, on_off_option);
+    createSettingsMenuItem(statusMenu, mm_showChapterMarks, _("Show chapter marks"),
+                           valueFont, PROP_STATUS_CHAPTER_MARKS, on_off_option);
     statusMenu->reconfigure( 0 );
     pageSettingsMenu->addItem( statusMenu );
     //====== End of Status line  ========

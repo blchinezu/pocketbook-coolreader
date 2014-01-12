@@ -1531,7 +1531,6 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
         percent = 10000;
     int percent_pos = /*info.left + */percent * info.width() / 10000;
     //    int gh = 3; //drawGauge ? 3 : 1;
-    LVArray<int> & sbounds = getSectionBounds();
     lvRect navBar;
     getNavigationBarRectangle(pageIndex, navBar);
     int gpos = info.bottom;
@@ -1547,25 +1546,14 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
     //      drawbuf->FillRect(info.left + percent_pos, gpos - 2, info.right, gpos - 2
     //                      + 1, cl1); // cl3
 
-    //pages till chapter end
-    int pageToBorder = 0;
-    int lenght_index = sbounds.length();
-    if ( /*enablepgtoborder &&*/pageCount ) {
-        for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
-            int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
-
-            if ( pTB >= pageIndex ) {
-                pageToBorder = pTB - pageIndex;
-                // last chapter
-                if ( sbound_index != lenght_index - 1 )
-                    pageToBorder++;
-                break;
-            }
-	}
-    }
     int boundCategoryOld = 0;
+    LVArray<int> dummy;
+    LVArray<int> & sbounds = dummy;
     int sbound_index = 0;
-    bool enableMarks = !leftPage && (phi & PGHDR_CHAPTER_MARKS) && sbounds.length()<info.width()/5;
+    bool enableMarks = !leftPage && (phi & PGHDR_CHAPTER_MARKS);
+    if ( enableMarks || (phi & PGHDR_CHAPTER_PAGE_REM) )
+         sbounds = getSectionBounds();
+    enableMarks = enableMarks && sbounds.length()<info.width()/5;
     for ( int x = info.left; x<info.right; x++ ) {
         int cl = -1;
         int sz = 1;
@@ -1684,6 +1672,22 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
                     pageinfo += " / ";
                 if (phi & PGHDR_CHAPTER_PAGE_REM) {
                     //serg
+                    //pages till chapter end
+                    int pageToBorder = 0;
+                    int lenght_index = sbounds.length();
+                    if ( pageCount ) {
+                        for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
+                            int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+
+                            if ( pTB >= pageIndex ) {
+                                pageToBorder = pTB - pageIndex;
+                                // last chapter
+                                if ( sbound_index != lenght_index - 1 )
+                                    pageToBorder++;
+                                break;
+                            }
+                        }
+                    }
                     pageinfo += fmt::decimal( pageToBorder );
                     pageinfo += " / ";
                 }
