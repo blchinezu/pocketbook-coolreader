@@ -252,6 +252,23 @@
   </menu>
   <window id="about" base="#dialog">
   </window>
+  <window id="tapSettings">
+    <title base="#title-main" size="100%,40">
+        <background color="#555555"/>
+        <background color="#FFFFFF" pos="0,-4" size="100%,2"/>
+        <background color="#FFFFFF" pos="0,-2" size="100%,2"/>
+    </title>
+    <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="true" italic="false" valign="center" halign="center"/>
+    <background image="cr3_settings_menu.png" color="#AAAAAA"/>
+    <client>
+        <background color="#FFFFFF"/>
+        <border widths="8,8,8,8"/>
+        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="false" italic="false" valign="center" halign="center" wordwrap="true"/>
+    </client>
+    <closebutton normal="arrow_back.png">
+        <border widths="6,3,3,3"/>
+    </closebutton>
+  </window>
   <menu id="main" min-item-count="8" max-item-count="8" show-shortcuts="false" fullscreen="true" >
         <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="center"/>
         <background color="#AAAAAA"/>

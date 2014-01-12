@@ -95,7 +95,12 @@
 #define PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE  "crengine.image.scaling.zoomin.block.scale"
 #define PROP_IMG_SCALING_ZOOMOUT_BLOCK_MODE "crengine.image.scaling.zoomout.block.mode"
 #define PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE "crengine.image.scaling.zoomout.block.scale"
-#define PROP_TAP_ZONE_ACTION "crengine.tapzone.action.tap"
+#define PROP_TAP_ZONE_ACTION "app.tapzone.action.tap."
+#define PROP_TAP_ZONE_ACTION_LONG "app.tapzone.action.tap.long."
+#define PROP_TAP_ZONE_WIDTH_1 "app.tapzone.width.1"
+#define PROP_TAP_ZONE_WIDTH_2 "app.tapzone.width.2"
+#define PROP_TAP_ZONE_HEIGHT_1 "app.tapzone.height.1"
+#define PROP_TAP_ZONE_HEIGHT_2 "app.tapzone.height.2"
 
 const lChar16 * getDocFormatName( doc_format_t fmt );
 

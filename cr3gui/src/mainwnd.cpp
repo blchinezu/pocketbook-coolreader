@@ -645,6 +645,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
 		CRLog::debug("settings file not found: %s", LCSTR(filename));
         _docview->propsUpdateDefaults( _props );
         _docview->propsApply( _props );
+        initTapDefaultActions(_props);
         _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
         _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));
         //setAccelerators( _wm->getAccTables().get(lString16("main"), _props) );
@@ -653,6 +654,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
     if ( _props->loadFromStream( stream.get() ) ) {
         _props->setIntDef(PROP_FILE_PROPS_FONT_SIZE, 26);
         _docview->propsUpdateDefaults( _props );
+        initTapDefaultActions(_props);
         _docview->propsApply( _props );
         _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
         _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));
@@ -660,6 +662,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
         return true;
     }
     _docview->propsUpdateDefaults( _props );
+    initTapDefaultActions(_props);
     _docview->propsApply( _props );
     _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
     _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));

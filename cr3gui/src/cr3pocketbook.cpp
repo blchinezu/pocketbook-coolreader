@@ -1358,81 +1358,15 @@ protected:
 
     virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
-//        int tapZone = getTapZone(pt.x, pt.y);
-        int tapZone = getTapZonePB(pt.x, pt.y);
-        int command = 0, param = 0;
-        // TODO: for now hardcoded, add touch zones settings dialog
-        if (CRTOUCH_UP == evType) {
-            switch (tapZone) {
-            case 1:
-              command = MCMD_GO_LINK;
-                break;
-            case 2:
-              command = MCMD_DICT;
-                break;
-            case 3:
-//              command = MCMD_BOOKMARK_LIST;
-                break;
-            case 4:
-                command = DCMD_PAGEUP;
-//                command = DCMD_PAGEDOWN;
-                break;
-            case 5:
-                command = PB_QUICK_MENU;
-                break;
-            case 6:
-                command = DCMD_PAGEDOWN;
-                break;
-            case 7:
-                 command = MCMD_CITE;
-                break;
-            case 8:
-              command = MCMD_BOOKMARK_LIST;
-                break;
-            case 9:
-//              command = MCMD_BOOKMARK_LIST;
-                break;
-            default:
-                ;
+        bool longTap = (CRTOUCH_DOWN_LONG == evType);
+        if (CRTOUCH_UP == evType ||  longTap) {
+            int tapZone = getTapZone(pt.x, pt.y, getProps());
+            int command = 0, param = 0;
+            getCommandForTapZone(tapZone, getProps(), longTap, command, param);
+            if (command != 0) {
+                _wm->postCommand(command, param);
+                return true;
             }
-        } else if (CRTOUCH_DOWN_LONG == evType) {
-            switch (tapZone) {
-            case 1:
-//              command = MCMD_GO_LINK;
-                break;
-            case 2:
-//              command = MCMD_DICT;
-                break;
-            case 3:
-              command = MCMD_BOOKMARK_LIST;
-                break;
-            case 4:
-                command = DCMD_PAGEUP;
-                param = 10;
-                break;
-            case 5:
-                command = MCMD_MAIN_MENU;
-                break;
-            case 6:
-                command = DCMD_PAGEDOWN;
-                param = 10;
-                break;
-            case 7:
-                command = MCMD_CITES_LIST;
-                break;
-            case 8:
-//              command = MCMD_;
-                break;
-            case 9:
-//              command = MCMD_;
-                break;
-            default:
-                ;
-            }
-        }
-        if (command != 0) {
-            _wm->postCommand(command, param);
-            return true;
         }
         return false;
     }

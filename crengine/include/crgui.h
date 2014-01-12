@@ -711,7 +711,8 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual bool getInputRect( lvRect & rc );
         /// calculates scroll rectangle for window rectangle
         virtual bool getScrollRect( lvRect & rc );
-        int getTapZone(int x, int y);
+        /// calculates tap zone [1-9] corresponding to given coordinates
+        int getTapZone(int x, int y, CRPropRef props);
     public:
         /// use to override status text
         virtual void setStatusText( lString16 s ) { _statusText = s; }

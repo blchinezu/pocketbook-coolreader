@@ -119,5 +119,7 @@ class CRSettingsMenu : public CRFullScreenMenu
         int _menuItemId;
 };
 
+void initTapDefaultActions(CRPropRef props);
+void getCommandForTapZone(int tapZone, CRPropRef props, bool longTap, int &command, int &param);
 
 #endif //CR3_SETTINGS_H_INCLUDED

@@ -21,6 +21,73 @@
 
 #include <cri18n.h>
 
+#define CR3_ACTION_NONE "NONE"
+#define CR3_ACTION_EXIT "EXIT"
+#define CR3_ACTION_PAGE_DOWN "PAGE_DOWN"
+#define CR3_ACTION_PAGE_DOWN_10 "PAGE_DOWN_10"
+#define CR3_ACTION_PAGE_UP "PAGE_UP"
+#define CR3_ACTION_PAGE_UP_10 "PAGE_UP_10"
+#define CR3_ACTION_ZOOM_IN "ZOOM_IN"
+#define CR3_ACTION_ZOOM_OUT "ZOOM_OUT"
+#define CR3_ACTION_BOOKMARKS "BOOKMARKS"
+#define CR3_ACTION_MAIN_MENU "MAIN_MENU"
+#define CR3_ACTION_ABOUT "ABOUT"
+#define CR3_ACTION_SEARCH "SEARCH"
+#define CR3_ACTION_DICT "DICT"
+#define CR3_ACTION_SETTINGS "SETTINGS"
+#define CR3_ACTION_GO_PAGE "GO_PAGE"
+#define CR3_ACTION_GO_LINK "GO_LINK"
+#define CR3_ACTION_GO_FIRST "GO_FIRST"
+#define CR3_ACTION_GO_LAST "GO_LAST"
+#define CR3_ACTION_CITES "CITES"
+#define CR3_ACTION_QUICK_MENU "QUICK_MENU"
+#define CR3_ACTION_PB_MAIN_MENU "PB_MAIN_MENU"
+
+typedef struct {
+    const char * action_id;
+    const int commandId;
+    const int commandParam;
+} action_def_t;
+
+static const action_def_t availableActions[] = {
+    { CR3_ACTION_NONE, 0, 0 },
+    { CR3_ACTION_EXIT, MCMD_QUIT, 0 },
+    { CR3_ACTION_PAGE_DOWN, DCMD_PAGEDOWN, 1 },
+    { CR3_ACTION_PAGE_DOWN_10, DCMD_PAGEDOWN, 10 },
+    { CR3_ACTION_PAGE_UP, DCMD_PAGEUP, 1 },
+    { CR3_ACTION_PAGE_UP_10, DCMD_PAGEUP, 10 },
+    { CR3_ACTION_ZOOM_IN, DCMD_ZOOM_IN, 0 },
+    { CR3_ACTION_ZOOM_OUT, DCMD_ZOOM_OUT, 0 },
+    { CR3_ACTION_BOOKMARKS, MCMD_BOOKMARK_LIST, 0 },
+    { CR3_ACTION_MAIN_MENU, MCMD_MAIN_MENU, 0 },
+    { CR3_ACTION_ABOUT, MCMD_ABOUT, 0 },
+    { CR3_ACTION_SEARCH, MCMD_SEARCH, 0 },
+    { CR3_ACTION_DICT, MCMD_DICT, 0 },
+    { CR3_ACTION_SETTINGS, MCMD_SETTINGS, 0 },
+    { CR3_ACTION_GO_PAGE, MCMD_GO_PAGE, 0 },
+    { CR3_ACTION_GO_LINK, MCMD_GO_LINK, 0 },
+    { CR3_ACTION_GO_FIRST, DCMD_BEGIN, 0 },
+    { CR3_ACTION_GO_LAST, DCMD_END, 0 },
+    { CR3_ACTION_CITES, MCMD_CITE, 0 },
+#ifdef CR_POCKETBOOK
+    { CR3_ACTION_QUICK_MENU, PB_QUICK_MENU, 0 },
+    { CR3_ACTION_PB_MAIN_MENU, PB_CMD_MAIN_MENU, 0 },
+#endif
+    { NULL, 0, 0 }
+};
+
+static const char* default_actions_short[] = {
+    CR3_ACTION_GO_LINK, CR3_ACTION_DICT, CR3_ACTION_NONE,
+    CR3_ACTION_PAGE_UP, CR3_ACTION_QUICK_MENU, CR3_ACTION_PAGE_DOWN,
+    CR3_ACTION_CITES, CR3_ACTION_BOOKMARKS, CR3_ACTION_NONE
+};
+
+static const char* default_actions_long[] = {
+    CR3_ACTION_NONE, CR3_ACTION_NONE, CR3_ACTION_NONE,
+    CR3_ACTION_PAGE_UP_10, CR3_ACTION_MAIN_MENU, CR3_ACTION_PAGE_DOWN_10,
+    CR3_ACTION_NONE, CR3_ACTION_NONE, CR3_ACTION_NONE
+};
+
 class CRControlsMenu;
 class CRControlsMenuItem : public CRMenuItem
 {
@@ -146,23 +213,57 @@ int CRControlsMenuItem::onSelect()
     return 1;
 }
 
+class CRActionsMenu : public CRFullScreenMenu
+{
+public:
+    CRActionsMenu(CRMenu * baseMenu, CRPropRef props, lvRect &rc)
+    : CRFullScreenMenu( baseMenu->getWindowManager(), 0, lString16(), 8, rc )
+    {
+        _menu = baseMenu;
+        _props = props;
+    }
+    void setPropertyName(lString16 propertyName)
+    {
+        _propName = propertyName;
+    }
+};
+
 class CRTapZoneSettings : public CRFullScreenMenu
 {
 private:
-    int _selectedZone;
+    const char *_propertyName;
+    int x0,x1,x2,x3;
 protected:
     CRPropRef _props;
+    CRActionsMenu *_actionsMenu;
     virtual void drawClient();
+    const char * getActionName(int index);
+    int getActionIndex(const char *actionId);
+    lString16 getActionNameForTapZone(int tapZone);
+    void drawTapZonesRow(LVDrawBuf & buf, CRRectSkinRef clientSkin, int row,
+                         int rowStart, int rowEnd);
 public:
-    CRTapZoneSettings(CRMenu * parentMenu, int id, CRPropRef props, int numItems, lvRect & rc) :
-        CRFullScreenMenu( parentMenu->getWindowManager(), id, lString16(_("Touch screen actions")), numItems, rc )
+    CRTapZoneSettings(CRMenu * parentMenu, int id, const lString16 & label, CRPropRef props,
+                      const char *propName, lvRect & rc) :
+        CRFullScreenMenu( parentMenu->getWindowManager(), id,  label, 1, rc ),
+        _propertyName(propName), _props(props)
     {
-        _menu = parentMenu;
-        _props = props;
-        setSkinName(lString16(L"#dialog"));
+        setSkinName(lString16("#tapSettings"));
         setAccelerators(parentMenu->getAccelerators());
-        _selectedZone = 0;
+        _actionsMenu = new CRActionsMenu(this, _props, rc);
+        for ( int i=0; availableActions[i].action_id; i++ ) {
+            lString8 label( getActionName(i) );
+            lString8 propertyValue( availableActions[i].action_id);
+            _actionsMenu->addItem( new CRMenuItem(_actionsMenu, i,
+                                                  label.c_str(),
+                                                  LVImageSourceRef(), LVFontRef(),
+                                                  Utf8ToUnicode( propertyValue ).c_str()) );
+        }
+        _actionsMenu->setAccelerators( parentMenu->getAccelerators() );
+        _actionsMenu->setSkinName(lString16("#settings"));
+        _actionsMenu->reconfigure( 0 );
     }
+
     virtual bool onCommand( int command, int params)
     {
         switch (command) {
@@ -174,51 +275,174 @@ public:
             doCloseMenu(getId(), false, params);
             return true;
         }
-        return false;
+        return CRMenu::onCommand( command, params );
     }
-    virtual bool isClickableElement(int x, int y, bool moveEvent)
+
+    virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
-        lvRect rc;
-        if (getClientRect(rc)) {
-            lvPoint pt(x, y);
-            if (rc.isPointInside(pt)) {
-                _selectedZone = getTapZone(x, y);
-                return true;
-            }
+        bool ret = false;
+        int selectedZone = getTapZone(pt.x, pt.y, _props);
+        if (CRTOUCH_UP == evType || CRTOUCH_DOWN_LONG == evType) {
+            _actionsMenu->setPropertyName( lString16(_propertyName).appendDecimal(selectedZone));
+            _actionsMenu->setLabel( getLabel() );
+            _wm->activateWindow(_actionsMenu);
+            ret = true;
         }
-        return false;
-    }
-    virtual bool handleLongTouchEvent()
-    {
-        CRLog::trace("long touch, zone = %d", _selectedZone);
-        return false;
-    }
-    virtual bool handleTouchUpEvent()
-    {
-        CRLog::trace("touch, zone = %d", _selectedZone);
-        return false;
+        return ret;
     }
 };
 
 class CRTapZoneSettingsMenuItem : public CRMenu
 {
+private:
+    const char *_propName;
 public:
-    CRTapZoneSettingsMenuItem(CRMenu * parentMenu, CRPropRef props)
-        : CRMenu(parentMenu->getWindowManager(), parentMenu, mm_touchScreenZones, lString16(_("Touch screen actions")), LVImageSourceRef(), LVFontRef(), LVFontRef())
+    CRTapZoneSettingsMenuItem(CRMenu * parentMenu, CRPropRef props, const char * label, const char * propName)
+        : CRMenu(parentMenu->getWindowManager(), parentMenu, mm_touchScreenZones, label, LVImageSourceRef(), LVFontRef(), LVFontRef()),
+          _propName(propName)
     {
         _props = props;
     }
     int onSelect()
     {
-        CRTapZoneSettings *menu = new CRTapZoneSettings(_menu, mm_touchScreenZones, _props, 0, _rect);
+        CRTapZoneSettings *menu = new CRTapZoneSettings(_menu, mm_touchScreenZones, getLabel(), _props,
+                                                        _propName, _rect );
         _wm->activateWindow(menu);
         return 1;
     }
 };
 
+const char * CRTapZoneSettings::getActionName(int index)
+{
+    const char * name;
+    if ( index == 0 )
+        name = _("(No action)");
+    else
+        name = getCommandName( availableActions[index].commandId,
+                              availableActions[index].commandParam );
+    return name;
+}
+
+int CRTapZoneSettings::getActionIndex(const char *actionId)
+{
+    lString16 id(actionId);
+    int ret = 0;
+    for ( int i=0; availableActions[i].action_id; i++ ) {
+        if ( id == availableActions[i].action_id ) {
+            ret = i;
+            break;
+        }
+    }
+    return ret;
+}
+
+lString16 CRTapZoneSettings::getActionNameForTapZone(int tapZone)
+{
+    lString16 value = _props->getStringDef(lString8(_propertyName).appendDecimal(tapZone).c_str(),
+                                           CR3_ACTION_NONE);
+    return lString16(getActionName(getActionIndex(LCSTR(value))));
+
+}
+
+void CRTapZoneSettings::drawTapZonesRow(LVDrawBuf & buf, CRRectSkinRef clientSkin,
+                                        int row, int rowStart, int rowEnd)
+{
+    int startZone = row * 3 + 1;
+    if ( x1 > x0 ) {
+        lvRect tapRc(x0,rowStart,x1,rowEnd);
+        clientSkin->drawText(buf, tapRc,
+                             getActionNameForTapZone(startZone));
+    }
+    if ( x2 > x1 ) {
+        lvRect tapRc(x1,rowStart,x2,rowEnd);
+        clientSkin->drawText(buf, tapRc,
+                             getActionNameForTapZone(startZone + 1));
+    }
+    if ( x2 < x3 ) {
+        lvRect tapRc(x2,rowStart,x3,rowEnd);
+        clientSkin->drawText(buf, tapRc,
+                             getActionNameForTapZone(startZone + 2));
+    }
+}
+
 void CRTapZoneSettings::drawClient()
 {
-    CRGUIWindowBase::drawClient();
+    lvRect rc;
+    if ( !_pageUpdate || !getClientRect( rc ) )
+        return;
+
+    LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
+    CRMenuSkinRef skin = getSkin();
+    CRRectSkinRef clientSkin = skin->getClientSkin();
+
+    lUInt32 cl = 0x000000;
+    if ( !clientSkin.isNull() ) {
+        clientSkin->draw( buf, rc );
+        cl = clientSkin->getTextColor();
+        x0 = rc.left;
+        x1 = x0 + rc.width() * _props->getIntDef(PROP_TAP_ZONE_WIDTH_1, 33) / 100;
+        x2 = x1 + rc.width() * _props->getIntDef(PROP_TAP_ZONE_WIDTH_2, 33) / 100;
+        x3 = rc.width();
+        int y = rc.top;
+        int y1 = y + rc.height() * _props->getIntDef(PROP_TAP_ZONE_HEIGHT_1, 33) / 100;
+        int y2 = y1 + rc.height() * _props->getIntDef(PROP_TAP_ZONE_HEIGHT_2, 33) / 100;
+        if ( x1 > x0 && x1 < rc.width() )
+            buf.FillRect(x1, rc.top, x1+1, rc.bottom, cl);
+        if ( x2 > x1 && x2 < rc.width() )
+            buf.FillRect(x2, rc.top, x2+1, rc.bottom, cl);
+        if ( y1 > y ) {
+            if ( y1 < rc.height() )
+                buf.FillRect(rc.left, y1, rc.right, y1+1, cl);
+            drawTapZonesRow(buf, clientSkin, 0, y, y1);
+        }
+        if ( y2 > y1 ) {
+            if ( y2 < rc.height())
+                buf.FillRect(rc.left, y2, rc.right, y2+1, cl);
+            drawTapZonesRow(buf, clientSkin, 1, y1, y2);
+        }
+        if (y2 < rc.height()) {
+            drawTapZonesRow(buf, clientSkin, 2, y2, rc.height());
+        }
+    } else {
+        buf.FillRect(rc, 0xFFFFFF);
+    }
+    if (!_controlsCreated)
+        addControl(new CRClientControl(this, rc));
+}
+
+void initTapDefaultActions(CRPropRef props)
+{
+
+    for( unsigned i=0; i < sizeof(default_actions_short)/sizeof(default_actions_short[0]); i++ ) {
+        lString8 property(PROP_TAP_ZONE_ACTION);
+        property.appendDecimal(i + 1);
+        props->setStringDef(property.c_str(), default_actions_short[i]);
+    }
+    for( unsigned i=0; i < sizeof(default_actions_long)/sizeof(default_actions_long[0]); i++ ) {
+        lString8 property(PROP_TAP_ZONE_ACTION_LONG);
+        property.appendDecimal(i + 1);
+        props->setStringDef(property.c_str(), default_actions_long[i]);
+    }
+}
+
+void getCommandForTapZone(int tapZone, CRPropRef props, bool longTap, int &command, int &param)
+{
+    lString8 property;
+    if ( longTap ) {
+        property = PROP_TAP_ZONE_ACTION_LONG;
+    } else {
+        property = PROP_TAP_ZONE_ACTION;
+    }
+    property.appendDecimal(tapZone);
+    lString16 value = props->getStringDef(property.c_str(), CR3_ACTION_NONE);
+    command = param = 0;
+    for ( int i=0; availableActions[i].action_id; i++ ) {
+        if ( value == availableActions[i].action_id ) {
+            command = availableActions[i].commandId;
+            param = availableActions[i].commandParam;
+            break;
+        }
+    }
 }
 
 CRControlsMenuItem::CRControlsMenuItem( CRControlsMenu * menu, int id, int key, int flags, const CRGUIAccelerator * defAcc )
@@ -1181,12 +1405,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     controlsMenu->reconfigure( 0 );
     controlSettingsMenu->addItem( controlsMenu );
 #endif
-#if 0
     if (getWindowManager()->getScreen()->isTouchSupported()) {
-        CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(controlSettingsMenu, props);
+        CRTapZoneSettingsMenuItem * touchMenu = new CRTapZoneSettingsMenuItem(controlSettingsMenu, props,
+                                                                              _("Tap action"), PROP_TAP_ZONE_ACTION);
+        controlSettingsMenu->addItem(touchMenu);
+        touchMenu = new CRTapZoneSettingsMenuItem(controlSettingsMenu, props, _("Long tap action"),
+                                                  PROP_TAP_ZONE_ACTION_LONG);
         controlSettingsMenu->addItem(touchMenu);
     }
-#endif
     controlSettingsMenu->reconfigure( 0 );
     mainMenu->addItem( controlSettingsMenu );
 

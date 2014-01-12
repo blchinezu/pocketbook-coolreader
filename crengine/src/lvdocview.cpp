@@ -5581,6 +5581,10 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_INLINE_MODE, defImgScaling.mode);
     props->setIntDef(PROP_IMG_SCALING_ZOOMIN_BLOCK_MODE, defImgScaling.mode);
     props->setIntDef(PROP_IMG_SCALING_ZOOMIN_INLINE_MODE, defImgScaling.mode);
+    props->limitValueRange(PROP_TAP_ZONE_WIDTH_1, 33, 0, 100);
+    props->limitValueRange(PROP_TAP_ZONE_WIDTH_2, 33, 0, 100);
+    props->limitValueRange(PROP_TAP_ZONE_HEIGHT_1, 33, 0, 100);
+    props->limitValueRange(PROP_TAP_ZONE_HEIGHT_2, 33, 0, 100);
 
     int p = props->getIntDef(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, DEF_MIN_SPACE_CONDENSING_PERCENT);
     if (p<25)

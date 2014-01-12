@@ -744,7 +744,7 @@ bool CRGUIWindowBase::onTouchEvent(int x, int y, CRGUITouchEventType evType)
     return false;
 }
 
-int CRGUIWindowBase::getTapZone(int x, int y)
+int CRGUIWindowBase::getTapZone(int x, int y, CRPropRef props)
 {
     lvRect rc;
 
@@ -753,10 +753,10 @@ int CRGUIWindowBase::getTapZone(int x, int y)
     int dx = rc.width();
     int dy = rc.height();
 
-    int x1 = dx / 3;
-    int x2 = dx * 2 / 3;
-    int y1 = dy / 3;
-    int y2 = dy * 2 / 3;
+    int x1 = rc.left + dx * props->getIntDef(PROP_TAP_ZONE_WIDTH_1, 33) / 100;
+    int x2 = x1 + dx * props->getIntDef(PROP_TAP_ZONE_WIDTH_2, 33) / 100;
+    int y1 = rc.top + dy * props->getIntDef(PROP_TAP_ZONE_HEIGHT_1, 33) / 100;
+    int y2 = y1 + dy * props->getIntDef(PROP_TAP_ZONE_HEIGHT_2, 33) / 100;
     int zone = 0;
     if ( y<y1 ) {
         if ( x<x1 )
