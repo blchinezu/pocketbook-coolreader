@@ -387,6 +387,23 @@ bool CRViewDialog::onCommand( int command, int params )
                 }
             }
 			return true;
+        case DCMD_BUTTON_PRESSED:
+        case DCMD_BUTTON_PRESSED_LONG:
+            if (params == BTN_SCROLL_DOWN) {
+                command = DCMD_PAGEDOWN;
+                params = (command == DCMD_BUTTON_PRESSED_LONG);
+                _lastNavigationDirection = 1;
+                break;
+            } else if (params == BTN_SCROLL_UP) {
+                command = DCMD_PAGEUP;
+                params = (command == DCMD_BUTTON_PRESSED_LONG);
+                _lastNavigationDirection = -1;
+                break;
+            } else if (params != BTN_CLOSE) {
+                // unknown button pressed
+                return false;
+            }
+            // else fallthrough and close window
         case MCMD_CANCEL:
         case MCMD_OK:
             _wm->closeWindow( this );
