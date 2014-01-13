@@ -330,7 +330,7 @@ static const struct {
     int commandId;
     int commandParam;
 } pbActions[] = {
-    { "@KA_none", PB_CMD_NONE, 0},
+    { "@KA_none", -1, 0},
     { "@KA_menu", PB_QUICK_MENU, 0},
     { "@KA_prev", DCMD_PAGEUP, 0},
     { "@KA_next", DCMD_PAGEDOWN, 0},
@@ -1167,7 +1167,7 @@ public:
 class CRPocketBookDocView : public V3DocViewWin {
 private:
     ibitmap *_bm3x3;
-    char *_strings3x3[9];
+    const char *_strings3x3[9];
     int _quick_menuactions[9];
     tocentry *_toc;
     int _tocLength;
@@ -1224,9 +1224,14 @@ protected:
                     const CRGUIAccelerator * acc = menuItems->get( i );
                     int cmd = acc->commandId;
                     int param = acc->commandParam;
-                    _strings3x3[count] = const_cast<char *>(getCommandName( cmd, param ));
-                    _quick_menuactions[count++] =
+                    if (cmd == PB_CMD_NONE) {
+                         _strings3x3[count] = TR("@Menu");
+                         _quick_menuactions[count++] = 0;
+                    } else {
+                        _strings3x3[count] = getCommandName( cmd, param );
+                        _quick_menuactions[count++] =
                             CRPocketBookWindowManager::instance->getPocketBookCommandIndex( cmd, param );
+                    }
                 }
             }
             if ( 9 != count) {
