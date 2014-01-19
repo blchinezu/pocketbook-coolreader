@@ -3183,6 +3183,7 @@ bool isGSensorSupported()
     return HWC_HAS_GSENSOR;
 }
 
+
 int InitDoc(const char *exename, char *fileName)
 {
     static const lChar16 * css_file_name = L"fb2.css"; // fb2

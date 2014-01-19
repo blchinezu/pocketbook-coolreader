@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cool Reader 3 Spanish Translation\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2014-01-12 16:00+0700\n"
+"POT-Creation-Date: 2014-01-19 17:00+0700\n"
 "PO-Revision-Date: 2010-03-02 19:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: jotas\n"
@@ -64,11 +64,11 @@ msgstr "Ayuda"
 msgid "Main Menu"
 msgstr "Menú Principal"
 
-#: ../src/mainwnd.cpp:880 ../src/viewdlg.cpp:557
+#: ../src/mainwnd.cpp:880 ../src/viewdlg.cpp:574
 msgid "About"
 msgstr "Acerca de..."
 
-#: ../src/mainwnd.cpp:890 ../src/viewdlg.cpp:521
+#: ../src/mainwnd.cpp:890 ../src/viewdlg.cpp:538
 msgid "Go to page"
 msgstr "Ir a página"
 
@@ -80,7 +80,7 @@ msgstr "Abrir libro leído recientemente"
 msgid "Dictionary"
 msgstr "Diccionario"
 
-#: ../src/mainwnd.cpp:912 ../src/settings.cpp:1187
+#: ../src/mainwnd.cpp:912 ../src/settings.cpp:1236
 msgid "Cite"
 msgstr "Cita"
 
@@ -92,11 +92,11 @@ msgstr "Marcadores"
 msgid "Search"
 msgstr "Buscar"
 
-#: ../src/mainwnd.cpp:924 ../src/settings.cpp:927
+#: ../src/mainwnd.cpp:924 ../src/settings.cpp:976
 msgid "Settings"
 msgstr "Ajustes"
 
-#: ../src/mainwnd.cpp:933 ../src/viewdlg.cpp:636
+#: ../src/mainwnd.cpp:933 ../src/viewdlg.cpp:652
 msgid "Keyboard layout"
 msgstr "Uso y disposición de las teclas"
 
@@ -285,23 +285,44 @@ msgid "Build date"
 msgstr ""
 
 #: ../src/mainwnd.cpp:1108
-msgid "Model"
+msgid "About program"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1109
+#: ../src/mainwnd.cpp:1111
 msgid "Hardware type"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1110
+#: ../src/mainwnd.cpp:1112
 #, fuzzy
 msgid "Firmware version"
 msgstr "Versión del documento"
 
-#: ../src/mainwnd.cpp:1112
-msgid "About program"
+#: ../src/mainwnd.cpp:1113
+#, fuzzy
+msgid "Keyboard type"
+msgstr "Uso y disposición de las teclas"
+
+#: ../src/mainwnd.cpp:1114
+msgid "Screen type"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1233
+#: ../src/mainwnd.cpp:1115
+msgid "Config file"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1116
+msgid "Keymap file"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1117
+msgid "Skin file"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1118
+msgid "Debug information"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1248
 msgid "Loading: please wait..."
 msgstr "Cargando: por favor, espera..."
 
@@ -393,7 +414,7 @@ msgstr "Eliminar a la citación"
 msgid "Citations"
 msgstr ""
 
-#: ../src/bmkdlg.cpp:452 ../src/viewdlg.cpp:558
+#: ../src/bmkdlg.cpp:452 ../src/viewdlg.cpp:575
 msgid "Cite selection dialog"
 msgstr "Seleccionar y marcar texto"
 
@@ -413,857 +434,861 @@ msgstr "Elige la acción a realizar"
 msgid "Controls"
 msgstr "Cambiar la función de las teclas"
 
-#: ../src/settings.cpp:319
+#: ../src/settings.cpp:323
 msgid "(No action)"
 msgstr ""
 
-#: ../src/settings.cpp:472
+#: ../src/settings.cpp:476
 msgid "[Command is not assigned]"
 msgstr "[Orden no asignada]"
 
-#: ../src/settings.cpp:493
+#: ../src/settings.cpp:497
 msgid "0` (Portrait)"
 msgstr "0` (Retrato)"
 
-#: ../src/settings.cpp:494
+#: ../src/settings.cpp:498
 msgid "90 `"
 msgstr "90 `"
 
-#: ../src/settings.cpp:495
+#: ../src/settings.cpp:499
 msgid "180 `"
 msgstr "180 `"
 
-#: ../src/settings.cpp:496
+#: ../src/settings.cpp:500
 msgid "270 `"
 msgstr "270 `"
 
-#: ../src/settings.cpp:507
+#: ../src/settings.cpp:511
 msgid "Page orientation"
 msgstr "Orientación de la página"
 
-#: ../src/settings.cpp:524
+#: ../src/settings.cpp:528
 msgid "Default font size"
 msgstr "Tamaño de la letra"
 
-#: ../src/settings.cpp:580
+#: ../src/settings.cpp:584
 msgid "The quick brown fox jumps over lazy dog"
 msgstr ""
 "El veloz murciélago hindú comía feliz cardillo y kiwi. La cigüeña tocaba el "
 "saxofón detrás del palenque de paja"
 
-#: ../src/settings.cpp:712
+#: ../src/settings.cpp:759
 msgid "Justify"
 msgstr ""
 
-#: ../src/settings.cpp:713
+#: ../src/settings.cpp:760
 #, fuzzy
 msgctxt "CSS"
 msgid "Left"
 msgstr "Izquierda"
 
-#: ../src/settings.cpp:714
+#: ../src/settings.cpp:761
 msgid "Center"
 msgstr ""
 
-#: ../src/settings.cpp:715
+#: ../src/settings.cpp:762
 #, fuzzy
 msgctxt "CSS"
 msgid "Right"
 msgstr "Derecha"
 
-#: ../src/settings.cpp:721
+#: ../src/settings.cpp:768
 msgid "No indent"
 msgstr ""
 
-#: ../src/settings.cpp:722
+#: ../src/settings.cpp:769
 msgid "Small indent"
 msgstr ""
 
-#: ../src/settings.cpp:723
+#: ../src/settings.cpp:770
 msgid "Big indent"
 msgstr ""
 
-#: ../src/settings.cpp:724
+#: ../src/settings.cpp:771
 msgid "Small outdent"
 msgstr ""
 
-#: ../src/settings.cpp:725
+#: ../src/settings.cpp:772
 msgid "Big outdent"
 msgstr ""
 
-#: ../src/settings.cpp:731
+#: ../src/settings.cpp:778
 msgid "[Default sans-serif font]"
 msgstr ""
 
-#: ../src/settings.cpp:732
+#: ../src/settings.cpp:779
 #, fuzzy
 msgid "[Default serif font]"
 msgstr "Tamaño de la letra"
 
-#: ../src/settings.cpp:733
+#: ../src/settings.cpp:780
 #, fuzzy
 msgid "[Default monospace font]"
 msgstr "Tipo de letra"
 
-#: ../src/settings.cpp:739
+#: ../src/settings.cpp:786
 msgid "Bigger (105%)"
 msgstr ""
 
-#: ../src/settings.cpp:740
+#: ../src/settings.cpp:787
 msgid "Bigger (110%)"
 msgstr ""
 
-#: ../src/settings.cpp:741
+#: ../src/settings.cpp:788
 msgid "Bigger (115%)"
 msgstr ""
 
-#: ../src/settings.cpp:742
+#: ../src/settings.cpp:789
 msgid "Bigger (120%)"
 msgstr ""
 
-#: ../src/settings.cpp:743
+#: ../src/settings.cpp:790
 msgid "Bigger (150%)"
 msgstr ""
 
-#: ../src/settings.cpp:744
+#: ../src/settings.cpp:791
 msgid "Smaller (95%)"
 msgstr ""
 
-#: ../src/settings.cpp:745
+#: ../src/settings.cpp:792
 msgid "Smaller (90%)"
 msgstr ""
 
-#: ../src/settings.cpp:746
+#: ../src/settings.cpp:793
 msgid "Smaller (85%)"
 msgstr ""
 
-#: ../src/settings.cpp:747
+#: ../src/settings.cpp:794
 msgid "Smaller (80%)"
 msgstr ""
 
-#: ../src/settings.cpp:748
+#: ../src/settings.cpp:795
 msgid "Smaller (70%)"
 msgstr ""
 
-#: ../src/settings.cpp:749
+#: ../src/settings.cpp:796
 msgid "Smaller (60%)"
 msgstr ""
 
-#: ../src/settings.cpp:755 ../src/settings.cpp:764 ../src/settings.cpp:976
-#: ../src/settings.cpp:982
+#: ../src/settings.cpp:802 ../src/settings.cpp:811 ../src/settings.cpp:1025
+#: ../src/settings.cpp:1031
 msgid "Normal"
 msgstr "Normal"
 
-#: ../src/settings.cpp:756 ../src/settings.cpp:983
+#: ../src/settings.cpp:803 ../src/settings.cpp:1032
 msgid "Bold"
 msgstr "Negrita"
 
-#: ../src/settings.cpp:757
+#: ../src/settings.cpp:804
 #, fuzzy
 msgid "Bolder"
 msgstr "Negrita"
 
-#: ../src/settings.cpp:758
+#: ../src/settings.cpp:805
 #, fuzzy
 msgid "Lighter"
 msgstr "Derecha"
 
-#: ../src/settings.cpp:765
+#: ../src/settings.cpp:812
 msgid "Italic"
 msgstr ""
 
-#: ../src/settings.cpp:787 ../src/settings.cpp:949
+#: ../src/settings.cpp:836 ../src/settings.cpp:998
 msgid "None"
 msgstr ""
 
-#: ../src/settings.cpp:788 ../src/settings.cpp:951
+#: ../src/settings.cpp:837 ../src/settings.cpp:1000
 msgid "Underline"
 msgstr ""
 
-#: ../src/settings.cpp:789
+#: ../src/settings.cpp:838
 msgid "Line through"
 msgstr ""
 
-#: ../src/settings.cpp:790
+#: ../src/settings.cpp:839
 msgid "Overline"
 msgstr ""
 
-#: ../src/settings.cpp:796
+#: ../src/settings.cpp:845
 #, fuzzy
 msgid "Baseline"
 msgstr "Línea de estado"
 
-#: ../src/settings.cpp:797
+#: ../src/settings.cpp:846
 msgid "Subscript"
 msgstr ""
 
-#: ../src/settings.cpp:798
+#: ../src/settings.cpp:847
 msgid "Superscript"
 msgstr ""
 
-#: ../src/settings.cpp:804 ../src/settings.cpp:812
+#: ../src/settings.cpp:853 ../src/settings.cpp:861
 msgid "Black"
 msgstr ""
 
-#: ../src/settings.cpp:805 ../src/settings.cpp:813
+#: ../src/settings.cpp:854 ../src/settings.cpp:862
 msgid "Gray"
 msgstr ""
 
-#: ../src/settings.cpp:806 ../src/settings.cpp:814
+#: ../src/settings.cpp:855 ../src/settings.cpp:863
 msgid "White"
 msgstr ""
 
-#: ../src/settings.cpp:821 ../src/settings.cpp:832
+#: ../src/settings.cpp:870 ../src/settings.cpp:881
 msgid "0.2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:822 ../src/settings.cpp:833
+#: ../src/settings.cpp:871 ../src/settings.cpp:882
 msgid "0.3 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:823 ../src/settings.cpp:834 ../src/settings.cpp:843
-#: ../src/settings.cpp:859
+#: ../src/settings.cpp:872 ../src/settings.cpp:883 ../src/settings.cpp:892
+#: ../src/settings.cpp:908
 msgid "0.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:824 ../src/settings.cpp:835 ../src/settings.cpp:844
-#: ../src/settings.cpp:860
+#: ../src/settings.cpp:873 ../src/settings.cpp:884 ../src/settings.cpp:893
+#: ../src/settings.cpp:909
 msgid "1 line height"
 msgstr ""
 
-#: ../src/settings.cpp:825 ../src/settings.cpp:836 ../src/settings.cpp:846
-#: ../src/settings.cpp:862
+#: ../src/settings.cpp:874 ../src/settings.cpp:885 ../src/settings.cpp:895
+#: ../src/settings.cpp:911
 msgid "2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:845 ../src/settings.cpp:861
+#: ../src/settings.cpp:894 ../src/settings.cpp:910
 msgid "1.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:847 ../src/settings.cpp:863
+#: ../src/settings.cpp:896 ../src/settings.cpp:912
 msgid "4 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:848 ../src/settings.cpp:864
+#: ../src/settings.cpp:897 ../src/settings.cpp:913
 #, c-format
 msgid "5% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:849 ../src/settings.cpp:865
+#: ../src/settings.cpp:898 ../src/settings.cpp:914
 #, c-format
 msgid "10% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:850 ../src/settings.cpp:866
+#: ../src/settings.cpp:899 ../src/settings.cpp:915
 #, c-format
 msgid "15% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:851 ../src/settings.cpp:867
+#: ../src/settings.cpp:900 ../src/settings.cpp:916
 #, c-format
 msgid "20% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:852 ../src/settings.cpp:868
+#: ../src/settings.cpp:901 ../src/settings.cpp:917
 #, c-format
 msgid "30% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:871
+#: ../src/settings.cpp:920
 #, fuzzy
 msgid "Text alignment"
 msgstr "Enlace siguiente"
 
-#: ../src/settings.cpp:873
+#: ../src/settings.cpp:922
 #, fuzzy
 msgid "First line indent"
 msgstr "Primer enlace"
 
-#: ../src/settings.cpp:876 ../src/settings.cpp:1302
+#: ../src/settings.cpp:925 ../src/settings.cpp:1351
 #, fuzzy
 msgid "Font face"
 msgstr "Tipo de letra"
 
-#: ../src/settings.cpp:890
+#: ../src/settings.cpp:939
 #, fuzzy
 msgid "Font size"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/settings.cpp:892 ../src/settings.cpp:1215 ../src/settings.cpp:1310
+#: ../src/settings.cpp:941 ../src/settings.cpp:1264 ../src/settings.cpp:1359
 msgid "Font weight"
 msgstr "Grosor de la letra"
 
-#: ../src/settings.cpp:894
+#: ../src/settings.cpp:943
 #, fuzzy
 msgid "Font style"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/settings.cpp:896 ../src/settings.cpp:1238
+#: ../src/settings.cpp:945 ../src/settings.cpp:1287
 msgid "Interline space"
 msgstr "Interlineado"
 
-#: ../src/settings.cpp:898
+#: ../src/settings.cpp:947
 #, fuzzy
 msgid "Text decoration"
 msgstr "Eliminar a la citación"
 
-#: ../src/settings.cpp:900
+#: ../src/settings.cpp:949
 #, fuzzy
 msgid "Text vertical alignment"
 msgstr "Enlace siguiente"
 
-#: ../src/settings.cpp:902
+#: ../src/settings.cpp:951
 msgid "Text color"
 msgstr ""
 
-#: ../src/settings.cpp:904
+#: ../src/settings.cpp:953
 msgid "Background color"
 msgstr ""
 
-#: ../src/settings.cpp:906
+#: ../src/settings.cpp:955
 msgid "Margin before"
 msgstr ""
 
-#: ../src/settings.cpp:908
+#: ../src/settings.cpp:957
 msgid "Margin after"
 msgstr ""
 
-#: ../src/settings.cpp:910
+#: ../src/settings.cpp:959
 msgid "Margin left"
 msgstr ""
 
-#: ../src/settings.cpp:912
+#: ../src/settings.cpp:961
 msgid "Margin right"
 msgstr ""
 
-#: ../src/settings.cpp:936
+#: ../src/settings.cpp:985
 msgid "On for all fonts"
 msgstr "Activado para todas"
 
-#: ../src/settings.cpp:937
+#: ../src/settings.cpp:986
 msgid "On for big fonts only"
 msgstr "Activado para las grandes"
 
-#: ../src/settings.cpp:938 ../src/settings.cpp:944 ../src/settings.cpp:996
+#: ../src/settings.cpp:987 ../src/settings.cpp:993 ../src/settings.cpp:1045
 msgid "Off"
 msgstr "Desactivado"
 
-#: ../src/settings.cpp:943
+#: ../src/settings.cpp:992
 msgid "On"
 msgstr "Activado"
 
-#: ../src/settings.cpp:950
+#: ../src/settings.cpp:999
 msgid "Solid"
 msgstr ""
 
-#: ../src/settings.cpp:977
+#: ../src/settings.cpp:1026
 msgid "Inverse"
 msgstr "Invertir"
 
-#: ../src/settings.cpp:988
+#: ../src/settings.cpp:1037
 msgid "One"
 msgstr "Una"
 
-#: ../src/settings.cpp:989
+#: ../src/settings.cpp:1038
 msgid "Two"
 msgstr "Dos"
 
-#: ../src/settings.cpp:994
+#: ../src/settings.cpp:1043
 msgid "Top"
 msgstr "Superior"
 
-#: ../src/settings.cpp:1001
+#: ../src/settings.cpp:1050
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1002
+#: ../src/settings.cpp:1051
 msgid "75%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1003
+#: ../src/settings.cpp:1052
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1004
+#: ../src/settings.cpp:1053
 #, fuzzy
 msgid "85%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1005
+#: ../src/settings.cpp:1054
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1006
+#: ../src/settings.cpp:1055
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1007
+#: ../src/settings.cpp:1056
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1008
+#: ../src/settings.cpp:1057
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1009
+#: ../src/settings.cpp:1058
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1010
+#: ../src/settings.cpp:1059
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1011
+#: ../src/settings.cpp:1060
 msgid "120%"
 msgstr "120%"
 
-#: ../src/settings.cpp:1012
+#: ../src/settings.cpp:1061
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1013
+#: ../src/settings.cpp:1062
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1014
+#: ../src/settings.cpp:1063
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1015
+#: ../src/settings.cpp:1064
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1016
+#: ../src/settings.cpp:1065
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1017
+#: ../src/settings.cpp:1066
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1018
+#: ../src/settings.cpp:1067
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1019
+#: ../src/settings.cpp:1068
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1020
+#: ../src/settings.cpp:1069
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1064
+#: ../src/settings.cpp:1113
 msgid "Always use fast updates"
 msgstr "Usar siempre actualización rápida"
 
-#: ../src/settings.cpp:1065
+#: ../src/settings.cpp:1114
 msgid "Don't use fast updates"
 msgstr "No usar actualización rápida"
 
-#: ../src/settings.cpp:1066
+#: ../src/settings.cpp:1115
 msgid "Full updates every 2 pages"
 msgstr "Actualización completa cada 2 páginas"
 
-#: ../src/settings.cpp:1067
+#: ../src/settings.cpp:1116
 msgid "Full updates every 3 pages"
 msgstr "Actualización completa cada 3 páginas"
 
-#: ../src/settings.cpp:1068
+#: ../src/settings.cpp:1117
 msgid "Full updates every 4 pages"
 msgstr "Actualización completa cada 4 páginas"
 
-#: ../src/settings.cpp:1069
+#: ../src/settings.cpp:1118
 msgid "Full updates every 5 pages"
 msgstr "Actualización completa cada 5 páginas"
 
-#: ../src/settings.cpp:1070
+#: ../src/settings.cpp:1119
 msgid "Full updates every 6 pages"
 msgstr "Actualización completa cada 6 páginas"
 
-#: ../src/settings.cpp:1071
+#: ../src/settings.cpp:1120
 msgid "Full updates every 8 pages"
 msgstr "Actualización completa cada 8 páginas"
 
-#: ../src/settings.cpp:1072
+#: ../src/settings.cpp:1121
 msgid "Full updates every 10 pages"
 msgstr "Actualización completa cada 10 páginas"
 
-#: ../src/settings.cpp:1073
+#: ../src/settings.cpp:1122
 msgid "Full updates every 14 pages"
 msgstr "Actualización completa cada 14 páginas"
 
-#: ../src/settings.cpp:1078
+#: ../src/settings.cpp:1127
 msgid "Turbo mode disabled"
 msgstr "Modo turbo desactivado"
 
-#: ../src/settings.cpp:1079
+#: ../src/settings.cpp:1128
 msgid "Turbo mode enabled"
 msgstr "Modo turbo activado"
 
-#: ../src/settings.cpp:1086
+#: ../src/settings.cpp:1135
 msgid "180+slow next page"
 msgstr "Lento- Pasar solo página siguiente"
 
-#: ../src/settings.cpp:1087
+#: ../src/settings.cpp:1136
 msgid "180+slow prev/next page"
 msgstr "Lento- Pasar solo página anterior y siguiente"
 
-#: ../src/settings.cpp:1088
+#: ../src/settings.cpp:1137
 msgid "180+FAST next page"
 msgstr "Rápido - Pasar solo página siguiente"
 
-#: ../src/settings.cpp:1089
+#: ../src/settings.cpp:1138
 msgid "180+FAST prev/next page"
 msgstr "Rápido- Pasar solo página anterior y siguiente"
 
-#: ../src/settings.cpp:1090
+#: ../src/settings.cpp:1139
 msgid "180+FAST next/prev page"
 msgstr "Rápido- Pasar solo página anterior y siguiente (invertido)"
 
-#: ../src/settings.cpp:1108
+#: ../src/settings.cpp:1157
 msgid "2 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1109
+#: ../src/settings.cpp:1158
 msgid "3 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1110
+#: ../src/settings.cpp:1159
 msgid "4 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1111
+#: ../src/settings.cpp:1160
 msgid "8 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1117
+#: ../src/settings.cpp:1166
 msgid "Disabled (1:1)"
 msgstr ""
 
-#: ../src/settings.cpp:1118
+#: ../src/settings.cpp:1167
 #, fuzzy
 msgid "Integer scale"
 msgstr "Interlineado"
 
-#: ../src/settings.cpp:1119
+#: ../src/settings.cpp:1168
 msgid "Arbitrary scale"
 msgstr ""
 
-#: ../src/settings.cpp:1124
+#: ../src/settings.cpp:1173
 msgid "Auto"
 msgstr ""
 
-#: ../src/settings.cpp:1125
+#: ../src/settings.cpp:1174
 msgid "*1"
 msgstr ""
 
-#: ../src/settings.cpp:1126
+#: ../src/settings.cpp:1175
 msgid "*2"
 msgstr ""
 
-#: ../src/settings.cpp:1127
+#: ../src/settings.cpp:1176
 msgid "*3"
 msgstr ""
 
-#: ../src/settings.cpp:1175
+#: ../src/settings.cpp:1224
 #, fuzzy
 msgid "No hinting"
 msgstr "[Sin silabeo]"
 
-#: ../src/settings.cpp:1176
+#: ../src/settings.cpp:1225
 msgid "Use bytecode"
 msgstr ""
 
-#: ../src/settings.cpp:1177
+#: ../src/settings.cpp:1226
 msgid "Autohinting"
 msgstr ""
 
-#: ../src/settings.cpp:1182
+#: ../src/settings.cpp:1231
 msgid "Default paragraph formatting"
 msgstr ""
 
-#: ../src/settings.cpp:1183
+#: ../src/settings.cpp:1232
 #, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "Título"
 
-#: ../src/settings.cpp:1184
+#: ../src/settings.cpp:1233
 #, fuzzy
 msgid "Subtitle"
 msgstr "Mostrar hora"
 
-#: ../src/settings.cpp:1185
+#: ../src/settings.cpp:1234
 #, fuzzy
 msgid "Preformatted text / code"
 msgstr "Texto preformateado"
 
-#: ../src/settings.cpp:1186
+#: ../src/settings.cpp:1235
 msgid "Link"
 msgstr ""
 
-#: ../src/settings.cpp:1188
+#: ../src/settings.cpp:1237
 msgid "Epigraph"
 msgstr ""
 
-#: ../src/settings.cpp:1189
+#: ../src/settings.cpp:1238
 msgid "Poem"
 msgstr ""
 
-#: ../src/settings.cpp:1190
+#: ../src/settings.cpp:1239
 msgid "Text / Cite / Epigraph author"
 msgstr ""
 
-#: ../src/settings.cpp:1191
+#: ../src/settings.cpp:1240
 msgid "Footnote"
 msgstr ""
 
-#: ../src/settings.cpp:1192
+#: ../src/settings.cpp:1241
 #, fuzzy
 msgid "Footnote link"
 msgstr "Ir a enlace"
 
-#: ../src/settings.cpp:1193
+#: ../src/settings.cpp:1242
 msgid "Footnote title"
 msgstr ""
 
-#: ../src/settings.cpp:1194
+#: ../src/settings.cpp:1243
 msgid "Annotation"
 msgstr ""
 
-#: ../src/settings.cpp:1207
+#: ../src/settings.cpp:1256
 msgid "Default font face"
 msgstr "Tipo de letra"
 
-#: ../src/settings.cpp:1210
+#: ../src/settings.cpp:1259
 #, fuzzy
 msgid "Font settings"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/settings.cpp:1217
+#: ../src/settings.cpp:1266
 msgid "Font antialiasing"
 msgstr "AntiAlias de las letras"
 
-#: ../src/settings.cpp:1219
+#: ../src/settings.cpp:1268
 #, fuzzy
 msgid "Font hinting"
 msgstr "Kerning para las letras"
 
-#: ../src/settings.cpp:1221
+#: ../src/settings.cpp:1270
 msgid "Font kerning"
 msgstr "Kerning para las letras"
 
-#: ../src/settings.cpp:1223
+#: ../src/settings.cpp:1272
 msgid "Font Gamma"
 msgstr ""
 
-#: ../src/settings.cpp:1225
+#: ../src/settings.cpp:1274
 #, fuzzy
 msgid "Document embedded fonts"
 msgstr "Estilos embebidos del documento"
 
-#: ../src/settings.cpp:1227
+#: ../src/settings.cpp:1276
 #, fuzzy
 msgid "Fallback font face"
 msgstr "Tipo de letra"
 
-#: ../src/settings.cpp:1233
+#: ../src/settings.cpp:1282
 #, fuzzy
 msgid "Formatting settings"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/settings.cpp:1244
+#: ../src/settings.cpp:1293
 msgid "[No Hyphenation]"
 msgstr "[Sin silabeo]"
 
-#: ../src/settings.cpp:1245
+#: ../src/settings.cpp:1294
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Silabeo algorítmico]"
 
-#: ../src/settings.cpp:1247
+#: ../src/settings.cpp:1296
 msgid "Hyphenation"
 msgstr "Silabeo"
 
-#: ../src/settings.cpp:1261
+#: ../src/settings.cpp:1310
 msgid "Preformatted text"
 msgstr "Texto preformateado"
 
-#: ../src/settings.cpp:1263
+#: ../src/settings.cpp:1312
 msgid "Space condensing percent"
 msgstr ""
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1314
 msgid "Floating punctuation"
 msgstr ""
 
-#: ../src/settings.cpp:1270
+#: ../src/settings.cpp:1319
 msgid "Image scaling"
 msgstr ""
 
-#: ../src/settings.cpp:1274
+#: ../src/settings.cpp:1323
 msgid "Block image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1276
+#: ../src/settings.cpp:1325
 msgid "Block image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1278
+#: ../src/settings.cpp:1327
 msgid "Inline image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1280
+#: ../src/settings.cpp:1329
 msgid "Inline image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1288
+#: ../src/settings.cpp:1337
 #, fuzzy
 msgid "Page settings"
 msgstr "Orientación de la página"
 
-#: ../src/settings.cpp:1293
+#: ../src/settings.cpp:1342
 msgid "Status line"
 msgstr "Línea de estado"
 
-#: ../src/settings.cpp:1298
+#: ../src/settings.cpp:1347
 #, fuzzy
 msgid "Status line settings"
 msgstr "Línea de estado"
 
-#: ../src/settings.cpp:1312
+#: ../src/settings.cpp:1361
 msgid "Show time"
 msgstr "Mostrar hora"
 
-#: ../src/settings.cpp:1314
+#: ../src/settings.cpp:1363
 #, fuzzy
 msgid "Show title"
 msgstr "Mostrar hora"
 
-#: ../src/settings.cpp:1316
+#: ../src/settings.cpp:1365
 #, fuzzy
 msgid "Show battery"
 msgstr "Mostrar hora"
 
-#: ../src/settings.cpp:1318
+#: ../src/settings.cpp:1367
 #, fuzzy
 msgid "Show battery percent"
 msgstr "Estado de la batería"
 
-#: ../src/settings.cpp:1320
+#: ../src/settings.cpp:1369
 #, fuzzy
 msgid "Show position percent"
 msgstr "Ir a página"
 
-#: ../src/settings.cpp:1322
+#: ../src/settings.cpp:1371
 #, fuzzy
 msgid "Show page count"
 msgstr "Introduce el número de página"
 
-#: ../src/settings.cpp:1324
+#: ../src/settings.cpp:1373
 #, fuzzy
 msgid "Show page count till chapter end"
 msgstr "Introduce el número de página"
 
-#: ../src/settings.cpp:1326
+#: ../src/settings.cpp:1375
 #, fuzzy
 msgid "Show page number"
 msgstr "Introduce el número de página"
 
-#: ../src/settings.cpp:1328
+#: ../src/settings.cpp:1377
 #, fuzzy
 msgid "Show chapter marks"
 msgstr "Mostrar hora"
 
-#: ../src/settings.cpp:1336
+#: ../src/settings.cpp:1385
 msgid "Page margins"
 msgstr "Márgenes de la página"
 
-#: ../src/settings.cpp:1341
+#: ../src/settings.cpp:1390
 msgid "Top margin"
 msgstr "Margen superior"
 
-#: ../src/settings.cpp:1343
+#: ../src/settings.cpp:1392
 msgid "Bottom margin"
 msgstr "Margen inferior"
 
-#: ../src/settings.cpp:1345
+#: ../src/settings.cpp:1394
 msgid "Left margin"
 msgstr "Margen izquierdo"
 
-#: ../src/settings.cpp:1347
+#: ../src/settings.cpp:1396
 msgid "Right margin"
 msgstr "Margen derecho"
 
-#: ../src/settings.cpp:1352
+#: ../src/settings.cpp:1401
 msgid "Footnotes at page bottom"
 msgstr "Notas al pie en la parte inferior"
 
-#: ../src/settings.cpp:1358
+#: ../src/settings.cpp:1407
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1367
+#: ../src/settings.cpp:1416
 msgid "Landscape pages"
 msgstr "Páginas apaisadas"
 
-#: ../src/settings.cpp:1369
+#: ../src/settings.cpp:1418
 msgid "Inverse display"
 msgstr "Invertir pantalla (negro/blanco)"
 
-#: ../src/settings.cpp:1372
+#: ../src/settings.cpp:1421
 msgid "Show bookmark icons"
 msgstr "Mostrar iconos de marcadores"
 
-#: ../src/settings.cpp:1375
+#: ../src/settings.cpp:1424
 #, fuzzy
 msgid "Highlight bookmarks"
 msgstr "Eliminar marcador"
 
-#: ../src/settings.cpp:1378
+#: ../src/settings.cpp:1427
 msgid "Display update mode"
 msgstr "Ver modo de actualización"
 
-#: ../src/settings.cpp:1382
+#: ../src/settings.cpp:1431
 msgid "Turbo update mode"
 msgstr "Modo de actualización turbo"
 
-#: ../src/settings.cpp:1386
+#: ../src/settings.cpp:1435
 msgid "Gray buffer depth(need restart)"
 msgstr ""
 
-#: ../src/settings.cpp:1392
+#: ../src/settings.cpp:1441
+msgid "Skin"
+msgstr ""
+
+#: ../src/settings.cpp:1457
 #, fuzzy
 msgid "Control settings"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/settings.cpp:1398
+#: ../src/settings.cpp:1464
 msgid "Rotate"
 msgstr "Modo paso de página con giro"
 
-#: ../src/settings.cpp:1400
+#: ../src/settings.cpp:1466
 msgid "Page turn angle"
 msgstr "Ángulo de giro para paso de página"
 
-#: ../src/settings.cpp:1414
+#: ../src/settings.cpp:1481
 msgid "Tap action"
 msgstr ""
 
-#: ../src/settings.cpp:1416
+#: ../src/settings.cpp:1483
 #, fuzzy
 msgid "Long tap action"
 msgstr "Ir a la citación"
 
-#: ../src/settings.cpp:1430
+#: ../src/settings.cpp:1501
 #, fuzzy
 msgid "Style settings"
 msgstr "Ajustes"
 
-#: ../src/settings.cpp:1435
+#: ../src/settings.cpp:1506
 msgid "Document embedded styles"
 msgstr "Estilos embebidos del documento"
 
-#: ../src/settings.cpp:1464
+#: ../src/settings.cpp:1535
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1308,304 +1333,304 @@ msgstr ""
 msgid "Find in dictionary"
 msgstr "Buscar en el diccionario"
 
-#: ../src/viewdlg.cpp:469
+#: ../src/viewdlg.cpp:486
 msgid "M"
 msgstr "M"
 
-#: ../src/viewdlg.cpp:471
+#: ../src/viewdlg.cpp:488
 msgid "Ok"
 msgstr "Ok"
 
-#: ../src/viewdlg.cpp:473
+#: ../src/viewdlg.cpp:490
 msgid "Up"
 msgstr "Arriba"
 
-#: ../src/viewdlg.cpp:475
+#: ../src/viewdlg.cpp:492
 msgid "Down"
 msgstr "Abajo"
 
-#: ../src/viewdlg.cpp:477
+#: ../src/viewdlg.cpp:494
 msgid "C"
 msgstr "C"
 
-#: ../src/viewdlg.cpp:479
+#: ../src/viewdlg.cpp:496
 #, fuzzy
 msgctxt "Key"
 msgid "Left"
 msgstr "Izquierda"
 
-#: ../src/viewdlg.cpp:481
+#: ../src/viewdlg.cpp:498
 #, fuzzy
 msgctxt "Key"
 msgid "Right"
 msgstr "Derecha"
 
-#: ../src/viewdlg.cpp:483
+#: ../src/viewdlg.cpp:500
 msgid "Side Up"
 msgstr "Lateral Arriba"
 
-#: ../src/viewdlg.cpp:485
+#: ../src/viewdlg.cpp:502
 msgid "Side Down"
 msgstr "Lateral Abajo"
 
-#: ../src/viewdlg.cpp:487
+#: ../src/viewdlg.cpp:504
 msgid "Side Press"
 msgstr "Lateral Pulsar"
 
-#: ../src/viewdlg.cpp:489
+#: ../src/viewdlg.cpp:506
 msgid "Menu"
 msgstr "Menú"
 
-#: ../src/viewdlg.cpp:491
+#: ../src/viewdlg.cpp:508
 msgid "Zoom"
 msgstr "Zoom"
 
-#: ../src/viewdlg.cpp:502
+#: ../src/viewdlg.cpp:519
 msgid "Long"
 msgstr "Mantener"
 
-#: ../src/viewdlg.cpp:509
+#: ../src/viewdlg.cpp:526
 msgid "To first page"
 msgstr "Ir a la primera página"
 
-#: ../src/viewdlg.cpp:511
+#: ../src/viewdlg.cpp:528
 msgid "Back by page"
 msgstr "Retroceder página(s)"
 
-#: ../src/viewdlg.cpp:513
+#: ../src/viewdlg.cpp:530
 msgid "Forward by page"
 msgstr "Pasar página(s)"
 
-#: ../src/viewdlg.cpp:514
+#: ../src/viewdlg.cpp:531
 msgid "Forward in move history"
 msgstr "Avanzar en el historial del movimiento"
 
-#: ../src/viewdlg.cpp:515
+#: ../src/viewdlg.cpp:532
 msgid "Back in move history"
 msgstr "Retroceder en el historial del movimiento"
 
-#: ../src/viewdlg.cpp:516
+#: ../src/viewdlg.cpp:533
 msgid "Next link"
 msgstr "Enlace siguiente"
 
-#: ../src/viewdlg.cpp:517
+#: ../src/viewdlg.cpp:534
 msgid "Previous link"
 msgstr "Enlace anterior"
 
-#: ../src/viewdlg.cpp:518 ../src/viewdlg.cpp:545
+#: ../src/viewdlg.cpp:535 ../src/viewdlg.cpp:562
 msgid "Go to link"
 msgstr "Ir a enlace"
 
-#: ../src/viewdlg.cpp:519
+#: ../src/viewdlg.cpp:536
 msgid "To last page"
 msgstr "Ir a la última página"
 
-#: ../src/viewdlg.cpp:520
+#: ../src/viewdlg.cpp:537
 msgid "Go to position"
 msgstr "Ir a la posición"
 
-#: ../src/viewdlg.cpp:522
+#: ../src/viewdlg.cpp:539
 msgid "Zoom in"
 msgstr "Aumentar el tamaño de la letra"
 
-#: ../src/viewdlg.cpp:523
+#: ../src/viewdlg.cpp:540
 msgid "Zoom out"
 msgstr "Reducir el tamaño de la letra"
 
-#: ../src/viewdlg.cpp:524
+#: ../src/viewdlg.cpp:541
 msgid "Toggle bold text"
 msgstr "Cambiar el texto en negrita"
 
-#: ../src/viewdlg.cpp:525
+#: ../src/viewdlg.cpp:542
 msgid "Toggle text format"
 msgstr "Cambiar el formato de texto"
 
-#: ../src/viewdlg.cpp:526
+#: ../src/viewdlg.cpp:543
 msgid "Save bookmark by number"
 msgstr "Guardar marcador por número"
 
-#: ../src/viewdlg.cpp:527
+#: ../src/viewdlg.cpp:544
 msgid "Go to bookmark by number"
 msgstr "Ir a marcador por número"
 
-#: ../src/viewdlg.cpp:528
+#: ../src/viewdlg.cpp:545
 msgid "Move by chapter"
 msgstr "Avanzar o retroceder(-) capítulo"
 
-#: ../src/viewdlg.cpp:529
+#: ../src/viewdlg.cpp:546
 msgid "First link"
 msgstr "Primer enlace"
 
-#: ../src/viewdlg.cpp:530
+#: ../src/viewdlg.cpp:547
 msgid "Rotate by"
 msgstr "Rotar por"
 
-#: ../src/viewdlg.cpp:531
+#: ../src/viewdlg.cpp:548
 msgid "Set rotate angle"
 msgstr "Ajustar ángulo de rotación"
 
-#: ../src/viewdlg.cpp:532
+#: ../src/viewdlg.cpp:549
 msgid "Save history and bookmarks"
 msgstr "Guardar historial y marcadores"
 
-#: ../src/viewdlg.cpp:533
+#: ../src/viewdlg.cpp:550
 msgid "Save document to cache"
 msgstr "Guardar documento a la caché"
 
-#: ../src/viewdlg.cpp:534
+#: ../src/viewdlg.cpp:551
 msgid "Close dialog"
 msgstr "Cerrar diálogo"
 
-#: ../src/viewdlg.cpp:537
+#: ../src/viewdlg.cpp:554
 msgid "Scroll forward"
 msgstr "Avanzar"
 
-#: ../src/viewdlg.cpp:538
+#: ../src/viewdlg.cpp:555
 msgid "Scroll back"
 msgstr "Retroceder"
 
-#: ../src/viewdlg.cpp:539
+#: ../src/viewdlg.cpp:556
 msgid "Close book"
 msgstr "Cerrar libro"
 
-#: ../src/viewdlg.cpp:540
+#: ../src/viewdlg.cpp:557
 msgid "Main menu"
 msgstr "Menú principal"
 
-#: ../src/viewdlg.cpp:541
+#: ../src/viewdlg.cpp:558
 msgid "Go to page dialog"
 msgstr "Índice del libro"
 
-#: ../src/viewdlg.cpp:542
+#: ../src/viewdlg.cpp:559
 msgid "Settings menu"
 msgstr "Ajustes"
 
-#: ../src/viewdlg.cpp:543
+#: ../src/viewdlg.cpp:560
 msgid "Font size settings"
 msgstr "Ajustar el tamaño de la letra"
 
-#: ../src/viewdlg.cpp:544
+#: ../src/viewdlg.cpp:561
 msgid "Page orientation settings"
 msgstr "Ajustar la orientación de la página"
 
-#: ../src/viewdlg.cpp:549
+#: ../src/viewdlg.cpp:566
 msgid "Find in Dictionary (T5)"
 msgstr "Buscar en el Diccionario (T5)"
 
-#: ../src/viewdlg.cpp:551
+#: ../src/viewdlg.cpp:568
 msgid "Bookmark list"
 msgstr "Marcadores"
 
-#: ../src/viewdlg.cpp:552
+#: ../src/viewdlg.cpp:569
 msgid "Citations list"
 msgstr "Liste las citas"
 
-#: ../src/viewdlg.cpp:553
+#: ../src/viewdlg.cpp:570
 msgid "Go to bookmark..."
 msgstr "Ir a marcador..."
 
-#: ../src/viewdlg.cpp:554
+#: ../src/viewdlg.cpp:571
 msgid "Recent books list"
 msgstr "Libros leídos recientemente"
 
-#: ../src/viewdlg.cpp:555
+#: ../src/viewdlg.cpp:572
 msgid "Open recent book by number"
 msgstr "Abrir libro reciente por número"
 
-#: ../src/viewdlg.cpp:556
+#: ../src/viewdlg.cpp:573
 msgid "Switch to recent book"
 msgstr "Cambiar al libro anterior"
 
-#: ../src/viewdlg.cpp:559
+#: ../src/viewdlg.cpp:576
 msgid "Search dialog"
 msgstr "Buscar"
 
-#: ../src/viewdlg.cpp:560
+#: ../src/viewdlg.cpp:577
 msgid "Find in Dictionary (virtual keyboard)"
 msgstr "Buscar en el Diccionario (teclado virtual)"
 
-#: ../src/viewdlg.cpp:561
+#: ../src/viewdlg.cpp:578
 msgid "Next keyboard layout"
 msgstr "Mapa de teclado siguiente"
 
-#: ../src/viewdlg.cpp:562
+#: ../src/viewdlg.cpp:579
 msgid "Previous keyboard layout"
 msgstr "Mapa de teclado anterior"
 
-#: ../src/viewdlg.cpp:563
+#: ../src/viewdlg.cpp:580
 msgid "Show manual"
 msgstr "Ver manual"
 
-#: ../src/viewdlg.cpp:564
+#: ../src/viewdlg.cpp:581
 msgid "Show key mapping"
 msgstr "Ver el uso de las teclas"
 
-#: ../src/viewdlg.cpp:565
+#: ../src/viewdlg.cpp:582
 msgid "Go to percent..."
 msgstr "Ir a página"
 
-#: ../src/viewdlg.cpp:570
+#: ../src/viewdlg.cpp:587
 #, fuzzy
 msgid "PocketBook Main menu"
 msgstr "Menú principal"
 
-#: ../src/viewdlg.cpp:573
+#: ../src/viewdlg.cpp:589
 msgid "Unknown command"
 msgstr "Comando desconocido"
 
-#: ../src/viewdlg.cpp:580
+#: ../src/viewdlg.cpp:596
 msgid "Previous Page"
 msgstr "Página anterior"
 
-#: ../src/viewdlg.cpp:582
+#: ../src/viewdlg.cpp:598
 msgid "Next Page"
 msgstr "Página siguiente"
 
-#: ../src/viewdlg.cpp:584
+#: ../src/viewdlg.cpp:600
 msgid "Back by 10 Pages"
 msgstr "Retroceder 10 páginas"
 
-#: ../src/viewdlg.cpp:586
+#: ../src/viewdlg.cpp:602
 msgid "Forward by 10 Pages"
 msgstr "Avanzar 10 páginas"
 
-#: ../src/viewdlg.cpp:588
+#: ../src/viewdlg.cpp:604
 msgid "Next Chapter"
 msgstr "Capítulo siguiente"
 
-#: ../src/viewdlg.cpp:590
+#: ../src/viewdlg.cpp:606
 msgid "Previous Chapter"
 msgstr "Capítulo anterior"
 
-#: ../src/viewdlg.cpp:592
+#: ../src/viewdlg.cpp:608
 msgid "Add Bookmark"
 msgstr "Añadir marcador"
 
-#: ../src/viewdlg.cpp:594
+#: ../src/viewdlg.cpp:610
 msgid "Rotate Clockwise"
 msgstr "Rotar en el sentido de las agujas del reloj"
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:612
 msgid "Rotate Anti-Clockwise"
 msgstr "Rotar en sentido contrario a las agujas del reloj"
 
-#: ../src/viewdlg.cpp:598
+#: ../src/viewdlg.cpp:614
 msgid "Portrait View"
 msgstr "Vista en modo retrado"
 
-#: ../src/viewdlg.cpp:600
+#: ../src/viewdlg.cpp:616
 msgid "Landscape View"
 msgstr "Vista en modo apaisado"
 
-#: ../src/viewdlg.cpp:624
+#: ../src/viewdlg.cpp:640
 msgid "Key"
 msgstr "Tecla"
 
-#: ../src/viewdlg.cpp:624
+#: ../src/viewdlg.cpp:640
 msgid "Assigned function"
 msgstr "Función asignada"
 
-#: ../src/cr3pocketbook.cpp:2923
+#: ../src/cr3pocketbook.cpp:2896
 msgid "Press $1 to translate"
 msgstr "pulse $1 para traducir"
 
