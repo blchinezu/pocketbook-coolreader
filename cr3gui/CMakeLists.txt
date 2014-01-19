@@ -208,12 +208,20 @@ elseif (${GUI} STREQUAL CRGUI_PB)
 	  message("libinkview library not found!")
     ENDIF (INKVIEW_LIB)
 
+    FIND_PROGRAM(ZIP_EXECUTABLE zip)
+    IF(NOT ZIP_EXECUTABLE)
+	MESSAGE(FATAL_ERROR "Unable to find 'zip' executable")
+    ENDIF(NOT ZIP_EXECUTABLE)
+    SET( cr3_def_skin ${CMAKE_CURRENT_BINARY_DIR}/default.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_def_skin} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_def_skin} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/default/* )
+    ADD_CUSTOM_TARGET( skin ALL DEPENDS ${cr3_def_skin} )
     INSTALL( FILES ${CR3_STYLES} DESTINATION system/share/cr3)
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pdb" )
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pattern" )
-    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
+#    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
+    INSTALL( FILES ${cr3_def_skin} DESTINATION system/share/cr3/skins )
     INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/keymaps/ DESTINATION system/share/cr3/keymaps )
     INSTALL( DIRECTORY data/manual/ DESTINATION system/share/cr3/manual )
 
