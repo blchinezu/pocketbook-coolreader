@@ -14,7 +14,9 @@
 #include <cr3version.h>
 #include "cr3pocketbook.h"
 #include <inkview.h>
+#ifdef POCKETBOOK_PRO
 #include <inkplatform.h>
+#endif
 
 #ifdef PB_DB_STATE_SUPPORTED
 #include <dlfcn.h>
@@ -3157,6 +3159,14 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
         mainTable->addAll(pbTable);
     }
 }
+
+#ifndef POCKETBOOK_PRO
+extern unsigned long long hwconfig;
+#define HWC_KEYBOARD     ((int)((hwconfig >> 12) & 31))
+#define HWC_GSENSOR      ((int)((hwconfig >> 20) & 15))
+#define HWC_DISPLAY      ((int)((hwconfig >> 4) & 15))
+#define HWC_HAS_GSENSOR (HWC_GSENSOR != 0)
+#endif
 
 int getPB_keyboardType()
 {
