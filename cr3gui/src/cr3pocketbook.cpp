@@ -3303,22 +3303,24 @@ int InitDoc(const char *exename, char *fileName)
 
         CRPbIniFile devices;
         if ( devices.loadFromFile(USERDATA"/share/cr3/devices.ini") ) {
-            lString8 kbdType;
+            lString8 kbdType = lString8::itoa(getPB_keyboardType());
 
-            kbdType.appendDecimal(getPB_keyboardType());
             lString16 keymapFile = devices.getStringDef("keyboard", kbdType.c_str());
             if( !keymapFile.empty() ) {
+                CRLog::info("Keymap file specified in the device config: %s",
+                            UnicodeToUtf8(keymapFile).c_str());
                 props->setStringDef(PROP_KEYMAP_FILE, LVExtractFilenameWithoutExtension(keymapFile));
             }
-            lString8 displayType;
+            lString8 displayType = lString8::itoa(getPB_screenType());
 
-            displayType.appendDecimal(getPB_screenType());
             lString16 skinFile = devices.getStringDef("screen", displayType.c_str());
             if ( !skinFile.empty() ) {
+                CRLog::info("Skin file specified in the device config: %s",
+                            UnicodeToUtf8(skinFile).c_str());
                 props->setStringDef(PROP_SKIN_FILE, LVExtractFilenameWithoutExtension(skinFile));
             }
         } else {
-            CRLog::trace("Error loading devices configuration");
+            CRLog::error("Error loading devices configuration");
         }
 
         const char * keymap_locations [] = {
@@ -3348,10 +3350,16 @@ int InitDoc(const char *exename, char *fileName)
         skins.openDirectory("SD", lString16(USERDATA2"/share/cr3/skins"));
         if ( skins.length() > 0 ) {
             lString16 skinName;
-            if (props->getString(PROP_SKIN_FILE, skinName))
+
+            CRLog::trace("There are some skins - try to select");
+            if (props->getString(PROP_SKIN_FILE, skinName)) {
+                CRLog::trace("Skin file specified in the settings: %s", skinName.c_str());
                 skinSet = wm->setSkin(skinName);
-            if (!skinSet)
+            }
+            if (!skinSet) {
+                CRLog::info("Try to load default skin");
                 skinSet = wm->setSkin(lString16("default"));
+            }
         }
         if (!skinSet && !wm->loadSkin(lString16(CONFIGPATH"/cr3/skin"))) {
             if (!wm->loadSkin(lString16(USERDATA2"/share/cr3/skin"))) {

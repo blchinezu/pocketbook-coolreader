@@ -1920,6 +1920,7 @@ bool CRSkinList::openDirectory(const char *id, lString16 directory)
                 const LVContainerItemInfo * item = container->GetObjectInfo( i );
                 lString16 name = item->GetName();
                 lString16 filename = directory + name;
+                name.erase( name.length() - 8, 8 ); //erase .cr3skin
                 lString16 title = name;
                 if (id) {
                     lString16 id16(id);
@@ -1928,7 +1929,6 @@ bool CRSkinList::openDirectory(const char *id, lString16 directory)
                     id16[id16.length() -1] = ':';
                     title = id16 + title;
                 }
-                title.erase( title.length() - 8, 8 ); //erase .cr3skin
                 _list.add(new CRSkinListItem(title, name, filename));
             }
             return (_list.length() != 0);
