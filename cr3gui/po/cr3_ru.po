@@ -1322,11 +1322,11 @@ msgstr "Вперед на страницу"
 
 #: ../src/viewdlg.cpp:514
 msgid "Forward in move history"
-msgstr "Назад по истории перемещений"
+msgstr "Вперед по истории перемещений"
 
 #: ../src/viewdlg.cpp:515
 msgid "Back in move history"
-msgstr "Вперед по истории перемещений"
+msgstr "Назад по истории перемещений"
 
 #: ../src/viewdlg.cpp:516
 msgid "Next link"

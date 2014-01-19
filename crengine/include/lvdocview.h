@@ -704,7 +704,6 @@ public:
     void setTextColor( lUInt32 cl )
     {
         m_textColor = cl;
-        m_props->setColor(PROP_FONT_COLOR, cl);
         clearImageCache();
     }
 
