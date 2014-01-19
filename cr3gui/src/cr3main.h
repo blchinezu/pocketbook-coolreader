@@ -29,6 +29,6 @@ bool InitCREngine( const char * exename, lString16Collection & fontPathList );
 
 void InitCREngineLog( const char * cfgfile );
 
-bool loadKeymaps(CRGUIWindowManager & winman,  const char * locations[] );
+bool loadKeymaps(CRGUIWindowManager & winman,  const char * keymapFile, const char * locations[] );
 
 #endif

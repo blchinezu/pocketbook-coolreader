@@ -491,11 +491,14 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         int _lastProgressPercent;
         CRSkinRef _skin;
         CRGUIAcceleratorTableList _accTables;
-		CRKeyboardLayoutList _kbLayouts;
+        CRKeyboardLayoutList _kbLayouts;
+        CRSkinList _skins;
         cr_rotate_angle_t _orientation;
         LVRefVec<LVImageSource> m_batteryIcons;
         bool _stopFlag;
         bool _ignoreTillUp;
+        lString16 _keymapFilePath;
+        lString16 _skinFilePath;
     public:
         /// forward events from system queue to application queue
         virtual void forwardSystemEvents( bool waitForEvent ) { }
@@ -544,6 +547,8 @@ class CRGUIWindowManager : public CRGUIStringTranslator
 		virtual CRKeyboardLayoutList & getKeyboardLayouts() { return _kbLayouts; }
         /// returns accelerator table list
         virtual CRGUIAcceleratorTableList & getAccTables() { return _accTables; }
+        /// returns skins list
+        virtual CRSkinList & getSkinList() { return _skins; }
         /// return battery status
         virtual bool getBatteryStatus( int & percent, bool & charging )
         {
@@ -551,7 +556,9 @@ class CRGUIWindowManager : public CRGUIStringTranslator
             percent = 0; charging = false; return false;
         }
         /// set skin
-        virtual void setSkin( CRSkinRef skin ) { _skin = skin; }
+        virtual void setSkin( CRSkinRef skin );
+        /// set skin using its name
+        virtual bool setSkin( lString16 name );
         /// returns currently selected skin
         virtual CRSkinRef getSkin() { return _skin; }
         /// sets another i18n translator
@@ -656,6 +663,10 @@ class CRGUIWindowManager : public CRGUIStringTranslator
             if ( _ownScreen )
                 delete _screen;
         }
+        lString16 getKeymapFilePath() { return _keymapFilePath; }
+        void setKeymapFilePath(lString16 keymapPath) { _keymapFilePath = keymapPath; }
+        lString16 getSkinFilePath() { return _skinFilePath; }
+        void setSkinFilePath(lString16 skinPath) { _skinFilePath = skinPath; }
 };
 
 class CRGUIControl;

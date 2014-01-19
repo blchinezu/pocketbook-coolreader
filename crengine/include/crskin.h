@@ -568,24 +568,29 @@ typedef LVFastRef<CRSkinContainer> CRSkinRef;
 
 class CRSkinListItem
 {
-    lString16 _name;
-    lString16 _baseDir;
+    lString16 _title;
+    lString16 _id;
     lString16 _fileName;
-    lString16Collection _pageSkinList;
-    CRSkinListItem() { }
 public:
-    lString16 getName() { return _name; }
+    CRSkinListItem( lString16 title, lString16 id, lString16 fileName ) :
+        _title(title), _id(id), _fileName(fileName) { }
+    lString16 getTitle() { return _title; }
     lString16 getFileName() { return _fileName; }
-    lString16 getDirName() { return _baseDir; }
-    lString16Collection & getPageSkinList() { return _pageSkinList; }
-    static CRSkinListItem * init( lString16 baseDir, lString16 fileName );
+    lString16 getId() { return _id; }
     CRSkinRef getSkin();
     virtual ~CRSkinListItem() { }
 };
-class CRSkinList : public LVPtrVector<CRSkinListItem>
+
+class CRSkinList
 {
+    LVPtrVector<CRSkinListItem> _list;
 public:
-    CRSkinListItem * findByName(const lString16 & name);
+    void add(CRSkinListItem * item) { _list.add(item); }
+    CRSkinListItem * get( int index ) { return (index>=0 && index<_list.length()) ? _list[index] : NULL; }
+    int length() { return _list.length(); }
+    bool openDirectory(const char *id, lString16 directory);
+    void clear() { _list.clear(); }
+    CRSkinListItem * findById(const lString16 & name);
 };
 
 

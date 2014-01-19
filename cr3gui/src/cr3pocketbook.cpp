@@ -14,6 +14,7 @@
 #include <cr3version.h>
 #include "cr3pocketbook.h"
 #include <inkview.h>
+#include <inkplatform.h>
 
 #ifdef PB_DB_STATE_SUPPORTED
 #include <dlfcn.h>
@@ -1180,6 +1181,7 @@ private:
     bool _restore_globOrientation;
     bool m_skipEvent;
     bool m_saveForceSoft;
+    bool m_bmFromSkin;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -1212,6 +1214,7 @@ protected:
 
                 tmpBuf.Draw(img, 0, 0, img->GetWidth(), img->GetHeight(), true);
                 memcpy(_bm3x3->data, tmpBuf.GetScanLine(0), _bm3x3->height * _bm3x3->scanline);
+                m_bmFromSkin = true;
             } else
                 _bm3x3 = GetResource(const_cast<char*>(PB_QUICK_MENU_BMP_ID), NULL);
 
@@ -1337,59 +1340,6 @@ protected:
             setDirty();
         return res;
     }
-
-///////////////////////////////////////////////////
-    int getTapZonePB( int x, int y )
-    {
-        lvRect rc;
-    
-        getClientRect(rc);
-        
-        int dx = rc.width();
-        int dy = rc.height();
-                
-        int x1 = dx / 3;
-        int x2 = dx * 2 / 3;
-//        int y1 = dy / 3;
-//        int y2 = dy * 2 / 3;
-        int y1 = dy / 4;
-        int y2 = dy * 3 / 4;
-        int zone = 0;
-        if ( y<y1 ) 
-       {
-          if ( x<x1 )
-             zone = 1;
-          else 
-          if ( x<x2 )
-             zone = 2;
-          else
-             zone = 3;
-       } 
-       else 
-       if ( y<y2 ) 
-       {
-          if ( x<x1 )
-             zone = 4;
-          else 
-          if ( x<x2 )
-             zone = 5;
-          else
-            zone = 6;
-       } 
-       else 
-       {
-          if ( x<x1 )
-            zone = 7;
-          else 
-          if ( x<x2 )
-            zone = 8;
-          else
-            zone = 9;
-       }
-       return zone;
-    }
-
-
     virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
         bool longTap = (CRTOUCH_DOWN_LONG == evType);
@@ -1408,7 +1358,8 @@ public:
     static CRPocketBookDocView * instance;
     CRPocketBookDocView( CRGUIWindowManager * wm, lString16 dataDir )
         : V3DocViewWin( wm, dataDir ), _bm3x3(NULL), _toc(NULL), _tocLength(0), _dictDlg(NULL), _rotatetimerset(false),
-        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false)
+        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false),
+        m_bmFromSkin(false)
     {
         instance = this;
     }
@@ -1425,6 +1376,16 @@ public:
         pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
         if (!exiting)
             CloseApp();
+    }
+
+    void reconfigure( int flags )
+    {
+        if ( m_bmFromSkin ) {
+            free(_bm3x3);
+            _bm3x3 = NULL;
+            m_bmFromSkin = false;
+        }
+        V3DocViewWin::reconfigure(flags);
     }
 
     void showProgress( lString16 filename, int progressPercent )
@@ -1674,6 +1635,11 @@ public:
         instance = NULL;
         if (_dictDlg != NULL)
             delete _dictDlg;
+        if (m_bmFromSkin) {
+            free(_bm3x3);
+            _bm3x3 = NULL;
+            m_bmFromSkin = false;
+        }
     }
 
     CRPropRef getNewProps() {
@@ -3035,6 +3001,134 @@ void CRPbDictionaryDialog::Update()
     _wm->update(false);
 }
 
+class CRPbIniFile
+{
+private:
+    LVHashTable<lString8, CRPropRef> m_sections;
+public:
+    CRPbIniFile() : m_sections(8)
+    {
+    }
+
+    virtual ~CRPbIniFile()
+    {
+    }
+
+    virtual lString16 getStringDef( const char * sectionName, const char * propName,
+                                   const char * defValue = NULL )
+    {
+        const lString8 name(sectionName);
+        CRPropRef section = m_sections.get(name);
+
+        if (section.isNull())
+            return lString16( defValue );
+        return section->getStringDef( propName, defValue );
+    }
+
+    virtual bool loadFromFile( const char * iniFile )
+    {
+        LVStreamRef stream = LVOpenFileStream( iniFile, LVOM_READ );
+        if ( stream.isNull() ) {
+            CRLog::error( "cannot open ini file %s", iniFile );
+            return false;
+        }
+        return loadFromStream( stream.get() );
+    }
+
+    virtual bool loadFromStream( LVStream * stream )
+    {
+        lString8 line;
+        lString8 section;
+        bool eof = false;
+        CRPropRef props;
+        do {
+            eof = !readIniLine(stream, line);
+            if ( eof || (!line.empty() && line[0]=='[') ) {
+                // eof or [section] found
+                // save old section
+                if ( !section.empty() ) {
+                    m_sections.set( section, props );
+                    section.clear();
+                }
+                // begin new section
+                if ( !eof ) {
+                    int endbracket = line.pos( cs8("]") );
+                    if ( endbracket<=0 )
+                        endbracket = line.length();
+                    if ( endbracket >= 2 )
+                        section = line.substr( 1, endbracket - 1 );
+                    else
+                        section.clear(); // wrong sectino
+                    if ( !section.empty())
+                        props = LVCreatePropsContainer();
+                }
+            } else if ( !section.empty() ) {
+                // read definition
+                lString8 name;
+                lString8 value;
+                if ( splitLine( line, cs8("="), name, value ) )  {
+                    props->setString( name.c_str(), Utf8ToUnicode(value) );
+                } else if ( !line.empty() )
+                    CRLog::error("Invalid property in line %s", line.c_str() );
+
+            }
+        } while ( !eof );
+        return true;
+    }
+protected:
+    bool readIniLine( LVStream *stream, lString8 & dst )
+    {
+        lString8 line;
+        bool flgComment = false;
+        bool crSeen = false;
+        for ( ; ; ) {
+            int ch = stream->ReadByte();
+            if ( ch<0 )
+                break;
+            if ( ch=='#' && line.empty() )
+                flgComment = true;
+            if ( ch =='\r' ) {
+                crSeen = true;
+            } else if ( ch=='\n' || crSeen ) {
+                if ( flgComment ) {
+                    flgComment = false;
+                    line.clear();
+                    if ( ch!= '\n')
+                        line << ch;
+                } else {
+                    if ( ch!='\n' )
+                        stream->SetPos( stream->GetPos()-1 );
+                    if ( !line.empty() ) {
+                        dst = line;
+                        return true;
+                    }
+                }
+                crSeen = false;
+            } else {
+                line << ch;
+            }
+        }
+        return false;
+    }
+
+    bool splitLine( lString8 line, const lString8 & delimiter, lString8 & key, lString8 & value )
+    {
+        if ( !line.empty() ) {
+            int n = line.pos(delimiter);
+            value.clear();
+            key = line;
+            if ( n>0 && n <line.length()-1 ) {
+                value = line.substr( n+1, line.length() - n - 1 );
+                key = line.substr( 0, n );
+                key.trim();
+                value.trim();
+                return key.length()!=0 && value.length()!=0;
+            }
+        }
+        return false;
+    }
+};
+
 static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
 {
     CRGUIAcceleratorTable pbTable;
@@ -3064,6 +3158,20 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
     }
 }
 
+int getPB_keyboardType()
+{
+    return HWC_KEYBOARD;
+}
+
+int getPB_screenType()
+{
+    return HWC_DISPLAY;
+}
+
+bool isGSensorSupported()
+{
+    return HWC_HAS_GSENSOR;
+}
 
 int InitDoc(const char *exename, char *fileName)
 {
@@ -3182,6 +3290,26 @@ int InitDoc(const char *exename, char *fileName)
         CRLog::trace("creating window manager...");
         CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight(), bpp);
 
+        CRPbIniFile devices;
+        if ( devices.loadFromFile(USERDATA"/share/cr3/devices.ini") ) {
+            lString8 kbdType;
+
+            kbdType.appendDecimal(getPB_keyboardType());
+            lString16 keymapFile = devices.getStringDef("keyboard", kbdType.c_str());
+            if( !keymapFile.empty() ) {
+                props->setStringDef(PROP_KEYMAP_FILE, LVExtractFilenameWithoutExtension(keymapFile));
+            }
+            lString8 displayType;
+
+            displayType.appendDecimal(getPB_screenType());
+            lString16 skinFile = devices.getStringDef("screen", displayType.c_str());
+            if ( !skinFile.empty() ) {
+                props->setStringDef(PROP_SKIN_FILE, LVExtractFilenameWithoutExtension(skinFile));
+            }
+        } else {
+            CRLog::trace("Error loading devices configuration");
+        }
+
         const char * keymap_locations [] = {
             CONFIGPATH"/cr3/keymaps",
             USERDATA"/share/cr3/keymaps",
@@ -3189,12 +3317,41 @@ int InitDoc(const char *exename, char *fileName)
             NULL,
         };
 
-        loadKeymaps(*wm, keymap_locations);
+        lString16 keymapFile = props->getStringDef(PROP_KEYMAP_FILE, "keymaps.ini");
+        int extPos = keymapFile.pos(".");
+        if ( -1==extPos )
+            keymapFile.append(".ini");
+        if ( !loadKeymaps(*wm, UnicodeToUtf8(keymapFile).c_str(), keymap_locations) &&
+                !loadKeymaps(*wm, "keymaps.ini",  keymap_locations)) {
+            ShutdownCREngine();
+            CRLog::error("Error loading keymap");
+            return 0;
+        }
         loadPocketBookKeyMaps(*wm);
         HyphMan::initDictionaries(lString16(USERDATA"/share/cr3/hyph/"));
-        if (!wm->loadSkin(lString16(CONFIGPATH"/cr3/skin")))
-            if (!wm->loadSkin(lString16(USERDATA2"/share/cr3/skin")))
-                wm->loadSkin(lString16(USERDATA"/share/cr3/skin"));
+
+        bool skinSet = false;
+        CRSkinList &skins = wm->getSkinList();
+        skins.openDirectory(NULL, lString16(USERDATA"/share/cr3/skins"));
+        skins.openDirectory("flash", lString16(FLASHDIR"/cr3/skins"));
+        skins.openDirectory("SD", lString16(USERDATA2"/share/cr3/skins"));
+        if ( skins.length() > 0 ) {
+            lString16 skinName;
+            if (props->getString(PROP_SKIN_FILE, skinName))
+                skinSet = wm->setSkin(skinName);
+            if (!skinSet)
+                skinSet = wm->setSkin(lString16("default"));
+        }
+        if (!skinSet && !wm->loadSkin(lString16(CONFIGPATH"/cr3/skin"))) {
+            if (!wm->loadSkin(lString16(USERDATA2"/share/cr3/skin"))) {
+                if (!wm->loadSkin(lString16(USERDATA"/share/cr3/skin"))) {
+                    CRLog::error("Error loading skin");
+                    delete wm;
+                    ShutdownCREngine();
+                    return 0;
+                }
+            }
+        }
 
         ldomDocCache::init(lString16(STATEPATH"/cr3/.cache"), PB_CR3_CACHE_SIZE);
         if (!ldomDocCache::enabled())
@@ -3349,7 +3506,9 @@ int main_handler(int type, int par1, int par2)
 {
     bool process_events = false;
     int ret = 0;
-    CRLog::trace("main_handler(%s, %d, %d)", getEventName(type), par1, par2);
+    if (CRLog::LL_TRACE == CRLog::getLogLevel()) {
+        CRLog::trace("main_handler(%s, %d, %d)", getEventName(type), par1, par2);
+    }
     switch (type) {
     case EVT_SHOW:
         CRPocketBookWindowManager::instance->update(true);

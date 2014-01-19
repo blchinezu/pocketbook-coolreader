@@ -674,6 +674,49 @@ public:
     }
 };
 
+class CRSkinSelectMenu : public CRMenu
+{
+public:
+    CRSkinSelectMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, const char * label, LVFontRef valueFont, CRPropRef props)
+        : CRMenu(wm, parentMenu, id, label, LVImageSourceRef(), LVFontRef(), valueFont, props, PROP_SKIN_FILE)
+    {
+    }
+
+    int onSelect()
+    {
+        if (isSubmenu()) {
+            // show menu
+            _wm->activateWindow( (CRMenu *)this );
+            return 1;
+        }
+        return 0;
+    }
+
+    bool onItemSelect(int itemId, int param = 0 )
+    {
+        if (itemId < 0 || itemId >= _items.length()) {
+                CRLog::error( "CRMenu::onItemSelect() - invalid selection: %d", itemId);
+                return true;
+        }
+
+        CRMenuItem * item = _items[itemId];
+
+        if (item->onSelect() > 0)
+            return true;
+
+        if (item->isSubmenu()) {
+            // show menu
+            _wm->activateWindow( (CRMenu *)item );
+        } else {
+            // set property
+            if (_wm->setSkin(item->getPropValue()))
+                _props->setString( UnicodeToUtf8(getPropName()).c_str(), item->getPropValue() );
+            doCloseMenu(getId());
+        }
+        return true;
+    }
+};
+
 CRMenu * CRSettingsMenu::createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label, const char * propName)
 {
     CRMenu * fontFaceMenu = new CRMenu(_wm, mainMenu, id,
@@ -1390,6 +1433,22 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth(need restart)"),
                            valueFont, PROP_POCKETBOOK_GRAYBUFFER_BPP, gray_buffer_bpp);
 #endif
+    CRSkinList &skins = wm->getSkinList();
+    if (skins.length() > 1) {
+        CRSkinSelectMenu * skinsMenu = new CRSkinSelectMenu(_wm, displaySettingsMenu, mm_Skin,
+                                       _("Skin"), valueFont, props);
+        for ( int i=0; i<skins.length(); i++ ) {
+            CRSkinListItem * item = skins.get( i );
+            skinsMenu->addItem( new CRMenuItem( skinsMenu, i,
+                                              item->getTitle(),
+                                              LVImageSourceRef(),
+                                              LVFontRef(), item->getId().c_str() ) );
+        }
+        skinsMenu->setAccelerators( _menuAccelerators );
+        skinsMenu->setSkinName(lString16("#settings"));
+        skinsMenu->reconfigure( 0 );
+        displaySettingsMenu->addItem( skinsMenu );
+    }
     displaySettingsMenu->reconfigure( 0 );
     mainMenu->addItem( displaySettingsMenu );
 
@@ -1399,10 +1458,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     controlSettingsMenu->setSkinName(lString16("#settings"));
     controlSettingsMenu->setAccelerators( _menuAccelerators );
 #ifdef CR_POCKETBOOK
-    createSettingsMenuItem(controlSettingsMenu, mm_rotateMode, _("Rotate"),
-                           valueFont, PROP_POCKETBOOK_ROTATE_MODE, rotate_mode_options);
-    createSettingsMenuItem(controlSettingsMenu, mm_rotateAngle, _("Page turn angle"),
-                           valueFont, PROP_POCKETBOOK_ROTATE_ANGLE, rotate_angle_options);
+    if (isGSensorSupported()) {
+        createSettingsMenuItem(controlSettingsMenu, mm_rotateMode, _("Rotate"),
+                               valueFont, PROP_POCKETBOOK_ROTATE_MODE, rotate_mode_options);
+        createSettingsMenuItem(controlSettingsMenu, mm_rotateAngle, _("Page turn angle"),
+                               valueFont, PROP_POCKETBOOK_ROTATE_ANGLE, rotate_angle_options);
+    }
 #endif
 #ifndef CR_POCKETBOOK
     CRControlsMenu * controlsMenu =
@@ -1421,9 +1482,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                                   PROP_TAP_ZONE_ACTION_LONG);
         controlSettingsMenu->addItem(touchMenu);
     }
-    controlSettingsMenu->reconfigure( 0 );
-    mainMenu->addItem( controlSettingsMenu );
-
+    if ( !controlSettingsMenu->getItems().empty()) {
+        controlSettingsMenu->reconfigure( 0 );
+        mainMenu->addItem( controlSettingsMenu );
+    } else {
+        delete controlSettingsMenu;
+        controlSettingsMenu = NULL;
+    }
     /*
         SetTimeMenuItem * setTime = new SetTimeMenuItem( mainMenu, mm_SetTime, _wm->translateString("VIEWER_MENU_SET_TIME", "Set time"),
                 LVImageSourceRef(), menuFont, L"bla" );

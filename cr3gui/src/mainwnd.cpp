@@ -1105,11 +1105,17 @@ void V3DocViewWin::showAboutDialog()
     lString8 progInfo;
     addPropLine( progInfo, _("CoolReader for PocketBook"), Utf8ToUnicode(lString8(CR_PB_VERSION)));
     addPropLine( progInfo, _("Build date"), Utf8ToUnicode(lString8(CR_PB_BUILD_DATE)));
-    addPropLine( progInfo, _("Model"), Utf8ToUnicode(lString8(GetDeviceModel())) );
-    addPropLine( progInfo, _("Hardware type"), Utf8ToUnicode(lString8(GetHardwareType())));
-    addPropLine( progInfo, _("Firmware version"), Utf8ToUnicode(lString8(GetSoftwareVersion())));
-
     addInfoSection( txt, progInfo, _("About program") );
+
+    lString8 debugInfo;
+    addPropLine( debugInfo, _("Hardware type"), Utf8ToUnicode(lString8(GetHardwareType())));
+    addPropLine( debugInfo, _("Firmware version"), Utf8ToUnicode(lString8(GetSoftwareVersion())));
+    addPropLine( debugInfo, _("Keyboard type"), Utf8ToUnicode(lString8::itoa(getPB_keyboardType())));
+    addPropLine( debugInfo, _("Screen type"), Utf8ToUnicode(lString8::itoa((getPB_screenType()))));
+    addPropLine( debugInfo, _("Config file"), _settingsFileName);
+    addPropLine( debugInfo, _("Keymap file"), _wm->getKeymapFilePath());
+    addPropLine( debugInfo, _("Skin file"), _wm->getSkinFilePath());
+    addInfoSection( txt, debugInfo, _("Debug information") );
 #endif
     txt << "</table>\n";
 
@@ -1180,6 +1186,15 @@ bool V3DocViewWin::onCommand( int command, int params )
         applySettings();
         saveSettings(lString16::empty_str);
         _wm->getSkin()->gc();
+        return true;
+    case mm_Skin:
+        if (_wm->setSkin(_newProps->getStringDef(PROP_SKIN_FILE))) {
+            applySettings();
+            saveSettings(lString16::empty_str);
+        } else {
+            // restore previous value
+            _newProps->setString(PROP_SKIN_FILE, _props->getStringDef(PROP_SKIN_FILE));
+        }
         return true;
     case DCMD_SAVE_HISTORY:
         saveHistory(lString16::empty_str);

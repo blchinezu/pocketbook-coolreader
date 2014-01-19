@@ -12,7 +12,7 @@
 #include "cr3main.h"
 #include "mainwnd.h"
 
-bool loadKeymaps( CRGUIWindowManager & winman, const char * locations[] )
+bool loadKeymaps( CRGUIWindowManager & winman, const char * keymapFile, const char * locations[] )
 {
 	bool res = false;
 	for ( int i=0; locations[i]; i++ ) {
@@ -25,13 +25,16 @@ bool loadKeymaps( CRGUIWindowManager & winman, const char * locations[] )
 			location << "/";
 #endif
 		lString8 def = location + "keydefs.ini";
-		lString8 map = location + "keymaps.ini";
+                lString8 map = location + keymapFile;
+#ifndef CR_POCKETBOOK
 		lString8 layout = location + "kblayout.ini";
 		winman.getKeyboardLayouts().openFromFile( layout.c_str() );
+#endif
 		CRGUIAcceleratorTableList tables;
 
 		if ( tables.openFromFile(  def.c_str(), map.c_str() ) ) {
 			res = true;
+                        winman.setKeymapFilePath(Utf8ToUnicode(map));
 			winman.getAccTables().addAll( tables );
 		}
 	}

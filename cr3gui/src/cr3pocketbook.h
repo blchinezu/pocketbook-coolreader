@@ -67,6 +67,10 @@ enum CRPbCommands {
 
 const char* TR(const char *label);
 
+int getPB_keyboardType();
+int getPB_screenType();
+bool isGSensorSupported();
+
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
 //#define BACKGROUND_CACHE_FILE_CREATION
 //#endif

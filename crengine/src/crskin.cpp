@@ -1892,32 +1892,47 @@ CRToolBarSkinRef CRSkinImpl::getToolBarSkin( const lChar16 * path )
     return res;
 }
 
-CRSkinListItem * CRSkinList::findByName( const lString16 & name )
+CRSkinListItem * CRSkinList::findById( const lString16 & id )
 {
-    for ( int i=0; i<length(); i++ )
-        if ( get(i)->getName()==name )
-            return get(i);
+    for ( int i=0; i<_list.length(); i++ )
+        if ( _list.get(i)->getId()==id )
+            return _list.get(i);
     return NULL;
-}
-
-CRSkinListItem * CRSkinListItem::init( lString16 baseDir, lString16 fileName )
-{
-    CRSkinRef skin = LVOpenSkin( baseDir + fileName );
-    if ( skin.isNull() )
-        return NULL;
-    CRSkinListItem * item = new CRSkinListItem();
-    item->_baseDir = baseDir;
-    item->_fileName = fileName;
-    //item->_name = skin->get
-    return item;
 }
 
 CRSkinRef CRSkinListItem::getSkin()
 {
-    return LVOpenSkin( getDirName() + getFileName() );
+    return LVOpenSkin( getFileName() );
 }
 
-bool CRLoadSkinList( lString16 baseDir, CRSkinList & list )
+bool CRSkinList::openDirectory(const char *id, lString16 directory)
 {
+    if ( directory.empty() )
+        return true;
+    LVAppendPathDelimiter( directory );
+    LVContainerRef container;
+    if ( LVDirectoryExists(directory)  ) {
+        container = LVOpenDirectory( directory.c_str(), L"*.cr3skin" );
+        if ( !container.isNull() ) {
+            int len = container->GetObjectCount();
+            CRLog::info("%d items found in skin directory", len);
+            for ( int i=0; i<len; i++ ) {
+                const LVContainerItemInfo * item = container->GetObjectInfo( i );
+                lString16 name = item->GetName();
+                lString16 filename = directory + name;
+                lString16 title = name;
+                if (id) {
+                    lString16 id16(id);
+                    id16 += '_';
+                    name = id16 + name;
+                    id16[id16.length() -1] = ':';
+                    title = id16 + title;
+                }
+                title.erase( title.length() - 8, 8 ); //erase .cr3skin
+                _list.add(new CRSkinListItem(title, name, filename));
+            }
+            return (_list.length() != 0);
+        }
+    }
     return false;
 }

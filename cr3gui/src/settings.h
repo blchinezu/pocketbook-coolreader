@@ -20,6 +20,9 @@
 #define MENU_FONT_FACE_SIZE 36
 #define VALUE_FONT_SIZE 24
 
+#define PROP_KEYMAP_FILE "app.keymap.file"
+#define PROP_SKIN_FILE "app.skin.file"
+
 typedef struct {
     const char * translate_default;
     const char * value;
@@ -82,6 +85,7 @@ enum MainMenuItems_t {
     mm_ShowPagesTillChapterEnd,
     mm_showChapterMarks,
     mm_StatusFontEmbolden,
+    mm_Skin,
     mm_Last
 };
 

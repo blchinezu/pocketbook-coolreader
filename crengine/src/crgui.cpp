@@ -95,6 +95,7 @@ bool CRGUIWindowManager::loadSkin( lString16 pathname )
         setSkin( skin );
         return false;
     }
+    setSkinFilePath(pathname);
     setSkin( skin );
     return true;
 }
@@ -504,6 +505,27 @@ void CRGUIWindowManager::showProgress( lString16 filename, int progressPercent )
     showWaitIcon( filename, progressPercent );
     _lastProgressUpdate = t;
     _lastProgressPercent = progressPercent;
+}
+
+void CRGUIWindowManager::setSkin(CRSkinRef skin)
+{
+    bool needUpdate = !_skin.isNull();
+    _skin = skin;
+    if (needUpdate) {
+        for ( int i=_windows.length()-1; i>=0; i-- ) {
+            _windows[i]->reconfigure( 0 );
+        }
+        postEvent( new CRGUIUpdateEvent(true) );
+    }
+}
+
+bool CRGUIWindowManager::setSkin( lString16 name )
+{
+    CRSkinListItem *item = _skins.findById(name);
+    if (NULL!=item ) {
+        return loadSkin(item->getFileName());
+    }
+    return false;
 }
 
 void CRGUIScreenBase::flush( bool full )
