@@ -4673,12 +4673,24 @@ void LVDocView::getCurrentPageLinks(ldomXRangeList & list) {
 				return true;
 			}
 		};
+                if (page->getStart().isText()) {
+                    //start of the page is text node, need to check if its parent is link element
+                    ldomNode * elem = page->getStart().getNode()->getParentNode();
+                    if ( elem && elem->getNodeId() == el_a )
+                        list.add(new ldomXRange(elem->getChildNode(0)));
+                }
 		LinkKeeper callback(list);
 		page->forEach(&callback);
 		if (m_view_mode == DVM_PAGES && getVisiblePageCount() > 1) {
 			// process second page
 			int pageNumber = getCurPage();
 			page = getPageDocumentRange(pageNumber + 1);
+                        if (page->getStart().isText()) {
+                            //start of the page is text node, need to check if its parent is link element
+                            ldomNode * elem = page->getStart().getNode()->getParentNode();
+                            if ( elem && elem->getNodeId() == el_a )
+                                list.add(new ldomXRange(elem->getChildNode(0)));
+                        }
 			if (!page.isNull())
 				page->forEach(&callback);
 		}
