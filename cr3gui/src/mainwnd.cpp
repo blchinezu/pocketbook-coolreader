@@ -1110,8 +1110,8 @@ void V3DocViewWin::showAboutDialog()
     lString8 debugInfo;
     addPropLine( debugInfo, _("Hardware type"), Utf8ToUnicode(lString8(GetHardwareType())));
     addPropLine( debugInfo, _("Firmware version"), Utf8ToUnicode(lString8(GetSoftwareVersion())));
-    addPropLine( debugInfo, _("Keyboard type"), Utf8ToUnicode(lString8::itoa(getPB_keyboardType())));
-    addPropLine( debugInfo, _("Screen type"), Utf8ToUnicode(lString8::itoa((getPB_screenType()))));
+    addPropLine( debugInfo, _("Keyboard type"), lString16::itoa(getPB_keyboardType()));
+    addPropLine( debugInfo, _("Screen type"), lString16::itoa((getPB_screenType())));
     addPropLine( debugInfo, _("Config file"), _settingsFileName);
     addPropLine( debugInfo, _("Keymap file"), _wm->getKeymapFilePath());
     addPropLine( debugInfo, _("Skin file"), _wm->getSkinFilePath());
