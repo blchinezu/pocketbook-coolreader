@@ -399,8 +399,8 @@ public:
     CRButtonListRef getButtons() { return _buttons; }
     void setButtons(CRButtonListRef list) { _buttons = list; }
     virtual void drawToolBar( LVDrawBuf & buf, const lvRect & rc, bool enabled, int selectedButton );
-    virtual void drawButton(LVDrawBuf & buf, const lvRect & rc, int index, int flags);
 };
+
 typedef LVFastRef<CRToolBarSkin> CRToolBarSkinRef;
 
 class CRWindowSkin : public CRRectSkin
@@ -555,7 +555,8 @@ public:
     virtual CRPageSkinListRef getPageSkinList() = 0;
     /// returns toolbar skin by path or #id
     virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path ) = 0;
-
+    /// returns icon skin by path or #id
+    virtual CRIconSkinRef getIconSkin( const lChar16 *path ) = 0;
     /// garbage collection
     virtual void gc() { }
 

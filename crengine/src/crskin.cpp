@@ -275,6 +275,7 @@ protected:
     LVCacheMap<lString16,CRMenuSkinRef> _menuCache;
     LVCacheMap<lString16,CRPageSkinRef> _pageCache;
     LVCacheMap<lString16,CRToolBarSkinRef> _toolbarCache;
+    LVCacheMap<lString16,CRIconSkinRef> _iconCache;
     CRPageSkinListRef _pageSkinList;
 public:
     /// returns scroll skin by path or #id
@@ -290,7 +291,9 @@ public:
     /// returns book page skin list
     virtual CRPageSkinListRef getPageSkinList();
     /// return ToolBar skin by path or #id
-	virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path );
+    virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path );
+    /// returns icon skin by path or #id
+    virtual CRIconSkinRef getIconSkin( const lChar16 * path );
     /// get DOM path by id
     virtual lString16 pathById( const lChar16 * id );
     /// gets image from container
@@ -303,7 +306,7 @@ public:
         _imageCache.clear();
     }
     /// constructor does nothing
-    CRSkinImpl()  : _imageCache(8), _rectCache(8), _scrollCache(1), _windowCache(8), _menuCache(8), _pageCache(8), _toolbarCache(2) { }
+    CRSkinImpl()  : _imageCache(8), _rectCache(8), _scrollCache(1), _windowCache(8), _menuCache(8), _pageCache(8), _toolbarCache(2), _iconCache(8) { }
     virtual ~CRSkinImpl(){ }
     // open from container
     virtual bool open( LVContainerRef container );
@@ -1889,6 +1892,22 @@ CRToolBarSkinRef CRSkinImpl::getToolBarSkin( const lChar16 * path )
     res = CRToolBarSkinRef( new CRToolBarSkin() );
     readToolBarSkin( p.c_str(), res.get() );
     _toolbarCache.set( lString16(path), res );
+    return res;
+}
+
+CRIconSkinRef CRSkinImpl::getIconSkin( const lChar16 * path )
+{
+    lString16 p(path);
+    CRIconSkinRef res;
+    if ( _iconCache.get( p, res ) )
+        return res; // found in cache
+    if ( *path == '#' ) {
+        // find by id
+        p = pathById( path+1 );
+    }
+    res = CRIconSkinRef( new CRIconSkin() );
+    readIconSkin( p.c_str(), res.get() );
+    _iconCache.set( lString16(path), res );
     return res;
 }
 
