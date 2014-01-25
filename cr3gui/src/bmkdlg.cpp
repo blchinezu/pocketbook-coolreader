@@ -178,6 +178,7 @@ void CRBookmarkMenu::handleContextMenu(int index)
 {
 	_wm->postCommand(index, 0);
 	_wm->processPostedEvents();
+        _wm->resetTillUp();
 }
 
 #endif
