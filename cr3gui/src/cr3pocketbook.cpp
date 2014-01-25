@@ -588,6 +588,15 @@ void tocHandler(long long position)
 
 int main_handler(int type, int par1, int par2);
 
+static int link_altParm = 0;
+void handle_LinksContextMenu(int index)
+{
+    CRPocketBookWindowManager::instance->postCommand(index,
+                                                     index == MCMD_GO_LINK ? 0 : link_altParm);
+    CRPocketBookWindowManager::instance->processPostedEvents();
+    CRPocketBookWindowManager::instance->resetTillUp();
+}
+
 void CRPocketBookScreen::draw(int x, int y, int w, int h)
 {
     if (m_bpp == 4) {
@@ -1167,6 +1176,12 @@ public:
     }
 };
 
+static imenu link_contextMenu[] = {
+    {ITEM_ACTIVE, MCMD_GO_LINK, NULL, NULL},
+    {ITEM_ACTIVE, PB_CMD_NONE, NULL, NULL},
+    { 0, 0, NULL, NULL }
+};
+
 class CRPocketBookDocView : public V3DocViewWin {
 private:
     ibitmap *_bm3x3;
@@ -1184,6 +1199,7 @@ private:
     bool m_skipEvent;
     bool m_saveForceSoft;
     bool m_bmFromSkin;
+    lString16 m_link;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -1352,10 +1368,22 @@ protected:
             if (longTap) {
                 ldomXPointer p = _docview->getNodeByPoint( pt );
                 if ( !p.isNull() ) {
-                    lString16 href = p.getHRef();
+                    m_link = p.getHRef();
 
-                    if ( !href.empty() && _docview->goLink( href ) )
-                        return showLinksDialog();
+                    if ( !m_link.empty() ) {
+                        if (command != 0 && command != MCMD_GO_LINK) {
+                            if (NULL == link_contextMenu[0].text)
+                                link_contextMenu[0].text = const_cast<char *>(getCommandName(MCMD_GO_LINK, 0));
+                            link_contextMenu[1].index = command;
+                            link_altParm = param;
+                            link_contextMenu[1].text = const_cast<char *>(getCommandName(command, param));
+                            OpenMenu(link_contextMenu, MCMD_GO_LINK, pt.x, pt.y, handle_LinksContextMenu );
+                            return true;
+                        } else {
+                            _docview->goLink( m_link );
+                            return showLinksDialog();
+                        }
+                    }
                 }
             }
             if (command != 0) {
@@ -1489,8 +1517,11 @@ public:
             showContents();
             return true;
         case MCMD_GO_LINK:
-            showLinksDialog();
-            return true;
+            if (!m_link.empty()) {
+                _docview->goLink(m_link);
+                m_link.clear();
+            }
+            return showLinksDialog();
         case PB_CMD_MP3:
             if (params == 0)
                 TogglePlaying();

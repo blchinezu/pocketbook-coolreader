@@ -667,6 +667,8 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         void setKeymapFilePath(lString16 keymapPath) { _keymapFilePath = keymapPath; }
         lString16 getSkinFilePath() { return _skinFilePath; }
         void setSkinFilePath(lString16 skinPath) { _skinFilePath = skinPath; }
+        /// call when long tap processed and it is known touch up event will not arrive
+        void resetTillUp() { _ignoreTillUp = false; }
 };
 
 class CRGUIControl;
