@@ -1174,11 +1174,6 @@ void CRToolBarSkin::drawToolBar( LVDrawBuf & buf, const lvRect & rect, bool enab
 	}
 }
 
-void CRToolBarSkin::drawButton(LVDrawBuf & buf, const lvRect & rc, int index, int flags)
-{
-	
-}
-
 CRRectSkin::CRRectSkin()
 : _margins( 0, 0, 0, 0 )
 , _size(toSkinPercent( 10000 ), toSkinPercent( 10000 )) // 100% x 100%

@@ -1349,6 +1349,15 @@ protected:
             int tapZone = getTapZone(pt.x, pt.y, getProps());
             int command = 0, param = 0;
             getCommandForTapZone(tapZone, getProps(), longTap, command, param);
+            if (longTap) {
+                ldomXPointer p = _docview->getNodeByPoint( pt );
+                if ( !p.isNull() ) {
+                    lString16 href = p.getHRef();
+
+                    if ( !href.empty() && _docview->goLink( href ) )
+                        return showLinksDialog();
+                }
+            }
             if (command != 0) {
                 _wm->postCommand(command, param);
                 return true;
