@@ -1223,9 +1223,24 @@ private:
         }
     }
 protected:
+    LVImageSourceRef getQuickMenuImage()
+    {
+        const char *lang = pbGlobals->getLang();
+
+        if ( lang && lang[0] ) {
+            lString16 imgName("cr3_pb_quickmenu_$1.png");
+            imgName.replaceParam(1, cs16(lang));
+            CRLog::debug("Quick menu image name: %s",UnicodeToLocal(imgName).c_str());
+            LVImageSourceRef img = _wm->getSkin()->getImage(imgName);
+            if ( !img.isNull())
+                return img;
+        }
+        return _wm->getSkin()->getImage(L"cr3_pb_quickmenu.png");
+    }
+
     ibitmap * getQuickMenuBitmap() {
         if (_bm3x3 == NULL) {
-            LVImageSourceRef img = _wm->getSkin()->getImage(L"cr3_pb_quickmenu.png");
+            LVImageSourceRef img = getQuickMenuImage();
             if ( !img.isNull() ) {
                 _bm3x3 = NewBitmap(img->GetWidth(), img->GetHeight());
                 LVGrayDrawBuf tmpBuf( img->GetWidth(), img->GetHeight() );
