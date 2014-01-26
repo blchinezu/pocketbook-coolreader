@@ -42,6 +42,7 @@
 #define CR3_ACTION_CITES "CITES"
 #define CR3_ACTION_QUICK_MENU "QUICK_MENU"
 #define CR3_ACTION_PB_MAIN_MENU "PB_MAIN_MENU"
+#define CR3_ACTION_PB_CONTENTS "PB_CONTENTS"
 
 typedef struct {
     const char * action_id;
@@ -72,6 +73,7 @@ static const action_def_t availableActions[] = {
 #ifdef CR_POCKETBOOK
     { CR3_ACTION_QUICK_MENU, PB_QUICK_MENU, 0 },
     { CR3_ACTION_PB_MAIN_MENU, PB_CMD_MAIN_MENU, 0 },
+    { CR3_ACTION_PB_CONTENTS, PB_CMD_CONTENTS, 0 },
 #endif
     { NULL, 0, 0 }
 };

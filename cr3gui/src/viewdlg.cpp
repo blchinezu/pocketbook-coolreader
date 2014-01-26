@@ -583,7 +583,7 @@ static const char * getCommandName( int command )
 #ifdef CR_POCKETBOOK
 	case PB_QUICK_MENU: return TR("@KA_menu");
 	case PB_CMD_ROTATE: return TR("@KA_rtte");
-	case PB_CMD_CONTENTS: return TR("@KA_cnts");
+        case PB_CMD_CONTENTS: return TR("@Contents");
         case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");
 #endif
     default: return _("Unknown command");
