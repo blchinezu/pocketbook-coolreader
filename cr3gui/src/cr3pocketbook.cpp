@@ -1365,7 +1365,7 @@ protected:
             int tapZone = getTapZone(pt.x, pt.y, getProps());
             int command = 0, param = 0;
             getCommandForTapZone(tapZone, getProps(), longTap, command, param);
-            if (longTap) {
+            if (longTap || command == MCMD_GO_LINK) {
                 ldomXPointer p = _docview->getNodeByPoint( pt );
                 if ( !p.isNull() ) {
                     m_link = p.getHRef();

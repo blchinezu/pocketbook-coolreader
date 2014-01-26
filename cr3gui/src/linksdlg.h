@@ -42,6 +42,7 @@ class CRLinksDialog : public CRGUIWindowBase
     protected:
         virtual void Update();
         virtual void draw();
+        virtual bool selectLink(int index);
     public:
         static CRLinksDialog * create( CRGUIWindowManager * wm, CRViewDialog * docwin );
         CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin );
@@ -49,8 +50,7 @@ class CRLinksDialog : public CRGUIWindowBase
         /// returns true if command is processed
         virtual bool onCommand( int command, int params );
         void invalidateCurrentSelection();
-        int getTapZonePB( int x, int y );
-        virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType );
+        virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType);
 };
 
 #endif

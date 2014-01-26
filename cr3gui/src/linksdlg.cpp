@@ -175,6 +175,29 @@ void CRLinksDialog::draw()
     LVDocImageRef page = _docview->getPageImage(0);
     LVDrawBuf * buf = page->getDrawBuf();
     _wm->getScreen()->draw( buf );
+    if (!_controlsCreated) {
+        ldomXRangeList list;
+        _docview->getCurrentPageLinks( list );
+        for (int i=0; i<list.length(); i++) {
+            ldomXRange * link = list[i];
+            lvRect rc;
+            if ( link && link->getRect( rc ) ) {
+                lvPoint topLeft = rc.topLeft();
+                lvPoint bottomRight = rc.bottomRight();
+                if ( _docview->docToWindowPoint(topLeft) && _docview->docToWindowPoint(bottomRight) ) {
+                    rc.left = topLeft.x;
+                    rc.top = topLeft.y;
+                    rc.right = bottomRight.x;
+                    rc.bottom = bottomRight.y;
+                    addControl( new CRCommandControl(this, rc, MCMD_SELECT, i) );
+                } else {
+                    CRLog::error("link rect conversion error");
+                }
+            }
+        }
+        addControl(new CRClientControl(this, _invalidateRect));
+        _controlsCreated = true;
+    }
     CRLog::trace("draw buttons, current=%d", _currentButton);
     for ( int i=0; i<_addButtonCount; i++ ) {
         int btn = _additionalButtons[i];
@@ -209,32 +232,35 @@ CRLinksDialog::CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin )
     _fwdSize = _docview->getNavigationHistory().forwardCount();
     CRLog::debug("LinksDialog: links=%d, back=%d, fwd=%d", _linkCount, _backSize, _fwdSize);
     _addButtonCount = 0;
-    if ( _backSize )
-        _additionalButtons[_addButtonCount++] = BACK;
-    if ( _fwdSize )
-        _additionalButtons[_addButtonCount++] = FORWARD;
+    if (!_wm->getScreen()->isTouchSupported()) {
+        if ( _backSize )
+            _additionalButtons[_addButtonCount++] = BACK;
+        if ( _fwdSize )
+            _additionalButtons[_addButtonCount++] = FORWARD;
 
-    CRLog::debug("LinksDialog: creating icons");
-    _activeIcons[FORWARD] = LVCreateXPMImageSource( link_forward_active );
-    _activeIcons[BACK] = LVCreateXPMImageSource( link_back_active );
-    _normalIcons[FORWARD] = LVCreateXPMImageSource( link_forward_normal );
-    _normalIcons[BACK] = LVCreateXPMImageSource( link_back_normal );
-    CRLog::debug("LinksDialog: icons created");
-    int dx = _activeIcons[0]->GetWidth();
-    int dy = _activeIcons[0]->GetHeight();
-    int w = 3;
-    lvRect rc1(w,w,w+dx,w+dy);
-    lvRect rc2(w+dx+w,w,w+dx+dx+w,w+dy);
-    _iconRects[0] = rc1;
-    _iconRects[1] = rc2;
-    // FORWARD->BACK->LINK->FORWARD->BACK
-    _currentButton =    (_linkCount>0) ? LINK :  ( (_backSize>0) ? BACK :  FORWARD);
-    _nextButton[BACK] = (_linkCount>0) ? LINK :  ( (_fwdSize>0)  ? FORWARD : BACK );
-    _nextButton[FORWARD] = (_backSize>0) ? BACK :( (_linkCount>0)? LINK :  FORWARD);
-    _nextButton[LINK] = (_fwdSize>0) ? FORWARD : ( (_backSize>0) ? BACK :  LINK);
-    _prevButton[FORWARD] =(_linkCount>0) ? LINK :( (_backSize>0) ? BACK :  FORWARD );
-    _prevButton[BACK] = (_fwdSize>0) ? FORWARD : ( (_linkCount>0)? LINK :  BACK);
-    _prevButton[LINK] = (_backSize>0) ? BACK :   ( (_fwdSize>0)  ? FORWARD : LINK);
+        CRLog::debug("LinksDialog: creating icons");
+        _activeIcons[FORWARD] = LVCreateXPMImageSource( link_forward_active );
+        _activeIcons[BACK] = LVCreateXPMImageSource( link_back_active );
+        _normalIcons[FORWARD] = LVCreateXPMImageSource( link_forward_normal );
+        _normalIcons[BACK] = LVCreateXPMImageSource( link_back_normal );
+        CRLog::debug("LinksDialog: icons created");
+        int dx = _activeIcons[0]->GetWidth();
+        int dy = _activeIcons[0]->GetHeight();
+        int w = 3;
+        lvRect rc1(w,w,w+dx,w+dy);
+        lvRect rc2(w+dx+w,w,w+dx+dx+w,w+dy);
+        _iconRects[0] = rc1;
+        _iconRects[1] = rc2;
+        // FORWARD->BACK->LINK->FORWARD->BACK
+        _currentButton =    (_linkCount>0) ? LINK :  ( (_backSize>0) ? BACK :  FORWARD);
+        _nextButton[BACK] = (_linkCount>0) ? LINK :  ( (_fwdSize>0)  ? FORWARD : BACK );
+        _nextButton[FORWARD] = (_backSize>0) ? BACK :( (_linkCount>0)? LINK :  FORWARD);
+        _nextButton[LINK] = (_fwdSize>0) ? FORWARD : ( (_backSize>0) ? BACK :  LINK);
+        _prevButton[FORWARD] =(_linkCount>0) ? LINK :( (_backSize>0) ? BACK :  FORWARD );
+        _prevButton[BACK] = (_fwdSize>0) ? FORWARD : ( (_linkCount>0)? LINK :  BACK);
+        _prevButton[LINK] = (_backSize>0) ? BACK :   ( (_fwdSize>0)  ? FORWARD : LINK);
+    } else
+        _currentButton = LINK;
     CRLog::debug("dialog is created");
     _fullscreen = true;
 }
@@ -297,6 +323,8 @@ bool CRLinksDialog::onCommand( int command, int params )
         Update();
         invalidateCurrentSelection();
         return true;
+    case MCMD_SELECT:
+        return selectLink(params);
     case MCMD_SELECT_1:
     case MCMD_SELECT_2:
     case MCMD_SELECT_3:
@@ -305,24 +333,7 @@ bool CRLinksDialog::onCommand( int command, int params )
     case MCMD_SELECT_6:
     case MCMD_SELECT_7:
     case MCMD_SELECT_8:
-        {
-            int index = command - MCMD_SELECT_1;
-            if ( index < _linkCount ) {
-                ldomXRangeList list;
-                _docview->getCurrentPageLinks( list );
-                ldomXRange * link = list[index];
-                invalidateCurrentSelection();
-                _docview->selectRange( *link );
-                draw();
-                invalidateCurrentSelection();
-                draw();
-                _docview->goSelectedLink();
-                    _docview->clearSelection();
-                _wm->closeWindow( this );
-                    return true;
-            }
-        }
-        break;
+         return selectLink(command - MCMD_SELECT_1);
     default:
         return true;
     }
@@ -376,99 +387,52 @@ void CRLinksDialog::invalidateCurrentSelection()
     }
 }
 
-
-int CRLinksDialog::getTapZonePB( int x, int y )
+bool CRLinksDialog::selectLink(int index)
 {
-        lvRect rc;
-    
-        getClientRect(rc);
-        
-        int dx = rc.width();
-        int dy = rc.height();
-                
-        int x1 = dx / 3;
-        int x2 = dx * 2 / 3;
-        int y1 = dy / 4;
-        int y2 = dy * 3 / 4;
-        int zone = 0;
-        if ( y<y1 ) 
-       {
-          if ( x<x1 )
-             zone = 1;
-          else 
-          if ( x<x2 )
-             zone = 2;
-          else
-             zone = 3;
-       } 
-       else 
-       if ( y<y2 ) 
-       {
-          if ( x<x1 )
-             zone = 4;
-          else 
-          if ( x<x2 )
-             zone = 5;
-          else
-            zone = 6;
-       } 
-
-  return zone;
-}
-
-bool CRLinksDialog::onTouchEvent( int x, int y, CRGUITouchEventType evType )
-{
-//      CRLog::trace("CRLinksDialog::onTouchEvent() x=%d  y= %d evType= %d", x, y, int( evType ) );
-      int tapZone= getTapZonePB( x, y );
-      int command = 0, param = 0;
-      
-      switch ( evType )
-      {
-      case CRTOUCH_UP:
-        {
-          switch ( tapZone )
-          {
-          case 4:
-           command= MCMD_SCROLL_FORWARD;
-            break;
-
-          case 5:
-           command= MCMD_OK;
-          break;
-
-          case 6:
-           command= MCMD_SCROLL_BACK;
-            break;
-
-          default:
-            break;
-          }//switch item
-        }
-        break;
-
-      case CRTOUCH_DOWN_LONG:
-      {
-        switch (tapZone) 
-        {
-        case 5:
-           command= MCMD_CANCEL;
-        break;
-
-       default:
-        break;
-        }
-      }            
-
-      default:
-        break;
-
-      }
-  
-    if ( command != 0 ) 
-    {
-        _wm->postCommand( command, param );
+    if ( index < _linkCount ) {
+        ldomXRangeList list;
+        _docview->getCurrentPageLinks( list );
+        ldomXRange * link = list[index];
+        //invalidateCurrentSelection();
+        _docview->selectRange( *link );
+        //draw();
+        invalidateCurrentSelection();
+        draw();
+        _docview->goSelectedLink();
+        _docview->clearSelection();
+        _wm->closeWindow( this );
         return true;
     }
+    return false;
+}
 
+bool CRLinksDialog::onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
+{
+    int tapZone = 0;
+    V3DocViewWin *docwin = static_cast<V3DocViewWin *>(_docwin);
+    if (docwin)
+        tapZone = getTapZone(pt.x, pt.y, docwin->getProps());
+    else
+        CRLog::error("Invalid window");
+    int command = 0;
+    if (evType == CRTOUCH_DOWN_LONG) {
+        switch(tapZone) {
+        case 4:
+            command = MCMD_LONG_BACK;
+            break;
+        case 5:
+            command = MCMD_CANCEL;
+            break;
+        case 6:
+            command = MCMD_LONG_FORWARD;
+            break;
+        default:
+            break;
+        }
+    }
+    if ( command != 0 ) {
+        _wm->postCommand( command, 0 );
+        return true;
+    }
     return false;
 }

@@ -1265,9 +1265,9 @@ public:
 };
 
 enum CRGuiButtons {
-    BTN_CLOSE,
-    BTN_SCROLL_DOWN,
-    BTN_SCROLL_UP
+    BTN_CLOSE = -1,
+    BTN_SCROLL_DOWN = -2,
+    BTN_SCROLL_UP = -3
 };
 
 class CRButtonControl : public CRGUIControl
