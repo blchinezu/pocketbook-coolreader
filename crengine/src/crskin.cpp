@@ -1126,52 +1126,52 @@ void CRScrollSkin::drawGauge( LVDrawBuf & buf, const lvRect & rect, int percent 
 
 void CRToolBarSkin::drawToolBar( LVDrawBuf & buf, const lvRect & rect, bool enabled, int selectedButton )
 {
-	draw(buf, rect);
+    draw(buf, rect);
     lvRect rc = rect;
     rc.shrinkBy( _margins );
     int width = 0;
-	for ( int i=0; i<_buttons->length(); i++ ) {
-		int flags = enabled ? CRButtonSkin::ENABLED : 0;
-		if (i == selectedButton && enabled)
-			flags |= CRButtonSkin::SELECTED;
-		LVRef<CRButtonSkin> button = _buttons->get(i);
-		if (!button.isNull()) {
-			width += button->getMinSize().x;
-			int h = button->getMinSize().y;
-			if (h > rc.height())
-				return;
-		}
-	}
-	if (width > rc.width())
-		return; // That's all for now
-	int offsetX = 0;
-	if (getHAlign() == SKIN_HALIGN_RIGHT)
-		offsetX = rc.width() - width;
-	else if (getHAlign() == SKIN_HALIGN_CENTER ) 
-		offsetX = rc.width() - width/2;
-	int h = rc.height();
     for ( int i=0; i<_buttons->length(); i++ ) {
-		lvRect rc2 = rc;
-		int flags = enabled ? CRButtonSkin::ENABLED : 0;
-		if (i == selectedButton && enabled)
-			flags |= CRButtonSkin::SELECTED;
-		LVRef<CRButtonSkin> button = _buttons->get(i);
-		if (!button.isNull()) {
-			LVImageSourceRef img = button->getImage(flags);
-			rc2.left += offsetX;
-			rc2.right = rc2.left + button->getMinSize().x;
-			if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-				rc2.top = rc2.bottom - button->getMinSize().y;
-			else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-				int imgh = button->getMinSize().y;
-				rc2.top += (h - imgh/2);
-				rc2.bottom = rc2.top + imgh;
-			} else
-				rc2.bottom = rc2.top + button->getMinSize().y;
-			button->drawButton( buf, rc2, flags );
-			offsetX = rc2.right - rc.left;
-		}
-	}
+        int flags = enabled ? CRButtonSkin::ENABLED : 0;
+        if (i == selectedButton && enabled)
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = _buttons->get(i);
+        if (!button.isNull()) {
+            width += button->getMinSize().x;
+            int h = button->getMinSize().y;
+            if (h > rc.height())
+                return;
+        }
+    }
+    if (width > rc.width())
+        return; // That's all for now
+    int offsetX = 0;
+    if (getHAlign() == SKIN_HALIGN_RIGHT)
+        offsetX = rc.width() - width;
+    else if (getHAlign() == SKIN_HALIGN_CENTER )
+        offsetX = ( rc.width()-width )/2;
+    int h = rc.height();
+    for ( int i=0; i<_buttons->length(); i++ ) {
+        lvRect rc2 = rc;
+        int flags = enabled ? CRButtonSkin::ENABLED : 0;
+        if (i == selectedButton && enabled)
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = _buttons->get(i);
+        if (!button.isNull()) {
+            LVImageSourceRef img = button->getImage(flags);
+            rc2.left += offsetX;
+            rc2.right = rc2.left + button->getMinSize().x;
+            if ( getVAlign()==SKIN_VALIGN_BOTTOM )
+                rc2.top = rc2.bottom - button->getMinSize().y;
+            else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
+                int imgh = button->getMinSize().y;
+                rc2.top += ( h-imgh )/2;
+                rc2.bottom = rc2.top + imgh;
+            } else
+                rc2.bottom = rc2.top + button->getMinSize().y;
+            button->drawButton( buf, rc2, flags );
+            offsetX = rc2.right - rc.left;
+        }
+    }
 }
 
 CRRectSkin::CRRectSkin()
