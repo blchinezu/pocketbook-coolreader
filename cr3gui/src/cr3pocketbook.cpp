@@ -3452,7 +3452,7 @@ int InitDoc(const char *exename, char *fileName)
 
         int orient;
         if (GetGlobalOrientation() == -1 || pbGlobals->getKeepOrientation() == 0 || pbGlobals->getKeepOrientation() == 2) {
-            orient = GetOrientation();
+            orient = pocketbook_orientations[GetOrientation()];
         } else {
             orient = main_win->getProps()->getIntDef(PROP_POCKETBOOK_ORIENTATION,
                                                      pocketbook_orientations[GetOrientation()]);
