@@ -582,19 +582,6 @@ bool V3DocViewWin::saveHistory( lString16 filename, bool exportBookmarks )
         _docview->exportBookmarks(_bookmarkDir); //use default filename
     }
     _historyFileName = filename;
-#ifdef POCKETBOOK_PRO
-    // сохранить историю для текущего файла в памяти.
-    CRFileHistRecord *_savedHistoryRecord = new CRFileHistRecord(*_docview->getCurrentFileHistRecord());
-    // Очистить историю
-    _docview->getHistory()->getRecords().clear();
-    // Перечитать историю
-    loadHistory(filename);
-    // Удалить устаревшую историю для текущего файла
-    _docview->getCurrentFileHistRecord();
-    _docview->getHistory()->getRecords().erase(0, 1);
-    // Вставить сохраненную историю
-    _docview->getHistory()->getRecords().insert(0, _savedHistoryRecord);
-#endif 
     log << "V3DocViewWin::saveHistory(" << filename << ")";
     LVStreamRef stream = LVOpenFileStream( filename.c_str(), LVOM_WRITE );
     if ( !stream ) {
