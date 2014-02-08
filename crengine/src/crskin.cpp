@@ -1730,13 +1730,30 @@ bool CRSkinContainer::readToolBarSkin(  const lChar16 * path, CRToolBarSkin * re
 {
     bool flg = false;
     lString16 base = getBasePath( path );
+    lString16 p( path );
+
     RecursionLimit limit;
     if ( !base.empty() && limit.test() ) {
         // read base skin first
         flg = readToolBarSkin( base.c_str(), res ) || flg;
+        lString16 overridepath = p + "/override";
+        CRButtonListRef buttons = res->getButtons();
+        for ( int i=0; i< buttons->length(); i++ ) {
+            lString16 p1 = lString16(overridepath) << "[" << fmt::decimal(i) << "]";
+            bool flg1 = false;
+            int item = readInt( p1.c_str(), L"item", -1, &flg1);
+            if (flg1 && item > 0 && item < buttons->length()) {
+                lString16 p2 = p1 + "/button";
+                CRButtonSkin * button = new CRButtonSkin();
+                if ( readButtonSkin( p2.c_str(), button ) )
+                    buttons->set(item, LVRef<CRButtonSkin>(button));
+                else
+                    delete button;
+            } else
+                break;
+        }
     }
 
-    lString16 p( path );
     ldomXPointer ptr = getXPointer( path );
     if ( !ptr ) {
 #ifdef TRACE_SKIN_ERRORS

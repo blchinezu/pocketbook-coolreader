@@ -303,10 +303,10 @@ public:
     LVImageSourceRef getImage(int flags = ENABLED);
     CRButtonSkin();
     virtual ~CRButtonSkin() { 
-		CRLog::trace("~CRButtonSkin()");
-	}
+        CRLog::trace("~CRButtonSkin()");
+    }
 };
-typedef LVFastRef<CRButtonSkin> CRButtonSkinRef;
+typedef LVRef<CRButtonSkin> CRButtonSkinRef;
 
 
 class CRScrollSkin : public CRRectSkin
@@ -378,11 +378,19 @@ public:
     void add( LVRef<CRButtonSkin> button ) { _list.add( button ); }
     void add( CRButtonList & list ) { _list.add( list._list ); }
     int length() { return _list.length(); }
-    LVRef<CRButtonSkin> get(int index) { return (index >= 0 && index < _list.length()) ? _list[index] : LVRef<CRButtonSkin>(); }
+    CRButtonSkinRef get(int index) { return (index >= 0 && index < _list.length()) ? _list[index] : LVRef<CRButtonSkin>(); }
+    bool set(int index, LVRef<CRButtonSkin> button)
+    {
+        if ( index>=0 && index<_list.length() ) {
+            _list.set(index, button);
+            return true;
+        }
+        return false;
+    }
     CRButtonList() { }
     virtual ~CRButtonList() {
-		CRLog::trace("~CRButtonList();");
-	}
+        CRLog::trace("~CRButtonList();");
+    }
 };
 typedef LVRef<CRButtonList> CRButtonListRef;
 
