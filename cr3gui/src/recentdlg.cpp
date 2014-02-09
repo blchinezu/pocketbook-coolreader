@@ -135,7 +135,7 @@ CRRecentBooksMenu::CRRecentBooksMenu(CRGUIWindowManager * wm, LVDocView * docvie
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16("#bookmarks"));
+    setSkinName(lString16("#recent-books"), lString16("#bookmarks"));
     lString16 pattern(_("$1 - open book\n$2, $3 - close"));
 #ifdef CR_POCKETBOOK
 	pattern.replaceParam(1, getCommandKeyName( MCMD_SELECT ));

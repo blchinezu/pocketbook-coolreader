@@ -341,7 +341,7 @@ CRCitesMenu::CRCitesMenu(CRGUIWindowManager * wm, LVDocView * docview, int numIt
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16("#bookmarks"));
+    setSkinName(lString16("#cites-list"), lString16("#bookmarks"));
     int mc = getSkin()->getMinItemCount();
     if ( _pageItems < mc )
         _pageItems = mc;

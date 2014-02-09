@@ -731,6 +731,8 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual void reconfigure( int flags );
         /// sets skin name for window
         virtual void setSkinName( const lString16  & skin ) { _skinName = skin; }
+        /// sets skin name for window, if a skin doesn't exist set name to the baseSkin
+        virtual void setSkinName( const lString16  & skin, lString16 & baseSkin );
         /// returns skin name for window
         virtual lString16 getSkinName() { return _skinName; }
         /// returns true if command is processed

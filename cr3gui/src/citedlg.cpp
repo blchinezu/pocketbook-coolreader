@@ -119,8 +119,8 @@ protected:
             if ( !keyRect.isEmpty() ) {
                 skin->draw( *_wm->getScreen()->getCanvas(), keyRect );
                 skin->drawText( *_wm->getScreen()->getCanvas(), keyRect, prompt );
-//                if (toolbarRect.left < keyRect.right)
-//                    toolbarRect.left = keyRect.right;
+                if (toolbarRect.left < keyRect.right)
+                    toolbarRect.left = keyRect.right;
             }
         }
         if (toolbar != NULL)
