@@ -1143,7 +1143,8 @@ void CRGUIWindowBase::drawTitleBar()
 
             closeBtnSkin->drawButton(buf, closeBtnRc);
             if (!_controlsCreated)
-                addControl(new CRButtonControl(this, closeBtnRc, closeBtnSkin, BTN_CLOSE));
+                addControl(new CRButtonControl(this, closeBtnRc, closeBtnSkin, BTN_CLOSE,
+                                               DCMD_BUTTON_PRESSED ));
             imgWidth += (closeBtnRc.width() + ITEM_MARGIN);
         }
     }
@@ -2458,3 +2459,179 @@ bool CRGUITouchEvent::handle(CRGUIWindow *window)
         wm->postEvent( new CRGUIUpdateEvent(false) );
     return res;
 }
+
+CRToolBar::CRToolBar(CRGUIWindowBase *window, CRToolBarSkinRef tbskin, bool active) :
+    m_window(window), m_currentButton(0), m_active(active), _controlsCreated(false),
+    _tbSkin(tbskin)
+{
+
+}
+
+bool CRToolBar::selectFirstButton()
+{
+    return selectButton(0, 1);
+}
+
+bool CRToolBar::selectLastButton()
+{
+    return selectButton(m_buttons.length() - 1, -1);
+}
+
+bool CRToolBar::selectNextButton(bool wrapAround)
+{
+    if (-1 == getCurrentButtonIndex())
+        return selectFirstButton();
+    if ( selectButton( m_currentButton+1, 1 ) )
+        return true;
+    if ( wrapAround )
+        return selectFirstButton();
+    return false;
+}
+
+bool CRToolBar::selectPrevButton(bool wrapAround)
+{
+    if (-1 == getCurrentButtonIndex())
+        return selectLastButton();
+    if ( selectButton( m_currentButton-1, -1) )
+        return true;
+    if ( wrapAround )
+        return selectLastButton();
+    return false;
+}
+
+bool CRToolBar::selectButton(int index)
+{
+    if ( index != m_currentButton && index < m_buttons.length() &&
+        m_buttons[index]->isEnabled() ) {
+        setActive(true);
+        m_currentButton = index;
+        m_window->setDirty();
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBar::selectButton(int from, int delta)
+{
+    for( int i=from; i>=0 && i<m_buttons.length(); i+=delta)
+    {
+        if ( m_buttons[i]->isEnabled() ) {
+            m_currentButton = i;
+            return true;
+        }
+    }
+    return false;
+}
+
+int CRToolBar::getCurrentButtonIndex()
+{
+    if (isActive()) {
+        return m_currentButton;
+    }
+    return -1;
+}
+
+bool CRToolBar::isEnabled(int index)
+{
+    if ( index<getButtonsCount() )
+        return m_buttons[index]->isEnabled();
+    return false;
+}
+
+bool CRToolBar::setEnabled(int index, bool value)
+{
+    if ( index<getButtonsCount() )
+        return m_buttons[index]->setEnabled(value);
+    return false;
+}
+
+void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect)
+{
+    if ( tbskin.isNull() )
+        return;
+    tbskin->draw(buf, rect);
+
+    lvRect rc = rect;
+    rc.shrinkBy( tbskin->getBorderWidths() );
+    CRButtonListRef buttons = tbskin->getButtons();
+    int width = 0;
+    for ( int i=0; i<buttons->length(); i++ ) {
+        int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
+        if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = buttons->get(i);
+        if ( !button.isNull() ) {
+            width += button->getMinSize().x;
+            int h = button->getMinSize().y;
+            if ( h>rc.height() )
+                return;
+        }
+    }
+    if ( width>rc.width() )
+        return; // That's all for now
+    int offsetX = 0;
+    if ( tbskin->getHAlign()==SKIN_HALIGN_RIGHT )
+        offsetX = rc.width() - width;
+    else if ( tbskin->getHAlign()==SKIN_HALIGN_CENTER )
+        offsetX = rc.width() - width/2;
+    int h = rc.height();
+    CRToolBarControl *toolBarControl = NULL;
+    if ( !_controlsCreated)
+        toolBarControl = new CRToolBarControl(m_window, this, rect);
+    for ( int i=0; i<buttons->length(); i++ ) {
+        lvRect rc2 = rc;
+        int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
+        if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
+            flags |= CRButtonSkin::SELECTED;
+        CRButtonSkinRef button = buttons->get(i);
+        if ( !button.isNull() ) {
+            rc2.left += offsetX;
+            rc2.right = rc2.left + button->getMinSize().x;
+            if ( tbskin->getVAlign()==SKIN_VALIGN_BOTTOM )
+                rc2.top = rc2.bottom - button->getMinSize().y;
+            else if ( tbskin->getVAlign()==SKIN_VALIGN_CENTER ) {
+                int imgh = button->getMinSize().y;
+                rc2.top += (h - imgh/2);
+                rc2.bottom = rc2.top + imgh;
+            } else
+                rc2.bottom = rc2.top + button->getMinSize().y;
+            if ( NULL != toolBarControl)
+                toolBarControl->addButton(new CRButtonControl(m_window, rc2, button,
+                                                              m_buttons[i]->getCommand(),
+                                                              m_buttons[i]->getParam()));
+            button->drawButton( buf, rc2, flags );
+            offsetX = rc2.right - rc.left;
+        }
+    }
+    if ( NULL != toolBarControl ) {
+        m_window->addControl(toolBarControl);
+        _controlsCreated = true;
+    }
+}
+
+bool CRToolBar::setActive(bool value)
+{
+    if ( m_active != value ) {
+        m_active = value;
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBar::getRect(lvRect &rc)
+{
+    lvRect clientRect;
+    if ( !_tbSkin.isNull() && m_window->getClientRect( clientRect) ) {
+        return _tbSkin->getRect(rc, clientRect);
+    }
+    return false;
+}
+
+CRToolButton * CRToolBar::getCurrentButton()
+{
+    int index = getCurrentButtonIndex();
+    if (index != -1)
+        return m_buttons[index];
+    return NULL;
+}
+

@@ -1717,8 +1717,8 @@ CRButtonListRef CRSkinContainer::readButtons( const lChar16 * path, bool * res )
         crtrace log;
         log << "CRSkinContainer::readButtons( " << path << ") - cannot read button from specified path";
 #endif
-		if ( res )
-			*res = false;
+        if ( res )
+            *res = false;
         return CRButtonListRef();
     }
     if ( res )
