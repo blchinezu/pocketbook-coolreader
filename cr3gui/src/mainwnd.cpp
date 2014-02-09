@@ -701,10 +701,10 @@ void V3DocViewWin::applySettings()
     CRPropRef delta = _props ^ _newProps;
     CRLog::trace( "applySettings() - %d options changed", delta->getCount() );
 #ifdef CR_POCKETBOOK
-	if (delta->hasProperty(PROP_POCKETBOOK_ORIENTATION)) {
-		CRLog::trace("PB orientation have changed");
-		_wm->postCommand(mm_Orientation, 1525);
-	}
+    if (delta->hasProperty(PROP_POCKETBOOK_ORIENTATION)) {
+        CRLog::trace("PB orientation have changed");
+        _wm->postCommand(mm_Orientation, 0);
+    }
 #endif
     _docview->propsApply( delta );
     _props = _newProps; // | _props;
