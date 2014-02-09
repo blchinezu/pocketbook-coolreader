@@ -199,9 +199,9 @@ void CRViewDialog::showGoToPercentDialog()
     _wm->activateWindow( dlg );
 }
 
-bool CRViewDialog::showLinksDialog()
+bool CRViewDialog::showLinksDialog(bool backPreffered)
 {
-    CRLinksDialog * dlg = CRLinksDialog::create( _wm, this );
+    CRLinksDialog * dlg = CRLinksDialog::create( _wm, this, backPreffered );
     if ( !dlg )
         return false;
     dlg->setAccelerators( getMenuAccelerators() );

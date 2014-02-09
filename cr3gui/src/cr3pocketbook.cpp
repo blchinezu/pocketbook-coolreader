@@ -420,7 +420,7 @@ public:
     int getPocketBookCommandIndex(int command, int param)
     {
         int ret = 0;
-        for( int i=0; i < sizeof(pbActions)/sizeof(pbActions[0]); i++) {
+        for( unsigned i=0; i < sizeof(pbActions)/sizeof(pbActions[0]); i++) {
             if( pbActions[i].commandId == command &&
                 pbActions[i].commandParam == param) {
                 ret = i;
@@ -1393,7 +1393,7 @@ protected:
                             return true;
                         } else {
                             _docview->goLink( m_link );
-                            return showLinksDialog();
+                            return showLinksDialog(true);
                         }
                     }
                 }
@@ -1531,8 +1531,9 @@ public:
             if (!m_link.empty()) {
                 _docview->goLink(m_link);
                 m_link.clear();
+                return showLinksDialog(true);
             }
-            return showLinksDialog();
+            return showLinksDialog(false);
         case PB_CMD_MP3:
             if (params == 0)
                 TogglePlaying();
@@ -1580,9 +1581,9 @@ public:
         return V3DocViewWin::onCommand( command, params );
     }
 
-    bool showLinksDialog()
+    bool showLinksDialog(bool backPreffered)
     {
-        CRLinksDialog * dlg = CRLinksDialog::create( _wm, this );
+        CRLinksDialog * dlg = CRLinksDialog::create( _wm, this, backPreffered );
         if ( !dlg )
             return false;
         dlg->setAccelerators( getDialogAccelerators() );

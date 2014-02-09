@@ -695,6 +695,7 @@ class CRGUIWindowBase : public CRGUIWindow
         LVImageSourceRef _icon; // window title icon
         LVPtrVector<CRGUIControl> _controls;
         bool _controlsCreated;
+        bool _sortZorder;
         CRGUIControl *_selectedControl;
         // draws frame, title, status and client
         virtual void draw();
@@ -778,11 +779,21 @@ class CRGUIWindowBase : public CRGUIWindow
         /// set fullscreen state for window
         virtual void setFullscreen( bool fullscreen ) { _fullscreen = fullscreen; }
         virtual CRGUIWindowManager * getWindowManager() { return _wm; }
-        void addControl(CRGUIControl *control) { _controls.add(control); }
+        void addControl(CRGUIControl *control)
+        {
+            _controls.add(control);
+            _sortZorder = true;
+        }
+        void invalidateControls()
+        {
+            _controls.clear();
+            _controlsCreated = false;
+            _selectedControl = NULL;
+        }
         virtual bool isScrollEnabled(bool down) { return false; }
         CRGUIWindowBase( CRGUIWindowManager * wm )
         : _wm(wm), _visible(true), _fullscreen(true), _dirty(true), _passKeysToParent(false), _passCommandsToParent(false)
-        , _page(0), _pages(0), _controlsCreated(false), _selectedControl(0)
+        , _page(0), _pages(0), _controlsCreated(false), _sortZorder(true), _selectedControl(0)
         {
             // fullscreen visible by default
             _rect = _wm->getScreen()->getRect();
@@ -796,12 +807,15 @@ class CRGUIControl
 protected:
     CRGUIWindowBase *_parent;
     lvRect _rect;
+    int _zOrder;
 public:
-    CRGUIControl(CRGUIWindowBase *parent, lvRect rc) : _parent(parent), _rect(rc) {}
+    CRGUIControl(CRGUIWindowBase *parent, lvRect rc, int zOrder = 0)
+        : _parent(parent), _rect(rc), _zOrder(zOrder) {}
     virtual bool hitTest(lvPoint &pt) { return _rect.isPointInside(pt); }
     virtual bool onTouch(CRGUITouchEventType evType) { return false; }
     virtual bool setSelected(bool selected) { return false; }
-    virtual bool isEnabled() { return true; }
+    virtual bool isEnabled() const { return true; }
+    int getZorder() const { return _zOrder; }
     virtual ~CRGUIControl() {}
 };
 
@@ -1245,7 +1259,10 @@ class CRToolBar
 public:
     CRToolBar(CRGUIWindowBase *window, CRToolBarSkinRef tbskin, bool active = true);
     virtual ~CRToolBar() { }
-    void addButton( CRToolButton * button ) { m_buttons.add( button ); }
+    void addButton( CRToolButton * button )
+    {
+        m_buttons.add( button );
+    }
     LVPtrVector<CRToolButton> & getButtons() { return m_buttons; }
     bool selectFirstButton();
     bool selectLastButton();
@@ -1286,6 +1303,10 @@ public:
         m_window->reconfigure(0);
     }
     void draw(CRToolBarSkinRef tbskin, LVDrawBuf & buf, const lvRect & rect);
+    void controlRemoved()
+    {
+        _controlsCreated = false;
+    }
 protected:
     LVPtrVector<CRToolButton> m_buttons;
 private:
@@ -1303,7 +1324,7 @@ class CRMenuItemControl : public CRGUIControl
 private:
     int _id;
 public:
-    CRMenuItemControl(CRMenu *parent, lvRect rc, int id) : CRGUIControl(parent, rc), _id(id) {}
+    CRMenuItemControl(CRMenu *parent, lvRect rc, int id) : CRGUIControl(parent, rc, 2), _id(id) {}
     virtual bool onTouch(CRGUITouchEventType evType)
     {
         if (CRTOUCH_UP == evType) {
@@ -1330,7 +1351,7 @@ protected:
     int _command;
     int _param;
 public:
-    CRCommandControl(CRGUIWindowBase *parent, lvRect rc, int cmd, int param) : CRGUIControl(parent, rc),
+    CRCommandControl(CRGUIWindowBase *parent, lvRect rc, int cmd, int param) : CRGUIControl(parent, rc, 1),
         _command(cmd), _param(param) {}
     virtual bool onTouch(CRGUITouchEventType evType)
     {
@@ -1362,7 +1383,8 @@ protected:
     int  _param;
     int _btnId;
 public:
-    CRButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, int id, int command, int param = 0) : CRGUIControl(parent, rc),
+    CRButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, int id, int command, int param = 0)
+        : CRGUIControl(parent, rc, 2),
         _btnSkin(skin), _selected(false), _command(command), _param(param), _btnId(id) {}
     virtual bool onTouch(CRGUITouchEventType evType)
     {
@@ -1410,40 +1432,15 @@ protected:
     int m_touchIndex;
     LVPtrVector<CRButtonControl> m_buttons;
 public:
-    CRToolBarControl(CRGUIWindowBase *parent, CRToolBar *toolbar, lvRect rc) : CRGUIControl(parent, rc),
+    CRToolBarControl(CRGUIWindowBase *parent, CRToolBar *toolbar, lvRect rc) : CRGUIControl(parent, rc, 3),
         m_toolbar(toolbar) {}
-    void addButton( CRButtonControl * button ) { m_buttons.add( button ); }
-    virtual bool hitTest(lvPoint &pt)
+    void addButton( CRButtonControl * button );
+    virtual bool hitTest(lvPoint &pt);
+    virtual bool onTouch(CRGUITouchEventType evType);
+    virtual bool setSelected(bool selected);
+    virtual ~CRToolBarControl()
     {
-        m_touchIndex = -1;
-        if ( CRGUIControl::hitTest(pt) ) {
-            for (int i = 0; i < m_buttons.length(); i++) {
-                CRButtonControl *button = m_buttons[i];
-                if ( button->hitTest(pt) ) {
-                    m_touchIndex = i;
-                    break;
-                }
-            }
-            return true;
-        }
-        return false;
-    }
-    virtual bool onTouch(CRGUITouchEventType evType)
-    {
-        if (m_touchIndex != -1) {
-            if (m_toolbar->getCurrentButtonIndex() != m_touchIndex)
-                setSelected(true);
-            return m_buttons[m_touchIndex]->onTouch(evType);
-        }
-        return false;
-    }
-    virtual bool setSelected(bool selected)
-    {
-        if (m_touchIndex != -1 && selected) {
-            if ( m_toolbar->selectButton(m_touchIndex) )
-                m_buttons[m_touchIndex]->setSelected(selected);
-        }
-        return m_toolbar->setActive(selected);
+        m_toolbar->controlRemoved();
     }
 private:
     CRToolBar *m_toolbar;

@@ -8,6 +8,19 @@
     <button normal="cite_grow_phrase.png" selected="cite_grow_phrase_sel.png"/>
     <button normal="cite_shrink_phrase.png" selected="cite_shrink_phrase_sel.png"/>
   </toolbar>
+  <toolbar id="links-toolbar-up" size="160,42" pos="0,0">
+    <border widths="16,4,4,4"/>
+    <background color="#FFFFFF"/>
+    <button normal="arrow_left_black.png" disabled="arrow_left_white.png" selected="arrow_left_black_sel.png"/>
+    <button normal="arrow_right_black.png" disabled="arrow_right_white.png" selected="arrow_right_black_sel.png"/>
+    <button normal="toolbar_move_down.png" selected="toolbar_move_down_sel.png"/>
+    <button normal="links_cancel.png" selected="links_cancel_sel.png"/>
+  </toolbar>
+  <toolbar id="links-toolbar-down" base="#links-toolbar-up" pos="0,-42">
+    <override item="3">
+	<button normal="toolbar_move_up.png" selected="toolbar_move_up_sel.png"/>
+    </override
+  </toolbar>
   <scroll id="titlescroll" autohide="true" show-page-numbers="true" location="title"
       pos="-120,0" size="130, 100%" halign="right" valign="center">
       <size minvalue="20,30" maxvalue="0,0"/>
@@ -107,9 +120,13 @@
   <window id="dialog-rotated" base="#dialog"/>
 
   <window id="cite-dialog" base="#dialog">
-    <client>
-	<toolbar1 base="#cite-toolbar" pos="40%, -42"/>
-    </client>
+    <toolbar1 base="#cite-toolbar" pos="40%, -42"/>
+  </window>
+  <window id="cite-dialog-rotated" base="cite-dialog"/>
+
+  <window id="links-dialog" base="#dialog">
+    <toolbar1 base="#links-toolbar-up"/>
+    <toolbar2 base="#links-toolbar-down"/>
   </window>
   <window id="cite-dialog-rotated" base="cite-dialog"/>
 

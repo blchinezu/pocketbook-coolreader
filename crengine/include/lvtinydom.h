@@ -1931,6 +1931,8 @@ class ldomNavigationHistory
         }
         int forwardCount()
         {
+            if (_pos>=(int)_links.length()-1)
+                return 0;
             return _links.length() - _pos;
         }
 };

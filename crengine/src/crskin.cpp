@@ -1582,13 +1582,13 @@ bool CRSkinContainer::readWindowSkin(  const lChar16 * path, CRWindowSkin * res 
     }
 
     CRToolBarSkinRef toolbar1Skin( new CRToolBarSkin());
-    if (readToolBarSkin(  (p + "/client/toolbar1").c_str(), toolbar1Skin.get() )) {
+    if (readToolBarSkin(  (p + "/toolbar1").c_str(), toolbar1Skin.get() )) {
         res->setToolBar1Skin(toolbar1Skin);
         flg = true;
     }
 
     CRToolBarSkinRef toolbar2Skin( new CRToolBarSkin());
-    if (readToolBarSkin(  (p + "/client/toolbar2").c_str(), toolbar2Skin.get() )) {
+    if (readToolBarSkin(  (p + "/toolbar2").c_str(), toolbar2Skin.get() )) {
         res->setToolBar2Skin(toolbar2Skin);
         flg = true;
     }
@@ -1754,11 +1754,11 @@ bool CRSkinContainer::readToolBarSkin(  const lChar16 * path, CRToolBarSkin * re
             lString16 p1 = lString16(overridepath) << "[" << fmt::decimal(i) << "]";
             bool flg1 = false;
             int item = readInt( p1.c_str(), L"item", -1, &flg1);
-            if (flg1 && item > 0 && item < buttons->length()) {
+            if (flg1 && item > 0 && item <= buttons->length()) {
                 lString16 p2 = p1 + "/button";
                 CRButtonSkin * button = new CRButtonSkin();
                 if ( readButtonSkin( p2.c_str(), button ) )
-                    buttons->set(item, LVRef<CRButtonSkin>(button));
+                    buttons->set(item -1, LVRef<CRButtonSkin>(button));
                 else
                     delete button;
             } else

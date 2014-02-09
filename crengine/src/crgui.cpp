@@ -740,10 +740,25 @@ bool CRGUIWindowBase::onTouch( int x, int y, CRGUITouchEventType evType)
     return false;
 }
 
+int zOrderComparator(const CRGUIControl ** item1, const CRGUIControl ** item2 )
+{
+    const CRGUIControl *a = *item1;
+    const CRGUIControl *b = *item2;
+    if ( a->getZorder()>b->getZorder() )
+        return -1;
+    if ( a->getZorder()<b->getZorder() )
+        return 1;
+    return 0;
+}
+
 bool CRGUIWindowBase::onTouchEvent(int x, int y, CRGUITouchEventType evType)
 {
     lvPoint pt(x, y);
 
+    if (_sortZorder && _controlsCreated) {
+        _controls.sort(zOrderComparator);
+        _sortZorder = false;
+    }
     for (int i = 0; i < _controls.length(); i++) {
         CRGUIControl *control = _controls.get(i);
         if (control->hitTest(pt)) {
@@ -1190,8 +1205,7 @@ void CRGUIWindowBase::reconfigure( int flags )
         setRect( rc );
     }
     _selectedControl = NULL;
-    _controls.clear();
-    _controlsCreated = false;
+    invalidateControls();
     setDirty();
 }
 
@@ -2513,11 +2527,12 @@ bool CRToolBar::selectPrevButton(bool wrapAround)
 
 bool CRToolBar::selectButton(int index)
 {
-    if ( index != m_currentButton && index < m_buttons.length() &&
+    if ( index < m_buttons.length() &&
         m_buttons[index]->isEnabled() ) {
         setActive(true);
+        if (index != m_currentButton)
+            m_window->setDirty();
         m_currentButton = index;
-        m_window->setDirty();
         return true;
     }
     return false;
@@ -2527,8 +2542,7 @@ bool CRToolBar::selectButton(int from, int delta)
 {
     for( int i=from; i>=0 && i<m_buttons.length(); i+=delta)
     {
-        if ( m_buttons[i]->isEnabled() ) {
-            m_currentButton = i;
+        if ( selectButton(i) ) {
             return true;
         }
     }
@@ -2595,23 +2609,26 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
         int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
         if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
             flags |= CRButtonSkin::SELECTED;
-        CRButtonSkinRef button = buttons->get(i);
-        if ( !button.isNull() ) {
+        CRButtonSkinRef buttonSkin = buttons->get(i);
+        if ( !buttonSkin.isNull() ) {
             rc2.left += offsetX;
-            rc2.right = rc2.left + button->getMinSize().x;
+            rc2.right = rc2.left + buttonSkin->getMinSize().x;
             if ( tbskin->getVAlign()==SKIN_VALIGN_BOTTOM )
-                rc2.top = rc2.bottom - button->getMinSize().y;
+                rc2.top = rc2.bottom - buttonSkin->getMinSize().y;
             else if ( tbskin->getVAlign()==SKIN_VALIGN_CENTER ) {
-                int imgh = button->getMinSize().y;
+                int imgh = buttonSkin->getMinSize().y;
                 rc2.top += (h - imgh/2);
                 rc2.bottom = rc2.top + imgh;
             } else
-                rc2.bottom = rc2.top + button->getMinSize().y;
-            if ( NULL != toolBarControl)
-                toolBarControl->addButton(new CRButtonControl(m_window, rc2, button,
-                                                              m_buttons[i]->getCommand(),
-                                                              m_buttons[i]->getParam()));
-            button->drawButton( buf, rc2, flags );
+                rc2.bottom = rc2.top + buttonSkin->getMinSize().y;
+            if ( NULL != toolBarControl) {
+                CRToolButton *button = m_buttons[i];
+                toolBarControl->addButton(new CRButtonControl(m_window, rc2, buttonSkin,
+                                                              button->getId(),
+                                                              button->getCommand(),
+                                                              button->getParam()));
+            }
+            buttonSkin->drawButton( buf, rc2, flags );
             offsetX = rc2.right - rc.left;
         }
     }
@@ -2632,9 +2649,9 @@ bool CRToolBar::setActive(bool value)
 
 bool CRToolBar::getRect(lvRect &rc)
 {
-    lvRect clientRect;
-    if ( !_tbSkin.isNull() && m_window->getClientRect( clientRect) ) {
-        return _tbSkin->getRect(rc, clientRect);
+    if ( !_tbSkin.isNull() ) {
+        lvRect rect = m_window->getWindowManager()->getScreen()->getRect();
+        return _tbSkin->getRect(rc, rect);
     }
     return false;
 }
@@ -2645,5 +2662,45 @@ CRToolButton * CRToolBar::getCurrentButton()
     if (index != -1)
         return m_buttons[index];
     return NULL;
+}
+
+void CRToolBarControl::addButton(CRButtonControl *button)
+{
+    m_buttons.add( button );
+}
+
+bool CRToolBarControl::hitTest(lvPoint &pt)
+{
+    m_touchIndex = -1;
+    if ( CRGUIControl::hitTest(pt) ) {
+        for (int i = 0; i < m_buttons.length(); i++) {
+            CRButtonControl *button = m_buttons[i];
+            if ( button->hitTest(pt) ) {
+                m_touchIndex = i;
+                break;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBarControl::onTouch(CRGUITouchEventType evType)
+{
+    if (m_touchIndex != -1) {
+        if (m_toolbar->getCurrentButtonIndex() != m_touchIndex)
+            setSelected(true);
+        return m_buttons[m_touchIndex]->onTouch(evType);
+    }
+    return false;
+}
+
+bool CRToolBarControl::setSelected(bool selected)
+{
+    if (m_touchIndex != -1 && selected) {
+        if ( m_toolbar->selectButton(m_touchIndex) )
+            m_buttons[m_touchIndex]->setSelected(selected);
+    }
+    return m_toolbar->setActive(selected);
 }
 
