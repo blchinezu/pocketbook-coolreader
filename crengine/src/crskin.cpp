@@ -1581,6 +1581,18 @@ bool CRSkinContainer::readWindowSkin(  const lChar16 * path, CRWindowSkin * res 
         flg = true;
     }
 
+    CRToolBarSkinRef toolbar1Skin( new CRToolBarSkin());
+    if (readToolBarSkin(  (p + "/client/toolbar1").c_str(), toolbar1Skin.get() )) {
+        res->setToolBar1Skin(toolbar1Skin);
+        flg = true;
+    }
+
+    CRToolBarSkinRef toolbar2Skin( new CRToolBarSkin());
+    if (readToolBarSkin(  (p + "/client/toolbar2").c_str(), toolbar2Skin.get() )) {
+        res->setToolBar2Skin(toolbar2Skin);
+        flg = true;
+    }
+
     CRRectSkinRef inputSkin( new CRRectSkin() );
     if ( readRectSkin(  (p + "/input").c_str(), inputSkin.get() ) ) {
         res->setInputSkin( inputSkin );

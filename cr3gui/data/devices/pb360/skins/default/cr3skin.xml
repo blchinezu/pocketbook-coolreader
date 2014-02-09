@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CR3Skin>
-  <toolbar id="cite-toolbar">
+  <toolbar id="cite-toolbar" size="180, 42">
     <border widths="16,4,4,4"/>
     <button normal="cite_move.png" selected="cite_move_sel.png"/>
     <button normal="cite_grow.png" selected="cite_grow_sel.png"/>
@@ -105,6 +105,14 @@
 	</closebutton>
   </window>
   <window id="dialog-rotated" base="#dialog"/>
+
+  <window id="cite-dialog" base="#dialog">
+    <client>
+	<toolbar1 base="#cite-toolbar" pos="40%, -42"/>
+    </client>
+  </window>
+  <window id="cite-dialog-rotated" base="cite-dialog"/>
+
   <window id="dict" size="100%, 33%">
 		<title>
             <size minvalue="0,40" maxvalue="100%,40"/>

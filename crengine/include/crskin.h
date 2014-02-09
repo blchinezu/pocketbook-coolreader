@@ -420,6 +420,8 @@ protected:
     CRRectSkinRef _statusSkin;
     CRRectSkinRef _inputSkin;
     CRScrollSkinRef _scrollSkin;
+    CRToolBarSkinRef _toolbar1;
+    CRToolBarSkinRef _toolBar2;
     CRButtonSkinRef _closebutton;
     bool _fullscreen;
 public:
@@ -445,6 +447,10 @@ public:
     virtual void setInputSkin( CRRectSkinRef skin ) { _inputSkin = skin; }
     CRButtonSkinRef getCloseButton() { return _closebutton; }
     void setCloseButton( CRButtonSkinRef btn ) { _closebutton = btn; }
+    CRToolBarSkinRef getToolBar1Skin() { return _toolbar1; }
+    void setToolBar1Skin(CRToolBarSkinRef toolbar1) { _toolbar1 = toolbar1; }
+    CRToolBarSkinRef getToolBar2Skin() { return _toolBar2; }
+    void setToolBar2Skin(CRToolBarSkinRef toolbar2) { _toolBar2 = toolbar2; }
 };
 typedef LVFastRef<CRWindowSkin> CRWindowSkinRef;
 

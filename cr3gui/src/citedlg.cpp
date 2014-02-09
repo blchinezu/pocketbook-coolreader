@@ -86,7 +86,10 @@ protected:
     virtual void draw()
     {
         BackgroundFitWindow::draw();
-        CRRectSkinRef skin = _wm->getSkin()->getWindowSkin( L"#dialog" )->getClientSkin();
+        CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+        if ( windowSkin.isNull() )
+            return;
+        CRRectSkinRef skin = windowSkin->getClientSkin();
         LVDrawBuf * buf = _wm->getScreen()->getCanvas().get();
         skin->draw( *buf, _rect );
 #ifdef CR_POCKETBOOK
@@ -119,8 +122,6 @@ protected:
             if ( !keyRect.isEmpty() ) {
                 skin->draw( *_wm->getScreen()->getCanvas(), keyRect );
                 skin->drawText( *_wm->getScreen()->getCanvas(), keyRect, prompt );
-                if (toolbarRect.left < keyRect.right)
-                    toolbarRect.left = keyRect.right;
             }
         }
         if (toolbar != NULL)
@@ -153,9 +154,13 @@ public:
         _rect = _wm->getScreen()->getRect();
         selector_.highlight();
         setDirty();
-        CRToolBarSkinRef tbSkin = _wm->getSkin()->getToolBarSkin( L"#cite-toolbar" );
-        if ( !tbSkin.isNull() && tbSkin->getButtons()->length() == 7 ||
-            tbSkin->getButtons()->length() == 5) {
+        setSkinName(L"#cite-dialog");
+        CRToolBarSkinRef tbSkin;
+        CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+        if ( !windowSkin.isNull() )
+            tbSkin = windowSkin->getToolBar1Skin();
+        if ( !tbSkin.isNull() && (tbSkin->getButtons()->length() == 7 ||
+            tbSkin->getButtons()->length() == 5)) {
             isTouchToolBar = tbSkin->getButtons()->length() == 7;
             toolbar = new CRToolBar(this, tbSkin);
             if (isTouchToolBar)

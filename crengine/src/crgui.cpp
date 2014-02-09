@@ -1153,7 +1153,7 @@ void CRGUIWindowBase::drawTitleBar()
     titleSkin->drawText( buf, textRect, _caption );
 }
 
-void CRGUIWindowBase::setSkinName( const lString16  & skin, lString16 & baseSkin )
+void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & baseSkin )
 {
     if ( !_wm->getSkin().isNull() ) {
         CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin(skin.c_str());
