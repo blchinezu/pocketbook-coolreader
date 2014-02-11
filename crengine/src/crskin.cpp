@@ -145,18 +145,6 @@ bool CRRectSkin::getRect( lvRect & rc, const lvRect & baseRect )
     lvPoint sz( fromSkinPercent( _size.x, rc.width()),
                 fromSkinPercent( _size.y, rc.height()) );
 
-    // left top corner -> origin point
-    if ( getHAlign()==SKIN_HALIGN_RIGHT )
-        pos.x = pos.x + sz.x;
-    else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
-        pos.x = pos.x + sz.x / 2;
-    }
-    if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-        pos.y = pos.y + sz.y;
-    else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-        pos.y = pos.y + sz.y/2;
-    }
-
     // apply size constraints
     if ( _minsize.x>0 && sz.x < _minsize.x )
         sz.x = _minsize.x;
@@ -167,20 +155,25 @@ bool CRRectSkin::getRect( lvRect & rc, const lvRect & baseRect )
     if ( _maxsize.y>0 && sz.y > _maxsize.y )
         sz.y = _maxsize.y;
 
-    // origin -> left top corner
-    if ( getHAlign()==SKIN_HALIGN_RIGHT )
-        pos.x = pos.x - sz.x;
-    else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
-        pos.x = pos.x - sz.x / 2;
-    }
-    if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-        pos.y = pos.y - sz.y;
-    else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-        pos.y = pos.y - sz.y/2;
-    }
-
     pos.x += baseRect.left;
     pos.y += baseRect.top;
+
+    int delta = rc.width() - (pos.x + sz.x);
+    if ( delta>0 ) {
+        if ( getHAlign()==SKIN_HALIGN_RIGHT )
+            pos.x += delta;
+        else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
+            pos.x += delta / 2;
+        }
+    }
+    delta = rc.height() - (pos.y + sz.y);
+    if ( delta> 0) {
+        if ( getVAlign()==SKIN_VALIGN_BOTTOM )
+            pos.y += delta;
+        else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
+            pos.y += delta/2;
+        }
+    }
     rc.left = pos.x;
     rc.top = pos.y;
     rc.right = pos.x + sz.x;
