@@ -577,17 +577,14 @@ void CRGUIScreenBase::flush( bool full )
 bool CRGUIWindowBase::getTitleRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
         rc.bottom = rc.top;
         return false;
     }
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc.shrinkBy(skin->getBorderWidths());
     rc.bottom = rc.top;
-    CRRectSkinRef clientSkin = skin->getClientSkin();
     CRRectSkinRef titleSkin = skin->getTitleSkin();
-    CRRectSkinRef statusSkin = skin->getStatusSkin();
-    CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( !titleSkin.isNull() ) {
         rc.bottom += titleSkin->getMinSize().y;
     }
@@ -598,11 +595,11 @@ bool CRGUIWindowBase::getTitleRect( lvRect & rc )
 bool CRGUIWindowBase::getStatusRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
         rc.bottom = rc.top;
         return false;
     }
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc.shrinkBy(skin->getBorderWidths());
     rc.top = rc.bottom;
     lvPoint scrollSize = getMinScrollSize( _page, _pages );
@@ -623,9 +620,11 @@ bool CRGUIWindowBase::getStatusRect( lvRect & rc )
 bool CRGUIWindowBase::getClientRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() )
-        return true;
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     rc.shrinkBy(skin->getBorderWidths());
     rc.bottom = rc.top;
     lvRect titleRect;
@@ -647,10 +646,10 @@ lString16 CRGUIWindowBase::getScrollLabel( int page, int pages )
 lvPoint CRGUIWindowBase::getMinScrollSize( int page, int pages )
 {
     lvPoint sz(0,0);
-    //if ( pages<=1 )
-    //    return sz; // can hide scrollbar
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
-    CRRectSkinRef statusSkin = skin->getStatusSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return sz;
+    }
     CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( !sskin.isNull() ) {
 		LVFontRef sf = sskin->getFont();
@@ -686,8 +685,12 @@ lvPoint CRGUIWindowBase::getMinScrollSize( int page, int pages )
 /// calculates scroll rectangle for specified window rectangle
 bool CRGUIWindowBase::getScrollRect( lvRect & rc )
 {
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc = _rect;
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     rc.shrinkBy(skin->getBorderWidths());
     CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( sskin.isNull() )
@@ -727,8 +730,8 @@ bool CRGUIWindowBase::onTouch( int x, int y, CRGUITouchEventType evType)
     lvPoint pt = lvPoint(x, y);
     lvRect rc;
     rc = _rect;
-    if (!_skinName.empty() ) {
-        CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
         rc.shrinkBy(skin->getBorderWidths());
     }
     if (rc.isPointInside(pt)) {
@@ -823,8 +826,12 @@ int CRGUIWindowBase::getTapZone(int x, int y, CRPropRef props)
 /// calculates input box rectangle for window rectangle
 bool CRGUIWindowBase::getInputRect( lvRect & rc )
 {
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc = _rect;
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     //rc.shrinkBy(skin->getBorderWidths());
     CRRectSkinRef inputSkin = skin->getInputSkin();
     CRRectSkinRef statusSkin = skin->getStatusSkin();
@@ -840,8 +847,11 @@ bool CRGUIWindowBase::getInputRect( lvRect & rc )
 /// draw input box, if any
 void CRGUIWindowBase::drawInputBox()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef inputSkin = skin->getInputSkin();
     CRRectSkinRef statusSkin = skin->getStatusSkin();
     if ( inputSkin.isNull() || statusSkin.isNull() )
@@ -869,8 +879,11 @@ void CRGUIWindowBase::drawStatusText( LVDrawBuf & buf, const lvRect & rc, CRRect
 /// draw status bar using current skin, with optional status text and scroll/tab/page indicator
 void CRGUIWindowBase::drawStatusBar()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef statusSkin = skin->getStatusSkin();
     CRScrollSkinRef sskin = skin->getScrollSkin();
     lvRect statusRc;
@@ -908,10 +921,13 @@ void CRGUIWindowBase::drawStatusBar()
 // draws frame, title, status and client
 void CRGUIWindowBase::draw()
 {
+    CRLog::trace("getting skin at CRGUIWindowBase::draw()");
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     CRLog::trace("enter CRGUIWindowBase::draw()");
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRLog::trace("getting skin at CRGUIWindowBase::draw()");
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRLog::trace("drawing window skin background at CRGUIWindowBase::draw()");
     skin->draw( buf, _rect );
     CRLog::trace("start drawing at CRGUIWindowBase::draw()");
@@ -925,8 +941,11 @@ void CRGUIWindowBase::draw()
 /// draw title bar using current skin, with optional scroll/tab/page indicator
 void CRGUIWindowBase::drawClient()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef clientSkin = skin->getClientSkin();
     if ( clientSkin.isNull() )
         return;
@@ -1111,8 +1130,11 @@ void CRGUIWindowBase::drawScroll(CRScrollSkinRef sskin, lvRect rect, bool vertic
 /// draw title bar using current skin, with optional scroll/tab/page indicator
 void CRGUIWindowBase::drawTitleBar()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef titleSkin = skin->getTitleSkin();
     lvRect titleRc;
     if ( !getTitleRect( titleRc ) )
@@ -1171,12 +1193,13 @@ void CRGUIWindowBase::drawTitleBar()
 void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & baseSkin )
 {
     if ( !_wm->getSkin().isNull() ) {
-        CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin(skin.c_str());
-        if ( !windowSkin.isNull() ) {
-            setSkinName(skin);
-            return;
-        }
-        setSkinName(baseSkin);
+        setSkinName(skin);
+        CRWindowSkinRef windowSkin = getSkin();
+        if ( windowSkin.isNull() ) {
+            setSkinName(baseSkin);
+            _baseSkinName.clear();
+        } else
+            _baseSkinName = baseSkin;
     }
 }
 
@@ -1419,10 +1442,9 @@ CRMenuSkinRef CRMenu::getSkin()
     if ( !_skin.isNull() )
         return _skin;
     lString16 path = getSkinName();
-    lString16 path2;
     if (!path.startsWith("#"))
         path = cs16("/CR3Skin/") + path;
-    else if ( _wm->getScreenOrientation()&1 )
+    if ( _wm->getScreenOrientation()&1 )
         _skin = _wm->getSkin()->getMenuSkin( (path + "-rotated").c_str() );
     if ( !_skin )
         _skin = _wm->getSkin()->getMenuSkin( path.c_str() );
@@ -2702,5 +2724,23 @@ bool CRToolBarControl::setSelected(bool selected)
             m_buttons[m_touchIndex]->setSelected(selected);
     }
     return m_toolbar->setActive(selected);
+}
+
+CRWindowSkinRef CRGUIWindowBase::getSkin()
+{
+    if ( !_skin.isNull() )
+        return _skin;
+    lString16 path = getSkinName();
+    if (!path.startsWith("#"))
+        path = cs16("/CR3Skin/") + path;
+    if ( _wm->getScreenOrientation()&1 ) {
+        _skin = _wm->getSkin()->getWindowSkin( (path + "-rotated").c_str() );
+        if ( _skin.isNull() && !_baseSkinName.empty() ) {
+            _skin = _wm->getSkin()->getWindowSkin( (_baseSkinName + "-rotated").c_str() );
+        }
+    }
+    if ( !_skin )
+        _skin = _wm->getSkin()->getWindowSkin( path.c_str() );
+    return _skin;
 }
 

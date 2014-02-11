@@ -688,6 +688,7 @@ class CRGUIWindowBase : public CRGUIWindow
         int _pages;
         CRGUIAcceleratorTableRef _acceleratorTable;
         lString16 _skinName;
+        lString16 _baseSkinName;
         lString16 _scrollLabel;
         lString16 _caption;
         lString16 _statusText;
@@ -697,12 +698,12 @@ class CRGUIWindowBase : public CRGUIWindow
         bool _controlsCreated;
         bool _sortZorder;
         CRGUIControl *_selectedControl;
-        // draws frame, title, status and client
-        virtual void draw();
+        CRWindowSkinRef _skin;
 
+        /// draws frame, title, status and client
+        virtual void draw();
         /// use to override status text
         virtual lString16 getStatusText() { return _statusText; }
-
         /// draw status bar using current skin, with optional status text and scroll/tab/page indicator
         virtual void drawStatusBar();
         /// draw status text
@@ -734,6 +735,8 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual void setSkinName( const lString16  & skin ) { _skinName = skin; }
         /// sets skin name for window, if a skin doesn't exist set name to the baseSkin
         virtual void setSkinName( const lString16  & skin, const lString16 & baseSkin );
+        /// returns skin of this window
+        CRWindowSkinRef getSkin();
         /// returns skin name for window
         virtual lString16 getSkinName() { return _skinName; }
         /// returns true if command is processed
