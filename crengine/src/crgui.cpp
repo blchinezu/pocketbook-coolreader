@@ -253,10 +253,7 @@ void CRGUIWindowManager::reconfigure( int dx, int dy, cr_rotate_angle_t orientat
     if ( !flags )
         return;
     if ( _screen->setSize( dx, dy ) ) {
-        fullRect = _screen->getRect();
-        for ( int i=_windows.length()-1; i>=0; i-- ) {
-            _windows[i]->reconfigure( flags );
-        }
+        reconfigureWindows( flags );
         postEvent( new CRGUIUpdateEvent(true) );
     }
 }
@@ -512,9 +509,8 @@ void CRGUIWindowManager::setSkin(CRSkinRef skin)
     bool needUpdate = !_skin.isNull();
     _skin = skin;
     if (needUpdate) {
-        for ( int i=_windows.length()-1; i>=0; i-- ) {
-            _windows[i]->reconfigure( 0 );
-        }
+        fontMan->gc();
+        reconfigureWindows( 0 );
         postEvent( new CRGUIUpdateEvent(true) );
     }
 }
@@ -1874,6 +1870,15 @@ void CRMenu::reconfigure( int flags )
         _pageItems = pageItems;
         _topItem = _topItem / pageItems * pageItems;
     }
+
+    // reconfigure submenus
+    LVPtrVector<CRMenuItem> items = getItems();
+    for ( int i=0; i<items.length(); i++) {
+        if (items[i]->isSubmenu()) {
+            CRMenu * submenu = static_cast<CRMenu *>(items[i]);
+            submenu->reconfigure(flags);
+        }
+    }
 }
 
 bool CRMenu::onKeyPressed( int key, int flags )
@@ -2742,5 +2747,14 @@ CRWindowSkinRef CRGUIWindowBase::getSkin()
     if ( !_skin )
         _skin = _wm->getSkin()->getWindowSkin( path.c_str() );
     return _skin;
+}
+
+void CRGUIWindowManager::reconfigureWindows(int flags)
+{
+    for ( int i=_windows.length()-1; i>=0; i-- ) {
+        CRMenu *menu = static_cast<CRMenu *>(_windows[i]);
+        if (NULL == menu || menu->isMainMenu() )
+            _windows[i]->reconfigure( flags );
+    }
 }
 

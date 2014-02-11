@@ -499,6 +499,8 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         bool _ignoreTillUp;
         lString16 _keymapFilePath;
         lString16 _skinFilePath;
+
+        void reconfigureWindows(int flags);
     public:
         /// forward events from system queue to application queue
         virtual void forwardSystemEvents( bool waitForEvent ) { }
@@ -1120,6 +1122,8 @@ class CRMenuItem
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
         /// returns true if submenu
         virtual bool isSubmenu() const { return false; }
+        /// returns true if main menu
+        virtual bool isMainMenu() const { return false; }
         /// called on item selection
         virtual int onSelect() { return 0; }
         virtual ~CRMenuItem() { }
@@ -1178,6 +1182,7 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         _cmdToHighlight(-1)
         { _fullscreen = false; _helpHeight=0; }
         virtual bool isSubmenu() const { return true; }
+        virtual bool isMainMenu() const { return ( _menu==NULL ); }
         LVPtrVector<CRMenuItem> & getItems() { return _items; }
         CRPropRef getProps() const { return _props; }
         lString16 getPropName() const { return _propName; }
