@@ -168,8 +168,10 @@ public:
             for (int i=0; i<5; i++) {
                 toolbar->addButton(new CRToolButton(toolbar, i, lString16(), DCMD_BUTTON_PRESSED));
             }
-            if (isTouchToolBar)
+            if (isTouchToolBar) {
                 toolbar->addButton( new CRToolButton(toolbar, 0, lString16(), MCMD_CANCEL) );
+                toolbar->selectButton( 1 );
+            }
             toolbar->getRect(toolbarRect);
             _rect.top = _rect.bottom - toolbarRect.height();
         } else {
