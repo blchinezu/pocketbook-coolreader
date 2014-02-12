@@ -509,8 +509,8 @@ void CRGUIWindowManager::setSkin(CRSkinRef skin)
     bool needUpdate = !_skin.isNull();
     _skin = skin;
     if (needUpdate) {
-        fontMan->gc();
         reconfigureWindows( 0 );
+        fontMan->gc();
         postEvent( new CRGUIUpdateEvent(true) );
     }
 }
@@ -1203,6 +1203,7 @@ void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & ba
 void CRGUIWindowBase::reconfigure( int flags )
 {
     lvRect fs = _wm->getScreen()->getRect();
+    _skin.Clear();
     if ( _fullscreen ) {
         setRect( fs );
     } else {
@@ -1440,8 +1441,12 @@ CRMenuSkinRef CRMenu::getSkin()
     lString16 path = getSkinName();
     if (!path.startsWith("#"))
         path = cs16("/CR3Skin/") + path;
-    if ( _wm->getScreenOrientation()&1 )
+    if ( _wm->getScreenOrientation()&1 ) {
         _skin = _wm->getSkin()->getMenuSkin( (path + "-rotated").c_str() );
+        if ( _skin.isNull() && !_baseSkinName.empty() ) {
+            _skin = _wm->getSkin()->getMenuSkin( (_baseSkinName + "-rotated").c_str() );
+        }
+    }
     if ( !_skin )
         _skin = _wm->getSkin()->getMenuSkin( path.c_str() );
     return _skin;
@@ -2752,7 +2757,7 @@ CRWindowSkinRef CRGUIWindowBase::getSkin()
 void CRGUIWindowManager::reconfigureWindows(int flags)
 {
     for ( int i=_windows.length()-1; i>=0; i-- ) {
-        CRMenu *menu = static_cast<CRMenu *>(_windows[i]);
+        CRMenu *menu = dynamic_cast<CRMenu *>(_windows[i]);
         if (NULL == menu || menu->isMainMenu() )
             _windows[i]->reconfigure( flags );
     }

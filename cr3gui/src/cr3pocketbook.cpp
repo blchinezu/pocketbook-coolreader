@@ -1287,7 +1287,7 @@ protected:
         return _bm3x3;
     }
 
-    bool rotateApply(int params)
+    bool rotateApply(int params,  bool saveOrient = true)
     {
         int orient = GetOrientation();
         if (orient == params)
@@ -1299,10 +1299,12 @@ protected:
         }
         cr_rotate_angle_t oldOrientation = pocketbook_orientations[orient];
         cr_rotate_angle_t newOrientation = pocketbook_orientations[GetOrientation()];
-        CRPropRef newProps = getNewProps();
-        newProps->setInt(PROP_POCKETBOOK_ORIENTATION, newOrientation);
-        applySettings();
-        saveSettings(lString16::empty_str);
+        if (saveOrient) {
+            CRPropRef newProps = getNewProps();
+            newProps->setInt(PROP_POCKETBOOK_ORIENTATION, newOrientation);
+            applySettings();
+            saveSettings(lString16::empty_str);
+        }
         int dx = _wm->getScreen()->getWidth();
         int dy = _wm->getScreen()->getHeight();
         if ((oldOrientation & 1) == (newOrientation & 1)) {
@@ -1478,8 +1480,9 @@ public:
             return quickMenuApply(params);
         case mm_Orientation:
             {
+                bool saveOrientation = (params != 1525); //magic number :)
                 _newProps->getInt(PROP_POCKETBOOK_ORIENTATION, params);
-                rotateApply(cr_oriantations[params]);
+                rotateApply(cr_oriantations[params], saveOrientation);
                 return true;
             }
         case PB_CMD_ROTATE_ANGLE_SET:

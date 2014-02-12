@@ -703,7 +703,7 @@ void V3DocViewWin::applySettings()
 #ifdef CR_POCKETBOOK
     if (delta->hasProperty(PROP_POCKETBOOK_ORIENTATION)) {
         CRLog::trace("PB orientation have changed");
-        _wm->postCommand(mm_Orientation, 0);
+        _wm->postCommand(mm_Orientation, 1525);
     }
 #endif
     _docview->propsApply( delta );

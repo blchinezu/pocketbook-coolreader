@@ -79,7 +79,7 @@ CRLinksDialog::CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin, bo
     _invalidateRect.bottom = _wm->getScreen()->getHeight();
     CRToolBarSkinRef tb1Skin;
     CRToolBarSkinRef tb2Skin;
-    CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+    CRWindowSkinRef windowSkin = getSkin();
     if ( !windowSkin.isNull() ) {
         tb1Skin = windowSkin->getToolBar1Skin();
         tb2Skin = windowSkin->getToolBar2Skin();
@@ -176,7 +176,7 @@ bool CRLinksDialog::onCommand( int command, int params )
                 activate(false);
         } else if ( params== 2) {
             //swap toolbar position
-            CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+            CRWindowSkinRef windowSkin = getSkin();
             _onTop = !_onTop;
             if (_onTop)
                 _toolBar->setSkin(windowSkin->getToolBar1Skin());
