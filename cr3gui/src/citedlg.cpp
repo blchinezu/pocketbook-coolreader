@@ -86,7 +86,7 @@ protected:
     virtual void draw()
     {
         BackgroundFitWindow::draw();
-        CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+        CRWindowSkinRef windowSkin = getSkin();
         if ( windowSkin.isNull() )
             return;
         CRRectSkinRef skin = windowSkin->getClientSkin();
@@ -156,7 +156,7 @@ public:
         setDirty();
         setSkinName(L"#cite-dialog");
         CRToolBarSkinRef tbSkin;
-        CRWindowSkinRef windowSkin = _wm->getSkin()->getWindowSkin( getSkinName().c_str() );
+        CRWindowSkinRef windowSkin = getSkin();
         if ( !windowSkin.isNull() )
             tbSkin = windowSkin->getToolBar1Skin();
         if ( !tbSkin.isNull() && (tbSkin->getButtons()->length() == 7 ||

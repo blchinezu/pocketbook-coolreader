@@ -1915,10 +1915,10 @@ CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDi
     bool default_dict = false;
     setSkinName(lString16("#dict"));
     lvRect rect = _wm->getScreen()->getRect();
-    if ( !_wm->getSkin().isNull() ) {
-        _skin = _wm->getSkin()->getWindowSkin(getSkinName().c_str());
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
         _toolBarImg = _wm->getSkin()->getImage(L"cr3_dict_tools.png");
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() ) {
             getDocView()->setBackgroundColor(clientSkin->getBackgroundColor());
             getDocView()->setTextColor(clientSkin->getTextColor());

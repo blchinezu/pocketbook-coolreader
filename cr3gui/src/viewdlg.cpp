@@ -106,8 +106,6 @@ CRViewDialog::CRViewDialog(CRGUIWindowManager * wm, lString16 title, lString8 te
     _passKeysToParent = _passCommandsToParent = false;
     if ( _showFrame ) {
         setSkinName( lString16("#dialog") );
-        if ( !_wm->getSkin().isNull() )
-            _skin = _wm->getSkin()->getWindowSkin(getSkinName().c_str());
     }
     setAccelerators( _wm->getAccTables().get("browse") );
     _caption = title;
@@ -125,8 +123,9 @@ CRViewDialog::CRViewDialog(CRGUIWindowManager * wm, lString16 title, lString8 te
     getDocView()->setTextColor(0x000000);
     getDocView()->setFontSize( 20 );
     getDocView()->setPageMargins( lvRect(8,8,8,8) );
-    if ( !_skin.isNull() ) {
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() ) {
             getDocView()->setBackgroundColor(clientSkin->getBackgroundColor());
             getDocView()->setTextColor(clientSkin->getTextColor());
@@ -662,8 +661,6 @@ void CRViewDialog::draw()
 
 void CRViewDialog::draw( int pageOffset )
 {
-    //if ( _skin.isNull() )
-    //	return; // skin is not yet loaded
     _pages = _docview->getPageCount();
     _page = _docview->getCurPage() + pageOffset + 1;
     if ( _page<1 )
@@ -673,16 +670,15 @@ void CRViewDialog::draw( int pageOffset )
     lvRect clientRect = _rect;
     lvRect borders;
     LVRef<LVDrawBuf> drawbuf = _wm->getScreen()->getCanvas();
-    if ( _showFrame && !_skin.isNull() ) {
-
-        //CRRectSkinRef titleSkin = _skin->getTitleSkin();
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( _showFrame && !skin.isNull() ) {
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() )
             borders = clientSkin->getBorderWidths();
         getClientRect( clientRect );
         if ( !clientSkin.isNull() )
             clientSkin->draw( *drawbuf, clientRect );
-        _skin->draw( *drawbuf, _rect );
+        skin->draw( *drawbuf, _rect );
     }
     if ( _showFrame ) {
         drawTitleBar();
