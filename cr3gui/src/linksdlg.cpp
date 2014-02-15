@@ -32,21 +32,28 @@ void CRLinksDialog::draw()
     if (!_controlsCreated) {
         ldomXRangeList list;
         _docview->getCurrentPageLinks( list );
+        CRLog::trace("%d links found on the page", list.length());
         for (int i=0; i<list.length(); i++) {
             ldomXRange * link = list[i];
-            lvRect rc;
-            if ( link && link->getRect( rc ) ) {
-                lvPoint topLeft = rc.topLeft();
-                lvPoint bottomRight = rc.bottomRight();
-                if ( _docview->docToWindowPoint(topLeft) && _docview->docToWindowPoint(bottomRight) ) {
-                    rc.left = topLeft.x;
-                    rc.top = topLeft.y;
-                    rc.right = bottomRight.x;
-                    rc.bottom = bottomRight.y;
-                    addControl( new CRCommandControl(this, rc, MCMD_SELECT, i) );
-                } else {
-                    CRLog::error("link rect conversion error");
+            LVArray<lvRect> rects;
+            if ( link && link->getRectangles( rects ) ) {
+                for ( int j=0; j<rects.length(); j++ ) {
+                    lvRect rc = rects[j];
+                    lvPoint topLeft = rc.topLeft();
+                    lvPoint bottomRight = rc.bottomRight();
+                    if ( _docview->docToWindowPoint(topLeft) && _docview->docToWindowPoint(bottomRight) ) {
+                        rc.left = topLeft.x;
+                        rc.top = topLeft.y;
+                        rc.right = bottomRight.x;
+                        rc.bottom = bottomRight.y;
+                        CRLog::trace("Link control at[%d,%d,%d,%d]", rc.left, rc.top, rc.right, rc.bottom);
+                        addControl( new CRCommandControl(this, rc, MCMD_SELECT, i) );
+                    } else {
+                        CRLog::error("link rect conversion error");
+                    }
                 }
+            } else {
+                CRLog::trace("Couldn't get the rectangle of the link range");
             }
         }
         addControl(new CRClientControl(this, _invalidateRect));
@@ -133,30 +140,31 @@ bool CRLinksDialog::onCommand( int command, int params )
     case MCMD_SCROLL_FORWARD:
     case MCMD_SELECT_0:
         if ( NULL != _toolBar && _toolBar->isActive() ) {
-            if ( !_toolBar->selectNextButton( _linkCount==0 )) {
+            if ( !( needUpdate=_toolBar->selectNextButton( _linkCount==0 ))) {
                 if ( _docview->selectNextPageLink( true ) ) {
                     needUpdate = true;
                     _toolBar->setActive(false);
                 }
             }
-        } else if ( !_docview->selectNextPageLink( false )) {
+        } else if ( !( needUpdate=_docview->selectNextPageLink( false )) ) {
             needUpdate = _toolBar->selectFirstButton();
         }
         break;
     case MCMD_SCROLL_BACK:
     case MCMD_SELECT_9:
         if ( NULL != _toolBar && _toolBar->isActive() ) {
-            if ( !_toolBar->selectPrevButton( _linkCount==0 )) {
+            if ( !( needUpdate=_toolBar->selectPrevButton( _linkCount==0 ) ) ) {
                 if ( _docview->selectPrevPageLink( true ) ) {
                     needUpdate = true;
                     _toolBar->setActive(false);
                 }
             }
-        } else if ( !_docview->selectPrevPageLink( false )) {
+        } else if ( !( needUpdate=_docview->selectPrevPageLink( false ) )) {
             needUpdate = _toolBar->selectLastButton();
         }
         break;
     case MCMD_SELECT:
+        CRLog::trace("selectLink(%d)", params);
         return selectLink(params);
     case MCMD_SELECT_1:
     case MCMD_SELECT_2:
@@ -207,9 +215,8 @@ void CRLinksDialog::invalidateCurrentSelection()
         CRLog::debug("invalidateCurrentSelection() : no current page selection found!");
         return;
     }
-    lvRect rc;
-    if ( link->getRect( rc ) ) {
-        CRLog::debug("link docRect { %d, %d, %d, %d }", rc.left, rc.top, rc.right, rc.bottom);
+    LVArray<lvRect> rects;
+    if ( link->getRectangles( rects ) ) {
 #if 1
         _invalidateRect.left = 0;
         _invalidateRect.top = 0;
@@ -252,7 +259,7 @@ bool CRLinksDialog::selectLink(int index)
         if (_docview->goSelectedLink())
             activate(true);
     }
-    return false;
+    return true;
 }
 
 bool CRLinksDialog::onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
@@ -291,6 +298,7 @@ bool CRLinksDialog::activate(bool backPreffered)
     bool needUpdate = false;
     int curPage = _docview->getCurPage();
     if (_curPage != curPage) {
+        needUpdate = true;
         _curPage = curPage;
         ldomXRangeList list;
         _docview->getCurrentPageLinks( list );
@@ -304,9 +312,9 @@ bool CRLinksDialog::activate(bool backPreffered)
         if ( (_linkCount > 0 && !backPreffered) || NULL == _toolBar ) {
             if (NULL != _toolBar)
                 _toolBar->setActive(false);
-            needUpdate = _docview->selectFirstPageLink();
+            _docview->selectFirstPageLink();
         } else
-            needUpdate = _toolBar->selectFirstButton();
+            _toolBar->selectFirstButton();
         invalidateControls();
     }
     if (needUpdate) {

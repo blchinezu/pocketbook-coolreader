@@ -5958,6 +5958,119 @@ bool ldomXRange::getRect( lvRect & rect )
     return !rect.isEmpty();
 }
 
+bool ldomXRange::getRectangles ( LVArray<lvRect> & dest)
+{
+    if ( isNull() )
+        return false;
+    // get start and end rects
+    lvRect rc1;
+    lvRect rc2;
+    if ( !getStart().getRect(rc1) || !getEnd().getRect(rc2) )
+        return false;
+    if ( rc1.top == rc2.top && rc1.bottom == rc2.bottom ) {
+        lvRect rect;
+        // on same line
+        rect.left = rc1.left;
+        rect.top = rc1.top;
+        rect.right = rc2.right;
+        rect.bottom = rc2.bottom;
+        if ( !rect.isEmpty() ) {
+            dest.append( &rect, 1);
+            return true;
+        }
+        return false;
+    }
+    // on different lines
+    ldomNode * parent = getNearestCommonParent();
+    if ( !parent ) {
+        CRLog::trace("Couldn't get nearest parent");
+        return false;
+    }
+    //look for final node
+    ldomNode * finalNode = NULL;
+    ldomNode * p = parent;
+    ldomNode * mainNode = p->getDocument()->getRootNode();
+    for ( ; p; p = p->getParentNode() ) {
+        if (!p->isElement())
+            continue;
+        int rm = p->getRendMethod();
+        if ( rm == erm_final || rm == erm_list_item ) {
+            finalNode = p; // found final block
+        } else if ( rm == erm_invisible ) {
+            return false; // invisible !!!
+        }
+        if ( p==mainNode )
+            break;
+    }
+    if ( finalNode==NULL ) {
+        lvRect rect;
+        parent->getAbsRect(rect);
+        rect.top = rc1.top;
+        rect.bottom = rc2.bottom;
+        CRLog::trace("node w/o final parent: %d..%d", rect.top, rect.bottom);
+        if ( !rect.isEmpty() ) {
+            dest.append( &rect, 1);
+            return true;
+        }
+        return false;
+    }
+    lvRect absRect;
+    finalNode->getAbsRect( absRect );
+
+    lvPoint pt1( rc1.left - absRect.left, rc1.top - absRect.top );
+    lvPoint pt2( rc2.right - absRect.left, rc2.top - absRect.top );
+
+    RenderRectAccessor r( finalNode );
+    LFormattedTextRef txtform;
+    finalNode->renderFinalBlock( txtform, &r, r.getWidth() );
+    int lcount = txtform->GetLineCount();
+    int l = 0;
+    lvRect rect;
+    for ( ; l<lcount; l++ ) {
+        const formatted_line_t * frmline = txtform->GetLineInfo(l);
+        if ( pt1.y >= (int)(frmline->y + frmline->height) && l<lcount-1 )
+            continue;
+        rect.top = pt1.y;
+        rect.left = pt1.x;
+        rect.bottom = rect.top + frmline->height;
+        rect.right = frmline->x + frmline->width -1;
+        // found start line
+        for ( int l1=l+1; l1<lcount; l1++) {
+            const formatted_line_t * frmline = txtform->GetLineInfo(l1);
+            if (pt2.y >= (int)(frmline->y + frmline->height) && l<lcount-1) {
+                if (rect.left != frmline->x || rect.right != (frmline->x + frmline->width -1) ) {
+                    lvRect rect1(rect.left + absRect.left, rect.top + absRect.top,
+                                 rect.right + absRect.left, rect.bottom + absRect.top);
+                    dest.append( &rect1, 1);
+                    rect.left = frmline->x;
+                    rect.right = frmline->x + frmline->width -1;
+                    rect.top = frmline->y;
+                    rect.bottom = rect.top + frmline->height;
+                } else {
+                    rect.bottom = frmline->y + frmline->height;
+                }
+            } else {
+                if ( (rect.left != frmline->x || rect.right != (pt2.x-1)) && ! rect.isEmpty() ) {
+                    lvRect rect1(rect.left + absRect.left, rect.top + absRect.top,
+                                 rect.right + absRect.left, rect.bottom + absRect.top);
+                    dest.append( &rect1, 1);
+                    rect.left = frmline->x;
+                    rect.right = pt2.x-1;
+                    rect.top = frmline->y;
+                    rect.bottom = rect.top + frmline->height;
+                } else {
+                    rect.bottom = frmline->y + frmline->height;
+                }
+                lvRect rect1(rect.left + absRect.left, rect.top + absRect.top,
+                             rect.right + absRect.left, rect.bottom + absRect.top);
+                dest.append( &rect1, 1);
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /// sets range to nearest word bounds, returns true if success
 bool ldomXRange::getWordRange( ldomXRange & range, ldomXPointer & p )
 {
