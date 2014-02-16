@@ -77,7 +77,7 @@ CRLinksDialog * CRLinksDialog::create( CRGUIWindowManager * wm, CRViewDialog * d
 }
 
 CRLinksDialog::CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin, bool backPreffered )
-: CRGUIWindowBase( wm ), _docwin(docwin), _docview(docwin->getDocView())
+: CRGUIWindowBase( wm ), _docwin(docwin), _docview(docwin->getDocView()), _toolBar(NULL)
 {
     setSkinName( L"#links-dialog");
     _invalidateRect.left = 0;

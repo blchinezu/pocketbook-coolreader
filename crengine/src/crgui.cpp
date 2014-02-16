@@ -2620,18 +2620,16 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
         LVRef<CRButtonSkin> button = buttons->get(i);
         if ( !button.isNull() ) {
             width += button->getMinSize().x;
-            int h = button->getMinSize().y;
-            if ( h>rc.height() )
-                return;
         }
     }
-    if ( width>rc.width() )
-        return; // That's all for now
+    int deltaX = rc.width() - width;
     int offsetX = 0;
-    if ( tbskin->getHAlign()==SKIN_HALIGN_RIGHT )
-        offsetX = rc.width() - width;
-    else if ( tbskin->getHAlign()==SKIN_HALIGN_CENTER )
-        offsetX = rc.width() - width/2;
+    if (deltaX > 0) {
+        if ( tbskin->getHAlign()==SKIN_HALIGN_RIGHT )
+            offsetX = deltaX;
+        else if ( tbskin->getHAlign()==SKIN_HALIGN_CENTER )
+            offsetX = deltaX/2;
+    }
     int h = rc.height();
     CRToolBarControl *toolBarControl = NULL;
     if ( !_controlsCreated)
@@ -2644,15 +2642,22 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
         CRButtonSkinRef buttonSkin = buttons->get(i);
         if ( !buttonSkin.isNull() ) {
             rc2.left += offsetX;
+            if (rc2.left >= rc.right)
+                break;
             rc2.right = rc2.left + buttonSkin->getMinSize().x;
-            if ( tbskin->getVAlign()==SKIN_VALIGN_BOTTOM )
-                rc2.top = rc2.bottom - buttonSkin->getMinSize().y;
-            else if ( tbskin->getVAlign()==SKIN_VALIGN_CENTER ) {
-                int imgh = buttonSkin->getMinSize().y;
-                rc2.top += (h - imgh/2);
-                rc2.bottom = rc2.top + imgh;
-            } else
-                rc2.bottom = rc2.top + buttonSkin->getMinSize().y;
+            if (rc2.right > rc.right)
+                rc2.right = rc.right;
+            int imgh = buttonSkin->getMinSize().y;
+            int deltaY = h - imgh;
+            if ( deltaY > 0) {
+                if ( tbskin->getVAlign()==SKIN_VALIGN_BOTTOM )
+                    rc2.top += deltaY;
+                else if ( tbskin->getVAlign()==SKIN_VALIGN_CENTER ) {
+                    rc2.top += (deltaY/2);
+                    rc2.bottom = rc2.top + imgh;
+                } else
+                    rc2.bottom = rc2.top + imgh;
+            }
             if ( NULL != toolBarControl) {
                 CRToolButton *button = m_buttons[i];
                 toolBarControl->addButton(new CRButtonControl(m_window, rc2, buttonSkin,
