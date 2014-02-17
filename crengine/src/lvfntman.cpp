@@ -974,7 +974,9 @@ public:
         }
         int flags = FT_LOAD_DEFAULT;
         flags |= (!_drawMonochrome ? FT_LOAD_TARGET_NORMAL : FT_LOAD_TARGET_MONO);
-        if (_hintingMode == HINTING_MODE_AUTOHINT)
+        if (_hintingMode == HINTING_MODE_LIGHT)
+	    flags |= FT_LOAD_TARGET_LIGHT;
+        else if (_hintingMode == HINTING_MODE_AUTOHINT)
             flags |= FT_LOAD_FORCE_AUTOHINT;
         else if (_hintingMode == HINTING_MODE_DISABLED)
             flags |= FT_LOAD_NO_AUTOHINT | FT_LOAD_NO_HINTING;
@@ -1185,7 +1187,9 @@ public:
         if ( !item ) {
 
             int rend_flags = FT_LOAD_RENDER | ( !_drawMonochrome ? FT_LOAD_TARGET_NORMAL : (FT_LOAD_TARGET_MONO) ); //|FT_LOAD_MONOCHROME|FT_LOAD_FORCE_AUTOHINT
-            if (_hintingMode == HINTING_MODE_AUTOHINT)
+            if (_hintingMode == HINTING_MODE_LIGHT)
+                rend_flags |= FT_LOAD_TARGET_LIGHT;
+            else if (_hintingMode == HINTING_MODE_AUTOHINT)
                 rend_flags |= FT_LOAD_FORCE_AUTOHINT;
             else if (_hintingMode == HINTING_MODE_DISABLED)
                 rend_flags |= FT_LOAD_NO_AUTOHINT | FT_LOAD_NO_HINTING;

@@ -5550,7 +5550,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	lString16Collection list;
 	fontMan->getFaceList(list);
 	static int def_aa_props[] = { 2, 1, 0 };
-	static int def_hint_props[] = {2, 0, 1, 2 };
+	static int def_hint_props[] = {2, 0, 1, 3 };
 
 	props->setIntDef(PROP_MIN_FILE_SIZE_TO_CACHE,
             300000); // ~6M
@@ -5610,8 +5610,8 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	props->limitValueList(PROP_EMBEDDED_STYLES, bool_options_def_true, 2);
 	props->limitValueList(PROP_EMBEDDED_FONTS, bool_options_def_true, 2);
 #endif
-	static int int_option_hinting[] = { 0, 1, 2 };
-	props->limitValueList(PROP_FONT_HINTING, int_option_hinting, 3);
+	static int int_option_hinting[] = { 0, 1, 2, 3 };
+	props->limitValueList(PROP_FONT_HINTING, int_option_hinting, 4);
     static int int_options_1_2[] = { 2, 1 };
 	props->limitValueList(PROP_LANDSCAPE_PAGES, int_options_1_2, 2);
 	props->limitValueList(PROP_PAGE_VIEW_MODE, bool_options_def_true, 2);
@@ -5757,7 +5757,7 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             }
         } else if (name == PROP_FONT_HINTING) {
             int mode = props->getIntDef(PROP_FONT_HINTING, (int)HINTING_MODE_AUTOHINT);
-            if ((int)fontMan->GetHintingMode() != mode && mode>=0 && mode<=2) {
+            if ((int)fontMan->GetHintingMode() != mode && mode>=0 && mode<=3) {
                 //CRLog::debug("Setting hinting mode to %d", mode);
                 fontMan->SetHintingMode((hinting_mode_t)mode);
                 requestRender();

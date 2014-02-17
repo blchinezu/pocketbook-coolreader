@@ -1226,6 +1226,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("No hinting"), "0"},
         {_("Use bytecode"), "1"},
         {_("Autohinting"), "2"},
+        {_("Light"), "3"},
         {NULL, NULL}
     };
 
