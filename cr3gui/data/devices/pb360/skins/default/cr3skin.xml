@@ -19,7 +19,7 @@
   <toolbar id="links-toolbar-down" base="#links-toolbar-up" pos="0,-42">
     <override item="3">
 	<button normal="toolbar_move_up.png" selected="toolbar_move_up_sel.png"/>
-    </override
+    </override>
   </toolbar>
   <scroll id="titlescroll" autohide="true" show-page-numbers="true" location="title"
       pos="-120,0" size="130, 100%" halign="right" valign="center">
@@ -122,13 +122,13 @@
   <window id="cite-dialog" base="#dialog">
     <toolbar1 base="#cite-toolbar" pos="40%, -42"/>
   </window>
-  <window id="cite-dialog-rotated" base="cite-dialog"/>
+  <window id="cite-dialog-rotated" base="#cite-dialog"/>
 
   <window id="links-dialog" base="#dialog">
     <toolbar1 base="#links-toolbar-up"/>
     <toolbar2 base="#links-toolbar-down"/>
   </window>
-  <window id="cite-dialog-rotated" base="cite-dialog"/>
+  <window id="links-dialog-rotated" base="#links-dialog"/>
 
   <window id="dict" size="100%, 33%">
 		<title>
@@ -418,6 +418,10 @@
         </item>
   </menu>
   <menu id="bookmarks-rotated" base="#bookmarks" min-item-count="5" max-item-count="5" />
+  <menu id="recent-books" base="#bookmarks"/>
+  <menu id="recent-books-rotated" base="#bookmarks-rotated"/>
+  <menu id="cites-list" base="#bookmarks"/>
+  <menu id="cites-list-rotated" base="#bookmarks-rotated"/>
   <menu id="settings" base="#main" fullscreen="true">
         <value base="#menu-value">
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="true" valign="bottom" halign="right"/>
