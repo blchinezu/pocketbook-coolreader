@@ -2610,11 +2610,12 @@ int CRPbDictionaryView::getDesiredHeight()
 {
     int dh = (_wm->getScreenOrientation() & 0x1) ? 200 : 300;
 
-    if (_skin.isNull())
+    CRWindowSkinRef skin = getSkin();
+    if (skin.isNull())
         return dh;
     lvRect screenRect = _wm->getScreen()->getRect();
     lvRect skinRect;
-    _skin->getRect(skinRect, screenRect);
+    skin->getRect(skinRect, screenRect);
     int sh = (screenRect.height() >> 1) - PB_LINE_HEIGHT;
     if (skinRect.height() <= 0)
         return dh;
