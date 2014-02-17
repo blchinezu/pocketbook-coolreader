@@ -700,14 +700,14 @@ void CRViewDialog::setRect( const lvRect & rc )
     CRLog::info("CRViewDialog::setRect(%d,%d,%d,%d)", rc.left, rc.top, rc.right, rc.bottom);
     _rect = rc;
     lvRect clientRect = _rect;
-    if ( _showFrame ) {
-        if ( !_skin.isNull() )
-            getClientRect(clientRect);
+    CRWindowSkinRef skin = getSkin();
+    if ( _showFrame && !skin.isNull() ) {
+        getClientRect(clientRect);
     }
     _docview->Resize( clientRect.width(), clientRect.height() );
     _docview->checkRender();
     _pages = _docview->getPageCount();
-    if ( !_skin.isNull() )
+    if ( !_showFrame && !skin.isNull() )
         getClientRect(clientRect);
     _docview->Resize( clientRect.width(), clientRect.height() );
     setDirty();

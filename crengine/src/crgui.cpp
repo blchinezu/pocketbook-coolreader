@@ -1186,6 +1186,13 @@ void CRGUIWindowBase::drawTitleBar()
     titleSkin->drawText( buf, textRect, _caption );
 }
 
+void CRGUIWindowBase::setSkinName( const lString16  & skin )
+{
+    _skinName = skin;
+    _skin.Clear();
+    _baseSkinName.clear();
+}
+
 void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & baseSkin )
 {
     if ( !_wm->getSkin().isNull() ) {
@@ -1193,7 +1200,6 @@ void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & ba
         CRWindowSkinRef windowSkin = getSkin();
         if ( windowSkin.isNull() ) {
             setSkinName(baseSkin);
-            _baseSkinName.clear();
         } else
             _baseSkinName = baseSkin;
     }
@@ -1257,9 +1263,10 @@ bool CRGUIWindowBase::onKeyPressed( int key, int flags )
 void CRDocViewWindow::draw()
 {
     lvRect clientRect = _rect;
-    if ( !_skin.isNull() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
         if ( getClientRect( clientRect ) ) {
-            _skin->draw( *_wm->getScreen()->getCanvas(), _rect );
+            skin->draw( *_wm->getScreen()->getCanvas(), _rect );
             drawTitleBar();
             drawStatusBar();
         }

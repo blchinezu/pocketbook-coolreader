@@ -734,7 +734,7 @@ class CRGUIWindowBase : public CRGUIWindow
         /// called on system configuration change: screen size and orientation
         virtual void reconfigure( int flags );
         /// sets skin name for window
-        virtual void setSkinName( const lString16  & skin ) { _skinName = skin; }
+        virtual void setSkinName( const lString16  & skin );
         /// sets skin name for window, if a skin doesn't exist set name to the baseSkin
         virtual void setSkinName( const lString16  & skin, const lString16 & baseSkin );
         /// returns skin of this window
@@ -995,7 +995,6 @@ class CRDocViewWindow : public CRGUIWindowBase
 {
     protected:
         LVDocView * _docview;
-	    CRWindowSkinRef _skin;
         virtual void draw();
     public:
         LVDocView * getDocView()
