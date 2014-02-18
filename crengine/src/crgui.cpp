@@ -1205,6 +1205,19 @@ void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & ba
     }
 }
 
+void CRGUIWindowBase::addControl(CRGUIControl *control)
+{
+    _controls.add(control);
+    _sortZorder = true;
+}
+
+void CRGUIWindowBase::invalidateControls()
+{
+    _controls.clear();
+    _controlsCreated = false;
+    _selectedControl = NULL;
+}
+
 /// called on system configuration change: screen size and orientation
 void CRGUIWindowBase::reconfigure( int flags )
 {

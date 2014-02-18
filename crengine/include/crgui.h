@@ -784,17 +784,8 @@ class CRGUIWindowBase : public CRGUIWindow
         /// set fullscreen state for window
         virtual void setFullscreen( bool fullscreen ) { _fullscreen = fullscreen; }
         virtual CRGUIWindowManager * getWindowManager() { return _wm; }
-        void addControl(CRGUIControl *control)
-        {
-            _controls.add(control);
-            _sortZorder = true;
-        }
-        void invalidateControls()
-        {
-            _controls.clear();
-            _controlsCreated = false;
-            _selectedControl = NULL;
-        }
+        void addControl(CRGUIControl *control);
+        void invalidateControls();
         virtual bool isScrollEnabled(bool down) { return false; }
         CRGUIWindowBase( CRGUIWindowManager * wm )
         : _wm(wm), _visible(true), _fullscreen(true), _dirty(true), _passKeysToParent(false), _passCommandsToParent(false)
