@@ -86,6 +86,7 @@ enum MainMenuItems_t {
     mm_showChapterMarks,
     mm_StatusFontEmbolden,
     mm_Skin,
+    mm_TapZoneSize,
     mm_Last
 };
 

@@ -1247,6 +1247,17 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t tap_zone_sizes[] = {
+        {"20%",  "20"},
+        {"25%",  "25"},
+        {"30%",  "30"},
+        {"33%",  "33"},
+        {"40%",  "40"},
+        {"50%",  "50"},
+        {"60%",  "60"},
+        {NULL, NULL}
+    };
+
     CRLog::trace("showSettingsMenu() - %d property values found", props->getCount() );
 
     setSkinName(lString16("#settings"));
@@ -1486,6 +1497,16 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         touchMenu = new CRTapZoneSettingsMenuItem(controlSettingsMenu, props, _("Long tap action"),
                                                   PROP_TAP_ZONE_ACTION_LONG);
         controlSettingsMenu->addItem(touchMenu);
+
+        createSettingsMenuItem(controlSettingsMenu, mm_TapZoneSize, _("Height of the upper tap zone"),
+                               valueFont, PROP_TAP_ZONE_HEIGHT_1, tap_zone_sizes);
+        createSettingsMenuItem(controlSettingsMenu, mm_TapZoneSize, _("Height of the middle tap zone"),
+                               valueFont, PROP_TAP_ZONE_HEIGHT_2, tap_zone_sizes);
+        createSettingsMenuItem(controlSettingsMenu, mm_TapZoneSize, _("Width of the left tap zone"),
+                               valueFont, PROP_TAP_ZONE_WIDTH_1, tap_zone_sizes);
+        createSettingsMenuItem(controlSettingsMenu, mm_TapZoneSize, _("Width of the middle tap zone"),
+                               valueFont, PROP_TAP_ZONE_WIDTH_2, tap_zone_sizes);
+
     }
     if ( !controlSettingsMenu->getItems().empty()) {
         controlSettingsMenu->reconfigure( 0 );
