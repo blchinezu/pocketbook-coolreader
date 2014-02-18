@@ -3309,6 +3309,7 @@ int InitDoc(const char *exename, char *fileName)
     lString16Collection fontDirs;
     fontDirs.add(lString16(L""USERFONTDIR));
     fontDirs.add(lString16(L""SYSTEMFONTDIR));
+    fontDirs.add(lString16(L""USERDATA"/share/cr3/fonts"));
     fontDirs.add(lString16(L""USERDATA2"/fonts"));
     CRLog::info("INIT...");
     if (!InitCREngine(exename, fontDirs))
