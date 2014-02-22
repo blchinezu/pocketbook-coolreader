@@ -2791,7 +2791,7 @@ bool LVDocView::goLink(lString16 link, bool savePos) {
 			m_doc_props->setString(DOC_PROP_CODE_BASE, LVExtractPath(filename));
 			m_doc_props->setString(DOC_PROP_FILE_SIZE, lString16::itoa(
 					(int) stream->GetSize()));
-			m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->crc32());
+            m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->getcrc32());
 			// TODO: load document from stream properly
 			if (!LoadDocument(stream)) {
                 createDefaultDocument(cs16("Load error"), lString16(
@@ -3490,7 +3490,7 @@ bool LVDocView::LoadDocument(const lChar16 * fname) {
 		m_doc_props->setString(DOC_PROP_FILE_SIZE, lString16::itoa(
 				(int) stream->GetSize()));
 		m_doc_props->setString(DOC_PROP_FILE_NAME, arcItemPathName);
-		m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->crc32());
+        m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->getcrc32());
 		// loading document
 		if (LoadDocument(stream)) {
 			m_filename = lString16(fname);
@@ -3536,7 +3536,7 @@ bool LVDocView::LoadDocument(const lChar16 * fname) {
     m_doc_props->setString(DOC_PROP_FILE_NAME, fn);
 	m_doc_props->setString(DOC_PROP_FILE_SIZE, lString16::itoa(
 			(int) stream->GetSize()));
-	m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->crc32());
+    m_doc_props->setHex(DOC_PROP_FILE_CRC32, stream->getcrc32());
 
 	if (LoadDocument(stream)) {
 		m_filename = lString16(fname);
@@ -3933,7 +3933,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 					m_doc_props->setString(DOC_PROP_FILE_NAME, fn);
 					m_doc_props->setString(DOC_PROP_CODE_BASE, LVExtractPath(fn) );
 					m_doc_props->setString(DOC_PROP_FILE_SIZE, lString16::itoa((int)m_stream->GetSize()));
-					m_doc_props->setHex(DOC_PROP_FILE_CRC32, m_stream->crc32());
+                    m_doc_props->setHex(DOC_PROP_FILE_CRC32, m_stream->getcrc32());
 					found = true;
 				}
 			}
@@ -4135,7 +4135,7 @@ bool LVDocView::ParseDocument() {
 				m_doc_props->getStringDef(DOC_PROP_FILE_NAME, "untitled");
 		fn = LVExtractFilename(fn);
 		lUInt32 crc = 0;
-		m_stream->crc32(crc);
+        m_stream->getcrc32(crc);
 		CRLog::debug("Check whether document %s crc %08x exists in cache",
 				UnicodeToUtf8(fn).c_str(), crc);
 

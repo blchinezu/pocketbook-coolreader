@@ -1,6 +1,6 @@
 #include "docview.h"
 #include "lvdocview.h"
-#include "crgl.h"
+//#include "crgl.h"
 
 
 
@@ -430,9 +430,16 @@ DocViewNative::DocViewNative()
 
 static DocViewNative * getNative(JNIEnv * env, jobject _this)
 {
+	if (!gNativeObjectID) {
+		CRLog::error("gNativeObjectID is not defined");
+	    jclass rvClass = env->FindClass("org/coolreader/crengine/DocView");
+	    gNativeObjectID = env->GetFieldID(rvClass, "mNativeObject", "I");
+	    if (!gNativeObjectID)
+	    	return NULL;
+	}
 	DocViewNative * res = (DocViewNative *)env->GetIntField(_this, gNativeObjectID);
 	if (res == NULL)
-		CRLog::warn("Native DocView is NULL");
+		CRLog::error("Native DocView is NULL");
 	return res;
 }
 
@@ -634,7 +641,9 @@ int DocViewNative::doCommand( int cmd, int param )
 JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_createInternal
   (JNIEnv * env, jobject _this)
 {
+	CRLog::info("******************************************************************");
 	CRLog::info("createInternal: Creating new RenderView");
+	CRLog::info("******************************************************************");
     jclass rvClass = env->FindClass("org/coolreader/crengine/DocView");
     gNativeObjectID = env->GetFieldID(rvClass, "mNativeObject", "I");
     DocViewNative * obj = new DocViewNative();
@@ -652,11 +661,14 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_destroyInternal
 {
     DocViewNative * p = getNative(env, view);
     if ( p!=NULL ) {
+    	CRLog::info("******************************************************************");
 		CRLog::info("Destroying RenderView");
+		CRLog::info("******************************************************************");
     	delete p;
 	    jclass rvClass = env->FindClass("org/coolreader/crengine/DocView");
 	    gNativeObjectID = env->GetFieldID(rvClass, "mNativeObject", "I");
 	    env->SetIntField(view, gNativeObjectID, 0);
+	    gNativeObjectID = 0;
 	} else {
 		CRLog::error("RenderView is already destroyed");
 	}
@@ -672,6 +684,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageInternal
 {
     CRLog::trace("getPageImageInternal entered : bpp=%d", bpp);
     DocViewNative * p = getNative(env, view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     //CRLog::info("Initialize callback");
 	DocViewCallback callback( env, p->_docview, view );	
     //CRLog::info("Initialized callback");
@@ -696,31 +712,6 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageInternal
 
 /*
  * Class:     org_coolreader_crengine_DocView
- * Method:    getPageImageTextureInternal
- * Signature: ([III)V
- */
-JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_getPageImageTextureInternal
-  (JNIEnv * env, jobject view, jintArray buf, jint width, jint height, jint bpp)
-{
-    CRLog::trace("getPageImageTextureInternal entered : %dx%d bpp=%d", width, height, bpp);
-    DocViewNative * p = getNative(env, view);
-	DocViewCallback callback( env, p->_docview, view );
-	PageImageTextureInfo ti;
-	getPageImageTexture(p->_docview, width, height, bpp, ti);
-	int len = env->GetArrayLength(buf);
-	if (len < 5)
-		return;
-    lInt32 * data = (lInt32 *)env->GetIntArrayElements(buf, 0);
-    data[0] = ti.dx;
-    data[1] = ti.dy;
-    data[2] = ti.tdx;
-    data[3] = ti.tdy;
-    data[4] = ti.textureId;
-    env->ReleaseIntArrayElements(buf, (jint*)data, 0);}
-
-
-/*
- * Class:     org_coolreader_crengine_DocView
  * Method:    checkImageInternal
  * Signature: (IILorg/coolreader/crengine/ImageInfo;)Z
  */
@@ -730,6 +721,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkImageIntern
     //CRLog::trace("checkImageInternal entered");
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     int dx, dy;
     bool needRotate = false;
     CRObjectAccessor acc(_env, imageInfo);
@@ -756,6 +751,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_checkBookmarkInt
   (JNIEnv * _env, jobject view, jint x, jint y, jobject bmk) {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     CRObjectAccessor acc(_env, bmk);
     //CRLog::trace("checkBookmarkInternal(%d, %d)", x, y);
     CRBookmark * found = p->_docview->findBookmarkByPoint(lvPoint(x, y));
@@ -780,6 +779,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_drawImageInterna
     CRLog::trace("checkImageInternal entered");
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     CRObjectAccessor acc(_env, imageInfo);
     int dx = CRIntField(acc,"scaledWidth").get();
     int dy = CRIntField(acc,"scaledHeight").get();
@@ -837,6 +840,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_closeImageIntern
 {
     CRLog::trace("checkImageInternal entered");
     DocViewNative * p = getNative(env, view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 	return p->closeImage() ? JNI_TRUE : JNI_FALSE;
 }
 
@@ -850,6 +857,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_loadDocumentInte
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 	DocViewCallback callback( _env, p->_docview, _this );
 	lString16 str = env.fromJavaString(s);
     bool res = p->loadDocument(str);
@@ -867,6 +878,10 @@ JNIEXPORT jobject JNICALL Java_org_coolreader_crengine_DocView_getSettingsIntern
 	CRLog::trace("DocView_getSettingsInternal");
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return NULL;
+    }
 	CRPropRef props = p->_docview->propsGetCurrent();
     return env.toJavaProperties(props);
 }
@@ -884,6 +899,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_applySettingsInt
 	CRLog::trace("DocView_applySettingsInternal");
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 	DocViewCallback callback( _env, p->_docview, _this );
 	CRPropRef props = env.fromJavaProperties(_props);
 	CRPropRef oldProps = p->_docview->propsGetCurrent();
@@ -950,6 +969,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_setStylesheetInterna
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _view);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
 	DocViewCallback callback( _env, p->_docview, _view );
     lString8 css8 = UnicodeToUtf8(env.fromJavaString(jcss));
     p->_docview->setStyleSheet(css8);
@@ -966,6 +989,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_resizeInternal
 	CRJNIEnv env(_env);
 	CRLog::debug("resizeInternal(%d, %d) is called", dx, dy);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
 	DocViewCallback callback( _env, p->_docview, _this );
     p->_docview->Resize(dx, dy);
     //p->_docview->checkRender();
@@ -982,6 +1009,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_doCommandInterna
   (JNIEnv * _env, jobject _this, jint cmd, jint param)
 {
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 	DocViewCallback callback( _env, p->_docview, _this );	
     if ( cmd>=READERVIEW_DCMD_START && cmd<=READERVIEW_DCMD_END) {
     	return p->doCommand(cmd, param)?JNI_TRUE:JNI_FALSE;
@@ -1000,7 +1031,11 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_isRenderedIntern
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
-	if (p == NULL || !p->_docview->isDocumentOpened())
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
+	if (!p->_docview->isDocumentOpened())
 		return JNI_FALSE;
 	return p->_docview->IsRendered() ? JNI_TRUE : JNI_FALSE;
 }
@@ -1068,6 +1103,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_updateBookInfoIntern
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
 	if ( !p->_docview->isDocumentOpened() )
 		return;
 	DocViewCallback callback( _env, p->_docview, _this );
@@ -1100,6 +1139,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_goToPositionInte
 {
 	CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 	if ( !p->_docview->isDocumentOpened() )
 		return JNI_FALSE;
 	DocViewCallback callback( _env, p->_docview, _this );
@@ -1123,6 +1166,10 @@ JNIEXPORT jobject JNICALL Java_org_coolreader_crengine_DocView_getPositionPropsI
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
 
     jclass cls = _env->FindClass("org/coolreader/crengine/PositionProperties");
     jmethodID mid = _env->GetMethodID(cls, "<init>", "()V");
@@ -1174,6 +1221,10 @@ JNIEXPORT jobject JNICALL Java_org_coolreader_crengine_DocView_getTOCInternal
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return NULL;
+    }
 	if ( !p->_docview->isDocumentOpened() )
 		return NULL;
 	DocViewCallback callback( _env, p->_docview, _this );
@@ -1191,6 +1242,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_clearSelectionIntern
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     if ( !p->_docview->isDocumentOpened() )
         return;
     p->clearSelection();
@@ -1206,6 +1261,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_findTextInternal
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     if ( !p->_docview->isDocumentOpened() )
         return JNI_FALSE;
     return p->findText(env.fromJavaString(jpattern), origin, reverse, caseInsensitive);
@@ -1221,6 +1280,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_setBatteryStateInter
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     p->_docview->setBatteryState(state);
 }
 
@@ -1234,6 +1297,10 @@ JNIEXPORT jint JNICALL Java_org_coolreader_crengine_DocView_swapToCacheInternal
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return 0;
+    }
     CRTimerUtil timeout(60000); // 1 minute, can be cancelled by Engine.suspendContinuousOperationInternal()
     _timeoutControl = timeout;
     return p->_docview->updateCache(_timeoutControl);
@@ -1250,6 +1317,10 @@ JNIEXPORT jbyteArray JNICALL Java_org_coolreader_crengine_DocView_getCoverPageDa
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return NULL;
+    }
 //	CRLog::trace("getCoverPageDataInternal() : requesting cover image stream");
     LVStreamRef stream = p->_docview->getCoverPageImageStream();
 //	CRLog::trace("getCoverPageDataInternal() : converting stream to byte array");
@@ -1271,6 +1342,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_setPageBackgroundTex
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     LVImageSourceRef img;
     if ( jdata!=NULL ) {
         LVStreamRef stream = env.jbyteArrayToStream( jdata );
@@ -1291,6 +1366,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_updateSelectionInter
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     CRObjectAccessor sel(_env, _sel);
     CRStringField sel_startPos(sel, "startPos");
     CRStringField sel_endPos(sel, "endPos");
@@ -1349,6 +1428,10 @@ JNIEXPORT jboolean JNICALL Java_org_coolreader_crengine_DocView_moveSelectionInt
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     CRObjectAccessor sel(_env, _sel);
     CRStringField sel_startPos(sel, "startPos");
     CRStringField sel_endPos(sel, "endPos");
@@ -1548,6 +1631,10 @@ JNIEXPORT jstring JNICALL Java_org_coolreader_crengine_DocView_checkLinkInternal
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return false;
+    }
     lString16 link;
     for ( int r=0; r<=delta; r+=5 ) {
     	link = p->getLink(x, y, r);
@@ -1567,6 +1654,10 @@ JNIEXPORT jint JNICALL Java_org_coolreader_crengine_DocView_goLinkInternal
 {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return 0;
+    }
     lString16 link = env.fromJavaString(_link);
     bool res = p->_docview->goLink( link, true );
     return res ? 1 : 0;
@@ -1581,6 +1672,10 @@ JNIEXPORT void JNICALL Java_org_coolreader_crengine_DocView_hilightBookmarksInte
   (JNIEnv * _env, jobject _this, jobjectArray list) {
     CRJNIEnv env(_env);
     DocViewNative * p = getNative(_env, _this);
+    if (!p) {
+    	CRLog::error("Cannot get native view");
+    	return;
+    }
     LVPtrVector<CRBookmark> bookmarks;
     if (list) {
     	int len = _env->GetArrayLength(list);

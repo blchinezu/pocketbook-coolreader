@@ -513,8 +513,8 @@ void cr3androidFatalErrorHandler(int errorCode, const char * errorText )
 {
 	static char str[1001];
 	snprintf(str, 1000, "CoolReader Fatal Error #%d: %s", errorCode, errorText);
-	LOGE(str);
-	LOGASSERTFAILED(errorText, str);
+	LOGE("CoolReader Fatal Error #%d: %s", errorCode, errorText);
+	LOGASSERTFAILED(errorText, "CoolReader Fatal Error #%d: %s", errorCode, errorText);
 }
 
 /// set fatal error handler
@@ -674,7 +674,7 @@ static JNINativeMethod sEngineMethods[] = {
   {"scanBookPropertiesInternal", "(Lorg/coolreader/crengine/FileInfo;)Z", (void*)Java_org_coolreader_crengine_Engine_scanBookPropertiesInternal},
   {"setHyphenationMethod", "(I[B)Z", (void*)Java_org_coolreader_crengine_Engine_setHyphenationMethod},
   {"getArchiveItemsInternal", "(Ljava/lang/String;)[Ljava/lang/String;", (void*)Java_org_coolreader_crengine_Engine_getArchiveItemsInternal},
-  {"isLink", "(Ljava/lang/String;)Ljava/lang/String;", (void*)JNICALL Java_org_coolreader_crengine_Engine_isLink},
+  {"isLink", "(Ljava/lang/String;)Ljava/lang/String;", (void*)Java_org_coolreader_crengine_Engine_isLink},
   {"suspendLongOperationInternal", "()V", (void*)Java_org_coolreader_crengine_Engine_suspendLongOperationInternal},
   {"setKeyBacklightInternal", "(I)Z", (void*)Java_org_coolreader_crengine_Engine_setKeyBacklightInternal},
   {"scanBookCoverInternal", "(Ljava/lang/String;)[B", (void*)Java_org_coolreader_crengine_Engine_scanBookCoverInternal},
@@ -713,8 +713,7 @@ static JNINativeMethod sDocViewMethods[] = {
   {"closeImageInternal", "()Z", (void*)Java_org_coolreader_crengine_DocView_closeImageInternal},
   {"hilightBookmarksInternal", "([Lorg/coolreader/crengine/Bookmark;)V", (void*)Java_org_coolreader_crengine_DocView_hilightBookmarksInternal},
   {"checkBookmarkInternal", "(IILorg/coolreader/crengine/Bookmark;)Z", (void*)Java_org_coolreader_crengine_DocView_checkBookmarkInternal},
-  {"isRenderedInternal", "()Z", (void*)Java_org_coolreader_crengine_DocView_isRenderedInternal},
-  {"getPageImageTextureInternal", "([III)V", (void*)Java_org_coolreader_crengine_DocView_getPageImageTextureInternal},
+  {"isRenderedInternal", "()Z", (void*)Java_org_coolreader_crengine_DocView_isRenderedInternal}
 };
 
 /*

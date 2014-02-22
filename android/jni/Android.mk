@@ -3,7 +3,7 @@ LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
 
-LOCAL_MODULE    := cr3engine-3-1-0
+LOCAL_MODULE    := cr3engine-3-1-1
 
 # Generate CREngine blob with statically linked libjpeg, libpng, libfreetype, chmlib
 # TODO: build libraries using separate makefiles
@@ -26,7 +26,7 @@ LOCAL_C_INCLUDES := \
     -I $(CR3_ROOT)/thirdparty/chmlib/src
 
 
-LOCAL_CFLAGS += $(CRFLAGS) $(CRENGINE_INCLUDES) -Wno-psabi -Wno-unused-variable -Wno-sign-compare -Wno-write-strings -Wno-main -Wno-unused-but-set-variable -Wno-unused-function -Werror -Wall
+LOCAL_CFLAGS += $(CRFLAGS) $(CRENGINE_INCLUDES) -Wno-psabi -Wno-unused-variable -Wno-sign-compare -Wno-write-strings -Wno-main -Wno-unused-but-set-variable -Wno-unused-function -Wall
 
 
 CRENGINE_SRC_FILES := \
@@ -60,7 +60,7 @@ CRENGINE_SRC_FILES := \
     ../../crengine/src/lvtextfm.cpp \
     ../../crengine/src/lvrend.cpp \
     ../../crengine/src/wolutil.cpp \
-    ../../crengine/src/crgl.cpp \
+    ../../crengine/src/crconcurrent.cpp \
     ../../crengine/src/hist.cpp
 #    ../../crengine/src/cri18n.cpp
 #    ../../crengine/src/crgui.cpp \
@@ -233,7 +233,7 @@ LOCAL_SRC_FILES := \
     $(CHM_SRC_FILES) \
     $(ANTIWORD_SRC_FILES)
 
-LOCAL_LDLIBS    := -lm -llog -lz -lGLESv1_CM -ldl -Wl,-Map=cr3engine.map
+LOCAL_LDLIBS    := -lm -llog -lz -ldl -Wl,-Map=cr3engine.map
 #-ljnigraphics
 
 include $(BUILD_SHARED_LIBRARY)
