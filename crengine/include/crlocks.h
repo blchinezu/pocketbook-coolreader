@@ -1,7 +1,6 @@
 #ifndef CRLOCKS_H
 #define CRLOCKS_H
 
-#if CR3_CONCURRENCY_SUPPORTED
 #include "lvautoptr.h"
 
 class CRMutex {
@@ -59,6 +58,7 @@ extern CRMutex * _fontGlyphCacheMutex;
 extern CRMutex * _fontLocalGlyphCacheMutex;
 extern CRMutex * _crengineMutex;
 
+#if CR3_CONCURRENCY_SUPPORTED
 // use REF_GUARD to acquire LVProtectedRef mutex
 #define REF_GUARD CRGuard _refGuard(_refMutex); CR_UNUSED(_refGuard);
 // use FONT_GUARD to acquire font operations mutex
