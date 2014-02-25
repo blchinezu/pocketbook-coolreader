@@ -262,6 +262,31 @@ bool CRFileHist::loadFromStream( LVStreamRef stream )
     return true;
 }
 
+lString16 EscapeAmpersand( lString16 s )
+{
+    const lChar16 * str = s.c_str();
+    for ( int i=0; str[i]; i++ ) {
+        if ( str[i]=='&'  ) {
+            // Ampersand char found
+            lString16 res;
+            res.reserve(s.length() + 4);
+            res.append(str, i);
+            res.append( "&amp;" );
+
+            // continue conversion
+            for ( i++; str[i]; i++ ) {
+                if ( str[i]=='&'  ) {
+                    res.append( "&amp;" );
+                } else {
+                    res.append(1, str[i]);
+                }
+            }
+            return res;
+        }
+    }
+    return s;
+}
+
 static void putTagValue( LVStream * stream, int level, const char * tag, lString16 value )
 {
     for ( int i=0; i<level; i++ )
@@ -313,7 +338,7 @@ bool CRFileHist::saveToStream( LVStream * targetStream )
         putTagValue( stream, 3, "doc-title", rec->getTitle() );
         putTagValue( stream, 3, "doc-author", rec->getAuthor() );
         putTagValue( stream, 3, "doc-series", rec->getSeries() );
-        putTagValue( stream, 3, "doc-filename", rec->getFileName() );
+        putTagValue( stream, 3, "doc-filename", EscapeAmpersand(rec->getFileName()) );
         putTagValue( stream, 3, "doc-filepath", rec->getFilePath() );
         putTagValue( stream, 3, "doc-filesize", lString16::itoa( (unsigned int)rec->getFileSize() ) );
         putTag( stream, 2, "/file-info" );
