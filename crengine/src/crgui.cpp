@@ -97,6 +97,7 @@ bool CRGUIWindowManager::loadSkin( lString16 pathname )
     }
     setSkinFilePath(pathname);
     setSkin( skin );
+    loadSkinKeymaps();
     return true;
 }
 
@@ -2190,22 +2191,20 @@ static int decodeKey( lString16 name )
     return key;
 }
 
-bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char * mapFile )
+bool CRGUIAcceleratorTableList::openFromStream( LVStreamRef defStream, LVStreamRef mapStream)
 {
     _table.clear();
     LVHashTable<lString16, int> defs( 256 );
-    LVStreamRef defStream = LVOpenFileStream( defFile, LVOM_READ );
+
     if ( defStream.isNull() ) {
-        CRLog::error( "cannot open keymap def file %s", defFile );
+        CRLog::error( "cannot open keymap def file" );
         return false;
     }
-    LVStreamRef mapStream = LVOpenFileStream( mapFile, LVOM_READ );
     if ( mapStream.isNull() ) {
-        CRLog::error( "cannot open keymap file %s", defFile );
+        CRLog::error( "cannot open keymap file" );
         return false;
     }
     lString16 line;
-    CRPropRef props = LVCreatePropsContainer();
     while ( readNextLine(defStream, line) ) {
         lString16 name;
         lString16 value;
@@ -2219,7 +2218,7 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             CRLog::error("Invalid definition in line %s", UnicodeToUtf8(line).c_str() );
     }
     if ( !defs.length() ) {
-        CRLog::error("No definitions read from %s", defFile);
+        CRLog::error("No definitions read from defFile");
         return false;
 
     }
@@ -2295,7 +2294,14 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             }
         }
     } while ( !eof );
+
     return !empty();
+}
+
+bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char * mapFile )
+{
+    return openFromStream( LVOpenFileStream( defFile, LVOM_READ ),
+                           LVOpenFileStream( mapFile, LVOM_READ ));
 }
 
 // get currently set layout
@@ -2788,3 +2794,15 @@ void CRGUIWindowManager::reconfigureWindows(int flags)
     }
 }
 
+void CRGUIWindowManager::loadSkinKeymaps()
+{
+    _skinAccTables.clear();
+
+    if ( !_skin.isNull() ) {
+        lString16 defFile = LVCombinePaths(getKeymapFilePath(), cs16("keydefs.ini"));
+        LVStreamRef keymapFile = _skin->getStream(L"keymaps.ini");
+
+        _skinAccTables.openFromStream(LVOpenFileStream( defFile.c_str(), LVOM_READ ),
+                                      keymapFile);
+    }
+}

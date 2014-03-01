@@ -571,6 +571,8 @@ public:
     virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path ) = 0;
     /// returns icon skin by path or #id
     virtual CRIconSkinRef getIconSkin( const lChar16 *path ) = 0;
+    /// returns read only file stream from skin
+    virtual LVStreamRef getStream(const lChar16 * fname) = 0;
     /// garbage collection
     virtual void gc() { }
 

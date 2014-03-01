@@ -293,6 +293,8 @@ public:
     virtual LVImageSourceRef getImage( const lChar16 * filename );
     /// gets doc pointer by asolute path
     virtual ldomXPointer getXPointer( const lString16 & xPointerStr ) { return _doc->createXPointer( xPointerStr ); }
+    /// returns read only file stream from skin
+    virtual LVStreamRef getStream(const lChar16 * fname) { return _container->OpenStream( fname, LVOM_READ); }
     /// garbage collection
     virtual void gc()
     {

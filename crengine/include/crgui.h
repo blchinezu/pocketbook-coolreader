@@ -237,6 +237,7 @@ public:
     ~CRGUIAcceleratorTableList() { }
     /// reads definitions from files
     bool openFromFile( const char  * defFile, const char * mapFile );
+    bool openFromStream( LVStreamRef defStream, LVStreamRef mapStream);
 };
 
 class CRKeyboardLayout
@@ -491,6 +492,7 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         int _lastProgressPercent;
         CRSkinRef _skin;
         CRGUIAcceleratorTableList _accTables;
+        CRGUIAcceleratorTableList _skinAccTables;
         CRKeyboardLayoutList _kbLayouts;
         CRSkinList _skins;
         cr_rotate_angle_t _orientation;
@@ -501,6 +503,7 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         lString16 _skinFilePath;
 
         void reconfigureWindows(int flags);
+        void loadSkinKeymaps();
     public:
         /// forward events from system queue to application queue
         virtual void forwardSystemEvents( bool waitForEvent ) { }
@@ -549,6 +552,8 @@ class CRGUIWindowManager : public CRGUIStringTranslator
 		virtual CRKeyboardLayoutList & getKeyboardLayouts() { return _kbLayouts; }
         /// returns accelerator table list
         virtual CRGUIAcceleratorTableList & getAccTables() { return _accTables; }
+        /// returns accelerator table list from current skin
+        CRGUIAcceleratorTableList & getSkinAccTables() { return _skinAccTables; }
         /// returns skins list
         virtual CRSkinList & getSkinList() { return _skins; }
         /// return battery status
