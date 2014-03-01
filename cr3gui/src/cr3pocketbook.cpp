@@ -2915,14 +2915,16 @@ void CRPbDictionaryDialog::onWordSelection(bool translate)
     lvRect wRc;
     _docview->setCursorPos(word->getWord().getStartXPointer());
     _docview->getCursorRect(wRc);
+    lvRect docRect;
+    _docwin->getClientRect(docRect);
     if (dictRc.top > 0) {
-        if (wRc.bottom >= dictRc.top) {
+        if (wRc.bottom >= (docRect.height() >> 1)) {
             rc.top = 0;
             rc.bottom = _dictView->getDesiredHeight();
             _dictView->setRect(rc);
         }
     } else {
-        if (wRc.top <= dictRc.bottom) {
+        if (wRc.top <= (docRect.height() >> 1)) {
             rc.bottom = _wm->getScreen()->getHeight();
             rc.top = rc.bottom - _dictView->getDesiredHeight();
             _dictView->setRect(rc);
