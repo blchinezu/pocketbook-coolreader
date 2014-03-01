@@ -89,10 +89,10 @@ enum CRMainMenuCmd
     MCMD_NEXT_MODE,
     MCMD_PREV_MODE,
     MCMD_BOOKMARK_LIST_GO_MODE,
-
     MCMD_GO_PERCENT,
     MCMD_GO_PERCENT_APPLY,
-    MCMD_CITES_LIST
+    MCMD_CITES_LIST,
+    MCMD_SWAP
 };
 
 class V3DocViewWin : public CRViewDialog, public LVDocViewCallback

@@ -51,6 +51,7 @@ enum LVDocCmd
 
     DCMD_BUTTON_PRESSED,
     DCMD_BUTTON_PRESSED_LONG,
+    DCMD_LINK_LAST,
 
     //=======================================
     DCMD_EDIT_CURSOR_LEFT,

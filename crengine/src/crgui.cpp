@@ -2544,11 +2544,30 @@ bool CRGUITouchEvent::handle(CRGUIWindow *window)
     return res;
 }
 
-CRToolBar::CRToolBar(CRGUIWindowBase *window, CRToolBarSkinRef tbskin, bool active) :
+CRToolBar::CRToolBar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active) :
     m_window(window), m_currentButton(0), m_active(active), _controlsCreated(false),
-    _tbSkin(tbskin)
+    m_id(id), _tbSkin(tbskin)
 {
+}
 
+bool CRToolBar::init(lString16 id)
+{
+    CRGUIAcceleratorTableRef buttons = m_window->getWindowManager()->getSkinAccTables().get( id);
+    if (buttons.isNull())
+        return false;
+
+    for (int i=0; i < buttons->length(); i++) {
+        int key = i+1;
+        int cmd;
+        int param;
+        if (buttons->translate( key, 0, cmd, param)) {
+            int cmdLong = DCMD_BUTTON_PRESSED_LONG;
+            int paramLong = -1;
+            buttons->translate( key, 1, cmdLong, paramLong);
+            addButton( new CRToolButton(this, key, lString16(), cmd, param, paramLong, cmdLong));
+        }
+    }
+    return ( m_buttons.length() != 0 );
 }
 
 bool CRToolBar::selectFirstButton()
@@ -2617,14 +2636,14 @@ int CRToolBar::getCurrentButtonIndex()
 
 bool CRToolBar::isEnabled(int index)
 {
-    if ( index<getButtonsCount() )
+    if ( index>=0 && index<getButtonsCount() )
         return m_buttons[index]->isEnabled();
     return false;
 }
 
 bool CRToolBar::setEnabled(int index, bool value)
 {
-    if ( index<getButtonsCount() )
+    if ( index>=0 && index<getButtonsCount() )
         return m_buttons[index]->setEnabled(value);
     return false;
 }
@@ -2660,7 +2679,7 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
     CRToolBarControl *toolBarControl = NULL;
     if ( !_controlsCreated)
         toolBarControl = new CRToolBarControl(m_window, this, rect);
-    for ( int i=0; i<buttons->length(); i++ ) {
+    for ( int i=0; i<buttons->length() && i < m_buttons.length(); i++ ) {
         lvRect rc2 = rc;
         int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
         if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
@@ -2689,7 +2708,9 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
                 toolBarControl->addButton(new CRButtonControl(m_window, rc2, buttonSkin,
                                                               button->getId(),
                                                               button->getCommand(),
-                                                              button->getParam()));
+                                                              button->getParam(),
+                                                              button->getParam(true),
+                                                              button->getCommand(true)));
             }
             buttonSkin->drawButton( buf, rc2, flags );
             offsetX = rc2.right - rc.left;
@@ -2699,6 +2720,19 @@ void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect
         m_window->addControl(toolBarControl);
         _controlsCreated = true;
     }
+}
+
+int CRToolBar::findButton(int command, int param)
+{
+    int ret = -1;
+
+    for ( int i=0; i<m_buttons.length() && ret==-1; i++) {
+        CRToolButton *current = m_buttons[i];
+        if (current->getCommand() == command && current->getParam() == param) {
+            ret = i;
+        }
+    }
+    return ret;
 }
 
 bool CRToolBar::setActive(bool value)
@@ -2799,7 +2833,8 @@ void CRGUIWindowManager::loadSkinKeymaps()
     _skinAccTables.clear();
 
     if ( !_skin.isNull() ) {
-        lString16 defFile = LVCombinePaths(getKeymapFilePath(), cs16("keydefs.ini"));
+        lString16 keymapDir = LVExtractPath(getKeymapFilePath());
+        lString16 defFile = LVCombinePaths(keymapDir, cs16("keydefs.ini"));
         LVStreamRef keymapFile = _skin->getStream(L"keymaps.ini");
 
         _skinAccTables.openFromStream(LVOpenFileStream( defFile.c_str(), LVOM_READ ),

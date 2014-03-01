@@ -16,6 +16,24 @@
 #include "cr3pocketbook.h"
 #endif
 
+class CiteToolBar : public CRToolBar
+{
+public:
+    CiteToolBar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active = true)
+        :  CRToolBar(window, id, tbskin, active)
+    {
+        init();
+    }
+    virtual ~CiteToolBar()
+    {}
+    virtual void initDefault()
+    {
+        for (int i=0; i<5; i++) {
+            addButton(new CRToolButton(this, i, lString16(), DCMD_BUTTON_PRESSED));
+        }
+    }
+};
+
 class CiteWindow : public BackgroundFitWindow
 {
     CiteSelection selector_;
@@ -161,17 +179,11 @@ public:
             tbSkin = windowSkin->getToolBar1Skin();
         if ( !tbSkin.isNull() && (tbSkin->getButtons()->length() == 7 ||
             tbSkin->getButtons()->length() == 5)) {
-            isTouchToolBar = tbSkin->getButtons()->length() == 7;
-            toolbar = new CRToolBar(this, tbSkin);
-            if (isTouchToolBar)
-                toolbar->addButton( new CRToolButton(toolbar, 0, lString16(), MCMD_OK) );
-            for (int i=0; i<5; i++) {
-                toolbar->addButton(new CRToolButton(toolbar, i, lString16(), DCMD_BUTTON_PRESSED));
-            }
-            if (isTouchToolBar) {
-                toolbar->addButton( new CRToolButton(toolbar, 0, lString16(), MCMD_CANCEL) );
-                toolbar->selectButton( 1 );
-            }
+            toolbar = new CiteToolBar(this, cs16("cite-toolbar"), tbSkin);
+
+            int index = toolbar->findButton(DCMD_BUTTON_PRESSED, 0);
+            if (index > 0)
+                toolbar->selectButton(index);
             toolbar->getRect(toolbarRect);
             _rect.top = _rect.bottom - toolbarRect.height();
         } else {

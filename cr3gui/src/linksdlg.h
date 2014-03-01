@@ -26,6 +26,8 @@ class CRLinksDialog : public CRGUIWindowBase
         int _linkCount;
         int _backSize;
         int _fwdSize;
+        int _backIndex;
+        int _forwardIndex;
         bool activate(bool backPreffered);
         int _curPage;
         CRToolBar *_toolBar;

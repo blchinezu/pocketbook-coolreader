@@ -1073,7 +1073,11 @@ enum CRMenuControlCmd {
     MCMD_NEXT_PAGE,
     MCMD_PREV_PAGE,
     MCMD_SELECT,
-    MCMD_SELECT_LONG
+    MCMD_SELECT_LONG,
+    MCMD_SCROLL_LEFT,
+    MCMD_SCROLL_RIGHT,
+    MCMD_SCROLL_LEFT_LONG,
+    MCMD_SCROLL_RIGHT_LONG
 };
 
 enum CRGUICmd {
@@ -1238,20 +1242,34 @@ class CRToolBar;
 class CRToolButton
 {
 public:
-    CRToolButton(CRToolBar *toolbar, int id, lString16 label, int command, int param = 0) :
+    CRToolButton(CRToolBar *toolbar, int id, lString16 label, int command, int param = 0,
+                 int paramLong=-1, int commandLong=DCMD_BUTTON_PRESSED_LONG) :
         m_toolbar(toolbar), m_id(id), m_command(command), m_param(param),
+        m_commandLong(commandLong), m_paramLong(paramLong),
         m_label(label), m_enabled(true) {}
     virtual ~CRToolButton() { }
     bool isEnabled() { return m_enabled; }
     bool setEnabled(bool value) { m_enabled = value; return true; }
-    inline int getCommand() { return m_command; }
-    inline int getParam() { return m_param; }
+    inline int getCommand(bool longPress=false)
+    {
+        if (longPress)
+            return m_commandLong;
+        return m_command;
+    }
+    inline int getParam(bool longPress=false)
+    {
+        if (longPress)
+            return m_paramLong;
+        return m_param;
+    }
     inline int getId() { return m_id; }
 private:
     CRToolBar *m_toolbar;
     int m_id;
     int m_command;
     int m_param;
+    int m_commandLong;
+    int m_paramLong;
     lString16 m_label;
     LVImageSourceRef m_image;
     bool m_enabled;
@@ -1260,11 +1278,19 @@ private:
 class CRToolBar
 {
 public:
-    CRToolBar(CRGUIWindowBase *window, CRToolBarSkinRef tbskin, bool active = true);
+    CRToolBar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active = true);
     virtual ~CRToolBar() { }
     void addButton( CRToolButton * button )
     {
         m_buttons.add( button );
+    }
+    virtual bool init(lString16 id);
+    virtual void initDefault() {}
+    void init()
+    {
+        m_buttons.clear();
+        if ( !init(m_id) )
+            initDefault();
     }
     LVPtrVector<CRToolButton> & getButtons() { return m_buttons; }
     bool selectFirstButton();
@@ -1304,12 +1330,15 @@ public:
         _tbSkin = tbskin;
         _controlsCreated = false;
         m_window->reconfigure(0);
+        init();
     }
     void draw(CRToolBarSkinRef tbskin, LVDrawBuf & buf, const lvRect & rect);
     void controlRemoved()
     {
         _controlsCreated = false;
     }
+    /// returns index of button having specified command and param properties
+    int findButton(int command, int param);
 protected:
     LVPtrVector<CRToolButton> m_buttons;
 private:
@@ -1319,6 +1348,7 @@ private:
     int m_currentButton;
     bool m_active;
     bool _controlsCreated;
+    lString16 m_id;
     CRToolBarSkinRef _tbSkin;
 };
 
@@ -1384,22 +1414,29 @@ protected:
     bool _selected;
     int  _command;
     int  _param;
+    int  _commandLong;
+    int  _paramLong;
     int _btnId;
 public:
-    CRButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, int id, int command, int param = 0)
+    CRButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, int id, int command, int param = -1,
+                    int paramLong = -1, int commandLong = DCMD_BUTTON_PRESSED_LONG)
         : CRGUIControl(parent, rc, 2),
-        _btnSkin(skin), _selected(false), _command(command), _param(param), _btnId(id) {}
+        _btnSkin(skin), _selected(false), _command(command), _param(param),
+        _commandLong(commandLong), _paramLong(paramLong), _btnId(id) {}
     virtual bool onTouch(CRGUITouchEventType evType)
     {
         switch (evType) {
         case CRTOUCH_UP:
-            if ( _command == DCMD_BUTTON_PRESSED)
+            if ( _command == DCMD_BUTTON_PRESSED && _param==-1 )
                 _parent->getWindowManager()->postCommand(_command, _btnId);
             else
                 _parent->getWindowManager()->postCommand(_command, _param);
             return setSelected(false);
         case CRTOUCH_DOWN_LONG:
-            _parent->getWindowManager()->postCommand(DCMD_BUTTON_PRESSED_LONG, _btnId);
+            if ( _commandLong == DCMD_BUTTON_PRESSED_LONG && _paramLong==-1 )
+                _parent->getWindowManager()->postCommand(DCMD_BUTTON_PRESSED_LONG, _btnId);
+            else
+                _parent->getWindowManager()->postCommand(_commandLong, _paramLong);
             // fallthrough - return false;
         default:
             ;

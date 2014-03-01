@@ -76,6 +76,25 @@ CRLinksDialog * CRLinksDialog::create( CRGUIWindowManager * wm, CRViewDialog * d
     return new CRLinksDialog( wm, docwin, backPreffered);
 }
 
+class LinksToolbar : public CRToolBar
+{
+public:
+    LinksToolbar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active = true)
+        :  CRToolBar(window, id, tbskin, active)
+    {
+        init();
+    }
+    ~LinksToolbar()
+    {}
+    void initDefault()
+    {
+        addButton( new CRToolButton(this, 0, cs16("<-"), DCMD_LINK_BACK, 0) ); //back
+        addButton( new CRToolButton(this, 1, cs16("->"), DCMD_LINK_FORWARD, 0) ); //forward
+        addButton( new CRToolButton(this, 2, cs16(""), MCMD_SWAP, 0) ); //swap
+        addButton( new CRToolButton(this, 0, cs16("X"), MCMD_CANCEL, 0) ); // cancel
+    }
+};
+
 CRLinksDialog::CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin, bool backPreffered )
 : CRGUIWindowBase( wm ), _docwin(docwin), _docview(docwin->getDocView()), _toolBar(NULL)
 {
@@ -92,14 +111,18 @@ CRLinksDialog::CRLinksDialog( CRGUIWindowManager * wm, CRViewDialog * docwin, bo
         tb2Skin = windowSkin->getToolBar2Skin();
     }
     if ( !tb1Skin.isNull() ) {
-        _toolBar = new CRToolBar(this, tb1Skin, backPreffered);
+        _toolBar = new LinksToolbar(this, cs16("links-toolbar"), tb1Skin, backPreffered);
 
-        _toolBar->addButton( new CRToolButton(_toolBar, 0, lString16(), DCMD_BUTTON_PRESSED, 0) ); //back
-        _toolBar->addButton( new CRToolButton(_toolBar, 1, lString16(), DCMD_BUTTON_PRESSED, 1) ); //forward
-        _toolBar->addButton( new CRToolButton(_toolBar, 2, lString16(), DCMD_BUTTON_PRESSED, 2) ); //swap
-        _toolBar->addButton( new CRToolButton(_toolBar, 0, lString16(), MCMD_CANCEL) ); // cancel
-        if ( tb2Skin.isNull() )
-            _toolBar->setEnabled(2, false); // can't switch toolbar position
+        _forwardIndex = _toolBar->findButton(DCMD_LINK_FORWARD, 0);
+        if ( -1 == _forwardIndex )
+            _forwardIndex = _toolBar->findButton(MCMD_LONG_FORWARD, 0);
+        _backIndex = _toolBar->findButton(DCMD_LINK_BACK, 0);
+        if ( -1 == _backIndex )
+            _backIndex = _toolBar->findButton(MCMD_LONG_BACK, 0);
+        if ( tb2Skin.isNull() ) {
+            // can't switch toolbar position
+            _toolBar->setEnabled(_toolBar->findButton(MCMD_SWAP, 0), false);
+        }
     }
     _curPage = -1;
     _fullscreen = true;
@@ -127,16 +150,25 @@ bool CRLinksDialog::onCommand( int command, int params )
             activate( true );
         }
         return true;
+    case DCMD_LINK_BACK:
+        if (_docview->goBack())
+            activate(_docview->canGoBack());
+        break;
     case MCMD_LONG_BACK:
         _docview->clearSelection();
         _docview->goBack();
         _wm->closeWindow( this );
         return true;
+    case DCMD_LINK_FORWARD:
+        if (_docview->goForward())
+            activate(false);
+        break;
     case MCMD_LONG_FORWARD:
         _docview->clearSelection();
         _docview->goForward();
         _wm->closeWindow( this );
         return true;
+    case DCMD_LINK_NEXT:
     case MCMD_SCROLL_FORWARD:
     case MCMD_SELECT_0:
         if ( NULL != _toolBar && _toolBar->isActive() ) {
@@ -150,6 +182,7 @@ bool CRLinksDialog::onCommand( int command, int params )
             needUpdate = _toolBar->selectFirstButton();
         }
         break;
+    case DCMD_LINK_PREV:
     case MCMD_SCROLL_BACK:
     case MCMD_SELECT_9:
         if ( NULL != _toolBar && _toolBar->isActive() ) {
@@ -163,6 +196,7 @@ bool CRLinksDialog::onCommand( int command, int params )
             needUpdate = _toolBar->selectLastButton();
         }
         break;
+    case DCMD_LINK_GO:
     case MCMD_SELECT:
         CRLog::trace("selectLink(%d)", params);
         return selectLink(params);
@@ -174,15 +208,13 @@ bool CRLinksDialog::onCommand( int command, int params )
     case MCMD_SELECT_6:
     case MCMD_SELECT_7:
     case MCMD_SELECT_8:
-         return selectLink(command - MCMD_SELECT_1);
-    case DCMD_BUTTON_PRESSED:
-        if ( params==0 ) {
-            if (_docview->goBack())
-                activate(_docview->canGoBack());
-        } else if ( params==1 ) {
-            if (_docview->goForward())
-                activate(false);
-        } else if ( params== 2) {
+        return selectLink(command - MCMD_SELECT_1);
+    case DCMD_LINK_FIRST:
+        return selectLink(0);
+    case DCMD_LINK_LAST:
+        return selectLink( _linkCount-1 );
+    case MCMD_SWAP:
+        {
             //swap toolbar position
             CRWindowSkinRef windowSkin = getSkin();
             _onTop = !_onTop;
@@ -190,6 +222,7 @@ bool CRLinksDialog::onCommand( int command, int params )
                 _toolBar->setSkin(windowSkin->getToolBar1Skin());
             else
                 _toolBar->setSkin(windowSkin->getToolBar2Skin());
+
         }
         break;
     default:
@@ -306,8 +339,8 @@ bool CRLinksDialog::activate(bool backPreffered)
         _backSize = _docview->getNavigationHistory().backCount();
         _fwdSize = _docview->getNavigationHistory().forwardCount();
         if ( NULL != _toolBar ) {
-            _toolBar->setEnabled(0, ( _backSize!=0 ) );
-            _toolBar->setEnabled(1, ( _fwdSize!=0 ) );
+            _toolBar->setEnabled( _backIndex, ( _backSize!=0 ) );
+            _toolBar->setEnabled( _forwardIndex, ( _fwdSize!=0 ) );
         }
         if ( (_linkCount > 0 && !backPreffered) || NULL == _toolBar ) {
             if (NULL != _toolBar)
