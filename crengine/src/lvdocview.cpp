@@ -3872,6 +3872,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 			int rtfCount = 0;
 			int txtCount = 0;
 			int fbdCount = 0;
+                        int docCount = 0;
             int pmlCount = 0;
 			lString16 defHtml;
 			lString16 firstGood;
@@ -3894,6 +3895,8 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 							htmCount++;
                         } else if ( s.endsWith(".fb2") ) {
 							fb2Count++;
+                        } else if ( s.endsWith(".doc") ) {
+							docCount++;
                         } else if ( s.endsWith(".rtf") ) {
 							rtfCount++;
                         } else if ( s.endsWith(".txt") ) {
@@ -3917,6 +3920,8 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
                                 nameIsOk = true;
                             else if (!lStr_cmp(pext, ".txt"))
                                 nameIsOk = true;
+                            else if (!lStr_cmp(pext, ".doc"))
+                                nameIsOk = true;
                             else if (!lStr_cmp(pext, ".rtf"))
                                 nameIsOk = true;
 						}
@@ -3934,18 +3939,19 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 					m_doc_props->setString(DOC_PROP_CODE_BASE, LVExtractPath(fn) );
 					m_doc_props->setString(DOC_PROP_FILE_SIZE, lString16::itoa((int)m_stream->GetSize()));
                     m_doc_props->setHex(DOC_PROP_FILE_CRC32, m_stream->getcrc32());
-					found = true;
+                                        return LoadDocument(m_stream);
+//					found = true;
 				}
 			}
 			// opened archieve stream
-			if ( !found )
-			{
+//			if ( !found )
+//			{
 				Clear();
 				if ( m_callback ) {
                     m_callback->OnLoadFileError( cs16("File with supported extension not fouind in archive.") );
 				}
 				return false;
-			}
+//			}
 
 		}
 		else
