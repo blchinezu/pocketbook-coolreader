@@ -2604,7 +2604,7 @@ bool CRToolBar::selectPrevButton(bool wrapAround)
 
 bool CRToolBar::selectButton(int index)
 {
-    if ( index < m_buttons.length() &&
+    if ( index>=0 && index<getButtonsCount() &&
         m_buttons[index]->isEnabled() ) {
         setActive(true);
         if (index != m_currentButton)
