@@ -2485,8 +2485,8 @@ void LVDocView::Render(int dx, int dy, LVRendPageList * pages) {
 		if (!m_font || !m_infoFont)
 			return;
 
-		CRLog::debug("Render(width=%d, height=%d, fontSize=%d)", dx, dy,
-				m_font_size);
+        CRLog::debug("Render(width=%d, height=%d, fontSize=%d, currentFontSize=%d, 0 char width=%d)", dx, dy,
+                     m_font_size, m_font->getSize(), m_font->getCharWidth('0'));
 		//CRLog::trace("calling render() for document %08X font=%08X", (unsigned int)m_doc, (unsigned int)m_font.get() );
 		m_doc->render(pages, isDocumentOpened() ? m_callback : NULL, dx, dy,
                 m_showCover, m_showCover ? dy + m_pageMargins.bottom * 4 : 0,
@@ -3175,6 +3175,7 @@ void LVDocView::setFontSize(int newSize) {
 	m_font_size = findBestFit(m_font_sizes, newSize);
 	if (oldSize != newSize) {
 		propsGetCurrent()->setInt(PROP_FONT_SIZE, m_font_size);
+        CRLog::debug("New font size: %d requested: %d", m_font_size, newSize);
         REQUEST_RENDER("setFontSize")
 	}
 	//goToBookmark(_posBookmark);
@@ -5739,17 +5740,24 @@ void LVDocView::setStatusMode(int newMode, bool showClock, bool showTitle,
 #endif
 }
 
+bool LVDocView::propApply(lString8 name, lString16 value) {
+    CRPropRef props = LVCreatePropsContainer();
+    props->setString(name.c_str(), value);
+    CRPropRef unknown = propsApply( props );
+    return ( 0 == unknown->getCount() );
+}
+
 /// applies properties, returns list of not recognized properties
 CRPropRef LVDocView::propsApply(CRPropRef props) {
-	CRLog::trace("LVDocView::propsApply( %d items )", props->getCount());
-	CRPropRef unknown = LVCreatePropsContainer();
-	for (int i = 0; i < props->getCount(); i++) {
-		lString8 name(props->getName(i));
-		lString16 value = props->getValue(i);
+    CRLog::trace("LVDocView::propsApply( %d items )", props->getCount());
+    CRPropRef unknown = LVCreatePropsContainer();
+    for (int i = 0; i < props->getCount(); i++) {
+        lString8 name(props->getName(i));
+        lString16 value = props->getValue(i);
         //bool isUnknown = false;
-		if (name == PROP_FONT_ANTIALIASING) {
-			int antialiasingMode = props->getIntDef(PROP_FONT_ANTIALIASING, 2);
-			fontMan->SetAntialiasMode(antialiasingMode);
+        if (name == PROP_FONT_ANTIALIASING) {
+            int antialiasingMode = props->getIntDef(PROP_FONT_ANTIALIASING, 2);
+            fontMan->SetAntialiasMode(antialiasingMode);
             REQUEST_RENDER("propsApply - font antialiasing")
         } else if (name.startsWith(cs8("styles."))) {
             REQUEST_RENDER("propsApply - styles.*")
@@ -5772,24 +5780,24 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             REQUEST_RENDER("propsApply - highlight")
         } else if (name == PROP_LANDSCAPE_PAGES) {
             int pages = props->getIntDef(PROP_LANDSCAPE_PAGES, 2);
-			setVisiblePageCount(pages);
-		} else if (name == PROP_FONT_KERNING_ENABLED) {
-			bool kerning = props->getBoolDef(PROP_FONT_KERNING_ENABLED, false);
-			fontMan->setKerning(kerning);
+            setVisiblePageCount(pages);
+        } else if (name == PROP_FONT_KERNING_ENABLED) {
+            bool kerning = props->getBoolDef(PROP_FONT_KERNING_ENABLED, false);
+            fontMan->setKerning(kerning);
             REQUEST_RENDER("propsApply - kerning")
-		} else if (name == PROP_FONT_WEIGHT_EMBOLDEN) {
-			bool embolden = props->getBoolDef(PROP_FONT_WEIGHT_EMBOLDEN, false);
-			int v = embolden ? STYLE_FONT_EMBOLD_MODE_EMBOLD
-					: STYLE_FONT_EMBOLD_MODE_NORMAL;
-			if (v != LVRendGetFontEmbolden()) {
-				LVRendSetFontEmbolden(v);
+        } else if (name == PROP_FONT_WEIGHT_EMBOLDEN) {
+            bool embolden = props->getBoolDef(PROP_FONT_WEIGHT_EMBOLDEN, false);
+            int v = embolden ? STYLE_FONT_EMBOLD_MODE_EMBOLD
+                             : STYLE_FONT_EMBOLD_MODE_NORMAL;
+            if (v != LVRendGetFontEmbolden()) {
+                LVRendSetFontEmbolden(v);
                 REQUEST_RENDER("propsApply - embolden")
-			}
-		} else if (name == PROP_TXT_OPTION_PREFORMATTED) {
-			bool preformatted = props->getBoolDef(PROP_TXT_OPTION_PREFORMATTED,
-					false);
-			setTextFormatOptions(preformatted ? txt_format_pre
-					: txt_format_auto);
+            }
+        } else if (name == PROP_TXT_OPTION_PREFORMATTED) {
+            bool preformatted = props->getBoolDef(PROP_TXT_OPTION_PREFORMATTED,
+                                                  false);
+            setTextFormatOptions(preformatted ? txt_format_pre
+                                              : txt_format_auto);
         } else if (name == PROP_IMG_SCALING_ZOOMIN_INLINE_SCALE || name == PROP_IMG_SCALING_ZOOMIN_INLINE_MODE
                    || name == PROP_IMG_SCALING_ZOOMOUT_INLINE_SCALE || name == PROP_IMG_SCALING_ZOOMOUT_INLINE_MODE
                    || name == PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE || name == PROP_IMG_SCALING_ZOOMIN_BLOCK_MODE
@@ -5798,19 +5806,19 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             m_props->setString(name.c_str(), value);
             REQUEST_RENDER("propsApply -img scale")
         } else if (name == PROP_FONT_COLOR || name == PROP_BACKGROUND_COLOR
-				|| name == PROP_DISPLAY_INVERSE || name==PROP_STATUS_FONT_COLOR) {
-			// update current value in properties
-			m_props->setString(name.c_str(), value);
+                   || name == PROP_DISPLAY_INVERSE || name==PROP_STATUS_FONT_COLOR) {
+            // update current value in properties
+            m_props->setString(name.c_str(), value);
             lUInt32 textColor = props->getColorDef(PROP_FONT_COLOR, m_props->getColorDef(PROP_FONT_COLOR, 0x000000));
             lUInt32 backColor = props->getColorDef(PROP_BACKGROUND_COLOR,
                                                    m_props->getIntDef(PROP_BACKGROUND_COLOR,
-                                                                       0xFFFFFF));
+                                                                      0xFFFFFF));
             lUInt32 statusColor = props->getColorDef(PROP_STATUS_FONT_COLOR,
                                                      m_props->getColorDef(PROP_STATUS_FONT_COLOR,
-                                                                         0xFF000000));
+                                                                          0xFF000000));
             bool inverse = props->getBoolDef(PROP_DISPLAY_INVERSE, m_props->getBoolDef(PROP_DISPLAY_INVERSE, false));
-			if (inverse) {
-				CRLog::trace("Setting inverse colors");
+            if (inverse) {
+                CRLog::trace("Setting inverse colors");
                 //if (name == PROP_FONT_COLOR)
                 setBackgroundColor(textColor);
                 //if (name == PROP_BACKGROUND_COLOR)
@@ -5818,8 +5826,8 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                 //if (name == PROP_BACKGROUND_COLOR)
                 setStatusColor(backColor);
                 REQUEST_RENDER("propsApply  color") // TODO: only colors to be changed
-			} else {
-				CRLog::trace("Setting normal colors");
+            } else {
+                CRLog::trace("Setting normal colors");
                 //if (name == PROP_BACKGROUND_COLOR)
                 setBackgroundColor(backColor);
                 //if (name == PROP_FONT_COLOR)
@@ -5827,10 +5835,10 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                 //if (name == PROP_STATUS_FONT_COLOR)
                 setStatusColor(statusColor);
                 REQUEST_RENDER("propsApply  color") // TODO: only colors to be changed
-			}
-		} else if (name == PROP_PAGE_MARGIN_TOP || name
-				== PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT
-				|| name == PROP_PAGE_MARGIN_BOTTOM) {
+            }
+        } else if (name == PROP_PAGE_MARGIN_TOP || name
+                   == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT
+                   || name == PROP_PAGE_MARGIN_BOTTOM) {
             int margin = props->getIntDef(name.c_str(), 8);
             int maxmargin = (name == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT) ? m_dx / 3 : m_dy / 3;
             if (margin > maxmargin)
@@ -5891,45 +5899,45 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                         setStatusFontSize(fontSize);
 			value = lString16::itoa(fontSize);
 #if !defined(ANDROID)
-		} else if (name == PROP_HYPHENATION_DICT) {
-			// hyphenation dictionary
-			lString16 id = props->getStringDef(PROP_HYPHENATION_DICT,
-					DEF_HYPHENATION_DICT);
+        } else if (name == PROP_HYPHENATION_DICT) {
+            // hyphenation dictionary
+            lString16 id = props->getStringDef(PROP_HYPHENATION_DICT,
+                                               DEF_HYPHENATION_DICT);
             CRLog::debug("PROP_HYPHENATION_DICT = %s", LCSTR(id));
             HyphDictionaryList * list = HyphMan::getDictList();
-			HyphDictionary * curr = HyphMan::getSelectedDictionary();
-			if (list) {
-				if (!curr || curr->getId() != id) {
-					//if (
-					CRLog::debug("Changing hyphenation to %s", LCSTR(id));
-					list->activate(id);
-					//)
+            HyphDictionary * curr = HyphMan::getSelectedDictionary();
+            if (list) {
+                if (!curr || curr->getId() != id) {
+                    //if (
+                    CRLog::debug("Changing hyphenation to %s", LCSTR(id));
+                    list->activate(id);
+                    //)
                     REQUEST_RENDER("propsApply hyphenation dict")
-				}
-			}
+                }
+            }
 #endif
-		} else if (name == PROP_INTERLINE_SPACE) {
-			int interlineSpace = props->getIntDef(PROP_INTERLINE_SPACE,
-					cr_interline_spaces[0]);
-			setDefaultInterlineSpace(interlineSpace);//cr_font_sizes
-			value = lString16::itoa(m_def_interline_space);
+        } else if (name == PROP_INTERLINE_SPACE) {
+            int interlineSpace = props->getIntDef(PROP_INTERLINE_SPACE,
+                                                  cr_interline_spaces[0]);
+            setDefaultInterlineSpace(interlineSpace);//cr_font_sizes
+            value = lString16::itoa(m_def_interline_space);
 #if CR_INTERNAL_PAGE_ORIENTATION==1
-		} else if ( name==PROP_ROTATE_ANGLE ) {
-			cr_rotate_angle_t angle = (cr_rotate_angle_t) (props->getIntDef( PROP_ROTATE_ANGLE, 0 )&3);
-			SetRotateAngle( angle );
-			value = lString16::itoa( m_rotateAngle );
+        } else if ( name==PROP_ROTATE_ANGLE ) {
+            cr_rotate_angle_t angle = (cr_rotate_angle_t) (props->getIntDef( PROP_ROTATE_ANGLE, 0 )&3);
+            SetRotateAngle( angle );
+            value = lString16::itoa( m_rotateAngle );
 #endif
-		} else if (name == PROP_EMBEDDED_STYLES) {
-			bool value = props->getBoolDef(PROP_EMBEDDED_STYLES, true);
-			getDocument()->setDocFlag(DOC_FLAG_ENABLE_INTERNAL_STYLES, value);
+        } else if (name == PROP_EMBEDDED_STYLES) {
+            bool value = props->getBoolDef(PROP_EMBEDDED_STYLES, true);
+            getDocument()->setDocFlag(DOC_FLAG_ENABLE_INTERNAL_STYLES, value);
             REQUEST_RENDER("propsApply embedded styles")
         } else if (name == PROP_EMBEDDED_FONTS) {
             bool value = props->getBoolDef(PROP_EMBEDDED_FONTS, true);
             getDocument()->setDocFlag(DOC_FLAG_ENABLE_DOC_FONTS, value);
             REQUEST_RENDER("propsApply doc fonts")
         } else if (name == PROP_FOOTNOTES) {
-			bool value = props->getBoolDef(PROP_FOOTNOTES, true);
-			getDocument()->setDocFlag(DOC_FLAG_ENABLE_FOOTNOTES, value);
+            bool value = props->getBoolDef(PROP_FOOTNOTES, true);
+            getDocument()->setDocFlag(DOC_FLAG_ENABLE_FOOTNOTES, value);
             REQUEST_RENDER("propsApply footnotes")
         } else if (name == PROP_FLOATING_PUNCTUATION) {
             bool value = props->getBoolDef(PROP_FLOATING_PUNCTUATION, true);
@@ -5949,25 +5957,25 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             }
             REQUEST_RENDER("propsApply - PROP_HIGHLIGHT_COMMENT_BOOKMARKS")
         } else if (name == PROP_PAGE_VIEW_MODE) {
-			LVDocViewMode m =
-					props->getIntDef(PROP_PAGE_VIEW_MODE, 1) ? DVM_PAGES
-							: DVM_SCROLL;
-			setViewMode(m);
+            LVDocViewMode m =
+                    props->getIntDef(PROP_PAGE_VIEW_MODE, 1) ? DVM_PAGES
+                                                             : DVM_SCROLL;
+            setViewMode(m);
         } else if (name == PROP_PAGE_VIEW_MODE) {
             bool value = props->getBoolDef(PROP_CACHE_VALIDATION_ENABLED, true);
-			enableCacheFileContentsValidation(value);
-		} else {
+            enableCacheFileContentsValidation(value);
+        } else {
 
-			// unknown property, adding to list of unknown properties
-			unknown->setString(name.c_str(), value);
+            // unknown property, adding to list of unknown properties
+            unknown->setString(name.c_str(), value);
             //isUnknown = true;
-		}
-		//if ( !isUnknown ) {
-		// update current value in properties
-		m_props->setString(name.c_str(), value);
-		//}
-	}
-	return unknown;
+        }
+        //if ( !isUnknown ) {
+        // update current value in properties
+        m_props->setString(name.c_str(), value);
+        //}
+    }
+    return unknown;
 }
 
 /// returns current values of supported properties

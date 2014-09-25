@@ -326,6 +326,8 @@ public:
     virtual LVFontRef GetFallbackFont(int /*size*/) { return LVFontRef(); }
     /// registers font by name
     virtual bool RegisterFont( lString8 name ) = 0;
+    /// registers font by name and face
+    virtual bool RegisterExternalFont(lString16 /*name*/, lString8 /*face*/, bool /*bold*/, bool /*italic*/) { return false; }
     /// registers document font
     virtual bool RegisterDocumentFont(int /*documentId*/, LVContainerRef /*container*/, lString16 /*name*/, lString8 /*face*/, bool /*bold*/, bool /*italic*/) { return false; }
     /// unregisters all document fonts
@@ -355,6 +357,9 @@ public:
     virtual ~LVFontManager() { }
     /// returns available typefaces
     virtual void getFaceList( lString16Collection & ) { }
+
+    /// returns first found face from passed list, or return face for font found by family only
+    virtual lString8 findFontFace(lString8 commaSeparatedFaceList, css_font_family_t fallbackByFamily);
 
     /// fills array with list of available gamma levels
     virtual void GetGammaLevels(LVArray<double> dst);

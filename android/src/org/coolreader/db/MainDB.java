@@ -14,7 +14,7 @@ public class MainDB extends BaseDB {
 	public static final Logger vlog = L.create("mdb", Log.VERBOSE);
 	
 	private boolean pathCorrectionRequired = false;
-	public final int DB_VERSION = 21;
+	public final int DB_VERSION = 23;
 	@Override
 	protected boolean upgradeSchema() {
 		if (mDB.needUpgrade(DB_VERSION)) {
@@ -124,6 +124,10 @@ public class MainDB extends BaseDB {
                         "path VARCHAR NOT NULL, " +
                         "position INTEGER NOT NULL default 0" +
                         ")");
+			if (currentVersion < 23) {
+			    execSQLIgnoreErrors("ALTER TABLE opds_catalog ADD COLUMN username VARCHAR DEFAULT NULL");
+			    execSQLIgnoreErrors("ALTER TABLE opds_catalog ADD COLUMN password VARCHAR DEFAULT NULL");
+			}
 
 			//==============================================================
 			// add more updates above this line
@@ -208,7 +212,7 @@ public class MainDB extends BaseDB {
 		for (int i=0; i<catalogs.length-1; i+=2) {
 			String url = catalogs[i];
 			String name = catalogs[i+1];
-			saveOPDSCatalog(null, url, name);
+			saveOPDSCatalog(null, url, name, null, null);
 		}
 	}
 
@@ -240,7 +244,7 @@ public class MainDB extends BaseDB {
 	}
 
 	
-	public boolean saveOPDSCatalog(Long id, String url, String name) {
+	public boolean saveOPDSCatalog(Long id, String url, String name, String username, String password) {
 		if (!isOpened())
 			return false;
 		if (url==null || name==null)
@@ -261,10 +265,10 @@ public class MainDB extends BaseDB {
 			}
 			if (id==null) {
 				// insert new
-				execSQL("INSERT INTO opds_catalog (name, url) VALUES ("+quoteSqlString(name)+", "+quoteSqlString(url)+")");
+				execSQL("INSERT INTO opds_catalog (name, url, username, password) VALUES ("+quoteSqlString(name)+", "+quoteSqlString(url)+", "+quoteSqlString(username)+", "+quoteSqlString(password)+")");
 			} else {
 				// update existing
-				execSQL("UPDATE opds_catalog SET name="+quoteSqlString(name)+", url="+quoteSqlString(url)+" WHERE id=" + id);
+				execSQL("UPDATE opds_catalog SET name="+quoteSqlString(name)+", url="+quoteSqlString(url)+", username="+quoteSqlString(username)+", password="+quoteSqlString(password)+" WHERE id=" + id);
 			}
 			updateOPDSCatalogLastUsage(url);
 				
@@ -280,7 +284,7 @@ public class MainDB extends BaseDB {
 		boolean found = false;
 		Cursor rs = null;
 		try {
-			String sql = "SELECT id, name, url FROM opds_catalog ORDER BY last_usage DESC, name";
+			String sql = "SELECT id, name, url, username, password FROM opds_catalog ORDER BY last_usage DESC, name";
 			rs = mDB.rawQuery(sql, null);
 			if ( rs.moveToFirst() ) {
 				// remove existing entries
@@ -290,10 +294,14 @@ public class MainDB extends BaseDB {
 					Long id = rs.getLong(0);
 					String name = rs.getString(1);
 					String url = rs.getString(2);
+					String username = rs.getString(3);
+					String password = rs.getString(4);
 					FileInfo opds = new FileInfo();
 					opds.isDirectory = true;
 					opds.pathname = FileInfo.OPDS_DIR_PREFIX + url;
 					opds.filename = name;
+					opds.username = username;
+					opds.password = password;
 					opds.isListed = true;
 					opds.isScanned = true;
 					opds.id = id;

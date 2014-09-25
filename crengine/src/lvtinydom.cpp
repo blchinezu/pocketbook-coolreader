@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.38"
+#define CACHE_FILE_FORMAT_VERSION "3.04.39"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -2302,6 +2302,7 @@ ldomTextStorageChunk::ldomTextStorageChunk(ldomDataStorageManager * manager, lUI
 	, _type( manager->_type )
 	, _saved(true)
 {
+    CR_UNUSED(compsize);
 }
 
 ldomTextStorageChunk::ldomTextStorageChunk(int preAllocSize, ldomDataStorageManager * manager, lUInt16 index)
@@ -11137,6 +11138,13 @@ void ldomDocument::registerEmbeddedFonts()
         return;
     for (int i=0; i<_fontList.length(); i++) {
         LVEmbeddedFontDef * item =  _fontList.get(i);
+        lString16 url = item->getUrl();
+        if (url.startsWithNoCase(lString16("res://")) || url.startsWithNoCase(lString16("file://"))) {
+            if (!fontMan->RegisterExternalFont(item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
+                CRLog::error("Failed to register external font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
+            }
+            continue;
+        }
         if (!fontMan->RegisterDocumentFont(getDocIndex(), _container, item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
             CRLog::error("Failed to register document font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
         }

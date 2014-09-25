@@ -144,8 +144,8 @@ public:
 CRTimerUtil _timeoutControl;
 
 #define DECL_DEF_CR_FONT_SIZES static int cr_font_sizes[] = \
- { 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
-   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 44, 48, 52, 56, 60, 64, 68, 72 }
+ { 9, 10, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, \
+   31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 42, 44, 48, 52, 56, 60, 64, 68, 72, 78, 84, 90, 110, 130, 150, 170, 200, 230, 260, 300, 340 }
 
 DECL_DEF_CR_FONT_SIZES;
 
@@ -1168,7 +1168,7 @@ JNIEXPORT jobject JNICALL Java_org_coolreader_crengine_DocView_getPositionPropsI
     DocViewNative * p = getNative(_env, _this);
     if (!p) {
     	CRLog::error("Cannot get native view");
-    	return false;
+    	return NULL;
     }
 
     jclass cls = _env->FindClass("org/coolreader/crengine/PositionProperties");
@@ -1633,7 +1633,7 @@ JNIEXPORT jstring JNICALL Java_org_coolreader_crengine_DocView_checkLinkInternal
     DocViewNative * p = getNative(_env, _this);
     if (!p) {
     	CRLog::error("Cannot get native view");
-    	return false;
+    	return NULL;
     }
     lString16 link;
     for ( int r=0; r<=delta; r+=5 ) {

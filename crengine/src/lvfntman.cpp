@@ -43,11 +43,20 @@
 //#include <ft2build.h>
 
 #ifdef ANDROID
+#ifdef USE_FREETYPE2
+#include "freetype2/config/ftheader.h"
+#include "freetype2/freetype.h"
+#else
 #include "freetype/config/ftheader.h"
 #include "freetype/freetype.h"
+#endif
 #else
 
+#ifdef USE_FREETYPE2
+#include <freetype2/config/ftheader.h>
+#else
 #include <freetype/config/ftheader.h>
+#endif
 //#include <ft2build.h>
 #include FT_FREETYPE_H
 //#include <freetype/freetype.h>
@@ -76,6 +85,31 @@ LVFontManager * fontMan = NULL;
 
 static double gammaLevel = 1.0;
 static int gammaIndex = GAMMA_LEVELS/2;
+
+/// returns first found face from passed list, or return face for font found by family only
+lString8 LVFontManager::findFontFace(lString8 commaSeparatedFaceList, css_font_family_t fallbackByFamily) {
+	// faces we want
+	lString8Collection list;
+	splitPropertyValueList(commaSeparatedFaceList.c_str(), list);
+	// faces we have
+	lString16Collection faces;
+	getFaceList(faces);
+	// find first matched
+	for (int i = 0; i < list.length(); i++) {
+		lString8 wantFace = list[i];
+		for (int j = 0; j < faces.length(); j++) {
+			lString16 haveFace = faces[j];
+			if (wantFace == haveFace)
+				return wantFace;
+		}
+	}
+	// not matched - get by family name
+    LVFontRef fnt = GetFont(10, 400, false, fallbackByFamily, lString8("Arial"));
+    if (fnt.isNull())
+    	return lString8::empty_str; // not found
+    // get face from found font
+    return fnt->getTypeFace();
+}
 
 /// fills array with list of available gamma levels
 void LVFontManager::GetGammaLevels(LVArray<double> dst) {
@@ -234,7 +268,8 @@ int LVFont::getVisualAligmentWidth()
 {
     FONT_GUARD
     if ( _visual_alignment_width==-1 ) {
-        lChar16 chars[] = { getHyphChar(), ',', '.', '!', ':', ';', 0 };
+        //lChar16 chars[] = { getHyphChar(), ',', '.', '!', ':', ';', 0 };
+		lChar16 chars[] = { getHyphChar(), ',', '.', '!', ':', ';', L'，', L'。', L'！', 0 };
         int maxw = 0;
         for ( int i=0; chars[i]; i++ ) {
             int w = getCharWidth( chars[i] );
@@ -1503,6 +1538,7 @@ public:
                         bool allow_hyphenation=true
                      )
     {
+        CR_UNUSED(allow_hyphenation);
         lUInt16 res = _baseFont->measureText(
                         text, len,
                         widths,
@@ -2482,12 +2518,105 @@ public:
             );
         }
     #endif
+			if ( face ) {
+				FT_Done_Face( face );
+				face = NULL;
+			}
+
             if ( _cache.findDuplicate( &def ) ) {
                 CRLog::trace("font definition is duplicate");
                 return false;
             }
             _cache.update( &def, LVFontRef(NULL) );
             if (!def.getItalic()) {
+                LVFontDef newDef( def );
+                newDef.setItalic(2); // can italicize
+                if ( !_cache.findDuplicate( &newDef ) )
+                    _cache.update( &newDef, LVFontRef(NULL) );
+            }
+            res = true;
+
+            if ( index>=num_faces-1 )
+                break;
+        }
+
+        return res;
+    }
+    /// unregisters all document fonts
+    virtual void UnregisterDocumentFonts(int documentId) {
+        _cache.removeDocumentFonts(documentId);
+    }
+
+    virtual bool RegisterExternalFont( lString16 name, lString8 family_name, bool bold, bool italic) {
+		if (name.startsWithNoCase(lString16("res://")))
+			name = name.substr(6);
+		else if (name.startsWithNoCase(lString16("file://")))
+			name = name.substr(7);
+		lString8 fname = UnicodeToUtf8(name);
+
+        bool res = false;
+
+        int index = 0;
+
+        FT_Face face = NULL;
+
+        // for all faces in file
+        for ( ;; index++ ) {
+            int error = FT_New_Face( _library, fname.c_str(), index, &face ); /* create face object */
+            if ( error ) {
+                if (index == 0) {
+                    CRLog::error("FT_New_Face returned error %d", error);
+                }
+                break;
+            }
+            bool scal = FT_IS_SCALABLE( face );
+            bool charset = checkCharSet( face );
+            //bool monospaced = isMonoSpaced( face );
+            if ( !scal || !charset ) {
+    //#if (DEBUG_FONT_MAN==1)
+     //           if ( _log ) {
+                CRLog::debug("    won't register font %s: %s",
+                    name.c_str(), !charset?"no mandatory characters in charset" : "font is not scalable"
+                    );
+    //            }
+    //#endif
+                if ( face ) {
+                    FT_Done_Face( face );
+                    face = NULL;
+                }
+                break;
+            }
+            int num_faces = face->num_faces;
+
+            css_font_family_t fontFamily = css_ff_sans_serif;
+            if ( face->face_flags & FT_FACE_FLAG_FIXED_WIDTH )
+                fontFamily = css_ff_monospace;
+            lString8 familyName( ::familyName(face) );
+            if ( familyName=="Times" || familyName=="Times New Roman" )
+                fontFamily = css_ff_serif;
+
+            LVFontDef def(
+                fname,
+                -1, // height==-1 for scalable fonts
+                bold?700:400,
+                italic?true:false,
+                fontFamily,
+                family_name,
+                index
+            );
+    #if (DEBUG_FONT_MAN==1)
+        if ( _log ) {
+            fprintf(_log, "registering font: (file=%s[%d], size=%d, weight=%d, italic=%d, family=%d, typeface=%s)\n",
+                def.getName().c_str(), def.getIndex(), def.getSize(), def.getWeight(), def.getItalic()?1:0, (int)def.getFamily(), def.getTypeFace().c_str()
+            );
+        }
+    #endif
+            if ( _cache.findDuplicate( &def ) ) {
+                CRLog::trace("font definition is duplicate");
+                return false;
+            }
+            _cache.update( &def, LVFontRef(NULL) );
+            if ( scal && !def.getItalic() ) {
                 LVFontDef newDef( def );
                 newDef.setItalic(2); // can italicize
                 if ( !_cache.findDuplicate( &newDef ) )
@@ -2505,11 +2634,7 @@ public:
         }
 
         return res;
-    }
-    /// unregisters all document fonts
-    virtual void UnregisterDocumentFonts(int documentId) {
-        _cache.removeDocumentFonts(documentId);
-    }
+	}
 
     virtual bool RegisterFont( lString8 name )
     {
@@ -2585,7 +2710,13 @@ public:
             );
         }
     #endif
-            if ( _cache.findDuplicate( &def ) ) {
+
+			if ( face ) {
+				FT_Done_Face( face );
+				face = NULL;
+			}
+
+			if ( _cache.findDuplicate( &def ) ) {
                 CRLog::trace("font definition is duplicate");
                 return false;
             }
@@ -2597,11 +2728,6 @@ public:
                     _cache.update( &newDef, LVFontRef(NULL) );
             }
             res = true;
-
-            if ( face ) {
-                FT_Done_Face( face );
-                face = NULL;
-            }
 
             if ( index>=num_faces-1 )
                 break;
@@ -2774,10 +2900,10 @@ public:
     virtual LVFontRef GetFont(int size, int weight, bool bitalic, css_font_family_t family, lString8 typeface )
     {
         int italic = bitalic?1:0;
-        if (size<10)
-            size = 10;
-        if (size>52)
-            size = 52;
+        if (size < 8)
+            size = 8;
+        if (size > 255)
+            size = 255;
         
         LVFontDef def( 
             lString8::empty_str,
@@ -2968,7 +3094,9 @@ bool ShutdownFontManager()
 
 int LVFontDef::CalcDuplicateMatch( const LVFontDef & def ) const
 {
-    bool size_match = (_size==-1 || def._size==-1) ? true 
+    if (def._documentId != -1 && _documentId != def._documentId)
+        return false;
+	bool size_match = (_size==-1 || def._size==-1) ? true
         : (def._size == _size);
     bool weight_match = (_weight==-1 || def._weight==-1) ? true 
         : (def._weight == _weight);
