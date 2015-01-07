@@ -30,7 +30,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
-import android.graphics.Point;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.text.ClipboardManager;
@@ -126,8 +126,11 @@ public class BaseActivity extends Activity implements Settings {
     	// create rest of settings
 		Services.startServices(this);
 	}
+	
+	private final static int SYSTEM_UI_FLAG_IMMERSIVE_STICKY = 4096;
 
-    @Override
+    @SuppressLint("NewApi")
+	@Override
     public void onWindowFocusChanged(boolean hasFocus) {
 	super.onWindowFocusChanged(hasFocus);
 	if (hasFocus && (DeviceInfo.getSDKLevel() >= 19)) {
@@ -137,7 +140,7 @@ public class BaseActivity extends Activity implements Settings {
 					| View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 					| View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 					| View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-					| View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+					| SYSTEM_UI_FLAG_IMMERSIVE_STICKY
 					| View.SYSTEM_UI_FLAG_FULLSCREEN;
 
             mDecorView.setSystemUiVisibility(flag);
@@ -322,7 +325,7 @@ public class BaseActivity extends Activity implements Settings {
 	}
 	
 	public boolean isSmartphone() {
-		return diagonalInches <= 5.8;
+		return diagonalInches <= 6.2; //5.8;
 	}
 	
 	private int densityDpi = 160;
@@ -384,7 +387,7 @@ public class BaseActivity extends Activity implements Settings {
         int sz = display.getWidth();
         if (sz > display.getHeight())
             sz = display.getHeight();
-        minFontSize = sz / 38;
+        minFontSize = sz / 45;
         maxFontSize = sz / 8;
         if (maxFontSize > 340)
             maxFontSize = 340;
@@ -431,9 +434,18 @@ public class BaseActivity extends Activity implements Settings {
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.GINGERBREAD)
+	private boolean isReverseLandscape() {
+		return screenOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE; 
+	}
+	
 	public boolean isLandscape()
 	{
-		return screenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE || screenOrientation == ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
+		if (screenOrientation == ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE)
+			return true;
+		if (DeviceInfo.getSDKLevel() >= 9 && isReverseLandscape())
+			return true;
+		return false;
 	}
 
 	// support pre API LEVEL 9
@@ -1490,7 +1502,7 @@ public class BaseActivity extends Activity implements Settings {
 	        }
 	        
 	        // default key actions
-          boolean menuKeyActionFound = false;
+            boolean menuKeyActionFound = false;
 	        for ( DefKeyAction ka : DEF_KEY_ACTIONS ) {
 	        		props.applyDefault(ka.getProp(), ka.action.id);
 	        		if (ReaderAction.READER_MENU.id.equals(ka.action.id))

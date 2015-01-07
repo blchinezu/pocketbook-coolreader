@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.04.39"
+#define CACHE_FILE_FORMAT_VERSION "3.12.52"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -6558,6 +6558,38 @@ bool ldomXPointerEx::nextVisibleWordStart( bool thisBlockOnly )
     }
 }
 
+/// move to end of current word
+bool ldomXPointerEx::thisVisibleWordEnd(bool thisBlockOnly)
+{
+    CR_UNUSED(thisBlockOnly);
+    if ( isNull() )
+        return false;
+    ldomNode * node = NULL;
+    lString16 text;
+    int textLen = 0;
+    bool moved = false;
+    if ( !isText() || !isVisible() )
+        return false;
+    node = getNode();
+    text = node->getText();
+    textLen = text.length();
+    if ( _data->getOffset() >= textLen )
+        return false;
+    // skip spaces
+    while ( _data->getOffset()<textLen && IsUnicodeSpace(text[ _data->getOffset() ]) ) {
+        _data->addOffset(1);
+        //moved = true;
+    }
+    // skip non-spaces
+    while ( _data->getOffset()<textLen ) {
+        if ( IsUnicodeSpace(text[ _data->getOffset() ]) )
+            break;
+        moved = true;
+        _data->addOffset(1);
+    }
+    return moved;
+}
+
 /// move to next visible word end
 bool ldomXPointerEx::nextVisibleWordEnd( bool thisBlockOnly )
 {
@@ -6780,7 +6812,8 @@ bool ldomXPointerEx::isSentenceEnd()
     // word is not ended with . ! ?
     // check whether it's last word of block
     ldomXPointerEx pos(*this);
-    return !pos.nextVisibleWordStart(true);
+    //return !pos.nextVisibleWordStart(true);
+    return !pos.thisVisibleWordEnd(true);
 }
 
 /// move to beginning of current visible text sentence

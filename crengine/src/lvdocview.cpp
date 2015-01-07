@@ -2890,7 +2890,7 @@ bool LVDocView::navigateTo(lString16 historyPath) {
 		lString16 curr_fname = getNavigationPath();
 		if (curr_fname != fname) {
 			CRLog::debug(
-					"navigateTo() : file name doesn't match: current=%s %s, new=%s %s",
+                    "navigateTo() : file name doesn't match: current=%s, new=%s",
 					LCSTR(curr_fname), LCSTR(fname));
 			if (!goLink(fname, false))
 				return false;
@@ -5468,13 +5468,23 @@ int LVDocView::onSelectionCommand( int cmd, int param )
     //int y1 = y0 + h;
     if (makeSelStartVisible) {
         // make start of selection visible
-        if (startPoint.y < y0 + m_font_size * 2 || startPoint.y > y0 + h * 3/4)
-            SetPos(startPoint.y - m_font_size * 2);
+        if (isScrollMode()) {
+            if (startPoint.y < y0 + m_font_size * 2 || startPoint.y > y0 + h * 3/4)
+                SetPos(startPoint.y - m_font_size * 2);
+        } else {
+            if (startPoint.y < y0 || startPoint.y >= y0 + h)
+                SetPos(startPoint.y);
+        }
         //goToBookmark(currSel.getStart());
     } else {
         // make end of selection visible
-        if (endPoint.y > y0 + h * 3/4 - m_font_size * 2)
-            SetPos(endPoint.y - h * 3/4 + m_font_size * 2, false);
+        if (isScrollMode()) {
+            if (endPoint.y > y0 + h * 3/4 - m_font_size * 2)
+                SetPos(endPoint.y - h * 3/4 + m_font_size * 2, false);
+        } else {
+            if (endPoint.y < y0 || endPoint.y >= y0 + h)
+                SetPos(endPoint.y, false);
+        }
     }
     CRLog::debug("Sel: %s", LCSTR(currSel.getRangeText()));
     return 1;
@@ -5637,7 +5647,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 
     static int def_status_line[] = { 0, 1, 2 };
 	props->limitValueList(PROP_STATUS_LINE, def_status_line, 3);
-    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 10, 12, 14, 15, 16, 20, 22, 24, 25, 26, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
+    static int def_margin[] = {8, 0, 1, 2, 3, 4, 5, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20, 22, 24, 25, 30, 40, 50, 60, 80, 100, 130, 150, 200, 300};
 	props->limitValueList(PROP_PAGE_MARGIN_TOP, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_BOTTOM, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_LEFT, def_margin, sizeof(def_margin)/sizeof(int));
@@ -5840,7 +5850,7 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
                    == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT
                    || name == PROP_PAGE_MARGIN_BOTTOM) {
             int margin = props->getIntDef(name.c_str(), 8);
-            int maxmargin = (name == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT) ? m_dx / 3 : m_dy / 3;
+            int maxmargin = (name == PROP_PAGE_MARGIN_LEFT || name == PROP_PAGE_MARGIN_RIGHT) ? m_dx / 4 : m_dy / 4;
             if (margin > maxmargin)
                 margin = maxmargin;
 			lvRect rc = getPageMargins();
