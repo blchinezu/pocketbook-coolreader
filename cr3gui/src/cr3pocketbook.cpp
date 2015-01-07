@@ -597,25 +597,29 @@ void handle_LinksContextMenu(int index)
     CRPocketBookWindowManager::instance->resetTillUp();
 }
 
+void Draw4Bits(LVDrawBuf & src, lUInt8 *dest, int x, int y, int w, int h)
+{
+    lUInt8 * line = src.GetScanLine(y);
+    int limit = x + w -1;
+    int scanline = (w + 1)/2;
+
+    for (int yy = 0; yy < h; yy++) {
+        int sx = x;
+        for (int xx = 0; xx < scanline; xx++) {
+            dest[xx] = line[sx++] & 0xF0;
+            if (sx < limit)
+                dest[xx] |= (line[sx++] >> 4);
+        }
+        line += src.GetRowSize();
+        dest += scanline;
+    }
+}
+
 void CRPocketBookScreen::draw(int x, int y, int w, int h)
 {
     if (m_bpp == 4) {
-        lUInt8 * line = _front->GetScanLine(y);
-        lUInt8 *dest = _buf4bpp;
-        int limit = x + w -1;
-        int scanline = (w + 1)/2;
-
-        for (int yy = 0; yy < h; yy++) {
-            int sx = x;
-            for (int xx = 0; xx < scanline; xx++) {
-                dest[xx] = line[sx++] & 0xF0;
-                if (sx < limit)
-                    dest[xx] |= (line[sx++] >> 4);
-            }
-            line += _front->GetRowSize();
-            dest += scanline;
-        }
-        Stretch(_buf4bpp, IMAGE_GRAY4, w, h, scanline, x, y, w, h, 0);
+        Draw4Bits(*_front, _buf4bpp, x, y, w, h);
+        Stretch(_buf4bpp, IMAGE_GRAY4, w, h, (w + 1)/2, x, y, w, h, 0);
     } else
         Stretch(_front->GetScanLine(y), m_bpp, w, h, _front->GetRowSize(), x, y, w, h, 0);
 }
@@ -1243,10 +1247,14 @@ protected:
             LVImageSourceRef img = getQuickMenuImage();
             if ( !img.isNull() ) {
                 _bm3x3 = NewBitmap(img->GetWidth(), img->GetHeight());
-                LVGrayDrawBuf tmpBuf( img->GetWidth(), img->GetHeight() );
+                LVGrayDrawBuf tmpBuf( img->GetWidth(), img->GetHeight(), _bm3x3->depth );
 
                 tmpBuf.Draw(img, 0, 0, img->GetWidth(), img->GetHeight(), true);
-                memcpy(_bm3x3->data, tmpBuf.GetScanLine(0), _bm3x3->height * _bm3x3->scanline);
+                if(4 == _bm3x3->depth) {
+                    Draw4Bits(tmpBuf, _bm3x3->data, 0, 0, img->GetWidth(), img->GetHeight());
+                } else {
+                    memcpy(_bm3x3->data, tmpBuf.GetScanLine(0), _bm3x3->height * _bm3x3->scanline);
+                }
                 m_bmFromSkin = true;
             } else
                 _bm3x3 = GetResource(const_cast<char*>(PB_QUICK_MENU_BMP_ID), NULL);
