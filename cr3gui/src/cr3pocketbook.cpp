@@ -1288,7 +1288,7 @@ protected:
                 lString8 menuActionId(PB_QUICK_MENU_ACTION_ID);
                 for (int i = 0; i < 9; i++) {
                     menuActionId[PB_QUICK_MENU_ACTION_ID_IDX] = '0' + i;
-                    char *action = GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
+                    char *action = (char*)GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
                     _quick_menuactions[i] = CRPocketBookWindowManager::instance->getPocketBookCommandIndex(action);
                 }
             }
@@ -3627,6 +3627,7 @@ void SetSaveStateTimer(){
 }
 #endif 
 
+static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
     bool process_events = false;
@@ -3638,6 +3639,22 @@ int main_handler(int type, int par1, int par2)
     case EVT_SHOW:
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
+        if (need_save_cover) {
+            ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight() - PanelHeight());
+            if (cover) {
+                ibitmap *cover_prev = LoadBitmap( USERLOGOPATH"/bookcover");
+                if (cover_prev) {
+                    if( cover->scanline * cover->height == cover_prev->scanline * cover_prev->height &&
+                        memcmp(cover->data,cover_prev->data,cover->scanline * cover->height) == 0 )
+                        need_save_cover = 0;
+                    if (need_save_cover)
+                        SaveBitmap( USERLOGOPATH"/bookcover", cover);
+                    free(cover_prev);
+                }
+                free(cover);
+            }
+            need_save_cover = false;
+        }
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
@@ -3706,6 +3723,10 @@ int main_handler(int type, int par1, int par2)
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
         break;
+    case EVT_INIT:
+        SetPanelType(0);
+        need_save_cover = true;
+        break;
     default:
         break;
     }
@@ -3721,6 +3742,7 @@ const char* TR(const char *label)
     return tr;
 }
 
+extern ifont* header_font;
 int main(int argc, char **argv)
 {
     OpenScreen();
@@ -3732,6 +3754,7 @@ int main(int argc, char **argv)
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
         return 2;
     }
+    header_font->color = WHITE;
     InkViewMain(main_handler);
     return 0;
 }
