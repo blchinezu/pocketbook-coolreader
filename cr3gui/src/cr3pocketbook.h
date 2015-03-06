@@ -17,7 +17,8 @@ enum CRPbCommands {
 	PB_QUICK_MENU_SELECT,
 	PB_CMD_ROTATE,
 	PB_CMD_ROTATE_ANGLE_SET,
-	PB_CMD_CONTENTS,
+    PB_CMD_CONTENTS,
+    PB_CMD_FRONT_LIGHT,
 	PB_CMD_LEFT,
 	PB_CMD_RIGHT,
 	PB_CMD_UP,
@@ -44,7 +45,7 @@ enum CRPbCommands {
 
 #define KEY_BUFFER_LEN 256
 
-#define PROP_POCKETBOOK_ORIENTATION    "cr3.pocketbook.orientation"
+#define PROP_POCKETBOOK_ORIENTATION "cr3.pocketbook.orientation"
 #define PROP_POCKETBOOK_DICT "cr3.pocketbook.dictionary"
 #define PROP_POCKETBOOK_DICT_PAGES "cr3.pocketbook.dict.pages"
 #define PROP_POCKETBOOK_DICT_AUTO_TRANSLATE "cr3.pocketbook.dict.auto"
@@ -54,8 +55,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-16"
-#define CR_PB_BUILD_DATE "2014-02-18"
+#define CR_PB_VERSION "0.0.6-16-1"
+#define CR_PB_BUILD_DATE "2015-03-06"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -65,11 +66,14 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_PREV_NEXT 5
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
+#define PB_FRONT_LIGHT_BIN "/ebrmain/bin/front-light.app"
+
 const char* TR(const char *label);
 
 int getPB_keyboardType();
 int getPB_screenType();
 bool isGSensorSupported();
+bool isFrontLightSupported();
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
 //#define BACKGROUND_CACHE_FILE_CREATION

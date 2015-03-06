@@ -352,6 +352,7 @@ static const struct {
     { "@KA_olnk", MCMD_GO_LINK, 0},
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
+    { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
     { "@KA_zmin", DCMD_ZOOM_IN, 0},
@@ -1538,6 +1539,9 @@ public:
         case PB_CMD_CONTENTS:
             showContents();
             return true;
+        case PB_CMD_FRONT_LIGHT:
+            showFrontLight();
+            return true;
         case MCMD_GO_LINK:
             if (!m_link.empty()) {
                 _docview->goLink(m_link);
@@ -1655,6 +1659,36 @@ public:
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
         _wm->activateWindow( wnd );
+    }
+
+    void showFrontLight() {
+        if( isFrontLightSupported() ) {
+            pid_t cpid;
+            pid_t child_pid;
+            cpid = fork();
+
+            switch (cpid) {
+                case -1:
+                    CRLog::error("showFrontLight(): Fork failed!");
+                    break;
+
+                case 0:
+                    child_pid = getpid();
+                    CRLog::trace("showFrontLight(): Child: PID %d", child_pid);
+                    CRLog::trace("showFrontLight(): Child: Launch %s", PB_FRONT_LIGHT_BIN);
+                    execl(PB_FRONT_LIGHT_BIN, PB_FRONT_LIGHT_BIN, NULL);
+                    exit(0);
+
+                default:
+                    CRLog::trace("showFrontLight(): Parent: Waiting for %d to finish", cpid);
+                    waitpid(cpid, NULL, 0);
+                    CRLog::trace("showFrontLight(): Parent: Returned from front-light.app");
+                    CRPocketBookWindowManager::instance->update(true);
+            }
+        }
+        else {
+            CRLog::trace("showFrontLight(): Front light isn't supported! You shouldn't be able to get here.");
+        }
     }
 
     void readingOff()
@@ -3247,6 +3281,11 @@ int getPB_screenType()
 bool isGSensorSupported()
 {
     return HWC_HAS_GSENSOR;
+}
+
+bool isFrontLightSupported()
+{
+    return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
 }
 
 

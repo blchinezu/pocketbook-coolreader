@@ -182,6 +182,10 @@ elseif ( ${GUI} STREQUAL CRGUI_WIN32 )
 
 elseif (${GUI} STREQUAL CRGUI_PB)
 #    SET(CR3_SOURCES ${CR3_SOURCES} src/cr3pocketbook.cpp)
+    # ADD_DEFINITIONS(-Wno-format-y2k)
+    # ADD_DEFINITIONS(-fomit-frame-pointer)
+    # ADD_DEFINITIONS(-fsigned-char)
+    # ADD_DEFINITIONS(-s)
     if (POCKETBOOK_PRO)
       Message("Will build for pocketbook PRO")
       ADD_DEFINITIONS(-DPOCKETBOOK_PRO=1)
@@ -212,16 +216,23 @@ elseif (${GUI} STREQUAL CRGUI_PB)
     IF(NOT ZIP_EXECUTABLE)
 	MESSAGE(FATAL_ERROR "Unable to find 'zip' executable")
     ENDIF(NOT ZIP_EXECUTABLE)
-    SET( cr3_def_skin ${CMAKE_CURRENT_BINARY_DIR}/default.cr3skin )
-    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_def_skin} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_def_skin} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/default/* )
-    ADD_CUSTOM_TARGET( skin ALL DEPENDS ${cr3_def_skin} )
+
+    SET( cr3_skin_default ${CMAKE_CURRENT_BINARY_DIR}/default.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_default} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_default} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/default/* )
+    ADD_CUSTOM_TARGET( skin_default ALL DEPENDS ${cr3_skin_default} )
+    
+    SET( cr3_skin_pb62x ${CMAKE_CURRENT_BINARY_DIR}/pb62x.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_pb62x} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_pb62x} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/pb62x/* )
+    ADD_CUSTOM_TARGET( skin_pb62x ALL DEPENDS ${cr3_skin_pb62x} )
+
     INSTALL( FILES ${CR3_STYLES} DESTINATION system/share/cr3)
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pdb" )
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pattern" )
 #    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
-    INSTALL( FILES ${cr3_def_skin} DESTINATION system/share/cr3/skins )
+    INSTALL( FILES ${cr3_skin_default} DESTINATION system/share/cr3/skins )
+    INSTALL( FILES ${cr3_skin_pb62x} DESTINATION system/share/cr3/skins )
     INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/keymaps/ DESTINATION system/share/cr3/keymaps )
     INSTALL( DIRECTORY data/manual/ DESTINATION system/share/cr3/manual )
 

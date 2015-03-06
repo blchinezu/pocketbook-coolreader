@@ -43,6 +43,7 @@
 #define CR3_ACTION_QUICK_MENU "QUICK_MENU"
 #define CR3_ACTION_PB_MAIN_MENU "PB_MAIN_MENU"
 #define CR3_ACTION_PB_CONTENTS "PB_CONTENTS"
+#define CR3_ACTION_PB_FRONT_LIGHT "PB_FRONT_LIGHT"
 
 typedef struct {
     const char * action_id;
@@ -74,6 +75,7 @@ static const action_def_t availableActions[] = {
     { CR3_ACTION_QUICK_MENU, PB_QUICK_MENU, 0 },
     { CR3_ACTION_PB_MAIN_MENU, PB_CMD_MAIN_MENU, 0 },
     { CR3_ACTION_PB_CONTENTS, PB_CMD_CONTENTS, 0 },
+    { CR3_ACTION_PB_FRONT_LIGHT, PB_CMD_FRONT_LIGHT, 0 },
 #endif
     { NULL, 0, 0 }
 };
@@ -254,6 +256,13 @@ public:
         setAccelerators(parentMenu->getAccelerators());
         _actionsMenu = new CRActionsMenu(this, _props, rc);
         for ( int i=0; availableActions[i].action_id; i++ ) {
+
+            #ifdef CR_POCKETBOOK
+            if( availableActions[i].action_id == CR3_ACTION_PB_FRONT_LIGHT &&
+                !isFrontLightSupported() )
+                continue;
+            #endif
+
             lString8 label( getActionName(i) );
             lString8 propertyValue( availableActions[i].action_id);
             _actionsMenu->addItem( new CRMenuItem(_actionsMenu, i,
