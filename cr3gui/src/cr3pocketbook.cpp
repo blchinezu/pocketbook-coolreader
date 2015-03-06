@@ -3639,23 +3639,33 @@ int main_handler(int type, int par1, int par2)
     case EVT_SHOW:
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
+        FullUpdate();
+
+        // CRLog::trace("COVER_OFF_SAVE");
+        // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
+            // CRLog::trace("COVER_OFF_SAVE: need_save_cover");
             ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight() - PanelHeight());
             if (cover) {
+                // CRLog::trace("COVER_OFF_SAVE: cover");
                 ibitmap *cover_prev = LoadBitmap( USERLOGOPATH"/bookcover");
                 if (cover_prev) {
+                    // CRLog::trace("COVER_OFF_SAVE: cover_prev");
                     if( cover->scanline * cover->height == cover_prev->scanline * cover_prev->height &&
-                        memcmp(cover->data,cover_prev->data,cover->scanline * cover->height) == 0 )
+                        memcmp(cover->data,cover_prev->data,cover->scanline * cover->height) == 0 ) {
+                        // CRLog::trace("COVER_OFF_SAVE: Deact need_save_cover");
                         need_save_cover = 0;
-                    if (need_save_cover)
+                    }
+                    if (need_save_cover) {
+                        CRLog::trace("Save bookcover for power off logo");
                         SaveBitmap( USERLOGOPATH"/bookcover", cover);
+                    }
                     free(cover_prev);
                 }
                 free(cover);
             }
             need_save_cover = false;
         }
-        FullUpdate();
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
