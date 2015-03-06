@@ -3655,6 +3655,7 @@ int main_handler(int type, int par1, int par2)
             }
             need_save_cover = false;
         }
+        FullUpdate();
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
