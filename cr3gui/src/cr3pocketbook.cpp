@@ -3453,9 +3453,12 @@ int InitDoc(const char *exename, char *fileName)
                 }
             }
         }
-        bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
-        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8)
-            bpp = 2;
+        bpp = GetHardwareDepth();
+        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16) {
+            bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
+            if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16)
+                bpp = 2;
+        }
         CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
         CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight(), bpp);
@@ -3697,7 +3700,7 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
             FullUpdate();
-            
+
             // CRLog::trace("COVER_OFF_SAVE: need_save_cover");
             ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight() - PanelHeight());
             if (cover) {
