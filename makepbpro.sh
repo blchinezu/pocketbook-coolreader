@@ -3,7 +3,7 @@
 mkdir -p pbPro
 cd pbPro
 cmake \
-    -D INKVIEW_LIB=/home/brucelee/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so \
+    -D INKVIEW_LIB=$HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so \
     -D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-gnu-eabi-pocketbook.cmake \
     -D TARGET_TYPE=ARM \
     -D DEVICE_NAME=pb360 \

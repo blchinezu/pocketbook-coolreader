@@ -3,7 +3,7 @@
 mkdir -p pb360
 cd pb360
 cmake \
-    -D INKVIEW_LIB=/home/brucelee/PBDEV/PBSDK/arm-linux/lib/libinkview.so \
+    -D INKVIEW_LIB=$HOME/PBDEV/PBSDK/arm-linux/lib/libinkview.so \
 	-D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-pocketbook.cmake \
 	-D TARGET_TYPE=ARM \
 	-D DEVICE_NAME=pb360 \
