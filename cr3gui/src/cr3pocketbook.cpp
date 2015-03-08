@@ -877,7 +877,7 @@ private:
     char *_newWord;
     char *_newTranslation;
 private:
-    void searchDictinary();
+    void searchDictionary();
     void loadDictionaries();
 protected:
     virtual void selectDictionary();
@@ -1691,7 +1691,7 @@ public:
         }
         else {
             CRLog::trace("showFrontLight(): Front light isn't supported! You shouldn't be able to get here.");
-            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary", 2000);
+            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the front light binary  @ "PB_FRONT_LIGHT_BIN, 2000);
         }
     }
 
@@ -2210,7 +2210,7 @@ void CRPbDictionaryView::setCurItem(int index)
     Update();
 }
 
-void CRPbDictionaryView::searchDictinary()
+void CRPbDictionaryView::searchDictionary()
 {
     _searchPattern.clear();
    // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
@@ -2242,10 +2242,10 @@ bool CRPbDictionaryView::onItemSelect()
     case PB_DICT_ARTICLE_LIST:
         return true;
     case PB_DICT_DEACTIVATE:
-      doDeactivate();
+        doDeactivate();
         return true;
     case PB_DICT_SEARCH:
-        searchDictinary();
+        searchDictionary();
         return true;
     case PB_DICT_GOOGLE:
         launchDictBrowser(PB_BROWSER_QUERY_GOOGLE);
@@ -2364,113 +2364,76 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
           {
             CRLog::trace("onTouchEvent() point inside toolbar" );
 
-            tmpRc.right = tmpRc.left + tbWidth/(_itemsCount -1);
+            int itemWidth = tbWidth/(_itemsCount-1);
+
+            tmpRc.right = tmpRc.left + itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-              _selectedIndex= PB_DICT_EXIT;
-              CRLog::trace("onTouchEvent() PB_DICT_EXIT %d", _selectedIndex );
-              closeDictionary();
-              return true;
+                CRLog::trace("onTouchEvent() PB_DICT_EXIT %d", PB_DICT_EXIT );
+                setCurItem( PB_DICT_EXIT );
+                onItemSelect();
+                Update();
+                closeDictionary();
+                return true;
             }
 
-            tmpRc.left  += tbWidth/(_itemsCount -1);
-            tmpRc.right += tbWidth/(_itemsCount -1);
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_GOOGLE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-                if ( _selectedIndex == PB_DICT_WIKIPEDIA ) {
-                    _wm->postCommand( PB_CMD_LEFT, 0 );
-                    return true;
-                }
-                else if ( _selectedIndex == PB_DICT_EXIT ) {
-                    _wm->postCommand( PB_CMD_RIGHT, 0 );
-                    return true;
-                }
-
-                _selectedIndex= PB_DICT_GOOGLE;
-                CRLog::trace("onTouchEvent() PB_DICT_GOOGLE %d", _selectedIndex );
-                setCurItem( _selectedIndex );
+                CRLog::trace("onTouchEvent() PB_DICT_GOOGLE %d", PB_DICT_GOOGLE );
+                setCurItem( PB_DICT_GOOGLE );
                 onItemSelect();
                 Update();
                 return true;
             }
 
-            tmpRc.left  += tbWidth/(_itemsCount -1);
-            tmpRc.right += tbWidth/(_itemsCount -1);
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_WIKIPEDIA tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-                if ( _selectedIndex == PB_DICT_ARTICLE_LIST ) {
-                    _wm->postCommand( PB_CMD_LEFT, 0 );
-                    return true;
-                }
-                else if ( _selectedIndex == PB_DICT_GOOGLE ) {
-                    _wm->postCommand( PB_CMD_RIGHT, 0 );
-                    return true;
-                }
-
-                _selectedIndex= PB_DICT_WIKIPEDIA;
-                CRLog::trace("onTouchEvent() PB_DICT_WIKIPEDIA %d", _selectedIndex );
-                setCurItem( _selectedIndex );
+                CRLog::trace("onTouchEvent() PB_DICT_WIKIPEDIA %d", PB_DICT_WIKIPEDIA );
+                setCurItem( PB_DICT_WIKIPEDIA );
                 onItemSelect();
                 Update();
                 return true;
             }
 
-            tmpRc.left  += tbWidth/(_itemsCount -1);
-            tmpRc.right += tbWidth/(_itemsCount -1);
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-                if ( _selectedIndex == PB_DICT_DEACTIVATE ) {
-                    _wm->postCommand( PB_CMD_LEFT, 0 );
-                    return true;
-                }
-                else if ( _selectedIndex == PB_DICT_WIKIPEDIA ) {
-                    _wm->postCommand( PB_CMD_RIGHT, 0 );
-                    return true;
-                }
-
-                _selectedIndex= PB_DICT_ARTICLE_LIST;
-                CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", _selectedIndex );
-                setCurItem( _selectedIndex );
+                CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", PB_DICT_ARTICLE_LIST );
+                setCurItem( PB_DICT_ARTICLE_LIST );
                 onItemSelect();
                 Update();
                 return true;
             }
 
-            tmpRc.left  += tbWidth/(_itemsCount -1);
-            tmpRc.right += tbWidth/(_itemsCount -1);
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-                if ( _selectedIndex == PB_DICT_ARTICLE_LIST ) {
-                    // return this->onCommand( PB_CMD_RIGHT, 1 );
-                    // return _wm->postCommand( PB_CMD_RIGHT, 0 );
-                    _wm->postCommand( PB_CMD_RIGHT, 0 );
-                    return true;
-                }
-                else if ( _selectedIndex == PB_DICT_SEARCH ) {
-                    // return this->onCommand( PB_CMD_LEFT, 1 );
-                    _wm->postCommand( PB_CMD_LEFT, 0 );
-                    return true;
-                }
-
-                // _selectedIndex= PB_DICT_DEACTIVATE;
-                CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", _selectedIndex );
+                CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", PB_DICT_DEACTIVATE );
+                setCurItem( PB_DICT_DEACTIVATE );
+                onItemSelect();
+                Update();
                 return true;
             }
 
-            tmpRc.left  += tbWidth/(_itemsCount -1);
-            tmpRc.right += tbWidth/(_itemsCount -1);
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_SEARCH tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-                CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", _selectedIndex );
-                _selectedIndex= PB_DICT_SEARCH;
+                CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", PB_DICT_SEARCH );
                 setCurItem( PB_DICT_SEARCH );
-                searchDictinary();
+                searchDictionary();
                 Update();
                 return true;
             }
@@ -3374,7 +3337,7 @@ void launchBrowser(lString16 url) {
     }
     else {
         CRLog::trace("launchBrowser(): The browser binary is not present @ %s", PB_BROWSER_BINARY);
-        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary", 2000);
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary @ "PB_BROWSER_BINARY, 2000);
     }
 }
 
