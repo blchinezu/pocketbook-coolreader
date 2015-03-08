@@ -68,12 +68,20 @@ enum CRPbCommands {
 
 #define PB_FRONT_LIGHT_BIN "/ebrmain/bin/front-light.app"
 
+#define PB_BROWSER_BINARY "/ebrmain/bin/browser.app"
+#define PB_BROWSER_EXEC "/ebrmain/bin/openbook"
+#define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
+#define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
+
 const char* TR(const char *label);
 
 int getPB_keyboardType();
 int getPB_screenType();
 bool isGSensorSupported();
 bool isFrontLightSupported();
+bool isBrowserSupported();
+
+void launchBrowser(lString16 url);
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
 //#define BACKGROUND_CACHE_FILE_CREATION

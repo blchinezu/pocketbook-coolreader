@@ -27,9 +27,11 @@
 
 #define PB_DICT_SELECT 0
 #define PB_DICT_EXIT 1
-#define PB_DICT_ARTICLE_LIST 2
-#define PB_DICT_DEACTIVATE 3
-#define PB_DICT_SEARCH 4
+#define PB_DICT_GOOGLE 2
+#define PB_DICT_WIKIPEDIA 3
+#define PB_DICT_ARTICLE_LIST 4
+#define PB_DICT_DEACTIVATE 5
+#define PB_DICT_SEARCH 6
 
 #define PB_LINE_HEIGHT 30
 
@@ -879,6 +881,7 @@ private:
     void loadDictionaries();
 protected:
     virtual void selectDictionary();
+    virtual void launchDictBrowser(char *urlBase);
     virtual void onDictionarySelect();
     virtual bool onItemSelect();
 public:
@@ -1688,6 +1691,7 @@ public:
         }
         else {
             CRLog::trace("showFrontLight(): Front light isn't supported! You shouldn't be able to get here.");
+            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary", 2000);
         }
     }
 
@@ -1951,7 +1955,7 @@ static void paused_rotate_timer()
 
 CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDialog *parent) 
     : CRViewDialog(wm, lString16::empty_str, lString8::empty_str, lvRect(), false, true), _parent(parent),
-    _dictsTable(16), _active(false), _dictsLoaded(false), _itemsCount(5), _translateResult(0),
+    _dictsTable(16), _active(false), _dictsLoaded(false), _itemsCount(7), _translateResult(0),
     _newWord(NULL), _newTranslation(NULL)
 {
     bool default_dict = false;
@@ -2056,7 +2060,7 @@ void CRPbDictionaryView::drawTitleBar()
     if ( !getTitleRect( titleRc ) )
         return;
 
-//    CRLog::trace("CRPbDictionaryView::drawTitleBar() titleRc ( %d, %d, %d, %d ) w= %d", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom, titleRc.width() );
+   // CRLog::trace("CRPbDictionaryView::drawTitleBar() titleRc ( %d, %d, %d, %d ) w= %d", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom, titleRc.width() );
     titleSkin->draw( buf, titleRc );
     lvRect borders = titleSkin->getBorderWidths();
     buf.SetTextColor( skin->getTextColor() );
@@ -2068,7 +2072,7 @@ void CRPbDictionaryView::drawTitleBar()
         int h = _icon->GetHeight();
         buf.Draw( _icon, titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
         imgWidth = w + 8;
-//        CRLog::trace("CRPbDictionaryView::drawTitleBar() _icon ( %d, %d, %d, %d )", titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() _icon ( %d, %d, %d, %d )", titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
     }
     int tbWidth = 0;
     if (!_toolBarImg.isNull()) 
@@ -2077,7 +2081,7 @@ void CRPbDictionaryView::drawTitleBar()
         int h = _toolBarImg->GetHeight();
         titleRc.right -= (tbWidth + titleSkin->getBorderWidths().right);
         buf.Draw(_toolBarImg, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
-//        CRLog::trace("CRPbDictionaryView::drawTitleBar() _toolBarImg tbWidth=%d, h=%d ( %d, %d, %d, %d )", tbWidth, h, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() _toolBarImg tbWidth=%d, h=%d ( %d, %d, %d, %d )", tbWidth, h, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
     }
     lvRect textRect = titleRc;
     textRect.left += imgWidth;
@@ -2100,7 +2104,7 @@ void CRPbDictionaryView::drawTitleBar()
         selRc.top += borders.top;
         selRc.bottom -= borders.bottom;
         buf.InvertRect(selRc.left, selRc.top, selRc.right, selRc.bottom);
-//        CRLog::trace("CRPbDictionaryView::drawTitleBar() InvertRect ( %d, %d, %d, %d )", selRc.left, selRc.top, selRc.right, selRc.bottom );
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() InvertRect ( %d, %d, %d, %d )", selRc.left, selRc.top, selRc.right, selRc.bottom );
     }
 }
 
@@ -2209,9 +2213,13 @@ void CRPbDictionaryView::setCurItem(int index)
 void CRPbDictionaryView::searchDictinary()
 {
     _searchPattern.clear();
-//    OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+   // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
     OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
 
+}
+
+void CRPbDictionaryView::launchDictBrowser(char *urlBase) {
+    launchBrowser(urlBase+_word);
 }
 
 void CRPbDictionaryView::closeDictionary()
@@ -2238,6 +2246,12 @@ bool CRPbDictionaryView::onItemSelect()
         return true;
     case PB_DICT_SEARCH:
         searchDictinary();
+        return true;
+    case PB_DICT_GOOGLE:
+        launchDictBrowser(PB_BROWSER_QUERY_GOOGLE);
+        return true;
+    case PB_DICT_WIKIPEDIA:
+        launchDictBrowser(PB_BROWSER_QUERY_WIKIPEDIA);
         return true;
     }
     return false;
@@ -2291,11 +2305,11 @@ bool CRPbDictionaryView::onCommand( int command, int params )
 
 bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType )
 {
-//  CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+ // CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
 
   if (_active) 
   {
-//    CRLog::trace("CRPbDictionaryView::onTouchEvent _active %d ( %d, %d, %d )",  _active, x, y, int( evType ) );
+   // CRLog::trace("CRPbDictionaryView::onTouchEvent _active %d ( %d, %d, %d )",  _active, x, y, int( evType ) );
     switch ( evType )
     {
     case CRTOUCH_UP:
@@ -2314,16 +2328,16 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
         if ( _toolBarImg.isNull() || !getTitleRect( titleRc ) || !getClientRect( titleRc ) || !pnItm.y )
           return true;
 
-//        CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
-//        CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+        // CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+        // CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
 
         titleRc.bottom= titleRc.top;
         titleRc.top= clientRc.top;
         clientRc.top= titleRc.bottom;
 
         CRLog::trace("===========================================================================================" );
-//        CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
-//        CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+        // CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+        // CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
 
         int command = 0;
         lvRect tmpRc;
@@ -2350,8 +2364,8 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
           {
             CRLog::trace("onTouchEvent() point inside toolbar" );
 
-            tmpRc.right = tmpRc.left + tbWidth/4;
-           CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            tmpRc.right = tmpRc.left + tbWidth/(_itemsCount -1);
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
               _selectedIndex= PB_DICT_EXIT;
@@ -2360,70 +2374,108 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
               return true;
             }
 
-            tmpRc.left  += tbWidth/4;
-            tmpRc.right += tbWidth/4;
+            tmpRc.left  += tbWidth/(_itemsCount -1);
+            tmpRc.right += tbWidth/(_itemsCount -1);
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_GOOGLE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                if ( _selectedIndex == PB_DICT_WIKIPEDIA ) {
+                    _wm->postCommand( PB_CMD_LEFT, 0 );
+                    return true;
+                }
+                else if ( _selectedIndex == PB_DICT_EXIT ) {
+                    _wm->postCommand( PB_CMD_RIGHT, 0 );
+                    return true;
+                }
+
+                _selectedIndex= PB_DICT_GOOGLE;
+                CRLog::trace("onTouchEvent() PB_DICT_GOOGLE %d", _selectedIndex );
+                setCurItem( _selectedIndex );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += tbWidth/(_itemsCount -1);
+            tmpRc.right += tbWidth/(_itemsCount -1);
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_WIKIPEDIA tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                if ( _selectedIndex == PB_DICT_ARTICLE_LIST ) {
+                    _wm->postCommand( PB_CMD_LEFT, 0 );
+                    return true;
+                }
+                else if ( _selectedIndex == PB_DICT_GOOGLE ) {
+                    _wm->postCommand( PB_CMD_RIGHT, 0 );
+                    return true;
+                }
+
+                _selectedIndex= PB_DICT_WIKIPEDIA;
+                CRLog::trace("onTouchEvent() PB_DICT_WIKIPEDIA %d", _selectedIndex );
+                setCurItem( _selectedIndex );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += tbWidth/(_itemsCount -1);
+            tmpRc.right += tbWidth/(_itemsCount -1);
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-              if ( _selectedIndex == PB_DICT_DEACTIVATE )
-              {
-//                 return this->onCommand( PB_CMD_LEFT, 1 );
-                   _wm->postCommand( PB_CMD_LEFT, 0 );
-                   return true;
-              }
-              else
-              if ( _selectedIndex == PB_DICT_EXIT )
-              {
-//                 return this->onCommand( PB_CMD_RIGHT, 1 );
-                   _wm->postCommand( PB_CMD_RIGHT, 0 );
-                   return true;
-              }
-              
-              _selectedIndex= PB_DICT_ARTICLE_LIST;
-              CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", _selectedIndex );
-              setCurItem( _selectedIndex );
-              onItemSelect();
-              Update();
-              return true;
+                if ( _selectedIndex == PB_DICT_DEACTIVATE ) {
+                    _wm->postCommand( PB_CMD_LEFT, 0 );
+                    return true;
+                }
+                else if ( _selectedIndex == PB_DICT_WIKIPEDIA ) {
+                    _wm->postCommand( PB_CMD_RIGHT, 0 );
+                    return true;
+                }
+
+                _selectedIndex= PB_DICT_ARTICLE_LIST;
+                CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", _selectedIndex );
+                setCurItem( _selectedIndex );
+                onItemSelect();
+                Update();
+                return true;
             }
 
-            tmpRc.left  += tbWidth/4;
-            tmpRc.right += tbWidth/4;
+            tmpRc.left  += tbWidth/(_itemsCount -1);
+            tmpRc.right += tbWidth/(_itemsCount -1);
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-              if ( _selectedIndex == PB_DICT_ARTICLE_LIST )
-              {
-//                return this->onCommand( PB_CMD_RIGHT, 1 );
-//                  return _wm->postCommand( PB_CMD_RIGHT, 0 );
+                if ( _selectedIndex == PB_DICT_ARTICLE_LIST ) {
+                    // return this->onCommand( PB_CMD_RIGHT, 1 );
+                    // return _wm->postCommand( PB_CMD_RIGHT, 0 );
                     _wm->postCommand( PB_CMD_RIGHT, 0 );
-                   return true;
-              }
-              else
-              if ( _selectedIndex == PB_DICT_SEARCH )
-              {
-//                 return this->onCommand( PB_CMD_LEFT, 1 );
-                   _wm->postCommand( PB_CMD_LEFT, 0 );
-                   return true;
-              }
-//              _selectedIndex= PB_DICT_DEACTIVATE;
-              CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", _selectedIndex );
-              return true;
+                    return true;
+                }
+                else if ( _selectedIndex == PB_DICT_SEARCH ) {
+                    // return this->onCommand( PB_CMD_LEFT, 1 );
+                    _wm->postCommand( PB_CMD_LEFT, 0 );
+                    return true;
+                }
+
+                // _selectedIndex= PB_DICT_DEACTIVATE;
+                CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", _selectedIndex );
+                return true;
             }
 
-            tmpRc.left  += tbWidth/4;
-            tmpRc.right += tbWidth/4;
+            tmpRc.left  += tbWidth/(_itemsCount -1);
+            tmpRc.right += tbWidth/(_itemsCount -1);
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_SEARCH tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
             if ( tmpRc.isPointInside( pn ) )
             {
-              CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", _selectedIndex );
-              _selectedIndex= PB_DICT_SEARCH;
-              setCurItem( PB_DICT_SEARCH );
-              searchDictinary();
-              Update();
-              return true;
+                CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", _selectedIndex );
+                _selectedIndex= PB_DICT_SEARCH;
+                setCurItem( PB_DICT_SEARCH );
+                searchDictinary();
+                Update();
+                return true;
             }
-          }
+            }
+
         }//if ( titleRc.isPointInside
 
         if ( clientRc.isPointInside( pn ) )
@@ -2460,8 +2512,8 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
               else
                 command = PB_CMD_DOWN;
 
-//             _wm->postCommand( command, 0 );
-//             return true;
+            // _wm->postCommand( command, 0 );
+            // return true;
               return _dictMenu->onCommand( command, 1 );
             }
             else//select item
@@ -2495,7 +2547,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
 
              _wm->postCommand( command, 0 );
              return true;
-//            return this->onCommand( command, 1 );
+           // return this->onCommand( command, 1 );
 
             break;
 
@@ -2514,7 +2566,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
     return true;
   }
 
-//  return true;
+ // return true;
   return false;
   //return CRViewDialog::onTouchEvent( x, y, evType );
 }
@@ -2720,7 +2772,7 @@ void CRPbDictionaryMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef s
         if (buf.GetBitsPerPixel() > 2){
 		buf.InvertRect( rc.left, rc.top, rc.right, rc.bottom);
 		buf.InvertRect( rc.left + 2, rc.top + 2, rc.right -2 , rc.bottom - 2);
-//            buf.Rect(rc, 2, buf.GetTextColor());
+           // buf.Rect(rc, 2, buf.GetTextColor());
 	}
         else
 #endif /* CR_INVERT_PRSERVE_GRAYS */
@@ -3277,15 +3329,53 @@ int getPB_screenType()
 {
     return HWC_DISPLAY;
 }
-
+        
 bool isGSensorSupported()
 {
     return HWC_HAS_GSENSOR;
 }
 
-bool isFrontLightSupported()
-{
+bool isFrontLightSupported() {
     return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
+}
+
+bool isBrowserSupported() {
+    return access( PB_BROWSER_BINARY, F_OK ) != -1;
+}
+
+void launchBrowser(lString16 url) {
+
+    if( isBrowserSupported() ) {
+        lString8 url8 = UnicodeToUtf8(url);
+        pid_t cpid;
+        pid_t child_pid;
+        cpid = fork();
+
+        switch (cpid) {
+            case -1:
+                CRLog::error("launchBrowser(): Fork failed!");
+                break;
+
+            case 0:
+                child_pid = getpid();
+                CRLog::trace("launchBrowser(): Child: PID %d", child_pid);
+                CRLog::trace("launchBrowser(): Child: Launch %s %s \"%s\"", PB_BROWSER_EXEC, PB_BROWSER_BINARY, url8.c_str());
+                execlp(PB_BROWSER_EXEC, PB_BROWSER_EXEC, PB_BROWSER_BINARY, const_cast<const char *>(url8.c_str()), NULL);
+                exit(0);
+
+            default:
+                CRLog::trace("launchBrowser(): Parent: Waiting for %d to finish", cpid);
+                waitpid(cpid, NULL, 0);
+                CRLog::trace("launchBrowser(): Parent: Returned from %s", PB_BROWSER_EXEC);
+                CRPocketBookWindowManager::instance->update(true);
+        }
+        // CRLog::trace("launchBrowser(): %s \"%s\"", PB_BROWSER_BINARY, url8.c_str());
+        // system( url8.c_str() );
+    }
+    else {
+        CRLog::trace("launchBrowser(): The browser binary is not present @ %s", PB_BROWSER_BINARY);
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary", 2000);
+    }
 }
 
 
@@ -3293,12 +3383,12 @@ int InitDoc(const char *exename, char *fileName)
 {
     static const lChar16 * css_file_name = L"fb2.css"; // fb2
 
-#ifdef __i386__
+// #ifdef __i386__
     CRLog::setStdoutLogger();
     CRLog::setLogLevel(CRLog::LL_TRACE);
-#else
-    InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
-#endif
+// #else
+//     InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
+// #endif
 
     CRLog::trace("InitDoc()");
 
