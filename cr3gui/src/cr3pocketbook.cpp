@@ -2371,9 +2371,6 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
             if ( tmpRc.isPointInside( pn ) )
             {
                 CRLog::trace("onTouchEvent() PB_DICT_EXIT %d", PB_DICT_EXIT );
-                setCurItem( PB_DICT_EXIT );
-                onItemSelect();
-                Update();
                 closeDictionary();
                 return true;
             }
