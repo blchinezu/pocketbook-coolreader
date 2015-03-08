@@ -2821,8 +2821,6 @@ void CRPbDictionaryMenu::setCurItem(int nItem)
 
 bool CRPbDictionaryMenu::onCommand( int command, int params )
 {
-    int nextItem = 0;
-
     CRLog::trace("CRPbDictionaryMenu::onCommand( %d, %d )", command, params);
     switch (command) {
     case MCMD_CANCEL:
@@ -2830,10 +2828,10 @@ bool CRPbDictionaryMenu::onCommand( int command, int params )
         return true;
     case MCMD_OK:
     case PB_CMD_RIGHT:
-        nextItem = PB_DICT_DEACTIVATE;
+        _parent->setCurItem(_parent->getCurItem() + 1);
         break;
     case PB_CMD_LEFT:
-        nextItem = PB_DICT_EXIT;
+        _parent->setCurItem(_parent->getCurItem() - 1);
         break;
     case PB_CMD_UP:
         if (params > 0)
@@ -2862,7 +2860,6 @@ bool CRPbDictionaryMenu::onCommand( int command, int params )
         _parent->setTranslation(CRViewDialog::makeFb2Xml(
                 _parent->createArticle(item->getWord(), item->getTranslation())));
     }
-    _parent->setCurItem(nextItem);
     return true;
 }
 
