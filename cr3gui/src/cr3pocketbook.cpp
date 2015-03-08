@@ -355,6 +355,7 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    { "@KA_lght", PB_CMD_STATUS_LINE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
@@ -1548,6 +1549,9 @@ public:
             return true;
         case PB_CMD_INVERT_DISPLAY:
             toggleInvertDisplay();
+            return true;
+        case PB_CMD_STATUS_LINE:
+            toggleStatusLine();
             return true;
         case MCMD_GO_LINK:
             if (!m_link.empty()) {
@@ -3276,11 +3280,12 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
 void toggleInvertDisplay() {
 
     CRPropRef props = CRPocketBookDocView::instance->getProps();
-    lString16 currentMode = props->getStringDef(PROP_DISPLAY_INVERSE, pbGlobals->getDictionary());
+    int currentMode = props->getIntDef(PROP_DISPLAY_INVERSE, 0);
 
-    CRLog::trace("toggleInvertDisplay(): currentMode = %d", UnicodeToUtf8(currentMode).c_str());
+    currentMode = currentMode==1?0:1;
+    CRLog::trace("toggleInvertDisplay(): %d", currentMode);
 
-    props->setString(PROP_DISPLAY_INVERSE, currentMode=="1"?"0":"1");
+    props->setInt(PROP_DISPLAY_INVERSE, currentMode);
     CRPocketBookDocView::instance->saveSettings(lString16());
     CRPocketBookDocView::instance->applySettings();
 
@@ -3292,6 +3297,32 @@ void toggleInvertDisplay() {
     main_win->getDocView()->setTextColor(back);
     main_win->getDocView()->setStatusColor(back);
     
+    CRPocketBookWindowManager::instance->update(true);
+}
+
+void toggleStatusLine() {
+    CRPropRef props = CRPocketBookDocView::instance->getProps();
+    int currentMode = props->getIntDef(PROP_STATUS_LINE, 0);
+
+    currentMode = currentMode==2?0:2;
+    CRLog::trace("toggleStatusBar(): %d", currentMode);
+
+    props->setInt(PROP_STATUS_LINE, currentMode);
+    CRPocketBookDocView::instance->saveSettings(lString16());
+    CRPocketBookDocView::instance->applySettings();
+    
+    main_win->getDocView()->setStatusMode(
+        currentMode,
+        props->getBoolDef(PROP_SHOW_TIME, false),
+        props->getBoolDef(PROP_SHOW_TITLE, true),
+        props->getBoolDef(PROP_SHOW_BATTERY, true),
+        props->getBoolDef(PROP_STATUS_CHAPTER_MARKS, true),
+        props->getBoolDef(PROP_SHOW_POS_PERCENT, false),
+        props->getBoolDef(PROP_SHOW_PAGE_NUMBER, true),
+        props->getBoolDef(PROP_SHOW_PAGE_COUNT, true),
+        props->getBoolDef(PROP_SHOW_CHAPTER_PAGES_REMAIN, false)
+        );
+
     CRPocketBookWindowManager::instance->update(true);
 }
 

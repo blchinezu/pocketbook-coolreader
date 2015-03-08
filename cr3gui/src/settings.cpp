@@ -45,6 +45,7 @@
 #define CR3_ACTION_PB_CONTENTS "PB_CONTENTS"
 #define CR3_ACTION_PB_FRONT_LIGHT "PB_FRONT_LIGHT"
 #define CR3_ACTION_PB_INVERT_DISPLAY "PB_INVERT_DISPLAY"
+#define CR3_ACTION_PB_STATUS_LINE "PB_STATUS_LINE"
 
 typedef struct {
     const char * action_id;
@@ -78,6 +79,7 @@ static const action_def_t availableActions[] = {
     { CR3_ACTION_PB_CONTENTS, PB_CMD_CONTENTS, 0 },
     { CR3_ACTION_PB_FRONT_LIGHT, PB_CMD_FRONT_LIGHT, 0 },
     { CR3_ACTION_PB_INVERT_DISPLAY, PB_CMD_INVERT_DISPLAY, 0 },
+    { CR3_ACTION_PB_STATUS_LINE, PB_CMD_STATUS_LINE, 0 },
 #endif
     { NULL, 0, 0 }
 };

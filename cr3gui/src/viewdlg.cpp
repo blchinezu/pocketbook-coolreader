@@ -585,6 +585,7 @@ static const char * getCommandName( int command )
     case PB_CMD_CONTENTS: return TR("@Contents");
     case PB_CMD_FRONT_LIGHT: return _("Front light");
     case PB_CMD_INVERT_DISPLAY: return _("Invert display");
+    case PB_CMD_STATUS_LINE: return _("Toggle status bar");
     case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");
 #endif
     default: return _("Unknown command");

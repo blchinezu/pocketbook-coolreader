@@ -20,6 +20,7 @@ enum CRPbCommands {
     PB_CMD_CONTENTS,
     PB_CMD_FRONT_LIGHT,
     PB_CMD_INVERT_DISPLAY,
+    PB_CMD_STATUS_LINE,
 	PB_CMD_LEFT,
 	PB_CMD_RIGHT,
 	PB_CMD_UP,
@@ -87,6 +88,7 @@ bool isFrontLightSupported();
 bool isBrowserSupported();
 
 void toggleInvertDisplay();
+void toggleStatusLine();
 void launchBrowser(lString16 url);
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
