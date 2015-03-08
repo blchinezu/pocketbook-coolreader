@@ -355,6 +355,7 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
     { "@KA_zmin", DCMD_ZOOM_IN, 0},
@@ -1544,6 +1545,9 @@ public:
             return true;
         case PB_CMD_FRONT_LIGHT:
             showFrontLight();
+            return true;
+        case PB_CMD_INVERT_DISPLAY:
+            toggleInvertDisplay();
             return true;
         case MCMD_GO_LINK:
             if (!m_link.empty()) {
@@ -3267,6 +3271,28 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
         CRLog::trace("main accelerator table is not null");
         mainTable->addAll(pbTable);
     }
+}
+
+void toggleInvertDisplay() {
+
+    CRPropRef props = CRPocketBookDocView::instance->getProps();
+    lString16 currentMode = props->getStringDef(PROP_DISPLAY_INVERSE, pbGlobals->getDictionary());
+
+    CRLog::trace("toggleInvertDisplay(): currentMode = %d", UnicodeToUtf8(currentMode).c_str());
+
+    props->setString(PROP_DISPLAY_INVERSE, currentMode=="1"?"0":"1");
+    CRPocketBookDocView::instance->saveSettings(lString16());
+    CRPocketBookDocView::instance->applySettings();
+
+    lUInt32 back = main_win->getDocView()->getBackgroundColor();
+    lUInt32 text = main_win->getDocView()->getTextColor();
+    // lUInt32 stat = props->getColorDef(PROP_STATUS_FONT_COLOR, text);
+
+    main_win->getDocView()->setBackgroundColor(text);
+    main_win->getDocView()->setTextColor(back);
+    main_win->getDocView()->setStatusColor(back);
+    
+    CRPocketBookWindowManager::instance->update(true);
 }
 
 #ifndef POCKETBOOK_PRO
