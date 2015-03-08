@@ -66,10 +66,14 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_PREV_NEXT 5
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
-#define PB_FRONT_LIGHT_BIN "/ebrmain/bin/front-light.app"
+#ifdef USERFRONTLIGHT
+	#define PB_FRONT_LIGHT_BIN USERFRONTLIGHT
+#else
+	#define PB_FRONT_LIGHT_BIN USERAPPDIR"/front-light.app"
+#endif
 
-#define PB_BROWSER_BINARY "/ebrmain/bin/browser.app"
-#define PB_BROWSER_EXEC "/ebrmain/bin/openbook"
+#define PB_BROWSER_BINARY USERAPPDIR"/browser.app"
+#define PB_BROWSER_EXEC USERAPPDIR"/openbook"
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
 #define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
 
