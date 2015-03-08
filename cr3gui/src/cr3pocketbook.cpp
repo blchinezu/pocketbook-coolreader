@@ -3340,12 +3340,12 @@ int InitDoc(const char *exename, char *fileName)
 {
     static const lChar16 * css_file_name = L"fb2.css"; // fb2
 
-// #ifdef __i386__
+#ifdef __i386__
     CRLog::setStdoutLogger();
     CRLog::setLogLevel(CRLog::LL_TRACE);
-// #else
-//     InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
-// #endif
+#else
+    InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
+#endif
 
     CRLog::trace("InitDoc()");
 
