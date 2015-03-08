@@ -3310,7 +3310,7 @@ void toggleStatusLine() {
     props->setInt(PROP_STATUS_LINE, currentMode);
     CRPocketBookDocView::instance->saveSettings(lString16());
     CRPocketBookDocView::instance->applySettings();
-    
+
     main_win->getDocView()->setStatusMode(
         currentMode,
         props->getBoolDef(PROP_SHOW_TIME, false),
@@ -3767,6 +3767,7 @@ int main_handler(int type, int par1, int par2)
                     if (need_save_cover) {
                         CRLog::trace("Save bookcover for power off logo");
                         SaveBitmap( USERLOGOPATH"/bookcover", cover);
+                        // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
                     }
                     free(cover_prev);
                 }
