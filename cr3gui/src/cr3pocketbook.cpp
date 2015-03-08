@@ -3692,11 +3692,12 @@ int main_handler(int type, int par1, int par2)
     case EVT_SHOW:
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
-        FullUpdate();
 
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
+            FullUpdate();
+            
             // CRLog::trace("COVER_OFF_SAVE: need_save_cover");
             ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight() - PanelHeight());
             if (cover) {
