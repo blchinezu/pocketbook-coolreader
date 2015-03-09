@@ -19,6 +19,7 @@ enum CRPbCommands {
 	PB_CMD_ROTATE_ANGLE_SET,
     PB_CMD_CONTENTS,
     PB_CMD_FRONT_LIGHT,
+    PB_CMD_SYSTEM_PANEL,
     PB_CMD_INVERT_DISPLAY,
     PB_CMD_STATUS_LINE,
 	PB_CMD_LEFT,
@@ -89,6 +90,7 @@ bool isBrowserSupported();
 
 void toggleInvertDisplay();
 void toggleStatusLine();
+void toggleSystemPanel();
 void launchBrowser(lString16 url);
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION

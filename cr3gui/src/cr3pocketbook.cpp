@@ -355,6 +355,7 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
@@ -1546,6 +1547,9 @@ public:
             return true;
         case PB_CMD_FRONT_LIGHT:
             showFrontLight();
+            return true;
+        case PB_CMD_SYSTEM_PANEL:
+            toggleSystemPanel();
             return true;
         case PB_CMD_INVERT_DISPLAY:
             toggleInvertDisplay();
@@ -3298,6 +3302,23 @@ void toggleInvertDisplay() {
     main_win->getDocView()->setStatusColor(back);
     
     CRPocketBookWindowManager::instance->update(true);
+}
+
+void toggleSystemPanel() {
+    int currentMode = GetPanelType();
+    currentMode = currentMode==PANEL_DISABLED?PANEL_ENABLED:PANEL_DISABLED;
+    
+    if( currentMode == PANEL_ENABLED ) {
+        CRLog::trace("toggleSystemPanel(): PANEL_ENABLED");
+        SetPanelType(PANEL_ENABLED);
+        DrawPanel(NULL, "", "", 0);
+        PartialUpdate(0, ScreenHeight()-PanelHeight(), ScreenWidth(), PanelHeight());
+    }
+    else {
+        CRLog::trace("toggleSystemPanel(): PANEL_DISABLED");
+        SetPanelType(PANEL_DISABLED);
+        CRPocketBookWindowManager::instance->update(true);
+    }
 }
 
 void toggleStatusLine() {
