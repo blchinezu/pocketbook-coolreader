@@ -3797,6 +3797,8 @@ int main_handler(int type, int par1, int par2)
             // Try getting cover with the system function (FW4 only?)
             ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight()/* - PanelHeight()*/);
 
+            #ifdef POCKETBOOK_PRO
+
             // Try getting library cached cover - poor quality (FW5 only?)
             if( !cover ) {
                 lString8 libCachePath = lString8(USERDATA"/cover_chache/1");
@@ -3879,7 +3881,9 @@ int main_handler(int type, int par1, int par2)
                 }
             }
 
-            // If somehow it got the current cover
+            #endif
+
+            // If somehow there is a cover
             if (cover) {
                 // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Got book cover", 1500);
 
