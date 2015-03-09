@@ -1470,8 +1470,9 @@ public:
     bool onCommand(int command, int params)
     {
         #ifdef POCKETBOOK_PRO
-        if( command != PB_CMD_SYSTEM_PANEL && systemPanelShown() ) {
+        if( systemPanelShown() ) {
             toggleSystemPanel();
+            return true;
         }
         #endif
 
