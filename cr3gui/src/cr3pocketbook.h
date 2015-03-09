@@ -92,6 +92,7 @@ void toggleInvertDisplay();
 void toggleStatusLine();
 void toggleSystemPanel();
 void launchBrowser(lString16 url);
+bool systemPanelShown();
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
 //#define BACKGROUND_CACHE_FILE_CREATION

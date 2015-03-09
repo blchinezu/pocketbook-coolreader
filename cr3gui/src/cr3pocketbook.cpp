@@ -3304,6 +3304,10 @@ void toggleInvertDisplay() {
     CRPocketBookWindowManager::instance->update(true);
 }
 
+bool systemPanelShown() {
+    return GetPanelType()!=PANEL_DISABLED;
+}
+
 void toggleSystemPanel() {
     int currentMode = GetPanelType();
     currentMode = currentMode==PANEL_DISABLED?PANEL_ENABLED:PANEL_DISABLED;
@@ -3312,7 +3316,7 @@ void toggleSystemPanel() {
         CRLog::trace("toggleSystemPanel(): PANEL_ENABLED");
         SetPanelType(PANEL_ENABLED);
         DrawPanel(NULL, "", "", 0);
-        PartialUpdate(0, ScreenHeight()-PanelHeight(), ScreenWidth(), PanelHeight());
+        PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
     }
     else {
         CRLog::trace("toggleSystemPanel(): PANEL_DISABLED");
@@ -3824,6 +3828,8 @@ int main_handler(int type, int par1, int par2)
             return 0;
         }
         if (CRPocketBookWindowManager::instance->hasKeyMapping(par1, KEY_FLAG_LONG_PRESS) < 0) {
+            if( systemPanelShown() )
+                toggleSystemPanel();
             CRPocketBookWindowManager::instance->onKeyPressed(par1, 0);
             process_events = true;
             keyPressed = par1;
@@ -3861,6 +3867,8 @@ int main_handler(int type, int par1, int par2)
     case EVT_POINTERUP:
     case EVT_POINTERMOVE:
     case EVT_POINTERLONG:
+        if( systemPanelShown() )
+            toggleSystemPanel();
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
         break;
