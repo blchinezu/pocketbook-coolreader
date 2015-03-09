@@ -1467,6 +1467,9 @@ public:
 
     bool onCommand(int command, int params)
     {
+        if( command != PB_CMD_SYSTEM_PANEL && systemPanelShown() ) {
+            toggleSystemPanel();
+        }
         switch(command) {
         case PB_CMD_MAIN_MENU:
             OpenMainMenu();
@@ -3828,8 +3831,6 @@ int main_handler(int type, int par1, int par2)
             return 0;
         }
         if (CRPocketBookWindowManager::instance->hasKeyMapping(par1, KEY_FLAG_LONG_PRESS) < 0) {
-            if( systemPanelShown() )
-                toggleSystemPanel();
             CRPocketBookWindowManager::instance->onKeyPressed(par1, 0);
             process_events = true;
             keyPressed = par1;
@@ -3867,8 +3868,6 @@ int main_handler(int type, int par1, int par2)
     case EVT_POINTERUP:
     case EVT_POINTERMOVE:
     case EVT_POINTERLONG:
-        if( systemPanelShown() )
-            toggleSystemPanel();
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
         break;
