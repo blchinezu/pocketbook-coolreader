@@ -355,7 +355,9 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    #ifdef POCKETBOOK_PRO
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
+    #endif
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
@@ -1467,9 +1469,12 @@ public:
 
     bool onCommand(int command, int params)
     {
+        #ifdef POCKETBOOK_PRO
         if( command != PB_CMD_SYSTEM_PANEL && systemPanelShown() ) {
             toggleSystemPanel();
         }
+        #endif
+
         switch(command) {
         case PB_CMD_MAIN_MENU:
             OpenMainMenu();
@@ -1551,9 +1556,13 @@ public:
         case PB_CMD_FRONT_LIGHT:
             showFrontLight();
             return true;
+
+        #ifdef POCKETBOOK_PRO
         case PB_CMD_SYSTEM_PANEL:
             toggleSystemPanel();
             return true;
+        #endif
+
         case PB_CMD_INVERT_DISPLAY:
             toggleInvertDisplay();
             return true;
@@ -3307,6 +3316,8 @@ void toggleInvertDisplay() {
     CRPocketBookWindowManager::instance->update(true);
 }
 
+#ifdef POCKETBOOK_PRO
+
 bool systemPanelShown() {
     return GetPanelType()!=PANEL_DISABLED;
 }
@@ -3327,6 +3338,8 @@ void toggleSystemPanel() {
         CRPocketBookWindowManager::instance->update(true);
     }
 }
+
+#endif
 
 void toggleStatusLine() {
     CRPropRef props = CRPocketBookDocView::instance->getProps();
