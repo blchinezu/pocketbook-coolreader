@@ -959,6 +959,7 @@ public:
     bool prevPage();
     int getTopItem() { return _topItem; }
     int getSelectedItem() { return _selectedItem; }
+    const char * getCurItemWord();
     int getPageInItemCount()
     {  
         CRMenuSkinRef skin = getSkin();
@@ -2503,22 +2504,27 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
             }
             else//select item
             {
-              tmpRc= clientRc;
-              tmpRc.right  -= clientRc.width() * 1/3; 
-              tmpRc.bottom -= clientRc.height()/2;
+                tmpRc= clientRc;
+                tmpRc.right  -= clientRc.width() * 1/3; 
+                tmpRc.bottom -= clientRc.height()/2;
 
-              int strcount= clientRc.height()/pnItm.y;
-              int pgitcount= _dictMenu->getPageInItemCount();
-              int nselect= ( y - clientRc.top ) / pnItm.y;
-                
-              if ( nselect != _dictMenu->getSelectedItem() && nselect >= 0 && nselect <= pgitcount )
-                _dictMenu->setCurItem( nselect );
-              
-              CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d ) _SelectedItem=%d _topItem=%d strcount%d  pgitcount=%d  nselect= %d" , tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom, _dictMenu->getSelectedItem(), _dictMenu->getTopItem(), strcount, _dictMenu->getPageInItemCount(),  nselect );
+                int strcount= clientRc.height()/pnItm.y;
+                int pgitcount= _dictMenu->getPageInItemCount();
+                int nselect= ( y - clientRc.top ) / pnItm.y;
 
-              return true;
+                if( nselect >= 0 && nselect <= pgitcount ) {
+
+                    if ( nselect != _dictMenu->getSelectedItem() )
+                        _dictMenu->setCurItem( nselect );
+                    translate( lString16(_dictMenu->getCurItemWord()) );
+                    Update();
+                    _wm->postCommand( PB_DICT_DEACTIVATE, 0 );
+                }
+
+                CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d ) _SelectedItem=%d _topItem=%d strcount%d  pgitcount=%d  nselect= %d" , tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom, _dictMenu->getSelectedItem(), _dictMenu->getTopItem(), strcount, _dictMenu->getPageInItemCount(),  nselect );
+
+                return true;
             }
-
             break;
 
           case PB_DICT_DEACTIVATE:
@@ -2842,6 +2848,12 @@ void CRPbDictionaryMenu::setCurItem(int nItem)
         _items[_selectedItem = nItem]->onEnter();
     }
     _parent->Update();
+}
+
+const char * CRPbDictionaryMenu::getCurItemWord()
+{
+    CRPbDictionaryMenuItem *item = static_cast<CRPbDictionaryMenuItem *>(_items[_selectedItem]);
+    return item->getWord();
 }
 
 bool CRPbDictionaryMenu::onCommand( int command, int params )
