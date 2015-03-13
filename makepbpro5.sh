@@ -3,7 +3,6 @@
 mkdir -p pbpro5
 cd pbpro5
 cmake \
-    -D INKVIEW_LIB=$HOME/PBDEV/SDK_481/arm-obreey-linux-gnueabi/sysroot/usr/local/lib/libinkview.so \
     -D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-obreey-linux-gnueabi-pocketbook.cmake \
     -D TARGET_TYPE=ARM \
     -D DEVICE_NAME=pb360 \
