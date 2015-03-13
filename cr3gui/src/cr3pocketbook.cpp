@@ -3821,15 +3821,11 @@ int main_handler(int type, int par1, int par2)
 
             #ifdef POCKETBOOK_PRO
 
-            // Try getting library cached cover - poor quality (FW5 only?)
+            // Try getting library cached cover
             if( !cover ) {
-                // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "No cover get cache", 1500);
-
                 lString8 libCachePath = lString8(USERDATA"/cover_chache/1");
                 libCachePath += lString8(UnicodeToLocal(pbGlobals->getFileName())).substr(strlen(FLASHDIR));
                 libCachePath += lString8(".png");
-
-                // Message( ICON_WARNING, const_cast<char*>("CoolReader"), libCachePath.c_str(), 1500);
 
                 if( access( libCachePath.c_str(), F_OK ) != -1 ) {
 
@@ -3862,23 +3858,7 @@ int main_handler(int type, int par1, int par2)
                         }
                     }
                 }
-                // if( cover )
-                //     Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Loaded", 1500);
-                // else
-                //     Message( ICON_WARNING, const_cast<char*>("CoolReader"), "NOT Loaded", 1500);
             }
-
-            // if( !cover ) { // @EPUB_file
-            //     bookinfo * bi = GetBookInfoExt(
-            //         UnicodeToLocal(pbGlobals->getFileName()).c_str(),
-            //         "/"
-            //         );
-            //     Message(
-            //         ICON_WARNING,
-            //         const_cast<char*>("CoolReader"),
-            //         (lString8("Book type: ")+lString8(bi->typedesc)).c_str(),
-            //         1500);
-            // }
 
             // If none worked - generate an ugly ass cover
             if( !cover ) {
@@ -3909,7 +3889,6 @@ int main_handler(int type, int par1, int par2)
 
             // If somehow there is a cover
             if (cover) {
-                // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Got book cover", 1500);
 
                 // Get previous cover
                 ibitmap *cover_prev = LoadBitmap( USERLOGOPATH"/bookcover");
@@ -3918,15 +3897,12 @@ int main_handler(int type, int par1, int par2)
                     // Compare covers
                     if( cover->scanline * cover->height == cover_prev->scanline * cover_prev->height &&
                         memcmp(cover->data,cover_prev->data,cover->scanline * cover->height) == 0 ) {
-                        // CRLog::trace("COVER_OFF_SAVE: Deact need_save_cover");
                         need_save_cover = 0;
                     }
                 }
 
                 // Save new cover if needed
                 if (need_save_cover) {
-                    // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Save Cover", 1500);
-
                     CRLog::trace("Save bookcover for power off logo");
                     SaveBitmap( USERLOGOPATH"/bookcover", cover);
                     // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
