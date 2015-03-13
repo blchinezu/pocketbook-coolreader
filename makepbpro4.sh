@@ -1,7 +1,7 @@
 #!/bin/sh
 
-mkdir -p pbPro
-cd pbPro
+mkdir -p pbpro4
+cd pbpro4
 cmake \
     -D INKVIEW_LIB=$HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so \
     -D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-gnu-eabi-pocketbook.cmake \
@@ -16,6 +16,10 @@ cmake \
     ..
 make
 
-if [ -f pbPro/cr3gui/cr3-pb.app ]; then
-    ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbPro/cr3gui/cr3-pb.app
+cd ..
+if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
+    echo 'Strip binary'
+    ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
 fi
+echo 'Done'
+

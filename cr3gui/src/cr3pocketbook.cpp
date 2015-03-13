@@ -3451,12 +3451,12 @@ int InitDoc(const char *exename, char *fileName)
 {
     static const lChar16 * css_file_name = L"fb2.css"; // fb2
 
-#ifdef __i386__
+// #ifdef __i386__
     CRLog::setStdoutLogger();
     CRLog::setLogLevel(CRLog::LL_TRACE);
-#else
-    InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
-#endif
+// #else
+    // InitCREngineLog(USERDATA"/share/cr3/crlog.ini");
+// #endif
 
     CRLog::trace("InitDoc()");
 
@@ -3807,12 +3807,30 @@ int main_handler(int type, int par1, int par2)
             FullUpdate();
 
             // Try getting cover with the system function (FW4 only?)
-            ibitmap *cover = GetBookCover(UnicodeToLocal(pbGlobals->getFileName()).c_str(), ScreenWidth(), ScreenHeight()/* - PanelHeight()*/);
+            ibitmap *cover = GetBookCover(
+                UnicodeToLocal(pbGlobals->getFileName()).c_str(),
+                ScreenWidth(),
+                ScreenHeight()/* - PanelHeight()*/
+                );
+            CRLog::trace("GetBookCover(): GetBookCover(%s, %d, %d);",
+                UnicodeToLocal(pbGlobals->getFileName()).c_str(),
+                ScreenWidth(),
+                ScreenHeight()
+                );
+            CRLog::trace("GetBookCover(): ibitmap *cover = %p", cover);
+            if( cover ) {
+                Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Got book cover", 1500);
+            }
+            else {
+                Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Still shit", 1500);
+            }
 
             #ifdef POCKETBOOK_PRO
 
             // Try getting library cached cover - poor quality (FW5 only?)
             if( !cover ) {
+                // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "No cover get cache", 1500);
+
                 lString8 libCachePath = lString8(USERDATA"/cover_chache/1");
                 libCachePath += lString8(UnicodeToLocal(pbGlobals->getFileName())).substr(strlen(FLASHDIR));
                 libCachePath += lString8(".png");
@@ -3909,17 +3927,17 @@ int main_handler(int type, int par1, int par2)
                         // CRLog::trace("COVER_OFF_SAVE: Deact need_save_cover");
                         need_save_cover = 0;
                     }
-
-                    // Save new cover if needed
-                    if (need_save_cover) {
-                        // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Save Cover", 1500);
-
-                        CRLog::trace("Save bookcover for power off logo");
-                        SaveBitmap( USERLOGOPATH"/bookcover", cover);
-                        // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
-                    }
-                    free(cover_prev);
                 }
+
+                // Save new cover if needed
+                if (need_save_cover) {
+                    // Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Save Cover", 1500);
+
+                    CRLog::trace("Save bookcover for power off logo");
+                    SaveBitmap( USERLOGOPATH"/bookcover", cover);
+                    // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
+                }
+                free(cover_prev);
                 free(cover);
             }
             need_save_cover = false;
