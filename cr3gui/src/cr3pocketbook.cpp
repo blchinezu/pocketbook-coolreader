@@ -3806,7 +3806,7 @@ int main_handler(int type, int par1, int par2)
         if (need_save_cover) {
             FullUpdate();
 
-            // Try getting cover with the system function (FW4 only?)
+            // Try getting cover with the system function
             ibitmap *cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
@@ -3818,12 +3818,6 @@ int main_handler(int type, int par1, int par2)
                 ScreenHeight()
                 );
             CRLog::trace("GetBookCover(): ibitmap *cover = %p", cover);
-            if( cover ) {
-                Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Got book cover", 1500);
-            }
-            else {
-                Message( ICON_WARNING, const_cast<char*>("CoolReader"), "Still shit", 1500);
-            }
 
             #ifdef POCKETBOOK_PRO
 
