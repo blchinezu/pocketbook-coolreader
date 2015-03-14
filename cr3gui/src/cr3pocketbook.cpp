@@ -3994,7 +3994,7 @@ int main_handler(int type, int par1, int par2)
 
 const char* TR(const char *label) 
 {
-    char* tr = GetLangText(const_cast<char*> (label));
+    const char* tr = GetLangText(const_cast<char*> (label));
     CRLog::trace("Translation for %s is %s", label, tr);
     return tr;
 }
