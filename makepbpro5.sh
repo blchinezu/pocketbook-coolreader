@@ -22,3 +22,5 @@ if [ -f pbpro5/cr3gui/cr3-pb.app ]; then
     ../../SDK_481/bin/arm-obreey-linux-gnueabi-strip pbpro5/cr3gui/cr3-pb.app
 fi
 echo "Done"
+
+bash updateReleases.sh pro5

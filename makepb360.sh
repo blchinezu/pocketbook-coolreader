@@ -16,6 +16,11 @@ cmake \
 	..
 make
 
-if [ -f pbPro/cr3gui/cr3-pb.app ]; then
+cd ..
+if [ -f pb360/cr3gui/cr3-pb.app ]; then
+    echo 'Strip binary'
     ../../PBSDK/bin/arm-linux-strip pb360/cr3gui/cr3-pb.app
 fi
+echo 'Done'
+
+bash updateReleases.sh 360

@@ -22,3 +22,4 @@ if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
 fi
 echo 'Done'
 
+bash updateReleases.sh pro4
