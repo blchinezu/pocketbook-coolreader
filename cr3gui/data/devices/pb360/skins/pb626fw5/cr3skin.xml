@@ -133,13 +133,13 @@
   <window id="dict" size="100%, 44%">
             <!-- Название слоаря в заголовке  /-->
     <title>
-            <size minvalue="0,75" maxvalue="100%,75"/>
+            <size minvalue="0,60" maxvalue="100%,60"/>
             <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
             <background color="#FFFFFF"/>
-            <background color="#000000" pos="0, 0" size="100%,2"/>
-            <background color="#000000" pos="0,-2" size="100%,2"/>
-            <background color="#000000" pos="0,0" size="2,100%"/> 
-            <background color="#000000" pos="-2,0" size="2,100%"/> 
+            <background color="#000000" pos="0, 0" size="100%,1"/>
+            <background color="#000000" pos="0,-1" size="100%,1"/>
+            <background color="#000000" pos="0,0" size="1,100%"/> 
+            <background color="#000000" pos="-1,0" size="1,100%"/> 
             <border widths="8,4,4,4"/>
     </title>
         <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
@@ -160,13 +160,13 @@
   <!-- Количество строк в списке - 6 (для 6" и 5" значения разные!)  /-->
   <menu id="dict-list" min-item-count="10" max-item-count="10" show-shortcuts="false" fullscreen="false" >
     <title>
-            <size minvalue="0,55" maxvalue="100%,55"/>
+            <size minvalue="0,60" maxvalue="100%,60"/>
             <text color="#000000" face="Liberation Sans, DejaVu Sans Condensed, Arial Unicode MS" size="28" bold="true" italic="false" valign="center" halign="left"/>
             <background color="#FFFFFF"/>
-            <background color="#000000" pos="0, 0" size="100%,2"/>
-            <background color="#000000" pos="0,-2" size="100%,2"/>
-            <background color="#000000" pos="0,0" size="2,100%"/> 
-            <background color="#000000" pos="-2,0" size="2,100%"/> 
+            <background color="#000000" pos="0, 0" size="100%,1"/>
+            <background color="#000000" pos="0,-1" size="100%,1"/>
+            <background color="#000000" pos="0,0" size="1,100%"/> 
+            <background color="#000000" pos="-1,0" size="1,100%"/> 
             <border widths="4,4,4,4"/>
     </title>
         <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
@@ -182,12 +182,12 @@
         <item>
              <!-- первое слово в списке отображемое жирным  /-->
              <border widths="0,0,0,0"/>
-             <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="left"/>
+             <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
         </item>
         <selitem>
              <border widths="0,0,0,0"/>
              <!-- первое слово в списке отображемое жирным под курсором /-->
-             <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="left"/>
+             <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
         </selitem>
         <status>
             <border widths="0,0,0,0"/>
@@ -238,38 +238,38 @@
   </menu>
   <menu id="toc-rotated" base="#toc" min-item-count="5" max-item-count="5" show-shortcuts="true" />
   <menu id="vkeyboard" base="#toc" show-shortcuts="false">
-        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
+        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
         <background color="#FFFFFF"/>
         <border widths="8,4,8,4"/>
         <!--icon image="filename" valign="" halign=""/-->
         <client>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="left"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
             <background color="#FFFFFF"/>
         </client>
         <title>
             <size minvalue="0,48" maxvalue="0,0"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
             <background color="#FFFFFF"/>
             <border widths="4,4,4,4"/>
             <!--icon image="filename" valign="" halign=""-->
         </title>
         <item>
           <size minvalue="32,32" maxvalue="0,0"/>
-          <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
+          <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
           <background color="#FFFFFF"/>
           <border widths="1,2,4,2"/>
           <!--icon image="filename" valign="" halign=""-->
         </item>
         <shortcut>
           <size minvalue="20,36" maxvalue="0,0"/>
-          <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
+          <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
           <background color="#808080"/>
           <border widths="3,3,3,3"/>
           <!--icon image="filename" valign="" halign=""-->
         </shortcut>
         <selitem>
           <size minvalue="32,32" maxvalue="0,0"/>
-          <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="false" italic="false" valign="center" halign="left"/>
+          <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="false" valign="center" halign="left"/>
           <background color="#FFFFFF"/>
           <border widths="6,6,6,6"/>
           <!--icon image="filename" valign="" halign=""-->
@@ -286,9 +286,7 @@
   <window id="about" base="#dialog">
   </window>
   <window id="tapSettings">
-    <title base="#title-main" size="100%,75">
-        <background color="#FFFFFF"/>
-        <background color="#000000" pos="0,-1" size="100%,1"/>
+    <title base="#title-main">
     </title>
     <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="true" italic="false" valign="center" halign="center"/>
     <background image="cr3_settings_menu.png" color="#AAAAAA"/>
@@ -298,34 +296,29 @@
         <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="false" italic="false" valign="center" halign="center" wordwrap="true"/>
     </client>
     <closebutton normal="arrow_back_623.png">
-        <border widths="6,3,3,3"/>
+        <border widths="0,0,0,0"/>
     </closebutton>
   </window>
   <window id="tapSettings-rotated" base="#tapSettings"/>
   <!-- Список меню с выбираемыми значениями - 11 - количество строк в списке, шрифт в заголовке окна /-->
   <menu id="main" min-item-count="11" max-item-count="11" show-shortcuts="false" fullscreen="true" >
-        <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
+        <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
         <background color="#AAAAAA"/>
         <border widths="0,0,0,0"/>
         <!--icon image="filename" valign="" halign=""/-->
         <title id="title-main">
-            <size minvalue="0,56" maxvalue="0,56"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="left"/>
+            <size minvalue="0,75" maxvalue="0,75"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="30" bold="true" italic="false" valign="center" halign="left"/>
             <background color="#FFFFFF"/>
-            <background color="#000000" pos="0,-7" size="100%,2"/>
-            <background color="#000000" pos="0,-5" size="100%,5"/>
-            <background color="#5C5C5C" pos="-4,-5" size="4,5"/>
-            <background color="#000000" pos="20,-5" size="6,5"/>
+            <background color="#000000" pos="0,-1" size="100%,1"/>
             <border widths="16,4,16,11"/>
             <icon image="cr-white.png" valign="center" halign="left"/>
         </title>
         <client>
             <background color="#FFFFFF" />
-            <background image="sheet-h79.png" pos="0,0" size="0,100%" htransform="none" vtransform="tile" />
-            <background color="#000000" pos="-4,0" size="4,100%"/>
         </client>
         <separator>
-            <background color="#FFFFFF" image="separator-h16.png" pos="44,0" size="-60,0" vtransform="none" htransform="tile" />
+            <background color="#FFFFFF" image="separator-h16.png" pos="20,0" size="-40,0" vtransform="none" htransform="tile" />
             <size minvalue="0,16" maxvalue="0,0"/>
         </separator>
         <status>
@@ -333,25 +326,23 @@
             <size minvalue="20,75" maxvalue="0,0"/>
             <background color="#FFFFFF"/>
             <background color="#000000" pos="0,0" size="100%,1"/>
-            <!-- Надписи под списком меню - статусбар /-->
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="18" bold="true" italic="false" valign="center" halign="left" wordwrap="true"/>
         </status>
         <value id="menu-value">
             <size minvalue="48,48" maxvalue="0,0"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="false" italic="true" valign="center" halign="right"/>
-            <border widths="50,0,20,0"/>
+            <text color="#393939" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="true" valign="center" halign="right"/>
+            <border widths="20,0,20,0"/>
             <!--icon image="filename" valign="" halign=""-->
         </value>
         <item id="menu-item">
             <size minvalue="48,48" maxvalue="50%,100%"/>
-            <!-- Выделенная курсором строка пункта меню -->
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="30" bold="true" italic="false" valign="top" halign="left"/>
-            <border widths="50,0,20,0"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="30" bold="false" italic="false" valign="top" halign="left"/>
+            <border widths="20,0,20,0"/>
             <!--icon image="filename" valign="" halign=""-->
         </item>
         <!--item-even>
             <size minvalue="48,48" maxvalue="0,0"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="left"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
             <border widths="44,6,16,6"/>
         </item-even-->
         <!--shortcut id="menu-shortcut">
@@ -362,8 +353,9 @@
             <!--icon image="filename" valign="" halign=""-->
         <!--/shortcut-->
         <selitem base="#menu-item">
-           <background image="marker.png" color="#FFFFFF" pos="36,0" size="10,100%"/>
-           <!-- <background image="marker.png" color="#FFFFFF" pos="-18,0" size="10,100%"/> -->
+           <!-- <text bold="true"/> -->
+            <size minvalue="10,17" maxvalue="10,17"/>
+            <background image="marker.png" color="#FFFFFF" pos="2,15" size="10,17"/>
         </selitem>
         <!--selshortcut base="#menu-shortcut">
             <text color="#FFFFFF" face="Arial Narrow, Arial, DejaVu Sans Condensed, DejaVu Sans" size="34" bold="true" italic="false" valign="center" halign="center"/>
@@ -395,14 +387,14 @@
     </item>
     <shortcut>
       <size minvalue="20,36" maxvalue="0,0"/>
-      <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="26" bold="false" italic="false" valign="center" halign="center"/>
+      <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="false" valign="center" halign="center"/>
       <background image="cr3_t9_shortcut.png" color="#FFFFFF"/>
       <border widths="3,3,3,3"/>
       <!--icon image="filename" valign="" halign=""-->
     </shortcut>
     <selitem>
       <size minvalue="32,32" maxvalue="0,0"/>
-      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="false" italic="false" valign="center" halign="left"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="false" valign="center" halign="left"/>
       <background color="#FFFFFF"/>
       <border widths="6,6,6,6"/>
       <!--icon image="filename" valign="" halign=""-->
@@ -434,7 +426,7 @@
   <!-- Строки в списке меню с выбором значений /-->
   <menu id="settings" base="#main" fullscreen="true">
         <value base="#menu-value"> 
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="false" italic="true" valign="bottom" halign="right"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="true" valign="bottom" halign="right"/>
         </value>
         <item base="#menu-item">
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="30" bold="false" italic="false" valign="top" halign="left"/>
