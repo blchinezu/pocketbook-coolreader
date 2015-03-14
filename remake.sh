@@ -3,6 +3,7 @@
 function doUpdate {
 	rm -rf pb$1/cr3gui
 	bash makepb$1.sh
+	bash makepb$1.sh
 }
 
 if [ "$1" = "" ]; then
