@@ -150,9 +150,9 @@
         </client>
         <status>
             <border widths="0,0,0,0"/>
-            <size minvalue="0,8" maxvalue="0,0"/>
+            <size minvalue="0,0" maxvalue="0,0"/>
             <background color="#FFFFFF"/>
-            <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="24" bold="true" italic="false" valign="center" halign="left" wordwrap="true"/>
+            <text color="#FFFFFF" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="1"/>
         </status>
   </window>
   <window id="dict-rotated" base="#dict"/>
@@ -191,9 +191,9 @@
         </selitem>
         <status>
             <border widths="0,0,0,0"/>
-            <size minvalue="0,4" maxvalue="0,0"/>
+            <size minvalue="0,0" maxvalue="0,0"/>
             <background color="#FFFFFF"/>
-            <text color="#000000" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="27" bold="true" italic="false" valign="center" halign="left" wordwrap="true"/>
+            <text color="#FFFFFF" face="Liberation Sans, Arial Unicode MS, DejaVu Sans" size="1"/>
         </status>
   </menu>
   <!-- Количество строк в списке (альбомная ориентация) - 4 (для 6" и 5" значения разные!)  /-->
@@ -205,11 +205,10 @@
             <background color="#000000" pos="0,-1" size="100%,1"/>
         </title>
         <status>
-            <border widths="4,4,4,4"/>
-            <size minvalue="20,75" maxvalue="0,0"/>
+            <border widths="0,0,0,0"/>
+            <size minvalue="0,0" maxvalue="0,0"/>
             <background color="#FFFFFF"/>
-            <background color="#000000" pos="0,1" size="100%,1"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="18" bold="true" italic="false" valign="center" halign="right" wordwrap="true"/>
+            <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="1"/>
         </status>
         <client>
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="false" italic="false" valign="center" halign="left"/>
@@ -322,11 +321,10 @@
             <size minvalue="0,16" maxvalue="0,0"/>
         </separator>
         <status>
-            <border widths="8,0,8,0"/>
-            <size minvalue="20,75" maxvalue="0,0"/>
+            <border widths="0,0,0,0"/>
+            <size minvalue="0,0" maxvalue="0,0"/>
             <background color="#FFFFFF"/>
-            <background color="#000000" pos="0,0" size="100%,1"/>
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="18" bold="true" italic="false" valign="center" halign="left" wordwrap="true"/>
+            <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="1"/>
         </status>
         <value id="menu-value">
             <size minvalue="48,48" maxvalue="0,0"/>
