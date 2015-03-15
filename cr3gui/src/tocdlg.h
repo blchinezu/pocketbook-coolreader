@@ -16,7 +16,7 @@
 #include "mainwnd.h"
 #include "numedit.h"
 
-class CRTOCDialog : public CRFullScreenMenu
+class CRTOCDialog : public CRNumberEditDialog
 {
     protected:
         LVPtrVector<LVTocItem, false> _items;
