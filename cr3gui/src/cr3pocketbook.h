@@ -21,6 +21,7 @@ enum CRPbCommands {
     PB_CMD_FRONT_LIGHT,
     #ifdef POCKETBOOK_PRO
     PB_CMD_SYSTEM_PANEL,
+    PB_CMD_LOCK_DEVICE,
     #endif
     PB_CMD_INVERT_DISPLAY,
     PB_CMD_STATUS_LINE,

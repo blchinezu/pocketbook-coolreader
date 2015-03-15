@@ -48,6 +48,7 @@
 #define CR3_ACTION_PB_STATUS_LINE "PB_STATUS_LINE"
 #ifdef POCKETBOOK_PRO
 #define CR3_ACTION_PB_SYSTEM_PANEL "PB_SYSTEM_PANEL"
+#define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
 #endif
 
 typedef struct {
@@ -85,6 +86,7 @@ static const action_def_t availableActions[] = {
     { CR3_ACTION_PB_STATUS_LINE, PB_CMD_STATUS_LINE, 0 },
     #ifdef POCKETBOOK_PRO
     { CR3_ACTION_PB_SYSTEM_PANEL, PB_CMD_SYSTEM_PANEL, 0 },
+    { CR3_ACTION_PB_LOCK_DEVICE, PB_CMD_LOCK_DEVICE, 0 },
     #endif
 #endif
     { NULL, 0, 0 }

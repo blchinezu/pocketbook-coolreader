@@ -356,6 +356,7 @@ static const struct {
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
     #ifdef POCKETBOOK_PRO
+    { "@KA_lght", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     #endif
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
@@ -1562,6 +1563,9 @@ public:
         #ifdef POCKETBOOK_PRO
         case PB_CMD_SYSTEM_PANEL:
             toggleSystemPanel();
+            return true;
+        case PB_CMD_LOCK_DEVICE:
+            LockDevice();
             return true;
         #endif
 
