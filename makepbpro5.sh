@@ -11,6 +11,7 @@ cmake \
     -D ENABLE_CHM=1 \
     -D ENABLE_ANTIWORD=1 \
     -D GUI=CRGUI_PB \
+    -D ENABLE_PB_DB_STATE=1 \
     -D POCKETBOOK_PRO=1 \
     -D POCKETBOOK_PRO_FW5=1 \
     ..
