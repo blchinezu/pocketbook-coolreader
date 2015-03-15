@@ -3472,25 +3472,30 @@ bool isBrowserSupported() {
     return access( PB_BROWSER_BINARY, F_OK ) != -1;
 }
 
+#if 0
 lString16 lastClock;
 void statusUpdateThread() {
-    // while( true ) {
-        lString16 currentClock = main_win->getDocView()->getTimeString();
-        if( currentClock != lastClock ) {
-            CRPocketBookWindowManager::instance->update(true);
-            PartialUpdate(0, 0, ScreenWidth(), main_win->getDocView()->getPageHeaderHeight());
-            lastClock = currentClock;
-        }
-        Message(ICON_WARNING,  const_cast<char*>("statusUpdateThread()"), "", 500);
-        // sleep(5);
+    lString16 currentClock = main_win->getDocView()->getTimeString();
+    if( currentClock != lastClock ) {
+        CRPocketBookWindowManager::instance->update(true);
+        main_win->getDocView->drawPageHeader();
+        PartialUpdate(0, 0, ScreenWidth(), main_win->getDocView()->getPageHeaderHeight());
+        lastClock = currentClock;
+    }
+    // else {
+    //     Message(ICON_WARNING,  const_cast<char*>("statusUpdateThread()"),
+    //         UnicodeToUtf8(lastClock+lString16(" != ")+currentClock).c_str(),
+    //         2000);
     // }
+    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
 }
 void startStatusUpdateThread() {
-    SetHardTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
+    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
 }
 void stopSatusUpdateThread() {
     ClearTimer(statusUpdateThread);
 }
+#endif
 
 void launchBrowser(lString16 url) {
 
@@ -3885,8 +3890,9 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
-
+            #if 0
             startStatusUpdateThread();
+            #endif
 
             FullUpdate();
 
