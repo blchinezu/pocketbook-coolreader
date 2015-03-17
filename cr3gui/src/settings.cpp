@@ -54,6 +54,9 @@
 #ifdef POCKETBOOK_PRO
 #define CR3_ACTION_PB_SYSTEM_PANEL "PB_SYSTEM_PANEL"
 #define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
+#ifdef POCKETBOOK_PRO_FW5
+#define CR3_ACTION_PB_OPEN_SYSTEM_PANEL "PB_OPEN_SYSTEM_PANEL"
+#endif
 #endif
 
 extern lString16 pbSkinFileName;
@@ -95,6 +98,9 @@ static const action_def_t availableActions[] = {
     #ifdef POCKETBOOK_PRO
     { CR3_ACTION_PB_SYSTEM_PANEL, PB_CMD_SYSTEM_PANEL, 0 },
     // { CR3_ACTION_PB_LOCK_DEVICE, PB_CMD_LOCK_DEVICE, 0 },
+    #ifdef POCKETBOOK_PRO_FW5
+    { CR3_ACTION_PB_OPEN_SYSTEM_PANEL, PB_CMD_OPEN_SYSTEM_PANEL, 0 },
+    #endif
     #endif
 #endif
     { NULL, 0, 0 }

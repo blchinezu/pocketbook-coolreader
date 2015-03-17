@@ -590,6 +590,9 @@ static const char * getCommandName( int command )
     #ifdef POCKETBOOK_PRO
     case PB_CMD_SYSTEM_PANEL: return _("Toggle system panel");
     case PB_CMD_LOCK_DEVICE: return _("Lock device");
+    #ifdef POCKETBOOK_PRO_FW5
+    case PB_CMD_OPEN_SYSTEM_PANEL: return _("Open system panel");
+    #endif
     #endif
     case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");
 #endif

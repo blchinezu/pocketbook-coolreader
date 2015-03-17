@@ -362,6 +362,9 @@ static const struct {
     #ifdef POCKETBOOK_PRO
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
+    #ifdef POCKETBOOK_PRO_FW5
+    { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
+    #endif
     #endif
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
@@ -1583,6 +1586,13 @@ public:
         case PB_CMD_SYSTEM_PANEL:
             toggleSystemPanel();
             return true;
+
+        #ifdef POCKETBOOK_PRO_FW5
+        case PB_CMD_OPEN_SYSTEM_PANEL:
+            OpenControlPanel(NULL);
+            return true;
+        #endif
+
         case PB_CMD_LOCK_DEVICE:
             LockDevice();
             return true;
