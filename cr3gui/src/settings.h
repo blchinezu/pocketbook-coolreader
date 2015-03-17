@@ -23,6 +23,8 @@
 #define PROP_KEYMAP_FILE "app.keymap.file"
 #define PROP_SKIN_FILE "app.skin.file"
 
+extern bool forcePartialBwUpdates;
+
 typedef struct {
     const char * translate_default;
     const char * value;
@@ -115,6 +117,7 @@ class CRSettingsMenu : public CRFullScreenMenu
         virtual bool onCommand( int command, int params );
         virtual ~CRSettingsMenu()
         {
+            forcePartialBwUpdates = false;
             CRLog::trace("Calling fontMan->gc() on Settings menu destroy");
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Settings menu destroy");

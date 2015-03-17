@@ -18,6 +18,10 @@
 #ifdef CR_POCKETBOOK
 #include "cr3pocketbook.h"
 #endif
+#include <inkview.h>
+#ifdef POCKETBOOK_PRO
+#include <inkplatform.h>
+#endif
 
 #include <cri18n.h>
 
@@ -50,6 +54,8 @@
 #define CR3_ACTION_PB_SYSTEM_PANEL "PB_SYSTEM_PANEL"
 #define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
 #endif
+
+extern lString16 pbSkinFileName;
 
 typedef struct {
     const char * action_id;
@@ -1000,6 +1006,9 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
   props( newProps ),
   _menuAccelerators( menuAccelerators ), _menuItemId(mm_Last)
 {
+    if( pbSkinFileName == lString16("pb626fw5.cr3skin") )
+        forcePartialBwUpdates = true;
+
     setSkinName(lString16("#settings"));
 
     _fullscreen = true;
@@ -1568,6 +1577,9 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     mainMenu->addItem( stylesMenu );
 
     reconfigure(0);
+
+    if( forcePartialBwUpdates )
+        SetWeakTimer("FullUpdate", FullUpdate, 150);
 }
 
 /// use to override status text

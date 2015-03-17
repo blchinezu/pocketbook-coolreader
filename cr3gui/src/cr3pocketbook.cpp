@@ -35,6 +35,9 @@
 
 #define PB_LINE_HEIGHT 30
 
+bool forcePartialBwUpdates;
+lString16 pbSkinFileName;
+
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
     "@Bookmarks", "@Menu", "@Rotate",
@@ -738,15 +741,19 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
     } else {
         draw(0, rc.top, _front->GetWidth(), rc.height());
         if (!isDocWnd && rc.height() < 300) {
-            if (_update_gray) {
+            if (_update_gray && !forcePartialBwUpdates) {
                 PartialUpdate(rc.left, rc.top, rc.right, rc.bottom);
                 CRLog::trace("PartialUpdate(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
             } else {
                 PartialUpdateBW(rc.left, rc.top, rc.right, rc.bottom);
                 CRLog::trace("PartialUpdateBW(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
             }
-        } else
+        } else if( !forcePartialBwUpdates ) {
             SoftUpdate();
+        }
+        else {
+            PartialUpdateBW(0, 0, ScreenWidth(), ScreenHeight());
+        }
     }
 }
 
@@ -4092,6 +4099,7 @@ const char* TR(const char *label)
 extern ifont* header_font;
 int main(int argc, char **argv)
 {
+    forcePartialBwUpdates = false;
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);

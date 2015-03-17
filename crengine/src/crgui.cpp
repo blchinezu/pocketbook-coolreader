@@ -26,6 +26,8 @@
 // if 1, full page (e.g. 8 items) is scrolled even if on next page would be less items (show empty space)
 #define FULL_SCROLL 1
 
+extern lString16 pbSkinFileName;
+
 const char * cr_default_skin =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 "<CR3Skin>\n"
@@ -98,6 +100,11 @@ bool CRGUIWindowManager::loadSkin( lString16 pathname )
     setSkinFilePath(pathname);
     setSkin( skin );
     loadSkinKeymaps();
+
+    const char *basename = strrchr(UnicodeToUtf8(pathname).c_str(), '/');
+    basename = basename ? basename+1 : UnicodeToUtf8(pathname).c_str();
+    pbSkinFileName = lString16(basename);
+
     return true;
 }
 
