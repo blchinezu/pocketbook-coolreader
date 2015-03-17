@@ -1358,11 +1358,12 @@ bool CRMenu::setCurPage( int nPage )
     if ( _topItem < 0 )
         _topItem = 0;
     if ( _topItem != oldTop ) {
-		_pageUpdate = true;
+        invalidateControls();
+        _pageUpdate = true;
         setDirty();
         return true;
-	}
-	return false;
+    }
+    return false;
 }
 
 int CRMenu::getCurPage( )
