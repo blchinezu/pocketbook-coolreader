@@ -1594,7 +1594,8 @@ public:
         #endif
 
         case PB_CMD_LOCK_DEVICE:
-            LockDevice();
+            FlushEvents();
+            SetWeakTimer("LockDevice", LockDevice, 350);
             return true;
         #endif
 
