@@ -358,8 +358,8 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
-    { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     #ifdef POCKETBOOK_PRO
+    { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     #ifdef POCKETBOOK_PRO_FW5
@@ -1578,11 +1578,11 @@ public:
         case PB_CMD_FRONT_LIGHT:
             showFrontLight();
             return true;
+
+        #ifdef POCKETBOOK_PRO
         case PB_CMD_TASK_MANAGER:
             showTaskManager();
             return true;
-
-        #ifdef POCKETBOOK_PRO
         case PB_CMD_SYSTEM_PANEL:
             toggleSystemPanel();
             return true;
@@ -1803,36 +1803,17 @@ public:
         }
     }
 
+    #ifdef POCKETBOOK_PRO
     void showTaskManager() {
         if( isTaskManagerSupported() ) {
-            pid_t cpid;
-            pid_t child_pid;
-            cpid = fork();
-
-            switch (cpid) {
-                case -1:
-                    CRLog::error("showTaskManager(): Fork failed!");
-                    break;
-
-                case 0:
-                    child_pid = getpid();
-                    CRLog::trace("showTaskManager(): Child: PID %d", child_pid);
-                    CRLog::trace("showTaskManager(): Child: Launch %s", PB_TASK_MANAGER_BIN);
-                    execl(PB_TASK_MANAGER_BIN, PB_TASK_MANAGER_BIN, NULL);
-                    exit(0);
-
-                default:
-                    CRLog::trace("showTaskManager(): Parent: Waiting for %d to finish", cpid);
-                    waitpid(cpid, NULL, 0);
-                    CRLog::trace("showTaskManager(): Parent: Returned from "PB_TASK_MANAGER_BIN);
-                    CRPocketBookWindowManager::instance->update(true);
-            }
+            CRLog::trace("showTaskManager(): OpenTaskList()");
+            OpenTaskList();
         }
         else {
             CRLog::trace("showTaskManager(): Task manager isn't supported! You shouldn't be able to get here.");
-            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the task manager binary  @ "PB_TASK_MANAGER_BIN, 2000);
         }
     }
+    #endif
 
     void readingOff()
     {
@@ -3521,7 +3502,7 @@ bool isFrontLightSupported() {
 }
 
 bool isTaskManagerSupported() {
-    return access( PB_TASK_MANAGER_BIN, F_OK ) != -1;
+    return MultitaskingSupported();
 }
 
 bool isBrowserSupported() {

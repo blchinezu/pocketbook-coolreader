@@ -19,8 +19,8 @@ enum CRPbCommands {
 	PB_CMD_ROTATE_ANGLE_SET,
     PB_CMD_CONTENTS,
     PB_CMD_FRONT_LIGHT,
-    PB_CMD_TASK_MANAGER,
     #ifdef POCKETBOOK_PRO
+    PB_CMD_TASK_MANAGER,
     PB_CMD_SYSTEM_PANEL,
     PB_CMD_LOCK_DEVICE,
     #ifdef POCKETBOOK_PRO_FW5
@@ -80,12 +80,6 @@ enum CRPbCommands {
     #define PB_FRONT_LIGHT_BIN SYSTEMSFRONTLIGHT
 #else
     #define PB_FRONT_LIGHT_BIN SYSTEMDATA"/bin/front-light.app"
-#endif
-
-#ifdef SYSTEMTASKMGR
-	#define PB_TASK_MANAGER_BIN SYSTEMTASKMGR
-#else
-	#define PB_TASK_MANAGER_BIN SYSTEMDATA"/bin/taskmgr.app"
 #endif
 
 #define PB_BROWSER_BINARY SYSTEMDATA"/bin/browser.app"
