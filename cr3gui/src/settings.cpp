@@ -92,10 +92,10 @@ static const action_def_t availableActions[] = {
     { CR3_ACTION_PB_MAIN_MENU, PB_CMD_MAIN_MENU, 0 },
     { CR3_ACTION_PB_CONTENTS, PB_CMD_CONTENTS, 0 },
     { CR3_ACTION_PB_FRONT_LIGHT, PB_CMD_FRONT_LIGHT, 0 },
-    { CR3_ACTION_PB_TASK_MANAGER, PB_CMD_TASK_MANAGER, 0 },
     { CR3_ACTION_PB_INVERT_DISPLAY, PB_CMD_INVERT_DISPLAY, 0 },
     { CR3_ACTION_PB_STATUS_LINE, PB_CMD_STATUS_LINE, 0 },
     #ifdef POCKETBOOK_PRO
+    { CR3_ACTION_PB_TASK_MANAGER, PB_CMD_TASK_MANAGER, 0 },
     { CR3_ACTION_PB_SYSTEM_PANEL, PB_CMD_SYSTEM_PANEL, 0 },
     { CR3_ACTION_PB_LOCK_DEVICE, PB_CMD_LOCK_DEVICE, 0 },
     #ifdef POCKETBOOK_PRO_FW5
@@ -287,9 +287,11 @@ public:
             if( availableActions[i].action_id == CR3_ACTION_PB_FRONT_LIGHT &&
                 !isFrontLightSupported() )
                 continue;
+            #ifdef POCKETBOOK_PRO
             if( availableActions[i].action_id == CR3_ACTION_PB_TASK_MANAGER &&
                 !isTaskManagerSupported() )
                 continue;
+            #endif
             #endif
 
             lString8 label( getActionName(i) );

@@ -3502,9 +3502,11 @@ bool isFrontLightSupported() {
     return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
 }
 
+#ifdef POCKETBOOK_PRO
 bool isTaskManagerSupported() {
     return MultitaskingSupported();
 }
+#endif
 
 bool isBrowserSupported() {
     return access( PB_BROWSER_BINARY, F_OK ) != -1;
