@@ -7,10 +7,10 @@ function doUpdate {
 	echo "Update dev release $1"
 
 	if [ -f $sdk/pb$1/cr3gui/cr3-pb.app ]; then
-		# rm -f $release/cr3-$1/system/bin/cr3-pb.ap
+		rm -f $release/cr3-$1/system/bin/cr3-pb.app
 		cp -f $sdk/pb$1/cr3gui/cr3-pb.app $release/cr3-$1/system/bin/
 
-		# rm -f $release/cr3-$1/system/share/cr3/skins/*.cr3skin
+		rm -f $release/cr3-$1/system/share/cr3/skins/*.cr3skin
 		cp -f $sdk/pb$1/cr3gui/*.cr3skin $release/cr3-$1/system/share/cr3/skins/
 	fi
 }
