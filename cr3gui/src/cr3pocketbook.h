@@ -110,6 +110,10 @@ bool isAutoConnectSupported();
 bool isTaskManagerSupported();
 bool isBrowserSupported();
 
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2);
+void pbLaunchWaitBinary(const char *binary, const char *param);
+void pbLaunchWaitBinary(const char *binary);
+
 void toggleInvertDisplay();
 void toggleStatusLine();
 void launchBrowser(lString16 url);

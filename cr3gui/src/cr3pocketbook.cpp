@@ -76,7 +76,6 @@ typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
 typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
 typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
 
-
 class CRPocketBookProStateSaver
 {
 private:
@@ -906,7 +905,7 @@ private:
     void loadDictionaries();
 protected:
     virtual void selectDictionary();
-    virtual void launchDictBrowser(char *urlBase);
+    virtual void launchDictBrowser(const char *urlBase);
     virtual void onDictionarySelect();
     virtual bool onItemSelect();
 public:
@@ -1781,52 +1780,10 @@ public:
      */
     void pbNetwork(char *action) {
         if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
-            pid_t cpid;
-            pid_t child_pid;
-            cpid = fork();
-
-            switch (cpid) {
-                case -1:
-                    CRLog::error("pbNetwork(): Fork failed!");
-                    break;
-
-                case 0:
-                    child_pid = getpid();
-                    CRLog::trace("pbNetwork(): Child: PID %d", child_pid);
-                    CRLog::trace("pbNetwork(): Child: Launch %s", PB_AUTO_CONNECT_BIN);
-                    execl(PB_AUTO_CONNECT_BIN, PB_AUTO_CONNECT_BIN, action, NULL);
-                    exit(0);
-
-                default:
-                    CRLog::trace("pbNetwork(): Parent: Waiting for %d to finish", cpid);
-                    waitpid(cpid, NULL, 0);
-                    CRLog::trace("pbNetwork(): Parent: Returned from "PB_AUTO_CONNECT_BIN);
-                    CRPocketBookWindowManager::instance->update(true);
-            }
+            pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
         }
         else if( isNetworkSupported() ) {
-            pid_t cpid;
-            pid_t child_pid;
-            cpid = fork();
-
-            switch (cpid) {
-                case -1:
-                    CRLog::error("pbNetwork(): Fork failed!");
-                    break;
-
-                case 0:
-                    child_pid = getpid();
-                    CRLog::trace("pbNetwork(): Child: PID %d", child_pid);
-                    CRLog::trace("pbNetwork(): Child: Launch %s", PB_NETWORK_BIN);
-                    execl(PB_NETWORK_BIN, PB_NETWORK_BIN, action, NULL);
-                    exit(0);
-
-                default:
-                    CRLog::trace("pbNetwork(): Parent: Waiting for %d to finish", cpid);
-                    waitpid(cpid, NULL, 0);
-                    CRLog::trace("pbNetwork(): Parent: Returned from "PB_NETWORK_BIN);
-                    CRPocketBookWindowManager::instance->update(true);
-            }
+            pbLaunchWaitBinary(PB_NETWORK_BIN, action);
         }
         else {
             CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
@@ -1836,28 +1793,7 @@ public:
 
     void showFrontLight() {
         if( isFrontLightSupported() ) {
-            pid_t cpid;
-            pid_t child_pid;
-            cpid = fork();
-
-            switch (cpid) {
-                case -1:
-                    CRLog::error("showFrontLight(): Fork failed!");
-                    break;
-
-                case 0:
-                    child_pid = getpid();
-                    CRLog::trace("showFrontLight(): Child: PID %d", child_pid);
-                    CRLog::trace("showFrontLight(): Child: Launch %s", PB_FRONT_LIGHT_BIN);
-                    execl(PB_FRONT_LIGHT_BIN, PB_FRONT_LIGHT_BIN, NULL);
-                    exit(0);
-
-                default:
-                    CRLog::trace("showFrontLight(): Parent: Waiting for %d to finish", cpid);
-                    waitpid(cpid, NULL, 0);
-                    CRLog::trace("showFrontLight(): Parent: Returned from "PB_FRONT_LIGHT_BIN);
-                    CRPocketBookWindowManager::instance->update(true);
-            }
+            pbLaunchWaitBinary(PB_FRONT_LIGHT_BIN);
         }
         else {
             CRLog::trace("showFrontLight(): Front light isn't supported! You shouldn't be able to get here.");
@@ -2400,7 +2336,7 @@ void CRPbDictionaryView::searchDictionary()
 
 }
 
-void CRPbDictionaryView::launchDictBrowser(char *urlBase) {
+void CRPbDictionaryView::launchDictBrowser(const char *urlBase) {
     launchBrowser(urlBase+_word);
 }
 
@@ -3606,34 +3542,46 @@ void stopSatusUpdateThread() {
 }
 #endif
 
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2) {
+    pid_t cpid;
+    pid_t child_pid;
+    cpid = fork();
+
+    switch (cpid) {
+        case -1:
+            CRLog::error("pbLaunchWaitBinary(): Fork failed!");
+            break;
+
+        case 0:
+            child_pid = getpid();
+            CRLog::trace("pbLaunchWaitBinary(): Child: PID %d", child_pid);
+            CRLog::trace("pbLaunchWaitBinary(): Child: Launch %s", binary);
+            execl(
+                binary,
+                binary,
+                param1,
+                param2,
+                NULL
+                );
+            exit(0);
+
+        default:
+            CRLog::trace("pbLaunchWaitBinary(): Parent: Waiting for %d to finish", cpid);
+            waitpid(cpid, NULL, 0);
+            CRLog::trace("pbLaunchWaitBinary(): Parent: Returned from %s", binary);
+            CRPocketBookWindowManager::instance->update(true);
+    }
+}
+void pbLaunchWaitBinary(const char *binary, const char *param) {
+    pbLaunchWaitBinary(binary, param, "");
+}
+void pbLaunchWaitBinary(const char *binary) {
+    pbLaunchWaitBinary(binary, "", "");
+}
+
 void launchBrowser(lString16 url) {
-
     if( isBrowserSupported() ) {
-        lString8 url8 = UnicodeToUtf8(url);
-        pid_t cpid;
-        pid_t child_pid;
-        cpid = fork();
-
-        switch (cpid) {
-            case -1:
-                CRLog::error("launchBrowser(): Fork failed!");
-                break;
-
-            case 0:
-                child_pid = getpid();
-                CRLog::trace("launchBrowser(): Child: PID %d", child_pid);
-                CRLog::trace("launchBrowser(): Child: Launch %s %s \"%s\"", PB_BROWSER_EXEC, PB_BROWSER_BINARY, url8.c_str());
-                execlp(PB_BROWSER_EXEC, PB_BROWSER_EXEC, PB_BROWSER_BINARY, const_cast<const char *>(url8.c_str()), NULL);
-                exit(0);
-
-            default:
-                CRLog::trace("launchBrowser(): Parent: Waiting for %d to finish", cpid);
-                waitpid(cpid, NULL, 0);
-                CRLog::trace("launchBrowser(): Parent: Returned from %s", PB_BROWSER_EXEC);
-                CRPocketBookWindowManager::instance->update(true);
-        }
-        // CRLog::trace("launchBrowser(): %s \"%s\"", PB_BROWSER_BINARY, url8.c_str());
-        // system( url8.c_str() );
+        pbLaunchWaitBinary(PB_BROWSER_EXEC, PB_BROWSER_BINARY, UnicodeToUtf8(url).c_str());
     }
     else {
         CRLog::trace("launchBrowser(): The browser binary is not present @ %s", PB_BROWSER_BINARY);
