@@ -82,6 +82,18 @@ enum CRPbCommands {
     #define PB_FRONT_LIGHT_BIN SYSTEMDATA"/bin/front-light.app"
 #endif
 
+#ifdef NETAGENT
+    #define PB_NETWORK_BIN NETAGENT
+#else
+    #define PB_NETWORK_BIN SYSTEMDATA"/bin/netagent"
+#endif
+
+#ifdef AUTO_CONNECT_APP
+    #define PB_AUTO_CONNECT_BIN AUTO_CONNECT_APP
+#else
+    #define PB_AUTO_CONNECT_BIN SYSTEMDATA"/bin/auto_connect.app"
+#endif
+
 #define PB_BROWSER_BINARY SYSTEMDATA"/bin/browser.app"
 #define PB_BROWSER_EXEC SYSTEMDATA"/bin/openbook"
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
@@ -93,6 +105,8 @@ int getPB_keyboardType();
 int getPB_screenType();
 bool isGSensorSupported();
 bool isFrontLightSupported();
+bool isNetworkSupported();
+bool isAutoConnectSupported();
 bool isTaskManagerSupported();
 bool isBrowserSupported();
 

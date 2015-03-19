@@ -1773,6 +1773,67 @@ public:
         OpenList(_("Contents"), tocListImage, ScreenWidth()/2, , _tocLength, currentPos, listTocHandler);
     }
     #endif
+
+    /**
+     * Enable/Disable pocketbook network
+     *
+     * @param  action  connect/disconnect
+     */
+    void pbNetwork(char *action) {
+        if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
+            pid_t cpid;
+            pid_t child_pid;
+            cpid = fork();
+
+            switch (cpid) {
+                case -1:
+                    CRLog::error("pbNetwork(): Fork failed!");
+                    break;
+
+                case 0:
+                    child_pid = getpid();
+                    CRLog::trace("pbNetwork(): Child: PID %d", child_pid);
+                    CRLog::trace("pbNetwork(): Child: Launch %s", PB_AUTO_CONNECT_BIN);
+                    execl(PB_AUTO_CONNECT_BIN, PB_AUTO_CONNECT_BIN, action, NULL);
+                    exit(0);
+
+                default:
+                    CRLog::trace("pbNetwork(): Parent: Waiting for %d to finish", cpid);
+                    waitpid(cpid, NULL, 0);
+                    CRLog::trace("pbNetwork(): Parent: Returned from "PB_AUTO_CONNECT_BIN);
+                    CRPocketBookWindowManager::instance->update(true);
+            }
+        }
+        else if( isNetworkSupported() ) {
+            pid_t cpid;
+            pid_t child_pid;
+            cpid = fork();
+
+            switch (cpid) {
+                case -1:
+                    CRLog::error("pbNetwork(): Fork failed!");
+                    break;
+
+                case 0:
+                    child_pid = getpid();
+                    CRLog::trace("pbNetwork(): Child: PID %d", child_pid);
+                    CRLog::trace("pbNetwork(): Child: Launch %s", PB_NETWORK_BIN);
+                    execl(PB_NETWORK_BIN, PB_NETWORK_BIN, action, NULL);
+                    exit(0);
+
+                default:
+                    CRLog::trace("pbNetwork(): Parent: Waiting for %d to finish", cpid);
+                    waitpid(cpid, NULL, 0);
+                    CRLog::trace("pbNetwork(): Parent: Returned from "PB_NETWORK_BIN);
+                    CRPocketBookWindowManager::instance->update(true);
+            }
+        }
+        else {
+            CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
+            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
+        }
+    }
+
     void showFrontLight() {
         if( isFrontLightSupported() ) {
             pid_t cpid;
@@ -3500,6 +3561,14 @@ bool isGSensorSupported()
 
 bool isFrontLightSupported() {
     return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
+}
+
+bool isNetworkSupported() {
+    return access( PB_NETWORK_BIN, F_OK ) != -1;
+}
+
+bool isAutoConnectSupported() {
+    return access( PB_AUTO_CONNECT_BIN, F_OK ) != -1;
 }
 
 #ifdef POCKETBOOK_PRO
