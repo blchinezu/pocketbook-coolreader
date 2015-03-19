@@ -284,11 +284,11 @@ public:
         for ( int i=0; availableActions[i].action_id; i++ ) {
 
             #ifdef CR_POCKETBOOK
-            if( availableActions[i].action_id == CR3_ACTION_PB_FRONT_LIGHT &&
+            if( strcmp(availableActions[i].action_id, CR3_ACTION_PB_FRONT_LIGHT) == 0 &&
                 !isFrontLightSupported() )
                 continue;
             #ifdef POCKETBOOK_PRO
-            if( availableActions[i].action_id == CR3_ACTION_PB_TASK_MANAGER &&
+            if( strcmp(availableActions[i].action_id, CR3_ACTION_PB_TASK_MANAGER) == 0 &&
                 !isTaskManagerSupported() )
                 continue;
             #endif
