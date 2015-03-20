@@ -36,6 +36,7 @@
 #define PB_LINE_HEIGHT 30
 
 bool forcePartialBwUpdates;
+bool forcePartialUpdates;
 lString16 pbSkinFileName;
 
 static const char *def_menutext[9] = {
@@ -728,8 +729,9 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
     rc.left &= ~3;
     rc.right = (rc.right + 3) & ~3;
 
-
-    if (!_forceSoft && ( isDocWnd || rc.height() > 400)
+    if( forcePartialUpdates )
+        full = false;
+    else if (!_forceSoft && ( isDocWnd || rc.height() > 400)
 #if ENABLE_UPDATE_MODE_SETTING==1
         && checkFullUpdateCounter()
 #endif
@@ -3517,21 +3519,22 @@ bool isBrowserSupported() {
     return access( PB_BROWSER_BINARY, F_OK ) != -1;
 }
 
-#if 0
 lString16 lastClock;
 void statusUpdateThread() {
     lString16 currentClock = main_win->getDocView()->getTimeString();
     if( currentClock != lastClock ) {
+
+        CRPocketBookWindowManager::instance->postCommand(DCMD_REFRESH_PAGE, 0);
+        main_win->getDocView()->requestRender();
+        main_win->getDocView()->checkRender();
+
+        bool save = forcePartialUpdates;
+        forcePartialUpdates = true;
         CRPocketBookWindowManager::instance->update(true);
-        main_win->getDocView->drawPageHeader();
-        PartialUpdate(0, 0, ScreenWidth(), main_win->getDocView()->getPageHeaderHeight());
+        forcePartialUpdates = save;
+
         lastClock = currentClock;
     }
-    // else {
-    //     Message(ICON_WARNING,  const_cast<char*>("statusUpdateThread()"),
-    //         UnicodeToUtf8(lastClock+lString16(" != ")+currentClock).c_str(),
-    //         2000);
-    // }
     SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
 }
 void startStatusUpdateThread() {
@@ -3540,7 +3543,6 @@ void startStatusUpdateThread() {
 void stopSatusUpdateThread() {
     ClearTimer(statusUpdateThread);
 }
-#endif
 
 void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2) {
     pid_t cpid;
@@ -3947,9 +3949,7 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
-            #if 0
             startStatusUpdateThread();
-            #endif
 
             FullUpdate();
 
@@ -4150,6 +4150,7 @@ extern ifont* header_font;
 int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
+    forcePartialUpdates = false;
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
