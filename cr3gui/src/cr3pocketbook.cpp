@@ -3522,6 +3522,7 @@ bool isBrowserSupported() {
 lString16 lastClock;
 void statusUpdateThread() {
     lString16 currentClock = main_win->getDocView()->getTimeString();
+    int ms = 1000;
     if( currentClock != lastClock ) {
 
         CRPocketBookWindowManager::instance->postCommand(DCMD_REFRESH_PAGE, 0);
@@ -3534,8 +3535,9 @@ void statusUpdateThread() {
         forcePartialUpdates = save;
 
         lastClock = currentClock;
+        ms = 60000;
     }
-    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
+    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, ms);
 }
 void startStatusUpdateThread() {
     SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
