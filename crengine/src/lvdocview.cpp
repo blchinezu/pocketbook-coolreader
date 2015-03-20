@@ -5299,6 +5299,10 @@ int LVDocView::doCommand(LVDocCmd cmd, int param) {
             }
         }
         break;
+    case DCMD_REFRESH_PAGE: {
+            return goToPage(getCurPage());
+        }
+        break;
 	case DCMD_ZOOM_IN: {
 		ZoomFont(+1);
 	}
