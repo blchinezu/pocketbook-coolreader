@@ -1775,12 +1775,15 @@ public:
     }
     #endif
 
+    #ifdef POCKETBOOK_PRO
     /**
      * Enable/Disable pocketbook network
      *
      * @param  action  connect/disconnect
      */
     void pbNetwork(char *action) {
+        if( strcmp(action,"connect") && pbNetworkConnected() )
+            return;
         if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
             pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
         }
@@ -1792,6 +1795,10 @@ public:
             Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
         }
     }
+    bool pbNetworkConnected() {
+        return NetInfo()->connected != 0;
+    }
+    #endif
 
     void showFrontLight() {
         if( isFrontLightSupported() ) {
@@ -3501,6 +3508,7 @@ bool isFrontLightSupported() {
     return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
 }
 
+#ifdef POCKETBOOK_PRO
 bool isNetworkSupported() {
     return access( PB_NETWORK_BIN, F_OK ) != -1;
 }
@@ -3509,7 +3517,6 @@ bool isAutoConnectSupported() {
     return access( PB_AUTO_CONNECT_BIN, F_OK ) != -1;
 }
 
-#ifdef POCKETBOOK_PRO
 bool isTaskManagerSupported() {
     return MultitaskingSupported();
 }

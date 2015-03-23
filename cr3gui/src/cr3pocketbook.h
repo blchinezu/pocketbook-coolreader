@@ -105,10 +105,13 @@ int getPB_keyboardType();
 int getPB_screenType();
 bool isGSensorSupported();
 bool isFrontLightSupported();
+bool isBrowserSupported();
+
+#ifdef POCKETBOOK_PRO
 bool isNetworkSupported();
 bool isAutoConnectSupported();
 bool isTaskManagerSupported();
-bool isBrowserSupported();
+#endif
 
 void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2);
 void pbLaunchWaitBinary(const char *binary, const char *param);
