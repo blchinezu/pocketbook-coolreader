@@ -3520,6 +3520,7 @@ bool isBrowserSupported() {
 }
 
 lString16 lastClock;
+void startStatusUpdateThread(int ms);
 void statusUpdateThread() {
     lString16 currentClock = main_win->getDocView()->getTimeString();
     int ms = 1000;
@@ -3537,10 +3538,10 @@ void statusUpdateThread() {
         lastClock = currentClock;
         ms = 60000;
     }
-    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, ms);
+    startStatusUpdateThread(ms);
 }
-void startStatusUpdateThread() {
-    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, 5000);
+void startStatusUpdateThread(int ms) {
+    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, ms);
 }
 void stopSatusUpdateThread() {
     ClearTimer(statusUpdateThread);
@@ -3951,7 +3952,7 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
-            startStatusUpdateThread();
+            startStatusUpdateThread(5000);
 
             FullUpdate();
 
