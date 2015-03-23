@@ -15,7 +15,8 @@
 #include "cr3pocketbook.h"
 #include <inkview.h>
 #ifdef POCKETBOOK_PRO
-#include <inkplatform.h>
+    #include <inkplatform.h>
+    #include "web.h"
 #endif
 
 #ifdef PB_DB_STATE_SUPPORTED
@@ -1772,31 +1773,6 @@ public:
         }*/
 
         OpenList(_("Contents"), tocListImage, ScreenWidth()/2, , _tocLength, currentPos, listTocHandler);
-    }
-    #endif
-
-    #ifdef POCKETBOOK_PRO
-    /**
-     * Enable/Disable pocketbook network
-     *
-     * @param  action  connect/disconnect
-     */
-    void pbNetwork(char *action) {
-        if( strcmp(action,"connect") && pbNetworkConnected() )
-            return;
-        if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
-            pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
-        }
-        else if( isNetworkSupported() ) {
-            pbLaunchWaitBinary(PB_NETWORK_BIN, action);
-        }
-        else {
-            CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
-            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
-        }
-    }
-    bool pbNetworkConnected() {
-        return NetInfo()->connected != 0;
     }
     #endif
 
@@ -3941,6 +3917,35 @@ void SetSaveStateTimer(){
     CRPocketBookDocView::instance->closing();
     exiting = false;
 }
+
+bool pbNetworkConnected() {
+    return NetInfo()->connected != 0;
+}
+/**
+ * Enable/Disable pocketbook network
+ *
+ * @param  action  connect/disconnect
+ */
+void pbNetwork(const char *action) {
+    if( strcmp(action,"connect") && pbNetworkConnected() )
+        return;
+    if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
+        pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
+    }
+    else if( isNetworkSupported() ) {
+        pbLaunchWaitBinary(PB_NETWORK_BIN, action);
+    }
+    else {
+        CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
+    }
+}
+/*void getSampleWebPage() {
+    pbNetwork("connect");
+    string html = web::get("http://brucelee.duckdns.org/");
+    Message(ICON_WARNING,  const_cast<char*>("CoolReader"), html.c_str(), 2000);
+}*/
+
 #endif 
 
 static bool need_save_cover = false;
@@ -3960,6 +3965,7 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
             startStatusUpdateThread(5000);
+            // SetWeakTimer(const_cast<char *>("getSampleWebPage"), getSampleWebPage, 5000);
 
             FullUpdate();
 
