@@ -13,11 +13,11 @@ function doUpdate {
 	sdk="$HOME/PBDEV/sources/cr3-fork"
 	release="$HOME/PBDEV/releases/coolreader3/dev"
 
-	waitForDropboxToCatchOn
-	echo
-	echo "Update dev release $1"
-
 	if [ -f $sdk/pb$1/cr3gui/cr3-pb.app ]; then
+
+		waitForDropboxToCatchOn
+		echo
+		echo "Update dev release $1"
 
 		echo " - remove binary, skins, translations"
 		# binary
