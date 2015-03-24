@@ -3981,7 +3981,7 @@ bool OTA_downloadExists(const lString16 url) {
     const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     return
         strlen(response) == strlen(PB_OTA_EXISTS_STR) &&
-        strcmp(CR_PB_VERSION, PB_OTA_EXISTS_STR) == 0;
+        strcmp(PB_OTA_EXISTS_STR, response) == 0;
 }
 
 /**
@@ -4063,22 +4063,22 @@ bool OTA_update() {
     }
 
     // Check if the device is linked to another one
-    const lString16 link = OTA_getLink(deviceModel);
-    if( link.empty() ) {
+    const lString16 linkedDevice = OTA_getLink(deviceModel);
+    if( linkedDevice.empty() ) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"),
             (
-                lString8(_("The update is not available for your device!\nDevice model: ")) +
-                UnicodeToUtf8(deviceModel)
-                ).c_str()
+            lString8(_("The update is not available for your device!\nDevice model: ")) +
+            UnicodeToUtf8(deviceModel)
+            ).c_str()
             , 5000);
         return false;
     }
 
     // If the device is linked and the download exists
-    if( OTA_downloadExists( OTA_genUrl(PB_OTA_URL_MASK_TEST, link) ) ) {
+    if( OTA_downloadExists( OTA_genUrl(PB_OTA_URL_MASK_TEST, linkedDevice) ) ) {
 
         // Update
-        return OTA_updateFrom( OTA_genUrl(PB_OTA_URL_MASK, link) );
+        return OTA_updateFrom( OTA_genUrl(PB_OTA_URL_MASK, linkedDevice) );
     }
 
     // Shouldn't reach this part
