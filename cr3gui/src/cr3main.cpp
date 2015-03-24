@@ -251,14 +251,14 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
     #if (USE_FREETYPE==1)
         lString16Collection fonts;
         fontDirs.add( fontDir );
+    #ifdef _LINUX
+    #ifndef LBOOK
         static const char * msfonts[] = {
             "arial.ttf", "arialbd.ttf", "ariali.ttf", "arialbi.ttf",
             "cour.ttf", "courbd.ttf", "couri.ttf", "courbi.ttf",
             "times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf",
             NULL
         };
-    #ifdef _LINUX
-    #ifndef LBOOK
         fontDirs.add("/usr/local/share/crengine/fonts");
         fontDirs.add("/usr/local/share/fonts/truetype/freefont");
         fontDirs.add("/usr/share/crengine/fonts");
