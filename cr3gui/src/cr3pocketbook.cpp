@@ -3972,7 +3972,7 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
             FullUpdate();
-            startStatusUpdateThread(5000);
+            // startStatusUpdateThread(5000);
 
             // Try getting cover with the system function
             ibitmap *cover = GetBookCover(
