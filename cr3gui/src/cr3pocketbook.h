@@ -76,6 +76,14 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_PREV_NEXT 5
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
+#if defined(POCKETBOOK_PRO_FW5)
+    #define CR_PB_SDK "PRO5"
+#elif defined(POCKETBOOK_PRO)
+    #define CR_PB_SDK "PRO4"
+#else
+    #define CR_PB_SDK "360"
+#endif
+
 #ifdef SYSTEMSFRONTLIGHT
     #define PB_FRONT_LIGHT_BIN SYSTEMSFRONTLIGHT
 #else
