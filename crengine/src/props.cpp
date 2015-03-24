@@ -340,7 +340,7 @@ bool CRPropAccessor::parseColor(lString16 value, lUInt32 & result) {
 /// get color (#xxxxxx) property by name, returns false if not found
 bool CRPropAccessor::getColor( const char * propName, lUInt32 &result ) const
 {
-    int n = 0;
+    // int n = 0;
     lString16 value;
     if ( !getString( propName, value ) ) {
         //CRLog::debug("%s is not found", propName);

@@ -3867,7 +3867,7 @@ bool LVDocView::LoadDocument(LVStreamRef stream) {
 			FileToArcProps( m_doc_props );
 			m_container = m_arc;
 			m_doc_props->setInt( DOC_PROP_ARC_FILE_COUNT, m_arc->GetObjectCount() );
-			bool found = false;
+			// bool found = false;
 			int htmCount = 0;
 			int fb2Count = 0;
 			int rtfCount = 0;
