@@ -3948,6 +3948,13 @@ void pbNetwork(const char *action) {
 
 #endif 
 
+lString16 getPbModelNumber() {
+    lString16 model = lString16(GetDeviceModel());
+    model.replace(lString16("PocketBook"), lString16(""));
+    model.replace(lString16(" "), lString16(""));
+    return model;
+}
+
 static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
@@ -3964,10 +3971,8 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
-            startStatusUpdateThread(5000);
-            // SetWeakTimer(const_cast<char *>("getSampleWebPage"), getSampleWebPage, 5000);
-
             FullUpdate();
+            startStatusUpdateThread(5000);
 
             // Try getting cover with the system function
             ibitmap *cover = GetBookCover(
