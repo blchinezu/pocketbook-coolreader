@@ -1591,6 +1591,11 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     stylesMenu->reconfigure( 0 );
     mainMenu->addItem( stylesMenu );
 
+    mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE,
+                _("OTA Update"),
+                LVImageSourceRef(),
+                LVFontRef() ) );
+
     reconfigure(0);
 
     if( forcePartialBwUpdates )
