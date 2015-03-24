@@ -3911,6 +3911,13 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
     return CRTOUCH_MOVE;
 }
 
+lString16 getPbModelNumber() {
+    lString16 model = lString16(GetDeviceModel());
+    model.replace(lString16("PocketBook"), lString16(""));
+    model.replace(lString16(" "), lString16(""));
+    return model;
+}
+
 #ifdef POCKETBOOK_PRO
 void SetSaveStateTimer(){
     exiting = true;
@@ -3963,7 +3970,7 @@ bool OTA_isNewVersion() {
  *
  * @return  true if ok, false if not
  */
-bool OTA_downloadExists(const lString16 *url) {
+bool OTA_downloadExists(const lString16 url) {
     if( !pbNetwork("connect") )
         return false;
     const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
@@ -3977,17 +3984,17 @@ bool OTA_downloadExists(const lString16 *url) {
  *
  * @param  deviceModel  current device model number
  *
- * @return  linked device model or NULL if not linked
+ * @return  linked device model or empty if not linked
  */
-lString16 OTA_getLink(const lString16 *deviceModel) {
+lString16 OTA_getLink(const lString16 deviceModel) {
     if( !pbNetwork("connect") )
         return NULL;
     lString16 url = lString16(PB_OTA_LINK_MASK);
-    url.replace(lString16("[DEVICE]", deviceModel));
+    url.replace(lString16("[DEVICE]"), deviceModel);
     const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     if( strlen(response) > 0 && strlen(response) <= PB_OTA_VERSION_MAX_LENGTH )
         return lString16(response);
-    return NULL;
+    return lString16("");
 }
 
 /**
@@ -3998,7 +4005,7 @@ lString16 OTA_getLink(const lString16 *deviceModel) {
  *
  * @return  url
  */
-lString16 OTA_genUrl(const char *mask, const lString16 *deviceModel) {
+lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
     lString16 url = lString16(mask);
     url.replace(lString16("[DEVICE]"), deviceModel);
     return url;
@@ -4011,7 +4018,7 @@ lString16 OTA_genUrl(const char *mask, const lString16 *deviceModel) {
  *
  * @return  true if updated, false if error
  */
-bool OTA_updateFrom(const lString16 *url) {
+bool OTA_updateFrom(const lString16 url) {
 
     Message(ICON_INFORMATION,  const_cast<char*>("CoolReader"),
         UnicodeToUtf8(url).c_str(), 5000);
@@ -4052,11 +4059,11 @@ bool OTA_update() {
 
     // Check if the device is linked to another one
     const lString16 link = OTA_getLink(deviceModel);
-    if( link == NULL ) {
+    if( link.empty() ) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"),
             (
                 lString8(_("The update is not available for your device!\nDevice model: ")) +
-                lString8(deviceModel)
+                UnicodeToUtf8(deviceModel)
                 ).c_str()
             , 5000);
         return false;
@@ -4076,13 +4083,6 @@ bool OTA_update() {
 }
 
 #endif 
-
-lString16 getPbModelNumber() {
-    lString16 model = lString16(GetDeviceModel());
-    model.replace(lString16("PocketBook"), lString16(""));
-    model.replace(lString16(" "), lString16(""));
-    return model;
-}
 
 static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
