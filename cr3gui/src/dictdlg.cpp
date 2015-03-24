@@ -390,7 +390,7 @@ void CRT9Keyboard::draw()
     lvRect borders = skin->getBorderWidths();
     rect.shrinkBy( borders );
     lvRect keyRect = rect;
-    lvPoint minSizeN = shortcutSkin->getMinSize();
+    // lvPoint minSizeN = shortcutSkin->getMinSize();
     for ( int i=0; i<encoding_.length(); i++ ) {
         lString16 txtN = lString16::itoa(i);
         lString16 txt = encoding_[i];

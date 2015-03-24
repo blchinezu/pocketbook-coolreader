@@ -507,12 +507,12 @@ CRControlsMenuItem::CRControlsMenuItem( CRControlsMenu * menu, int id, int key, 
 
 void CRControlsMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected )
 {
-    lvRect itemBorders = skin->getBorderWidths();
+    // lvRect itemBorders = skin->getBorderWidths();
     skin->draw( buf, rc );
     buf.SetTextColor( skin->getTextColor() );
     buf.SetBackgroundColor( skin->getBackgroundColor() );
     lvRect textRect = rc;
-    lvRect borders = skin->getBorderWidths();
+    // lvRect borders = skin->getBorderWidths();
     //textRect.shrinkBy(borders);
     skin->drawText(buf, textRect, _label);
     lString16 s = getSubmenuValue();
