@@ -4067,7 +4067,7 @@ bool OTA_update() {
     if( linkedDevice.empty() ) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"),
             (
-            lString8(_("The update is not available for your device!\nDevice model: ")) +
+            lString8(_("Update is not available for your device!\nDevice model: ")) +
             UnicodeToUtf8(deviceModel)
             ).c_str()
             , 5000);
