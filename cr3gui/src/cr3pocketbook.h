@@ -110,8 +110,8 @@ enum CRPbCommands {
 
 #ifdef POCKETBOOK_PRO
 #define PB_OTA_URL_BASE      "http://sourceforge.net/u/e379d14417/crengine/ci/pocketbook-port/tree/builds/"
-#define PB_OTA_URL_MASK      PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK".zip?format=raw"
-#define PB_OTA_URL_MASK_TEST PB_OTA_URL_BASE "[DEVICE]/exists?format=raw"
+#define PB_OTA_URL_MASK      PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK"/latest.zip?format=raw"
+#define PB_OTA_URL_MASK_TEST PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK"/exists?format=raw"
 #define PB_OTA_VERSION       PB_OTA_URL_BASE "current.version?format=raw"
 #define PB_OTA_LINK_MASK     PB_OTA_URL_BASE "links/[DEVICE]?format=raw"
 #define PB_OTA_VERSION_MAX_LENGTH 15
