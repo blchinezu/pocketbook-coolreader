@@ -65,8 +65,7 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_FORK_VERSION "12"
-#define CR_PB_VERSION "0.0.6-16-"CR_PB_FORK_VERSION
+#define CR_PB_VERSION "0.0.6-16-12"
 #define CR_PB_BUILD_DATE "2015-03-17"
 
 #define PB_ROTATE_MODE_360 0
@@ -107,6 +106,17 @@ enum CRPbCommands {
 #define PB_BROWSER_EXEC SYSTEMDATA"/bin/openbook"
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
 #define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
+
+#ifdef POCKETBOOK_PRO
+#define PB_OTA_URL_BASE      "http://sourceforge.net/u/e379d14417/crengine/ci/pocketbook-port/tree/builds/"
+#define PB_OTA_URL_MASK      PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK".zip?format=raw"
+#define PB_OTA_URL_MASK_TEST PB_OTA_URL_BASE "[DEVICE]/exists?format=raw"
+#define PB_OTA_VERSION       PB_OTA_URL_BASE "current.version?format=raw"
+#define PB_OTA_LINK_MASK     PB_OTA_URL_BASE "links/[DEVICE]?format=raw"
+#define PB_OTA_VERSION_MAX_LENGTH 15
+#define PB_OTA_LINK_MAX_LENGTH    50
+#define PB_OTA_EXISTS_STR         "yes"
+#endif
 
 const char* TR(const char *label);
 
