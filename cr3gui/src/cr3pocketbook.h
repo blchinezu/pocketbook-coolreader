@@ -23,6 +23,7 @@ enum CRPbCommands {
     PB_CMD_TASK_MANAGER,
     PB_CMD_SYSTEM_PANEL,
     PB_CMD_LOCK_DEVICE,
+    PB_CMD_OTA_UPDATE,
     #ifdef POCKETBOOK_PRO_FW5
     PB_CMD_OPEN_SYSTEM_PANEL,
     #endif
@@ -116,6 +117,7 @@ enum CRPbCommands {
 #define PB_OTA_VERSION_MAX_LENGTH 15
 #define PB_OTA_LINK_MAX_LENGTH    50
 #define PB_OTA_EXISTS_STR         "yes"
+bool OTA_update();
 #endif
 
 const char* TR(const char *label);

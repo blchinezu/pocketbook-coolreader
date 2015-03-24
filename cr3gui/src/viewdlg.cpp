@@ -590,6 +590,7 @@ static const char * getCommandName( int command )
     case PB_CMD_TASK_MANAGER: return _("Tasks list");
     case PB_CMD_SYSTEM_PANEL: return _("Toggle system panel");
     case PB_CMD_LOCK_DEVICE: return _("Lock device");
+    case PB_CMD_OTA_UPDATE: return _("OTA Update");
     #ifdef POCKETBOOK_PRO_FW5
     case PB_CMD_OPEN_SYSTEM_PANEL: return _("Open system panel");
     #endif

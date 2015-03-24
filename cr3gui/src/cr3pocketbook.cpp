@@ -362,6 +362,7 @@ static const struct {
     #ifdef POCKETBOOK_PRO
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
+    { "@KA_otau", PB_CMD_OTA_UPDATE, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     #ifdef POCKETBOOK_PRO_FW5
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
@@ -1598,6 +1599,10 @@ public:
         case PB_CMD_LOCK_DEVICE:
             FlushEvents();
             SetWeakTimer("LockDevice", LockDevice, 350);
+            return true;
+
+        case PB_CMD_OTA_UPDATE:
+            OTA_update();
             return true;
         #endif
 
