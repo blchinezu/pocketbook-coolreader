@@ -22,25 +22,47 @@ INCLUDE(${KWWidgets_CMAKE_DIR}KWWidgetsInternationalizationMacros.cmake)
 SET (LANGUAGES ru uk de fr bg es ca cs pl lt zh_CN zh_TW)
 message( "Languages: ${LANGUAGES}" )
 
-SET (CR3_SOURCES 
-  src/bgfit.cpp
-  src/citedlg.cpp 
-  src/fsmenu.cpp    
-  src/mainwnd.cpp  
-  src/recentdlg.cpp 
-  src/selnavig.cpp 
-  src/tocdlg.cpp 
-  src/bmkdlg.cpp   
-  src/cr3_def_cover.cpp 
-  src/cr3main.cpp  
-  src/dictdlg.cpp 
-  src/linksdlg.cpp 
-  src/numedit.cpp 
-  src/scrkbd.cpp   
-  src/settings.cpp 
-  src/viewdlg.cpp
-  src/web.cpp
-)
+if (DEFINED POCKETBOOK_PRO)
+  SET (CR3_SOURCES 
+    src/bgfit.cpp
+    src/citedlg.cpp 
+    src/fsmenu.cpp    
+    src/mainwnd.cpp  
+    src/recentdlg.cpp 
+    src/selnavig.cpp 
+    src/tocdlg.cpp 
+    src/bmkdlg.cpp   
+    src/cr3_def_cover.cpp 
+    src/cr3main.cpp  
+    src/dictdlg.cpp 
+    src/linksdlg.cpp 
+    src/numedit.cpp 
+    src/scrkbd.cpp   
+    src/settings.cpp 
+    src/viewdlg.cpp
+    src/web.cpp
+    src/ota_update.cpp
+  )
+else ()
+  SET (CR3_SOURCES 
+    src/bgfit.cpp
+    src/citedlg.cpp 
+    src/fsmenu.cpp    
+    src/mainwnd.cpp  
+    src/recentdlg.cpp 
+    src/selnavig.cpp 
+    src/tocdlg.cpp 
+    src/bmkdlg.cpp   
+    src/cr3_def_cover.cpp 
+    src/cr3main.cpp  
+    src/dictdlg.cpp 
+    src/linksdlg.cpp 
+    src/numedit.cpp 
+    src/scrkbd.cpp   
+    src/settings.cpp 
+    src/viewdlg.cpp
+  )
+endif (DEFINED POCKETBOOK_PRO)
 
 if (${GUI} STREQUAL CRGUI_PB)
     SET (CR3_STYLES

@@ -108,28 +108,19 @@ enum CRPbCommands {
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
 #define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
 
-#ifdef POCKETBOOK_PRO
-#define PB_OTA_URL_BASE      "http://sourceforge.net/u/e379d14417/crengine/ci/pocketbook-port/tree/builds/"
-#define PB_OTA_URL_MASK      PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK"/latest.zip?format=raw"
-#define PB_OTA_URL_MASK_TEST PB_OTA_URL_BASE "[DEVICE]/"CR_PB_SDK"/exists?format=raw"
-#define PB_OTA_VERSION       PB_OTA_URL_BASE "current.version?format=raw"
-#define PB_OTA_LINK_MASK     PB_OTA_URL_BASE "links/[DEVICE]?format=raw"
-#define PB_OTA_VERSION_MAX_LENGTH 15
-#define PB_OTA_LINK_MAX_LENGTH    50
-#define PB_OTA_EXISTS_STR         "yes"
-bool OTA_update();
-#endif
-
 const char* TR(const char *label);
 
 int getPB_keyboardType();
 int getPB_screenType();
+
 bool isGSensorSupported();
 bool isFrontLightSupported();
 bool isBrowserSupported();
 
 #ifdef POCKETBOOK_PRO
 bool isNetworkSupported();
+bool pbNetworkConnected();
+bool pbNetwork(const char *action);
 bool isAutoConnectSupported();
 bool isTaskManagerSupported();
 #endif
@@ -141,6 +132,8 @@ void pbLaunchWaitBinary(const char *binary);
 void toggleInvertDisplay();
 void toggleStatusLine();
 void launchBrowser(lString16 url);
+
+lString16 getPbModelNumber();
 
 #ifdef POCKETBOOK_PRO
 void toggleSystemPanel();
