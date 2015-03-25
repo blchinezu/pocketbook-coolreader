@@ -1647,6 +1647,8 @@ public:
 #if BUILD_LITE!=1
     /// returns rectangle (in doc coordinates) for range. Returns true if found.
     bool getRect( lvRect & rect );
+    /// returns rectangles (in doc coordinates) for range. Returns true if found.
+    bool getRectangles ( LVArray<lvRect> & dest);
 #endif
     /// returns nearest common element for start and end points
     ldomNode * getNearestCommonParent();
@@ -1933,6 +1935,8 @@ class ldomNavigationHistory
         }
         int forwardCount()
         {
+            if (_pos>=(int)_links.length()-1)
+                return 0;
             return _links.length() - _pos;
         }
 };

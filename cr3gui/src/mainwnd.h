@@ -89,10 +89,10 @@ enum CRMainMenuCmd
     MCMD_NEXT_MODE,
     MCMD_PREV_MODE,
     MCMD_BOOKMARK_LIST_GO_MODE,
-
     MCMD_GO_PERCENT,
     MCMD_GO_PERCENT_APPLY,
-    MCMD_CITES_LIST
+    MCMD_CITES_LIST,
+    MCMD_SWAP
 };
 
 class V3DocViewWin : public CRViewDialog, public LVDocViewCallback
@@ -109,6 +109,7 @@ protected:
 	lString16 _helpFile;
     lString16 _cssDir;
     time_t _loadFileStart;
+    lString16 _fileName;
 public:
     lString16 getBookmarkDir() { return _bookmarkDir; }
     void setBookmarkDir( lString16 dir ) { _bookmarkDir = dir; }
@@ -145,7 +146,7 @@ public:
 	virtual void OnLoadFileError( lString16 message );
     /// Override to handle external links
     virtual void OnExternalLink( lString16 url, ldomNode * node );
-
+    virtual void showProgress( lString16 filename, int progressPercent );
     /// returns current properties
     CRPropRef getProps() { return _props; }
 

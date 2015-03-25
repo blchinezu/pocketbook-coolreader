@@ -45,6 +45,7 @@
 
 #ifdef CR_POCKETBOOK
 #include "cr3pocketbook.h"
+#include <inkview.h>
 #endif
 
 
@@ -56,6 +57,7 @@
 
 DECL_DEF_CR_FONT_SIZES;
 
+#define PROGRESS_ICON_FILE lString16("cr3_wait_icon.png")
 
 V3DocViewWin::V3DocViewWin( CRGUIWindowManager * wm, lString16 dataDir )
 : CRViewDialog ( wm, lString16::empty_str, lString8::empty_str, lvRect(), false, false ), _dataDir(dataDir), _loadFileStart(0)
@@ -358,8 +360,17 @@ void V3DocViewWin::OnLoadFileStart( lString16 filename )
 void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
 {
     CRLog::trace("OnLoadFileFormatDetected(%d)", (int)fileFormat);
-    lString16 filename("fb2.css");
-    if ( _cssDir.length() > 0 ) {
+    lString16 filename;
+
+    lString16 dir = LVExtractPath(_fileName);
+
+    int fb2Pos = _fileName.pos(lString16(L".fb2"));
+    if (fb2Pos < 0)
+        filename = dir + LVExtractFilenameWithoutExtension(_fileName);
+    else
+        filename = _fileName.substr(0, fb2Pos);
+    filename += L".css";
+    if (!loadCSS(filename)) {
         switch ( fileFormat ) {
         case doc_format_txt:
             filename = "txt.css";
@@ -378,13 +389,18 @@ void V3DocViewWin::OnLoadFileFormatDetected( doc_format_t fileFormat )
             break;
         case doc_format_doc:
             filename = "doc.css";
-			break;
+            break;
         default:
-            // do nothing
+            filename = L"fb2.css"
             ;
         }
+
         CRLog::debug( "CSS file to load: %s", UnicodeToUtf8(filename).c_str() );
-        if ( LVFileExists( _cssDir + filename ) ) {
+        if (LVFileExists(dir + filename)) {
+            loadCSS( dir + filename );
+        } else if (_cssDir.length() <= 0) {
+            CRLog::debug("_cssDir is empty");
+        } else if ( LVFileExists( _cssDir + filename ) ) {
             loadCSS( _cssDir + filename );
         } else if ( LVFileExists( _cssDir + "fb2.css" ) ) {
             loadCSS( _cssDir + "fb2.css" );
@@ -403,7 +419,7 @@ void V3DocViewWin::OnLoadFileProgress( int percent )
     CRLog::trace("OnLoadFileProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 10+percent/2);
+        showProgress(PROGRESS_ICON_FILE, 10+percent/2);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -415,7 +431,7 @@ void V3DocViewWin::OnFormatStart()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 60);
+        showProgress(PROGRESS_ICON_FILE, 60);
 }
 
 /// document formatting finished
@@ -423,13 +439,12 @@ void V3DocViewWin::OnFormatEnd()
 {
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR )
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 100);
+        showProgress(PROGRESS_ICON_FILE, 100);
     // Background cache file saving is disabled when _docview->updateCache(infinite) is called here.
     // To implement background cache file saving, schedule on Idle state following task:
     // in each idle cycle call _docview->updateCache(timeOut) while it returns CR_TIMEOUT
 #ifndef BACKGROUND_CACHE_FILE_CREATION
-    CRTimerUtil infinite;
-    _docview->updateCache(infinite);
+    _docview->updateCache();
 #endif
 }
 
@@ -439,7 +454,7 @@ void V3DocViewWin::OnFormatProgress( int percent )
     CRLog::trace("OnFormatProgress(%d)", percent);
     time_t t = time((time_t)0);
     if ( t - _loadFileStart >= SECONDS_BEFORE_PROGRESS_BAR ) {
-        _wm->showProgress(lString16("cr3_wait_icon.png"), 60+percent*4/10);
+        showProgress(PROGRESS_ICON_FILE, 60+percent*4/10);
 #ifdef TRACE_DOC_MEM_STATS
         _docview->getDocument()->dumpStatistics();
 #endif
@@ -543,6 +558,7 @@ void V3DocViewWin::closing()
 
 bool V3DocViewWin::loadDocument( lString16 filename )
 {
+    _fileName = filename;
     if ( !_docview->LoadDocument( filename.c_str() ) ) {
     	CRLog::error("V3DocViewWin::loadDocument( %s ) - failed!", UnicodeToUtf8(filename).c_str() );
         return false;
@@ -617,6 +633,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
 		CRLog::debug("settings file not found: %s", LCSTR(filename));
         _docview->propsUpdateDefaults( _props );
         _docview->propsApply( _props );
+        initTapDefaultActions(_props);
         _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
         _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));
         //setAccelerators( _wm->getAccTables().get(lString16("main"), _props) );
@@ -625,6 +642,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
     if ( _props->loadFromStream( stream.get() ) ) {
         _props->setIntDef(PROP_FILE_PROPS_FONT_SIZE, 26);
         _docview->propsUpdateDefaults( _props );
+        initTapDefaultActions(_props);
         _docview->propsApply( _props );
         _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
         _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));
@@ -632,6 +650,7 @@ bool V3DocViewWin::loadSettings( lString16 filename )
         return true;
     }
     _docview->propsUpdateDefaults( _props );
+    initTapDefaultActions(_props);
     _docview->propsApply( _props );
     _wm->getScreen()->setFullUpdateInterval(_props->getIntDef(PROP_DISPLAY_FULL_UPDATE_INTERVAL, 1));
     _wm->getScreen()->setTurboUpdateEnabled(_props->getIntDef(PROP_DISPLAY_TURBO_UPDATE_MODE, 0));
@@ -682,10 +701,10 @@ void V3DocViewWin::applySettings()
     CRPropRef delta = _props ^ _newProps;
     CRLog::trace( "applySettings() - %d options changed", delta->getCount() );
 #ifdef CR_POCKETBOOK
-	if (delta->hasProperty(PROP_POCKETBOOK_ORIENTATION)) {
-		CRLog::trace("PB orientation have changed");
-		_wm->postCommand(mm_Orientation, 1525);
-	}
+    if (delta->hasProperty(PROP_POCKETBOOK_ORIENTATION)) {
+        CRLog::trace("PB orientation have changed");
+        _wm->postCommand(mm_Orientation, 1525);
+    }
 #endif
     _docview->propsApply( delta );
     _props = _newProps; // | _props;
@@ -712,7 +731,7 @@ void V3DocViewWin::showFontSizeMenu()
     _newProps = LVClonePropsContainer( _props );
     lvRect rc = _wm->getScreen()->getRect();
     CRSettingsMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont, getMenuAccelerators(), rc );
-    CRMenu * menu = mainMenu->createFontSizeMenu( _wm, NULL, _newProps );
+    CRMenu * menu = mainMenu->createFontSizeMenu( NULL, cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int), _newProps, PROP_FONT_SIZE );
     _wm->activateWindow( menu );
 }
 
@@ -734,6 +753,7 @@ void V3DocViewWin::showRecentBooksMenu()
 {
     lvRect rc = _wm->getScreen()->getRect();
     CRRecentBooksMenu * menu_win = new CRRecentBooksMenu(_wm, _docview, 8, rc);
+    menu_win->reconfigure(0);
     _wm->activateWindow( menu_win );
 }
 
@@ -797,6 +817,7 @@ void V3DocViewWin::showBookmarksMenu( bool goMode )
 {
     lvRect rc = _wm->getScreen()->getRect();
     CRBookmarkMenu * menu_win = new CRBookmarkMenu(_wm, _docview, 8, rc, goMode);
+    menu_win->reconfigure(0);
     _wm->activateWindow( menu_win );
 }
 
@@ -804,6 +825,7 @@ void V3DocViewWin::showCitesMenu()
 {
     lvRect rc = _wm->getScreen()->getRect();
     CRCitesMenu * menu_win = new CRCitesMenu(_wm, _docview, 8, rc);
+    menu_win->reconfigure(0);
     _wm->activateWindow( menu_win );
 }
 
@@ -1037,7 +1059,7 @@ void V3DocViewWin::showAboutDialog()
     addInfoSection( txt, fileInfo, _("File info") );
 
     lString8 bookInfo;
-    addPropLine( bookInfo, _("Title"), props->getStringDef(DOC_PROP_TITLE) );
+    addPropLine( bookInfo, C_("Book", "Title"), props->getStringDef(DOC_PROP_TITLE) );
     addPropLine( bookInfo, _("Author(s)"), props->getStringDef(DOC_PROP_AUTHORS) );
     addPropLine( bookInfo, _("Series name"), props->getStringDef(DOC_PROP_SERIES_NAME) );
     addPropLine( bookInfo, _("Series number"), props->getStringDef(DOC_PROP_SERIES_NUMBER) );
@@ -1074,6 +1096,16 @@ void V3DocViewWin::showAboutDialog()
     addPropLine( progInfo, _("CoolReader for PocketBook"), Utf8ToUnicode(lString8(CR_PB_VERSION)));
     addPropLine( progInfo, _("Build date"), Utf8ToUnicode(lString8(CR_PB_BUILD_DATE)));
     addInfoSection( txt, progInfo, _("About program") );
+
+    lString8 debugInfo;
+    addPropLine( debugInfo, _("Hardware type"), Utf8ToUnicode(lString8(GetHardwareType())));
+    addPropLine( debugInfo, _("Firmware version"), Utf8ToUnicode(lString8(GetSoftwareVersion())));
+    addPropLine( debugInfo, _("Keyboard type"), lString16::itoa(getPB_keyboardType()));
+    addPropLine( debugInfo, _("Screen type"), lString16::itoa((getPB_screenType())));
+    addPropLine( debugInfo, _("Config file"), _settingsFileName);
+    addPropLine( debugInfo, _("Keymap file"), _wm->getKeymapFilePath());
+    addPropLine( debugInfo, _("Skin file"), _wm->getSkinFilePath());
+    addInfoSection( txt, debugInfo, _("Debug information") );
 #endif
     txt << "</table>\n";
 
@@ -1145,6 +1177,15 @@ bool V3DocViewWin::onCommand( int command, int params )
         saveSettings(lString16::empty_str);
         _wm->getSkin()->gc();
         return true;
+    case mm_Skin:
+        if (_wm->setSkin(_newProps->getStringDef(PROP_SKIN_FILE))) {
+            applySettings();
+            saveSettings(lString16::empty_str);
+        } else {
+            // restore previous value
+            _newProps->setString(PROP_SKIN_FILE, _props->getStringDef(PROP_SKIN_FILE));
+        }
+        return true;
     case DCMD_SAVE_HISTORY:
         saveHistory(lString16::empty_str);
         saveSettings(lString16::empty_str);
@@ -1202,4 +1243,9 @@ void V3DocViewWin::OnLoadFileFirstPagesReady()
     _docview->requestRender();
     // TODO: remove debug sleep
     //sleep(5);
+}
+
+void V3DocViewWin::showProgress(lString16 filename, int progressPercent)
+{
+    _wm->showProgress(filename, progressPercent);
 }

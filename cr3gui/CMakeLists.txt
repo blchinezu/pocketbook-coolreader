@@ -22,31 +22,59 @@ INCLUDE(${KWWidgets_CMAKE_DIR}KWWidgetsInternationalizationMacros.cmake)
 SET (LANGUAGES ru uk de fr bg es ca cs pl lt zh_CN zh_TW)
 message( "Languages: ${LANGUAGES}" )
 
-SET (CR3_SOURCES 
-  src/bgfit.cpp
-  src/citedlg.cpp 
-  src/fsmenu.cpp    
-  src/mainwnd.cpp  
-  src/recentdlg.cpp 
-  src/selnavig.cpp 
-  src/tocdlg.cpp 
-  src/bmkdlg.cpp   
-  src/cr3_def_cover.cpp 
-  src/cr3main.cpp  
-  src/dictdlg.cpp 
-  src/linksdlg.cpp 
-  src/numedit.cpp 
-  src/scrkbd.cpp   
-  src/settings.cpp 
-  src/viewdlg.cpp
-)
-
-SET (CR3_STYLES
-  data/epub.css  data/fb2.css  data/htm.css  data/rtf.css  data/txt.css data/chm.css
-)
+if (DEFINED POCKETBOOK_PRO)
+  SET (CR3_SOURCES 
+    src/bgfit.cpp
+    src/citedlg.cpp 
+    src/fsmenu.cpp    
+    src/mainwnd.cpp  
+    src/recentdlg.cpp 
+    src/selnavig.cpp 
+    src/tocdlg.cpp 
+    src/bmkdlg.cpp   
+    src/cr3_def_cover.cpp 
+    src/cr3main.cpp  
+    src/dictdlg.cpp 
+    src/linksdlg.cpp 
+    src/numedit.cpp 
+    src/scrkbd.cpp   
+    src/settings.cpp 
+    src/viewdlg.cpp
+    src/web.cpp
+    src/ota_update.cpp
+  )
+else ()
+  SET (CR3_SOURCES 
+    src/bgfit.cpp
+    src/citedlg.cpp 
+    src/fsmenu.cpp    
+    src/mainwnd.cpp  
+    src/recentdlg.cpp 
+    src/selnavig.cpp 
+    src/tocdlg.cpp 
+    src/bmkdlg.cpp   
+    src/cr3_def_cover.cpp 
+    src/cr3main.cpp  
+    src/dictdlg.cpp 
+    src/linksdlg.cpp 
+    src/numedit.cpp 
+    src/scrkbd.cpp   
+    src/settings.cpp 
+    src/viewdlg.cpp
+  )
+endif (DEFINED POCKETBOOK_PRO)
 
 if (${GUI} STREQUAL CRGUI_PB)
-    SET(CR3_SOURCES ${CR3_SOURCES} src/cr3pocketbook.cpp)
+    SET (CR3_STYLES
+         data/epub.css  data/fb2.css  data/htm.css  data/rtf.css  data/txt.css data/chm.css data/doc.css data/dict.css
+        )
+    SET (CR3_SOURCES ${CR3_SOURCES} src/cr3pocketbook.cpp)
+    SET (CR3_BIN_DESTINATION system/bin)
+else ()
+    SET (CR3_STYLES
+        data/epub.css  data/fb2.css  data/htm.css  data/rtf.css  data/txt.css data/chm.css
+        )
+    SET (CR3_BIN_DESTINATION bin)
 endif (${GUI} STREQUAL CRGUI_PB)
 
 #   
@@ -62,8 +90,6 @@ KWWidgets_CREATE_GETTEXT_TARGETS(
 )
 #   CREATE_PO_TARGET
 #   CREATE_MO_TARGET
-
-SET (CR3_BIN_DESTINATION bin)
 
 if ( ${GUI} STREQUAL CRGUI_XCB )
 
@@ -179,23 +205,69 @@ elseif ( ${GUI} STREQUAL CRGUI_WIN32 )
 
 elseif (${GUI} STREQUAL CRGUI_PB)
 #    SET(CR3_SOURCES ${CR3_SOURCES} src/cr3pocketbook.cpp)
+    # ADD_DEFINITIONS(-Wno-format-y2k)
+    # ADD_DEFINITIONS(-fomit-frame-pointer)
+    # ADD_DEFINITIONS(-fsigned-char)
+    # ADD_DEFINITIONS(-s)
+    if (POCKETBOOK_PRO)
+      Message("Will build for pocketbook PRO")
+      ADD_DEFINITIONS(-DPOCKETBOOK_PRO=1)
+    endif (POCKETBOOK_PRO) 
+    if (POCKETBOOK_PRO_FW5)
+      Message("Will build for firmware 5")
+      ADD_DEFINITIONS(-DPOCKETBOOK_PRO_FW5=1)
+    endif (POCKETBOOK_PRO_FW5) 
+    if (BACKGROUND_CACHE_FILE_CREATION)
+      ADD_DEFINITIONS(-DBACKGROUND_CACHE_FILE_CREATION=1)
+    endif (BACKGROUND_CACHE_FILE_CREATION) 
     FIND_LIBRARY(INKVIEW_LIB inkview)
+    IF (ENABLE_PB_DB_STATE)
+    FIND_LIBRARY (BOOKSTATE_LIB bookstate)
+    IF (BOOKSTATE_LIB)
+        ADD_DEFINITIONS( -DPB_DB_STATE_SUPPORTED=1 )
+        message("bookstate library found!")
+        SET (BOOKSTATE_LIB dl )
+    ELSE (BOOKSTATE_LIB)
+        message("bookstate library not found!")
+        SET (BOOKSTATE_LIB "")
+    ENDIF (BOOKSTATE_LIB)
+    ENDIF (ENABLE_PB_DB_STATE)
     IF (INKVIEW_LIB)
 	IF (DEFINED POCKETBOOK_EMU_GTK)
 	    FIND_PACKAGE (GTK2 REQUIRED)
 	    FIND_PACKAGE (CURL REQUIRED)
 	ENDIF (DEFINED POCKETBOOK_EMU_GTK)
-	SET (EXTRA_LIBS ${INKVIEW_LIB} ${GTK2_LIBRARIES} ${CURL_LIBRARIES})
+        SET (EXTRA_LIBS ${INKVIEW_LIB} ${BOOKSTATE_LIB} ${GTK2_LIBRARIES} ${CURL_LIBRARIES})
     ELSE (INKVIEW_LIB)
 	  message("libinkview library not found!")
     ENDIF (INKVIEW_LIB)
+
+    FIND_PROGRAM(ZIP_EXECUTABLE zip)
+    IF(NOT ZIP_EXECUTABLE)
+	MESSAGE(FATAL_ERROR "Unable to find 'zip' executable")
+    ENDIF(NOT ZIP_EXECUTABLE)
+
+    SET( cr3_skin_default ${CMAKE_CURRENT_BINARY_DIR}/default.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_default} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_default} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/default/* )
+    ADD_CUSTOM_TARGET( skin_default ALL DEPENDS ${cr3_skin_default} )
+    
+    SET( cr3_skin_pb62x ${CMAKE_CURRENT_BINARY_DIR}/pb62x.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_pb62x} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_pb62x} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/pb62x/* )
+    ADD_CUSTOM_TARGET( skin_pb62x ALL DEPENDS ${cr3_skin_pb62x} )
+
+    SET( cr3_skin_pb626fw5 ${CMAKE_CURRENT_BINARY_DIR}/pb626fw5.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_pb626fw5} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_pb626fw5} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/pb626fw5/* )
+    ADD_CUSTOM_TARGET( skin_pb626fw5 ALL DEPENDS ${cr3_skin_pb626fw5} )
 
     INSTALL( FILES ${CR3_STYLES} DESTINATION system/share/cr3)
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pdb" )
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pattern" )
-    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
+#    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
+    INSTALL( FILES ${cr3_skin_default} DESTINATION system/share/cr3/skins )
+    INSTALL( FILES ${cr3_skin_pb62x} DESTINATION system/share/cr3/skins )
+    INSTALL( FILES ${cr3_skin_pb626fw5} DESTINATION system/share/cr3/skins )
     INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/keymaps/ DESTINATION system/share/cr3/keymaps )
     INSTALL( DIRECTORY data/manual/ DESTINATION system/share/cr3/manual )
 

@@ -106,8 +106,6 @@ CRViewDialog::CRViewDialog(CRGUIWindowManager * wm, lString16 title, lString8 te
     _passKeysToParent = _passCommandsToParent = false;
     if ( _showFrame ) {
         setSkinName( lString16("#dialog") );
-        if ( !_wm->getSkin().isNull() )
-            _skin = _wm->getSkin()->getWindowSkin(getSkinName().c_str());
     }
     setAccelerators( _wm->getAccTables().get("browse") );
     _caption = title;
@@ -125,8 +123,9 @@ CRViewDialog::CRViewDialog(CRGUIWindowManager * wm, lString16 title, lString8 te
     getDocView()->setTextColor(0x000000);
     getDocView()->setFontSize( 20 );
     getDocView()->setPageMargins( lvRect(8,8,8,8) );
-    if ( !_skin.isNull() ) {
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() ) {
             getDocView()->setBackgroundColor(clientSkin->getBackgroundColor());
             getDocView()->setTextColor(clientSkin->getTextColor());
@@ -169,7 +168,6 @@ bool CRViewDialog::hasDictionaries()
 
 void CRViewDialog::showGoToPageDialog()
 {
-    LVTocItem * toc = _docview->getToc();
     CRNumberEditDialog * dlg;
 #if USE_SEPARATE_GO_TO_PAGE_DIALOG==1
     if ( toc && toc->getChildCount()>0 ) {
@@ -191,7 +189,6 @@ void CRViewDialog::showGoToPageDialog()
 
 void CRViewDialog::showGoToPercentDialog()
 {
-    LVTocItem * toc = _docview->getToc();
     CRNumberEditDialog * dlg;
     dlg = new CRNumberEditDialog( _wm,
         lString16( _("Enter position percent") ),
@@ -201,9 +198,9 @@ void CRViewDialog::showGoToPercentDialog()
     _wm->activateWindow( dlg );
 }
 
-bool CRViewDialog::showLinksDialog()
+bool CRViewDialog::showLinksDialog(bool backPreffered)
 {
-    CRLinksDialog * dlg = CRLinksDialog::create( _wm, this );
+    CRLinksDialog * dlg = CRLinksDialog::create( _wm, this, backPreffered );
     if ( !dlg )
         return false;
     dlg->setAccelerators( getMenuAccelerators() );
@@ -389,6 +386,23 @@ bool CRViewDialog::onCommand( int command, int params )
                 }
             }
 			return true;
+        case DCMD_BUTTON_PRESSED:
+        case DCMD_BUTTON_PRESSED_LONG:
+            if (params == BTN_SCROLL_DOWN) {
+                command = DCMD_PAGEDOWN;
+                params = (command == DCMD_BUTTON_PRESSED_LONG);
+                _lastNavigationDirection = 1;
+                break;
+            } else if (params == BTN_SCROLL_UP) {
+                command = DCMD_PAGEUP;
+                params = (command == DCMD_BUTTON_PRESSED_LONG);
+                _lastNavigationDirection = -1;
+                break;
+            } else if (params != BTN_CLOSE) {
+                // unknown button pressed
+                return false;
+            }
+            // else fallthrough and close window
         case MCMD_CANCEL:
         case MCMD_OK:
             _wm->closeWindow( this );
@@ -478,9 +492,9 @@ const char * getKeyName( int keyCode )
 	case XK_Escape:
         return _("C");
 	case XK_Left:
-        return _("Left");
+        return C_("Key", "Left");
 	case XK_Right:
-        return _("Right");
+        return C_("Key", "Right");
 	case XK_Prior:
         return _("Side Up");
 	case XK_Next:
@@ -568,8 +582,20 @@ static const char * getCommandName( int command )
 #ifdef CR_POCKETBOOK
 	case PB_QUICK_MENU: return TR("@KA_menu");
 	case PB_CMD_ROTATE: return TR("@KA_rtte");
-	case PB_CMD_CONTENTS: return TR("@KA_cnts");
-        case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");
+    case PB_CMD_CONTENTS: return TR("@Contents");
+    case PB_CMD_FRONT_LIGHT: return _("Front light");
+    case PB_CMD_INVERT_DISPLAY: return _("Invert display");
+    case PB_CMD_STATUS_LINE: return _("Toggle status bar");
+    #ifdef POCKETBOOK_PRO
+    case PB_CMD_TASK_MANAGER: return _("Tasks list");
+    case PB_CMD_SYSTEM_PANEL: return _("Toggle system panel");
+    case PB_CMD_LOCK_DEVICE: return _("Lock device");
+    case PB_CMD_OTA_UPDATE: return _("OTA Update");
+    #ifdef POCKETBOOK_PRO_FW5
+    case PB_CMD_OPEN_SYSTEM_PANEL: return _("Open system panel");
+    #endif
+    #endif
+    case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");
 #endif
     default: return _("Unknown command");
 	}
@@ -647,8 +673,6 @@ void CRViewDialog::draw()
 
 void CRViewDialog::draw( int pageOffset )
 {
-    //if ( _skin.isNull() )
-    //	return; // skin is not yet loaded
     _pages = _docview->getPageCount();
     _page = _docview->getCurPage() + pageOffset + 1;
     if ( _page<1 )
@@ -658,21 +682,22 @@ void CRViewDialog::draw( int pageOffset )
     lvRect clientRect = _rect;
     lvRect borders;
     LVRef<LVDrawBuf> drawbuf = _wm->getScreen()->getCanvas();
-    if ( _showFrame && !_skin.isNull() ) {
-
-        //CRRectSkinRef titleSkin = _skin->getTitleSkin();
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( _showFrame && !skin.isNull() ) {
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() )
             borders = clientSkin->getBorderWidths();
         getClientRect( clientRect );
         if ( !clientSkin.isNull() )
             clientSkin->draw( *drawbuf, clientRect );
-        _skin->draw( *drawbuf, _rect );
+        skin->draw( *drawbuf, _rect );
     }
     if ( _showFrame ) {
         drawTitleBar();
         drawStatusBar();
     }
+    if (!_controlsCreated)
+        addControl(new CRClientControl(this, clientRect));
     LVDocImageRef pageImage = _docview->getPageImage( pageOffset );
     if ( !pageImage.isNull() ) {
         LVDrawBuf * pagedrawbuf = pageImage->getDrawBuf();
@@ -687,14 +712,14 @@ void CRViewDialog::setRect( const lvRect & rc )
     CRLog::info("CRViewDialog::setRect(%d,%d,%d,%d)", rc.left, rc.top, rc.right, rc.bottom);
     _rect = rc;
     lvRect clientRect = _rect;
-    if ( _showFrame ) {
-        if ( !_skin.isNull() )
-            getClientRect(clientRect);
+    CRWindowSkinRef skin = getSkin();
+    if ( _showFrame && !skin.isNull() ) {
+        getClientRect(clientRect);
     }
     _docview->Resize( clientRect.width(), clientRect.height() );
     _docview->checkRender();
     _pages = _docview->getPageCount();
-    if ( !_skin.isNull() )
+    if ( !_showFrame && !skin.isNull() )
         getClientRect(clientRect);
     _docview->Resize( clientRect.width(), clientRect.height() );
     setDirty();

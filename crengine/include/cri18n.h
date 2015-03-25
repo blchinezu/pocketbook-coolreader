@@ -88,9 +88,22 @@ public:
 #ifdef _16
 #undef _16
 #endif
+#ifdef C_
+#undef C_
+#endif
+#ifdef C_8
+#undef C_8
+#endif
+#ifdef C_16
+#undef C_16
+#endif
+
 #define _(String) CRI18NTranslator::translate(String)
+#define C_(Context, String) CRI18NTranslator::translate(Context "\004" String)
 #define _8(String) CRI18NTranslator::translate8(String)
+#define C_8(Context, String) CRI18NTranslator::translate8(Context "\004" String)
 #define _16(String) CRI18NTranslator::translate16(String)
+#define C_16(Context, String) CRI18NTranslator::translate16(Context "\004" String)
 
 
 #endif

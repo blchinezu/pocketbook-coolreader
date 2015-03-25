@@ -145,18 +145,6 @@ bool CRRectSkin::getRect( lvRect & rc, const lvRect & baseRect )
     lvPoint sz( fromSkinPercent( _size.x, rc.width()),
                 fromSkinPercent( _size.y, rc.height()) );
 
-    // left top corner -> origin point
-    if ( getHAlign()==SKIN_HALIGN_RIGHT )
-        pos.x = pos.x + sz.x;
-    else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
-        pos.x = pos.x + sz.x / 2;
-    }
-    if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-        pos.y = pos.y + sz.y;
-    else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-        pos.y = pos.y + sz.y/2;
-    }
-
     // apply size constraints
     if ( _minsize.x>0 && sz.x < _minsize.x )
         sz.x = _minsize.x;
@@ -167,20 +155,25 @@ bool CRRectSkin::getRect( lvRect & rc, const lvRect & baseRect )
     if ( _maxsize.y>0 && sz.y > _maxsize.y )
         sz.y = _maxsize.y;
 
-    // origin -> left top corner
-    if ( getHAlign()==SKIN_HALIGN_RIGHT )
-        pos.x = pos.x - sz.x;
-    else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
-        pos.x = pos.x - sz.x / 2;
-    }
-    if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-        pos.y = pos.y - sz.y;
-    else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-        pos.y = pos.y - sz.y/2;
-    }
-
     pos.x += baseRect.left;
     pos.y += baseRect.top;
+
+    int delta = rc.width() - (pos.x + sz.x);
+    if ( delta>0 ) {
+        if ( getHAlign()==SKIN_HALIGN_RIGHT )
+            pos.x += delta;
+        else if ( getHAlign()==SKIN_HALIGN_CENTER ) {
+            pos.x += delta / 2;
+        }
+    }
+    delta = rc.height() - (pos.y + sz.y);
+    if ( delta> 0) {
+        if ( getVAlign()==SKIN_VALIGN_BOTTOM )
+            pos.y += delta;
+        else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
+            pos.y += delta/2;
+        }
+    }
     rc.left = pos.x;
     rc.top = pos.y;
     rc.right = pos.x + sz.x;
@@ -275,6 +268,7 @@ protected:
     LVCacheMap<lString16,CRMenuSkinRef> _menuCache;
     LVCacheMap<lString16,CRPageSkinRef> _pageCache;
     LVCacheMap<lString16,CRToolBarSkinRef> _toolbarCache;
+    LVCacheMap<lString16,CRIconSkinRef> _iconCache;
     CRPageSkinListRef _pageSkinList;
 public:
     /// returns scroll skin by path or #id
@@ -290,20 +284,24 @@ public:
     /// returns book page skin list
     virtual CRPageSkinListRef getPageSkinList();
     /// return ToolBar skin by path or #id
-	virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path );
+    virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path );
+    /// returns icon skin by path or #id
+    virtual CRIconSkinRef getIconSkin( const lChar16 * path );
     /// get DOM path by id
     virtual lString16 pathById( const lChar16 * id );
     /// gets image from container
     virtual LVImageSourceRef getImage( const lChar16 * filename );
     /// gets doc pointer by asolute path
     virtual ldomXPointer getXPointer( const lString16 & xPointerStr ) { return _doc->createXPointer( xPointerStr ); }
+    /// returns read only file stream from skin
+    virtual LVStreamRef getStream(const lChar16 * fname) { return _container->OpenStream( fname, LVOM_READ); }
     /// garbage collection
     virtual void gc()
     {
         _imageCache.clear();
     }
     /// constructor does nothing
-    CRSkinImpl()  : _imageCache(8), _rectCache(8), _scrollCache(1), _windowCache(8), _menuCache(8), _pageCache(8), _toolbarCache(2) { }
+    CRSkinImpl()  : _imageCache(8), _rectCache(8), _scrollCache(1), _windowCache(8), _menuCache(8), _pageCache(8), _toolbarCache(2), _iconCache(8) { }
     virtual ~CRSkinImpl(){ }
     // open from container
     virtual bool open( LVContainerRef container );
@@ -1065,7 +1063,7 @@ void CRButtonSkin::drawButton( LVDrawBuf & buf, const lvRect & rect, int flags )
     if ( !btnImage.isNull() ) {
         LVImageSourceRef img = LVCreateStretchFilledTransform( btnImage,
             rc.width(), rc.height() );
-        buf.Draw( btnImage, rc.left, rc.top, rc.width(), rc.height(), false );
+        buf.Draw( img, rc.left, rc.top, rc.width(), rc.height(), false );
     }
 }
 
@@ -1085,161 +1083,6 @@ LVImageSourceRef CRButtonSkin::getImage(int flags)
     if ( btnImage.isNull() )
         btnImage = _normalimage;
 	return btnImage;
-}
-
-void CRScrollSkin::drawScroll( LVDrawBuf & buf, const lvRect & rect, bool vertical, int pos, int maxpos, int pagesize )
-{
-    lvRect rc = rect;
-
-    draw( buf, rc );
-
-    int pages = pagesize>0 ? (maxpos+pagesize-1)/pagesize : 0;
-    int page = pages>0 ? pos/pagesize+1 : 0;
-
-    if ( !_bottomTabSkin.isNull() && !_bottomPageBoundSkin.isNull() &&
-         !_bottomActiveTabSkin.isNull() ) {
-        // tabs
-        if ( pages<=1 )
-            return; // don't draw tabs if no other pages
-        int tabwidth = _bottomTabSkin->getMinSize().x;
-        if ( tabwidth<40 )
-            tabwidth = 40;
-        if ( tabwidth>_bottomTabSkin->getMaxSize().x && _bottomTabSkin->getMaxSize().x>0)
-            tabwidth = _bottomTabSkin->getMaxSize().x;
-        int maxtabs = rc.width()-_margins.left-_margins.right / tabwidth;
-        if ( pages <= maxtabs ) {
-            // can draw tabs
-            lvRect r(rc);
-            r.left += _margins.left;
-            for ( int i=0; i<pages; i++ ) {
-                r.right = r.left + tabwidth;
-                if ( i+1!=page ) {
-                    _bottomTabSkin->draw(buf, r);
-                    lString16 label = lString16::itoa(i+1);
-                    _bottomTabSkin->drawText(buf, r, label);
-                }
-                r.left += tabwidth - r.height()/6;
-            }
-            _bottomPageBoundSkin->draw(buf, rc);
-            r = rc;
-            r.left += _margins.left;
-            for ( int i=0; i<pages; i++ ) {
-                r.right = r.left + tabwidth;
-                if ( i+1==page ) {
-                    _bottomActiveTabSkin->draw(buf, r);
-                    lString16 label = lString16::itoa(i+1);
-                    _bottomActiveTabSkin->drawText(buf, r, label);
-                }
-                r.left += tabwidth - r.height()/6;
-            }
-            return;
-        }
-    }
-
-
-    rc.shrinkBy( _margins );
-
-    int btn1State = CRButtonSkin::ENABLED;
-    int btn2State = CRButtonSkin::ENABLED;
-    if ( pos <= 0 )
-        btn1State = 0;
-    if ( pos >= maxpos-pagesize )
-        btn2State = 0;
-    CRButtonSkinRef btn1Skin;
-    CRButtonSkinRef btn2Skin;
-    lvRect btn1Rect = rc;
-    lvRect btn2Rect = rc;
-    lvRect bodyRect = rc;
-    lvRect sliderRect = rc;
-    LVImageSourceRef bodyImg;
-    LVImageSourceRef sliderImg;
-
-    if ( _hBody.isNull() ) {
-        // text label with optional arrows
-        lString16 label;
-        label << fmt::decimal(page) << " / " << fmt::decimal(pages);
-        // calc label width
-        int w = getFont()->getTextWidth( label.c_str(), label.length() );
-        int margin = 4;
-        btn1Skin = _leftButton;
-        btn2Skin = _rightButton;
-        // calc button widths
-        int bw1 = btn1Skin.isNull() ? 0 : btn1Skin->getMinSize().x;
-        int bw2 = btn1Skin.isNull() ? 0 : btn2Skin->getMinSize().x;
-        // total width
-        int ww = w + margin + margin + bw1 + bw2;
-        int dw = rc.width() - ww;
-        rc.left += dw*3/4;
-        rc.right = rc.left + ww;
-        // adjust rectangle size
-        btn1Rect = rc;
-        btn2Rect = rc;
-        btn1Rect.right = btn1Rect.left + bw1;
-        btn2Rect.left = btn2Rect.right - bw2;
-        bodyRect.left = btn1Rect.right;
-        bodyRect.right = btn2Rect.left;
-        int dy = bodyRect.height() - btn1Skin->getMinSize().y;
-        btn1Rect.top += dy/2;
-        btn1Rect.bottom = btn1Rect.top + btn1Skin->getMinSize().y;
-        dy = bodyRect.height() - btn2Skin->getMinSize().y;
-        btn2Rect.top += dy/2;
-        btn2Rect.bottom = btn2Rect.top + btn2Skin->getMinSize().y;
-        btn1Skin->drawButton( buf, btn1Rect, btn1State );
-        btn2Skin->drawButton( buf, btn2Rect, btn2State );
-        drawText( buf, bodyRect, label );
-        return;
-    }
-
-    if ( vertical ) {
-        // draw vertical
-        btn1Skin = _upButton;
-        btn2Skin = _downButton;
-        btn1Rect.bottom = btn1Rect.top + btn1Skin->getMinSize().y;
-        btn2Rect.top = btn2Rect.bottom - btn2Skin->getMinSize().y;
-        bodyRect.top = btn1Rect.bottom;
-        bodyRect.bottom = btn2Rect.top;
-        int sz = bodyRect.height();
-        if ( pagesize < maxpos ) {
-            sliderRect.top = bodyRect.top + sz * pos / maxpos;
-            sliderRect.bottom = bodyRect.top + sz * (pos + pagesize) / maxpos;
-        } else
-            sliderRect = bodyRect;
-        bodyImg = _vBody;
-        sliderImg = _vSlider;
-    } else {
-        // draw horz
-        btn1Skin = _leftButton;
-        btn2Skin = _rightButton;
-        btn1Rect.right = btn1Rect.left + btn1Skin->getMinSize().x;
-        btn2Rect.left = btn2Rect.right - btn2Skin->getMinSize().x;
-        bodyRect.left = btn1Rect.right;
-        bodyRect.right = btn2Rect.left;
-        int sz = bodyRect.width();
-        if ( pagesize < maxpos ) {
-            sliderRect.left = bodyRect.left + sz * pos / maxpos;
-            sliderRect.right = bodyRect.left + sz * (pos + pagesize) / maxpos;
-        } else
-            sliderRect = bodyRect;
-        bodyImg = _hBody;
-        sliderImg = _hSlider;
-    }
-    btn1Skin->drawButton( buf, btn1Rect, btn1State );
-    btn2Skin->drawButton( buf, btn2Rect, btn2State );
-    if ( !bodyImg.isNull() ) {
-        LVImageSourceRef img = LVCreateStretchFilledTransform( bodyImg,
-            bodyRect.width(), bodyRect.height() );
-        buf.Draw( img, bodyRect.left, bodyRect.top, bodyRect.width(), bodyRect.height(), false );
-    }
-    if ( !sliderImg.isNull() ) {
-        LVImageSourceRef img = LVCreateStretchFilledTransform( sliderImg,
-            sliderRect.width(), sliderRect.height() );
-        buf.Draw( img, sliderRect.left, sliderRect.top, sliderRect.width(), sliderRect.height(), false );
-        if ( this->getShowPageNumbers() ) {
-            lString16 label;
-            label << fmt::decimal(page) << " / " << fmt::decimal(pages);
-            drawText( buf, sliderRect, label );
-        }
-    }
 }
 
 void CRScrollSkin::drawGauge( LVDrawBuf & buf, const lvRect & rect, int percent )
@@ -1278,57 +1121,52 @@ void CRScrollSkin::drawGauge( LVDrawBuf & buf, const lvRect & rect, int percent 
 
 void CRToolBarSkin::drawToolBar( LVDrawBuf & buf, const lvRect & rect, bool enabled, int selectedButton )
 {
-	draw(buf, rect);
+    draw(buf, rect);
     lvRect rc = rect;
     rc.shrinkBy( _margins );
     int width = 0;
-	for ( int i=0; i<_buttons->length(); i++ ) {
-		int flags = enabled ? CRButtonSkin::ENABLED : 0;
-		if (i == selectedButton && enabled)
-			flags |= CRButtonSkin::SELECTED;
-		LVRef<CRButtonSkin> button = _buttons->get(i);
-		if (!button.isNull()) {
-			width += button->getMinSize().x;
-			int h = button->getMinSize().y;
-			if (h > rc.height())
-				return;
-		}
-	}
-	if (width > rc.width())
-		return; // That's all for now
-	int offsetX = 0;
-	if (getHAlign() == SKIN_HALIGN_RIGHT)
-		offsetX = rc.width() - width;
-	else if (getHAlign() == SKIN_HALIGN_CENTER ) 
-		offsetX = rc.width() - width/2;
-	int h = rc.height();
     for ( int i=0; i<_buttons->length(); i++ ) {
-		lvRect rc2 = rc;
-		int flags = enabled ? CRButtonSkin::ENABLED : 0;
-		if (i == selectedButton && enabled)
-			flags |= CRButtonSkin::SELECTED;
-		LVRef<CRButtonSkin> button = _buttons->get(i);
-		if (!button.isNull()) {
-			LVImageSourceRef img = button->getImage(flags);
-			rc2.left += offsetX;
-			rc2.right = rc2.left + button->getMinSize().x;
-			if ( getVAlign()==SKIN_VALIGN_BOTTOM )
-				rc2.top = rc2.bottom - button->getMinSize().y;
-			else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
-				int imgh = button->getMinSize().y;
-				rc2.top += (h - imgh/2);
-				rc2.bottom = rc2.top + imgh;
-			} else
-				rc2.bottom = rc2.top + button->getMinSize().y;
-			button->drawButton( buf, rc2, flags );
-			offsetX = rc2.right - rc.left;
-		}
-	}
-}
-
-void CRToolBarSkin::drawButton(LVDrawBuf & buf, const lvRect & rc, int index, int flags)
-{
-	
+        int flags = enabled ? CRButtonSkin::ENABLED : 0;
+        if (i == selectedButton && enabled)
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = _buttons->get(i);
+        if (!button.isNull()) {
+            width += button->getMinSize().x;
+            int h = button->getMinSize().y;
+            if (h > rc.height())
+                return;
+        }
+    }
+    if (width > rc.width())
+        return; // That's all for now
+    int offsetX = 0;
+    if (getHAlign() == SKIN_HALIGN_RIGHT)
+        offsetX = rc.width() - width;
+    else if (getHAlign() == SKIN_HALIGN_CENTER )
+        offsetX = ( rc.width()-width )/2;
+    int h = rc.height();
+    for ( int i=0; i<_buttons->length(); i++ ) {
+        lvRect rc2 = rc;
+        int flags = enabled ? CRButtonSkin::ENABLED : 0;
+        if (i == selectedButton && enabled)
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = _buttons->get(i);
+        if (!button.isNull()) {
+            LVImageSourceRef img = button->getImage(flags);
+            rc2.left += offsetX;
+            rc2.right = rc2.left + button->getMinSize().x;
+            if ( getVAlign()==SKIN_VALIGN_BOTTOM )
+                rc2.top = rc2.bottom - button->getMinSize().y;
+            else if ( getVAlign()==SKIN_VALIGN_CENTER ) {
+                int imgh = button->getMinSize().y;
+                rc2.top += ( h-imgh )/2;
+                rc2.bottom = rc2.top + imgh;
+            } else
+                rc2.bottom = rc2.top + button->getMinSize().y;
+            button->drawButton( buf, rc2, flags );
+            offsetX = rc2.right - rc.left;
+        }
+    }
 }
 
 CRRectSkin::CRRectSkin()
@@ -1738,6 +1576,18 @@ bool CRSkinContainer::readWindowSkin(  const lChar16 * path, CRWindowSkin * res 
         flg = true;
     }
 
+    CRToolBarSkinRef toolbar1Skin( new CRToolBarSkin());
+    if (readToolBarSkin(  (p + "/toolbar1").c_str(), toolbar1Skin.get() )) {
+        res->setToolBar1Skin(toolbar1Skin);
+        flg = true;
+    }
+
+    CRToolBarSkinRef toolbar2Skin( new CRToolBarSkin());
+    if (readToolBarSkin(  (p + "/toolbar2").c_str(), toolbar2Skin.get() )) {
+        res->setToolBar2Skin(toolbar2Skin);
+        flg = true;
+    }
+
     CRRectSkinRef inputSkin( new CRRectSkin() );
     if ( readRectSkin(  (p + "/input").c_str(), inputSkin.get() ) ) {
         res->setInputSkin( inputSkin );
@@ -1756,6 +1606,11 @@ bool CRSkinContainer::readWindowSkin(  const lChar16 * path, CRWindowSkin * res 
         flg = true;
     }
 
+    CRButtonSkinRef closeButton( new CRButtonSkin() );
+    if ( readButtonSkin(  (p + L"/closebutton").c_str(), closeButton.get() ) ) {
+        res->setCloseButton( closeButton );
+        flg = true;
+    }
     if ( !flg ) {
         crtrace log;
         log << "Window skin reading failed: " << path;
@@ -1869,8 +1724,8 @@ CRButtonListRef CRSkinContainer::readButtons( const lChar16 * path, bool * res )
         crtrace log;
         log << "CRSkinContainer::readButtons( " << path << ") - cannot read button from specified path";
 #endif
-		if ( res )
-			*res = false;
+        if ( res )
+            *res = false;
         return CRButtonListRef();
     }
     if ( res )
@@ -1882,13 +1737,30 @@ bool CRSkinContainer::readToolBarSkin(  const lChar16 * path, CRToolBarSkin * re
 {
     bool flg = false;
     lString16 base = getBasePath( path );
+    lString16 p( path );
+
     RecursionLimit limit;
     if ( !base.empty() && limit.test() ) {
         // read base skin first
         flg = readToolBarSkin( base.c_str(), res ) || flg;
+        lString16 overridepath = p + "/override";
+        CRButtonListRef buttons = res->getButtons();
+        for ( int i=0; i< buttons->length(); i++ ) {
+            lString16 p1 = lString16(overridepath) << "[" << fmt::decimal(i) << "]";
+            bool flg1 = false;
+            int item = readInt( p1.c_str(), L"item", -1, &flg1);
+            if (flg1 && item > 0 && item <= buttons->length()) {
+                lString16 p2 = p1 + "/button";
+                CRButtonSkin * button = new CRButtonSkin();
+                if ( readButtonSkin( p2.c_str(), button ) )
+                    buttons->set(item -1, LVRef<CRButtonSkin>(button));
+                else
+                    delete button;
+            } else
+                break;
+        }
     }
 
-    lString16 p( path );
     ldomXPointer ptr = getXPointer( path );
     if ( !ptr ) {
 #ifdef TRACE_SKIN_ERRORS
@@ -2042,32 +1914,63 @@ CRToolBarSkinRef CRSkinImpl::getToolBarSkin( const lChar16 * path )
     return res;
 }
 
-CRSkinListItem * CRSkinList::findByName( const lString16 & name )
+CRIconSkinRef CRSkinImpl::getIconSkin( const lChar16 * path )
 {
-    for ( int i=0; i<length(); i++ )
-        if ( get(i)->getName()==name )
-            return get(i);
-    return NULL;
+    lString16 p(path);
+    CRIconSkinRef res;
+    if ( _iconCache.get( p, res ) )
+        return res; // found in cache
+    if ( *path == '#' ) {
+        // find by id
+        p = pathById( path+1 );
+    }
+    res = CRIconSkinRef( new CRIconSkin() );
+    readIconSkin( p.c_str(), res.get() );
+    _iconCache.set( lString16(path), res );
+    return res;
 }
 
-CRSkinListItem * CRSkinListItem::init( lString16 baseDir, lString16 fileName )
+CRSkinListItem * CRSkinList::findById( const lString16 & id )
 {
-    CRSkinRef skin = LVOpenSkin( baseDir + fileName );
-    if ( skin.isNull() )
-        return NULL;
-    CRSkinListItem * item = new CRSkinListItem();
-    item->_baseDir = baseDir;
-    item->_fileName = fileName;
-    //item->_name = skin->get
-    return item;
+    for ( int i=0; i<_list.length(); i++ )
+        if ( _list.get(i)->getId()==id )
+            return _list.get(i);
+    return NULL;
 }
 
 CRSkinRef CRSkinListItem::getSkin()
 {
-    return LVOpenSkin( getDirName() + getFileName() );
+    return LVOpenSkin( getFileName() );
 }
 
-bool CRLoadSkinList( lString16 baseDir, CRSkinList & list )
+bool CRSkinList::openDirectory(const char *id, lString16 directory)
 {
+    if ( directory.empty() )
+        return true;
+    LVAppendPathDelimiter( directory );
+    LVContainerRef container;
+    if ( LVDirectoryExists(directory)  ) {
+        container = LVOpenDirectory( directory.c_str(), L"*.cr3skin" );
+        if ( !container.isNull() ) {
+            int len = container->GetObjectCount();
+            CRLog::info("%d items found in skin directory", len);
+            for ( int i=0; i<len; i++ ) {
+                const LVContainerItemInfo * item = container->GetObjectInfo( i );
+                lString16 name = item->GetName();
+                lString16 filename = directory + name;
+                name.erase( name.length() - 8, 8 ); //erase .cr3skin
+                lString16 title = name;
+                if (id) {
+                    lString16 id16(id);
+                    id16 += '_';
+                    name = id16 + name;
+                    id16[id16.length() -1] = ':';
+                    title = id16 + title;
+                }
+                _list.add(new CRSkinListItem(title, name, filename));
+            }
+            return (_list.length() != 0);
+        }
+    }
     return false;
 }

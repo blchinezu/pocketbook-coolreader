@@ -62,9 +62,8 @@ void CRBookmarkMenu::setMode( bool goToMode )
     //if ( _goToMode==goToMode )
     //    return;
     CRLog::trace("CRBookmarkMenu::setMode");
-    int k, f;
 #ifdef CR_POCKETBOOK
-	lString16 selKeyName = getCommandKeyName( MCMD_SELECT );
+    lString16 selKeyName = getCommandKeyName( MCMD_SELECT );
 #else
     lString16 selKeyName = getItemNumberKeysName();
 #endif
@@ -179,6 +178,7 @@ void CRBookmarkMenu::handleContextMenu(int index)
 {
 	_wm->postCommand(index, 0);
 	_wm->processPostedEvents();
+        _wm->resetTillUp();
 }
 
 #endif
@@ -279,6 +279,11 @@ bool CRBookmarkMenu::onCommand( int command, int params )
 		 return true;
 	 }
 #endif	
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+        BTN_CLOSE == params) {
+        closeMenu( 0 );
+        return true;
+    }
     return CRMenu::onCommand(command, params);
     //closeMenu( 0 );
     //return true;
@@ -336,7 +341,7 @@ CRCitesMenu::CRCitesMenu(CRGUIWindowManager * wm, LVDocView * docview, int numIt
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16("#bookmarks"));
+    setSkinName(lString16("#cites-list"), lString16("#bookmarks"));
     int mc = getSkin()->getMinItemCount();
     if ( _pageItems < mc )
         _pageItems = mc;
@@ -412,6 +417,11 @@ bool CRCitesMenu::onCommand( int command, int params )
         return true;
     }
 #endif
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+        BTN_CLOSE == params) {
+        closeMenu( 0 );
+        return true;
+    }
     return CRMenu::onCommand(command, params);
 }
 
@@ -428,7 +438,6 @@ void CRCitesMenu::goToCitePage(int selecteditem)
 
 int CRCitesMenu::getSelectedItemIndex()
 {
-    CRFileHistRecord * bookmarks = _docview->getCurrentFileHistRecord();
     int curPage = _docview->getCurPage();
     for (int i = 0; i < _items.length(); i++) {
         CRBookmarkMenuItem *item = static_cast<CRBookmarkMenuItem *>(_items[i]);

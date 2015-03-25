@@ -26,6 +26,8 @@
 // if 1, full page (e.g. 8 items) is scrolled even if on next page would be less items (show empty space)
 #define FULL_SCROLL 1
 
+extern lString16 pbSkinFileName;
+
 const char * cr_default_skin =
 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 "<CR3Skin>\n"
@@ -95,7 +97,14 @@ bool CRGUIWindowManager::loadSkin( lString16 pathname )
         setSkin( skin );
         return false;
     }
+    setSkinFilePath(pathname);
     setSkin( skin );
+    loadSkinKeymaps();
+
+    const char *basename = strrchr(UnicodeToUtf8(pathname).c_str(), '/');
+    basename = basename ? basename+1 : UnicodeToUtf8(pathname).c_str();
+    pbSkinFileName = lString16(basename);
+
     return true;
 }
 
@@ -211,6 +220,32 @@ bool CRGUIWindowManager::onKeyPressed( int key, int flags )
     return false;
 }
 
+bool CRGUIWindowManager::onTouch( int x, int y, CRGUITouchEventType evType )
+{
+    if (_ignoreTillUp) {
+        if (evType == CRTOUCH_UP)
+            _ignoreTillUp = false;
+        return false;
+    }
+    CRGUIWindow * topWin = getTopVisibleWindow();
+    for ( int i=_windows.length()-1; i>=0; i-- ) {
+        if ( _windows[i]->isVisible() ) {
+            if ( _windows[i]->onTouch( x, y, evType ) ) {
+                CRLog::trace("CRGUIWindowManager::onTouch() -- window %d has processed the event, exiting", i );
+                if (topWin != _windows[i])
+                    activateWindow(_windows[i]);
+                _ignoreTillUp = (evType == CRTOUCH_DOWN_LONG);
+                return true;
+            } else {
+                CRLog::trace("CRGUIWindowManager::onTouch() -- window %d cannot process the event, continue", i );
+            }
+        } else {
+            CRLog::trace("CRGUIWindowManager::onTouch() -- window %d is invisible, continue", i );
+        }
+    }
+    return false;
+}
+
 /// changes screen size and orientation
 void CRGUIWindowManager::reconfigure( int dx, int dy, cr_rotate_angle_t orientation )
 {
@@ -226,10 +261,7 @@ void CRGUIWindowManager::reconfigure( int dx, int dy, cr_rotate_angle_t orientat
     if ( !flags )
         return;
     if ( _screen->setSize( dx, dy ) ) {
-        fullRect = _screen->getRect();
-        for ( int i=_windows.length()-1; i>=0; i-- ) {
-            _windows[i]->reconfigure( flags );
-        }
+        reconfigureWindows( flags );
         postEvent( new CRGUIUpdateEvent(true) );
     }
 }
@@ -343,7 +375,8 @@ void CRGUIWindowManager::activateWindow( CRGUIWindow * window )
         if ( lostFocus )
             lostFocus->covered();
         window->activated();
-    }
+    } else
+        window->reactivated();
 }
 
 /// runs event loop
@@ -382,7 +415,7 @@ void CRGUIWindowManager::postCommand( int command, int params )
 void CRGUIWindowManager::postEvent( CRGUIEvent * event )
 {
     int evt = event->getType();
-    if ( evt==CREV_KEYDOWN || evt==CREV_KEYUP || evt==CREV_COMMAND ) {
+    if ( evt==CREV_KEYDOWN || evt==CREV_KEYUP || evt==CREV_COMMAND || evt == CREV_TOUCH ) {
         // for window events, like keyPress or Command, post them before Update/Resize
         int i=_events.length()-1;
         for ( ; i>=0; i-- ) {
@@ -447,7 +480,7 @@ void CRGUIWindowManager::showWaitIcon( lString16 filename, int progressPercent )
         int dy = img->GetHeight();
         int x = (_screen->getWidth() - dx) / 2;
         int y = (_screen->getHeight() - dy) / 2;
-        CRLog::debug("Drawing wait image %s %dx%d  progress=%d%%", UnicodeToUtf8(filename).c_str(), dx, dy, progressPercent );
+        CRLog::debug("Drawing wait image %s [%d,%d %dx%d]  progress=%d%%", UnicodeToUtf8(filename).c_str(), x, y, dx, dy, progressPercent );
         _screen->getCanvas()->Draw( img, x, y, dx, dy, true );
         int gaugeH = 0;
         if ( progressPercent>=0 && progressPercent<=100 ) {
@@ -461,7 +494,7 @@ void CRGUIWindowManager::showWaitIcon( lString16 filename, int progressPercent )
         }
         _screen->invalidateRect( lvRect(x, y, x+dx, y+dy+gaugeH) );
         _screen->flush(firstWaitUpdate);
-        firstWaitUpdate = false;
+        firstWaitUpdate = (progressPercent == 100);
     } else {
         CRLog::error("CRGUIWindowManager::showWaitIcon(%s): image not found in current skin", UnicodeToUtf8(filename).c_str() );
     }
@@ -477,6 +510,26 @@ void CRGUIWindowManager::showProgress( lString16 filename, int progressPercent )
     showWaitIcon( filename, progressPercent );
     _lastProgressUpdate = t;
     _lastProgressPercent = progressPercent;
+}
+
+void CRGUIWindowManager::setSkin(CRSkinRef skin)
+{
+    bool needUpdate = !_skin.isNull();
+    _skin = skin;
+    if (needUpdate) {
+        reconfigureWindows( 0 );
+        fontMan->gc();
+        postEvent( new CRGUIUpdateEvent(true) );
+    }
+}
+
+bool CRGUIWindowManager::setSkin( lString16 name )
+{
+    CRSkinListItem *item = _skins.findById(name);
+    if (NULL!=item ) {
+        return loadSkin(item->getFileName());
+    }
+    return false;
 }
 
 void CRGUIScreenBase::flush( bool full )
@@ -528,17 +581,14 @@ void CRGUIScreenBase::flush( bool full )
 bool CRGUIWindowBase::getTitleRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
         rc.bottom = rc.top;
         return false;
     }
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc.shrinkBy(skin->getBorderWidths());
     rc.bottom = rc.top;
-    CRRectSkinRef clientSkin = skin->getClientSkin();
     CRRectSkinRef titleSkin = skin->getTitleSkin();
-    CRRectSkinRef statusSkin = skin->getStatusSkin();
-    CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( !titleSkin.isNull() ) {
         rc.bottom += titleSkin->getMinSize().y;
     }
@@ -549,11 +599,11 @@ bool CRGUIWindowBase::getTitleRect( lvRect & rc )
 bool CRGUIWindowBase::getStatusRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
         rc.bottom = rc.top;
         return false;
     }
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc.shrinkBy(skin->getBorderWidths());
     rc.top = rc.bottom;
     lvPoint scrollSize = getMinScrollSize( _page, _pages );
@@ -574,9 +624,11 @@ bool CRGUIWindowBase::getStatusRect( lvRect & rc )
 bool CRGUIWindowBase::getClientRect( lvRect & rc )
 {
     rc = _rect;
-    if ( _skinName.empty() )
-        return true;
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     rc.shrinkBy(skin->getBorderWidths());
     rc.bottom = rc.top;
     lvRect titleRect;
@@ -598,10 +650,10 @@ lString16 CRGUIWindowBase::getScrollLabel( int page, int pages )
 lvPoint CRGUIWindowBase::getMinScrollSize( int page, int pages )
 {
     lvPoint sz(0,0);
-    //if ( pages<=1 )
-    //    return sz; // can hide scrollbar
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
-    CRRectSkinRef statusSkin = skin->getStatusSkin();
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return sz;
+    }
     CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( !sskin.isNull() ) {
 		LVFontRef sf = sskin->getFont();
@@ -637,8 +689,12 @@ lvPoint CRGUIWindowBase::getMinScrollSize( int page, int pages )
 /// calculates scroll rectangle for specified window rectangle
 bool CRGUIWindowBase::getScrollRect( lvRect & rc )
 {
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc = _rect;
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     rc.shrinkBy(skin->getBorderWidths());
     CRScrollSkinRef sskin = skin->getScrollSkin();
     if ( sskin.isNull() )
@@ -673,11 +729,113 @@ bool CRGUIWindowBase::getScrollRect( lvRect & rc )
     return !rc.isEmpty();
 }
 
+bool CRGUIWindowBase::onTouch( int x, int y, CRGUITouchEventType evType)
+{
+    lvPoint pt = lvPoint(x, y);
+    lvRect rc;
+    rc = _rect;
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.shrinkBy(skin->getBorderWidths());
+    }
+    if (rc.isPointInside(pt)) {
+        CRGUIEvent * event = new CRGUITouchEvent( x, y, evType);
+        event->setTargetWindow(this);
+        _wm->postEvent( event );
+        return true;
+    }
+    return false;
+}
+
+int zOrderComparator(const CRGUIControl ** item1, const CRGUIControl ** item2 )
+{
+    const CRGUIControl *a = *item1;
+    const CRGUIControl *b = *item2;
+    if ( a->getZorder()>b->getZorder() )
+        return -1;
+    if ( a->getZorder()<b->getZorder() )
+        return 1;
+    return 0;
+}
+
+bool CRGUIWindowBase::onTouchEvent(int x, int y, CRGUITouchEventType evType)
+{
+    lvPoint pt(x, y);
+
+    if (_sortZorder && _controlsCreated) {
+        _controls.sort(zOrderComparator);
+        _sortZorder = false;
+    }
+    for (int i = 0; i < _controls.length(); i++) {
+        CRGUIControl *control = _controls.get(i);
+        if (control->hitTest(pt)) {
+            bool upd = control != _selectedControl;
+            if (upd) {
+                upd = _selectedControl ? _selectedControl->setSelected(false) : false;
+                _selectedControl = control;
+                upd = _selectedControl->setSelected(true) || upd;
+            }
+            if (control->isEnabled())
+                return control->onTouch(evType) || upd;
+            return upd;
+        }
+    }
+    if (_selectedControl) {
+        bool ret = _selectedControl->setSelected(false);
+        _selectedControl = NULL;
+        return ret;
+    }
+    return false;
+}
+
+int CRGUIWindowBase::getTapZone(int x, int y, CRPropRef props)
+{
+    lvRect rc;
+
+    getClientRect(rc);
+
+    int dx = rc.width();
+    int dy = rc.height();
+
+    int x1 = rc.left + dx * props->getIntDef(PROP_TAP_ZONE_WIDTH_1, 33) / 100;
+    int x2 = x1 + dx * props->getIntDef(PROP_TAP_ZONE_WIDTH_2, 33) / 100;
+    int y1 = rc.top + dy * props->getIntDef(PROP_TAP_ZONE_HEIGHT_1, 33) / 100;
+    int y2 = y1 + dy * props->getIntDef(PROP_TAP_ZONE_HEIGHT_2, 33) / 100;
+    int zone = 0;
+    if ( y<y1 ) {
+        if ( x<x1 )
+            zone = 1;
+        else if ( x<x2 )
+            zone = 2;
+        else
+            zone = 3;
+    } else if ( y<y2 ) {
+        if ( x<x1 )
+            zone = 4;
+        else if ( x<x2 )
+            zone = 5;
+        else
+            zone = 6;
+    } else {
+        if ( x<x1 )
+            zone = 7;
+        else if ( x<x2 )
+            zone = 8;
+        else
+            zone = 9;
+    }
+    return zone;
+}
+
 /// calculates input box rectangle for window rectangle
 bool CRGUIWindowBase::getInputRect( lvRect & rc )
 {
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     rc = _rect;
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        rc.bottom = rc.top;
+        return false;
+    }
     //rc.shrinkBy(skin->getBorderWidths());
     CRRectSkinRef inputSkin = skin->getInputSkin();
     CRRectSkinRef statusSkin = skin->getStatusSkin();
@@ -693,8 +851,11 @@ bool CRGUIWindowBase::getInputRect( lvRect & rc )
 /// draw input box, if any
 void CRGUIWindowBase::drawInputBox()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef inputSkin = skin->getInputSkin();
     CRRectSkinRef statusSkin = skin->getStatusSkin();
     if ( inputSkin.isNull() || statusSkin.isNull() )
@@ -722,8 +883,11 @@ void CRGUIWindowBase::drawStatusText( LVDrawBuf & buf, const lvRect & rc, CRRect
 /// draw status bar using current skin, with optional status text and scroll/tab/page indicator
 void CRGUIWindowBase::drawStatusBar()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef statusSkin = skin->getStatusSkin();
     CRScrollSkinRef sskin = skin->getScrollSkin();
     lvRect statusRc;
@@ -738,7 +902,7 @@ void CRGUIWindowBase::drawStatusBar()
     }
     bool scroll = ( !sskin.isNull() && sskin->getLocation()==CRScrollSkin::Status && !scrollRc.isEmpty() );
     if ( scroll ) {
-        sskin->drawScroll( buf, scrollRc, false, _page-1, _pages, 1 );
+        drawScroll(sskin, scrollRc, false, _page-1, _pages, 1 );
     }
     if ( !statusSkin.isNull() && !statusRc.isEmpty() && !getStatusText().empty() ) {
         if ( scroll ) {
@@ -761,24 +925,31 @@ void CRGUIWindowBase::drawStatusBar()
 // draws frame, title, status and client
 void CRGUIWindowBase::draw()
 {
+    CRLog::trace("getting skin at CRGUIWindowBase::draw()");
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     CRLog::trace("enter CRGUIWindowBase::draw()");
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRLog::trace("getting skin at CRGUIWindowBase::draw()");
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRLog::trace("drawing window skin background at CRGUIWindowBase::draw()");
     skin->draw( buf, _rect );
     CRLog::trace("start drawing at CRGUIWindowBase::draw()");
     drawTitleBar();
     drawStatusBar();
     drawClient();
+    _controlsCreated = true;
     CRLog::trace("exit CRGUIWindowBase::draw()");
 }
 
 /// draw title bar using current skin, with optional scroll/tab/page indicator
 void CRGUIWindowBase::drawClient()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef clientSkin = skin->getClientSkin();
     if ( clientSkin.isNull() )
         return;
@@ -788,11 +959,186 @@ void CRGUIWindowBase::drawClient()
     clientSkin->draw( buf, rc );
 }
 
+void CRGUIWindowBase::drawScroll(CRScrollSkinRef sskin, lvRect rect, bool vertical, int pos, int maxpos, int pagesize)
+{
+    LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
+    lvRect rc = rect;
+    sskin->draw(buf, rc);
+    lvRect borders;
+
+    sskin->getBorderWidths();
+
+    int pages = pagesize>0 ? (maxpos+pagesize-1)/pagesize : 0;
+    int page = pages>0 ? pos/pagesize+1 : 0;
+
+    CRRectSkinRef bottomTabSkin = sskin->getBottomTabSkin();
+    CRRectSkinRef bottomPageBoundSkin = sskin->getBottomPageBoundSkin();
+    CRRectSkinRef bottomActiveTabSkin = sskin->getBottomActiveTabSkin();
+
+    if ( !bottomTabSkin.isNull() && !bottomPageBoundSkin.isNull() &&
+         !bottomActiveTabSkin.isNull() ) {
+        // tabs
+        if ( pages<=1 )
+            return; // don't draw tabs if no other pages
+        int tabwidth = bottomTabSkin->getMinSize().x;
+        if ( tabwidth < 40 )
+            tabwidth = 40;
+        if ( tabwidth > bottomTabSkin->getMaxSize().x && bottomTabSkin->getMaxSize().x > 0)
+            tabwidth = bottomTabSkin->getMaxSize().x;
+        int maxtabs = (rc.width() - borders.left - borders.right) / tabwidth;
+        if ( pages <= maxtabs ) {
+            // can draw tabs
+            lvRect r(rc);
+            r.left += borders.left;
+            for ( int i=0; i<pages; i++ ) {
+                r.right = r.left + tabwidth;
+                if ( i+1!=page ) {
+                    bottomTabSkin->draw(buf, r);
+                    lString16 label = lString16::itoa(i+1);
+                    bottomTabSkin->drawText(buf, r, label);
+                }
+                if (!_controlsCreated)
+                    addControl(new CRCommandControl(this, r, DCMD_GO_PAGE, i));
+                r.left += tabwidth - r.height()/6;
+            }
+            bottomPageBoundSkin->draw(buf, rc);
+            r = rc;
+            r.left += borders.left;
+            for ( int i=0; i<pages; i++ ) {
+                r.right = r.left + tabwidth;
+                if ( i+1==page ) {
+                    bottomActiveTabSkin->draw(buf, r);
+                    lString16 label = lString16::itoa(i+1);
+                    bottomActiveTabSkin->drawText(buf, r, label);
+                }
+                r.left += tabwidth - r.height()/6;
+            }
+            return;
+        }
+    }
+
+    rc.shrinkBy( borders );
+
+    int btn1State = CRButtonSkin::ENABLED;
+    int btn2State = CRButtonSkin::ENABLED;
+    if ( pos <= 0 )
+        btn1State = 0;
+    if ( pos >= maxpos-pagesize )
+        btn2State = 0;
+    CRButtonSkinRef btn1Skin;
+    CRButtonSkinRef btn2Skin;
+    lvRect btn1Rect = rc;
+    lvRect btn2Rect = rc;
+    lvRect bodyRect = rc;
+    lvRect sliderRect = rc;
+    LVImageSourceRef bodyImg;
+    LVImageSourceRef sliderImg;
+
+    LVImageSourceRef hBody = sskin->getHBody();
+    if ( hBody.isNull() ) {
+        // text label with optional arrows
+        lString16 label;
+        label << lString16::itoa(page) + L" / " << lString16::itoa(pages);
+        // calc label width
+        int w = sskin->getFont()->getTextWidth( label.c_str(), label.length() );
+        int margin = 4;
+        btn1Skin = sskin->getLeftButton();
+        btn2Skin = sskin->getRightButton();
+        // calc button widths
+        int bw1 = btn1Skin.isNull() ? 0 : btn1Skin->getMinSize().x;
+        int bw2 = btn1Skin.isNull() ? 0 : btn2Skin->getMinSize().x;
+        // total width
+        int ww = w + margin + margin + bw1 + bw2;
+        int dw = rc.width() - ww;
+        rc.left += dw*3/4;
+        rc.right = rc.left + ww;
+        // adjust rectangle size
+        btn1Rect = rc;
+        btn2Rect = rc;
+        btn1Rect.right = btn1Rect.left + bw1;
+        btn2Rect.left = btn2Rect.right - bw2;
+        bodyRect.left = btn1Rect.right;
+        bodyRect.right = btn2Rect.left;
+        int dy = bodyRect.height() - btn1Skin->getMinSize().y;
+        btn1Rect.top += dy/2;
+        btn1Rect.bottom = btn1Rect.top + btn1Skin->getMinSize().y;
+        dy = bodyRect.height() - btn2Skin->getMinSize().y;
+        btn2Rect.top += dy/2;
+        btn2Rect.bottom = btn2Rect.top + btn2Skin->getMinSize().y;
+        if (!_controlsCreated) {
+            addControl(new CRScrollButtonControl(this, btn1Rect, btn1Skin, false));
+            addControl(new CRScrollButtonControl(this, btn2Rect, btn2Skin, true));
+        }
+        btn1Skin->drawButton( buf, btn1Rect, btn1State );
+        btn2Skin->drawButton( buf, btn2Rect, btn2State );
+        sskin->drawText( buf, bodyRect, label );
+        return;
+    }
+
+    if ( vertical ) {
+        // draw vertical
+        btn1Skin = sskin->getUpButton();
+        btn2Skin = sskin->getDownButton();
+        btn1Rect.bottom = btn1Rect.top + btn1Skin->getMinSize().y;
+        btn2Rect.top = btn2Rect.bottom - btn2Skin->getMinSize().y;
+        bodyRect.top = btn1Rect.bottom;
+        bodyRect.bottom = btn2Rect.top;
+        int sz = bodyRect.height();
+        if ( pagesize < maxpos ) {
+            sliderRect.top = bodyRect.top + sz * pos / maxpos;
+            sliderRect.bottom = bodyRect.top + sz * (pos + pagesize) / maxpos;
+        } else
+            sliderRect = bodyRect;
+        bodyImg = sskin->getVBody();
+        sliderImg = sskin->getVSlider();
+    } else {
+        // draw horz
+        btn1Skin = sskin->getLeftButton();
+        btn2Skin = sskin->getRightButton();
+        btn1Rect.right = btn1Rect.left + btn1Skin->getMinSize().x;
+        btn2Rect.left = btn2Rect.right - btn2Skin->getMinSize().x;
+        bodyRect.left = btn1Rect.right;
+        bodyRect.right = btn2Rect.left;
+        int sz = bodyRect.width();
+        if ( pagesize < maxpos ) {
+            sliderRect.left = bodyRect.left + sz * pos / maxpos;
+            sliderRect.right = bodyRect.left + sz * (pos + pagesize) / maxpos;
+        } else
+            sliderRect = bodyRect;
+        bodyImg = hBody;
+        sliderImg = sskin->getHSlider();
+    }
+    if (!_controlsCreated) {
+        addControl(new CRScrollButtonControl(this, btn1Rect, btn1Skin, false));
+        addControl(new CRScrollButtonControl(this, btn2Rect, btn2Skin, true));
+    }
+    btn1Skin->drawButton( buf, btn1Rect, btn1State );
+    btn2Skin->drawButton( buf, btn2Rect, btn2State );
+    if ( !bodyImg.isNull() ) {
+        LVImageSourceRef img = LVCreateStretchFilledTransform( bodyImg,
+            bodyRect.width(), bodyRect.height() );
+        buf.Draw( img, bodyRect.left, bodyRect.top, bodyRect.width(), bodyRect.height(), false );
+    }
+    if ( !sliderImg.isNull() ) {
+        LVImageSourceRef img = LVCreateStretchFilledTransform( sliderImg,
+            sliderRect.width(), sliderRect.height() );
+        buf.Draw( img, sliderRect.left, sliderRect.top, sliderRect.width(), sliderRect.height(), false );
+        if ( sskin->getShowPageNumbers() ) {
+            lString16 label;
+            label << lString16::itoa(page) + L" / " << lString16::itoa(pages);
+            sskin->drawText( buf, sliderRect, label );
+        }
+    }
+}
+
 /// draw title bar using current skin, with optional scroll/tab/page indicator
 void CRGUIWindowBase::drawTitleBar()
 {
+    CRWindowSkinRef skin = getSkin();
+    if ( skin.isNull() ) {
+        return;
+    }
     LVDrawBuf & buf = *_wm->getScreen()->getCanvas();
-    CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef titleSkin = skin->getTitleSkin();
     lvRect titleRc;
     if ( !getTitleRect( titleRc ) )
@@ -809,7 +1155,7 @@ void CRGUIWindowBase::drawTitleBar()
     getScrollRect( scrollRc );
     bool scroll = ( !sskin.isNull() && sskin->getLocation()==CRScrollSkin::Title && !scrollRc.isEmpty() );
     if ( scroll ) {
-        sskin->drawScroll( buf, scrollRc, false, _page-1, _pages, 1 );
+        drawScroll( sskin, scrollRc, false, _page-1, _pages, 1 );
         titleRc.right = scrollRc.left;
     }
 
@@ -825,15 +1171,66 @@ void CRGUIWindowBase::drawTitleBar()
         buf.Draw( _icon, titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
         imgWidth = w + ITEM_MARGIN;
     }
+    if (_wm->getScreen()->isTouchSupported()) {
+        CRButtonSkinRef closeBtnSkin = skin->getCloseButton();
+        if (!closeBtnSkin.isNull()) {
+            lvRect closeBtnRc = titleRc;
+            closeBtnRc.left += imgWidth;
+            closeBtnRc.right = closeBtnRc.left + closeBtnSkin->getMinSize().x;
+
+            int dy = titleRc.height() - closeBtnSkin->getMinSize().y;
+            closeBtnRc.top += dy/2; //FIXME: no boundaries checks
+            closeBtnRc.bottom = closeBtnRc.top + closeBtnSkin->getMinSize().y;
+
+            closeBtnSkin->drawButton(buf, closeBtnRc);
+            if (!_controlsCreated)
+                addControl(new CRButtonControl(this, closeBtnRc, closeBtnSkin, BTN_CLOSE,
+                                               DCMD_BUTTON_PRESSED ));
+            imgWidth += (closeBtnRc.width() + ITEM_MARGIN);
+        }
+    }
     lvRect textRect = titleRc;
     textRect.left += imgWidth;
     titleSkin->drawText( buf, textRect, _caption );
+}
+
+void CRGUIWindowBase::setSkinName( const lString16  & skin )
+{
+    _skinName = skin;
+    _skin.Clear();
+    _baseSkinName.clear();
+}
+
+void CRGUIWindowBase::setSkinName( const lString16  & skin, const lString16 & baseSkin )
+{
+    if ( !_wm->getSkin().isNull() ) {
+        setSkinName(skin);
+        CRWindowSkinRef windowSkin = getSkin();
+        if ( windowSkin.isNull() ) {
+            setSkinName(baseSkin);
+        } else
+            _baseSkinName = baseSkin;
+    }
+}
+
+void CRGUIWindowBase::addControl(CRGUIControl *control)
+{
+    _controls.add(control);
+    _sortZorder = true;
+}
+
+void CRGUIWindowBase::invalidateControls()
+{
+    _controls.clear();
+    _controlsCreated = false;
+    _selectedControl = NULL;
 }
 
 /// called on system configuration change: screen size and orientation
 void CRGUIWindowBase::reconfigure( int flags )
 {
     lvRect fs = _wm->getScreen()->getRect();
+    _skin.Clear();
     if ( _fullscreen ) {
         setRect( fs );
     } else {
@@ -854,6 +1251,8 @@ void CRGUIWindowBase::reconfigure( int flags )
         }
         setRect( rc );
     }
+    _selectedControl = NULL;
+    invalidateControls();
     setDirty();
 }
 
@@ -885,9 +1284,10 @@ bool CRGUIWindowBase::onKeyPressed( int key, int flags )
 void CRDocViewWindow::draw()
 {
     lvRect clientRect = _rect;
-    if ( !_skin.isNull() ) {
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
         if ( getClientRect( clientRect ) ) {
-            _skin->draw( *_wm->getScreen()->getCanvas(), _rect );
+            skin->draw( *_wm->getScreen()->getCanvas(), _rect );
             drawTitleBar();
             drawStatusBar();
         }
@@ -937,14 +1337,9 @@ void CRMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectS
     } else {
         s1 = _label;
     }
-
     LVFontRef font = getFont();
     if ( font.isNull() )
         font = skin->getFont();
-    if ( s2.empty() ) {
-        textRect.top += (textRect.height() - font->getHeight() - itemBorders.top - itemBorders.bottom) / 2;
-        textRect.bottom = textRect.top + font->getHeight() + itemBorders.top + itemBorders.bottom;
-    }
     skin->drawText( buf, textRect, s1, font );
     if ( !s2.empty() ) {
         valueSkin->drawText( buf, valueRect, s2 );
@@ -970,11 +1365,12 @@ bool CRMenu::setCurPage( int nPage )
     if ( _topItem < 0 )
         _topItem = 0;
     if ( _topItem != oldTop ) {
-		_pageUpdate = true;
+        invalidateControls();
+        _pageUpdate = true;
         setDirty();
         return true;
-	}
-	return false;
+    }
+    return false;
 }
 
 int CRMenu::getCurPage( )
@@ -1019,11 +1415,6 @@ void CRMenu::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinR
         } else {
             valueSkin->drawText( buf, textRect, s );
         }
-    } else {
-		LVFontRef skinFont = skin->getFont();
-		int fh = skinFont.isNull() ? skin->getFontSize() : skinFont->getHeight();
-        textRect.top += (textRect.height() - fh - itemBorders.top - itemBorders.bottom) / 2;
-        textRect.bottom = textRect.top + fh + itemBorders.top + itemBorders.bottom;
     }
     skin->drawText( buf, textRect, _label );
     if ( !s.empty() ) {
@@ -1077,11 +1468,14 @@ CRMenuSkinRef CRMenu::getSkin()
     if ( !_skin.isNull() )
         return _skin;
     lString16 path = getSkinName();
-    lString16 path2;
     if (!path.startsWith("#"))
         path = cs16("/CR3Skin/") + path;
-    else if ( _wm->getScreenOrientation()&1 )
+    if ( _wm->getScreenOrientation()&1 ) {
         _skin = _wm->getSkin()->getMenuSkin( (path + "-rotated").c_str() );
+        if ( _skin.isNull() && !_baseSkinName.empty() ) {
+            _skin = _wm->getSkin()->getMenuSkin( (_baseSkinName + "-rotated").c_str() );
+        }
+    }
     if ( !_skin )
         _skin = _wm->getSkin()->getMenuSkin( path.c_str() );
     return _skin;
@@ -1385,6 +1779,8 @@ void CRMenu::drawClient()
 
         lvRect itemRc( rc );
 
+        if (!_controlsCreated)
+            addControl(new CRMenuItemControl(this, itemRc, index));
         if ( showShortcuts ) {
             int shortcutSize = HOTKEY_SIZE;
             if ( shortcutSize < ss->getMinSize().x )
@@ -1508,6 +1904,15 @@ void CRMenu::reconfigure( int flags )
         _pageItems = pageItems;
         _topItem = _topItem / pageItems * pageItems;
     }
+
+    // reconfigure submenus
+    LVPtrVector<CRMenuItem> items = getItems();
+    for ( int i=0; i<items.length(); i++) {
+        if (items[i]->isSubmenu()) {
+            CRMenu * submenu = static_cast<CRMenu *>(items[i]);
+            submenu->reconfigure(flags);
+        }
+    }
 }
 
 bool CRMenu::onKeyPressed( int key, int flags )
@@ -1570,7 +1975,24 @@ void CRMenu::setCurItem(int nItem)
 /// returns true if command is processed
 bool CRMenu::onCommand( int command, int params )
 {
-	CRLog::trace( "CRMenu::onCommand(%d, %d)", command, params );
+    CRLog::trace( "CRMenu::onCommand(%d, %d)", command, params );
+    if (DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) {
+        switch (params) {
+        case BTN_CLOSE:
+            doCloseMenu(getId(), false, 0);
+            return true;
+        case BTN_SCROLL_DOWN:
+            command = MCMD_NEXT_PAGE;
+            params = 1;
+            break;
+        case BTN_SCROLL_UP:
+            command = MCMD_PREV_PAGE;
+            params = 1;
+            break;
+        default:
+            return false;
+        }
+    }
     switch (command) {
 	case MCMD_CANCEL:
 		closeMenu( 0 );
@@ -1614,7 +2036,11 @@ bool CRMenu::onCommand( int command, int params )
     case MCMD_SELECT:
 		onItemSelect(_selectedItem, params);
 		return true;
-	}
+    case DCMD_GO_PAGE:
+        if (setCurPage(params) && _selectedItem >= 0)
+            setCurItem(_selectedItem - _pageItems);
+        return true;
+    }
 
     int option = -1;
     int longPress = 0;
@@ -1773,22 +2199,20 @@ static int decodeKey( lString16 name )
     return key;
 }
 
-bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char * mapFile )
+bool CRGUIAcceleratorTableList::openFromStream( LVStreamRef defStream, LVStreamRef mapStream)
 {
     _table.clear();
     LVHashTable<lString16, int> defs( 256 );
-    LVStreamRef defStream = LVOpenFileStream( defFile, LVOM_READ );
+
     if ( defStream.isNull() ) {
-        CRLog::error( "cannot open keymap def file %s", defFile );
+        CRLog::error( "cannot open keymap def file" );
         return false;
     }
-    LVStreamRef mapStream = LVOpenFileStream( mapFile, LVOM_READ );
     if ( mapStream.isNull() ) {
-        CRLog::error( "cannot open keymap file %s", defFile );
+        CRLog::error( "cannot open keymap file" );
         return false;
     }
     lString16 line;
-    CRPropRef props = LVCreatePropsContainer();
     while ( readNextLine(defStream, line) ) {
         lString16 name;
         lString16 value;
@@ -1802,7 +2226,7 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             CRLog::error("Invalid definition in line %s", UnicodeToUtf8(line).c_str() );
     }
     if ( !defs.length() ) {
-        CRLog::error("No definitions read from %s", defFile);
+        CRLog::error("No definitions read from defFile");
         return false;
 
     }
@@ -1878,7 +2302,14 @@ bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char 
             }
         }
     } while ( !eof );
+
     return !empty();
+}
+
+bool CRGUIAcceleratorTableList::openFromFile( const char  * defFile, const char * mapFile )
+{
+    return openFromStream( LVOpenFileStream( defFile, LVOM_READ ),
+                           LVOpenFileStream( mapFile, LVOM_READ ));
 }
 
 // get currently set layout
@@ -2058,6 +2489,20 @@ bool CRDocViewWindow::onCommand( int command, int params )
 			}
 		}
 #endif
+         if (DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) {
+             switch (params) {
+             case BTN_SCROLL_DOWN:
+                 command = DCMD_PAGEDOWN;
+                 params = 1;
+                 break;
+             case BTN_SCROLL_UP:
+                 command = DCMD_PAGEUP;
+                 params = 1;
+                 break;
+             default:
+                 return false;
+             }
+         }
         _docview->doCommand( (LVDocCmd)command, params );
         _dirty = true;
         return true;
@@ -2092,4 +2537,315 @@ bool CRGUICommandEvent::handle( CRGUIWindow * window )
     if ( res )
         wm->postEvent( new CRGUIUpdateEvent(false) );
     return res;
+}
+
+bool CRGUITouchEvent::handle(CRGUIWindow *window)
+{
+    if ( _targetWindow!=NULL ) {
+        if ( window!=_targetWindow )
+            return false;
+    }
+    CRGUIWindowManager * wm = window->getWindowManager();
+    bool res = window->onTouchEvent( _param1, _param2, _type );
+    if ( res )
+        wm->postEvent( new CRGUIUpdateEvent(false) );
+    return res;
+}
+
+CRToolBar::CRToolBar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active) :
+    m_window(window), m_currentButton(0), m_active(active), _controlsCreated(false),
+    m_id(id), _tbSkin(tbskin)
+{
+}
+
+bool CRToolBar::init(lString16 id)
+{
+    CRGUIAcceleratorTableRef buttons = m_window->getWindowManager()->getSkinAccTables().get( id);
+    if (buttons.isNull())
+        return false;
+
+    for (int i=0; i < buttons->length(); i++) {
+        int key = i+1;
+        int cmd;
+        int param;
+        if (buttons->translate( key, 0, cmd, param)) {
+            int cmdLong = DCMD_BUTTON_PRESSED_LONG;
+            int paramLong = -1;
+            buttons->translate( key, 1, cmdLong, paramLong);
+            addButton( new CRToolButton(this, key, lString16(), cmd, param, paramLong, cmdLong));
+        }
+    }
+    return ( m_buttons.length() != 0 );
+}
+
+bool CRToolBar::selectFirstButton()
+{
+    return selectButton(0, 1);
+}
+
+bool CRToolBar::selectLastButton()
+{
+    return selectButton(m_buttons.length() - 1, -1);
+}
+
+bool CRToolBar::selectNextButton(bool wrapAround)
+{
+    if (-1 == getCurrentButtonIndex())
+        return selectFirstButton();
+    if ( selectButton( m_currentButton+1, 1 ) )
+        return true;
+    if ( wrapAround )
+        return selectFirstButton();
+    return false;
+}
+
+bool CRToolBar::selectPrevButton(bool wrapAround)
+{
+    if (-1 == getCurrentButtonIndex())
+        return selectLastButton();
+    if ( selectButton( m_currentButton-1, -1) )
+        return true;
+    if ( wrapAround )
+        return selectLastButton();
+    return false;
+}
+
+bool CRToolBar::selectButton(int index)
+{
+    if ( index>=0 && index<getButtonsCount() &&
+        m_buttons[index]->isEnabled() ) {
+        setActive(true);
+        if (index != m_currentButton)
+            m_window->setDirty();
+        m_currentButton = index;
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBar::selectButton(int from, int delta)
+{
+    for( int i=from; i>=0 && i<m_buttons.length(); i+=delta)
+    {
+        if ( selectButton(i) ) {
+            return true;
+        }
+    }
+    return false;
+}
+
+int CRToolBar::getCurrentButtonIndex()
+{
+    if (isActive()) {
+        return m_currentButton;
+    }
+    return -1;
+}
+
+bool CRToolBar::isEnabled(int index)
+{
+    if ( index>=0 && index<getButtonsCount() )
+        return m_buttons[index]->isEnabled();
+    return false;
+}
+
+bool CRToolBar::setEnabled(int index, bool value)
+{
+    if ( index>=0 && index<getButtonsCount() )
+        return m_buttons[index]->setEnabled(value);
+    return false;
+}
+
+void CRToolBar::draw(CRToolBarSkinRef tbskin, LVDrawBuf &buf, const lvRect &rect)
+{
+    if ( tbskin.isNull() )
+        return;
+    tbskin->draw(buf, rect);
+
+    lvRect rc = rect;
+    rc.shrinkBy( tbskin->getBorderWidths() );
+    CRButtonListRef buttons = tbskin->getButtons();
+    int width = 0;
+    for ( int i=0; i<buttons->length(); i++ ) {
+        int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
+        if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
+            flags |= CRButtonSkin::SELECTED;
+        LVRef<CRButtonSkin> button = buttons->get(i);
+        if ( !button.isNull() ) {
+            width += button->getMinSize().x;
+        }
+    }
+    int deltaX = rc.width() - width;
+    int offsetX = 0;
+    if (deltaX > 0) {
+        if ( tbskin->getHAlign()==SKIN_HALIGN_RIGHT )
+            offsetX = deltaX;
+        else if ( tbskin->getHAlign()==SKIN_HALIGN_CENTER )
+            offsetX = deltaX/2;
+    }
+    int h = rc.height();
+    CRToolBarControl *toolBarControl = NULL;
+    if ( !_controlsCreated)
+        toolBarControl = new CRToolBarControl(m_window, this, rect);
+    for ( int i=0; i<buttons->length() && i < m_buttons.length(); i++ ) {
+        lvRect rc2 = rc;
+        int flags = isEnabled(i) ? CRButtonSkin::ENABLED : 0;
+        if ( i==getCurrentButtonIndex() && ( flags & CRButtonSkin::ENABLED ) )
+            flags |= CRButtonSkin::SELECTED;
+        CRButtonSkinRef buttonSkin = buttons->get(i);
+        if ( !buttonSkin.isNull() ) {
+            rc2.left += offsetX;
+            if (rc2.left >= rc.right)
+                break;
+            rc2.right = rc2.left + buttonSkin->getMinSize().x;
+            if (rc2.right > rc.right)
+                rc2.right = rc.right;
+            int imgh = buttonSkin->getMinSize().y;
+            int deltaY = h - imgh;
+            if ( deltaY > 0) {
+                if ( tbskin->getVAlign()==SKIN_VALIGN_BOTTOM )
+                    rc2.top += deltaY;
+                else if ( tbskin->getVAlign()==SKIN_VALIGN_CENTER ) {
+                    rc2.top += (deltaY/2);
+                    rc2.bottom = rc2.top + imgh;
+                } else
+                    rc2.bottom = rc2.top + imgh;
+            }
+            if ( NULL != toolBarControl) {
+                CRToolButton *button = m_buttons[i];
+                toolBarControl->addButton(new CRButtonControl(m_window, rc2, buttonSkin,
+                                                              button->getId(),
+                                                              button->getCommand(),
+                                                              button->getParam(),
+                                                              button->getParam(true),
+                                                              button->getCommand(true)));
+            }
+            buttonSkin->drawButton( buf, rc2, flags );
+            offsetX = rc2.right - rc.left;
+        }
+    }
+    if ( NULL != toolBarControl ) {
+        m_window->addControl(toolBarControl);
+        _controlsCreated = true;
+    }
+}
+
+int CRToolBar::findButton(int command, int param)
+{
+    int ret = -1;
+
+    for ( int i=0; i<m_buttons.length() && ret==-1; i++) {
+        CRToolButton *current = m_buttons[i];
+        if (current->getCommand() == command && current->getParam() == param) {
+            ret = i;
+        }
+    }
+    return ret;
+}
+
+bool CRToolBar::setActive(bool value)
+{
+    if ( m_active != value ) {
+        m_active = value;
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBar::getRect(lvRect &rc)
+{
+    if ( !_tbSkin.isNull() ) {
+        lvRect rect = m_window->getWindowManager()->getScreen()->getRect();
+        return _tbSkin->getRect(rc, rect);
+    }
+    return false;
+}
+
+CRToolButton * CRToolBar::getCurrentButton()
+{
+    int index = getCurrentButtonIndex();
+    if (index != -1)
+        return m_buttons[index];
+    return NULL;
+}
+
+void CRToolBarControl::addButton(CRButtonControl *button)
+{
+    m_buttons.add( button );
+}
+
+bool CRToolBarControl::hitTest(lvPoint &pt)
+{
+    m_touchIndex = -1;
+    if ( CRGUIControl::hitTest(pt) ) {
+        for (int i = 0; i < m_buttons.length(); i++) {
+            CRButtonControl *button = m_buttons[i];
+            if ( button->hitTest(pt) ) {
+                m_touchIndex = i;
+                break;
+            }
+        }
+        return true;
+    }
+    return false;
+}
+
+bool CRToolBarControl::onTouch(CRGUITouchEventType evType)
+{
+    if (m_touchIndex != -1) {
+        if (m_toolbar->getCurrentButtonIndex() != m_touchIndex)
+            setSelected(true);
+        return m_buttons[m_touchIndex]->onTouch(evType);
+    }
+    return false;
+}
+
+bool CRToolBarControl::setSelected(bool selected)
+{
+    if (m_touchIndex != -1 && selected) {
+        if ( m_toolbar->selectButton(m_touchIndex) )
+            m_buttons[m_touchIndex]->setSelected(selected);
+    }
+    return m_toolbar->setActive(selected);
+}
+
+CRWindowSkinRef CRGUIWindowBase::getSkin()
+{
+    if ( !_skin.isNull() )
+        return _skin;
+    lString16 path = getSkinName();
+    if (!path.startsWith("#"))
+        path = cs16("/CR3Skin/") + path;
+    if ( _wm->getScreenOrientation()&1 ) {
+        _skin = _wm->getSkin()->getWindowSkin( (path + "-rotated").c_str() );
+        if ( _skin.isNull() && !_baseSkinName.empty() ) {
+            _skin = _wm->getSkin()->getWindowSkin( (_baseSkinName + "-rotated").c_str() );
+        }
+    }
+    if ( !_skin )
+        _skin = _wm->getSkin()->getWindowSkin( path.c_str() );
+    return _skin;
+}
+
+void CRGUIWindowManager::reconfigureWindows(int flags)
+{
+    for ( int i=_windows.length()-1; i>=0; i-- ) {
+        CRMenu *menu = dynamic_cast<CRMenu *>(_windows[i]);
+        if (NULL == menu || menu->isMainMenu() )
+            _windows[i]->reconfigure( flags );
+    }
+}
+
+void CRGUIWindowManager::loadSkinKeymaps()
+{
+    _skinAccTables.clear();
+
+    if ( !_skin.isNull() ) {
+        lString16 keymapDir = LVExtractPath(getKeymapFilePath());
+        lString16 defFile = LVCombinePaths(keymapDir, cs16("keydefs.ini"));
+        LVStreamRef keymapFile = _skin->getStream(L"keymaps.ini");
+
+        _skinAccTables.openFromStream(LVOpenFileStream( defFile.c_str(), LVOM_READ ),
+                                      keymapFile);
+    }
 }

@@ -12,7 +12,7 @@
 #include "cr3main.h"
 #include "mainwnd.h"
 
-bool loadKeymaps( CRGUIWindowManager & winman, const char * locations[] )
+bool loadKeymaps( CRGUIWindowManager & winman, const char * keymapFile, const char * locations[] )
 {
 	bool res = false;
 	for ( int i=0; locations[i]; i++ ) {
@@ -25,13 +25,16 @@ bool loadKeymaps( CRGUIWindowManager & winman, const char * locations[] )
 			location << "/";
 #endif
 		lString8 def = location + "keydefs.ini";
-		lString8 map = location + "keymaps.ini";
+                lString8 map = location + keymapFile;
+#ifndef CR_POCKETBOOK
 		lString8 layout = location + "kblayout.ini";
 		winman.getKeyboardLayouts().openFromFile( layout.c_str() );
+#endif
 		CRGUIAcceleratorTableList tables;
 
 		if ( tables.openFromFile(  def.c_str(), map.c_str() ) ) {
 			res = true;
+                        winman.setKeymapFilePath(Utf8ToUnicode(map));
 			winman.getAccTables().addAll( tables );
 		}
 	}
@@ -204,6 +207,8 @@ bool getDirectoryFonts( lString16Collection & pathList, lString16Collection & ex
 bool InitCREngine( const char * exename, lString16Collection & fontDirs )
 {
     CRLog::trace("InitCREngine(%s)", exename);
+
+    crSetSignalHandler();
     for ( int k=0; k<fontDirs.length(); k++ )
         CRLog::trace(" fontDir: %s", LCSTR(fontDirs[k]));
     lString16 appname( exename );
@@ -246,14 +251,14 @@ bool InitCREngine( const char * exename, lString16Collection & fontDirs )
     #if (USE_FREETYPE==1)
         lString16Collection fonts;
         fontDirs.add( fontDir );
+    #ifdef _LINUX
+    #ifndef LBOOK
         static const char * msfonts[] = {
             "arial.ttf", "arialbd.ttf", "ariali.ttf", "arialbi.ttf",
             "cour.ttf", "courbd.ttf", "couri.ttf", "courbi.ttf",
             "times.ttf", "timesbd.ttf", "timesi.ttf", "timesbi.ttf",
             NULL
         };
-    #ifdef _LINUX
-    #ifndef LBOOK
         fontDirs.add("/usr/local/share/crengine/fonts");
         fontDirs.add("/usr/local/share/fonts/truetype/freefont");
         fontDirs.add("/usr/share/crengine/fonts");

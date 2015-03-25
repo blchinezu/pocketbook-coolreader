@@ -1,12 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CR3Skin>
-  <toolbar id="cite-toolbar">
+  <toolbar id="cite-toolbar" size="180, 42">
     <border widths="16,4,4,4"/>
     <button normal="cite_move.png" selected="cite_move_sel.png"/>
     <button normal="cite_grow.png" selected="cite_grow_sel.png"/>
     <button normal="cite_shrink.png" selected="cite_shrink_sel.png"/>
     <button normal="cite_grow_phrase.png" selected="cite_grow_phrase_sel.png"/>
     <button normal="cite_shrink_phrase.png" selected="cite_shrink_phrase_sel.png"/>
+  </toolbar>
+  <toolbar id="links-toolbar-up" size="160,42" pos="0,0">
+    <border widths="16,4,4,4"/>
+    <background color="#FFFFFF"/>
+    <button normal="arrow_left_black.png" disabled="arrow_left_white.png" selected="arrow_left_black_sel.png"/>
+    <button normal="arrow_right_black.png" disabled="arrow_right_white.png" selected="arrow_right_black_sel.png"/>
+    <button normal="toolbar_move_down.png" selected="toolbar_move_down_sel.png"/>
+    <button normal="links_cancel.png" selected="links_cancel_sel.png"/>
+  </toolbar>
+  <toolbar id="links-toolbar-down" base="#links-toolbar-up" pos="0,-42">
+    <override item="3">
+	<button normal="toolbar_move_up.png" selected="toolbar_move_up_sel.png"/>
+    </override>
   </toolbar>
   <scroll id="titlescroll" autohide="true" show-page-numbers="true" location="title"
       pos="-120,0" size="130, 100%" halign="right" valign="center">
@@ -18,15 +31,15 @@
   </scroll>
   <scroll id="menuscroll" autohide="true" show-page-numbers="true" location="status">
       <size minvalue="20,51" maxvalue="0,0"/>
-      <background color="#555555"/>
+      <background color="#000000"/>
       <background color="#FFFFFF" pos="0,0" size="100%,2"/>
       <leftbutton normal="scroll_arrow_left_enabled.png" disabled="scroll_arrow_left_disabled.png"/>
       <rightbutton normal="scroll_arrow_right_enabled.png" disabled="scroll_arrow_right_disabled.png"/>
-      <text color="#555555" face="Liberation Sans, DejaVu Sans" size="22" bold="true" italic="false" valign="center" halign="center"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="22" bold="true" italic="false" valign="center" halign="center"/>
   </scroll>
   <scroll id="sscroll" autohide="true" show-page-numbers="true">
       <size minvalue="20,51" maxvalue="0,0"/>
-      <background color="#555555"/>
+      <background color="#000000"/>
       <background color="#FFFFFF" pos="0,0" size="100%,2"/>
       <leftbutton normal="scroll_arrow_left_enabled.png" disabled="scroll_arrow_left_disabled.png"/>
       <rightbutton normal="scroll_arrow_right_enabled.png" disabled="scroll_arrow_right_disabled.png"/>
@@ -34,12 +47,12 @@
       <upbutton normal="scroll_arrow_up_enabled.png" disabled="scroll_arrow_up_disabled.png"/>
       <downbutton normal="scroll_arrow_down_enabled.png" disabled="scroll_arrow_down_disabled.png"/>
       <vbody frame="scroll_body_vertical.png" slider="scroll_slider_vertical.png"/>
-      <text color="#555555" face="Liberation Sans, DejaVu Sans" size="22" bold="true" italic="false" valign="center" halign="center"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="22" bold="true" italic="false" valign="center" halign="center"/>
       <tab-bottom>
         <background image="tab-h51.png" htransform="split" vtransform="none" valign="top" />
         <size minvalue="100,51" maxvalue="120,51"/>
         <border widths="8,4,8,4"/>
-        <text color="#555555" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="false" valign="center" halign="center"/>
+        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="false" valign="center" halign="center"/>
       </tab-bottom>
       <tab-bottom-active>
         <background image="tab-h51.png" htransform="split" vtransform="none" valign="top" />
@@ -59,13 +72,13 @@
   <scroll id="tabs" base="#menuscroll">
       <border widths="44,0,0,0"/>
       <size minvalue="20,51" maxvalue="0,0"/>
-      <background color="#555555"/>
+      <background color="#000000"/>
       <background color="#FFFFFF" pos="0,0" size="100%,2"/>
       <tab-bottom>
         <background image="tab-h51.png" htransform="split" vtransform="none" valign="top" />
         <size minvalue="100,51" maxvalue="120,51"/>
         <border widths="8,4,8,4"/>
-        <text color="#555555" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="false" valign="center" halign="center"/>
+        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="false" valign="center" halign="center"/>
       </tab-bottom>
       <tab-bottom-active>
         <background image="tab-h51.png" htransform="split" vtransform="none" valign="top" />
@@ -88,7 +101,7 @@
   </scroll>
   <window id="dialog">
         <title base="#title-main" size="100%,40">
-            <background color="#555555"/>
+            <background color="#000000"/>
             <background color="#FFFFFF" pos="0,-4" size="100%,2"/>
             <background color="#FFFFFF" pos="0,-2" size="100%,2"/>
         </title>
@@ -100,8 +113,23 @@
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="false" italic="false" valign="center" halign="center"/>
         </client>
         <scroll base="#titlescroll"/>
+	<closebutton normal="arrow_back.png">
+	    <border widths="6,3,3,3"/>
+	</closebutton>
   </window>
   <window id="dialog-rotated" base="#dialog"/>
+
+  <window id="cite-dialog" base="#dialog">
+    <toolbar1 base="#cite-toolbar" pos="40%, -42"/>
+  </window>
+  <window id="cite-dialog-rotated" base="#cite-dialog"/>
+
+  <window id="links-dialog" base="#dialog">
+    <toolbar1 base="#links-toolbar-up"/>
+    <toolbar2 base="#links-toolbar-down"/>
+  </window>
+  <window id="links-dialog-rotated" base="#links-dialog"/>
+
   <window id="dict" size="100%, 33%">
 		<title>
             <size minvalue="0,40" maxvalue="100%,40"/>
@@ -166,14 +194,14 @@
   
   <menu id="toc" base="#main">
         <title base="#title-main" size="100%,40">
-            <background color="#555555"/>
+            <background color="#000000"/>
             <background color="#FFFFFF" pos="0,-4" size="100%,2"/>
             <background color="#FFFFFF" pos="0,-2" size="100%,2"/>
         </title>
         <status>
             <border widths="4,4,4,4"/>
             <size minvalue="20,51" maxvalue="0,0"/>
-            <background color="#555555"/>
+            <background color="#000000"/>
             <background color="#FFFFFF" pos="0,0" size="100%,2"/>
             <background color="#FFFFFF" pos="0,2" size="100%,2"/>
             <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="18" bold="true" italic="false" valign="center" halign="right" wordwrap="true"/>
@@ -206,7 +234,7 @@
   <menu id="toc-rotated" base="#toc" min-item-count="5" max-item-count="5" show-shortcuts="true" />
   <menu id="vkeyboard" base="#toc" show-shortcuts="false">
         <text color="#000000" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
-        <background color="#555555"/>
+        <background color="#000000"/>
         <border widths="8,4,8,4"/>
         <!--icon image="filename" valign="" halign=""/-->
         <client>
@@ -216,7 +244,7 @@
         <title>
             <size minvalue="0,48" maxvalue="0,0"/>
             <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="26" bold="true" italic="false" valign="center" halign="center"/>
-            <background color="#555555"/>
+            <background color="#000000"/>
             <border widths="4,4,4,4"/>
             <!--icon image="filename" valign="" halign=""-->
         </title>
@@ -252,6 +280,24 @@
   </menu>
   <window id="about" base="#dialog">
   </window>
+  <window id="tapSettings">
+    <title base="#title-main" size="100%,40">
+        <background color="#000000"/>
+        <background color="#FFFFFF" pos="0,-4" size="100%,2"/>
+        <background color="#FFFFFF" pos="0,-2" size="100%,2"/>
+    </title>
+    <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="true" italic="false" valign="center" halign="center"/>
+    <background image="cr3_settings_menu.png" color="#AAAAAA"/>
+    <client>
+        <background color="#FFFFFF"/>
+        <border widths="8,8,8,8"/>
+        <text color="#000000" face="Liberation Sans, DejaVu Sans" size="20" bold="false" italic="false" valign="center" halign="center" wordwrap="true"/>
+    </client>
+    <closebutton normal="arrow_back.png">
+        <border widths="6,3,3,3"/>
+    </closebutton>
+  </window>
+  <window id="tapSettings-rotated" base="#tapSettings"/>
   <menu id="main" min-item-count="8" max-item-count="8" show-shortcuts="false" fullscreen="true" >
         <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="center"/>
         <background color="#AAAAAA"/>
@@ -260,7 +306,7 @@
         <title id="title-main">
             <size minvalue="0,56" maxvalue="0,56"/>
             <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
-            <background color="#555555"/>
+            <background color="#000000"/>
             <background color="#FFFFFF" pos="0,-7" size="100%,2"/>
             <background color="#FFFFFF" pos="0,-5" size="100%,5"/>
             <background color="#999999" pos="-4,-5" size="4,5"/>
@@ -280,7 +326,7 @@
         <status>
             <border widths="8,0,8,0"/>
             <size minvalue="20,51" maxvalue="0,0"/>
-            <background color="#555555"/>
+            <background color="#000000"/>
             <background color="#FFFFFF" pos="0,0" size="100%,2"/>
             <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="18" bold="true" italic="false" valign="center" halign="left" wordwrap="true"/>
         </status>
@@ -316,6 +362,9 @@
             <text color="#FFFFFF" face="Arial Narrow, Arial, DejaVu Sans Condensed, DejaVu Sans" size="34" bold="true" italic="false" valign="center" halign="center"/>
         </selshortcut-->
     <scroll base="#titlescroll"/>
+    <closebutton normal="arrow_back.png">
+        <border widths="6,3,3,3"/>
+    </closebutton>
   </menu>
   <menu id="main-rotated" base="#main" min-item-count="5" max-item-count="5" />
   <menu id="t9input">
@@ -332,7 +381,7 @@
     </client>
     <item>
       <size minvalue="32,32" maxvalue="0,0"/>
-      <text color="#555555" face="Liberation Sans, DejaVu Sans" size="18" bold="false" italic="false" valign="center" halign="left"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="18" bold="false" italic="false" valign="center" halign="left"/>
       <background color="#FFFFFF"/>
       <border widths="1,2,4,2"/>
       <!--icon image="filename" valign="" halign=""-->
@@ -365,10 +414,14 @@
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="true" valign="bottom" halign="left"/>
         </value>
         <item base="#menu-item">
-            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
+            <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="top" halign="left"/>
         </item>
   </menu>
   <menu id="bookmarks-rotated" base="#bookmarks" min-item-count="5" max-item-count="5" />
+  <menu id="recent-books" base="#bookmarks"/>
+  <menu id="recent-books-rotated" base="#bookmarks-rotated"/>
+  <menu id="cites-list" base="#bookmarks"/>
+  <menu id="cites-list-rotated" base="#bookmarks-rotated"/>
   <menu id="settings" base="#main" fullscreen="true">
         <value base="#menu-value">
             <text color="#000000" face="Liberation Sans, DejaVu Sans" size="24" bold="false" italic="true" valign="bottom" halign="right"/>

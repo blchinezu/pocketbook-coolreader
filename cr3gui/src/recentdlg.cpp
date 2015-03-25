@@ -76,21 +76,20 @@ void CRRecentBookMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef ski
 static CRRecentBooksMenu *bmkDialog = NULL;
 
 static imenu _contextMenu[] = {
-	{ITEM_ACTIVE, MCMD_OPEN_RECENT_BOOK, NULL, NULL},
-	{ITEM_ACTIVE, PB_CMD_BOOKMARK_REMOVE, NULL, NULL},
-	{ 0, 0, NULL, NULL }
+    {ITEM_ACTIVE, MCMD_OPEN_RECENT_BOOK, NULL, NULL},
+    {ITEM_ACTIVE, PB_CMD_BOOKMARK_REMOVE, NULL, NULL},
+    { 0, 0, NULL, NULL }
 };
 
 static void handle_contextMenu(int index)
 {
-	bmkDialog->handleContextMenu(index);
+    bmkDialog->handleContextMenu(index);
 }
 
 void CRRecentBooksMenu::showContextMenu()
 {
-	CRRecentBookMenuItem *item = static_cast<CRRecentBookMenuItem *>(getItems()[_selectedItem]);
-	CRMenuSkinRef skin = getSkin();
-	CRRectSkinRef separatorSkin = skin->getSeparatorSkin();
+    CRMenuSkinRef skin = getSkin();
+    CRRectSkinRef separatorSkin = skin->getSeparatorSkin();
     int separatorHeight = 0;
     if ( !separatorSkin.isNull() )
         separatorHeight = separatorSkin->getMinSize().y;
@@ -98,22 +97,23 @@ void CRRecentBooksMenu::showContextMenu()
     lvRect clientRect;
     getClientRect(clientRect);
     lvPoint itemSize = getMaxItemSize();
-        int y = clientRect.top + (itemSize.y + separatorHeight) * (_selectedItem - _topItem) +
-			((itemSize.y + separatorHeight)/4);
-	if (_contextMenu[0].text == NULL) {
-		_contextMenu[0].text = (char *)_("Open book");
-		_contextMenu[1].text = (char *)_("Delete record");
-	}
-	OpenMenu(_contextMenu, MCMD_OPEN_RECENT_BOOK,
-		ScreenWidth()/4, 
-		y, 
-		handle_contextMenu);
+    int y = clientRect.top + (itemSize.y + separatorHeight) * (_selectedItem - _topItem) +
+            ((itemSize.y + separatorHeight)/4);
+    if (_contextMenu[0].text == NULL) {
+        _contextMenu[0].text = (char *)_("Open book");
+        _contextMenu[1].text = (char *)_("Delete record");
+    }
+    OpenMenu(_contextMenu, MCMD_OPEN_RECENT_BOOK,
+             ScreenWidth()/4,
+             y,
+             handle_contextMenu);
 }
 
 void CRRecentBooksMenu::handleContextMenu(int index)
 {
-	_wm->postCommand(index, 0);
-	_wm->processPostedEvents();
+    _wm->postCommand(index, 0);
+    _wm->processPostedEvents();
+    _wm->resetTillUp();
 }
 #endif
 
@@ -135,7 +135,7 @@ CRRecentBooksMenu::CRRecentBooksMenu(CRGUIWindowManager * wm, LVDocView * docvie
     if ( acc.isNull() )
         acc = _wm->getAccTables().get("menu");
     setAccelerators( acc );
-    setSkinName(lString16("#bookmarks"));
+    setSkinName(lString16("#recent-books"), lString16("#bookmarks"));
     lString16 pattern(_("$1 - open book\n$2, $3 - close"));
 #ifdef CR_POCKETBOOK
 	pattern.replaceParam(1, getCommandKeyName( MCMD_SELECT ));
@@ -191,15 +191,15 @@ bool CRRecentBooksMenu::onCommand( int command, int params )
 		closeMenu( 0 );
 		return true;
 	} else if (command == MCMD_SELECT_LONG) {
-		if (_selectedItem >= 0) {
+            if (_selectedItem >= 0) {
 #ifdef CR_POCKETBOOK
-			showContextMenu();
+                showContextMenu();
 #else
-            removeItem( _selectedItem );
-            setDirty();			
+                removeItem( _selectedItem );
+                setDirty();
 #endif
-            return true;
-		}
+                return true;
+            }
 	} else if (command == MCMD_PREV_PAGE) {
 		if (_topItem == 0) {
 			closeMenu(0);
@@ -216,7 +216,12 @@ bool CRRecentBooksMenu::onCommand( int command, int params )
 		return true;
 	}
 #endif
-	return CRMenu::onCommand(command, params);
+    else if ((DCMD_BUTTON_PRESSED == command || DCMD_BUTTON_PRESSED_LONG == command) &&
+            BTN_CLOSE == params) {
+            closeMenu( 0 );
+            return true;
+    }
+    return CRMenu::onCommand(command, params);
     //closeMenu( 0 );
     //return true;
 }

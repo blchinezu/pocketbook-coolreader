@@ -66,6 +66,8 @@ public:
     virtual void limitValueList( const char * propName, const char * values[] );
     /// do validation and corrections
     virtual void limitValueList( const char * propName, int values[], int value_count );
+    /// do validation and corrections
+    virtual void limitValueRange( const char * propName, int defValue, int minValue, int maxValue );
 
     /// get int property by name, returns false if not found
     virtual bool getInt( const char * propName, int &result ) const;

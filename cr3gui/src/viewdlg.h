@@ -51,7 +51,7 @@ public:
 
     void showGoToPercentDialog();
 
-    bool showLinksDialog();
+    bool showLinksDialog(bool backPreffered = false);
     /// returns true if dictionaries found, shows warning window otherwise
     bool hasDictionaries();
 

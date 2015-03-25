@@ -134,7 +134,7 @@ CRTOCDialog::CRTOCDialog( CRGUIWindowManager * wm, lString16 title, int resultCm
     _fullscreen = true;
     _rect = _wm->getScreen()->getRect();
     _caption = title;
-    lvRect clientRect = _skin->getClientRect( _rect );
+    // lvRect clientRect = _skin->getClientRect( _rect );
     lvRect tocRect;
     getClientRect( tocRect );
     tocRect.shrinkBy(borders);

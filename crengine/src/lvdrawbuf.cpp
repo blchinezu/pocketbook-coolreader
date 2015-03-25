@@ -832,9 +832,7 @@ void LVGrayDrawBuf::FillRectPattern( int x0, int y0, int x1, int y1, lUInt32 col
 static const lUInt8 fill_masks1[5] = {0x00, 0x3, 0x0f, 0x3f, 0xff};
 static const lUInt8 fill_masks2[4] = {0x00, 0xc0, 0xf0, 0xfc};
 
-#define INVERT_PRSERVE_GRAYS
-
-#ifdef INVERT_PRSERVE_GRAYS
+#ifdef CR_INVERT_PRSERVE_GRAYS
 static const lUInt8 inverted_bytes[] = {
     0xff, 0xfd, 0xfe, 0xfc, 0xf7, 0xf5, 0xf6, 0xf4, 0xfb, 0xf9, 0xfa, 0xf8, 0xf3, 0xf1,
     0xf2, 0xf0, 0xdf, 0xdd, 0xde, 0xdc, 0xd7, 0xd5, 0xd6, 0xd4, 0xdb, 0xd9, 0xda, 0xd8,
@@ -902,21 +900,28 @@ void LVGrayDrawBuf::InvertRect(int x0, int y0, int x1, int y1)
 			}
 			line += _rowsize;
 		}
-        }
-#if 0
-        else if (_bpp == 4) { // 3, 4, 8
+#ifdef CR_INVERT_PRSERVE_GRAYS
+        } else if (_bpp == 4) {
             lUInt8 * line = GetScanLine(y0);
             for (int y=y0; y<y1; y++) {
                 for (int x=x0; x<x1; x++) {
                     lUInt8 value = line[x];
                     if (value == 0 || value == 0xF0)
-                        line[x] = ~value;
+                        line[x] = ~value & 0xF0;
                 }
                 line += _rowsize;
             }
-        }
+        } else if (_bpp == 8 ) {
+            lUInt8 * line = GetScanLine(y0);
+            for (int y=y0; y<y1; y++) {
+                for (int x=x0; x<x1; x++) {
+                    if (line[x] < 64 || line[x] > 192)
+                        line[x] = ~line[x];
+                }
+                line += _rowsize;
+            }
 #endif
-        else { // 3, 4, 8
+        } else { // 3
             lUInt8 * line = GetScanLine(y0);
             for (int y=y0; y<y1; y++) {
                 for (int x=x0; x<x1; x++)
@@ -2162,6 +2167,14 @@ void LVGrayDrawBuf::DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, 
                             lUInt8 b = *dst & ~(0xC0 >> shift);
                             *dst = (lUInt8)(b | (dithered >> shift));
                         }
+#ifdef CR_POCKETBOOK
+                        else if (_bpp==8)
+                        {
+                            lUInt8 * dst = dst0 + x + xx;
+                            lUInt32 dithered = DitherNBitColor(cl, xx, yy, 4);
+                            *dst = dithered;
+			}
+#endif
                         else
                         {
                             lUInt8 * dst = dst0 + x + xx;
@@ -2213,16 +2226,24 @@ void LVGrayDrawBuf::DrawRescaled(LVDrawBuf * src, int x, int y, int dx, int dy, 
                         else if (_bpp==2)
                         {
                             lUInt8 * dst = dst0 + ((x + xx) >> 2);
-                            int shift = x & 3;
+                            int shift = ((x+xx) & 3) * 2;
                             lUInt32 dithered = Dither2BitColor(cl, xx, yy) << 6;
                             lUInt8 b = *dst & ~(0xC0 >> shift);
-                            *dst = (lUInt8)(b | (dithered >> (shift * 2)));
+                            *dst = b | (dithered >> shift);
                         }
+#ifdef CR_POCKETBOOK
+                        else if (_bpp==8)
+                        {
+                            lUInt8 * dst = dst0 + x + xx;
+                            lUInt32 dithered = DitherNBitColor(cl, xx, yy, 4);
+                            *dst = dithered;
+			}
+#endif
                         else
                         {
                             lUInt8 * dst = dst0 + x + xx;
-                            lUInt32 dithered = DitherNBitColor(cl, xx, yy, _bpp) << (8 - _bpp);
-                            *dst = (lUInt8)dithered;
+                            lUInt32 dithered = DitherNBitColor(cl, xx, yy, _bpp); // << (8 - _bpp);
+                            *dst = dithered;
                         }
                     }
                 }

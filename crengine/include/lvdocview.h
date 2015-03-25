@@ -23,7 +23,6 @@
 #include "lvdocviewcmd.h"
 #include "lvdocviewprops.h"
 
-
 const lChar16 * getDocFormatName( doc_format_t fmt );
 
 /// text format import options
@@ -193,7 +192,6 @@ public:
 };
 
 
-
 /// document view mode: pages/scroll
 enum LVDocViewMode
 {
@@ -226,9 +224,16 @@ enum {
     PGHDR_CLOCK=16,
     PGHDR_BATTERY=32,
     PGHDR_CHAPTER_MARKS=64,
-    PGHDR_PERCENT=128
+    PGHDR_PERCENT=128,
+    PGHDR_CHAPTER_PAGE_REM=256
 };
 
+/// page header font sizes
+enum {
+    MIN_STATUS_FONT_SIZE = 8,
+    MAX_STATUS_FONT_SIZE = 32,
+    DEF_STATUS_FONT_SIZE = 22
+};
 
 //typedef lUInt64 LVPosBookmark;
 
@@ -243,6 +248,7 @@ typedef LVArray<int> LVBookMarkPercentInfo;
 
     Supports scroll view of document.
 */
+
 class LVDocView : public CacheLoadingCallback
 {
     friend class LVDrawThread;
@@ -335,7 +341,8 @@ private:
 
 
     lString8 m_defaultFontFace;
-	lString8 m_statusFontFace;
+    lString8 m_statusFontFace;
+    int m_statusFontEmbolden;
     ldomNavigationHistory _navigationHistory;
 
     doc_format_t m_doc_format;
@@ -375,6 +382,8 @@ private:
     void insertBookmarkPercentInfo(int start_page, int end_y, int percent);
 
     void updateDocStyleSheet();
+    //serg
+    void addBounds( ldomNode * lsection, int fh, lUInt16 section_id );
 
 protected:
 
@@ -400,7 +409,8 @@ public:
     /// get screen rectangle for specified cursor position, returns false if not visible
     bool getCursorRect( ldomXPointer ptr, lvRect & rc, bool scrollToCursor = false );
     /// set status bar and clock mode
-    void setStatusMode( int newMode, bool showClock, bool showTitle, bool showBattery, bool showChapterMarks, bool showPercent, bool showPageNumber, bool showPageCount );
+    void setStatusMode( int newMode, bool showClock, bool showTitle, bool showBattery, bool showChapterMarks,
+                       bool showPercent, bool showPageNumber, bool showPageCount, bool showChapterPagesRemain );
     /// draw to specified buffer by either Y pos or page number (unused param should be -1)
     void Draw( LVDrawBuf & drawbuf, int pageTopPosition, int pageNumber, bool rotate, bool autoresize = true);
     /// ensure current position is set to current bookmark value
@@ -570,6 +580,10 @@ public:
     lString8 getStatusFontFace() { return m_statusFontFace; }
     /// set status bar font face
     void setStatusFontFace( const lString8 & newFace );
+    /// get status bar font weight
+    int getStatusFontEmbolden() { return m_statusFontEmbolden; }
+    /// set status bar font weight
+    void setStatusFontEmbolden( int addWidth );
     /// invalidate formatted data, request render
     void requestRender();
     /// invalidate document data, request reload
@@ -689,7 +703,6 @@ public:
     void setTextColor( lUInt32 cl )
     {
         m_textColor = cl;
-        m_props->setColor(PROP_FONT_COLOR, cl);
         clearImageCache();
     }
 
@@ -854,7 +867,7 @@ public:
     bool LoadDocument( const lChar16 * fname );
     /// load document from stream
     bool LoadDocument( LVStreamRef stream );
-
+    bool LoadFb2Document( LVStreamRef stream );
     /// save last file position
     void savePosition();
     /// restore last file position
@@ -871,7 +884,6 @@ public:
         m_props->setInt(PROP_MIN_FILE_SIZE_TO_CACHE, size);
     }
 #endif
-
     /// render (format) document
     void Render( int dx=0, int dy=0, LVRendPageList * pages=NULL );
     /// set properties before rendering

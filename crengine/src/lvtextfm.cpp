@@ -1,4 +1,4 @@
-﻿/*******************************************************
+/*******************************************************
 
    CoolReader Engine C-compatible API
 
@@ -1337,6 +1337,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     }
                 }
             }
+#endif
             if (bookmarks!=NULL && bookmarks->length()>0) {
                 lvRect lineRect( frmline->x, frmline->y, frmline->x + frmline->width, frmline->y + frmline->height );
                 for ( int i=0; i<bookmarks->length(); i++ ) {
@@ -1349,20 +1350,7 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     }
                 }
             }
-#endif
-#ifdef CR_USE_INVERT_FOR_SELECTION_MARKS
-            // process bookmarks
-            if ( bookmarks != NULL && bookmarks->length() > 0 ) {
-                lvRect lineRect( frmline->x, frmline->y, frmline->x + frmline->width, frmline->y + frmline->height );
-                for ( int i=0; i<bookmarks->length(); i++ ) {
-                    lvRect bookmark_rc;
-                    ldomMarkedRange * range = bookmarks->get(i);
-                    if ( range->intersects( lineRect, bookmark_rc ) ) {
-                        buf->FillRect( bookmark_rc.left + x, bookmark_rc.top + y, bookmark_rc.right + x, bookmark_rc.bottom + y, 0xAAAAAA );
-                    }
-                }
-            }
-#endif
+
             for (j=0; j<frmline->word_count; j++)
             {
                 word = &frmline->words[j];
@@ -1432,7 +1420,24 @@ void LFormattedText::Draw( LVDrawBuf * buf, int x, int y, ldomMarkedRangeList * 
                     lvRect mark;
                     ldomMarkedRange * range = marks->get(i);
                     if ( range->intersects( lineRect, mark ) ) {
-						buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+#ifdef CR_USE_UNDERLINE_FOR_SELECTION
+                        buf->InvertRect( mark.left + x, mark.bottom + y - 2, mark.right + x, mark.bottom + y + 1);
+#else
+#ifdef CR_INVERT_PRSERVE_GRAYS
+                        if (buf->GetBitsPerPixel() > 2) {
+				buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+				buf->InvertRect( mark.left + x + 2, mark.top + y + 2, mark.right + x -2 , mark.bottom + y - 2);
+/*                            lvRect markRc(mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+                            if (markRc.left - 2 > clip.left)
+                                markRc.left -=1;
+                            markRc.left -=1;
+                            if (markRc.right + 2 < clip.right)
+                                markRc.right += 2; // This is some magic :)
+                            buf->Rect( markRc, 2, buf->GetTextColor()); */
+                        } else
+#endif /* CR_INVERT_PRSERVE_GRAYS */
+                            buf->InvertRect( mark.left + x, mark.top + y, mark.right + x, mark.bottom + y);
+#endif /* CR_USE_UNDERLINE_FOR_SELECTION */
                     }
                 }
             }

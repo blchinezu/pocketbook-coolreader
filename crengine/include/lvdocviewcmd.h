@@ -35,6 +35,7 @@ enum LVDocCmd
     DCMD_SCROLL_BY, // scroll by N pixels, for Scroll view mode only
     DCMD_REQUEST_RENDER, // invalidate rendered data
     DCMD_GO_PAGE_DONT_SAVE_HISTORY,
+    DCMD_REFRESH_PAGE,
     DCMD_SET_INTERNAL_STYLES, // set internal styles option
 
     // selection by sentences
@@ -49,6 +50,9 @@ enum LVDocCmd
     // 137
     DCMD_SET_DOC_FONTS, // set embedded fonts option (1=enabled, 0=disabled)
 
+    DCMD_BUTTON_PRESSED,
+    DCMD_BUTTON_PRESSED_LONG,
+    DCMD_LINK_LAST,
 
     //=======================================
     DCMD_EDIT_CURSOR_LEFT,

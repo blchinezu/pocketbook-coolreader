@@ -237,6 +237,7 @@ public:
     ~CRGUIAcceleratorTableList() { }
     /// reads definitions from files
     bool openFromFile( const char  * defFile, const char * mapFile );
+    bool openFromStream( LVStreamRef defStream, LVStreamRef mapStream);
 };
 
 class CRKeyboardLayout
@@ -322,11 +323,21 @@ enum CRGUIEventType {
     CREV_KEYDOWN = 1,
     CREV_KEYUP,
     CREV_COMMAND,
+    CREV_TOUCH,
 
     CREV_WM_EVENTS_START=100,
     CREV_UPDATE = 100,
     CREV_RESIZE
 
+};
+
+
+enum CRGUITouchEventType {
+    CRTOUCH_DOWN = 1,
+    CRTOUCH_DOWN_LONG,
+    CRTOUCH_DOUBLE,
+    CRTOUCH_MOVE,
+    CRTOUCH_UP
 };
 
 class CRGUIWindow;
@@ -393,6 +404,7 @@ class CRGUIScreen
         virtual void flush( bool full ) = 0;
         /// invalidates rectangle: add it to bounding box of next partial update
         virtual void invalidateRect( const lvRect & rc ) { }
+        virtual bool isTouchSupported() { return false; }
         virtual ~CRGUIScreen() { }
 };
 
@@ -427,6 +439,10 @@ class CRGUIWindow
         virtual CRGUIAcceleratorTableRef getAccelerators() { return CRGUIAcceleratorTableRef(); }
         /// returns true if key is processed
         virtual bool onKeyPressed( int key, int flags = 0 ) = 0;
+        /// returns true if event is processed
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType ) = 0;
+        /// returns true if event is processed
+        virtual bool onTouchEvent(int x, int y, CRGUITouchEventType evType) = 0;
         /// returns true if command is processed
         virtual bool onCommand( int command, int params = 0 ) = 0;
         /// returns true if window is visible
@@ -476,10 +492,18 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         int _lastProgressPercent;
         CRSkinRef _skin;
         CRGUIAcceleratorTableList _accTables;
-		CRKeyboardLayoutList _kbLayouts;
+        CRGUIAcceleratorTableList _skinAccTables;
+        CRKeyboardLayoutList _kbLayouts;
+        CRSkinList _skins;
         cr_rotate_angle_t _orientation;
         LVRefVec<LVImageSource> m_batteryIcons;
         bool _stopFlag;
+        bool _ignoreTillUp;
+        lString16 _keymapFilePath;
+        lString16 _skinFilePath;
+
+        void reconfigureWindows(int flags);
+        void loadSkinKeymaps();
     public:
         /// forward events from system queue to application queue
         virtual void forwardSystemEvents( bool waitForEvent ) { }
@@ -528,6 +552,10 @@ class CRGUIWindowManager : public CRGUIStringTranslator
 		virtual CRKeyboardLayoutList & getKeyboardLayouts() { return _kbLayouts; }
         /// returns accelerator table list
         virtual CRGUIAcceleratorTableList & getAccTables() { return _accTables; }
+        /// returns accelerator table list from current skin
+        CRGUIAcceleratorTableList & getSkinAccTables() { return _skinAccTables; }
+        /// returns skins list
+        virtual CRSkinList & getSkinList() { return _skins; }
         /// return battery status
         virtual bool getBatteryStatus( int & percent, bool & charging )
         {
@@ -535,7 +563,9 @@ class CRGUIWindowManager : public CRGUIStringTranslator
             percent = 0; charging = false; return false;
         }
         /// set skin
-        virtual void setSkin( CRSkinRef skin ) { _skin = skin; }
+        virtual void setSkin( CRSkinRef skin );
+        /// set skin using its name
+        virtual bool setSkin( lString16 name );
         /// returns currently selected skin
         virtual CRSkinRef getSkin() { return _skin; }
         /// sets another i18n translator
@@ -572,6 +602,9 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         }
         /// returns true if key is processed
         virtual bool onKeyPressed( int key, int flags = 0 );
+
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType );
+
         /// returns top visible window
         CRGUIWindow * getTopVisibleWindow()
         {
@@ -621,6 +654,7 @@ class CRGUIWindowManager : public CRGUIStringTranslator
         ,_lastProgressPercent(-1)
         ,_orientation(CR_ROTATE_ANGLE_0)
         ,_stopFlag(false)
+        ,_ignoreTillUp(false)
         {
         }
         virtual void closeAllWindows()
@@ -636,7 +670,15 @@ class CRGUIWindowManager : public CRGUIStringTranslator
             if ( _ownScreen )
                 delete _screen;
         }
+        lString16 getKeymapFilePath() { return _keymapFilePath; }
+        void setKeymapFilePath(lString16 keymapPath) { _keymapFilePath = keymapPath; }
+        lString16 getSkinFilePath() { return _skinFilePath; }
+        void setSkinFilePath(lString16 skinPath) { _skinFilePath = skinPath; }
+        /// call when long tap processed and it is known touch up event will not arrive
+        void resetTillUp() { _ignoreTillUp = false; }
 };
+
+class CRGUIControl;
 
 /// Window base implementation
 class CRGUIWindowBase : public CRGUIWindow
@@ -653,17 +695,22 @@ class CRGUIWindowBase : public CRGUIWindow
         int _pages;
         CRGUIAcceleratorTableRef _acceleratorTable;
         lString16 _skinName;
+        lString16 _baseSkinName;
         lString16 _scrollLabel;
         lString16 _caption;
         lString16 _statusText;
         lString16 _inputText;
         LVImageSourceRef _icon; // window title icon
-        // draws frame, title, status and client
-        virtual void draw();
+        LVPtrVector<CRGUIControl> _controls;
+        bool _controlsCreated;
+        bool _sortZorder;
+        CRGUIControl *_selectedControl;
+        CRWindowSkinRef _skin;
 
+        /// draws frame, title, status and client
+        virtual void draw();
         /// use to override status text
         virtual lString16 getStatusText() { return _statusText; }
-
         /// draw status bar using current skin, with optional status text and scroll/tab/page indicator
         virtual void drawStatusBar();
         /// draw status text
@@ -674,17 +721,10 @@ class CRGUIWindowBase : public CRGUIWindow
         virtual void drawInputBox();
         /// draw title bar using current skin, with optional scroll/tab/page indicator
         virtual void drawClient();
-
-        /// calculates title rectangle for window rectangle
-        virtual bool getTitleRect( lvRect & rc );
-        /// calculates status rectangle for window rectangle
-        virtual bool getStatusRect( lvRect & rc );
-        /// calculates client rectangle for window rectangle
-        virtual bool getClientRect( lvRect & rc );
-        /// calculates input box rectangle for window rectangle
-        virtual bool getInputRect( lvRect & rc );
-        /// calculates scroll rectangle for window rectangle
-        virtual bool getScrollRect( lvRect & rc );
+        /// draw scroll bar using current skin
+        virtual void drawScroll(CRScrollSkinRef sskin, lvRect scrollRc, bool vertical, int pos, int maxpos, int pagesize);
+        /// calculates tap zone [1-9] corresponding to given coordinates
+        int getTapZone(int x, int y, CRPropRef props);
     public:
         /// use to override status text
         virtual void setStatusText( lString16 s ) { _statusText = s; }
@@ -699,13 +739,33 @@ class CRGUIWindowBase : public CRGUIWindow
         /// called on system configuration change: screen size and orientation
         virtual void reconfigure( int flags );
         /// sets skin name for window
-        virtual void setSkinName( const lString16  & skin ) { _skinName = skin; }
+        virtual void setSkinName( const lString16  & skin );
+        /// sets skin name for window, if a skin doesn't exist set name to the baseSkin
+        virtual void setSkinName( const lString16  & skin, const lString16 & baseSkin );
+        /// returns skin of this window
+        CRWindowSkinRef getSkin();
         /// returns skin name for window
         virtual lString16 getSkinName() { return _skinName; }
         /// returns true if command is processed
         virtual bool onCommand( int command, int params = 0 ) { return !_passCommandsToParent; }
         /// returns true if key is processed (by default, let's translate key to command using accelerator table)
         virtual bool onKeyPressed( int key, int flags = 0 );
+        virtual bool onTouch( int x, int y, CRGUITouchEventType evType );
+        virtual bool onTouchEvent(int x, int y, CRGUITouchEventType evType);
+        virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType )
+        {
+            return false;
+        }
+        /// calculates title rectangle for window rectangle
+        virtual bool getTitleRect( lvRect & rc );
+        /// calculates status rectangle for window rectangle
+        virtual bool getStatusRect( lvRect & rc );
+        /// calculates client rectangle for window rectangle
+        virtual bool getClientRect( lvRect & rc );
+        /// calculates input box rectangle for window rectangle
+        virtual bool getInputRect( lvRect & rc );
+        /// calculates scroll rectangle for window rectangle
+        virtual bool getScrollRect( lvRect & rc );
         /// set accelerator table for window
         virtual void setAccelerators( CRGUIAcceleratorTableRef table ) { _acceleratorTable = table; }
         /// get window accelerator table
@@ -729,15 +789,35 @@ class CRGUIWindowBase : public CRGUIWindow
         /// set fullscreen state for window
         virtual void setFullscreen( bool fullscreen ) { _fullscreen = fullscreen; }
         virtual CRGUIWindowManager * getWindowManager() { return _wm; }
+        void addControl(CRGUIControl *control);
+        void invalidateControls();
+        virtual bool isScrollEnabled(bool down) { return false; }
         CRGUIWindowBase( CRGUIWindowManager * wm )
         : _wm(wm), _visible(true), _fullscreen(true), _dirty(true), _passKeysToParent(false), _passCommandsToParent(false)
-        , _page(0), _pages(0)
+        , _page(0), _pages(0), _controlsCreated(false), _sortZorder(true), _selectedControl(0)
         {
             // fullscreen visible by default
             _rect = _wm->getScreen()->getRect();
             //_statusText = "Sample status text";
         }
         virtual ~CRGUIWindowBase() { }
+};
+
+class CRGUIControl
+{
+protected:
+    CRGUIWindowBase *_parent;
+    lvRect _rect;
+    int _zOrder;
+public:
+    CRGUIControl(CRGUIWindowBase *parent, lvRect rc, int zOrder = 0)
+        : _parent(parent), _rect(rc), _zOrder(zOrder) {}
+    virtual bool hitTest(lvPoint &pt) { return _rect.isPointInside(pt); }
+    virtual bool onTouch(CRGUITouchEventType evType) { return false; }
+    virtual bool setSelected(bool selected) { return false; }
+    virtual bool isEnabled() const { return true; }
+    int getZorder() const { return _zOrder; }
+    virtual ~CRGUIControl() {}
 };
 
 /// Base Screen class implementation
@@ -911,7 +991,6 @@ class CRDocViewWindow : public CRGUIWindowBase
 {
     protected:
         LVDocView * _docview;
-	    CRWindowSkinRef _skin;
         virtual void draw();
     public:
         LVDocView * getDocView()
@@ -943,6 +1022,14 @@ class CRDocViewWindow : public CRGUIWindowBase
         virtual bool isDirty()
         {
             return _dirty || !_docview->isPageImageReady( 0 );
+        }
+
+        virtual bool isScrollEnabled(bool down)
+        {
+            if (down)
+                return _docview->getCurPage() < _docview->getPageCount();
+            else
+                return _docview->getCurPage() != 0;
         }
 };
 
@@ -986,7 +1073,11 @@ enum CRMenuControlCmd {
     MCMD_NEXT_PAGE,
     MCMD_PREV_PAGE,
     MCMD_SELECT,
-    MCMD_SELECT_LONG
+    MCMD_SELECT_LONG,
+    MCMD_SCROLL_LEFT,
+    MCMD_SCROLL_RIGHT,
+    MCMD_SCROLL_LEFT_LONG,
+    MCMD_SCROLL_RIGHT_LONG
 };
 
 enum CRGUICmd {
@@ -1030,6 +1121,8 @@ class CRMenuItem
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
         /// returns true if submenu
         virtual bool isSubmenu() const { return false; }
+        /// returns true if main menu
+        virtual bool isMainMenu() const { return false; }
         /// called on item selection
         virtual int onSelect() { return 0; }
         virtual ~CRMenuItem() { }
@@ -1045,8 +1138,6 @@ class CRMenuItem
 
 /// CRGUI menu base class
 class CRMenu : public CRGUIWindowBase, public CRMenuItem {
-	private:
-		void doCloseMenu(int command, bool highlight = false, int param = 0);
     protected:
         LVPtrVector<CRMenuItem> _items;
         CRPropRef _props;
@@ -1064,18 +1155,18 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
         //virtual void Draw( LVDrawBuf & buf, int x, int y );
         virtual void highlightCommandItem( int cmd );
-		virtual bool onItemSelect(int command, int params = 0 );
-		int getLastOnPage();
+        virtual bool onItemSelect(int command, int params = 0 );
+        int getLastOnPage();
+        void doCloseMenu(int command, bool highlight = false, int param = 0);
     public:
         /// returns index of selected item, -1 if no item selected
         virtual int getSelectedItemIndex();
-        virtual int getDefaultSelectionIndex() 
-        {
+        virtual int getDefaultSelectionIndex() {
 #ifdef CR_POCKETBOOK
-			if (getProps().isNull())
-				return 0;
+            if ( getProps().isNull() && getItems().length() > 0 )
+                return 0;
 #endif
-			return -1; 
+            return -1;
         }
         virtual void activated();
         virtual void drawClient();
@@ -1090,6 +1181,7 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         _cmdToHighlight(-1)
         { _fullscreen = false; _helpHeight=0; }
         virtual bool isSubmenu() const { return true; }
+        virtual bool isMainMenu() const { return ( _menu==NULL ); }
         LVPtrVector<CRMenuItem> & getItems() { return _items; }
         CRPropRef getProps() const { return _props; }
         lString16 getPropName() const { return _propName; }
@@ -1113,7 +1205,7 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual int getPageCount();
         /// returns true if current page is changed
         virtual bool setCurPage( int nPage );
-		virtual void setCurItem(int nItem);
+        virtual void setCurItem(int nItem);
         virtual int getCurPage( );
         virtual int getTopItem();
         virtual lString16 getSubmenuValue();
@@ -1136,6 +1228,279 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         /// closes menu and its submenus
         virtual void destroyMenu();
         virtual void covered() { _pageUpdate = true; }
+        virtual void reactivated() { _pageUpdate = true; }
+        virtual bool isScrollEnabled(bool downScroll)
+        {
+            if (downScroll)
+                return (_topItem + _pageItems < (int)_items.length());
+            return (_topItem > 0);
+        }
+};
+
+class CRToolBar;
+
+class CRToolButton
+{
+public:
+    CRToolButton(CRToolBar *toolbar, int id, lString16 label, int command, int param = 0,
+                 int paramLong=-1, int commandLong=DCMD_BUTTON_PRESSED_LONG) :
+        m_toolbar(toolbar), m_id(id), m_command(command), m_param(param),
+        m_commandLong(commandLong), m_paramLong(paramLong),
+        m_label(label), m_enabled(true) {}
+    virtual ~CRToolButton() { }
+    bool isEnabled() { return m_enabled; }
+    bool setEnabled(bool value) { m_enabled = value; return true; }
+    inline int getCommand(bool longPress=false)
+    {
+        if (longPress)
+            return m_commandLong;
+        return m_command;
+    }
+    inline int getParam(bool longPress=false)
+    {
+        if (longPress)
+            return m_paramLong;
+        return m_param;
+    }
+    inline int getId() { return m_id; }
+private:
+    CRToolBar *m_toolbar;
+    int m_id;
+    int m_command;
+    int m_param;
+    int m_commandLong;
+    int m_paramLong;
+    lString16 m_label;
+    LVImageSourceRef m_image;
+    bool m_enabled;
+};
+
+class CRToolBar
+{
+public:
+    CRToolBar(CRGUIWindowBase *window, lString16 id, CRToolBarSkinRef tbskin, bool active = true);
+    virtual ~CRToolBar() { }
+    void addButton( CRToolButton * button )
+    {
+        m_buttons.add( button );
+    }
+    virtual bool init(lString16 id);
+    virtual void initDefault() {}
+    void init()
+    {
+        m_buttons.clear();
+        if ( !init(m_id) )
+            initDefault();
+    }
+    LVPtrVector<CRToolButton> & getButtons() { return m_buttons; }
+    bool selectFirstButton();
+    bool selectLastButton();
+    bool selectNextButton(bool wrapAround = true);
+    bool selectPrevButton(bool wrapAround = true);
+    bool selectButton(int index);
+    bool isEnabled(int index);
+    bool setEnabled(int index, bool value);
+    bool isActive() { return m_active; }
+    bool setActive( bool value );
+    inline int getButtonsCount() { return m_buttons.length(); }
+    int getCurrentButtonIndex();
+    CRToolButton * getCurrentButton();
+    bool getRect( lvRect & rc );
+    bool getRect( lvRect & rc, const lvRect & baseRect )
+    {
+        if ( !_tbSkin.isNull() )
+            return _tbSkin->getRect( rc, baseRect );
+        return false;
+    }
+    void draw( LVDrawBuf & buf, const lvRect & rc)
+    {
+        draw( _tbSkin, buf, rc );
+    }
+    void draw()
+    {
+        lvRect rc;
+
+        if ( getRect(rc) ) {
+            LVDrawBuf & buf = *m_window->getWindowManager()->getScreen()->getCanvas();
+            draw( _tbSkin, buf, rc );
+        }
+    }
+    void setSkin(CRToolBarSkinRef tbskin)
+    {
+        _tbSkin = tbskin;
+        _controlsCreated = false;
+        m_window->reconfigure(0);
+        init();
+    }
+    void draw(CRToolBarSkinRef tbskin, LVDrawBuf & buf, const lvRect & rect);
+    void controlRemoved()
+    {
+        _controlsCreated = false;
+    }
+    /// returns index of button having specified command and param properties
+    int findButton(int command, int param);
+protected:
+    LVPtrVector<CRToolButton> m_buttons;
+private:
+    bool selectButton(int from, int delta);
+
+    CRGUIWindowBase *m_window;
+    int m_currentButton;
+    bool m_active;
+    bool _controlsCreated;
+    lString16 m_id;
+    CRToolBarSkinRef _tbSkin;
+};
+
+class CRMenuItemControl : public CRGUIControl
+{
+private:
+    int _id;
+public:
+    CRMenuItemControl(CRMenu *parent, lvRect rc, int id) : CRGUIControl(parent, rc, 2), _id(id) {}
+    virtual bool onTouch(CRGUITouchEventType evType)
+    {
+        if (CRTOUCH_UP == evType) {
+            _parent->getWindowManager()->postCommand(MCMD_SELECT, 0);
+        } else if (CRTOUCH_DOWN_LONG == evType) {
+            _parent->getWindowManager()->postCommand(MCMD_SELECT_LONG, 0);
+        }
+        return false;
+    }
+
+    virtual bool setSelected(bool selected)
+    {
+        if (selected) {
+            ((CRMenu *) _parent)->setCurItem(((CRMenu *) _parent)->getTopItem() + _id);
+            return _parent->isDirty();
+        }
+        return false;
+    }
+};
+
+class CRCommandControl : public CRGUIControl
+{
+protected:
+    int _command;
+    int _param;
+public:
+    CRCommandControl(CRGUIWindowBase *parent, lvRect rc, int cmd, int param) : CRGUIControl(parent, rc, 1),
+        _command(cmd), _param(param) {}
+    virtual bool onTouch(CRGUITouchEventType evType)
+    {
+        if (CRTOUCH_UP == evType || CRTOUCH_DOWN_LONG == evType) {
+            _parent->getWindowManager()->postCommand(_command, _param);
+            if (CRTOUCH_UP == evType)
+                return setSelected(CRTOUCH_DOWN_LONG == evType);
+        }
+        return false;
+    }
+    virtual bool setSelected(bool selected)
+    {
+        return false;
+    }
+};
+
+enum CRGuiButtons {
+    BTN_CLOSE = -1,
+    BTN_SCROLL_DOWN = -2,
+    BTN_SCROLL_UP = -3
+};
+
+class CRButtonControl : public CRGUIControl
+{
+protected:
+    CRButtonSkinRef _btnSkin;
+    bool _selected;
+    int  _command;
+    int  _param;
+    int  _commandLong;
+    int  _paramLong;
+    int _btnId;
+public:
+    CRButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, int id, int command, int param = -1,
+                    int paramLong = -1, int commandLong = DCMD_BUTTON_PRESSED_LONG)
+        : CRGUIControl(parent, rc, 2),
+        _btnSkin(skin), _selected(false), _command(command), _param(param),
+        _commandLong(commandLong), _paramLong(paramLong), _btnId(id) {}
+    virtual bool onTouch(CRGUITouchEventType evType)
+    {
+        switch (evType) {
+        case CRTOUCH_UP:
+            if ( _command == DCMD_BUTTON_PRESSED && _param==-1 )
+                _parent->getWindowManager()->postCommand(_command, _btnId);
+            else
+                _parent->getWindowManager()->postCommand(_command, _param);
+            return setSelected(false);
+        case CRTOUCH_DOWN_LONG:
+            if ( _commandLong == DCMD_BUTTON_PRESSED_LONG && _paramLong==-1 )
+                _parent->getWindowManager()->postCommand(DCMD_BUTTON_PRESSED_LONG, _btnId);
+            else
+                _parent->getWindowManager()->postCommand(_commandLong, _paramLong);
+            // fallthrough - return false;
+        default:
+            ;
+        }
+        return false;
+    }
+    virtual bool setSelected(bool selected)
+    {
+        if (selected != _selected) {
+            LVDrawBuf & buf = *_parent->getWindowManager()->getScreen()->getCanvas();
+            int flags = selected ? CRButtonSkin::ENABLED|CRButtonSkin::PRESSED : CRButtonSkin::ENABLED;
+            _btnSkin->drawButton(buf, _rect, flags);
+            return true;
+        }
+        return false;
+    }
+};
+
+class CRScrollButtonControl : public CRButtonControl
+{
+protected:
+    bool _down;
+public:
+    CRScrollButtonControl(CRGUIWindowBase *parent, lvRect rc, CRButtonSkinRef skin, bool down) :
+        CRButtonControl(parent, rc, skin, down ? BTN_SCROLL_DOWN : BTN_SCROLL_UP, DCMD_BUTTON_PRESSED),
+        _down(down) {}
+    virtual bool isEnabled() { return _parent->isScrollEnabled(_down); }
+};
+
+class CRToolBarControl : public CRGUIControl
+{
+protected:
+    int m_touchIndex;
+    LVPtrVector<CRButtonControl> m_buttons;
+public:
+    CRToolBarControl(CRGUIWindowBase *parent, CRToolBar *toolbar, lvRect rc) : CRGUIControl(parent, rc, 3),
+        m_toolbar(toolbar) {}
+    void addButton( CRButtonControl * button );
+    virtual bool hitTest(lvPoint &pt);
+    virtual bool onTouch(CRGUITouchEventType evType);
+    virtual bool setSelected(bool selected);
+    virtual ~CRToolBarControl()
+    {
+        m_toolbar->controlRemoved();
+    }
+private:
+    CRToolBar *m_toolbar;
+};
+
+class CRClientControl : public CRGUIControl
+{
+protected:
+    lvPoint _touchPt;
+public:
+    CRClientControl(CRGUIWindowBase *parent, lvRect rc) : CRGUIControl(parent, rc) {}
+    virtual bool hitTest(lvPoint &pt)
+    {
+        _touchPt = pt;
+        return CRGUIControl::hitTest(pt);
+    }
+    virtual bool onTouch(CRGUITouchEventType evType)
+    {
+        return _parent->onClientTouch(_touchPt, evType);
+    }
 };
 
 class CRGUIUpdateEvent : public CRGUIEvent
@@ -1209,5 +1574,20 @@ public:
     virtual bool isForVisibleOnly() { return true; }
 };
 
+class CRGUITouchEvent : public CRGUIEvent
+{
+    CRGUITouchEventType _type;
+public:
+    CRGUITouchEvent( int x, int y, CRGUITouchEventType evType )
+        : CRGUIEvent( CREV_TOUCH )
+    {
+        _param1 = x;
+        _param2 = y;
+        _type = evType;
+    }
+    virtual bool handle( CRGUIWindow * window );
+    virtual bool handle( CRGUIWindowManager * wm ) { return false; }
+    virtual bool isForVisibleOnly() { return true; }
+};
 
 #endif// CR_GUI_INCLUDED

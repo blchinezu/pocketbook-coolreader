@@ -303,10 +303,10 @@ public:
     LVImageSourceRef getImage(int flags = ENABLED);
     CRButtonSkin();
     virtual ~CRButtonSkin() { 
-		CRLog::trace("~CRButtonSkin()");
-	}
+        CRLog::trace("~CRButtonSkin()");
+    }
 };
-typedef LVFastRef<CRButtonSkin> CRButtonSkinRef;
+typedef LVRef<CRButtonSkin> CRButtonSkinRef;
 
 
 class CRScrollSkin : public CRRectSkin
@@ -336,7 +336,6 @@ protected:
 
 public:
 
-
     Location getLocation() { return _location; }
     void setLocation( Location location ) { _location = location; }
     CRRectSkinRef getBottomTabSkin() { return _bottomTabSkin; }
@@ -365,7 +364,6 @@ public:
     void setAutohide( bool flgAutoHide ) { _autohide = flgAutoHide; }
     bool getShowPageNumbers() { return _showPageNumbers; }
     void setShowPageNumbers( bool flg ) { _showPageNumbers = flg; }
-    virtual void drawScroll( LVDrawBuf & buf, const lvRect & rc, bool vertical, int pos, int maxpos, int pagesize );
     virtual void drawGauge( LVDrawBuf & buf, const lvRect & rc, int percent );
     CRScrollSkin();
     virtual ~CRScrollSkin() { }
@@ -380,11 +378,19 @@ public:
     void add( LVRef<CRButtonSkin> button ) { _list.add( button ); }
     void add( CRButtonList & list ) { _list.add( list._list ); }
     int length() { return _list.length(); }
-    LVRef<CRButtonSkin> get(int index) { return (index >= 0 && index < _list.length()) ? _list[index] : LVRef<CRButtonSkin>(); }
+    CRButtonSkinRef get(int index) { return (index >= 0 && index < _list.length()) ? _list[index] : LVRef<CRButtonSkin>(); }
+    bool set(int index, LVRef<CRButtonSkin> button)
+    {
+        if ( index>=0 && index<_list.length() ) {
+            _list.set(index, button);
+            return true;
+        }
+        return false;
+    }
     CRButtonList() { }
     virtual ~CRButtonList() {
-		CRLog::trace("~CRButtonList();");
-	}
+        CRLog::trace("~CRButtonList();");
+    }
 };
 typedef LVRef<CRButtonList> CRButtonListRef;
 
@@ -401,8 +407,8 @@ public:
     CRButtonListRef getButtons() { return _buttons; }
     void setButtons(CRButtonListRef list) { _buttons = list; }
     virtual void drawToolBar( LVDrawBuf & buf, const lvRect & rc, bool enabled, int selectedButton );
-    virtual void drawButton(LVDrawBuf & buf, const lvRect & rc, int index, int flags);
 };
+
 typedef LVFastRef<CRToolBarSkin> CRToolBarSkinRef;
 
 class CRWindowSkin : public CRRectSkin
@@ -414,6 +420,9 @@ protected:
     CRRectSkinRef _statusSkin;
     CRRectSkinRef _inputSkin;
     CRScrollSkinRef _scrollSkin;
+    CRToolBarSkinRef _toolbar1;
+    CRToolBarSkinRef _toolBar2;
+    CRButtonSkinRef _closebutton;
     bool _fullscreen;
 public:
     bool getFullScreen() { return _fullscreen; }
@@ -436,6 +445,12 @@ public:
     virtual void setStatusSkin( CRRectSkinRef skin ) { _statusSkin = skin; }
     virtual CRRectSkinRef getInputSkin() { return _inputSkin; }
     virtual void setInputSkin( CRRectSkinRef skin ) { _inputSkin = skin; }
+    CRButtonSkinRef getCloseButton() { return _closebutton; }
+    void setCloseButton( CRButtonSkinRef btn ) { _closebutton = btn; }
+    CRToolBarSkinRef getToolBar1Skin() { return _toolbar1; }
+    void setToolBar1Skin(CRToolBarSkinRef toolbar1) { _toolbar1 = toolbar1; }
+    CRToolBarSkinRef getToolBar2Skin() { return _toolBar2; }
+    void setToolBar2Skin(CRToolBarSkinRef toolbar2) { _toolBar2 = toolbar2; }
 };
 typedef LVFastRef<CRWindowSkin> CRWindowSkinRef;
 
@@ -554,7 +569,10 @@ public:
     virtual CRPageSkinListRef getPageSkinList() = 0;
     /// returns toolbar skin by path or #id
     virtual CRToolBarSkinRef getToolBarSkin( const lChar16 * path ) = 0;
-
+    /// returns icon skin by path or #id
+    virtual CRIconSkinRef getIconSkin( const lChar16 *path ) = 0;
+    /// returns read only file stream from skin
+    virtual LVStreamRef getStream(const lChar16 * fname) = 0;
     /// garbage collection
     virtual void gc() { }
 
@@ -567,24 +585,29 @@ typedef LVFastRef<CRSkinContainer> CRSkinRef;
 
 class CRSkinListItem
 {
-    lString16 _name;
-    lString16 _baseDir;
+    lString16 _title;
+    lString16 _id;
     lString16 _fileName;
-    lString16Collection _pageSkinList;
-    CRSkinListItem() { }
 public:
-    lString16 getName() { return _name; }
+    CRSkinListItem( lString16 title, lString16 id, lString16 fileName ) :
+        _title(title), _id(id), _fileName(fileName) { }
+    lString16 getTitle() { return _title; }
     lString16 getFileName() { return _fileName; }
-    lString16 getDirName() { return _baseDir; }
-    lString16Collection & getPageSkinList() { return _pageSkinList; }
-    static CRSkinListItem * init( lString16 baseDir, lString16 fileName );
+    lString16 getId() { return _id; }
     CRSkinRef getSkin();
     virtual ~CRSkinListItem() { }
 };
-class CRSkinList : public LVPtrVector<CRSkinListItem>
+
+class CRSkinList
 {
+    LVPtrVector<CRSkinListItem> _list;
 public:
-    CRSkinListItem * findByName(const lString16 & name);
+    void add(CRSkinListItem * item) { _list.add(item); }
+    CRSkinListItem * get( int index ) { return (index>=0 && index<_list.length()) ? _list[index] : NULL; }
+    int length() { return _list.length(); }
+    bool openDirectory(const char *id, lString16 directory);
+    void clear() { _list.clear(); }
+    CRSkinListItem * findById(const lString16 & name);
 };
 
 

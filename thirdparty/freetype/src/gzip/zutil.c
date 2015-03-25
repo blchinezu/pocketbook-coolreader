@@ -179,3 +179,16 @@ void  zcfree (opaque, ptr)
 }
 
 #endif /* MY_ZCALLOC */
+
+#ifdef DEBUG
+#ifndef verbose
+#define verbose 0
+#endif
+
+int z_verbose = verbose;
+void z_error (char *m)
+{
+    fprintf(stderr, "%s\n", m);
+    exit(1);
+}
+#endif

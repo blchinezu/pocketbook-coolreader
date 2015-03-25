@@ -20,6 +20,7 @@
 #define PROP_STATUS_FONT_COLOR       "crengine.page.header.font.color"
 #define PROP_STATUS_FONT_FACE        "crengine.page.header.font.face"
 #define PROP_STATUS_FONT_SIZE        "crengine.page.header.font.size"
+#define PROP_STATUS_FONT_EMBOLDEN    "crengine.page.header.font.embolden"
 #define PROP_PAGE_MARGIN_TOP         "crengine.page.margin.top"
 #define PROP_PAGE_MARGIN_BOTTOM      "crengine.page.margin.bottom"
 #define PROP_PAGE_MARGIN_LEFT        "crengine.page.margin.left"
@@ -45,6 +46,7 @@
 #define PROP_SHOW_PAGE_COUNT         "window.status.pos.page.count"
 #define PROP_SHOW_PAGE_NUMBER        "window.status.pos.page.number"
 #define PROP_SHOW_BATTERY_PERCENT    "window.status.battery.percent"
+#define PROP_SHOW_CHAPTER_PAGES_REMAIN "window.status.pos.chapter.page.remains"
 #define PROP_FONT_KERNING_ENABLED    "font.kerning.enabled"
 #define PROP_LANDSCAPE_PAGES         "window.landscape.pages"
 #define PROP_HYPHENATION_DICT        "crengine.hyphenation.directory"
@@ -77,5 +79,13 @@
 #define PROP_IMG_SCALING_ZOOMIN_BLOCK_SCALE  "crengine.image.scaling.zoomin.block.scale"
 #define PROP_IMG_SCALING_ZOOMOUT_BLOCK_MODE "crengine.image.scaling.zoomout.block.mode"
 #define PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE "crengine.image.scaling.zoomout.block.scale"
+
+//It probably had to be window.tap*
+#define PROP_TAP_ZONE_ACTION "app.tapzone.action.tap."
+#define PROP_TAP_ZONE_ACTION_LONG "app.tapzone.action.tap.long."
+#define PROP_TAP_ZONE_WIDTH_1 "app.tapzone.width.1"
+#define PROP_TAP_ZONE_WIDTH_2 "app.tapzone.width.2"
+#define PROP_TAP_ZONE_HEIGHT_1 "app.tapzone.height.1"
+#define PROP_TAP_ZONE_HEIGHT_2 "app.tapzone.height.2"
 
 #endif // LVDOCVIEWPROPS_H

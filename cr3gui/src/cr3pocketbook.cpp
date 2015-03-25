@@ -14,16 +14,32 @@
 #include <cr3version.h>
 #include "cr3pocketbook.h"
 #include <inkview.h>
+#ifdef POCKETBOOK_PRO
+    #include <inkplatform.h>
+    #include "web.h"
+    #include "ota_update.h"
+#endif
+
+#ifdef PB_DB_STATE_SUPPORTED
+#include <dlfcn.h>
+#include <bookstate.h>
+#endif
 
 #define PB_CR3_TRANSLATE_DELAY 1000
 
 #define PB_DICT_SELECT 0
 #define PB_DICT_EXIT 1
-#define PB_DICT_ARTICLE_LIST 2
-#define PB_DICT_DEACTIVATE 3
-#define PB_DICT_SEARCH 4
+#define PB_DICT_GOOGLE 2
+#define PB_DICT_WIKIPEDIA 3
+#define PB_DICT_ARTICLE_LIST 4
+#define PB_DICT_DEACTIVATE 5
+#define PB_DICT_SEARCH 6
 
 #define PB_LINE_HEIGHT 30
+
+bool forcePartialBwUpdates;
+bool forcePartialUpdates;
+lString16 pbSkinFileName;
 
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
@@ -53,6 +69,88 @@ static const int angles_measured[] = { 19, 24, 29, 33, 38, 43, 47, 50, 52, 55, 5
 static void translate_timer();
 static void rotate_timer();
 static void paused_rotate_timer();
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+static void cache_timer();
+#endif
+
+#ifdef PB_DB_STATE_SUPPORTED
+typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
+typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
+typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
+typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
+
+class CRPocketBookProStateSaver
+{
+private:
+    void *_handle;
+    bsLoadFuncPtr_t _bsLoadPtr;
+    bsSetPageFuncPtr_t _bsSetCPagePtr;
+    bsSetPageFuncPtr_t _bsSetNPagePtr;
+    bsSetOpenTimeFuncPtr_t _bsSetOpenTimePtr;
+    bsSaveCloseFuncPtr_t _bsClosePtr;
+    bsSaveCloseFuncPtr_t _bsSavePtr;
+public:
+    CRPocketBookProStateSaver() : _handle(NULL), _bsLoadPtr(NULL), _bsSetCPagePtr(NULL),
+        _bsSetNPagePtr(NULL), _bsSetOpenTimePtr(NULL), _bsClosePtr(NULL)
+    {
+        _handle = dlopen("/usr/lib/libbookstate.so", RTLD_LAZY);
+        if (_handle)
+        {
+            _bsLoadPtr = (bsLoadFuncPtr_t)dlsym(_handle, "bsLoad");
+            if (_bsLoadPtr)
+            {
+                _bsSetCPagePtr = (bsSetPageFuncPtr_t)dlsym(_handle, "bsSetCPage");
+                if (_bsSetCPagePtr)
+                {
+                    _bsSetNPagePtr = (bsSetPageFuncPtr_t)dlsym(_handle, "bsSetNPage");
+                    if (_bsSetNPagePtr)
+                    {
+                        _bsSetOpenTimePtr = (bsSetOpenTimeFuncPtr_t)dlsym(_handle, "bsSetOpenTime");
+                        if (_bsSetOpenTimePtr) {
+                            _bsClosePtr = (bsSaveCloseFuncPtr_t)dlsym(_handle, "bsClose");
+                            if (_bsClosePtr)
+                                _bsSavePtr = (bsSaveCloseFuncPtr_t)dlsym(_handle, "bsSave");
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    virtual ~CRPocketBookProStateSaver()
+    {
+        if (_handle)
+        {
+            dlclose(_handle);
+            _handle = NULL;
+        }
+    }
+
+    bool isSaveStateSupported()
+    {
+        return (_bsLoadPtr != NULL && _bsSetCPagePtr != NULL && _bsSetNPagePtr != NULL &&
+                _bsSetOpenTimePtr != NULL && _bsClosePtr != NULL);
+    }
+
+    bool saveState(char *fileName, int cpage, int npages)
+    {
+        bsHandle bs = _bsLoadPtr(fileName);
+        if (bs)
+        {
+            _bsSetCPagePtr(bs, cpage + 1);
+            _bsSetNPagePtr(bs, npages);
+            _bsSetOpenTimePtr(bs, time(0));
+            if (_bsSavePtr(bs))
+                CRLog::trace("Book(%s) state saved to db successfully", fileName);
+            else
+                CRLog::error("Book(%s) state saving to db failed", fileName);
+            _bsClosePtr(bs);
+            return true;
+        }
+        return false;
+    }
+};
+#endif
 
 class CRPocketBookGlobals
 {
@@ -64,6 +162,10 @@ private :
     bool _ready_sent;
     bool createFile(char *fName);
     bool _translateTimer;
+    int _saved_page;
+#ifdef PB_DB_STATE_SUPPORTED
+    CRPocketBookProStateSaver proStateSaver;
+#endif /* PB_DB_STATE_SUPPORTED */
 public:
     CRPocketBookGlobals(char *fileName);
     lString16 getFileName() { return _fileName ; }
@@ -110,6 +212,7 @@ CRPocketBookGlobals::CRPocketBookGlobals(char *fileName)
     _fileName = lString16(fileName);
     _ready_sent = false;
     _translateTimer = false;
+    _saved_page = -1;
     iconfig *gc = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
     _lang = ReadString(gc, const_cast<char *>("language"), const_cast<char *>("en"));
     CRLog::trace("language=%s", _lang.c_str());
@@ -142,13 +245,21 @@ bool CRPocketBookGlobals::createFile(char *fName)
 
 void CRPocketBookGlobals::saveState(int cpage, int npages)
 {
-    char *af0 = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 0);
+    if (cpage != _saved_page) {
+        _saved_page = cpage;
+        lString8 cf = UnicodeToLocal(_fileName);
+        char *af0 = GetAssociatedFile((char *)cf.c_str(), 0);
 
-    if (createFile(af0)) {
-        if (npages - cpage < 3 && cpage >= 5) {
-            char *afz = GetAssociatedFile((char *)UnicodeToLocal(_fileName).c_str(), 'z');
-            createFile(afz);
+        if (createFile(af0)) {
+            if (npages - cpage < 3 && cpage >= 5) {
+                char *afz = GetAssociatedFile((char *)cf.c_str(), 'z');
+                createFile(afz);
+            }
         }
+    #ifdef PB_DB_STATE_SUPPORTED
+        if (proStateSaver.isSaveStateSupported())
+            proStateSaver.saveState((char *)cf.c_str(), cpage, npages);
+    #endif
     }
 }
 
@@ -165,10 +276,10 @@ char key_buffer[KEY_BUFFER_LEN];
 class CRPocketBookScreen : public CRGUIScreenBase {
 private:
     bool _forceSoft;
+    bool _update_gray;
     CRGUIWindowBase *m_mainWindow;
-#if GRAY_BACKBUFFER_BITS == 4
+    int m_bpp;
     lUInt8 *_buf4bpp;
-#endif
 public:
     static CRPocketBookScreen * instance;
 protected:
@@ -178,21 +289,23 @@ public:
     virtual ~CRPocketBookScreen()
     {
         instance = NULL;
-#if GRAY_BACKBUFFER_BITS == 4
-        delete [] _buf4bpp;
-#endif
+        if (m_bpp == 4)
+            delete [] _buf4bpp;
     }
 
-    CRPocketBookScreen( int width, int height )
-        :  CRGUIScreenBase( width, height, true ), _forceSoft(false)
+    CRPocketBookScreen( int width, int height, int bpp)
+        :  CRGUIScreenBase( width, height, true ), _forceSoft(false), _update_gray(false), m_bpp(bpp)
     {
         instance = this;
-#if GRAY_BACKBUFFER_BITS == 4
-        if (width > height)
-            _buf4bpp = new lUInt8[ (width + 1)/2 * width ];
-        else
-            _buf4bpp = new lUInt8[ (height + 1)/2 * height ];
-#endif
+        if (m_bpp == 4) {
+            if (width > height)
+                _buf4bpp = new lUInt8[ (width + 1)/2 * width ];
+            else
+                _buf4bpp = new lUInt8[ (height + 1)/2 * height ];
+        }
+        _canvas = LVRef<LVDrawBuf>( createCanvas( width, height ) );
+        if ( !_front.isNull() )
+            _front = LVRef<LVDrawBuf>( createCanvas( width, height ) );
     }
 
     void MakeSnapShot()
@@ -206,6 +319,17 @@ public:
         bool ret = _forceSoft;
         _forceSoft = force;
         return ret;
+    }
+    virtual void flush( bool full );
+    /// creates compatible canvas of specified size
+    virtual LVDrawBuf * createCanvas( int dx, int dy )
+    {
+        LVDrawBuf * buf = new LVGrayDrawBuf( dx, dy, m_bpp );
+        return buf;
+    }
+    bool isTouchSupported()
+    {
+        return (QueryTouchpanel() != 0);
     }
 };
 
@@ -235,6 +359,18 @@ static const struct {
     { "@KA_olnk", MCMD_GO_LINK, 0},
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
+    { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    #ifdef POCKETBOOK_PRO
+    { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
+    { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
+    { "@KA_otau", PB_CMD_OTA_UPDATE, 0},
+    { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
+    #ifdef POCKETBOOK_PRO_FW5
+    { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
+    #endif
+    #endif
+    { "@KA_lght", PB_CMD_STATUS_LINE, 0},
+    { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
     { "@KA_zmin", DCMD_ZOOM_IN, 0},
@@ -253,6 +389,8 @@ static const struct {
 
 class CRPocketBookWindowManager : public CRGUIWindowManager
 {
+private:
+    bool m_incommand;
 protected:
     LVHashTable<lString8, int> _pbTable;
 
@@ -284,7 +422,8 @@ public:
         instance = NULL;
     }
 
-    void getPocketBookCommand(char *name, int &commandId, int &commandParam) {
+    void getPocketBookCommand(char *name, int &commandId, int &commandParam)
+    {
         int index = _pbTable.get(lString8(name));
         commandId = pbActions[index].commandId;
         commandParam = pbActions[index].commandParam;
@@ -292,14 +431,28 @@ public:
                      name, index, commandId, commandParam);
     }
 
-    int getPocketBookCommandIndex(char *name) {
+    int getPocketBookCommandIndex(char *name)
+    {
         return _pbTable.get(lString8(name));
     }
 
-    CRPocketBookWindowManager(int dx, int dy)
-        : CRGUIWindowManager(NULL), _pbTable(32)
+    int getPocketBookCommandIndex(int command, int param)
     {
-        CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy);
+        int ret = 0;
+        for( unsigned i=0; i < sizeof(pbActions)/sizeof(pbActions[0]); i++) {
+            if( pbActions[i].commandId == command &&
+                pbActions[i].commandParam == param) {
+                ret = i;
+                break;
+            }
+        }
+        return ret;
+    }
+
+    CRPocketBookWindowManager(int dx, int dy, int bpp)
+        : CRGUIWindowManager(NULL), m_incommand(false), _pbTable(32)
+    {
+        CRPocketBookScreen * s = new CRPocketBookScreen(dx, dy, bpp);
         _orientation = pocketbook_orientations[GetOrientation()];
         _screen = s;
         _ownScreen = true;
@@ -329,10 +482,11 @@ public:
 
     bool doCommand( int cmd, int params )
     {
-        CRLog::debug("doCommand(%d, %d)", cmd, params);
+        m_incommand = true;
         if ( !onCommand( cmd, params ) )
             return false;
         update( false );
+        m_incommand = false;
         return true;
     }
 
@@ -385,10 +539,38 @@ public:
         }
         return CRGUIWindowManager::onKeyPressed(key, flags);
     }
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+    void scheduleCacheSwap()
+    {
+        SetHardTimer(const_cast<char *>("UpdateCacheTimer"), cache_timer, 1500);
+    }
+    void cancelCacheSwap()
+    {
+        ClearTimer(cache_timer);
+    }
+    void updateCache();
+#endif
 };
 
 CRPocketBookWindowManager * CRPocketBookWindowManager::instance = NULL;
 V3DocViewWin * main_win = NULL;
+
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+void CRPocketBookWindowManager::updateCache()
+{
+    CRTimerUtil timeout(500);
+    if (m_incommand || !_events.empty() ||
+        main_win != getTopVisibleWindow() ||
+        CR_TIMEOUT == main_win->getDocView()->updateCache(timeout))
+        scheduleCacheSwap();
+}
+
+static void cache_timer()
+{
+    CRLog::trace("cache_timer()");
+    CRPocketBookWindowManager::instance->updateCache();
+}
+#endif
 
 void executeCommand(int commandId, int commandParam)
 {
@@ -423,13 +605,28 @@ void tocHandler(long long position)
     executeCommand(MCMD_GO_PAGE_APPLY, position);
 }
 
+#if 0 && defined(POCKETBOOK_PRO)
+int listTocHandler(int action, int x, int y, int idx, int state)
+{
+    executeCommand(MCMD_GO_PAGE_APPLY, idx);
+    return 0;
+}
+#endif
+
 int main_handler(int type, int par1, int par2);
 
-void CRPocketBookScreen::draw(int x, int y, int w, int h)
+static int link_altParm = 0;
+void handle_LinksContextMenu(int index)
 {
-#if (GRAY_BACKBUFFER_BITS == 4)
-    lUInt8 * line = _front->GetScanLine(y);
-    lUInt8 *dest = _buf4bpp;
+    CRPocketBookWindowManager::instance->postCommand(index,
+                                                     index == MCMD_GO_LINK ? 0 : link_altParm);
+    CRPocketBookWindowManager::instance->processPostedEvents();
+    CRPocketBookWindowManager::instance->resetTillUp();
+}
+
+void Draw4Bits(LVDrawBuf & src, lUInt8 *dest, int x, int y, int w, int h)
+{
+    lUInt8 * line = src.GetScanLine(y);
     int limit = x + w -1;
     int scanline = (w + 1)/2;
 
@@ -440,13 +637,90 @@ void CRPocketBookScreen::draw(int x, int y, int w, int h)
             if (sx < limit)
                 dest[xx] |= (line[sx++] >> 4);
         }
-        line += _front->GetRowSize();
+        line += src.GetRowSize();
         dest += scanline;
     }
-    Stretch(_buf4bpp, IMAGE_GRAY4, w, h, scanline, x, y, w, h, 0);
-#else
-    Stretch(_front->GetScanLine(y), PB_BUFFER_GRAYS, w, h, _front->GetRowSize(), x, y, w, h, 0);
-#endif
+}
+
+void CRPocketBookScreen::draw(int x, int y, int w, int h)
+{
+    if (m_bpp == 4) {
+        Draw4Bits(*_front, _buf4bpp, x, y, w, h);
+        Stretch(_buf4bpp, IMAGE_GRAY4, w, h, (w + 1)/2, x, y, w, h, 0);
+    } else
+        Stretch(_front->GetScanLine(y), m_bpp, w, h, _front->GetRowSize(), x, y, w, h, 0);
+}
+
+void CRPocketBookScreen::flush( bool full )
+{
+    if ( _updateRect.isEmpty() && !full && !getTurboUpdateEnabled() ) {
+        CRLog::trace("CRGUIScreenBase::flush() - update rectangle is empty");
+        return;
+    }
+    if ( !_front.isNull() && !_updateRect.isEmpty() && !full ) {
+        // calculate really changed area
+        lvRect rc;
+        lvRect lineRect(_updateRect);
+        _update_gray = false;
+        int sz = _canvas->GetRowSize();
+        for ( int y = _updateRect.top; y < _updateRect.bottom; y++ ) {
+            if ( y>=0 && y<_height ) {
+                lUInt8 * line1 = _canvas->GetScanLine( y );
+                lUInt8 * line2 = _front->GetScanLine( y );
+                if ( memcmp( line1, line2, sz ) ) {
+                    // check if gray pixels changed
+                    if (m_bpp == 2) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i]) {
+                                for (int j = 0; !_update_gray && j < 3; j++) {
+                                    lUInt8 color1 = (line1[i] >> (j << 1)) & 0x3;
+                                    lUInt8 color2 = (line1[i] >> (j << 1)) & 0x3;
+                                    _update_gray = color1 != color2 && (color1 == 1 || color1 == 2);
+                                }
+                                if (_update_gray)
+                                    CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                            }
+                        }
+                    } else if (m_bpp == 4) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i])
+                                _update_gray = line1[i] != 0 && line1[i] != 0xF0;
+                            if (_update_gray)
+                                CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                        }
+                    } else if (m_bpp == 8) {
+                        for (int i = 0; !_update_gray && i < sz; i++) {
+                            if (line1[i] != line2[i])
+                                _update_gray = line1[i] != 0 && (line1[i] > 64 && line1[i] < 192);
+                            if (_update_gray)
+                                CRLog::trace("gray(%d) at [%d, %d]", line1[i], i, y);
+                        }
+                    }
+                    // line content is different
+                    lineRect.top = y;
+                    lineRect.bottom = y+1;
+                    rc.extend( lineRect );
+                    // copy line to front buffer
+                    memcpy( line2, line1, sz );
+                }
+            }
+        }
+        if ( rc.isEmpty() ) {
+            // no actual changes
+            _updateRect.clear();
+            return;
+        }
+        _updateRect.top = rc.top;
+        _updateRect.bottom = rc.bottom;
+    }
+    if ( full) {
+        _updateRect = getRect();
+        // copy full screen to front buffer
+        if (!_front.isNull())
+            _canvas->DrawTo( _front.get(), 0, 0, 0, NULL );
+    }
+    update( _updateRect, full );
+    _updateRect.clear();
 }
 
 void CRPocketBookScreen::update( const lvRect & rc2, bool full )
@@ -458,8 +732,9 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
     rc.left &= ~3;
     rc.right = (rc.right + 3) & ~3;
 
-
-    if (!_forceSoft && ( isDocWnd || rc.height() > 400)
+    if( forcePartialUpdates )
+        full = false;
+    else if (!_forceSoft && ( isDocWnd || rc.height() > 400)
 #if ENABLE_UPDATE_MODE_SETTING==1
         && checkFullUpdateCounter()
 #endif
@@ -473,10 +748,20 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
         FullUpdate();
     } else {
         draw(0, rc.top, _front->GetWidth(), rc.height());
-        if (!isDocWnd && rc.height() < 300)
-            PartialUpdateBW(rc.left, rc.top, rc.right, rc.bottom);
-        else
+        if (!isDocWnd && rc.height() < 300) {
+            if (_update_gray && !forcePartialBwUpdates) {
+                PartialUpdate(rc.left, rc.top, rc.right, rc.bottom);
+                CRLog::trace("PartialUpdate(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
+            } else {
+                PartialUpdateBW(rc.left, rc.top, rc.right, rc.bottom);
+                CRLog::trace("PartialUpdateBW(%d, %d, %d, %d)", rc.left, rc.top, rc.right, rc.bottom);
+            }
+        } else if( !forcePartialBwUpdates ) {
             SoftUpdate();
+        }
+        else {
+            PartialUpdateBW(0, 0, ScreenWidth(), ScreenHeight());
+        }
     }
 }
 
@@ -512,6 +797,13 @@ public:
             CRLog::trace("CRPocketBookInkViewWindow::onCommand() - unhandled");
         }
         return true;
+    }
+    virtual bool onTouch( int x, int y, CRGUITouchEventType evType )
+    {
+        _wm->postEvent( new CRGUITouchEvent(x, y, evType) );
+        _wm->closeWindow( this );
+        return true;
+
     }
     virtual bool onKeyPressed( int key, int flags )
     {
@@ -614,10 +906,11 @@ private:
     char *_newWord;
     char *_newTranslation;
 private:
-    void searchDictinary();
+    void searchDictionary();
     void loadDictionaries();
 protected:
     virtual void selectDictionary();
+    virtual void launchDictBrowser(const char *urlBase);
     virtual void onDictionarySelect();
     virtual bool onItemSelect();
 public:
@@ -627,7 +920,15 @@ public:
     virtual void translate(const lString16 &w);
     virtual lString8 createArticle(const char *word, const char *translation);
     virtual bool onCommand( int command, int params );
+
+    virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType );
+    //{
+    //  CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+    //  return CRViewDialog::onTouchEvent( x, y, evType );
+    //}
+
     void doActivate();
+    void doDeactivate();
     int getCurItem() { return _selectedIndex; }
     void setTranslation(lString8 translation);
     void setCurItem(int index);
@@ -680,6 +981,17 @@ public:
     bool newPage(const char *word, const char *translation);
     bool nextPage();
     bool prevPage();
+    int getTopItem() { return _topItem; }
+    int getSelectedItem() { return _selectedItem; }
+    const char * getCurItemWord();
+    int getPageInItemCount()
+    {  
+        CRMenuSkinRef skin = getSkin();
+        if ( !skin.isNull() )
+           return skin->getMinItemCount();
+           
+        return 0;
+    }
     virtual void draw() { CRMenu::draw(); _dirty = false; }
     void invalidateMenu()
     {
@@ -722,20 +1034,31 @@ protected:
     virtual void draw();
     void endWordSelection();
     bool isWordSelection() { return _wordSelector!=NULL; }
-    void onWordSelection();
+    void onWordSelection(bool translate=true);
     bool _docDirty;
     int _curPage;
     int _lastWordX;
     int _lastWordY;
 public:
+    CRPbDictionaryDialog(CRGUIWindowManager * wm) : CRGUIWindowBase(wm), _dictView(NULL)
+    {
+        _wordSelector = NULL;
+        _fullscreen = true;
+        CRGUIAcceleratorTableRef acc = _wm->getAccTables().get("dict");
+        if ( acc.isNull() )
+            acc = _wm->getAccTables().get("dialog");
+        setAccelerators( acc );
+    }
     CRPbDictionaryDialog( CRGUIWindowManager * wm, CRViewDialog * docwin,  lString8 css);
     virtual ~CRPbDictionaryDialog() {
         if (_wordSelector) {
             delete _wordSelector;
             _wordSelector = NULL;
         }
-        delete _dictView;
-        _dictView = NULL;
+        if (_dictView) {
+            delete _dictView;
+            _dictView = NULL;
+        }
     }
     /// returns true if command is processed
     virtual bool onCommand( int command, int params );
@@ -762,6 +1085,41 @@ public:
     {
         return (!_autoTranslate && !_wordTranslated);
     }
+    virtual bool onTouchEvent( int x, int y, CRGUITouchEventType evType )
+    {
+      CRLog::trace("CRPbDictionaryDialog::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+
+        lvPoint pt (x, y);
+
+        if (_dictView->getRect().isPointInside(pt)) 
+        {
+            if (!_dictViewActive) 
+            {
+                activateDictView(true);
+                _dictView->doActivate();
+            }
+            CRLog::trace(" CRPbDictionaryDialog::onTouchEvent(...) _dictView->onTouchEvent()" );
+
+            return _dictView->onTouchEvent(x, y, evType);
+        } 
+        else 
+        if (CRTOUCH_DOWN == evType && _dictViewActive) 
+        {
+            _dictView->doDeactivate();
+        }
+
+        ldomXPointer p = _docview->getNodeByPoint( pt );
+        if ( !p.isNull() ) 
+        {
+            pt = p.toPoint();
+            _wordSelector->selectWord(pt.x, pt.y);
+            onWordSelection( false );
+            if ( CRTOUCH_UP == evType )
+                _wm->onCommand(PB_CMD_TRANSLATE, 0);
+            return true;
+        }
+        return false;
+    }
 };
 
 class CRPbDictionaryProxyWindow : public CRPbDictionaryDialog
@@ -772,7 +1130,8 @@ protected:
     virtual void draw() { _dictDlg->draw(); }
 public:
     CRPbDictionaryProxyWindow(CRPbDictionaryDialog * dictDialog)
-        : CRPbDictionaryDialog(dictDialog->getWindowManager(), dictDialog->_docwin, lString8::empty_str), _dictDlg(dictDialog)
+        : CRPbDictionaryDialog(dictDialog->getWindowManager() /*, dictDialog->_docwin, lString8()*/), _dictDlg(dictDialog)
+/*        : CRPbDictionaryDialog(dictDialog->getWindowManager(), dictDialog->_docwin, lString8::empty_str), _dictDlg(dictDialog) */
     {
         _dictDlg->_wordTranslated = _dictDlg->_dictViewActive = false;
         _dictDlg->_selText.clear();
@@ -849,12 +1208,22 @@ public:
     {
         _dictDlg->activated();
     }
+    virtual bool onTouchEvent(int x, int y, CRGUITouchEventType type)
+    {
+        return _dictDlg->onTouchEvent(x, y, type);
+    }
+};
+
+static imenu link_contextMenu[] = {
+    {ITEM_ACTIVE, MCMD_GO_LINK, NULL, NULL},
+    {ITEM_ACTIVE, PB_CMD_NONE, NULL, NULL},
+    { 0, 0, NULL, NULL }
 };
 
 class CRPocketBookDocView : public V3DocViewWin {
 private:
     ibitmap *_bm3x3;
-    char *_strings3x3[9];
+    const char *_strings3x3[9];
     int _quick_menuactions[9];
     tocentry *_toc;
     int _tocLength;
@@ -866,6 +1235,9 @@ private:
     int  m_goToPage;
     bool _restore_globOrientation;
     bool m_skipEvent;
+    bool m_saveForceSoft;
+    bool m_bmFromSkin;
+    lString16 m_link;
     void freeContents()
     {
         for (int i = 0; i < _tocLength; i++) {
@@ -884,48 +1256,86 @@ private:
             if ( LVFileExists(fn) ) {
                 // Actually book opened in openRecentBook() we are in truble if it will fail
                 pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
-                pbGlobals->setFileName(file->getFilePathName());
+                pbGlobals->setFileName(fn);
             }
         }
     }
 protected:
+    LVImageSourceRef getQuickMenuImage()
+    {
+        const char *lang = pbGlobals->getLang();
+
+        if ( lang && lang[0] ) {
+            lString16 imgName("cr3_pb_quickmenu_$1.png");
+            imgName.replaceParam(1, cs16(lang));
+            CRLog::debug("Quick menu image name: %s",UnicodeToLocal(imgName).c_str());
+            LVImageSourceRef img = _wm->getSkin()->getImage(imgName);
+            if ( !img.isNull())
+                return img;
+        }
+        return _wm->getSkin()->getImage(L"cr3_pb_quickmenu.png");
+    }
+
     ibitmap * getQuickMenuBitmap() {
         if (_bm3x3 == NULL) {
-            LVImageSourceRef img = _wm->getSkin()->getImage(L"cr3_pb_quickmenu.png");
+            LVImageSourceRef img = getQuickMenuImage();
             if ( !img.isNull() ) {
                 _bm3x3 = NewBitmap(img->GetWidth(), img->GetHeight());
-                LVGrayDrawBuf tmpBuf( img->GetWidth(), img->GetHeight() );
+                LVGrayDrawBuf tmpBuf( img->GetWidth(), img->GetHeight(), _bm3x3->depth );
 
                 tmpBuf.Draw(img, 0, 0, img->GetWidth(), img->GetHeight(), true);
-                memcpy(_bm3x3->data, tmpBuf.GetScanLine(0), _bm3x3->height * _bm3x3->scanline);
+                if(4 == _bm3x3->depth) {
+                    Draw4Bits(tmpBuf, _bm3x3->data, 0, 0, img->GetWidth(), img->GetHeight());
+                } else {
+                    memcpy(_bm3x3->data, tmpBuf.GetScanLine(0), _bm3x3->height * _bm3x3->scanline);
+                }
+                m_bmFromSkin = true;
             } else
                 _bm3x3 = GetResource(const_cast<char*>(PB_QUICK_MENU_BMP_ID), NULL);
 
             if (_bm3x3 == NULL)
                 _bm3x3 = NewBitmap(128, 128);
-            lString8 menuTextId(PB_QUICK_MENU_TEXT_ID);
-            for (int i = 0; i < 9; i++) {
-                menuTextId[PB_QUICK_MENU_TEXT_ID_IDX] = '0' + i;
-                _strings3x3[i] = GetThemeString((char *)menuTextId.c_str(), (char *)def_menutext[i]);
+            CRGUIAcceleratorTableRef menuItems = _wm->getAccTables().get(lString16("quickMenuItems"));
+            int count = 0;
+            if ( !menuItems.isNull() && menuItems->length()>1 ) {
+                for (int i=0; i < menuItems->length(); i++) {
+                    const CRGUIAccelerator * acc = menuItems->get( i );
+                    int cmd = acc->commandId;
+                    int param = acc->commandParam;
+                    if (cmd == PB_CMD_NONE) {
+                         _strings3x3[count] = TR("@Menu");
+                         _quick_menuactions[count++] = 0;
+                    } else {
+                        _strings3x3[count] = getCommandName( cmd, param );
+                        _quick_menuactions[count++] =
+                            CRPocketBookWindowManager::instance->getPocketBookCommandIndex( cmd, param );
+                    }
+                }
             }
-            lString8 menuActionId(PB_QUICK_MENU_ACTION_ID);
-            for (int i = 0; i < 9; i++) {
-                menuActionId[PB_QUICK_MENU_ACTION_ID_IDX] = '0' + i;
-                char *action = GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
-                _quick_menuactions[i] = CRPocketBookWindowManager::instance->getPocketBookCommandIndex(action);
+            if ( 9 != count) {
+                lString8 menuTextId(PB_QUICK_MENU_TEXT_ID);
+                for (int i = 0; i < 9; i++) {
+                    menuTextId[PB_QUICK_MENU_TEXT_ID_IDX] = '0' + i;
+                    _strings3x3[i] = GetThemeString((char *)menuTextId.c_str(), (char *)def_menutext[i]);
+                }
+                lString8 menuActionId(PB_QUICK_MENU_ACTION_ID);
+                for (int i = 0; i < 9; i++) {
+                    menuActionId[PB_QUICK_MENU_ACTION_ID_IDX] = '0' + i;
+                    char *action = (char*)GetThemeString((char *)menuActionId.c_str(), (char *)def_menuaction[i]);
+                    _quick_menuactions[i] = CRPocketBookWindowManager::instance->getPocketBookCommandIndex(action);
+                }
             }
         }
         return _bm3x3;
     }
 
-    bool rotateApply(int params, bool saveOrient = true)
+    bool rotateApply(int params,  bool saveOrient = true)
     {
         int orient = GetOrientation();
         if (orient == params)
             return true;
         if (params == -1 || pbGlobals->getKeepOrientation() == 0 || pbGlobals->getKeepOrientation() == 2) {
             SetGlobalOrientation(params);
-            saveOrient = false;
         } else {
             SetOrientation(params);
         }
@@ -985,8 +1395,10 @@ protected:
 
     bool incrementPage(int delta)
     {
-        if (m_goToPage == -1)
+        if (m_goToPage == -1) {
+            m_saveForceSoft = CRPocketBookScreen::instance->setForceSoftUpdate(true);
             m_goToPage = _docview->getCurPage();
+        }
         m_goToPage = m_goToPage + delta * _docview->getVisiblePageCount();
         bool res = true;
         int page_count = _docview->getPageCount();
@@ -1002,19 +1414,53 @@ protected:
             setDirty();
         return res;
     }
+    virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
+    {
+        bool longTap = (CRTOUCH_DOWN_LONG == evType);
+        if (CRTOUCH_UP == evType ||  longTap) {
+            int tapZone = getTapZone(pt.x, pt.y, getProps());
+            int command = 0, param = 0;
+            getCommandForTapZone(tapZone, getProps(), longTap, command, param);
+            if (longTap || command == MCMD_GO_LINK) {
+                ldomXPointer p = _docview->getNodeByPoint( pt );
+                if ( !p.isNull() ) {
+                    m_link = p.getHRef();
 
+                    if ( !m_link.empty() ) {
+                        if (command != 0 && command != MCMD_GO_LINK) {
+                            if (NULL == link_contextMenu[0].text)
+                                link_contextMenu[0].text = const_cast<char *>(getCommandName(MCMD_GO_LINK, 0));
+                            link_contextMenu[1].index = command;
+                            link_altParm = param;
+                            link_contextMenu[1].text = const_cast<char *>(getCommandName(command, param));
+                            OpenMenu(link_contextMenu, MCMD_GO_LINK, pt.x, pt.y, handle_LinksContextMenu );
+                            return true;
+                        } else {
+                            _docview->goLink( m_link );
+                            return showLinksDialog(true);
+                        }
+                    }
+                }
+            }
+            if (command != 0) {
+                _wm->postCommand(command, param);
+                return true;
+            }
+        }
+        return false;
+    }
 public:
     static CRPocketBookDocView * instance;
     CRPocketBookDocView( CRGUIWindowManager * wm, lString16 dataDir )
         : V3DocViewWin( wm, dataDir ), _bm3x3(NULL), _toc(NULL), _tocLength(0), _dictDlg(NULL), _rotatetimerset(false),
-        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false)
+        _lastturn(true), _pauseRotationTimer(false), m_goToPage(-1), _restore_globOrientation(false), m_skipEvent(false),
+        m_bmFromSkin(false)
     {
         instance = this;
     }
 
     virtual void closing()
     {
-        pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
         CRLog::trace("V3DocViewWin::closing();");
         readingOff();
         if (_restore_globOrientation) {
@@ -1022,12 +1468,39 @@ public:
             _restore_globOrientation = false;
         }
         V3DocViewWin::closing();
+        pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
         if (!exiting)
             CloseApp();
     }
 
+    void reconfigure( int flags )
+    {
+        if ( m_bmFromSkin ) {
+            free(_bm3x3);
+            _bm3x3 = NULL;
+            m_bmFromSkin = false;
+        }
+        V3DocViewWin::reconfigure(flags);
+    }
+
+    void showProgress( lString16 filename, int progressPercent )
+    {
+        CRGUIWindowBase *wnd = new CRGUIWindowBase(_wm);
+        // this is to avoid flashing when updating progressbar
+        _wm->activateWindow(wnd);
+        V3DocViewWin::showProgress(filename, progressPercent);
+        _wm->closeWindow(wnd);
+    }
+
     bool onCommand(int command, int params)
     {
+        #ifdef POCKETBOOK_PRO
+        if( systemPanelShown() ) {
+            toggleSystemPanel();
+            return true;
+        }
+        #endif
+
         switch(command) {
         case PB_CMD_MAIN_MENU:
             OpenMainMenu();
@@ -1106,9 +1579,47 @@ public:
         case PB_CMD_CONTENTS:
             showContents();
             return true;
-        case MCMD_GO_LINK:
-            showLinksDialog();
+        case PB_CMD_FRONT_LIGHT:
+            showFrontLight();
             return true;
+
+        #ifdef POCKETBOOK_PRO
+        case PB_CMD_TASK_MANAGER:
+            showTaskManager();
+            return true;
+        case PB_CMD_SYSTEM_PANEL:
+            toggleSystemPanel();
+            return true;
+
+        #ifdef POCKETBOOK_PRO_FW5
+        case PB_CMD_OPEN_SYSTEM_PANEL:
+            OpenControlPanel(NULL);
+            return true;
+        #endif
+
+        case PB_CMD_LOCK_DEVICE:
+            FlushEvents();
+            SetWeakTimer("LockDevice", LockDevice, 350);
+            return true;
+
+        case PB_CMD_OTA_UPDATE:
+            OTA_update();
+            return true;
+        #endif
+
+        case PB_CMD_INVERT_DISPLAY:
+            toggleInvertDisplay();
+            return true;
+        case PB_CMD_STATUS_LINE:
+            toggleStatusLine();
+            return true;
+        case MCMD_GO_LINK:
+            if (!m_link.empty()) {
+                _docview->goLink(m_link);
+                m_link.clear();
+                return showLinksDialog(true);
+            }
+            return showLinksDialog(false);
         case PB_CMD_MP3:
             if (params == 0)
                 TogglePlaying();
@@ -1118,18 +1629,19 @@ public:
         case PB_CMD_VOLUME:
             SetVolume(GetVolume() + params);
             return true;
+        case MCMD_SWITCH_TO_RECENT_BOOK:
+        case DCMD_SAVE_TO_CACHE:
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+            CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
+            break;
         case MCMD_OPEN_RECENT_BOOK:
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+            CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
             switchToRecentBook(params);
             break;
         case PB_CMD_PAGEUP_REPEAT:
-            if (m_skipEvent) {
-                m_skipEvent = false;
-                return false;
-            }
-            m_skipEvent = true;
-            if (params < 1)
-                params = 1;
-            return incrementPage(-params);
         case PB_CMD_PAGEDOWN_REPEAT:
             if (m_skipEvent) {
                 m_skipEvent = false;
@@ -1138,9 +1650,10 @@ public:
             if (params < 1)
                 params = 1;
             m_skipEvent = true;
-            return incrementPage(params);
+            return incrementPage(command == PB_CMD_PAGEUP_REPEAT ? -params : params);
         case PB_CMD_REPEAT_FINISH:
             if (m_goToPage != -1) {
+                CRPocketBookScreen::instance->setForceSoftUpdate(m_saveForceSoft);
                 int page = m_goToPage;
                 m_goToPage = -1;
                 m_skipEvent = false;
@@ -1154,9 +1667,9 @@ public:
         return V3DocViewWin::onCommand( command, params );
     }
 
-    bool showLinksDialog()
+    bool showLinksDialog(bool backPreffered)
     {
-        CRLinksDialog * dlg = CRLinksDialog::create( _wm, this );
+        CRLinksDialog * dlg = CRLinksDialog::create( _wm, this, backPreffered );
         if ( !dlg )
             return false;
         dlg->setAccelerators( getDialogAccelerators() );
@@ -1214,10 +1727,82 @@ public:
                     const_cast<char*>("@No_contents"), 2000);
             return;
         }
+
+        #if 0 && defined(POCKETBOOK_PRO)
+        // If device supports touch
+        if( QueryTouchpanel() != 0 ) {
+            showContentsTouch();
+            return;
+        }
+        #endif
+
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
         _wm->activateWindow( wnd );
     }
+    #if 0 && defined(POCKETBOOK_PRO)
+    void showContentsTouch(tocentry *_toc, int _tocLength, int currentPos)
+    {
+        int itemw = (ScreenWidth()/3)*2;
+        int itemh = (ScreenHeight()-20)/10;
+
+        // just for doc. no direct practical use here
+        /*
+        // _toc to buf
+        CRRectSkinRef skin = _wm->getSkin()->getWindowSkin( L"#dialog" )->getClientSkin();
+        LVDrawBuf * buf = _wm->getScreen()->getCanvas().get();
+        lString16 text = lString16::itoa(m_goToPage + 1);
+        lvPoint text_size = skin->measureText(text);
+        lvRect rc;
+        rc.left = _wm->getScreen()->getWidth() - 65;
+        rc.top = _wm->getScreen()->getHeight() - text_size.y - 30;
+        rc.right = rc.left + 60;
+        rc.bottom = rc.top + text_size.y * 3/2;
+        buf->FillRect(rc, _docview->getBackgroundColor());
+        buf->Rect(rc, _docview->getTextColor());
+        rc.shrink(1);
+        buf->Rect(rc, _docview->getTextColor());
+        skin->drawText(*buf, rc, text);
+
+
+
+        // buf to bmp
+        cover = NewBitmap(cachedFile->GetWidth(), cachedFile->GetHeight());
+        LVGrayDrawBuf tmpBuf( cachedFile->GetWidth(), cachedFile->GetHeight(), cover->depth );
+
+        tmpBuf.Draw(cachedFile, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight(), true);
+
+        if(4 == cover->depth) {
+            Draw4Bits(tmpBuf, cover->data, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight());
+        } else {
+            memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
+        }*/
+
+        OpenList(_("Contents"), tocListImage, ScreenWidth()/2, , _tocLength, currentPos, listTocHandler);
+    }
+    #endif
+
+    void showFrontLight() {
+        if( isFrontLightSupported() ) {
+            pbLaunchWaitBinary(PB_FRONT_LIGHT_BIN);
+        }
+        else {
+            CRLog::trace("showFrontLight(): Front light isn't supported! You shouldn't be able to get here.");
+            Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the front light binary  @ "PB_FRONT_LIGHT_BIN, 2000);
+        }
+    }
+
+    #ifdef POCKETBOOK_PRO
+    void showTaskManager() {
+        if( isTaskManagerSupported() ) {
+            CRLog::trace("showTaskManager(): OpenTaskList()");
+            OpenTaskList();
+        }
+        else {
+            CRLog::trace("showTaskManager(): Task manager isn't supported! You shouldn't be able to get here.");
+        }
+    }
+    #endif
 
     void readingOff()
     {
@@ -1262,6 +1847,11 @@ public:
         instance = NULL;
         if (_dictDlg != NULL)
             delete _dictDlg;
+        if (m_bmFromSkin) {
+            free(_bm3x3);
+            _bm3x3 = NULL;
+            m_bmFromSkin = false;
+        }
     }
 
     CRPropRef getNewProps() {
@@ -1337,13 +1927,15 @@ public:
     {
         _pauseRotationTimer = false;
         int orient = GetOrientation();
-        if (orient == _pausedRotation)
-            return;
-        SetOrientation(_pausedRotation);
+        if (orient != _pausedRotation)
+            SetOrientation(_pausedRotation);
+        cr_rotate_angle_t oldOrientation = CRPocketBookWindowManager::instance->getScreenOrientation();
+        cr_rotate_angle_t newOrientation = pocketbook_orientations[GetOrientation()];
+        CRLog::trace("onPausedRotation(), oldOrient = %d, newOrient = %d", oldOrientation, newOrientation);
         int dx = _wm->getScreen()->getWidth();
         int dy = _wm->getScreen()->getHeight();
-        cr_rotate_angle_t oldOrientation = pocketbook_orientations[orient];
-        cr_rotate_angle_t newOrientation = pocketbook_orientations[GetOrientation()];
+        if (oldOrientation == newOrientation)
+            return;
         if ((oldOrientation & 1) == (newOrientation & 1))
             _wm->reconfigure(dx, dy, newOrientation);
         else {
@@ -1411,13 +2003,50 @@ public:
             }
         }
     }
+    void OnFormatStart()
+    {
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+        CRPocketBookWindowManager::instance->cancelCacheSwap();
+#endif
+        if (!_restore_globOrientation) {
+            CRPropRef props = CRPocketBookDocView::instance->getProps();
+            int rotate_mode = props->getIntDef(PROP_POCKETBOOK_ROTATE_MODE, PB_ROTATE_MODE_180);
+            if (PB_ROTATE_MODE_360 == rotate_mode && -1 == GetGlobalOrientation()) {
+                SetGlobalOrientation(GetOrientation());
+                _restore_globOrientation = true;
+            }
+        }
+        V3DocViewWin::OnFormatStart();
+    }
     void OnFormatEnd()
     {
         V3DocViewWin::OnFormatEnd();
+#ifdef BACKGROUND_CACHE_FILE_CREATION
+        CRPocketBookWindowManager::instance->scheduleCacheSwap();
+#endif
         if (_restore_globOrientation) {
             SetGlobalOrientation(-1);
             _restore_globOrientation = false;
         }
+    }
+    void OnExternalLink( lString16 url, ldomNode * node )
+    {
+        lString16 protocol;
+        lString16 path;
+
+        if ( url.split2(lString16(":"), protocol, path ) ) {
+            if (!protocol.compare(L"file") && path.startsWith(L"//") && path.length() > 5) {
+                lString16 anchor;
+                int p = path.pos(L"#");
+                if (p > 2) {
+                    anchor = path.substr(p + 1);
+                    path = path.substr(2, p -2);
+                } else
+                    path = path.substr(2, path.length() - 1);
+                OpenBook(UnicodeToLocal(path).c_str(), UnicodeToLocal(anchor).c_str(), 1);
+            }
+        } else
+            Message(ICON_WARNING, "CR3", "@Is_ext_link", 2000);
     }
 };
 
@@ -1435,15 +2064,16 @@ static void paused_rotate_timer()
 
 CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDialog *parent) 
     : CRViewDialog(wm, lString16::empty_str, lString8::empty_str, lvRect(), false, true), _parent(parent),
-    _dictsTable(16), _active(false), _dictsLoaded(false), _itemsCount(5), _translateResult(0),
+    _dictsTable(16), _active(false), _dictsLoaded(false), _itemsCount(7), _translateResult(0),
     _newWord(NULL), _newTranslation(NULL)
 {
+    bool default_dict = false;
     setSkinName(lString16("#dict"));
     lvRect rect = _wm->getScreen()->getRect();
-    if ( !_wm->getSkin().isNull() ) {
-        _skin = _wm->getSkin()->getWindowSkin(getSkinName().c_str());
+    CRWindowSkinRef skin = getSkin();
+    if ( !skin.isNull() ) {
         _toolBarImg = _wm->getSkin()->getImage(L"cr3_dict_tools.png");
-        CRRectSkinRef clientSkin = _skin->getClientSkin();
+        CRRectSkinRef clientSkin = skin->getClientSkin();
         if ( !clientSkin.isNull() ) {
             getDocView()->setBackgroundColor(clientSkin->getBackgroundColor());
             getDocView()->setTextColor(clientSkin->getTextColor());
@@ -1459,16 +2089,24 @@ CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDi
     CRPropRef props = CRPocketBookDocView::instance->getProps();
     getDocView()->setVisiblePageCount(props->getIntDef(PROP_POCKETBOOK_DICT_PAGES, 1));
     lString16 lastDict = props->getStringDef(PROP_POCKETBOOK_DICT, pbGlobals->getDictionary());
-    if (lastDict.empty()) {
+    if ((default_dict = lastDict.empty())) {
+        CRLog::trace("last dictionary is empty");
         loadDictionaries();
         if (_dictCount > 0)
             lastDict = Utf8ToUnicode(lString8(_dictNames[0]));
+        CRLog::trace("_dictCount = %d", _dictCount);
     }
     if (!lastDict.empty()) {
         _dictIndex = 0;
         int rc = OpenDictionary((char *)UnicodeToUtf8(lastDict).c_str());
+        CRLog::trace("OpenDictionary() returned = %d", rc);
         if (rc == 1) {
             _caption = lastDict;
+            getDocView()->createDefaultDocument(lString16(), Utf8ToUnicode(TR("@Word_not_found")));
+            if (default_dict) {
+                props->setString(PROP_POCKETBOOK_DICT, lastDict);
+                CRPocketBookDocView::instance->saveSettings(lString16());
+            }
             getDocView()->createDefaultDocument(lString16::empty_str, Utf8ToUnicode(TR("@Word_not_found")));
             return;
         }
@@ -1527,8 +2165,11 @@ void CRPbDictionaryView::drawTitleBar()
     CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
     CRRectSkinRef titleSkin = skin->getTitleSkin();
     lvRect titleRc;
+
     if ( !getTitleRect( titleRc ) )
         return;
+
+   // CRLog::trace("CRPbDictionaryView::drawTitleBar() titleRc ( %d, %d, %d, %d ) w= %d", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom, titleRc.width() );
     titleSkin->draw( buf, titleRc );
     lvRect borders = titleSkin->getBorderWidths();
     buf.SetTextColor( skin->getTextColor() );
@@ -1540,18 +2181,22 @@ void CRPbDictionaryView::drawTitleBar()
         int h = _icon->GetHeight();
         buf.Draw( _icon, titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
         imgWidth = w + 8;
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() _icon ( %d, %d, %d, %d )", titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
     }
     int tbWidth = 0;
-    if (!_toolBarImg.isNull()) {
+    if (!_toolBarImg.isNull()) 
+    {
         tbWidth = _toolBarImg->GetWidth();
         int h = _toolBarImg->GetHeight();
         titleRc.right -= (tbWidth + titleSkin->getBorderWidths().right);
         buf.Draw(_toolBarImg, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() _toolBarImg tbWidth=%d, h=%d ( %d, %d, %d, %d )", tbWidth, h, titleRc.right, titleRc.top + hh/2 - h/2, tbWidth, h );
     }
     lvRect textRect = titleRc;
     textRect.left += imgWidth;
     titleSkin->drawText( buf, textRect, _caption );	
-    if (_active) {
+    if (_active) 
+    {
         lvRect selRc;
 
         if (_selectedIndex != 0 && tbWidth > 0) {
@@ -1559,24 +2204,32 @@ void CRPbDictionaryView::drawTitleBar()
             selRc = titleRc;
             selRc.left = titleRc.right + itemWidth * (_selectedIndex -1);
             selRc.right = selRc.left + itemWidth;
+            CRLog::trace("CRPbDictionaryView::drawTitleBar() _selectedIndex=%d, ( %d, %d, %d, %d )", _selectedIndex, selRc.left, selRc.top, selRc.right, selRc.bottom );
         } else {
             selRc = textRect;
             selRc.left += borders.left;
+            CRLog::trace("CRPbDictionaryView::drawTitleBar() else textRect _selectedIndex=%d, ( %d, %d, %d, %d )", _selectedIndex, selRc.left, selRc.top, selRc.right, selRc.bottom );
         }
         selRc.top += borders.top;
         selRc.bottom -= borders.bottom;
         buf.InvertRect(selRc.left, selRc.top, selRc.right, selRc.bottom);
+       // CRLog::trace("CRPbDictionaryView::drawTitleBar() InvertRect ( %d, %d, %d, %d )", selRc.left, selRc.top, selRc.right, selRc.bottom );
     }
 }
 
 void CRPbDictionaryView::draw()
 {
+    int antialiasingMode = fontMan->GetAntialiasMode();
+    if (antialiasingMode == 1)
+        fontMan->SetAntialiasMode(0);
     if (isArticleListActive()) {
         _dictMenu->draw();
     } else {
         CRViewDialog::draw();
         _dirty = false;
     }
+    if (antialiasingMode == 1)
+        fontMan->SetAntialiasMode(1);
 }
 
 void CRPbDictionaryView::selectDictionary()
@@ -1616,19 +2269,23 @@ void CRPbDictionaryView::onDictionarySelect()
     lString16 lastDict = props->getStringDef(PROP_POCKETBOOK_DICT);
     int index = _dictsTable.get(lastDict);
     CRLog::trace("CRPbDictionaryView::onDictionarySelect(%d)", index);
-    if (index >= 0 && index <= _dictCount) {
+    while (index >= 0 && index <= _dictCount) {
         if (_dictIndex >= 0) {
+            if (index == _dictIndex) {
+                break; /* The same dictionary selected */
+            }
             CloseDictionary();
         }
         int rc = OpenDictionary(_dictNames[index]);
+        CRLog::trace("OpenDictionary(%s) returned %d", _dictNames[index], rc);
         if (rc == 1) {
             _dictIndex = index;
             CRPocketBookDocView::instance->saveSettings(lString16());
         } else {
             _dictIndex = -1;
-            CRLog::error("OpenDictionary(%s) returned %d", _dictNames[_dictIndex], rc);
         }
         _caption = lastDict;
+        index = -1; // to break from the loop
     }
     lString16 word = _word;
     _word.clear();
@@ -1662,10 +2319,16 @@ void CRPbDictionaryView::setCurItem(int index)
     Update();
 }
 
-void CRPbDictionaryView::searchDictinary()
+void CRPbDictionaryView::searchDictionary()
 {
     _searchPattern.clear();
-    OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+   // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+    OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
+
+}
+
+void CRPbDictionaryView::launchDictBrowser(const char *urlBase) {
+    launchBrowser(urlBase+_word);
 }
 
 void CRPbDictionaryView::closeDictionary()
@@ -1688,11 +2351,16 @@ bool CRPbDictionaryView::onItemSelect()
     case PB_DICT_ARTICLE_LIST:
         return true;
     case PB_DICT_DEACTIVATE:
-        setDirty();
-        _parent->activateDictView(_active = false);
+        doDeactivate();
         return true;
     case PB_DICT_SEARCH:
-        searchDictinary();
+        searchDictionary();
+        return true;
+    case PB_DICT_GOOGLE:
+        launchDictBrowser(PB_BROWSER_QUERY_GOOGLE);
+        return true;
+    case PB_DICT_WIKIPEDIA:
+        launchDictBrowser(PB_BROWSER_QUERY_WIKIPEDIA);
         return true;
     }
     return false;
@@ -1707,12 +2375,12 @@ bool CRPbDictionaryView::onCommand( int command, int params )
 
     switch (command) {
     case MCMD_CANCEL:
-        closeDictionary();
+      closeDictionary();
         return true;
     case MCMD_OK:
         return onItemSelect();
     case PB_CMD_RIGHT:
-        setCurItem(getCurItem() + 1);
+      setCurItem(getCurItem() + 1);
         return true;
     case PB_CMD_LEFT:
         setCurItem(getCurItem() - 1);
@@ -1742,6 +2410,239 @@ bool CRPbDictionaryView::onCommand( int command, int params )
         return true;
     }
     return false;
+}
+
+bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType )
+{
+ // CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
+
+  if (_active) 
+  {
+   // CRLog::trace("CRPbDictionaryView::onTouchEvent _active %d ( %d, %d, %d )",  _active, x, y, int( evType ) );
+    switch ( evType )
+    {
+    case CRTOUCH_UP:
+      CRLog::trace("CRPbDictionaryView::onTouchEvent( x=%d, y=%d,evType= %d )", x, y, int( evType ) );
+
+      CRLog::trace("CRPbDictionaryView::onTouchEvent _selectedIndex=%d )", _selectedIndex );
+      {
+
+        lvPoint pn( x, y );
+        CRWindowSkinRef skin( _wm->getSkin()->getWindowSkin(_skinName.c_str()) );
+        CRRectSkinRef titleSkin = skin->getTitleSkin();
+        lvRect titleRc;
+        lvRect clientRc= _dictMenu->getRect();
+        lvPoint pnItm= _dictMenu->getMaxItemSize();
+        //pnItm= _dictMenu->getItemSize();
+        if ( _toolBarImg.isNull() || !getTitleRect( titleRc ) || !getClientRect( titleRc ) || !pnItm.y )
+          return true;
+
+        // CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+        // CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+
+        titleRc.bottom= titleRc.top;
+        titleRc.top= clientRc.top;
+        clientRc.top= titleRc.bottom;
+
+        CRLog::trace("===========================================================================================" );
+        // CRLog::trace("CRDV::onTouchEvent() titleRc ( %d, %d, %d, %d )", titleRc.left, titleRc.top, titleRc.right, titleRc.bottom );
+        // CRLog::trace("CRDV::onTouchEvent() clientRc( %d, %d, %d, %d ) pnItm.x=%d pnItm.y=%d", clientRc.left, clientRc.top, clientRc.right, clientRc.bottom, pnItm.x, pnItm.y );
+
+        int command = 0;
+        lvRect tmpRc;
+        if ( titleRc.isPointInside( pn ) )
+        {
+          CRLog::trace("onTouchEvent() point inside title" );
+
+          int tbWidth = _toolBarImg->GetWidth();
+          tmpRc= titleRc;
+          tmpRc.right -= ( tbWidth + titleSkin->getBorderWidths().right );
+          CRLog::trace("CRDV::onTouchEvent() PB_DICT_SELECT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+          if ( tmpRc.isPointInside( pn ) )
+          {
+            _selectedIndex= PB_DICT_SELECT;
+            selectDictionary();
+            CRLog::trace("onTouchEvent() PB_DICT_SELECT %d", _selectedIndex );
+            return true;
+          }
+          
+          tmpRc= titleRc;
+          tmpRc.left += tmpRc.right - ( tbWidth + titleSkin->getBorderWidths().right );
+          CRLog::trace("CRDV::onTouchEvent() toolBar tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+          if ( tmpRc.isPointInside( pn ) )// in toolBar
+          {
+            CRLog::trace("onTouchEvent() point inside toolbar" );
+
+            int itemWidth = tbWidth/(_itemsCount-1);
+
+            tmpRc.right = tmpRc.left + itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_EXIT %d", PB_DICT_EXIT );
+                closeDictionary();
+                return true;
+            }
+
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_GOOGLE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_GOOGLE %d", PB_DICT_GOOGLE );
+                setCurItem( PB_DICT_GOOGLE );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_WIKIPEDIA tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_WIKIPEDIA %d", PB_DICT_WIKIPEDIA );
+                setCurItem( PB_DICT_WIKIPEDIA );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_ARTICLE_LIST %d", PB_DICT_ARTICLE_LIST );
+                setCurItem( PB_DICT_ARTICLE_LIST );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_DEACTIVATE %d", PB_DICT_DEACTIVATE );
+                setCurItem( PB_DICT_DEACTIVATE );
+                onItemSelect();
+                Update();
+                return true;
+            }
+
+            tmpRc.left  += itemWidth;
+            tmpRc.right += itemWidth;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_SEARCH tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+            {
+                CRLog::trace("onTouchEvent() PB_DICT_SEARCH %d", PB_DICT_SEARCH );
+                setCurItem( PB_DICT_SEARCH );
+                searchDictionary();
+                Update();
+                return true;
+            }
+            }
+
+        }//if ( titleRc.isPointInside
+
+        if ( clientRc.isPointInside( pn ) )
+        {
+          CRLog::trace("onTouchEvent() point inside client" );
+
+          switch ( _selectedIndex )
+          {
+          case PB_DICT_SELECT:
+            break;
+
+          case PB_DICT_EXIT:
+            tmpRc= clientRc;
+            tmpRc.bottom -= clientRc.height()/2;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_EXIT tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+              command = PB_CMD_UP;
+            else
+              command = PB_CMD_DOWN;
+
+             _wm->postCommand( command, 0 );
+             return true;
+            break;
+
+          case PB_DICT_ARTICLE_LIST:
+            tmpRc= clientRc;
+            tmpRc.left += clientRc.width() * 2/3; 
+            if ( tmpRc.isPointInside( pn ) )//PgUp, PgDn
+            {
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+              tmpRc.bottom -= clientRc.height()/2;
+              if ( tmpRc.isPointInside( pn ) )
+                command = PB_CMD_UP;
+              else
+                command = PB_CMD_DOWN;
+
+            // _wm->postCommand( command, 0 );
+            // return true;
+              return _dictMenu->onCommand( command, 1 );
+            }
+            else//select item
+            {
+                tmpRc= clientRc;
+                tmpRc.right  -= clientRc.width() * 1/3; 
+                tmpRc.bottom -= clientRc.height()/2;
+
+                int strcount= clientRc.height()/pnItm.y;
+                int pgitcount= _dictMenu->getPageInItemCount();
+                int nselect= ( y - clientRc.top ) / pnItm.y;
+
+                if( nselect >= 0 && nselect <= pgitcount ) {
+
+                    if ( nselect != _dictMenu->getSelectedItem() )
+                        _dictMenu->setCurItem( nselect );
+                    translate( lString16(_dictMenu->getCurItemWord()) );
+                    Update();
+                    _wm->postCommand( PB_DICT_DEACTIVATE, 0 );
+                }
+
+                CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d ) _SelectedItem=%d _topItem=%d strcount%d  pgitcount=%d  nselect= %d" , tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom, _dictMenu->getSelectedItem(), _dictMenu->getTopItem(), strcount, _dictMenu->getPageInItemCount(),  nselect );
+
+                return true;
+            }
+            break;
+
+          case PB_DICT_DEACTIVATE:
+            tmpRc= clientRc;
+            tmpRc.bottom -= clientRc.height()/2;
+            CRLog::trace("CRDV::onTouchEvent() PB_DICT_DEACTIVATE tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
+            if ( tmpRc.isPointInside( pn ) )
+              command = PB_CMD_UP;
+            else
+              command = PB_CMD_DOWN;
+
+             _wm->postCommand( command, 0 );
+             return true;
+           // return this->onCommand( command, 1 );
+
+            break;
+
+          case PB_DICT_SEARCH:
+            break;
+          }
+        }//if ( clientRc.isPointInside ..
+      }
+
+    break;
+    
+    default:
+    break;
+
+    }
+    return true;
+  }
+
+ // return true;
+  return false;
+  //return CRViewDialog::onTouchEvent( x, y, evType );
 }
 
 lString8 CRPbDictionaryView::createArticle(const char *word, const char *translation)
@@ -1806,17 +2707,20 @@ void CRPbDictionaryView::translate(const lString16 &w)
 {
     lString8 body;
 
-    CRLog::trace("CRPbDictionaryView::translate() start");
-    if (_dictIndex >= 0) {
-        lString16 s16 = w;
-        if (s16 == _word)
-            return;
-        _word = s16;
+    lString16 s16 = w;
+    if (s16 == _word) {
+        CRLog::trace("CRPbDictionaryView::translate() - the same word");
+        return;
+    }
+    _word = s16;
 
+    CRLog::trace("CRPbDictionaryView::translate() start, _dictIndex = %d", _dictIndex);
+    if (_dictIndex >= 0) {
         s16.lowercase();
         lString8 what = UnicodeToUtf8( s16 );
         char *word = NULL, *translation = NULL;
 
+        CRLog::trace("CRPbDictionaryView::translate() LookupWord");
         _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
         //_translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
         CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
@@ -1842,15 +2746,14 @@ void CRPbDictionaryView::translate(const lString16 &w)
     }
     setDirty();
     _selectedIndex = PB_DICT_DEACTIVATE;
-    _stream = LVCreateStringStream( CRViewDialog::makeFb2Xml( body ) );
-    getDocView()->LoadDocument(_stream);
+    setTranslation(CRViewDialog::makeFb2Xml( body ));
     CRLog::trace("CRPbDictionaryView::translate() end");
 }
 
 void CRPbDictionaryView::setTranslation(lString8 translation)
 {
     _stream = LVCreateStringStream( translation );
-    getDocView()->LoadDocument(_stream);
+    getDocView()->LoadFb2Document(_stream);
 }
 
 void CRPbDictionaryView::reconfigure( int flags )
@@ -1865,15 +2768,22 @@ void CRPbDictionaryView::doActivate()
     setCurItem(getCurItem());
 }
 
+void CRPbDictionaryView::doDeactivate()
+{
+    setDirty();
+    _parent->activateDictView(_active = false);
+}
+
 int CRPbDictionaryView::getDesiredHeight()
 {
     int dh = (_wm->getScreenOrientation() & 0x1) ? 200 : 300;
 
-    if (_skin.isNull())
+    CRWindowSkinRef skin = getSkin();
+    if (skin.isNull())
         return dh;
     lvRect screenRect = _wm->getScreen()->getRect();
     lvRect skinRect;
-    _skin->getRect(skinRect, screenRect);
+    skin->getRect(skinRect, screenRect);
     int sh = (screenRect.height() >> 1) - PB_LINE_HEIGHT;
     if (skinRect.height() <= 0)
         return dh;
@@ -1931,8 +2841,17 @@ void CRPbDictionaryMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef s
     textRect.left = textRect.right + 1;
     textRect.right = rc.right;
     valueSkin->drawText( buf, textRect, _translation16 );
-    if (selected)
-        buf.InvertRect(rc.left, rc.top, rc.right, rc.bottom);
+    if (selected) {
+#ifdef CR_INVERT_PRSERVE_GRAYS
+        if (buf.GetBitsPerPixel() > 2){
+		buf.InvertRect( rc.left, rc.top, rc.right, rc.bottom);
+		buf.InvertRect( rc.left + 2, rc.top + 2, rc.right -2 , rc.bottom - 2);
+           // buf.Rect(rc, 2, buf.GetTextColor());
+	}
+        else
+#endif /* CR_INVERT_PRSERVE_GRAYS */
+            buf.InvertRect(rc.left, rc.top, rc.right, rc.bottom);
+    }
 }
 
 
@@ -2014,10 +2933,14 @@ void CRPbDictionaryMenu::setCurItem(int nItem)
     _parent->Update();
 }
 
+const char * CRPbDictionaryMenu::getCurItemWord()
+{
+    CRPbDictionaryMenuItem *item = static_cast<CRPbDictionaryMenuItem *>(_items[_selectedItem]);
+    return item->getWord();
+}
+
 bool CRPbDictionaryMenu::onCommand( int command, int params )
 {
-    int nextItem = 0;
-
     CRLog::trace("CRPbDictionaryMenu::onCommand( %d, %d )", command, params);
     switch (command) {
     case MCMD_CANCEL:
@@ -2025,20 +2948,26 @@ bool CRPbDictionaryMenu::onCommand( int command, int params )
         return true;
     case MCMD_OK:
     case PB_CMD_RIGHT:
-        nextItem = PB_DICT_DEACTIVATE;
+        _parent->setCurItem(_parent->getCurItem() + 1);
         break;
     case PB_CMD_LEFT:
-        nextItem = PB_DICT_EXIT;
+        _parent->setCurItem(_parent->getCurItem() - 1);
         break;
     case PB_CMD_UP:
         if (params > 0)
+        {
             prevPage();
+            setCurItem( _selectedItem );
+        }
         else
             setCurItem(_selectedItem - 1);
         return true;
     case PB_CMD_DOWN:
         if (params > 0)
+        {
             nextPage();
+            setCurItem( _selectedItem );
+        }
         else
             setCurItem(_selectedItem + 1);
         return true;
@@ -2051,7 +2980,6 @@ bool CRPbDictionaryMenu::onCommand( int command, int params )
         _parent->setTranslation(CRViewDialog::makeFb2Xml(
                 _parent->createArticle(item->getWord(), item->getTranslation())));
     }
-    _parent->setCurItem(nextItem);
     return true;
 }
 
@@ -2144,7 +3072,7 @@ void CRPbDictionaryDialog::endWordSelection()
     }
 }
 
-void CRPbDictionaryDialog::onWordSelection() 
+void CRPbDictionaryDialog::onWordSelection(bool translate)
 {
     CRLog::trace("CRPbDictionaryDialog::onWordSelection()");
     ldomWordEx * word = _wordSelector->getSelectedWord();
@@ -2158,14 +3086,16 @@ void CRPbDictionaryDialog::onWordSelection()
     lvRect wRc;
     _docview->setCursorPos(word->getWord().getStartXPointer());
     _docview->getCursorRect(wRc);
+    lvRect docRect;
+    _docwin->getClientRect(docRect);
     if (dictRc.top > 0) {
-        if (wRc.bottom >= dictRc.top) {
+        if (wRc.bottom >= (docRect.height() >> 1)) {
             rc.top = 0;
             rc.bottom = _dictView->getDesiredHeight();
             _dictView->setRect(rc);
         }
     } else {
-        if (wRc.top <= dictRc.bottom) {
+        if (wRc.top <= (docRect.height() >> 1)) {
             rc.bottom = _wm->getScreen()->getHeight();
             rc.top = rc.bottom - _dictView->getDesiredHeight();
             _dictView->setRect(rc);
@@ -2177,7 +3107,10 @@ void CRPbDictionaryDialog::onWordSelection()
     bool firstTime = _selText.empty();
     _selText = word->getText();
     CRLog::trace("_selText = %s", UnicodeToUtf8( _selText).c_str());
-    if (_autoTranslate) {
+    if (!translate) {
+        setDocDirty();
+        Update();
+    } else if (_autoTranslate) {
         if (!firstTime) {
             setDocDirty();
             Update();
@@ -2299,6 +3232,134 @@ void CRPbDictionaryDialog::Update()
     _wm->update(false);
 }
 
+class CRPbIniFile
+{
+private:
+    LVHashTable<lString8, CRPropRef> m_sections;
+public:
+    CRPbIniFile() : m_sections(8)
+    {
+    }
+
+    virtual ~CRPbIniFile()
+    {
+    }
+
+    virtual lString16 getStringDef( const char * sectionName, const char * propName,
+                                   const char * defValue = NULL )
+    {
+        const lString8 name(sectionName);
+        CRPropRef section = m_sections.get(name);
+
+        if (section.isNull())
+            return lString16( defValue );
+        return section->getStringDef( propName, defValue );
+    }
+
+    virtual bool loadFromFile( const char * iniFile )
+    {
+        LVStreamRef stream = LVOpenFileStream( iniFile, LVOM_READ );
+        if ( stream.isNull() ) {
+            CRLog::error( "cannot open ini file %s", iniFile );
+            return false;
+        }
+        return loadFromStream( stream.get() );
+    }
+
+    virtual bool loadFromStream( LVStream * stream )
+    {
+        lString8 line;
+        lString8 section;
+        bool eof = false;
+        CRPropRef props;
+        do {
+            eof = !readIniLine(stream, line);
+            if ( eof || (!line.empty() && line[0]=='[') ) {
+                // eof or [section] found
+                // save old section
+                if ( !section.empty() ) {
+                    m_sections.set( section, props );
+                    section.clear();
+                }
+                // begin new section
+                if ( !eof ) {
+                    int endbracket = line.pos( cs8("]") );
+                    if ( endbracket<=0 )
+                        endbracket = line.length();
+                    if ( endbracket >= 2 )
+                        section = line.substr( 1, endbracket - 1 );
+                    else
+                        section.clear(); // wrong sectino
+                    if ( !section.empty())
+                        props = LVCreatePropsContainer();
+                }
+            } else if ( !section.empty() ) {
+                // read definition
+                lString8 name;
+                lString8 value;
+                if ( splitLine( line, cs8("="), name, value ) )  {
+                    props->setString( name.c_str(), Utf8ToUnicode(value) );
+                } else if ( !line.empty() )
+                    CRLog::error("Invalid property in line %s", line.c_str() );
+
+            }
+        } while ( !eof );
+        return true;
+    }
+protected:
+    bool readIniLine( LVStream *stream, lString8 & dst )
+    {
+        lString8 line;
+        bool flgComment = false;
+        bool crSeen = false;
+        for ( ; ; ) {
+            int ch = stream->ReadByte();
+            if ( ch<0 )
+                break;
+            if ( ch=='#' && line.empty() )
+                flgComment = true;
+            if ( ch =='\r' ) {
+                crSeen = true;
+            } else if ( ch=='\n' || crSeen ) {
+                if ( flgComment ) {
+                    flgComment = false;
+                    line.clear();
+                    if ( ch!= '\n')
+                        line << ch;
+                } else {
+                    if ( ch!='\n' )
+                        stream->SetPos( stream->GetPos()-1 );
+                    if ( !line.empty() ) {
+                        dst = line;
+                        return true;
+                    }
+                }
+                crSeen = false;
+            } else {
+                line << ch;
+            }
+        }
+        return false;
+    }
+
+    bool splitLine( lString8 line, const lString8 & delimiter, lString8 & key, lString8 & value )
+    {
+        if ( !line.empty() ) {
+            int n = line.pos(delimiter);
+            value.clear();
+            key = line;
+            if ( n>0 && n <line.length()-1 ) {
+                value = line.substr( n+1, line.length() - n - 1 );
+                key = line.substr( 0, n );
+                key.trim();
+                value.trim();
+                return key.length()!=0 && value.length()!=0;
+            }
+        }
+        return false;
+    }
+};
+
 static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
 {
     CRGUIAcceleratorTable pbTable;
@@ -2325,6 +3386,200 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
     if (!mainTable.isNull()) {
         CRLog::trace("main accelerator table is not null");
         mainTable->addAll(pbTable);
+    }
+}
+
+void toggleInvertDisplay() {
+
+    CRPropRef props = CRPocketBookDocView::instance->getProps();
+    int currentMode = props->getIntDef(PROP_DISPLAY_INVERSE, 0);
+
+    currentMode = currentMode==1?0:1;
+    CRLog::trace("toggleInvertDisplay(): %d", currentMode);
+
+    props->setInt(PROP_DISPLAY_INVERSE, currentMode);
+    CRPocketBookDocView::instance->saveSettings(lString16());
+    CRPocketBookDocView::instance->applySettings();
+
+    lUInt32 back = main_win->getDocView()->getBackgroundColor();
+    lUInt32 text = main_win->getDocView()->getTextColor();
+    // lUInt32 stat = props->getColorDef(PROP_STATUS_FONT_COLOR, text);
+
+    main_win->getDocView()->setBackgroundColor(text);
+    main_win->getDocView()->setTextColor(back);
+    main_win->getDocView()->setStatusColor(back);
+    
+    CRPocketBookWindowManager::instance->update(true);
+}
+
+#ifdef POCKETBOOK_PRO
+
+bool systemPanelShown() {
+    return GetPanelType()!=PANEL_DISABLED;
+}
+
+void toggleSystemPanel() {
+    int currentMode = GetPanelType();
+    currentMode = currentMode==PANEL_DISABLED?PANEL_ENABLED:PANEL_DISABLED;
+    
+    if( currentMode == PANEL_ENABLED ) {
+        CRLog::trace("toggleSystemPanel(): PANEL_ENABLED");
+        SetPanelType(PANEL_ENABLED);
+        DrawPanel(NULL, "", "", 0);
+        PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+    }
+    else {
+        CRLog::trace("toggleSystemPanel(): PANEL_DISABLED");
+        SetPanelType(PANEL_DISABLED);
+        CRPocketBookWindowManager::instance->update(true);
+    }
+}
+
+#endif
+
+void toggleStatusLine() {
+    CRPropRef props = CRPocketBookDocView::instance->getProps();
+    int currentMode = props->getIntDef(PROP_STATUS_LINE, 0);
+
+    currentMode = currentMode==2?0:2;
+    CRLog::trace("toggleStatusBar(): %d", currentMode);
+
+    props->setInt(PROP_STATUS_LINE, currentMode);
+    CRPocketBookDocView::instance->saveSettings(lString16());
+    CRPocketBookDocView::instance->applySettings();
+
+    main_win->getDocView()->setStatusMode(
+        currentMode,
+        props->getBoolDef(PROP_SHOW_TIME, false),
+        props->getBoolDef(PROP_SHOW_TITLE, true),
+        props->getBoolDef(PROP_SHOW_BATTERY, true),
+        props->getBoolDef(PROP_STATUS_CHAPTER_MARKS, true),
+        props->getBoolDef(PROP_SHOW_POS_PERCENT, false),
+        props->getBoolDef(PROP_SHOW_PAGE_NUMBER, true),
+        props->getBoolDef(PROP_SHOW_PAGE_COUNT, true),
+        props->getBoolDef(PROP_SHOW_CHAPTER_PAGES_REMAIN, false)
+        );
+
+    CRPocketBookWindowManager::instance->update(true);
+}
+
+#ifndef POCKETBOOK_PRO
+extern unsigned long long hwconfig;
+#define HWC_KEYBOARD     ((int)((hwconfig >> 12) & 31))
+#define HWC_GSENSOR      ((int)((hwconfig >> 20) & 15))
+#define HWC_DISPLAY      ((int)((hwconfig >> 4) & 15))
+#define HWC_HAS_GSENSOR (HWC_GSENSOR != 0)
+#endif
+
+int getPB_keyboardType()
+{
+    return HWC_KEYBOARD;
+}
+
+int getPB_screenType()
+{
+    return HWC_DISPLAY;
+}
+        
+bool isGSensorSupported()
+{
+    return HWC_HAS_GSENSOR;
+}
+
+bool isFrontLightSupported() {
+    return access( PB_FRONT_LIGHT_BIN, F_OK ) != -1;
+}
+
+#ifdef POCKETBOOK_PRO
+bool isNetworkSupported() {
+    return access( PB_NETWORK_BIN, F_OK ) != -1;
+}
+
+bool isAutoConnectSupported() {
+    return access( PB_AUTO_CONNECT_BIN, F_OK ) != -1;
+}
+
+bool isTaskManagerSupported() {
+    return MultitaskingSupported();
+}
+#endif
+
+bool isBrowserSupported() {
+    return access( PB_BROWSER_BINARY, F_OK ) != -1;
+}
+
+lString16 lastClock;
+void startStatusUpdateThread(int ms);
+void statusUpdateThread() {
+    lString16 currentClock = main_win->getDocView()->getTimeString();
+    int ms = 1000;
+    if( currentClock != lastClock ) {
+
+        CRPocketBookWindowManager::instance->postCommand(DCMD_REFRESH_PAGE, 0);
+        main_win->getDocView()->requestRender();
+        main_win->getDocView()->checkRender();
+
+        bool save = forcePartialUpdates;
+        forcePartialUpdates = true;
+        CRPocketBookWindowManager::instance->update(true);
+        forcePartialUpdates = save;
+
+        lastClock = currentClock;
+        ms = 60000;
+    }
+    startStatusUpdateThread(ms);
+}
+void startStatusUpdateThread(int ms) {
+    SetWeakTimer(const_cast<char *>("statusUpdateThread"), statusUpdateThread, ms);
+}
+void stopSatusUpdateThread() {
+    ClearTimer(statusUpdateThread);
+}
+
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2) {
+    pid_t cpid;
+    pid_t child_pid;
+    cpid = fork();
+
+    switch (cpid) {
+        case -1:
+            CRLog::error("pbLaunchWaitBinary(): Fork failed!");
+            break;
+
+        case 0:
+            child_pid = getpid();
+            CRLog::trace("pbLaunchWaitBinary(): Child: PID %d", child_pid);
+            CRLog::trace("pbLaunchWaitBinary(): Child: Launch %s", binary);
+            execl(
+                binary,
+                binary,
+                param1,
+                param2,
+                NULL
+                );
+            exit(0);
+
+        default:
+            CRLog::trace("pbLaunchWaitBinary(): Parent: Waiting for %d to finish", cpid);
+            waitpid(cpid, NULL, 0);
+            CRLog::trace("pbLaunchWaitBinary(): Parent: Returned from %s", binary);
+            CRPocketBookWindowManager::instance->update(true);
+    }
+}
+void pbLaunchWaitBinary(const char *binary, const char *param) {
+    pbLaunchWaitBinary(binary, param, "");
+}
+void pbLaunchWaitBinary(const char *binary) {
+    pbLaunchWaitBinary(binary, "", "");
+}
+
+void launchBrowser(lString16 url) {
+    if( isBrowserSupported() ) {
+        pbLaunchWaitBinary(PB_BROWSER_EXEC, PB_BROWSER_BINARY, UnicodeToUtf8(url).c_str());
+    }
+    else {
+        CRLog::trace("launchBrowser(): The browser binary is not present @ %s", PB_BROWSER_BINARY);
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the browser binary @ "PB_BROWSER_BINARY, 2000);
     }
 }
 
@@ -2396,15 +3651,81 @@ int InitDoc(const char *exename, char *fileName)
 #endif
 
     lString16Collection fontDirs;
-    fontDirs.add(lString16(USERFONTDIR));
-    fontDirs.add(lString16(SYSTEMFONTDIR));
+    fontDirs.add(lString16(L""USERFONTDIR));
+    fontDirs.add(lString16(L""SYSTEMFONTDIR));
+    fontDirs.add(lString16(L""USERDATA"/share/cr3/fonts"));
+    fontDirs.add(lString16(L""USERDATA2"/fonts"));
     CRLog::info("INIT...");
     if (!InitCREngine(exename, fontDirs))
         return 0;
 
     {
+        lString16 filename16(fileName);
+        lString16 dir = LVExtractPath(filename16);
+
+        CRLog::trace("choosing init file...");
+        static const lChar16 * dirs[] = {
+            dir.c_str(),
+            L""CONFIGPATH"/cr3/",
+            L""USERDATA2"/share/cr3/",
+            L""USERDATA"/share/cr3/",
+            L""CONFIGPATH"/cr3/",
+            NULL
+        };
+        lString16 ini;
+        CRPropRef props = LVCreatePropsContainer();
+        int bpp = 2;
+
+        int fb2Pos = filename16.pos(lString16(L".fb2"));
+        if (fb2Pos < 0)
+            ini = dir + LVExtractFilenameWithoutExtension(filename16);
+        else
+            ini = filename16.substr(0, fb2Pos);
+        ini.append((lChar16 *)L"_cr3.ini");
+        LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
+        if ( stream.isNull() || !props->loadFromStream( stream.get())) {
+            for (int i = 0; dirs[i]; i++ ) {
+                ini = lString16(dirs[i]) + ini_fname;
+                CRLog::debug("Try %s file", UnicodeToUtf8(ini).c_str());
+                LVStreamRef stream = LVOpenFileStream( ini.c_str(), LVOM_READ );
+                if ( !stream.isNull() ) {
+                    if ( props->loadFromStream( stream.get() ) ) {
+                        break;
+                    }
+                }
+            }
+        }
+        bpp = GetHardwareDepth();
+        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16) {
+            bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
+            if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16)
+                bpp = 2;
+        }
+        CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
-        CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight());
+        CRPocketBookWindowManager * wm = new CRPocketBookWindowManager(ScreenWidth(), ScreenHeight(), bpp);
+
+        CRPbIniFile devices;
+        if ( devices.loadFromFile(USERDATA"/share/cr3/devices.ini") ) {
+            lString8 kbdType = lString8::itoa(getPB_keyboardType());
+
+            lString16 keymapFile = devices.getStringDef("keyboard", kbdType.c_str());
+            if( !keymapFile.empty() ) {
+                CRLog::info("Keymap file specified in the device config: %s",
+                            UnicodeToUtf8(keymapFile).c_str());
+                props->setStringDef(PROP_KEYMAP_FILE, LVExtractFilenameWithoutExtension(keymapFile));
+            }
+            lString8 displayType = lString8::itoa(getPB_screenType());
+
+            lString16 skinFile = devices.getStringDef("screen", displayType.c_str());
+            if ( !skinFile.empty() ) {
+                CRLog::info("Skin file specified in the device config: %s",
+                            UnicodeToUtf8(skinFile).c_str());
+                props->setStringDef(PROP_SKIN_FILE, LVExtractFilenameWithoutExtension(skinFile));
+            }
+        } else {
+            CRLog::error("Error loading devices configuration");
+        }
 
         const char * keymap_locations [] = {
             CONFIGPATH"/cr3/keymaps",
@@ -2413,12 +3734,47 @@ int InitDoc(const char *exename, char *fileName)
             NULL,
         };
 
-        loadKeymaps(*wm, keymap_locations);
+        lString16 keymapFile = props->getStringDef(PROP_KEYMAP_FILE, "keymaps.ini");
+        int extPos = keymapFile.pos(".");
+        if ( -1==extPos )
+            keymapFile.append(".ini");
+        if ( !loadKeymaps(*wm, UnicodeToUtf8(keymapFile).c_str(), keymap_locations) &&
+                !loadKeymaps(*wm, "keymaps.ini",  keymap_locations)) {
+            ShutdownCREngine();
+            CRLog::error("Error loading keymap");
+            return 0;
+        }
         loadPocketBookKeyMaps(*wm);
         HyphMan::initDictionaries(lString16(USERDATA"/share/cr3/hyph/"));
-        if (!wm->loadSkin(lString16(CONFIGPATH"/cr3/skin")))
-            if (!wm->loadSkin(lString16(USERDATA2"/share/cr3/skin")))
-                wm->loadSkin(lString16(USERDATA"/share/cr3/skin"));
+
+        bool skinSet = false;
+        CRSkinList &skins = wm->getSkinList();
+        skins.openDirectory(NULL, lString16(USERDATA"/share/cr3/skins"));
+        skins.openDirectory("flash", lString16(FLASHDIR"/cr3/skins"));
+        skins.openDirectory("SD", lString16(USERDATA2"/share/cr3/skins"));
+        if ( skins.length() > 0 ) {
+            lString16 skinName;
+
+            CRLog::trace("There are some skins - try to select");
+            if (props->getString(PROP_SKIN_FILE, skinName)) {
+                CRLog::trace("Skin file specified in the settings: %s", skinName.c_str());
+                skinSet = wm->setSkin(skinName);
+            }
+            if (!skinSet) {
+                CRLog::info("Try to load default skin");
+                skinSet = wm->setSkin(lString16("default"));
+            }
+        }
+        if (!skinSet && !wm->loadSkin(lString16(CONFIGPATH"/cr3/skin"))) {
+            if (!wm->loadSkin(lString16(USERDATA2"/share/cr3/skin"))) {
+                if (!wm->loadSkin(lString16(USERDATA"/share/cr3/skin"))) {
+                    CRLog::error("Error loading skin");
+                    delete wm;
+                    ShutdownCREngine();
+                    return 0;
+                }
+            }
+        }
 
         ldomDocCache::init(lString16(STATEPATH"/cr3/.cache"), PB_CR3_CACHE_SIZE);
         if (!ldomDocCache::enabled())
@@ -2440,28 +3796,12 @@ int InitDoc(const char *exename, char *fileName)
             if ( !main_win->loadCSS(  lString16(USERDATA"/share/cr3/" ) + lString16(css_file_name) ) )
                 main_win->loadCSS( lString16(USERDATA2"/share/cr3/" ) + lString16(css_file_name) );
         main_win->setBookmarkDir(lString16(FLASHDIR"/cr3_notes/"));
-        CRLog::trace("choosing init file...");
-        static const lChar16 * dirs[] = {
-            L""CONFIGPATH"/cr3/",
-            L""USERDATA2"/share/cr3/",
-            L""USERDATA"/share/cr3/",
-            L""CONFIGPATH"/cr3/",
-            NULL
-        };
         CRLog::debug("Loading settings...");
-        lString16 ini;
-        for (int i = 0; dirs[i]; i++ ) {
-            ini = lString16(dirs[i]) + ini_fname;
-            if ( main_win->loadSettings( ini ) ) {
-                break;
-            }
-        }
-        CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
+        main_win->loadSettings( ini );
 
         int orient;
-
         if (GetGlobalOrientation() == -1 || pbGlobals->getKeepOrientation() == 0 || pbGlobals->getKeepOrientation() == 2) {
-            orient = GetOrientation();
+            orient = pocketbook_orientations[GetOrientation()];
         } else {
             orient = main_win->getProps()->getIntDef(PROP_POCKETBOOK_ORIENTATION,
                                                      pocketbook_orientations[GetOrientation()]);
@@ -2525,6 +3865,14 @@ const char * getEventName(int evt)
         return "EVT_NEXTPAGE";
     case EVT_OPENDIC:
         return "EVT_OPENDIC";
+#ifdef POCKETBOOK_PRO
+    case EVT_BACKGROUND:
+        return "EVT_BACKGROUND";
+    case EVT_FOREGROUND:
+        return "EVT_FOREGROUND";
+    case EVT_ACTIVATE:
+        return "EVT_ACTIVATE";
+#endif 
     default:
         sprintf(buffer, "%d", evt);
         return buffer;
@@ -2556,16 +3904,190 @@ static bool commandCanRepeat(int command)
     return false;
 }
 
+CRGUITouchEventType getTouchEventType(int inkview_evt)
+{
+    switch (inkview_evt) {
+    case EVT_POINTERDOWN:
+        return CRTOUCH_DOWN;
+    case EVT_POINTERLONG:
+        return CRTOUCH_DOWN_LONG;
+    case EVT_POINTERUP:
+        return CRTOUCH_UP;
+    }
+    return CRTOUCH_MOVE;
+}
+
+lString16 getPbModelNumber() {
+    lString16 model = lString16(GetDeviceModel());
+    model.replace(lString16("PocketBook"), lString16(""));
+    model.replace(lString16(" "), lString16(""));
+    return model;
+}
+
+#ifdef POCKETBOOK_PRO
+void SetSaveStateTimer(){
+    exiting = true;
+    CRPocketBookDocView::instance->closing();
+    exiting = false;
+}
+bool pbNetworkConnected() {
+    return NetInfo()->connected != 0;
+}
+
+/**
+ * Enable/Disable pocketbook network
+ *
+ * @param  action  connect/disconnect
+ */
+bool pbNetwork(const char *action) {
+    if( strcmp(action,"connect") && pbNetworkConnected() )
+        return true;
+    if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
+        pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
+    }
+    else if( isNetworkSupported() ) {
+        pbLaunchWaitBinary(PB_NETWORK_BIN, action);
+    }
+    else {
+        CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
+    }
+    return pbNetworkConnected();
+}
+
+#endif 
+
+static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
     bool process_events = false;
     int ret = 0;
-    CRLog::trace("main_handler(%s, %d, %d)", getEventName(type), par1, par2);
+    if (CRLog::LL_TRACE == CRLog::getLogLevel()) {
+        CRLog::trace("main_handler(%s, %d, %d)", getEventName(type), par1, par2);
+    }
     switch (type) {
     case EVT_SHOW:
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
+
+        // CRLog::trace("COVER_OFF_SAVE");
+        // CRLog::trace(USERLOGOPATH"/bookcover");
+        if (need_save_cover) {
+            FullUpdate();
+            // startStatusUpdateThread(5000);
+
+            // Try getting cover with the system function
+            ibitmap *cover = GetBookCover(
+                UnicodeToLocal(pbGlobals->getFileName()).c_str(),
+                ScreenWidth(),
+                ScreenHeight()/* - PanelHeight()*/
+                );
+            CRLog::trace("GetBookCover(): GetBookCover(%s, %d, %d);",
+                UnicodeToLocal(pbGlobals->getFileName()).c_str(),
+                ScreenWidth(),
+                ScreenHeight()
+                );
+            CRLog::trace("GetBookCover(): ibitmap *cover = %p", cover);
+
+            #ifdef POCKETBOOK_PRO
+
+            // Try getting library cached cover
+            if( !cover ) {
+                lString8 libCachePath = lString8(USERDATA"/cover_chache/1");
+                libCachePath += lString8(UnicodeToLocal(pbGlobals->getFileName())).substr(strlen(FLASHDIR));
+                libCachePath += lString8(".png");
+
+                if( access( libCachePath.c_str(), F_OK ) != -1 ) {
+
+                    // Load image
+                    LVImageSourceRef cachedFile = LVCreateFileCopyImageSource( lString16(libCachePath.c_str()) );
+
+                    // Stretch image
+                    if( !cachedFile.isNull() ) {
+                        cachedFile = LVCreateStretchFilledTransform(
+                            cachedFile,
+                            ScreenWidth(),
+                            ScreenHeight(),
+                            IMG_TRANSFORM_STRETCH,
+                            IMG_TRANSFORM_STRETCH
+                            );
+
+                        // Convert to ibitmap
+                        if( !cachedFile.isNull() ) {
+
+                            cover = NewBitmap(cachedFile->GetWidth(), cachedFile->GetHeight());
+                            LVGrayDrawBuf tmpBuf( cachedFile->GetWidth(), cachedFile->GetHeight(), cover->depth );
+
+                            tmpBuf.Draw(cachedFile, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight(), true);
+
+                            if(4 == cover->depth) {
+                                Draw4Bits(tmpBuf, cover->data, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight());
+                            } else {
+                                memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
+                            }
+                        }
+                    }
+                }
+            }
+
+            // If none worked - generate an ugly ass cover
+            if( !cover ) {
+
+                LVGrayDrawBuf tmpBuf( ScreenWidth(), ScreenHeight(), GetHardwareDepth() );
+
+                bookinfo *info = GetBookInfoExt(UnicodeToLocal(pbGlobals->getFileName()).c_str(),"/");
+
+                LVDrawBookCover(
+                    tmpBuf,
+                    main_win->getDocView()->getCoverPageImage(),
+                    lString8(DEFAULTFONT),
+                    lString16(info->title),
+                    lString16(info->author),
+                    lString16(info->series),
+                    info->numinseries
+                    );
+
+                cover = NewBitmap(ScreenWidth(), ScreenHeight());
+                if(4 == cover->depth) {
+                    Draw4Bits(tmpBuf, cover->data, 0, 0, ScreenWidth(), ScreenHeight());
+                } else {
+                    memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
+                }
+            }
+
+            #endif
+
+            // If somehow there is a cover
+            if (cover) {
+
+                // Get previous cover
+                ibitmap *cover_prev = LoadBitmap( USERLOGOPATH"/bookcover");
+                if (cover_prev) {
+
+                    // Compare covers
+                    if( cover->scanline * cover->height == cover_prev->scanline * cover_prev->height &&
+                        memcmp(cover->data,cover_prev->data,cover->scanline * cover->height) == 0 ) {
+                        need_save_cover = 0;
+                    }
+                }
+
+                // Save new cover if needed
+                if (need_save_cover) {
+                    CRLog::trace("Save bookcover for power off logo");
+                    SaveBitmap( USERLOGOPATH"/bookcover", cover);
+                    // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
+                }
+                free(cover_prev);
+                free(cover);
+            }
+            need_save_cover = false;
+        }
         break;
+#ifdef POCKETBOOK_PRO
+    case EVT_BACKGROUND:
+	SetWeakTimer("SaveStateTimer", SetSaveStateTimer, 500);
+        break;
+#endif 
     case EVT_EXIT:
         exiting = true;
         if (CRPocketBookWindowManager::instance->getWindowCount() != 0)
@@ -2621,6 +4143,17 @@ int main_handler(int type, int par1, int par2)
     case EVT_SNAPSHOT:
         CRPocketBookScreen::instance->MakeSnapShot();
         break;
+    case EVT_POINTERDOWN:
+    case EVT_POINTERUP:
+    case EVT_POINTERMOVE:
+    case EVT_POINTERLONG:
+        CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
+        process_events = true;
+        break;
+    case EVT_INIT:
+        SetPanelType(0);
+        need_save_cover = true;
+        break;
     default:
         break;
     }
@@ -2631,13 +4164,16 @@ int main_handler(int type, int par1, int par2)
 
 const char* TR(const char *label) 
 {
-    char* tr = GetLangText(const_cast<char*> (label));
+    const char* tr = GetLangText(const_cast<char*> (label));
     CRLog::trace("Translation for %s is %s", label, tr);
     return tr;
 }
 
+extern ifont* header_font;
 int main(int argc, char **argv)
 {
+    forcePartialBwUpdates = false;
+    forcePartialUpdates = false;
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
@@ -2647,6 +4183,7 @@ int main(int argc, char **argv)
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
         return 2;
     }
+    header_font->color = WHITE;
     InkViewMain(main_handler);
     return 0;
 }

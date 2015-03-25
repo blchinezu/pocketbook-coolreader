@@ -20,6 +20,11 @@
 #define MENU_FONT_FACE_SIZE 36
 #define VALUE_FONT_SIZE 24
 
+#define PROP_KEYMAP_FILE "app.keymap.file"
+#define PROP_SKIN_FILE "app.skin.file"
+
+extern bool forcePartialBwUpdates;
+
 typedef struct {
     const char * translate_default;
     const char * value;
@@ -39,12 +44,20 @@ enum MainMenuItems_t {
     mm_EmbeddedStyles,
     mm_EmbeddedFonts,
     mm_Inverse,
+    mm_StatusMenu,
     mm_HighlightBookmarks,
     mm_StatusLine,
+    mm_ShowTime,
+    mm_ShowTitle,
+    mm_ShowBattery,
+    mm_ShowBatteryPercent,
+    mm_ShowPosPercent,
+    mm_ShowPageCount,
+    mm_ShowPageNumber,
     mm_BookmarkIcons,
+    mm_SpaceCondensing,
     mm_Footnotes,
     mm_SetTime,
-    mm_ShowTime,
     mm_Kerning,
     mm_LandscapePages,
     mm_PreformattedText,
@@ -61,13 +74,22 @@ enum MainMenuItems_t {
     mm_FloatingPunctuation
 #ifdef CR_POCKETBOOK
     ,mm_rotateMode,
-    mm_rotateAngle
+    mm_rotateAngle,
+    mm_grayBufferMode
 #endif /* CR_POCKETBOOK*/
     ,mm_ImageScaling = 350,
     mm_blockImagesZoominMode,
     mm_blockImagesZoominScale,
     mm_inlineImagesZoominMode,
-    mm_inlineImagesZoominScale
+    mm_inlineImagesZoominScale,
+    mm_fontGamma,
+    mm_touchScreenZones,
+    mm_ShowPagesTillChapterEnd,
+    mm_showChapterMarks,
+    mm_StatusFontEmbolden,
+    mm_Skin,
+    mm_TapZoneSize,
+    mm_Last
 };
 
 
@@ -84,9 +106,10 @@ class CRSettingsMenu : public CRFullScreenMenu
         CRPropRef props;
         CRGUIAcceleratorTableRef _menuAccelerators;
         void addMenuItems( CRMenu * menu, item_def_t values[] );
+
         lString16 getStatusText();
     public:
-        CRMenu * createFontSizeMenu( CRGUIWindowManager * wm, CRMenu * mainMenu, CRPropRef props );
+        CRMenu * createFontSizeMenu( CRMenu * mainMenu, int *fontSizes, unsigned sizesCount, CRPropRef props, const char * propName );
 #if CR_INTERNAL_PAGE_ORIENTATION==1 || defined(CR_POCKETBOOK)
         CRMenu * createOrientationMenu( CRMenu * mainMenu, CRPropRef props );
 #endif
@@ -94,11 +117,20 @@ class CRSettingsMenu : public CRFullScreenMenu
         virtual bool onCommand( int command, int params );
         virtual ~CRSettingsMenu()
         {
+            forcePartialBwUpdates = false;
             CRLog::trace("Calling fontMan->gc() on Settings menu destroy");
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Settings menu destroy");
         }
+    private:
+        CRMenu * createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label, lString8 property, item_def_t values[]);
+        CRMenu * createSettingsMenuItem(CRMenu * menu, int id, const char * label, LVFontRef valueFont, const char * propName, item_def_t values[]);
+        CRMenu * createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label, const char * propName);
+        void createStyleMenuItems( CRMenu * menu, LVFontRef valueFont, const char * prefix );
+        int _menuItemId;
 };
 
+void initTapDefaultActions(CRPropRef props);
+void getCommandForTapZone(int tapZone, CRPropRef props, bool longTap, int &command, int &param);
 
 #endif //CR3_SETTINGS_H_INCLUDED

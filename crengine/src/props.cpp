@@ -266,6 +266,14 @@ void CRPropAccessor::limitValueList( const char * propName, int values[], int va
     setString( propName, defValue );
 }
 
+void CRPropAccessor::limitValueRange( const char * propName, int defValue, int minValue, int maxValue )
+{
+    int value = 0;
+    if ( !(getInt( propName, value ) && (value >= minValue && value <= maxValue))) {
+        setInt( propName, defValue );
+    }
+}
+
 //============================================================================
 // CRPropAccessor methods
 //============================================================================
@@ -332,7 +340,7 @@ bool CRPropAccessor::parseColor(lString16 value, lUInt32 & result) {
 /// get color (#xxxxxx) property by name, returns false if not found
 bool CRPropAccessor::getColor( const char * propName, lUInt32 &result ) const
 {
-    int n = 0;
+    // int n = 0;
     lString16 value;
     if ( !getString( propName, value ) ) {
         //CRLog::debug("%s is not found", propName);
