@@ -4,8 +4,11 @@ CoolReader 3 - free e-book reader
 LICENSE: All source codes (except thirdparty directory) 
 are provided under the terms of GNU GPL license, version 2
 
-Source codes are available at sourceforge:
-git clone git://crengine.git.sourceforge.net/gitroot/crengine/crengine
+This is a fork of:
+https://sourceforge.net/p/crengine/crengine/ci/pocketbook-port/tree/
+
+Source codes are available at github:
+https://github.com/blchinezu/pocketbook-coolreader
 
 
 
