@@ -45,3 +45,12 @@ SDK for 360 and PRO devices:
   
 SDK for PRO devices with firmware 5:
   https://github.com/pocketbook-free/SDK_481
+
+
+My development dir looks like this:
+  ~/PBDEV/FRSCSDK/
+  ~/PBDEV/PBSDK/
+  ~/PBDEV/SDK_481/
+  ~/PBDEV/sources/cr3-fork/
+  ~/PBDEV/system/
+With this structure you should be able to build the source without any changes.
