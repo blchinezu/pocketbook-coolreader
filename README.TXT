@@ -11,7 +11,7 @@ This is a fork of:
   https://sourceforge.net/p/crengine/crengine/ci/pocketbook-port/tree/
 
 
-Source codes are available at github:
+Source code is available at github:
   https://github.com/blchinezu/pocketbook-coolreader
 
 
