@@ -1604,6 +1604,7 @@ public:
 
         case PB_CMD_OTA_UPDATE:
             OTA_update();
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif
 
@@ -3931,7 +3932,7 @@ void SetSaveStateTimer(){
     exiting = false;
 }
 bool pbNetworkConnected() {
-    return NetInfo()->connected != 0;
+    return strlen(web::get(PB_NETWORK_TEST_URL).c_str()) > 100;
 }
 
 /**

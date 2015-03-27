@@ -108,6 +108,8 @@ enum CRPbCommands {
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
 #define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
 
+#define PB_NETWORK_TEST_URL "https://www.google.com"
+
 const char* TR(const char *label);
 
 int getPB_keyboardType();
