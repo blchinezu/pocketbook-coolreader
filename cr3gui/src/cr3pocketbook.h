@@ -127,6 +127,7 @@ bool isAutoConnectSupported();
 bool isTaskManagerSupported();
 #endif
 
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2, const char *param3);
 void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2);
 void pbLaunchWaitBinary(const char *binary, const char *param);
 void pbLaunchWaitBinary(const char *binary);

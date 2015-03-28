@@ -3537,7 +3537,7 @@ void stopSatusUpdateThread() {
     ClearTimer(statusUpdateThread);
 }
 
-void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2) {
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2, const char *param3) {
     pid_t cpid;
     pid_t child_pid;
     cpid = fork();
@@ -3556,6 +3556,7 @@ void pbLaunchWaitBinary(const char *binary, const char *param1, const char *para
                 binary,
                 param1,
                 param2,
+                param3,
                 NULL
                 );
             exit(0);
@@ -3567,11 +3568,14 @@ void pbLaunchWaitBinary(const char *binary, const char *param1, const char *para
             CRPocketBookWindowManager::instance->update(true);
     }
 }
+void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2) {
+    pbLaunchWaitBinary(binary, param1, param2, "");
+}
 void pbLaunchWaitBinary(const char *binary, const char *param) {
     pbLaunchWaitBinary(binary, param, "");
 }
 void pbLaunchWaitBinary(const char *binary) {
-    pbLaunchWaitBinary(binary, "", "");
+    pbLaunchWaitBinary(binary, "");
 }
 
 void launchBrowser(lString16 url) {
