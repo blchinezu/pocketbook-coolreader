@@ -55,7 +55,7 @@
 #ifdef USE_FREETYPE2
 #include <freetype2/config/ftheader.h>
 #else
-#include <freetype/config/ftheader.h>
+#include <config/ftheader.h>
 #endif
 //#include <ft2build.h>
 #include FT_FREETYPE_H
