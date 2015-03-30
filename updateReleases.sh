@@ -2,7 +2,7 @@
 
 function waitForDropboxToCatchOn {
 	printf " - wait for dropbox to catch on: "
-	for s in {10..1}; do
+	for s in {5..1}; do
 		printf "$s "
 		sleep 1s
 	done
