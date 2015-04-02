@@ -13,12 +13,12 @@
 // #include <dirent.h>
 // #include <stdio.h>
 
-const char * OTA_concat(const char *p1, const char *p2) {
+/*const char * OTA_concat(const char *p1, const char *p2) {
     return (lString8(p1)+lString8(p2)).c_str();
 }
 const char * OTA_concat(const char *p1, const char *p2, const char *p3) {
     return (lString8(p1)+lString8(p2)+lString8(p3)).c_str();
-}
+}*/
 
 void OTA_exec(const char *binary, const char *param1, const char *param2, const char *param3) {
     pid_t cpid;
@@ -53,11 +53,11 @@ void OTA_exec(const char *binary, const char *param1, const char *param2, const 
 void OTA_exec(const char *binary, const char *param1, const char *param2) {
     OTA_exec(binary, param1, param2, "");
 }
-void OTA_exec(const char *binary, const char *param1) {
+/*void OTA_exec(const char *binary, const char *param1) {
     OTA_exec(binary, param1, "");
-}
+}*/
 
-bool OTA_mkdir_recursive(const char *path) {
+/*bool OTA_mkdir_recursive(const char *path) {
 
     if( access( path, F_OK ) != -1 )
         return true;
@@ -66,7 +66,7 @@ bool OTA_mkdir_recursive(const char *path) {
     // mkdir(path, 0777);
 
     return access( path, F_OK ) != -1;
-}
+}*/
 
 bool OTA_rm_recursive(const char *path) {
 
@@ -75,34 +75,10 @@ bool OTA_rm_recursive(const char *path) {
 
     OTA_exec(RM_BINARY, "-r", path);
 
-    /*DIR *dir;
-    struct dirent *entry;
-
-    if (!(dir = opendir(path))) {
-        unlink(path);
-        return;
-    }
-
-    while ((entry = readdir(dir))) {
-        if( entry == NULL )
-            break;
-        if (entry->d_type == DT_DIR) {
-            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-                continue;
-            OTA_rm_recursive( OTA_concat(path, "/", entry->d_name) );
-        }
-        else {
-            unlink(entry->d_name);
-        }
-    }
-
-    closedir(dir);
-    rmdir(path);*/
-
     return access( path, F_OK ) == -1;
 }
 
-bool OTA_cp_recursive(const char *from, const char *to) {
+/*bool OTA_cp_recursive(const char *from, const char *to) {
 
     if( access( from, F_OK ) == -1 )
         return false;
@@ -113,9 +89,9 @@ bool OTA_cp_recursive(const char *from, const char *to) {
     OTA_exec(CP_BINARY, "-r", from, to);
 
     return access( to, F_OK ) != -1;
-}
+}*/
 
-bool OTA_mv_recursive(const char *from, const char *to) {
+/*bool OTA_mv_recursive(const char *from, const char *to) {
 
     if( access( from, F_OK ) == -1 )
         return false;
@@ -126,65 +102,10 @@ bool OTA_mv_recursive(const char *from, const char *to) {
     if( !OTA_rm_recursive(from) )
         return false;
 
-    /*DIR *dir;
-    struct dirent *entry;
-
-    if (!(dir = opendir(from))) {
-
-        if( access( to, F_OK ) != -1 )
-            OTA_rm_recursive(to);
-
-        move_file(from, to);
-        return;
-    }
-
-    mkdir(to, 0777);
-
-    if( access( to, F_OK ) != -1 )
-        OTA_rm_recursive(to);
-
-    while ((entry = readdir(dir))) {
-        if( entry == NULL )
-            break;
-        if (entry->d_type == DT_DIR) {
-            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
-                continue;
-            OTA_mv_recursive(
-                OTA_concat(from, "/", entry->d_name),
-                OTA_concat(to, "/", entry->d_name)
-                );
-        }
-        else {
-            move_file(
-                OTA_concat(from, "/", entry->d_name),
-                OTA_concat(to, "/", entry->d_name)
-                );
-        }
-    }
-    
-    closedir(dir);
-    OTA_rm_recursive(from);*/
-    
     return access( from, F_OK ) == -1 && access( to, F_OK ) != -1;
-}
+}*/
 
 int OTA_sessionId;
-
-/**
- * Update progress bar
- *
- * @param  text         text shown
- * @param  progress     0..100
- * @param  deviceModel  device model
- */
-void OTA_progress(const char *text, int progress, lString16 deviceModel) {
-    lString16 finalText = lString16(text);
-    finalText.replace(lString16("[DEVICE]"), deviceModel);
-    UpdateProgressbar(UnicodeToUtf8(finalText).c_str(), 0);
-}
-void OTA_progress(const char *text, int progress) {
-    OTA_progress(text, progress, lString16(""));
-}
 
 /**
  * Check if there is a new version
@@ -250,7 +171,7 @@ lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
  *
  * @return  error message or blank
  */
-const char * OTA_installPackagePath(const char* path) {
+/*const char * OTA_installPackagePath(const char* path) {
 
     const char * pathFrom  = (lString8(OTA_TEMP_DIR"/")+lString8(path)).c_str();
     const char * pathTo    = (lString8(FLASHDIR"/")+lString8(path)).c_str();
@@ -281,7 +202,7 @@ const char * OTA_installPackagePath(const char* path) {
 
     // All fine
     return "";
-}
+}*/
 
 /**
  * Install the update zip file
@@ -290,14 +211,14 @@ const char * OTA_installPackagePath(const char* path) {
  *
  * @return  error message or blank
  */
-const char * OTA_installPackage(const char* packagePath) {
+/*const char * OTA_installPackage(const char* packagePath) {
 
     // Remove old package
     if( access( OTA_TEMP_DIR, F_OK ) != -1 && !OTA_rm_recursive(OTA_TEMP_DIR) )
         return _("Couldn't remove old temporary data!");
 
     // Extract
-    OTA_progress(_("Installing..."), 70);
+    UpdateProgressbar(_("Installing..."), 0);
     if( !OTA_mkdir_recursive(OTA_TEMP_DIR) )
         return _("Failed creating temporary dir!");
     OTA_exec(UNZIP_BINARY, packagePath, "-d", OTA_TEMP_DIR);
@@ -309,7 +230,7 @@ const char * OTA_installPackage(const char* packagePath) {
 
 
     // Install binary
-    OTA_progress(_("Installing..."), 80);
+    UpdateProgressbar(_("Installing..."), 0);
     const char* msg;
     msg = OTA_installPackagePath("system/bin/cr3-pb.app");
     if( strcmp("", msg) != 0 )
@@ -319,15 +240,15 @@ const char * OTA_installPackage(const char* packagePath) {
         return msg;
 
     // Remove temp data
-    OTA_progress(_("Installing..."), 90);
+    UpdateProgressbar(_("Installing..."), 0);
     if( access( OTA_TEMP_DIR, F_OK ) != -1 && !OTA_rm_recursive(OTA_TEMP_DIR) )
         return _("Couldn't remove temporary data!");
 
     // All fine
     return "";
-}
+}*/
 
-bool OTA_updateFrom_continue() {
+/*bool OTA_updateFrom_continue() {
 
     // Failed download
     if( access( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, F_OK ) == -1 ) {
@@ -338,7 +259,7 @@ bool OTA_updateFrom_continue() {
     }
 
     // Install
-    OTA_progress(_("Installing..."), 60);
+    UpdateProgressbar(_("Installing..."), 0);
     const char* msg = OTA_installPackage( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME );
     if( strcmp("", msg) != 0 ) {
         CloseProgressbar();
@@ -355,9 +276,9 @@ bool OTA_updateFrom_continue() {
     }
 
     // Success
-    OTA_progress(_("Update successfull!"), 100);
+    UpdateProgressbar(_("Update successfull!"), 0);
     sleep(3);
-    OTA_progress(_("CoolReader will reload itself..."), 100);
+    UpdateProgressbar(_("CoolReader will reload itself..."), 0);
     sleep(3);
     CloseProgressbar();
 
@@ -365,7 +286,7 @@ bool OTA_updateFrom_continue() {
 
 
     return true;
-}
+}*/
 
 void OTA_DL_dialog_handler(int button) {
     return;
@@ -466,18 +387,18 @@ bool OTA_update() {
     // Get device model number
     const lString16 deviceModel = getPbModelNumber();
 
-    OTA_progress(_("Searching..."), 20);
+    UpdateProgressbar(_("Searching..."), 0);
 
     // If download exists
     if( OTA_downloadExists( OTA_genUrl(OTA_URL_MASK_TEST, deviceModel) ) ) {
 
-        OTA_progress(_("Downloading..."), 50);
+        UpdateProgressbar(_("Downloading..."), 0);
 
         // Update
         return OTA_updateFrom( OTA_genUrl(OTA_URL_MASK, deviceModel) );
     }
 
-    OTA_progress(_("Searching..."), 30);
+    UpdateProgressbar(_("Searching..."), 0);
 
     // Check if the device is linked to another one
     const lString16 linkedDevice = OTA_getLinkedDevice(deviceModel);
@@ -492,12 +413,10 @@ bool OTA_update() {
         return false;
     }
 
-    OTA_progress(_("Searching..."), 40, linkedDevice);
-
     // If the device is linked and the download exists
     if( OTA_downloadExists( OTA_genUrl(OTA_URL_MASK_TEST, linkedDevice) ) ) {
 
-        OTA_progress(_("Downloading..."), 50);
+        UpdateProgressbar(_("Downloading..."), 0);
 
         // Update
         return OTA_updateFrom( OTA_genUrl(OTA_URL_MASK, linkedDevice) );

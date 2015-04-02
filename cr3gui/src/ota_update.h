@@ -11,13 +11,13 @@
 #endif
 
 
-#define UNZIP_BINARY "/bin/unzip"
+// #define UNZIP_BINARY "/bin/unzip"
 // #define WGET_BINARY "/bin/wget"
-#define MKDIR_BINARY "/bin/mkdir"
+// #define MKDIR_BINARY "/bin/mkdir"
 #define RM_BINARY "/bin/rm"
-#define MV_BINARY "/bin/mv"
-#define CP_BINARY "/bin/cp"
-#define SH_BINARY "/bin/sh"
+// #define MV_BINARY "/bin/mv"
+// #define CP_BINARY "/bin/cp"
+// #define SH_BINARY "/bin/sh"
 
 #define OTA_DOWNLOAD_DIR FLASHDIR
 #define OTA_PACKAGE_NAME "latest.zip"
