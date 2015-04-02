@@ -13,8 +13,6 @@
 // #include <dirent.h>
 // #include <stdio.h>
 
-const char * progressBarMessage;
-
 const char * OTA_concat(const char *p1, const char *p2) {
     return (lString8(p1)+lString8(p2)).c_str();
 }
@@ -182,8 +180,7 @@ int OTA_sessionId;
 void OTA_progress(const char *text, int progress, lString16 deviceModel) {
     lString16 finalText = lString16(text);
     finalText.replace(lString16("[DEVICE]"), deviceModel);
-    progressBarMessage = UnicodeToUtf8(finalText).c_str();
-    UpdateProgressbar(progressBarMessage, 0);
+    UpdateProgressbar(UnicodeToUtf8(finalText).c_str(), 0);
 }
 void OTA_progress(const char *text, int progress) {
     OTA_progress(text, progress, lString16(""));
@@ -386,7 +383,7 @@ void OTA_DL_update_progress(void) {
             _("Couldn't connect to server!"), 3000);
         // OTA_updateFrom_continue();
     } else {
-        UpdateProgressbar(progressBarMessage, 100*si->progress/si->length);
+        UpdateProgressbar(_("Downloading..."), 100*si->progress/si->length);
         if (si->progress >= si->length) {
             CloseSession(OTA_sessionId);
             if (si->response >= 400) {
@@ -404,8 +401,8 @@ void OTA_DL_update_progress(void) {
             } else {
                 CloseProgressbar();
                 Dialog(ICON_INFORMATION, const_cast<char*>("CoolReader"), 
-                    _("Update successfull!\nPlease restart CoolReader."),
-                    GetLangText("@Ok"), NULL, OTA_DL_dialog_handler);
+                    _("Download successfull!\nPlease restart CoolReader."),
+                    _("OK"), NULL, OTA_DL_dialog_handler);
                 // OTA_updateFrom_continue();
             }
         } else {
@@ -474,7 +471,7 @@ bool OTA_update() {
     // If download exists
     if( OTA_downloadExists( OTA_genUrl(OTA_URL_MASK_TEST, deviceModel) ) ) {
 
-        OTA_progress(_("Downloading package for [DEVICE]..."), 50, deviceModel);
+        OTA_progress(_("Downloading..."), 50);
 
         // Update
         return OTA_updateFrom( OTA_genUrl(OTA_URL_MASK, deviceModel) );
@@ -500,7 +497,7 @@ bool OTA_update() {
     // If the device is linked and the download exists
     if( OTA_downloadExists( OTA_genUrl(OTA_URL_MASK_TEST, linkedDevice) ) ) {
 
-        OTA_progress(_("Downloading package for [DEVICE]..."), 50, linkedDevice);
+        OTA_progress(_("Downloading..."), 50);
 
         // Update
         return OTA_updateFrom( OTA_genUrl(OTA_URL_MASK, linkedDevice) );
