@@ -20,7 +20,7 @@ const char * OTA_concat(const char *p1, const char *p2, const char *p3) {
     return (lString8(p1)+lString8(p2)+lString8(p3)).c_str();
 }*/
 
-void OTA_exec(const char *binary, const char *param1, const char *param2, const char *param3) {
+void OTA_exec(const char *binary, const char *param1, const char *param2/*, const char *param3*/) {
     pid_t cpid;
     pid_t child_pid;
     cpid = fork();
@@ -39,7 +39,7 @@ void OTA_exec(const char *binary, const char *param1, const char *param2, const 
                 binary,
                 param1,
                 param2,
-                param3,
+                /*param3,*/
                 NULL
                 );
             exit(0);
@@ -50,9 +50,9 @@ void OTA_exec(const char *binary, const char *param1, const char *param2, const 
             CRLog::trace("OTA_exec(): Parent: Returned from %s", binary);
     }
 }
-void OTA_exec(const char *binary, const char *param1, const char *param2) {
+/*void OTA_exec(const char *binary, const char *param1, const char *param2) {
     OTA_exec(binary, param1, param2, "");
-}
+}*/
 /*void OTA_exec(const char *binary, const char *param1) {
     OTA_exec(binary, param1, "");
 }*/
