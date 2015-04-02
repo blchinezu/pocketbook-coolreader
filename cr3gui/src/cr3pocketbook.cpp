@@ -3096,7 +3096,7 @@ void CRPbDictionaryDialog::onWordSelection(bool translate)
             _dictView->setRect(rc);
         }
     } else {
-        if (wRc.top <= (docRect.height() >> 1)) {
+        if (wRc.top < (docRect.height() >> 1)) {
             rc.bottom = _wm->getScreen()->getHeight();
             rc.top = rc.bottom - _dictView->getDesiredHeight();
             _dictView->setRect(rc);
