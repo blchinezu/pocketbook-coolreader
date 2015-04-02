@@ -3089,18 +3089,14 @@ void CRPbDictionaryDialog::onWordSelection(bool translate)
     _docview->getCursorRect(wRc);
     lvRect docRect;
     _docwin->getClientRect(docRect);
-    if (dictRc.top > 0) {
-        if (wRc.bottom >= (docRect.height() >> 1)) {
-            rc.top = 0;
-            rc.bottom = _dictView->getDesiredHeight();
-            _dictView->setRect(rc);
-        }
-    } else {
-        if (wRc.top <= (docRect.height() >> 1)) {
-            rc.bottom = _wm->getScreen()->getHeight();
-            rc.top = rc.bottom - _dictView->getDesiredHeight();
-            _dictView->setRect(rc);
-        }
+    if (wRc.bottom > docRect.height() / 2) {
+        rc.top = 0;
+        rc.bottom = _dictView->getDesiredHeight();
+        _dictView->setRect(rc);
+    } else if (wRc.bottom < docRect.height() / 2) {
+        rc.bottom = _wm->getScreen()->getHeight();
+        rc.top = rc.bottom - _dictView->getDesiredHeight();
+        _dictView->setRect(rc);
     }
     lvPoint middle = word->getMark().getMiddlePoint();
     _lastWordX = middle.x;

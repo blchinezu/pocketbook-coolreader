@@ -12,14 +12,17 @@
 
 
 #define UNZIP_BINARY "/bin/unzip"
-#define WGET_BINARY "/bin/wget"
+// #define WGET_BINARY "/bin/wget"
 #define MKDIR_BINARY "/bin/mkdir"
 #define RM_BINARY "/bin/rm"
 #define MV_BINARY "/bin/mv"
+#define CP_BINARY "/bin/cp"
+#define SH_BINARY "/bin/sh"
 
 #define OTA_DOWNLOAD_DIR FLASHDIR
 #define OTA_PACKAGE_NAME "latest.zip"
 #define OTA_TEMP_DIR OTA_DOWNLOAD_DIR"/.cr3update"
+#define OTA_INSTALL_SCRIPT OTA_TEMP_DIR"/install.sh"
 
 // Sourceforge [old source]
 // #define OTA_URL_BASE      "http://sourceforge.net/u/e379d14417/crengine/ci/pocketbook-port/tree/builds/"
