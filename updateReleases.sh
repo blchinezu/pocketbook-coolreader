@@ -21,7 +21,7 @@ function doUpdate {
 
 		echo " - remove binary, skins, translations"
 		# binary
-		rm -rf $release/cr3-$1/system/bin
+		rm -rf $release/cr3-$1/system/share/cr3/bin
 		# skins
 		rm -rf $release/cr3-$1/system/share/cr3/skins
 		# translations
@@ -31,8 +31,8 @@ function doUpdate {
 
 		echo " - copy binary, skins, translations"
 		# binary
-		mkdir -p $release/cr3-$1/system/bin
-		cp -f $sdk/pb$1/cr3gui/cr3-pb.app $release/cr3-$1/system/bin/
+		mkdir -p $release/cr3-$1/system/share/cr3/bin
+		cp -f $sdk/pb$1/cr3gui/cr3-pb.app $release/cr3-$1/system/share/cr3/bin/
 		# skins
 		mkdir -p $release/cr3-$1/system/share/cr3/skins
 		cp -f $sdk/pb$1/cr3gui/*.cr3skin $release/cr3-$1/system/share/cr3/skins/

@@ -8,9 +8,169 @@
 #include "cr3pocketbook.h"
 #include "ota_update.h"
 
+// #include <unistd.h>
+// #include <sys/types.h>
+// #include <dirent.h>
+// #include <stdio.h>
+
+const char * progressBarMessage;
+
+const char * OTA_concat(const char *p1, const char *p2) {
+    return (lString8(p1)+lString8(p2)).c_str();
+}
+const char * OTA_concat(const char *p1, const char *p2, const char *p3) {
+    return (lString8(p1)+lString8(p2)+lString8(p3)).c_str();
+}
+
+void OTA_exec(const char *binary, const char *param1, const char *param2, const char *param3) {
+    pid_t cpid;
+    pid_t child_pid;
+    cpid = fork();
+
+    switch (cpid) {
+        case -1:
+            CRLog::error("OTA_exec(): Fork failed!");
+            break;
+
+        case 0:
+            child_pid = getpid();
+            CRLog::trace("OTA_exec(): Child: PID %d", child_pid);
+            CRLog::trace("OTA_exec(): Child: Launch %s", binary);
+            execl(
+                binary,
+                binary,
+                param1,
+                param2,
+                param3,
+                NULL
+                );
+            exit(0);
+
+        default:
+            CRLog::trace("OTA_exec(): Parent: Waiting for %d to finish", cpid);
+            waitpid(cpid, NULL, 0);
+            CRLog::trace("OTA_exec(): Parent: Returned from %s", binary);
+    }
+}
+void OTA_exec(const char *binary, const char *param1, const char *param2) {
+    OTA_exec(binary, param1, param2, "");
+}
+void OTA_exec(const char *binary, const char *param1) {
+    OTA_exec(binary, param1, "");
+}
+
+bool OTA_mkdir_recursive(const char *path) {
+
+    if( access( path, F_OK ) != -1 )
+        return true;
+
+    OTA_exec(MKDIR_BINARY, "-p", path);
+    // mkdir(path, 0777);
+
+    return access( path, F_OK ) != -1;
+}
+
+bool OTA_rm_recursive(const char *path) {
+
+    if( access( path, F_OK ) == -1 )
+        return true;
+
+    OTA_exec(RM_BINARY, "-r", path);
+
+    /*DIR *dir;
+    struct dirent *entry;
+
+    if (!(dir = opendir(path))) {
+        unlink(path);
+        return;
+    }
+
+    while ((entry = readdir(dir))) {
+        if( entry == NULL )
+            break;
+        if (entry->d_type == DT_DIR) {
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+            OTA_rm_recursive( OTA_concat(path, "/", entry->d_name) );
+        }
+        else {
+            unlink(entry->d_name);
+        }
+    }
+
+    closedir(dir);
+    rmdir(path);*/
+
+    return access( path, F_OK ) == -1;
+}
+
+bool OTA_cp_recursive(const char *from, const char *to) {
+
+    if( access( from, F_OK ) == -1 )
+        return false;
+
+    if( !OTA_rm_recursive(to) )
+        return false;
+
+    OTA_exec(CP_BINARY, "-r", from, to);
+
+    return access( to, F_OK ) != -1;
+}
+
+bool OTA_mv_recursive(const char *from, const char *to) {
+
+    if( access( from, F_OK ) == -1 )
+        return false;
+
+    if( !OTA_cp_recursive(from, to) )
+        return false;
+    
+    if( !OTA_rm_recursive(from) )
+        return false;
+
+    /*DIR *dir;
+    struct dirent *entry;
+
+    if (!(dir = opendir(from))) {
+
+        if( access( to, F_OK ) != -1 )
+            OTA_rm_recursive(to);
+
+        move_file(from, to);
+        return;
+    }
+
+    mkdir(to, 0777);
+
+    if( access( to, F_OK ) != -1 )
+        OTA_rm_recursive(to);
+
+    while ((entry = readdir(dir))) {
+        if( entry == NULL )
+            break;
+        if (entry->d_type == DT_DIR) {
+            if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+                continue;
+            OTA_mv_recursive(
+                OTA_concat(from, "/", entry->d_name),
+                OTA_concat(to, "/", entry->d_name)
+                );
+        }
+        else {
+            move_file(
+                OTA_concat(from, "/", entry->d_name),
+                OTA_concat(to, "/", entry->d_name)
+                );
+        }
+    }
+    
+    closedir(dir);
+    OTA_rm_recursive(from);*/
+    
+    return access( from, F_OK ) == -1 && access( to, F_OK ) != -1;
+}
 
 int OTA_sessionId;
-
 
 /**
  * Update progress bar
@@ -22,7 +182,8 @@ int OTA_sessionId;
 void OTA_progress(const char *text, int progress, lString16 deviceModel) {
     lString16 finalText = lString16(text);
     finalText.replace(lString16("[DEVICE]"), deviceModel);
-    UpdateProgressbar(UnicodeToUtf8(finalText).c_str(), progress);
+    progressBarMessage = UnicodeToUtf8(finalText).c_str();
+    UpdateProgressbar(progressBarMessage, 0);
 }
 void OTA_progress(const char *text, int progress) {
     OTA_progress(text, progress, lString16(""));
@@ -100,27 +261,25 @@ const char * OTA_installPackagePath(const char* path) {
 
     // If it doesn't exist in the update package
     if( access( pathFrom, F_OK ) == -1 )
-        return _("Invalid update package!");
+        return (
+            lString8( "Path not found: " ) +
+            lString8(pathFrom)
+            ).c_str();
 
     // Backup old path if exists
     if( access( pathTo, F_OK ) != -1 ) {
 
         // If backup already exists
-        if( access( pathToBak, F_OK ) != -1 ) {
-            pbLaunchWaitBinary(RM_BINARY, "-rf", pathToBak);
-            if( access( pathToBak, F_OK ) != -1 )
-                return _("Failed removing old backup!");
-        }
+        if( access( pathToBak, F_OK ) != -1 && !OTA_rm_recursive(pathToBak) )
+            return _("Failed removing old backup!");
 
         // Move
-        pbLaunchWaitBinary(MV_BINARY, pathTo, pathToBak);
-        if( access( pathTo, F_OK ) != -1 )
+        if( !OTA_mv_recursive(pathTo, pathToBak) )
             return _("Failed creating backup!");
     }
 
     // Move the thing, AKA "Install"
-    pbLaunchWaitBinary(MV_BINARY, pathFrom, pathTo);
-    if( access( pathTo, F_OK ) != -1 )
+    if( !OTA_mv_recursive(pathFrom, pathTo) )
         return _("Failed installing update!");
 
     // All fine
@@ -137,21 +296,20 @@ const char * OTA_installPackagePath(const char* path) {
 const char * OTA_installPackage(const char* packagePath) {
 
     // Remove old package
-    if( access( OTA_TEMP_DIR, F_OK ) != -1 ) {
-        pbLaunchWaitBinary(RM_BINARY, "-rf", OTA_TEMP_DIR);
-        if( access( OTA_TEMP_DIR, F_OK ) != -1 ) {
-            return _("Couldn't remove old temporary data!");
-        }
-    }
+    if( access( OTA_TEMP_DIR, F_OK ) != -1 && !OTA_rm_recursive(OTA_TEMP_DIR) )
+        return _("Couldn't remove old temporary data!");
 
     // Extract
     OTA_progress(_("Installing..."), 70);
-    pbLaunchWaitBinary(MKDIR_BINARY, "-p", OTA_TEMP_DIR);
-    if( access( OTA_TEMP_DIR, F_OK ) == -1 )
+    if( !OTA_mkdir_recursive(OTA_TEMP_DIR) )
         return _("Failed creating temporary dir!");
-    pbLaunchWaitBinary(UNZIP_BINARY, "-d", OTA_TEMP_DIR, packagePath);
-    if( access( OTA_TEMP_DIR"/system/bin", F_OK ) == -1 )
-        return _("Invalid update package!");
+    OTA_exec(UNZIP_BINARY, packagePath, "-d", OTA_TEMP_DIR);
+    if( access( OTA_INSTALL_SCRIPT, F_OK ) == -1 )
+        return _("Extracted package is not valid!");
+
+    // Run installation script
+    OTA_exec(SH_BINARY, OTA_INSTALL_SCRIPT);
+
 
     // Install binary
     OTA_progress(_("Installing..."), 80);
@@ -165,84 +323,13 @@ const char * OTA_installPackage(const char* packagePath) {
 
     // Remove temp data
     OTA_progress(_("Installing..."), 90);
-    if( access( OTA_TEMP_DIR, F_OK ) != -1 ) {
-        pbLaunchWaitBinary(RM_BINARY, "-rf", OTA_TEMP_DIR);
-        if( access( OTA_TEMP_DIR, F_OK ) != -1 ) {
-            return _("Couldn't remove temporary data!");
-        }
-    }
+    if( access( OTA_TEMP_DIR, F_OK ) != -1 && !OTA_rm_recursive(OTA_TEMP_DIR) )
+        return _("Couldn't remove temporary data!");
 
     // All fine
     return "";
 }
 
-bool OTA_updateFrom_continue();
-void OTA_DL_dialog_handler(int button) {
-    OTA_updateFrom_continue();
-}
-
-void OTA_DL_update_progress(void) {
-    iv_sessioninfo *si;
-
-    si = GetSessionInfo(OTA_sessionId);
-
-    if (si->length <= 0) {
-        CloseProgressbar();
-        Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
-            _("Couldn't connect to server!"), 3000);
-        OTA_updateFrom_continue();
-    } else {
-        if (si->progress >= si->length) {
-            CloseSession(OTA_sessionId);
-            CloseProgressbar();
-            if (si->response >= 400) {
-                Dialog(ICON_ERROR, const_cast<char*>("CoolReader"), 
-                    (
-                    lString8(_("Server returned error response: ")) +
-                    lString8::itoa((int)si->response) +
-                    lString8("\nurl: ") + lString8(si->url) +
-                    lString8("\nctype: ") + lString8(si->ctype) +
-                    lString8("\nlength: ") + lString8::itoa(si->length) +
-                    lString8("\nprogress: ") + lString8::itoa(si->progress)
-                    ).c_str(),
-                    GetLangText("@Close"), NULL, OTA_DL_dialog_handler);
-            } else {
-                OTA_updateFrom_continue();
-            }
-        } else {
-            SetHardTimer("OTA_DL_update_progress", OTA_DL_update_progress, 1000);
-        }
-    }
-}
-
-/**
- * This does the actual updating of the app
- *
- * @param  url  url
- *
- * @return  true if updated, false if error
- */
-bool OTA_updateFrom(const lString16 url) {
-
-    // Remove old package
-    if( access( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, F_OK ) != -1 ) {
-        iv_unlink(OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME);
-        if( access( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, F_OK ) != -1 ) {
-            CloseProgressbar();
-            Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
-                _("Couldn't remove existing package!"), 2000);
-            return false;
-        }
-    }
-
-    // Download
-    OTA_sessionId = NewSession();
-    DownloadTo(OTA_sessionId, UnicodeToUtf8(url).c_str(), "",
-        OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, 10000);
-    SetHardTimer("OTA_DL_update_progress", OTA_DL_update_progress, 1000);
-
-    return true;
-}
 bool OTA_updateFrom_continue() {
 
     // Failed download
@@ -263,15 +350,92 @@ bool OTA_updateFrom_continue() {
     }
 
     // Remove package
-    if( access( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, F_OK ) != -1 ) {
-        iv_unlink(OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME);
-        if( access( OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, F_OK ) != -1 ) {
-            CloseProgressbar();
-            Message(ICON_WARNING,  const_cast<char*>("CoolReader"),
-                _("Couldn't remove downloaded package!"), 2000);
-            return true;
+    if( !OTA_rm_recursive(OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME) ) {
+        CloseProgressbar();
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"),
+            _("Couldn't remove downloaded package!"), 2000);
+        return true;
+    }
+
+    // Success
+    OTA_progress(_("Update successfull!"), 100);
+    sleep(3);
+    OTA_progress(_("CoolReader will reload itself..."), 100);
+    sleep(3);
+    CloseProgressbar();
+
+    // Reload app
+
+
+    return true;
+}
+
+void OTA_DL_dialog_handler(int button) {
+    return;
+    // OTA_updateFrom_continue();
+}
+
+void OTA_DL_update_progress(void) {
+    iv_sessioninfo *si;
+
+    si = GetSessionInfo(OTA_sessionId);
+
+    if (si->length <= 0) {
+        CloseProgressbar();
+        Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
+            _("Couldn't connect to server!"), 3000);
+        // OTA_updateFrom_continue();
+    } else {
+        UpdateProgressbar(progressBarMessage, 100*si->progress/si->length);
+        if (si->progress >= si->length) {
+            CloseSession(OTA_sessionId);
+            if (si->response >= 400) {
+                CloseProgressbar();
+                Dialog(ICON_ERROR, const_cast<char*>("CoolReader"), 
+                    (
+                    lString8(_("Server returned error response: ")) +
+                    lString8::itoa((int)si->response) +
+                    lString8("\nurl: ") + lString8(si->url) +
+                    lString8("\nctype: ") + lString8(si->ctype) +
+                    lString8("\nlength: ") + lString8::itoa(si->length) +
+                    lString8("\nprogress: ") + lString8::itoa(si->progress)
+                    ).c_str(),
+                    GetLangText("@Close"), NULL, OTA_DL_dialog_handler);
+            } else {
+                CloseProgressbar();
+                Dialog(ICON_INFORMATION, const_cast<char*>("CoolReader"), 
+                    _("Update successfull!\nPlease restart CoolReader."),
+                    GetLangText("@Ok"), NULL, OTA_DL_dialog_handler);
+                // OTA_updateFrom_continue();
+            }
+        } else {
+            SetHardTimer("OTA_DL_update_progress", OTA_DL_update_progress, 1000);
         }
     }
+}
+
+/**
+ * This does the actual updating of the app
+ *
+ * @param  url  url
+ *
+ * @return  true if updated, false if error
+ */
+bool OTA_updateFrom(const lString16 url) {
+
+    // Remove old package
+    if( !OTA_rm_recursive(OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME) ) {
+        CloseProgressbar();
+        Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
+            _("Couldn't remove existing package!"), 2000);
+        return false;
+    }
+
+    // Download
+    OTA_sessionId = NewSession();
+    DownloadTo(OTA_sessionId, UnicodeToUtf8(url).c_str(), "",
+        OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME, 10000);
+    SetHardTimer("OTA_DL_update_progress", OTA_DL_update_progress, 1000);
 
     return true;
 }
@@ -283,7 +447,7 @@ bool OTA_updateFrom_continue() {
  */
 bool OTA_update() {
 
-    iv_dialoghandler progressbar;
+    iv_dialoghandler progressbar = NULL;
 
     // Network Connect
     if( !pbNetwork("connect") ) {
