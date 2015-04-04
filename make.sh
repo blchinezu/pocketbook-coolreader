@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Set current build date
+DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}' | sed -e s/\\\"//g`"
+if [ "$DATE" != "`date +"%Y-%m-%d"`" ]; then
+    sed -i "s/CR_PB_BUILD_DATE \"[0-9][0-9][0-9][0-9]-[0-1][0-9]-[0-3][0-9]\"/CR_PB_BUILD_DATE \"`date +"%Y-%m-%d"`\"/g" cr3gui/src/cr3pocketbook.h
+fi
+
 if [ "$1" = "" -o "$1" = "360" ]; then
     
     mkdir -p pb360
