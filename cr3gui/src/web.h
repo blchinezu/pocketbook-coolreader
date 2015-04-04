@@ -6,7 +6,9 @@
 #include <iostream>
  
 #include <curl/curl.h>
- 
+
+#define LIB_CURL_COOKIES_FILE "/mnt/ext1/system/config/cr3/cr3_cookies.txt"
+
 using namespace std;
  
 class web
