@@ -1171,6 +1171,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("Full updates every 9 pages"), "9"},
         {_("Full updates every 10 pages"), "10"},
         {_("Full updates every 14 pages"), "14"},
+        {_("Full updates every 20 pages"), "20"},
+        {_("Full updates every 25 pages"), "25"},
+        {_("Full updates every 30 pages"), "30"},
+        {_("Full updates every 35 pages"), "35"},
+        {_("Full updates every 40 pages"), "40"},
+        {_("Full updates every 45 pages"), "45"},
+        {_("Full updates every 50 pages"), "50"},
         {NULL, NULL},
     };
 #endif
