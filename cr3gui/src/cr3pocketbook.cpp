@@ -370,6 +370,7 @@ static const struct {
     #endif
     #endif
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
+    { "@KA_fuup", PB_CMD_FULL_UPDATE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
@@ -1608,6 +1609,9 @@ public:
             return true;
         #endif
 
+        case PB_CMD_FULL_UPDATE:
+            FullUpdate();
+            return true;
         case PB_CMD_INVERT_DISPLAY:
             toggleInvertDisplay();
             return true;

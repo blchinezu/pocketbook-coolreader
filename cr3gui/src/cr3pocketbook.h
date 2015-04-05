@@ -28,6 +28,7 @@ enum CRPbCommands {
     PB_CMD_OPEN_SYSTEM_PANEL,
     #endif
     #endif
+    PB_CMD_FULL_UPDATE,
     PB_CMD_INVERT_DISPLAY,
     PB_CMD_STATUS_LINE,
 	PB_CMD_LEFT,
