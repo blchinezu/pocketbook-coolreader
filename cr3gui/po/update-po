@@ -1,11 +1,15 @@
 #!/bin/sh 
 echo "Updating po files"
+msgmerge --update cr3_bg.po cr3.pot
+msgmerge --update cr3_ca.po cr3.pot
+msgmerge --update cr3_cs.po cr3.pot
+msgmerge --update cr3_de.po cr3.pot
+msgmerge --update cr3_es.po cr3.pot
+msgmerge --update cr3_fr.po cr3.pot
+msgmerge --update cr3_he.po cr3.pot
+msgmerge --update cr3_lt.po cr3.pot
+msgmerge --update cr3_pl.po cr3.pot
 msgmerge --update cr3_ru.po cr3.pot
 msgmerge --update cr3_uk.po cr3.pot
-msgmerge --update cr3_pl.po cr3.pot
-msgmerge --update cr3_lt.po cr3.pot
-msgmerge --update cr3_es.po cr3.pot
-msgmerge --update cr3_de.po cr3.pot
 msgmerge --update cr3_zh_CN.po cr3.pot
 msgmerge --update cr3_zh_TW.po cr3.pot
-
