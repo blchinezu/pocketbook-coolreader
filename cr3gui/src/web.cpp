@@ -70,8 +70,8 @@ string web::easycurl(const string &url, bool post, const string &postparamstring
       curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST,  2);
       curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
       curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);  // this line makes it work under https
-      curl_easy_setopt(curl, CURLOPT_COOKIEFILE, "cookies.txt");//read from
-      curl_easy_setopt(curl, CURLOPT_COOKIEJAR, "cookies.txt"); //write to
+      curl_easy_setopt(curl, CURLOPT_COOKIEFILE, LIB_CURL_COOKIES_FILE);//read from
+      curl_easy_setopt(curl, CURLOPT_COOKIEJAR, LIB_CURL_COOKIES_FILE); //write to
  
       // Attempt to retrieve the remote page
       result = curl_easy_perform(curl);
