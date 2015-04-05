@@ -106,7 +106,7 @@ dropbox start
 # COMMIT GIT
 cd "$sdk"
 echo " - Commit to github"
-git commit -a -m 'publish: $VERSION'
+git commit -a -m "Up version: $VERSION"
 
 echo " - Push to web"
 git push
