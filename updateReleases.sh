@@ -48,6 +48,8 @@ function doUpdate {
 		fi
 		rm -rf $release/cr3-$1/system/share/cr3/i18n/*
 		ls $sdk/pb$1/i18n | xargs -I lang cp -f "$sdk/pb$1/i18n/lang/LC_MESSAGES/cr3.mo" "$release/cr3-$1/system/share/cr3/i18n/lang.mo"
+
+		bash publish.sh "dev" "$1"
 	fi
 }
 

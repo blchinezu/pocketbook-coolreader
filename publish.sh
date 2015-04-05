@@ -17,6 +17,16 @@ echo
 sdk="$HOME/PBDEV/sources/cr3-fork"
 releases="$HOME/PBDEV/releases/coolreader3"
 
+# PUBLISH DEV FW5
+if [ "$1" = "dev" -a "$2" != "" ]; then
+	echo " - DEV: Firmware specific: $2"
+	rm -f $releases/dev/cr3-v$VERSION-$2.zip
+	cd $releases/dev/cr3-$2/
+	zip -r "$releases/dev/cr3-v$VERSION-$2.zip" ./*
+	echo "Done"
+	exit
+fi
+
 # CHECK IF IT'S ALREADY PUBLISHED
 if [ -f "$releases/cr3-v$VERSION-pro5.zip" ]; then
 	echo " -> Version already published!"
