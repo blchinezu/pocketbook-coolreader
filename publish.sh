@@ -97,13 +97,14 @@ done
 echo " - Stop dropbox"
 dropbox stop
 
-echo " - Wait 5 seconds..."
+echo " - Wait 2 seconds..."
 sleep 5s
 
 echo " - Start dropbox"
 dropbox start
 
 # COMMIT GIT
+cd "$sdk"
 echo " - Commit to github"
 git commit -a -m 'publish: $VERSION'
 
