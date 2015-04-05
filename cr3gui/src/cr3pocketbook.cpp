@@ -4086,6 +4086,17 @@ int main_handler(int type, int par1, int par2)
                 free(cover);
             }
             need_save_cover = false;
+
+            // Check if it's a fresh update
+            if( access( PB_FRESH_UPDATE_MARKER, F_OK ) != -1 )
+                Message(ICON_INFORMATION,  const_cast<char*>("CoolReader"),
+                    (
+                        lString8( _("Updated to v") ) +
+                        lString8( CR_PB_VERSION ) +
+                        lString8( " / " ) +
+                        lString8( CR_PB_BUILD_DATE )
+                    ).c_str(), 4000);
+                iv_unlink(PB_FRESH_UPDATE_MARKER);
         }
         break;
 #ifdef POCKETBOOK_PRO
