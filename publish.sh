@@ -1,12 +1,17 @@
 #!/bin/sh
 
 SVN="/media/Fast/dev/svn/brucelee.duckdns.org/cr3-pb-ota"
+sdk="$HOME/PBDEV/sources/cr3-fork"
+releases="$HOME/PBDEV/releases/coolreader3"
 
 # MARK VERSION
+cd "$sdk"
 VERSION="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_VERSION | awk '{print $3}' | sed -e s/\\\"//g`"
 DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}' | sed -e s/\\\"//g`"
-if [ "$VERSION" != "`cat "$VERSION_FILE"`" ]; then
+if [ "$VERSION" != "`cat "$SVN/current.version"`" ]; then
 	printf "$VERSION" > "$SVN/current.version"
+fi
+if [ "$VERSION" != "`cat "builds/current.version"`" ]; then
 	printf "$VERSION" > "builds/current.version"
 fi
 
@@ -14,11 +19,13 @@ echo
 echo "Publishing: $VERSION / $DATE"
 echo
 
-sdk="$HOME/PBDEV/sources/cr3-fork"
-releases="$HOME/PBDEV/releases/coolreader3"
-
 # PUBLISH DEV FW5
 if [ "$1" = "dev" -a "$2" != "" ]; then
+	echo " - DEV: Check firmware binary: $2"
+	if [ ! -f $releases/dev/cr3-$2/system/share/cr3/bin/cr3-pb.app ]; then
+		echo "   ERR: No binary found!"
+		exit
+	fi
 	echo " - DEV: Firmware specific: $2"
 	rm -f $releases/dev/cr3-v$VERSION-$2.zip
 	cd $releases/dev/cr3-$2/

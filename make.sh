@@ -8,6 +8,11 @@ fi
 
 if [ "$1" = "" -o "$1" = "360" ]; then
     
+    if [ -f pb360/cr3gui/cr3-pb.app ]; then
+        echo 'Remove previous build'
+        rm -f pb360/cr3gui/cr3-pb.app
+    fi
+
     mkdir -p pb360
     cd pb360
     cmake \
@@ -27,6 +32,9 @@ if [ "$1" = "" -o "$1" = "360" ]; then
     if [ -f pb360/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
         ../../PBSDK/bin/arm-linux-strip pb360/cr3gui/cr3-pb.app
+    else
+        echo 'Failed compiling binary!'
+        exit
     fi
     echo 'Done'
 
@@ -35,6 +43,11 @@ if [ "$1" = "" -o "$1" = "360" ]; then
 fi
 
 if [ "$1" = "" -o "$1" = "pro4" ]; then
+
+    if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
+        echo 'Remove previous build'
+        rm -f pbpro4/cr3gui/cr3-pb.app
+    fi
 
     mkdir -p pbpro4
     cd pbpro4
@@ -57,6 +70,9 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
     if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
         ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
+    else
+        echo 'Failed compiling binary!'
+        exit
     fi
     echo 'Done'
 
@@ -65,6 +81,11 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
 fi
 
 if [ "$1" = "" -o "$1" = "pro5" ]; then
+
+    if [ -f pbpro5/cr3gui/cr3-pb.app ]; then
+        echo 'Remove previous build'
+        rm -f pbpro5/cr3gui/cr3-pb.app
+    fi
 
     mkdir -p pbpro5
     cd pbpro5
@@ -88,6 +109,9 @@ if [ "$1" = "" -o "$1" = "pro5" ]; then
     if [ -f pbpro5/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
         ../../SDK_481/bin/arm-obreey-linux-gnueabi-strip pbpro5/cr3gui/cr3-pb.app
+    else
+        echo 'Failed compiling binary!'
+        exit
     fi
     echo "Done"
 
