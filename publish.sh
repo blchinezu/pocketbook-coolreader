@@ -52,6 +52,7 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 		select yn in "Yes" "No"; do
 		    case $yn in
 		        Yes )
+					echo
 					echo " - DEV: Update git build: $2"
 					rm -f "builds/626/$2/latest.zip"
 					cp "$releases/dev/cr3-v$VERSION-$2.zip" "builds/626/$2/latest.zip"
