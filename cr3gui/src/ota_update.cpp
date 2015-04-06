@@ -47,8 +47,6 @@ bool OTA_isNewVersion() {
  * @return  true if ok, false if not
  */
 bool OTA_downloadExists(const lString16 url) {
-    Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
-        UnicodeToUtf8(url).c_str(), 5000);
     const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     return
         strlen(response) == strlen(OTA_EXISTS_STR) &&
