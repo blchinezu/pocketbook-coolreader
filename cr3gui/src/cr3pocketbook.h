@@ -24,6 +24,7 @@ enum CRPbCommands {
     PB_CMD_SYSTEM_PANEL,
     PB_CMD_LOCK_DEVICE,
     PB_CMD_OTA_UPDATE,
+    PB_CMD_OTA_UPDATE_DEV,
     #ifdef POCKETBOOK_PRO_FW5
     PB_CMD_OPEN_SYSTEM_PANEL,
     #endif
@@ -68,7 +69,7 @@ enum CRPbCommands {
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
 #define CR_PB_VERSION "0.0.6-16-13"
-#define CR_PB_BUILD_DATE "2015-04-05"
+#define CR_PB_BUILD_DATE "2015-04-06"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1

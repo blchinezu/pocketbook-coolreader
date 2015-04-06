@@ -364,6 +364,7 @@ static const struct {
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_otau", PB_CMD_OTA_UPDATE, 0},
+    { "@KA_otad", PB_CMD_OTA_UPDATE_DEV, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     #ifdef POCKETBOOK_PRO_FW5
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
@@ -1604,7 +1605,12 @@ public:
             return true;
 
         case PB_CMD_OTA_UPDATE:
-            OTA_update();
+            OTA_update(OTA_BRANCH_STABLE);
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+            return true;
+
+        case PB_CMD_OTA_UPDATE_DEV:
+            OTA_update(OTA_BRANCH_DEV);
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif

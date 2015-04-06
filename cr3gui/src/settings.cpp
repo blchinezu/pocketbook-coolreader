@@ -21,6 +21,7 @@
 #include <inkview.h>
 #ifdef POCKETBOOK_PRO
 #include <inkplatform.h>
+#include "ota_update.h"
 #endif
 
 #include <cri18n.h>
@@ -56,6 +57,7 @@
 #define CR3_ACTION_PB_SYSTEM_PANEL "PB_SYSTEM_PANEL"
 #define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
 #define CR3_ACTION_PB_OTA_UPDATE "PB_OTA_UPDATE"
+#define CR3_ACTION_PB_OTA_UPDATE_DEV "PB_OTA_UPDATE_DEV"
 #ifdef POCKETBOOK_PRO_FW5
 #define CR3_ACTION_PB_OPEN_SYSTEM_PANEL "PB_OPEN_SYSTEM_PANEL"
 #endif
@@ -102,6 +104,7 @@ static const action_def_t availableActions[] = {
     { CR3_ACTION_PB_SYSTEM_PANEL, PB_CMD_SYSTEM_PANEL, 0 },
     { CR3_ACTION_PB_LOCK_DEVICE, PB_CMD_LOCK_DEVICE, 0 },
     { CR3_ACTION_PB_OTA_UPDATE, PB_CMD_OTA_UPDATE, 0 },
+    // { CR3_ACTION_PB_OTA_UPDATE_DEV, PB_CMD_OTA_UPDATE_DEV, 0 },
     #ifdef POCKETBOOK_PRO_FW5
     { CR3_ACTION_PB_OPEN_SYSTEM_PANEL, PB_CMD_OPEN_SYSTEM_PANEL, 0 },
     #endif
@@ -1605,6 +1608,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                 _("OTA Update"),
                 LVImageSourceRef(),
                 LVFontRef() ) );
+    if( access( OTA_DEV_MARKER, F_OK ) != -1 ) {
+        mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE_DEV,
+                _("OTA Update Dev"),
+                LVImageSourceRef(),
+                LVFontRef() ) );
+    }
     #endif
 
     reconfigure(0);
