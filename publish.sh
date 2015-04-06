@@ -29,7 +29,16 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 		exit
 	fi
 
+	# Wait for dropbox to catch on
+	echo
+	echo " - DEV: Wait for dropbox to catch on..."
+	sleep 2s
+	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+		sleep 1s
+	done
+
 	# Create update package (dropbox)
+	echo
 	echo " - DEV: Firmware specific: $2"
 	rm -f "$releases/dev/cr3-v$VERSION-$2.zip"
 	cd "$releases/dev/cr3-$2/"
@@ -47,6 +56,7 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 					rm -f "builds/626/$2/latest.zip"
 					cp "$releases/dev/cr3-v$VERSION-$2.zip" "builds/626/$2/latest.zip"
 					git commit "builds/626/$2/latest.zip" -m 'Auto update dev build [publish.sh]'
+					sleep 1s
 					git push
 					break;;
 		        No )
@@ -54,6 +64,21 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 		    esac
 		done
 	fi
+
+	# Wait for dropbox to catch on
+	echo
+	echo " - DEV: Wait for dropbox to catch on..."
+	sleep 2s
+	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+		sleep 1s
+	done
+
+	# RELOAD DROPBOX
+	sleep 1s
+	echo " - Restart dropbox"
+	dropbox stop
+	sleep 1s
+	dropbox start
 
 	echo
 	echo "Done"
@@ -136,20 +161,26 @@ for DEVICE in '360' '515' '626'; do
 	fi
 done
 
+# Wait for dropbox to catch on
+echo
+echo " - Wait for dropbox to catch on..."
+sleep 2s
+while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+	sleep 1s
+done
+
 # RELOAD DROPBOX
-echo " - Stop dropbox"
+sleep 1s
+echo " - Restart dropbox"
 dropbox stop
-
-echo " - Wait 2 seconds..."
-sleep 5s
-
-echo " - Start dropbox"
+sleep 1s
 dropbox start
 
 # COMMIT GIT
 cd "$sdk"
 echo " - Commit to github"
 git commit -a -m "Up version: $VERSION"
+sleep 1s
 
 echo " - Push to web"
 git push
