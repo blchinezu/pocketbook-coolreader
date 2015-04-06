@@ -22,21 +22,6 @@ int OTA_sessionId;
 lString16 OTA_branch;
 
 /**
- * Replace [BRANCH] in a given URL with the OTA_branch variable
- *
- * @param  url  URL mask
- *
- * @return  final URL
- */
-const char * OTA_replaceBranch(lString16 url) {
-    url.replace(lString16("[BRANCH]"), OTA_branch);
-    return UnicodeToUtf8(url).c_str();
-}
-const char * OTA_replaceBranch(const char * url) {
-    OTA_replaceBranch( lString16(url) );
-}
-
-/**
  * Check if there is a new version
  *  - If using dev branch this always returns true
  *
@@ -45,8 +30,9 @@ const char * OTA_replaceBranch(const char * url) {
 bool OTA_isNewVersion() {
     if( OTA_branch == lString16(OTA_BRANCH_DEV) )
         return true;
-
-    const char * response = web::get(OTA_replaceBranch(OTA_VERSION)).c_str();
+    lString16 url = lString16(OTA_VERSION);
+    url.replace(lString16("[BRANCH]"), OTA_branch);
+    const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     return
         strlen(response) > 5 &&
         strlen(response) <= OTA_VERSION_MAX_LENGTH &&
@@ -61,7 +47,9 @@ bool OTA_isNewVersion() {
  * @return  true if ok, false if not
  */
 bool OTA_downloadExists(const lString16 url) {
-    const char * response = web::get(OTA_replaceBranch(url)).c_str();
+    Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
+        UnicodeToUtf8(url).c_str(), 5000);
+    const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     return
         strlen(response) == strlen(OTA_EXISTS_STR) &&
         strcmp(OTA_EXISTS_STR, response) == 0;
@@ -77,7 +65,8 @@ bool OTA_downloadExists(const lString16 url) {
 lString16 OTA_getLinkedDevice(const lString16 deviceModel) {
     lString16 url = lString16(OTA_LINK_MASK);
     url.replace(lString16("[DEVICE]"), deviceModel);
-    const char * response = web::get(OTA_replaceBranch(url)).c_str();
+    url.replace(lString16("[BRANCH]"), OTA_branch);
+    const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     if( strlen(response) > 0 && strlen(response) <= OTA_VERSION_MAX_LENGTH )
         return lString16(response);
     return lString16("");
@@ -92,8 +81,9 @@ lString16 OTA_getLinkedDevice(const lString16 deviceModel) {
  * @return  url
  */
 lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
-    lString16 url = lString16(OTA_replaceBranch(mask));
+    lString16 url = lString16(mask);
     url.replace(lString16("[DEVICE]"), deviceModel);
+    url.replace(lString16("[BRANCH]"), OTA_branch);
     return url;
 }
 
