@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CR3Skin>
-  <toolbar id="cite-toolbar-touch" size="700,100" halign="center" valign="bottom">
+  <toolbar id="cite-toolbar-touch" size="100%,100" halign="center" valign="bottom">
     <size minvalue="0,0" maxvalue="0,0"/>
     <border widths="0,0,0,0"/>
     <button normal="cite_save.png" selected="cite_save_select.png"/>
@@ -11,6 +11,7 @@
     <button normal="cite_c-.png" selected="cite_c-_select.png"/>
     <button normal="cite_cancel.png" selected="cite_cancel_select.png"/>
   </toolbar>
+  <toolbar id="cite-toolbar" base="cite-toolbar-touch">
   <toolbar id="links-toolbar-up" size="500,100" pos="0,0">
     <border widths="10,4,10,4"/>
     <background color="#FFFFFF"/>
