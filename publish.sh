@@ -21,15 +21,41 @@ echo
 
 # PUBLISH DEV FW5
 if [ "$1" = "dev" -a "$2" != "" ]; then
+
+	# Check if binary is present
 	echo " - DEV: Check firmware binary: $2"
-	if [ ! -f $releases/dev/cr3-$2/system/share/cr3/bin/cr3-pb.app ]; then
+	if [ ! -f "$releases/dev/cr3-$2/system/share/cr3/bin/cr3-pb.app" ]; then
 		echo "   ERR: No binary found!"
 		exit
 	fi
+
+	# Create update package (dropbox)
 	echo " - DEV: Firmware specific: $2"
-	rm -f $releases/dev/cr3-v$VERSION-$2.zip
-	cd $releases/dev/cr3-$2/
+	rm -f "$releases/dev/cr3-v$VERSION-$2.zip"
+	cd "$releases/dev/cr3-$2/"
 	zip -r "$releases/dev/cr3-v$VERSION-$2.zip" ./*
+	cd "$sdk"
+
+	# Update git build (dev branch)
+	if [ -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
+		echo
+		echo "Update git dev branch?"
+		select yn in "Yes" "No"; do
+		    case $yn in
+		        Yes )
+					echo " - DEV: Update git build: $2"
+					rm -f "builds/626/$2/latest.zip"
+					cp "$releases/dev/cr3-v$VERSION-$2.zip" "builds/626/$2/latest.zip"
+					git commit "builds/626/$2/latest.zip" -m 'Auto update dev build [publish.sh]'
+					git push
+					break;;
+		        No )
+					break;;
+		    esac
+		done
+	fi
+
+	echo
 	echo "Done"
 	exit
 fi
