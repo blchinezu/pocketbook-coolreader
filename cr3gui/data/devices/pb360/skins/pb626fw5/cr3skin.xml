@@ -150,9 +150,9 @@
     </client>
     <status>
       <border widths="0,0,0,0"/>
-      <size minvalue="0,0" maxvalue="0,0"/>
-      <background color="#FFFFFF"/>
-      <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="1"/>
+      <size minvalue="0,1" maxvalue="0,0"/>
+      <background color="#000000"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="1"/>
     </status>
   </window>
   <window id="dict-rotated" base="#dict"/>
