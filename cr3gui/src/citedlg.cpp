@@ -16,6 +16,12 @@
 #include "cr3pocketbook.h"
 #endif
 
+#ifdef POCKETBOOK_PRO
+    #define CITETOOLBAR_BUTTONS 7
+#else
+    #define CITETOOLBAR_BUTTONS 5
+#endif
+
 class CiteToolBar : public CRToolBar
 {
 public:
@@ -28,9 +34,21 @@ public:
     {}
     virtual void initDefault()
     {
-        for (int i=0; i<5; i++) {
+        for (int i=0; i<CITETOOLBAR_BUTTONS; i++) {
             addButton(new CRToolButton(this, i, lString16(), DCMD_BUTTON_PRESSED));
         }
+    }
+    bool isDefault()
+    {
+        bool ret = (5 == m_buttons.length());
+
+        for ( int i=0; i<m_buttons.length() && ret==true; i++) {
+            CRToolButton *current = m_buttons[i];
+            if (current->getCommand() != DCMD_BUTTON_PRESSED) {
+                ret = false;
+            }
+        }
+        return ret;
     }
 };
 
@@ -38,10 +56,10 @@ class CiteWindow : public BackgroundFitWindow
 {
     CiteSelection selector_;
     V3DocViewWin * mainwin_;
-#ifdef CR_POCKETBOOK
-    CRToolBar *toolbar;
+    CiteToolBar *toolbar;
     lvRect toolbarRect;
-    bool isTouchToolBar;
+    bool isDefaultToolBar;
+#ifdef CR_POCKETBOOK
     bool _noClose;
 
     int getSelectedIndex()
@@ -60,40 +78,91 @@ class CiteWindow : public BackgroundFitWindow
             return -1;
         int index = getSelectedIndex();
         switch (index) {
-        case 0:
-            //move
-            if (command == MCMD_SCROLL_BACK)
-                return MCMD_SELECT_5; //up
-            else if (command == MCMD_SCROLL_FORWARD)
-                return MCMD_SELECT_6; //down
-            break;
-        case 1:
-            //grow
-            if (command == MCMD_SCROLL_BACK)
-                return MCMD_SELECT_1; //up
-            else if (command == MCMD_SCROLL_FORWARD)
-                return MCMD_SELECT_0; //down
-            break;
-        case 2:
-            //shrink
-            if (command == MCMD_SCROLL_BACK)
-                return MCMD_SELECT_9;
-            else if (command == MCMD_SCROLL_FORWARD)
-                return MCMD_SELECT_2;
-            break;
-        case 3:
-            // grow phrase:
-            if (command == MCMD_SCROLL_BACK)
-                return MCMD_SELECT_3; // up
-            else if (command == MCMD_SCROLL_FORWARD)
-                return MCMD_SELECT_8; // down
-        case 4:
-            // Shrink phrase
-            if (command == MCMD_SCROLL_BACK)
-                return MCMD_SELECT_7;
-            else if (command == MCMD_SCROLL_FORWARD)
-                return MCMD_SELECT_4;
-            break;
+
+        #ifdef POCKETBOOK_PRO
+
+            case 0:
+                // Ok
+                return MCMD_OK;
+                break;
+            case 1:
+                //move
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_5; //up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_6; //down
+                break;
+            case 2:
+                //grow
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_1; //up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_0; //down
+                break;
+            case 3:
+                //shrink
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_9;
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_2;
+                break;
+            case 4:
+                // grow phrase:
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_3; // up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_8; // down
+            case 5:
+                // Shrink phrase
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_7;
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_4;
+                break;
+            case 6:
+                // Close
+                return MCMD_CANCEL;
+                break;
+
+        #else
+
+            case 0:
+                //move
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_5; //up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_6; //down
+                break;
+            case 1:
+                //grow
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_1; //up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_0; //down
+                break;
+            case 2:
+                //shrink
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_9;
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_2;
+                break;
+            case 3:
+                // grow phrase:
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_3; // up
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_8; // down
+            case 4:
+                // Shrink phrase
+                if (command == MCMD_SCROLL_BACK)
+                    return MCMD_SELECT_7;
+                else if (command == MCMD_SCROLL_FORWARD)
+                    return MCMD_SELECT_4;
+                break;
+
+        #endif
+
         default:
             break;
         }
@@ -113,7 +182,7 @@ protected:
 #ifdef CR_POCKETBOOK
         lvRect borders = skin->getBorderWidths();
         lvRect keyRect;
-        if ( !isTouchToolBar) {
+        if ( isDefaultToolBar) {
             lString16 prompt;
             int index = getSelectedIndex();
             switch (index) {
@@ -132,7 +201,6 @@ protected:
             case 4:
                 prompt = lString16(_("Deselect phrase"));
                 break;
-
             }
             int promptWidth = skin->measureText(prompt).x;
             keyRect = _rect;
@@ -177,13 +245,14 @@ public:
         CRWindowSkinRef windowSkin = getSkin();
         if ( !windowSkin.isNull() )
             tbSkin = windowSkin->getToolBar1Skin();
-        if ( !tbSkin.isNull() && (tbSkin->getButtons()->length() == 7 ||
-            tbSkin->getButtons()->length() == 5)) {
+        isDefaultToolBar = false;
+        if ( !tbSkin.isNull()) {
             toolbar = new CiteToolBar(this, cs16("cite-toolbar"), tbSkin);
-
+            isDefaultToolBar = toolbar->isDefault();
             int index = toolbar->findButton(DCMD_BUTTON_PRESSED, 0);
             if (index > 0)
                 toolbar->selectButton(index);
+
             toolbar->getRect(toolbarRect);
             _rect.top = _rect.bottom - toolbarRect.height();
         } else {

@@ -585,12 +585,14 @@ static const char * getCommandName( int command )
     case PB_CMD_CONTENTS: return TR("@Contents");
     case PB_CMD_FRONT_LIGHT: return _("Front light");
     case PB_CMD_INVERT_DISPLAY: return _("Invert display");
+    case PB_CMD_FULL_UPDATE: return _("Full screen update");
     case PB_CMD_STATUS_LINE: return _("Toggle status bar");
     #ifdef POCKETBOOK_PRO
     case PB_CMD_TASK_MANAGER: return _("Tasks list");
     case PB_CMD_SYSTEM_PANEL: return _("Toggle system panel");
     case PB_CMD_LOCK_DEVICE: return _("Lock device");
     case PB_CMD_OTA_UPDATE: return _("OTA Update");
+    case PB_CMD_OTA_UPDATE_DEV: return _("OTA Update Dev");
     #ifdef POCKETBOOK_PRO_FW5
     case PB_CMD_OPEN_SYSTEM_PANEL: return _("Open system panel");
     #endif

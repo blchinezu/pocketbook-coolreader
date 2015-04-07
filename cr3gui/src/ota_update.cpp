@@ -1,3 +1,6 @@
+/**
+ * OTA Update implementation
+ */
 
 #include <inkview.h>
 #include <inkplatform.h>
@@ -8,15 +11,28 @@
 #include "cr3pocketbook.h"
 #include "ota_update.h"
 
+/**
+ * The downloading session id
+ */
 int OTA_sessionId;
 
 /**
+ * The OTA branch to use (stable/dev)
+ */
+lString16 OTA_branch;
+
+/**
  * Check if there is a new version
+ *  - If using dev branch this always returns true
  *
  * @return  true if new version, false otherwise
  */
 bool OTA_isNewVersion() {
-    const char * response = web::get(OTA_VERSION).c_str();
+    if( OTA_branch == lString16(OTA_BRANCH_DEV) )
+        return true;
+    lString16 url = lString16(OTA_VERSION);
+    url.replace(lString16("[BRANCH]"), OTA_branch);
+    const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     return
         strlen(response) > 5 &&
         strlen(response) <= OTA_VERSION_MAX_LENGTH &&
@@ -47,6 +63,7 @@ bool OTA_downloadExists(const lString16 url) {
 lString16 OTA_getLinkedDevice(const lString16 deviceModel) {
     lString16 url = lString16(OTA_LINK_MASK);
     url.replace(lString16("[DEVICE]"), deviceModel);
+    url.replace(lString16("[BRANCH]"), OTA_branch);
     const char * response = web::get(UnicodeToUtf8(url).c_str()).c_str();
     if( strlen(response) > 0 && strlen(response) <= OTA_VERSION_MAX_LENGTH )
         return lString16(response);
@@ -64,6 +81,7 @@ lString16 OTA_getLinkedDevice(const lString16 deviceModel) {
 lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
     lString16 url = lString16(mask);
     url.replace(lString16("[DEVICE]"), deviceModel);
+    url.replace(lString16("[BRANCH]"), OTA_branch);
     return url;
 }
 
@@ -140,7 +158,10 @@ bool OTA_updateFrom(const lString16 url) {
  *
  * @return  true if updated, false if not
  */
-bool OTA_update() {
+bool OTA_update(const char *branch) {
+
+    // Set used branch
+    OTA_branch = lString16(branch);
 
     iv_dialoghandler progressbar = NULL;
 

@@ -1,12 +1,17 @@
 #!/bin/sh
 
 SVN="/media/Fast/dev/svn/brucelee.duckdns.org/cr3-pb-ota"
+sdk="$HOME/PBDEV/sources/cr3-fork"
+releases="$HOME/PBDEV/releases/coolreader3"
 
 # MARK VERSION
+cd "$sdk"
 VERSION="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_VERSION | awk '{print $3}' | sed -e s/\\\"//g`"
 DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}' | sed -e s/\\\"//g`"
-if [ "$VERSION" != "`cat "$VERSION_FILE"`" ]; then
+if [ "$VERSION" != "`cat "$SVN/current.version"`" ]; then
 	printf "$VERSION" > "$SVN/current.version"
+fi
+if [ "$VERSION" != "`cat "builds/current.version"`" ]; then
 	printf "$VERSION" > "builds/current.version"
 fi
 
@@ -14,8 +19,72 @@ echo
 echo "Publishing: $VERSION / $DATE"
 echo
 
-sdk="$HOME/PBDEV/sources/cr3-fork"
-releases="$HOME/PBDEV/releases/coolreader3"
+# PUBLISH DEV FW5
+if [ "$1" = "dev" -a "$2" != "" ]; then
+
+	# Check if binary is present
+	echo " - DEV: Check firmware binary: $2"
+	if [ ! -f "$releases/dev/cr3-$2/system/share/cr3/bin/cr3-pb.app" ]; then
+		echo "   ERR: No binary found!"
+		exit
+	fi
+
+	# Wait for dropbox to catch on
+	echo
+	echo " - DEV: Wait for dropbox to catch on..."
+	sleep 2s
+	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+		sleep 1s
+	done
+
+	# Create update package (dropbox)
+	echo
+	echo " - DEV: Firmware specific: $2"
+	rm -f "$releases/dev/cr3-v$VERSION-$2.zip"
+	cd "$releases/dev/cr3-$2/"
+	zip -r "$releases/dev/cr3-v$VERSION-$2.zip" ./*
+	cd "$sdk"
+
+	# Update git build (dev branch)
+	if [ -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
+		echo
+		echo "Update git dev branch?"
+		select yn in "Yes" "No"; do
+		    case $yn in
+		        Yes )
+					echo
+					echo " - DEV: Update git build: $2"
+					rm -f "builds/626/$2/latest.zip"
+					cp "$releases/dev/cr3-v$VERSION-$2.zip" "builds/626/$2/latest.zip"
+					git commit "builds/626/$2/latest.zip" -m 'Auto update dev build [publish.sh]'
+					sleep 1s
+					git push
+					break;;
+		        No )
+					break;;
+		    esac
+		done
+	fi
+
+	# Wait for dropbox to catch on
+	echo
+	echo " - DEV: Wait for dropbox to catch on..."
+	sleep 2s
+	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+		sleep 1s
+	done
+
+	# RELOAD DROPBOX
+	sleep 1s
+	echo " - Restart dropbox"
+	dropbox stop
+	sleep 1s
+	dropbox start
+
+	echo
+	echo "Done"
+	exit
+fi
 
 # CHECK IF IT'S ALREADY PUBLISHED
 if [ -f "$releases/cr3-v$VERSION-pro5.zip" ]; then
@@ -93,20 +162,26 @@ for DEVICE in '360' '515' '626'; do
 	fi
 done
 
+# Wait for dropbox to catch on
+echo
+echo " - Wait for dropbox to catch on..."
+sleep 2s
+while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+	sleep 1s
+done
+
 # RELOAD DROPBOX
-echo " - Stop dropbox"
+sleep 1s
+echo " - Restart dropbox"
 dropbox stop
-
-echo " - Wait 2 seconds..."
-sleep 5s
-
-echo " - Start dropbox"
+sleep 1s
 dropbox start
 
 # COMMIT GIT
 cd "$sdk"
 echo " - Commit to github"
 git commit -a -m "Up version: $VERSION"
+sleep 1s
 
 echo " - Push to web"
 git push

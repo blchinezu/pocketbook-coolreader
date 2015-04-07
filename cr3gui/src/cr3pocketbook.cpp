@@ -364,12 +364,14 @@ static const struct {
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_otau", PB_CMD_OTA_UPDATE, 0},
+    { "@KA_otad", PB_CMD_OTA_UPDATE_DEV, 0},
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
     #ifdef POCKETBOOK_PRO_FW5
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
     #endif
     #endif
     { "@KA_lght", PB_CMD_STATUS_LINE, 0},
+    { "@KA_fuup", PB_CMD_FULL_UPDATE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
     { "@KA_dict", MCMD_DICT, 0},
@@ -1603,11 +1605,19 @@ public:
             return true;
 
         case PB_CMD_OTA_UPDATE:
-            OTA_update();
+            OTA_update(OTA_BRANCH_STABLE);
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+            return true;
+
+        case PB_CMD_OTA_UPDATE_DEV:
+            OTA_update(OTA_BRANCH_DEV);
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif
 
+        case PB_CMD_FULL_UPDATE:
+            FullUpdate();
+            return true;
         case PB_CMD_INVERT_DISPLAY:
             toggleInvertDisplay();
             return true;
@@ -3974,7 +3984,22 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
-            FullUpdate();
+
+            // Check if it's a fresh cr3 update
+            if( access( PB_FRESH_UPDATE_MARKER, F_OK ) != -1 ) {
+                Message(ICON_INFORMATION,  const_cast<char*>("CoolReader"),
+                    (
+                        lString8( _("Updated to v") ) +
+                        lString8( CR_PB_VERSION ) +
+                        lString8( " / " ) +
+                        lString8( CR_PB_BUILD_DATE )
+                    ).c_str(), 4000);
+                iv_unlink(PB_FRESH_UPDATE_MARKER);
+            }
+            // Else full screen update
+            else {
+                FullUpdate();
+            }
             // startStatusUpdateThread(5000);
 
             // Try getting cover with the system function

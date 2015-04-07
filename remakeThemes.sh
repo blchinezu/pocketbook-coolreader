@@ -2,7 +2,7 @@
 
 function doUpdate {
 	rm -rf pb$1/cr3gui/*.cr3skin
-	bash makepb$1.sh
+	bash make.sh "$1"
 }
 
 if [ "$1" = "" ]; then
