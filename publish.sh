@@ -30,12 +30,12 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 	fi
 
 	# Wait for dropbox to catch on
-	echo
-	echo " - DEV: Wait for dropbox to catch on..."
-	sleep 2s
-	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
-		sleep 1s
-	done
+	# echo
+	# echo " - DEV: Wait for dropbox to catch on..."
+	# sleep 2s
+	# while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+	# 	sleep 1s
+	# done
 
 	# Create update package (dropbox)
 	echo
@@ -67,19 +67,19 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 	fi
 
 	# Wait for dropbox to catch on
-	echo
-	echo " - DEV: Wait for dropbox to catch on..."
-	sleep 2s
-	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
-		sleep 1s
-	done
+	# echo
+	# echo " - DEV: Wait for dropbox to catch on..."
+	# sleep 2s
+	# while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+	# 	sleep 1s
+	# done
 
 	# RELOAD DROPBOX
-	sleep 1s
-	echo " - Restart dropbox"
-	dropbox stop
-	sleep 1s
-	dropbox start
+	# sleep 1s
+	# echo " - Restart dropbox"
+	# dropbox stop
+	# sleep 1s
+	# dropbox start
 
 	echo
 	echo "Done"
