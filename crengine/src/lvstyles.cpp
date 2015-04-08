@@ -89,6 +89,7 @@ bool operator == (const css_style_rec_t & r1, const css_style_rec_t & r2)
            r1.line_height == r2.line_height &&
            r1.width == r2.width &&
            r1.height == r2.height &&
+           r1.letter_spacing == r2.letter_spacing &&
            r1.color == r2.color &&
            r1.background_color == r2.background_color &&
            r1.text_indent == r2.text_indent &&

@@ -880,6 +880,17 @@ void CRSettingsMenu::createStyleMenuItems(CRMenu * menu, LVFontRef valueFont, co
         {NULL, NULL}
     };
 
+    item_def_t font_letter_spacing[] = {
+        {"-", ""}, // inherited
+        {"0px", "letter-spacing: 0px"},
+        {"1px", "letter-spacing: 1px"},
+        {"2px", "letter-spacing: 2px"},
+        {"3px", "letter-spacing: 3px"},
+        {"4px", "letter-spacing: 4px"},
+        {"5px", "letter-spacing: 5px"},
+        {NULL, NULL}
+    };
+
     item_def_t text_decoration_options[] = {
         {"-", ""}, // inherited
         {_("None"), "text-decoration: none"},
@@ -993,6 +1004,8 @@ void CRSettingsMenu::createStyleMenuItems(CRMenu * menu, LVFontRef valueFont, co
                     lString8(prefix) + ".font-style", font_style_options);
     createStyleMenuItem(menu, valueFont, _("Interline space"),
                     lString8(prefix) + ".line-height", line_height_options);
+    createStyleMenuItem(menu, valueFont, _("Letter spacing"),
+                    lString8(prefix) + ".letter-spacing", font_letter_spacing);
     createStyleMenuItem(menu, valueFont, _("Text decoration"),
                     lString8(prefix) + ".text-decoration", text_decoration_options);
     createStyleMenuItem(menu, valueFont, _("Text vertical alignment"),

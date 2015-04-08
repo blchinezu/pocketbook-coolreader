@@ -5499,6 +5499,7 @@ static int cr_interline_spaces[] = { 100, 70, 75, 80, 85, 90, 95, 100, 105, 110,
 
 static const char * def_style_macros[] = {
     "styles.def.align", "text-align: justify",
+    "styles.def.letter-spacing", "letter-spacing: 0px",
     "styles.def.text-indent", "text-indent: 1.2em",
     "styles.def.margin-top", "margin-top: 0em",
     "styles.def.margin-bottom", "margin-bottom: 0em",
