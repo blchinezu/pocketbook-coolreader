@@ -44,6 +44,17 @@ fi
 
 if [ "$1" = "" -o "$1" = "602" ]; then
 
+    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+        echo
+        echo 'Invalid SDK structure!'
+        echo
+        echo 'libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/'
+        echo '  For 602 you have to rename it to libinkview.1.1a.so'
+        echo '  (a symlink is created by make.sh when needed)'
+        echo
+        exit
+    fi
+
     rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
     ln -s \
         $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so \
@@ -87,6 +98,17 @@ if [ "$1" = "" -o "$1" = "602" ]; then
 fi
 
 if [ "$1" = "" -o "$1" = "pro4" ]; then
+
+    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+        echo
+        echo 'Invalid SDK structure!'
+        echo
+        echo 'libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/'
+        echo '  For pro4 you have to add libinkview.pb626.fw4.4.so from a FW4 device to the lib dir'
+        echo '  (a symlink is created by make.sh when needed)'
+        echo
+        exit
+    fi
 
     rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
     ln -s \
