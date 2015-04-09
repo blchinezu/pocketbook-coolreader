@@ -42,7 +42,78 @@ if [ "$1" = "" -o "$1" = "360" ]; then
 
 fi
 
+if [ "$1" = "" -o "$1" = "602" ]; then
+
+    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+        echo
+        echo 'Invalid SDK structure!'
+        echo
+        echo 'libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/'
+        echo '  For 602 you have to rename it to libinkview.1.1a.so'
+        echo '  (a symlink is created by make.sh when needed)'
+        echo
+        exit
+    fi
+
+    rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
+    ln -s \
+        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so \
+        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
+
+    if [ -f pb602/cr3gui/cr3-pb.app ]; then
+        echo 'Remove previous build'
+        rm -f pb602/cr3gui/cr3-pb.app
+    fi
+
+    mkdir -p pb602
+    cd pb602
+    cmake \
+        -D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-gnu-eabi-pocketbook.cmake \
+        -D TARGET_TYPE=ARM \
+        -D DEVICE_NAME=pb360 \
+        -D MAX_IMAGE_SCALE_MUL=2 \
+        -D CMAKE_BUILD_TYPE=Release \
+        -D ENABLE_CHM=1 \
+        -D ENABLE_ANTIWORD=1 \
+        -D GUI=CRGUI_PB \
+        -D ENABLE_PB_DB_STATE=1 \
+        -D BACKGROUND_CACHE_FILE_CREATION=1 \
+        -D POCKETBOOK_PRO=1 \
+        -D POCKETBOOK_PRO_602=1 \
+        ..
+    make
+
+    cd ..
+    if [ -f pb602/cr3gui/cr3-pb.app ]; then
+        echo 'Strip binary'
+        ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
+    else
+        echo 'Failed compiling binary!'
+        exit
+    fi
+    echo 'Done'
+
+    bash updateReleases.sh 602
+
+fi
+
 if [ "$1" = "" -o "$1" = "pro4" ]; then
+
+    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+        echo
+        echo 'Invalid SDK structure!'
+        echo
+        echo 'libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/'
+        echo '  For pro4 you have to add libinkview.pb626.fw4.4.so from a FW4 device to the lib dir'
+        echo '  (a symlink is created by make.sh when needed)'
+        echo
+        exit
+    fi
+
+    rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
+    ln -s \
+        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.pb626.fw4.4.so \
+        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
 
     if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
         echo 'Remove previous build'

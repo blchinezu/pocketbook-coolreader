@@ -21,7 +21,9 @@ enum CRPbCommands {
     PB_CMD_FRONT_LIGHT,
     #ifdef POCKETBOOK_PRO
     PB_CMD_TASK_MANAGER,
+    #ifndef POCKETBOOK_PRO_602
     PB_CMD_SYSTEM_PANEL,
+    #endif
     PB_CMD_LOCK_DEVICE,
     PB_CMD_OTA_UPDATE,
     PB_CMD_OTA_UPDATE_DEV,
@@ -68,8 +70,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-16-15"
-#define CR_PB_BUILD_DATE "2015-04-08"
+#define CR_PB_VERSION "0.0.6-16-16"
+#define CR_PB_BUILD_DATE "2015-04-09"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
