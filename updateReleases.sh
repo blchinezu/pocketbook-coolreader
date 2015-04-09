@@ -37,8 +37,10 @@ function doUpdate {
 		# if [ "$1" = "360" ]; then
 			cp -f $sdk/pb$1/cr3gui/default.cr3skin $release/cr3-$1/system/share/cr3/skins/
 		# fi
-		if [ "$1" = "pro4" -o "$1" = "pro5" ]; then
+		if [ "$1" = "602" -o "$1" = "pro4" -o "$1" = "pro5" ]; then
 			cp -f $sdk/pb$1/cr3gui/pb62x.cr3skin $release/cr3-$1/system/share/cr3/skins/
+		fi
+		if [ "$1" = "pro4" -o "$1" = "pro5" ]; then
 			cp -f $sdk/pb$1/cr3gui/pb626fw5.cr3skin $release/cr3-$1/system/share/cr3/skins/
 		fi
 		
@@ -57,7 +59,7 @@ function doUpdate {
 }
 
 if [ "$1" = "" ]; then
-	for TYPE in '360' 'pro4' 'pro5'; do
+	for TYPE in '360' '602' 'pro4' 'pro5'; do
 		doUpdate "$TYPE"
 	done
 else

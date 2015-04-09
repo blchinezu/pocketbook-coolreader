@@ -97,7 +97,7 @@ echo " - Move old builds"
 mv $releases/*.zip $releases/old/
 
 # CHECK FIRMWARE SPECIFIC
-for FIRMWARE in '360' 'pro4' 'pro5'; do
+for FIRMWARE in '360' '602' 'pro4' 'pro5'; do
 	echo " - Check firmware binary: $1"
 	if [ ! -f $releases/dev/cr3-$FIRMWARE/system/share/cr3/bin/cr3-pb.app ]; then
 		echo "   ERR: No binary found!"
@@ -106,7 +106,7 @@ for FIRMWARE in '360' 'pro4' 'pro5'; do
 done
 
 # BUILD FIRMWARE SPECIFIC - DROPBOX
-for FIRMWARE in '360' 'pro4' 'pro5'; do
+for FIRMWARE in '360' '602' 'pro4' 'pro5'; do
 	echo " - Firmware specific: $FIRMWARE"
 	cd $releases/dev/cr3-$FIRMWARE/
 	zip -r "$releases/cr3-v$VERSION-$FIRMWARE.zip" ./*
@@ -152,14 +152,13 @@ function doPublish {
 }
 
 # BUILD DEVICE SPECIFIC - GIT / OTA
-for DEVICE in '360' '515' '626'; do
-	if [ "$DEVICE" = "360" ]; then
-		doPublish "360" "360" "$sdk" "$releases"
-	else
-		for FIRMWARE in 'pro4' 'pro5'; do
-			doPublish "$DEVICE" "$FIRMWARE" "$sdk" "$releases"
-		done
-	fi
+for DEVICE in '360' '602'; do
+	doPublish "$DEVICE" "$DEVICE" "$sdk" "$releases"
+done
+for DEVICE in '515' '626'; do
+	for FIRMWARE in 'pro4' 'pro5'; do
+		doPublish "$DEVICE" "$FIRMWARE" "$sdk" "$releases"
+	done
 done
 
 # Wait for dropbox to catch on

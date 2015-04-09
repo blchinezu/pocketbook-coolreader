@@ -365,7 +365,9 @@ static const struct {
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
     { "@KA_otau", PB_CMD_OTA_UPDATE, 0},
     { "@KA_otad", PB_CMD_OTA_UPDATE_DEV, 0},
+    #ifndef POCKETBOOK_PRO_602
     { "@KA_sysp", PB_CMD_SYSTEM_PANEL, 0},
+    #endif
     #ifdef POCKETBOOK_PRO_FW5
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
     #endif
@@ -1496,7 +1498,7 @@ public:
 
     bool onCommand(int command, int params)
     {
-        #ifdef POCKETBOOK_PRO
+        #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_602)
         if( systemPanelShown() ) {
             toggleSystemPanel();
             return true;
@@ -1589,9 +1591,12 @@ public:
         case PB_CMD_TASK_MANAGER:
             showTaskManager();
             return true;
+
+        #ifndef POCKETBOOK_PRO_602
         case PB_CMD_SYSTEM_PANEL:
             toggleSystemPanel();
             return true;
+        #endif
 
         #ifdef POCKETBOOK_PRO_FW5
         case PB_CMD_OPEN_SYSTEM_PANEL:
@@ -3419,7 +3424,7 @@ void toggleInvertDisplay() {
     CRPocketBookWindowManager::instance->update(true);
 }
 
-#ifdef POCKETBOOK_PRO
+#if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_602)
 
 bool systemPanelShown() {
     return GetPanelType()!=PANEL_DISABLED;
@@ -4056,6 +4061,8 @@ int main_handler(int type, int par1, int par2)
                 }
             }
 
+            #ifndef POCKETBOOK_PRO_602
+
             // If none worked - generate an ugly ass cover
             if( !cover ) {
 
@@ -4081,6 +4088,8 @@ int main_handler(int type, int par1, int par2)
                 }
             }
 
+            #endif
+            
             #endif
 
             // If somehow there is a cover
