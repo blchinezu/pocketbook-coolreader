@@ -70,7 +70,7 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-16-16"
+#define CR_PB_VERSION "0.0.6-16-16.1"
 #define CR_PB_BUILD_DATE "2015-04-09"
 
 #define PB_ROTATE_MODE_360 0
@@ -86,7 +86,11 @@ enum CRPbCommands {
 #if defined(POCKETBOOK_PRO_FW5)
     #define CR_PB_SDK "pro5"
 #elif defined(POCKETBOOK_PRO)
-    #define CR_PB_SDK "pro4"
+    #if !defined(POCKETBOOK_PRO_602)
+        #define CR_PB_SDK "pro4"
+    #else
+        #define CR_PB_SDK "602"
+    #endif
 #else
     #define CR_PB_SDK "360"
 #endif
