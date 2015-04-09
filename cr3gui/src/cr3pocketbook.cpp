@@ -372,7 +372,7 @@ static const struct {
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
     #endif
     #endif
-    { "@KA_lght", PB_CMD_STATUS_LINE, 0},
+    { "@KA_stln", PB_CMD_STATUS_LINE, 0},
     { "@KA_fuup", PB_CMD_FULL_UPDATE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
