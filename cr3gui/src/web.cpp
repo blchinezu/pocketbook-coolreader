@@ -1,3 +1,4 @@
+#include <crengine.h>
 #include "web.h"
  
 //have to re-declare static members at file level
@@ -42,6 +43,7 @@ string web::post(const string &url, map<string, string> &m)
 //---------------------------------------------------------------------------
 string web::easycurl(const string &url, bool post, const string &postparamstring)
 {
+    CRLog::trace("web::easycurl(%s)", url.c_str());
  
     // Our curl objects
     buffer="";
@@ -50,7 +52,8 @@ string web::easycurl(const string &url, bool post, const string &postparamstring
     CURL *curl;
     CURLcode result;
  
-    // Create our curl handle
+    // Create curl handle
+    CRLog::trace("web::easycurl(): Create curl handle");
     curl = curl_easy_init();
  
     if (curl)
@@ -74,6 +77,7 @@ string web::easycurl(const string &url, bool post, const string &postparamstring
       curl_easy_setopt(curl, CURLOPT_COOKIEJAR, LIB_CURL_COOKIES_FILE); //write to
  
       // Attempt to retrieve the remote page
+      CRLog::trace("web::easycurl(): Attempt to retrieve the remote page");
       result = curl_easy_perform(curl);
  
       // Always cleanup
@@ -82,10 +86,12 @@ string web::easycurl(const string &url, bool post, const string &postparamstring
       // Did we succeed?
       if (result == CURLE_OK)
       {
+          CRLog::trace("web::easycurl(): Got page");
           return buffer;
       }
       else
       {
+          CRLog::trace("web::easycurl(): Couldn't get page");
           cerr << "error:" << errorBuffer <<endl;
           return "";
       }

@@ -1610,12 +1610,22 @@ public:
             return true;
 
         case PB_CMD_OTA_UPDATE:
-            OTA_update(OTA_BRANCH_STABLE);
+            CRLog::trace("Launch OTA Update from "OTA_BRANCH_STABLE" branch");
+            if( !OTA_update(OTA_BRANCH_STABLE) )
+                CRLog::trace("Returned from OTA_update()");
+                PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+            else
+                CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
 
         case PB_CMD_OTA_UPDATE_DEV:
-            OTA_update(OTA_BRANCH_DEV);
+            CRLog::trace("Launch OTA Update from "OTA_BRANCH_DEV" branch");
+            if( !OTA_update(OTA_BRANCH_DEV) )
+                CRLog::trace("Returned from OTA_update()");
+                PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+            else
+                CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif
@@ -3934,9 +3944,11 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
 }
 
 lString16 getPbModelNumber() {
+    CRLog::trace("getPbModelNumber()");
     lString16 model = lString16(GetDeviceModel());
     model.replace(lString16("PocketBook"), lString16(""));
     model.replace(lString16(" "), lString16(""));
+    CRLog::trace("getPbModelNumber(): %s", UnicodeToUtf8(model).c_str());
     return model;
 }
 
@@ -3956,19 +3968,33 @@ bool pbNetworkConnected() {
  * @param  action  connect/disconnect
  */
 bool pbNetwork(const char *action) {
-    if( strcmp(action,"connect") && pbNetworkConnected() )
+
+    CRLog::trace("pbNetwork(%s)", action);
+
+    if( strcmp(action,"connect") && pbNetworkConnected() ) {
+        CRLog::trace("pbNetwork(): Already connected");
         return true;
+    }
     if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
+        CRLog::trace("pbNetwork(): Connect using '%s'", PB_AUTO_CONNECT_BIN);
         pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
     }
     else if( isNetworkSupported() ) {
+        CRLog::trace("pbNetwork(): Connect using '%s'", PB_NETWORK_BIN);
         pbLaunchWaitBinary(PB_NETWORK_BIN, action);
     }
     else {
-        CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
+        CRLog::error("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
     }
-    return pbNetworkConnected();
+    
+    bool connected = pbNetworkConnected();
+    if( connected )
+        CRLog::trace("pbNetwork(): Conected");
+    else
+        CRLog::error("pbNetwork(): Couldn't connect");
+
+    return connected;
 }
 
 #endif 
