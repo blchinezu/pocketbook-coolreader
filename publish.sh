@@ -46,7 +46,7 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 	cd "$sdk"
 
 	# Update git build (dev branch)
-	if [ -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
+	if [ "$2" = "pro5" -a -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
 		echo
 		echo "Update git dev branch?"
 		select yn in "Yes" "No"; do
