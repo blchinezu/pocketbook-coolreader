@@ -18,6 +18,7 @@
     #include <inkplatform.h>
     #include "web.h"
     #include "ota_update.h"
+    #include "pb_toc.h"
 #endif
 
 #ifdef PB_DB_STATE_SUPPORTED
@@ -1613,7 +1614,6 @@ public:
             CRLog::trace("Launch OTA Update from "OTA_BRANCH_STABLE" branch");
             if( !OTA_update(OTA_BRANCH_STABLE) )
                 CRLog::trace("Returned from OTA_update()");
-                PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             else
                 CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
@@ -1623,7 +1623,6 @@ public:
             CRLog::trace("Launch OTA Update from "OTA_BRANCH_DEV" branch");
             if( !OTA_update(OTA_BRANCH_DEV) )
                 CRLog::trace("Returned from OTA_update()");
-                PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             else
                 CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
