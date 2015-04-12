@@ -128,13 +128,13 @@ function doPublish {
 	cp -r $releases/dev/cr3-$fw/* $tmpDir/
 
 	# copy exceptions
-	rm -f $tmpDir/system/share/cr3/keymaps/*
-	cp $releases/dev/device-$device/system/share/cr3/keymaps/* $tmpDir/system/share/cr3/keymaps/
+	# rm -f $tmpDir/system/share/cr3/keymaps/*
+	# cp $releases/dev/device-$device/system/share/cr3/keymaps/* $tmpDir/system/share/cr3/keymaps/
 
-	rm -f $tmpDir/system/share/cr3/devices.ini
-	if [ -f $releases/dev/device-$device/system/share/cr3/devices.ini ]; then
-		cp $releases/dev/device-$device/system/share/cr3/devices.ini $tmpDir/system/share/cr3/
-	fi
+	# rm -f $tmpDir/system/share/cr3/devices.ini
+	# if [ -f $releases/dev/device-$device/system/share/cr3/devices.ini ]; then
+	# 	cp $releases/dev/device-$device/system/share/cr3/devices.ini $tmpDir/system/share/cr3/
+	# fi
 
 	# create package
 	mkdir -p "$sdk/builds/$device/$fw"
