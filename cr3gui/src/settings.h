@@ -60,6 +60,7 @@ enum MainMenuItems_t {
     mm_Footnotes,
     mm_SetTime,
     mm_Kerning,
+    mm_Embolding,
     mm_LandscapePages,
     mm_PreformattedText,
     mm_PageMargins,

@@ -245,6 +245,10 @@ public:
     virtual void setHintingMode(hinting_mode_t /*mode*/) { }
     /// returns current hinting mode
     virtual hinting_mode_t  getHintingMode() const { return HINTING_MODE_AUTOHINT; }
+    /// sets current embolding
+    virtual void setEmbolding(int embolding) { }
+    /// returns current embolding
+    virtual int getEmbolding() const { return 0; }
 
     /// returns true if font is empty
     virtual bool IsNull() const = 0;
@@ -313,6 +317,7 @@ protected:
     int _antialiasMode;
     bool _allowKerning;
     hinting_mode_t _hintingMode;
+    int _embolding;
 public:
     /// garbage collector frees unused fonts
     virtual void gc() = 0;
@@ -376,6 +381,10 @@ public:
     virtual void SetHintingMode(hinting_mode_t /*mode*/) { }
     /// returns current hinting mode
     virtual hinting_mode_t  GetHintingMode() { return HINTING_MODE_AUTOHINT; }
+    /// sets current embolding
+    virtual void SetEmbolding(int embolding) { }
+    /// returens current embolding
+    virtual int GetEmbolding() { return 0; }
 
 };
 

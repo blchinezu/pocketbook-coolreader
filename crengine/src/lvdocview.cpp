@@ -5694,6 +5694,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 #endif
 
     props->setStringDef(PROP_FONT_GAMMA, "1.00");
+    props->setStringDef(PROP_FONT_EMBOLDING, "0");
 
     img_scaling_option_t defImgScaling;
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE, defImgScaling.max_scale);
@@ -5791,6 +5792,12 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             if ( sscanf(s8.c_str(), "%lf", &gamma)==1 ) {
                 fontMan->SetGamma(gamma);
                 clearImageCache();
+            }
+        } else if (name == PROP_FONT_EMBOLDING) {
+            int embolding = props->getIntDef(PROP_FONT_EMBOLDING, 0);
+            if (fontMan->GetEmbolding() != embolding && embolding >=-18 && embolding <=20) {
+                fontMan->SetEmbolding(embolding);
+                REQUEST_RENDER("propsApply - font embolding")
             }
         } else if (name == PROP_FONT_HINTING) {
             int mode = props->getIntDef(PROP_FONT_HINTING, (int)HINTING_MODE_AUTOHINT);
