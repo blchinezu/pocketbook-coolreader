@@ -1232,6 +1232,8 @@ bool V3DocViewWin::onCommand( int command, int params )
             saveHistory(lString16::empty_str);
         return true;
     default:
+        #ifdef POCKETBOOK_PRO
+
         // Treat TOC page change
         if( command > PB_TOC_SAFE_CMD_RANGE ) {
             CRLog::trace("V3DocViewWin::onCommand(): %d > %d", command, PB_TOC_SAFE_CMD_RANGE);
@@ -1250,6 +1252,8 @@ bool V3DocViewWin::onCommand( int command, int params )
             }
             return true;
         }
+        
+        #endif
         ;
     }
     return CRViewDialog::onCommand( command, params );
