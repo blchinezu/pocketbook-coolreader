@@ -56,6 +56,7 @@
 
 #define PROP_FLOATING_PUNCTUATION    "crengine.style.floating.punctuation.enabled"
 #define PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT "crengine.style.space.condensing.percent"
+#define PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT "crengine.style.space.expanding.percent"
 
 #define PROP_FILE_PROPS_FONT_SIZE    "cr3.file.props.font.size"
 

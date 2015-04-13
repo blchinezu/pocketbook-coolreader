@@ -56,6 +56,7 @@ enum MainMenuItems_t {
     mm_ShowPageNumber,
     mm_BookmarkIcons,
     mm_SpaceCondensing,
+    mm_SpaceExpanding,
     mm_Footnotes,
     mm_SetTime,
     mm_Kerning,

@@ -27,7 +27,8 @@
 // disable CJK support since it breaks usual text formatting with floating punctuation and space trunctaion turned on
 #define CJK_PATCH 0
 
-#define MIN_SPACE_CONDENSING_PERCENT 50
+#define MIN_SPACE_CONDENSING_PERCENT 100
+#define MAX_SPACE_EXPANDING_PERCENT 300
 
 // to debug formatter
 
@@ -125,7 +126,8 @@ formatted_text_fragment_t * lvtextAllocFormatter( lUInt16 width )
     pbuffer->img_zoom_out_scale_block = defMult; /**< max scale for block images zoom out: 1, 2, 3 */
     pbuffer->img_zoom_out_mode_inline = defMode; /**< can zoom out inline images: 0=disabled, 1=integer scale, 2=free scale */
     pbuffer->img_zoom_out_scale_inline = defMult; /**< max scale for inline images zoom out: 1, 2, 3 */
-    pbuffer->min_space_condensing_percent = MIN_SPACE_CONDENSING_PERCENT; // 50%
+    pbuffer->min_space_condensing_percent = MIN_SPACE_CONDENSING_PERCENT; // 100%
+    pbuffer->max_space_expanding_percent = MAX_SPACE_EXPANDING_PERCENT; // 300%
 
     return pbuffer;
 }
@@ -649,10 +651,15 @@ public:
                 for ( i=0; i<(int)frmline->word_count; i++ ) {
                     frmline->words[i].x += delta;
                     if ( frmline->words[i].flags & LTEXT_WORD_CAN_ADD_SPACE_AFTER ) {
-                        delta += addSpaceDiv;
-                        if ( addSpaceMod>0 ) {
-                            addSpaceMod--;
-                            delta++;
+                        int ew = frmline->words[i].max_width - frmline->words[i].width;
+                        if ( addSpaceDiv>ew ) {
+                            delta += ew;
+                            } else {
+                                delta += addSpaceDiv;
+                                if ( addSpaceMod>0 ) {
+                                addSpaceMod--;
+                                delta++;
+                            }
                         }
                     }
                 }
@@ -732,6 +739,7 @@ public:
                     word->flags = LTEXT_WORD_IS_OBJECT;
                     word->width = lastSrc->o.width;
                     word->min_width = word->width;
+                    word->max_width = word->width;
                     word->o.height = lastSrc->o.height;
                     //int maxw = m_pbuffer->width - x;
 
@@ -769,6 +777,7 @@ public:
                     word->t.len = i - wstart;
                     word->width = m_widths[i>0 ? i-1 : 0] - (wstart>0 ? m_widths[wstart-1] : 0);
                     word->min_width = word->width;
+                    word->max_width = word->width;
                     TR("addLine - word(%d, %d) x=%d (%d..%d)[%d] |%s|", wstart, i, frmline->width, wstart>0 ? m_widths[wstart-1] : 0, m_widths[i-1], word->width, LCSTR(lString16(m_text+wstart, i-wstart)));
 //                    lChar16 lastch = m_text[i-1];
 //                    if ( lastch==UNICODE_NO_BREAK_SPACE )
@@ -776,6 +785,7 @@ public:
                     if ( m_flags[i-1] & LCHAR_ALLOW_HYPH_WRAP_AFTER ) {
                         word->width += font->getHyphenWidth();
                         word->min_width = word->width;
+                        word->max_width = word->width;
                         word->flags |= LTEXT_WORD_CAN_HYPH_BREAK_LINE_AFTER;
                     }
                     if ( m_flags[i-1] & LCHAR_IS_SPACE) {
@@ -789,11 +799,16 @@ public:
                                 if (dw>0) {
                                     word->min_width = word->width - dw;
                                 }
+                                int ew = getMaxWideSpaceExpansion(i-1);
+                                if (ew>0) {
+                                    word->max_width = word->width + ew;
+                                }
                             }
                         }
                         if ( !visualAlignmentEnabled && lastWord ) {
                             word->width = m_widths[i>1 ? i-2 : 0] - (wstart>0 ? m_widths[wstart-1] : 0);
                             word->min_width = word->width;
+                            word->max_width = word->width;
                         }
                     } else if ( frmline->word_count>1 && m_flags[wstart] & LCHAR_IS_SPACE ) {
                         //if ( word->t.len<2 || m_text[i-1]!=UNICODE_NO_BREAK_SPACE || m_text[i-2]!=UNICODE_NO_BREAK_SPACE)
@@ -831,6 +846,7 @@ public:
                             word->width -= w;
                         }
                         word->min_width = word->width;
+                        word->max_width = word->width;
                     }
 
                     word->y = wy;
@@ -879,6 +895,19 @@ public:
             if ( dw>fntBasedSpaceWidthDiv2 )
                 dw = fntBasedSpaceWidthDiv2;
             return dw;
+        }
+        return 0;
+    }
+
+    int getMaxWideSpaceExpansion(int pos) {
+        if (pos<0 || pos>=m_length || !(m_flags[pos] & LCHAR_IS_SPACE))
+            return 0;
+        if (m_pbuffer->max_space_expanding_percent==100)
+            return 0;
+        int w = (m_widths[pos] - (pos > 0 ? m_widths[pos-1] : 0));
+        int ew = (w * m_pbuffer->max_space_expanding_percent / 100) - w;
+        if ( ew>0 ) {
+            return ew;
         }
         return 0;
     }
@@ -1214,6 +1243,12 @@ void LFormattedText::setMinSpaceCondensingPercent(int minSpaceWidthPercent)
 {
     if (minSpaceWidthPercent>=25 && minSpaceWidthPercent<=100)
         m_pbuffer->min_space_condensing_percent = minSpaceWidthPercent;
+}
+
+void LFormattedText::setMaxSpaceExpandingPercent(int maxSpaceWidthPercent)
+{
+    if (maxSpaceWidthPercent>=100 && maxSpaceWidthPercent<=800)
+        m_pbuffer->max_space_expanding_percent = maxSpaceWidthPercent;
 }
 
 /// set colors for selection and bookmarks

@@ -93,7 +93,8 @@
 #define DOC_PROP_CODE_BASE       "doc.file.code.base"
 #define DOC_PROP_COVER_FILE      "doc.cover.file"
 
-#define DEF_MIN_SPACE_CONDENSING_PERCENT 50
+#define DEF_MIN_SPACE_CONDENSING_PERCENT 100
+#define DEF_MAX_SPACE_EXPANDING_PERCENT 300
 
 //#if BUILD_LITE!=1
 /// final block cache
@@ -393,6 +394,7 @@ protected:
 
     img_scaling_options_t _imgScalingOptions;
     int  _minSpaceCondensingPercent;
+    int  _maxSpaceExpandingPercent;
 
 
     int calcFinalBlocks();
@@ -452,6 +454,13 @@ public:
         if (minSpaceCondensingPercent == _minSpaceCondensingPercent)
             return false;
         _minSpaceCondensingPercent = minSpaceCondensingPercent;
+        return true;
+    }
+
+    bool setMaxSpaceExpandingPercent(int maxSpaceExpandingPercent) {
+        if (maxSpaceExpandingPercent == _maxSpaceExpandingPercent)
+            return false;
+        _maxSpaceExpandingPercent = maxSpaceExpandingPercent;
         return true;
     }
 
