@@ -1753,59 +1753,20 @@ public:
             return;
         }
 
-        #if 0 && defined(POCKETBOOK_PRO)
+        #ifdef POCKETBOOK_PRO
+
         // If device supports touch
         if( QueryTouchpanel() != 0 ) {
-            showContentsTouch();
+            showTocTouchMenu(_toc, _tocLength);
             return;
         }
+
         #endif
 
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
         _wm->activateWindow( wnd );
     }
-    #if 0 && defined(POCKETBOOK_PRO)
-    void showContentsTouch(tocentry *_toc, int _tocLength, int currentPos)
-    {
-        int itemw = (ScreenWidth()/3)*2;
-        int itemh = (ScreenHeight()-20)/10;
-
-        // just for doc. no direct practical use here
-        /*
-        // _toc to buf
-        CRRectSkinRef skin = _wm->getSkin()->getWindowSkin( L"#dialog" )->getClientSkin();
-        LVDrawBuf * buf = _wm->getScreen()->getCanvas().get();
-        lString16 text = lString16::itoa(m_goToPage + 1);
-        lvPoint text_size = skin->measureText(text);
-        lvRect rc;
-        rc.left = _wm->getScreen()->getWidth() - 65;
-        rc.top = _wm->getScreen()->getHeight() - text_size.y - 30;
-        rc.right = rc.left + 60;
-        rc.bottom = rc.top + text_size.y * 3/2;
-        buf->FillRect(rc, _docview->getBackgroundColor());
-        buf->Rect(rc, _docview->getTextColor());
-        rc.shrink(1);
-        buf->Rect(rc, _docview->getTextColor());
-        skin->drawText(*buf, rc, text);
-
-
-
-        // buf to bmp
-        cover = NewBitmap(cachedFile->GetWidth(), cachedFile->GetHeight());
-        LVGrayDrawBuf tmpBuf( cachedFile->GetWidth(), cachedFile->GetHeight(), cover->depth );
-
-        tmpBuf.Draw(cachedFile, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight(), true);
-
-        if(4 == cover->depth) {
-            Draw4Bits(tmpBuf, cover->data, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight());
-        } else {
-            memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
-        }*/
-
-        OpenList(_("Contents"), tocListImage, ScreenWidth()/2, , _tocLength, currentPos, listTocHandler);
-    }
-    #endif
 
     void showFrontLight() {
         if( isFrontLightSupported() ) {

@@ -42,6 +42,7 @@ if (DEFINED POCKETBOOK_PRO)
     src/viewdlg.cpp
     src/web.cpp
     src/ota_update.cpp
+    src/pb_toc.cpp
   )
 else ()
   SET (CR3_SOURCES 

@@ -15,8 +15,12 @@
 #include <crengine.h>
 #include <crgui.h>
 #include <crtrace.h>
+#include <inkview.h>
 #include "fsmenu.h"
 #include "settings.h"
+#ifdef POCKETBOOK_PRO
+    #include "pb_toc.h"
+#endif
 #include "t9encoding.h"
 
 #ifndef WITH_DICT
@@ -93,6 +97,9 @@ enum CRMainMenuCmd
     MCMD_GO_PERCENT_APPLY,
     MCMD_CITES_LIST,
     MCMD_SWAP
+#ifdef POCKETBOOK_PRO
+    ,MCMD_TOC_TOUCH
+#endif
 };
 
 class V3DocViewWin : public CRViewDialog, public LVDocViewCallback
@@ -162,6 +169,10 @@ public:
     void applySettings();
 
     void showSettingsMenu();
+
+#ifdef POCKETBOOK_PRO
+    void showTocTouchMenu(tocentry *toc, int length);
+#endif
 
 #if CR_INTERNAL_PAGE_ORIENTATION==1 || defined(CR_POCKETBOOK)
     void showOrientationMenu();

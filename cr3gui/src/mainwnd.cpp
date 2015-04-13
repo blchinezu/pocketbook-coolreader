@@ -723,6 +723,17 @@ void V3DocViewWin::showSettingsMenu()
     _wm->activateWindow( mainMenu );
 }
 
+#ifdef POCKETBOOK_PRO
+void V3DocViewWin::showTocTouchMenu(tocentry *tocItems, int length)
+{
+    _props = _docview->propsGetCurrent() | _props;
+    _newProps = LVClonePropsContainer( _props );
+    lvRect rc = _wm->getScreen()->getRect();
+    CRMenu * mainMenu = new CRTocMenu( _wm, _newProps, MCMD_TOC_TOUCH, getMenuAccelerators(), rc, tocItems, length );
+    _wm->activateWindow( mainMenu );
+}
+#endif
+
 void V3DocViewWin::showFontSizeMenu()
 {
     LVFontRef menuFont( fontMan->GetFont( MENU_FONT_SIZE, 600, true, css_ff_sans_serif, lString8("Arial")) );
@@ -1221,7 +1232,24 @@ bool V3DocViewWin::onCommand( int command, int params )
             saveHistory(lString16::empty_str);
         return true;
     default:
-        // do nothing
+        // Treat TOC page change
+        if( command > PB_TOC_SAFE_CMD_RANGE ) {
+            CRLog::trace("V3DocViewWin::onCommand(): %d > %d", command, PB_TOC_SAFE_CMD_RANGE);
+            int page = command - PB_TOC_SAFE_CMD_RANGE;
+            CRLog::trace("V3DocViewWin::onCommand(): page = %d", page);
+            if (page <= 0)
+                page = 1;
+            if (page > main_win->getDocView()->getPageCount())
+                page = main_win->getDocView()->getPageCount();
+            CRLog::trace("V3DocViewWin::onCommand(): page = %d", page);
+            if (main_win->onCommand( MCMD_GO_PAGE_APPLY, page )) {
+                // CRPocketBookWindowManager::instance->update(true);
+                _wm->update(true);
+                CRLog::trace("V3DocViewWin::onCommand(): screen update");
+                return true;
+            }
+            return true;
+        }
         ;
     }
     return CRViewDialog::onCommand( command, params );
