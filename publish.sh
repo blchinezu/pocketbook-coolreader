@@ -46,7 +46,7 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 	cd "$sdk"
 
 	# Update git build (dev branch)
-	if [ -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
+	if [ "$2" = "pro5" -a -f "$releases/dev/cr3-v$VERSION-$2.zip" ]; then
 		echo
 		echo "Update git dev branch?"
 		select yn in "Yes" "No"; do
@@ -128,13 +128,13 @@ function doPublish {
 	cp -r $releases/dev/cr3-$fw/* $tmpDir/
 
 	# copy exceptions
-	rm -f $tmpDir/system/share/cr3/keymaps/*
-	cp $releases/dev/device-$device/system/share/cr3/keymaps/* $tmpDir/system/share/cr3/keymaps/
+	# rm -f $tmpDir/system/share/cr3/keymaps/*
+	# cp $releases/dev/device-$device/system/share/cr3/keymaps/* $tmpDir/system/share/cr3/keymaps/
 
-	rm -f $tmpDir/system/share/cr3/devices.ini
-	if [ -f $releases/dev/device-$device/system/share/cr3/devices.ini ]; then
-		cp $releases/dev/device-$device/system/share/cr3/devices.ini $tmpDir/system/share/cr3/
-	fi
+	# rm -f $tmpDir/system/share/cr3/devices.ini
+	# if [ -f $releases/dev/device-$device/system/share/cr3/devices.ini ]; then
+	# 	cp $releases/dev/device-$device/system/share/cr3/devices.ini $tmpDir/system/share/cr3/
+	# fi
 
 	# create package
 	mkdir -p "$sdk/builds/$device/$fw"

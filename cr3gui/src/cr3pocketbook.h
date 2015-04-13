@@ -19,18 +19,6 @@ enum CRPbCommands {
 	PB_CMD_ROTATE_ANGLE_SET,
     PB_CMD_CONTENTS,
     PB_CMD_FRONT_LIGHT,
-    #ifdef POCKETBOOK_PRO
-    PB_CMD_TASK_MANAGER,
-    #ifndef POCKETBOOK_PRO_602
-    PB_CMD_SYSTEM_PANEL,
-    #endif
-    PB_CMD_LOCK_DEVICE,
-    PB_CMD_OTA_UPDATE,
-    PB_CMD_OTA_UPDATE_DEV,
-    #ifdef POCKETBOOK_PRO_FW5
-    PB_CMD_OPEN_SYSTEM_PANEL,
-    #endif
-    #endif
     PB_CMD_FULL_UPDATE,
     PB_CMD_INVERT_DISPLAY,
     PB_CMD_STATUS_LINE,
@@ -44,11 +32,26 @@ enum CRPbCommands {
 	PB_CMD_VOLUME,
 	PB_CMD_BOOKMARK_REMOVE,
 	PB_CMD_MAIN_MENU,
-        PB_CMD_UPDATE_WINDOW,
-        PB_CMD_PAGEUP_REPEAT,
-        PB_CMD_PAGEDOWN_REPEAT,
-        PB_CMD_REPEAT_FINISH,
-        PB_CMD_NONE
+
+    PB_CMD_UPDATE_WINDOW,
+    PB_CMD_PAGEUP_REPEAT,
+    PB_CMD_PAGEDOWN_REPEAT,
+    PB_CMD_REPEAT_FINISH,
+
+    #ifdef POCKETBOOK_PRO
+        PB_CMD_TASK_MANAGER,
+        #ifndef POCKETBOOK_PRO_602
+            PB_CMD_SYSTEM_PANEL,
+        #endif
+        PB_CMD_LOCK_DEVICE,
+        PB_CMD_OTA_UPDATE,
+        PB_CMD_OTA_UPDATE_DEV,
+        #ifdef POCKETBOOK_PRO_FW5
+            PB_CMD_OPEN_SYSTEM_PANEL,
+        #endif
+    #endif
+
+    PB_CMD_NONE
 };
 
 #define PB_QUICK_MENU_BMP_ID "fbreader_menu"
@@ -70,8 +73,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-16-16.1"
-#define CR_PB_BUILD_DATE "2015-04-09"
+#define CR_PB_VERSION "0.0.6-17-17"
+#define CR_PB_BUILD_DATE "2015-04-13"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -136,6 +139,8 @@ bool pbNetwork(const char *action);
 bool isAutoConnectSupported();
 bool isTaskManagerSupported();
 #endif
+
+void executeCommand(int commandId, int commandParam);
 
 void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2, const char *param3);
 void pbLaunchWaitBinary(const char *binary, const char *param1, const char *param2);

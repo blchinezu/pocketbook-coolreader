@@ -18,6 +18,7 @@
     #include <inkplatform.h>
     #include "web.h"
     #include "ota_update.h"
+    #include "pb_toc.h"
 #endif
 
 #ifdef PB_DB_STATE_SUPPORTED
@@ -372,7 +373,7 @@ static const struct {
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
     #endif
     #endif
-    { "@KA_lght", PB_CMD_STATUS_LINE, 0},
+    { "@KA_stln", PB_CMD_STATUS_LINE, 0},
     { "@KA_fuup", PB_CMD_FULL_UPDATE, 0},
     { "@KA_invd", PB_CMD_INVERT_DISPLAY, 0},
     { "@KA_srch", MCMD_SEARCH, 0},
@@ -1610,12 +1611,20 @@ public:
             return true;
 
         case PB_CMD_OTA_UPDATE:
-            OTA_update(OTA_BRANCH_STABLE);
+            CRLog::trace("Launch OTA Update from "OTA_BRANCH_STABLE" branch");
+            if( !OTA_update(OTA_BRANCH_STABLE) )
+                CRLog::trace("Returned from OTA_update()");
+            else
+                CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
 
         case PB_CMD_OTA_UPDATE_DEV:
-            OTA_update(OTA_BRANCH_DEV);
+            CRLog::trace("Launch OTA Update from "OTA_BRANCH_DEV" branch");
+            if( !OTA_update(OTA_BRANCH_DEV) )
+                CRLog::trace("Returned from OTA_update()");
+            else
+                CRLog::trace("Returned from OTA_update(). Download is running.");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif
@@ -1744,59 +1753,20 @@ public:
             return;
         }
 
-        #if 0 && defined(POCKETBOOK_PRO)
+        #ifdef POCKETBOOK_PRO
+
         // If device supports touch
         if( QueryTouchpanel() != 0 ) {
-            showContentsTouch();
+            showTocTouchMenu(_toc, _tocLength);
             return;
         }
+
         #endif
 
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
         _wm->activateWindow( wnd );
     }
-    #if 0 && defined(POCKETBOOK_PRO)
-    void showContentsTouch(tocentry *_toc, int _tocLength, int currentPos)
-    {
-        int itemw = (ScreenWidth()/3)*2;
-        int itemh = (ScreenHeight()-20)/10;
-
-        // just for doc. no direct practical use here
-        /*
-        // _toc to buf
-        CRRectSkinRef skin = _wm->getSkin()->getWindowSkin( L"#dialog" )->getClientSkin();
-        LVDrawBuf * buf = _wm->getScreen()->getCanvas().get();
-        lString16 text = lString16::itoa(m_goToPage + 1);
-        lvPoint text_size = skin->measureText(text);
-        lvRect rc;
-        rc.left = _wm->getScreen()->getWidth() - 65;
-        rc.top = _wm->getScreen()->getHeight() - text_size.y - 30;
-        rc.right = rc.left + 60;
-        rc.bottom = rc.top + text_size.y * 3/2;
-        buf->FillRect(rc, _docview->getBackgroundColor());
-        buf->Rect(rc, _docview->getTextColor());
-        rc.shrink(1);
-        buf->Rect(rc, _docview->getTextColor());
-        skin->drawText(*buf, rc, text);
-
-
-
-        // buf to bmp
-        cover = NewBitmap(cachedFile->GetWidth(), cachedFile->GetHeight());
-        LVGrayDrawBuf tmpBuf( cachedFile->GetWidth(), cachedFile->GetHeight(), cover->depth );
-
-        tmpBuf.Draw(cachedFile, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight(), true);
-
-        if(4 == cover->depth) {
-            Draw4Bits(tmpBuf, cover->data, 0, 0, cachedFile->GetWidth(), cachedFile->GetHeight());
-        } else {
-            memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
-        }*/
-
-        OpenList(_("Contents"), tocListImage, ScreenWidth()/2, , _tocLength, currentPos, listTocHandler);
-    }
-    #endif
 
     void showFrontLight() {
         if( isFrontLightSupported() ) {
@@ -3934,9 +3904,11 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
 }
 
 lString16 getPbModelNumber() {
+    CRLog::trace("getPbModelNumber()");
     lString16 model = lString16(GetDeviceModel());
     model.replace(lString16("PocketBook"), lString16(""));
     model.replace(lString16(" "), lString16(""));
+    CRLog::trace("getPbModelNumber(): %s", UnicodeToUtf8(model).c_str());
     return model;
 }
 
@@ -3956,19 +3928,33 @@ bool pbNetworkConnected() {
  * @param  action  connect/disconnect
  */
 bool pbNetwork(const char *action) {
-    if( strcmp(action,"connect") && pbNetworkConnected() )
+
+    CRLog::trace("pbNetwork(%s)", action);
+
+    if( strcmp(action,"connect") && pbNetworkConnected() ) {
+        CRLog::trace("pbNetwork(): Already connected");
         return true;
+    }
     if( strcmp(action,"connect") == 0 && isAutoConnectSupported() ) {
+        CRLog::trace("pbNetwork(): Connect using '%s'", PB_AUTO_CONNECT_BIN);
         pbLaunchWaitBinary(PB_AUTO_CONNECT_BIN);
     }
     else if( isNetworkSupported() ) {
+        CRLog::trace("pbNetwork(): Connect using '%s'", PB_NETWORK_BIN);
         pbLaunchWaitBinary(PB_NETWORK_BIN, action);
     }
     else {
-        CRLog::trace("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
+        CRLog::error("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
     }
-    return pbNetworkConnected();
+    
+    bool connected = pbNetworkConnected();
+    if( connected )
+        CRLog::trace("pbNetwork(): Conected");
+    else
+        CRLog::error("pbNetwork(): Couldn't connect");
+
+    return connected;
 }
 
 #endif 

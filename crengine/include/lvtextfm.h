@@ -110,7 +110,8 @@ typedef struct
        } o;
    };
    lUInt16 min_width;        /**< \brief 16 index of source text line */
-   lUInt16 padding;          /**< \brief 18 not used */
+   lUInt16 max_width;        /**< \brief 18 index of source text line */
+   lUInt16 padding;          /**< \brief 19 not used */
 } formatted_word_t;
 
 /// can add space after this word
@@ -186,6 +187,7 @@ typedef struct
    lInt32                img_zoom_out_mode_inline; /**< can zoom out inline images: 0=disabled, 1=integer scale, 2=free scale */
    lInt32                img_zoom_out_scale_inline; /**< max scale for inline images zoom out: 1, 2, 3 */
    lInt32                min_space_condensing_percent; /**< min size of space (relative to normal size) to allow fitting line by reducing of spaces */
+   lInt32                max_space_expanding_percent; /**< max size of space (relative to normal size) to allow fitting line by adding word space */
    text_highlight_options_t highlight_options; /**< options for selection/bookmark highlighting */
 } formatted_text_fragment_t;
 
@@ -259,6 +261,9 @@ public:
 
     /// set space condensing line fitting option (25..100%)
     void setMinSpaceCondensingPercent(int minSpaceWidthPercent);
+
+    /// set space expanding line fitting option (100..800%)
+    void setMaxSpaceExpandingPercent(int maxSpaceWidthPercent);
 
     /// set colors for selection and bookmarks
     void setHighlightOptions(text_highlight_options_t * options);

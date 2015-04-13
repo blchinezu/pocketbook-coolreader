@@ -1,4 +1,4 @@
-//
+
 // C++ Implementation: settings
 //
 // Description:
@@ -1090,6 +1090,18 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t space_expanding_percent[] = {
+        {"100%", "100"},
+        {"150%", "150"},
+        {"200%", "200"},
+        {"250%", "250"},
+        {"300%", "300"},
+        {"400%", "400"},
+        {"600%", "600"},
+        {"800%", "800"},
+        {NULL, NULL}
+    };
+
     item_def_t inverse_mode[] = {
         {_("Normal"), "0"},
         {_("Inverse"), "1"},
@@ -1256,6 +1268,34 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t font_embolding[] = {
+        {"-18", "-18"},
+        {"-14", "-14"},
+        {"-10", "-10"},
+        {"-8",  "-8"},
+        {"-6",  "-6"},
+        {"-4",  "-4"},
+        {"-2",  "-2"},
+        {"-1",  "-1"},
+        {"Off",  "0"},
+        {"1",  "1"},
+        {"2",  "2"},
+        {"3",  "3"},
+        {"4",  "4"},
+        {"5",  "5"},
+        {"6",  "6"},
+        {"7",  "7"},
+        {"8",  "8"},
+        {"9",  "9"},
+        {"10",  "10"},
+        {"12",  "12"},
+        {"14",  "14"},
+        {"16",  "16"},
+        {"18",  "18"},
+        {"20",  "20"},
+        {NULL, NULL}
+    };
+
     item_def_t font_gammas[] = {
         {"0.3",  "0.3"},
         {"0.35", "0.35"},
@@ -1362,6 +1402,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            valueFont, PROP_FONT_HINTING, font_hinting);
     createSettingsMenuItem(fontSettingsMenu, mm_Kerning, _("Font kerning"),
                            valueFont, PROP_FONT_KERNING_ENABLED, on_off_option);
+    createSettingsMenuItem(fontSettingsMenu, mm_Embolding, _("Font embolding"),
+                           valueFont, PROP_FONT_EMBOLDING, font_embolding);
     createSettingsMenuItem(fontSettingsMenu, mm_fontGamma, _("Font Gamma"),
                            valueFont, PROP_FONT_GAMMA, font_gammas);
     createSettingsMenuItem(fontSettingsMenu, mm_EmbeddedFonts, _("Document embedded fonts"),
@@ -1404,6 +1446,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            valueFont, PROP_TXT_OPTION_PREFORMATTED, on_off_option);
     createSettingsMenuItem(formatSettingsMenu, mm_SpaceCondensing, _("Space condensing percent"),
                            valueFont, PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, space_condensing_percent);
+    createSettingsMenuItem(formatSettingsMenu, mm_SpaceExpanding, _("Space expanding percent"),
+                           valueFont, PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, space_expanding_percent);
     createSettingsMenuItem(formatSettingsMenu, mm_FloatingPunctuation, _("Floating punctuation"),
                            valueFont, PROP_FLOATING_PUNCTUATION, on_off_option);
 

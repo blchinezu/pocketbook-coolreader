@@ -4,6 +4,7 @@
 // standard properties supported by LVDocView
 #define PROP_FONT_GAMMA              "font.gamma" // currently supported: 0.65 .. 1.35, see gammatbl.h
 #define PROP_FONT_GAMMA_INDEX        "font.gamma.index" // currently supported: 0..30 ~= 0.65 .. 1.35, see gammatbl.h
+#define PROP_FONT_EMBOLDING          "font.embolding" // currently supported: -8..10
 #define PROP_FONT_ANTIALIASING       "font.antialiasing.mode"
 #define PROP_FONT_HINTING            "font.hinting.mode"
 #define PROP_FONT_COLOR              "font.color.default"
@@ -56,6 +57,7 @@
 
 #define PROP_FLOATING_PUNCTUATION    "crengine.style.floating.punctuation.enabled"
 #define PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT "crengine.style.space.condensing.percent"
+#define PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT "crengine.style.space.expanding.percent"
 
 #define PROP_FILE_PROPS_FONT_SIZE    "cr3.file.props.font.size"
 

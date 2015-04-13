@@ -4092,7 +4092,8 @@ void LVDocView::createEmptyDocument() {
 			PROP_EMBEDDED_STYLES, true));
     m_doc->setDocFlag(DOC_FLAG_ENABLE_DOC_FONTS, m_props->getBoolDef(
             PROP_EMBEDDED_FONTS, true));
-    m_doc->setMinSpaceCondensingPercent(m_props->getIntDef(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, 50));
+    m_doc->setMinSpaceCondensingPercent(m_props->getIntDef(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, 100));
+    m_doc->setMaxSpaceExpandingPercent(m_props->getIntDef(PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, 300));
 
     m_doc->setContainer(m_container);
 	m_doc->setNodeTypes(fb2_elem_table);
@@ -5693,6 +5694,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 #endif
 
     props->setStringDef(PROP_FONT_GAMMA, "1.00");
+    props->setStringDef(PROP_FONT_EMBOLDING, "0");
 
     img_scaling_option_t defImgScaling;
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE, defImgScaling.max_scale);
@@ -5714,6 +5716,13 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     if (p>100)
         p = 100;
     props->setInt(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, p);
+
+    int q = props->getIntDef(PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, DEF_MAX_SPACE_EXPANDING_PERCENT);
+    if (q<100)
+        q = 100;
+    if (q>800)
+        q=800;
+    props->setInt(PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, q);
 
     props->setIntDef(PROP_FILE_PROPS_FONT_SIZE, 22);
 
@@ -5783,6 +5792,12 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             if ( sscanf(s8.c_str(), "%lf", &gamma)==1 ) {
                 fontMan->SetGamma(gamma);
                 clearImageCache();
+            }
+        } else if (name == PROP_FONT_EMBOLDING) {
+            int embolding = props->getIntDef(PROP_FONT_EMBOLDING, 0);
+            if (fontMan->GetEmbolding() != embolding && embolding >=-18 && embolding <=20) {
+                fontMan->SetEmbolding(embolding);
+                REQUEST_RENDER("propsApply - font embolding")
             }
         } else if (name == PROP_FONT_HINTING) {
             int mode = props->getIntDef(PROP_FONT_HINTING, (int)HINTING_MODE_AUTOHINT);
@@ -5964,6 +5979,10 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             int value = props->getIntDef(PROP_FORMAT_MIN_SPACE_CONDENSING_PERCENT, DEF_MIN_SPACE_CONDENSING_PERCENT);
             if (getDocument()->setMinSpaceCondensingPercent(value))
                 REQUEST_RENDER("propsApply condensing percent")
+        } else if (name == PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT) {
+            int value = props->getIntDef(PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, DEF_MAX_SPACE_EXPANDING_PERCENT);
+            if (getDocument()->setMaxSpaceExpandingPercent(value))
+                REQUEST_RENDER("propsApply expanding percent")
         } else if (name == PROP_HIGHLIGHT_COMMENT_BOOKMARKS) {
             int value = props->getIntDef(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, highlight_mode_underline);
             if (m_highlightBookmarks != value) {

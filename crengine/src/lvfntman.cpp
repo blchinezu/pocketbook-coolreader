@@ -46,16 +46,20 @@
 #ifdef USE_FREETYPE2
 #include "freetype2/config/ftheader.h"
 #include "freetype2/freetype.h"
+#include "freetype2/ftoutln.h"
 #else
 #include "freetype/config/ftheader.h"
 #include "freetype/freetype.h"
+#include "freetype/ftoutln.h"
 #endif
 #else
 
 #ifdef USE_FREETYPE2
 #include <freetype2/config/ftheader.h>
+#include "freetype2/ftoutln.h"
 #else
 #include <config/ftheader.h>
+#include "ftoutln.h"
 #endif
 //#include <ft2build.h>
 #include FT_FREETYPE_H
@@ -765,6 +769,7 @@ protected:
     bool          _drawMonochrome;
     bool          _allowKerning;
     hinting_mode_t _hintingMode;
+    int            _embolding;
     bool          _fallbackFontIsSet;
     LVFontRef     _fallbackFont;
 public:
@@ -799,13 +804,14 @@ public:
     LVFreeTypeFace( LVMutex &mutex, FT_Library  library, LVFontGlobalGlyphCache * globalCache )
     : _mutex(mutex), _fontFamily(css_ff_sans_serif), _library(library), _face(NULL), _size(0), _hyphen_width(0), _baseline(0)
     , _weight(400), _italic(0)
-    , _glyph_cache(globalCache), _drawMonochrome(false), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT), _fallbackFontIsSet(false)
+    , _glyph_cache(globalCache), _drawMonochrome(false), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT), _embolding(0),  _fallbackFontIsSet(false)
     {
         _matrix.xx = 0x10000;
         _matrix.yy = 0x10000;
         _matrix.xy = 0;
         _matrix.yx = 0;
         _hintingMode = fontMan->GetHintingMode();
+        _embolding = fontMan->GetEmbolding();
     }
 
     virtual ~LVFreeTypeFace()
@@ -838,6 +844,18 @@ public:
     /// returns current hinting mode
     virtual hinting_mode_t  getHintingMode() const { return _hintingMode; }
 
+    /// sets current embolding
+    virtual void setEmbolding(int embolding) {
+        if (_embolding == embolding)
+            return;
+        _embolding = embolding;
+        _glyph_cache.clear();
+        _wcache.clear();
+    }
+
+    /// returns current embolding
+    virtual int getEmbolding() const { return _embolding; }
+
     /// get bitmap mode (true=bitmap, false=antialiased)
     virtual bool getBitmapMode() { return _drawMonochrome; }
     /// set bitmap mode (true=bitmap, false=antialiased)
@@ -854,6 +872,7 @@ public:
     {
         FONT_GUARD
         _hintingMode = fontMan->GetHintingMode();
+        _embolding = fontMan->GetEmbolding();
         _drawMonochrome = monochrome;
         _fontFamily = fontFamily;
         int error = FT_New_Memory_Face( _library, buf->get(), buf->length(), index, &_face ); /* create face object */
@@ -918,6 +937,7 @@ public:
     {
         FONT_GUARD
         _hintingMode = fontMan->GetHintingMode();
+        _embolding = fontMan->GetEmbolding();
         _drawMonochrome = monochrome;
         _fontFamily = fontFamily;
         if ( fname )
@@ -1230,7 +1250,7 @@ public:
         LVFontGlyphCacheItem * item = _glyph_cache.get( ch );
         if ( !item ) {
             int mode_light = ((_hintingMode == HINTING_MODE_LIGHT) ? FT_LOAD_TARGET_LIGHT : FT_LOAD_TARGET_NORMAL);
-            int rend_flags = FT_LOAD_RENDER | ( !_drawMonochrome ? mode_light : (FT_LOAD_TARGET_MONO) ); //|FT_LOAD_MONOCHROME|FT_LOAD_FORCE_AUTOHINT
+            int rend_flags =  !_drawMonochrome ? mode_light : (FT_LOAD_TARGET_MONO); //|FT_LOAD_MONOCHROME|FT_LOAD_FORCE_AUTOHINT
             if (_hintingMode == HINTING_MODE_AUTOHINT)
                 rend_flags |= FT_LOAD_FORCE_AUTOHINT;
             else if (_hintingMode == HINTING_MODE_DISABLED)
@@ -1244,6 +1264,11 @@ public:
             if ( error ) {
                 return NULL;  /* ignore errors */
             }
+            if (_embolding != 0) {
+                FT_Pos embold = FT_MulFix(_face->units_per_EM, _face->size->metrics.y_scale) * _embolding / 256;
+                FT_Outline_Embolden( &_face->glyph->outline, embold );
+            }
+            FT_Render_Glyph( _face->glyph, (!_drawMonochrome ? FT_RENDER_MODE_NORMAL : FT_RENDER_MODE_MONO));
             item = newItem( &_glyph_cache, ch, _slot ); //, _drawMonochrome
             _glyph_cache.put( item );
         }
@@ -1964,6 +1989,24 @@ public:
     /// sets current gamma level
     virtual hinting_mode_t  GetHintingMode() {
         return _hintingMode;
+    }
+
+    virtual void SetEmbolding(int embolding) {
+        if (_embolding == embolding)
+            return;
+        FONT_MAN_GUARD
+        CRLog::debug("Embolding mode is changed: %d", embolding);
+        _embolding = embolding;
+        gc();
+        clearGlyphCache();
+        LVPtrVector< LVFontCacheItem > * fonts = _cache.getInstances();
+        for ( int i=0; i<fonts->length(); i++ ) {
+            fonts->get(i)->getFont()->setEmbolding(embolding);
+        }
+    }
+
+    virtual int GetEmbolding() {
+        return _embolding;
     }
 
     /// set antialiasing mode
