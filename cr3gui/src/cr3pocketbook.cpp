@@ -40,6 +40,7 @@
 
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
+bool useDeveloperFeatures;
 lString16 pbSkinFileName;
 
 static const char *def_menutext[9] = {
@@ -1755,8 +1756,9 @@ public:
 
         #ifdef POCKETBOOK_PRO
 
-        // If device supports touch
-        if( QueryTouchpanel() != 0 ) {
+        // If device supports touch and resolution is greater than 800x600
+        if( useDeveloperFeatures && // FIXME: TODO: XXX: Remove when releasing
+            QueryTouchpanel() != 0 && ScreenWidth() > 600 && ScreenHeight() > 800 ) {
             showTocTouchMenu(_toc, _tocLength);
             return;
         }
@@ -4221,6 +4223,7 @@ int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
+    useDeveloperFeatures = access( OTA_DEV_MARKER, F_OK ) != -1;
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);

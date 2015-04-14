@@ -66,6 +66,7 @@
 #endif
 
 extern lString16 pbSkinFileName;
+extern bool useDeveloperFeatures;
 
 typedef struct {
     const char * action_id;
@@ -1670,7 +1671,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                 _("OTA Update"),
                 LVImageSourceRef(),
                 LVFontRef() ) );
-    if( access( OTA_DEV_MARKER, F_OK ) != -1 ) {
+    if( useDeveloperFeatures ) {
         mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE_DEV,
                 _("OTA Update Dev"),
                 LVImageSourceRef(),
