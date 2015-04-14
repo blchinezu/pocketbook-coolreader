@@ -4006,6 +4006,32 @@ int main_handler(int type, int par1, int par2)
                 );
             CRLog::trace("GetBookCover(): ibitmap *cover = %p", cover);
 
+            // Stretch cover if height/width is at most 6% less than the screen size
+            /*if( cover ) {
+                CRLog::trace("GetBookCover(): cover->height = %d", cover->height);
+                CRLog::trace("GetBookCover(): cover->width = %d", cover->width);
+
+                CRLog::trace("GetBookCover(): cover->width > ScreenWidth()-(ScreenWidth()*0.06) ==== %d > %d",
+                    cover->width, ScreenWidth()-(ScreenWidth()*0.06));
+                CRLog::trace("GetBookCover(): cover->height > ScreenHeight()-(ScreenHeight()*0.06) ==== %d > %d",
+                    cover->height, ScreenHeight()-(ScreenHeight()*0.06));
+
+                if( ( // Smaller width
+                    cover->height == ScreenHeight() &&
+                    cover->width < ScreenWidth() &&
+                    cover->width > ScreenWidth()-(ScreenWidth()*0.06)
+                    ) || ( // Or smaller height
+                    cover->width == ScreenWidth() &&
+                    cover->height < ScreenHeight() &&
+                    cover->height > ScreenHeight()-(ScreenHeight()*0.06)
+                    ) ) {
+                    CRLog::trace("GetBookCover(): Stretch");
+                    StretchBitmap(0, 0, ScreenWidth(), ScreenHeight(), cover, 0);
+                    CRLog::trace("GetBookCover(): after: cover->height = %d", cover->height);
+                    CRLog::trace("GetBookCover(): after: cover->width = %d", cover->width);
+                }
+            }*/
+
             #ifdef POCKETBOOK_PRO
 
             // Try getting library cached cover
