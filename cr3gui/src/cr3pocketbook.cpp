@@ -3989,10 +3989,16 @@ int main_handler(int type, int par1, int par2)
                     ).c_str(), 4000);
                 iv_unlink(PB_FRESH_UPDATE_MARKER);
             }
+            
+            #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_602)
+
             // Else full screen update
             else {
                 FullUpdate();
             }
+
+            #endif
+
             // startStatusUpdateThread(5000);
 
             // Try getting cover with the system function
