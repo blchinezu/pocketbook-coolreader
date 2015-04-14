@@ -85,6 +85,7 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
 #define PB_FRESH_UPDATE_MARKER USERDATA"/.cr3updated"
+#define PB_DEV_MARKER          USERDATA"/.cr3-use-devel-branch"
 
 #if defined(POCKETBOOK_PRO_FW5)
     #define CR_PB_SDK "pro5"

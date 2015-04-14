@@ -4223,7 +4223,7 @@ int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
-    useDeveloperFeatures = access( OTA_DEV_MARKER, F_OK ) != -1;
+    useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
