@@ -31,7 +31,7 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 
 	# Mark package.version
 	echo "Version: $VERSION" > "$releases/dev/cr3-$2/package.version"
-	echo "Date:    $DATE" >> "$releases/dev/cr3-$2/package.version"
+	echo "Date:    `date +"%Y-%m-%d %H:%M:%S"`" >> "$releases/dev/cr3-$2/package.version"
 	echo "Build:   $2" >> "$releases/dev/cr3-$2/package.version"
 	echo "Branch:  dev" >> "$releases/dev/cr3-$2/package.version"
 
