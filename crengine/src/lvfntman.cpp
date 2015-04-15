@@ -591,7 +591,11 @@ static LVFontGlyphCacheItem * newItem( LVFontLocalGlyphCache * local_cache, lCha
     }
     item->origin_x =   (lInt8)slot->bitmap_left;
     item->origin_y =   (lInt8)slot->bitmap_top;
-    item->advance =    (lUInt8)(myabs(slot->metrics.horiAdvance) >> 6);
+    int _tracking = fontMan->GetTracking();
+    int tempTracking = slot->face->height * _tracking / 1000;
+    if ((myabs(slot->metrics.horiAdvance) + tempTracking) < 0)
+        tempTracking = 0;
+    item->advance = (lUInt8)((myabs(slot->metrics.horiAdvance) + tempTracking) >> 6);
     return item;
 }
 
@@ -770,6 +774,7 @@ protected:
     bool          _allowKerning;
     hinting_mode_t _hintingMode;
     int            _embolding;
+    int            _tracking;
     bool          _fallbackFontIsSet;
     LVFontRef     _fallbackFont;
 public:
@@ -804,7 +809,7 @@ public:
     LVFreeTypeFace( LVMutex &mutex, FT_Library  library, LVFontGlobalGlyphCache * globalCache )
     : _mutex(mutex), _fontFamily(css_ff_sans_serif), _library(library), _face(NULL), _size(0), _hyphen_width(0), _baseline(0)
     , _weight(400), _italic(0)
-    , _glyph_cache(globalCache), _drawMonochrome(false), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT), _embolding(0),  _fallbackFontIsSet(false)
+    , _glyph_cache(globalCache), _drawMonochrome(false), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT), _embolding(0), _tracking(0), _fallbackFontIsSet(false)
     {
         _matrix.xx = 0x10000;
         _matrix.yy = 0x10000;
@@ -812,6 +817,7 @@ public:
         _matrix.yx = 0;
         _hintingMode = fontMan->GetHintingMode();
         _embolding = fontMan->GetEmbolding();
+        _tracking = fontMan->GetTracking();
     }
 
     virtual ~LVFreeTypeFace()
@@ -856,6 +862,17 @@ public:
     /// returns current embolding
     virtual int getEmbolding() const { return _embolding; }
 
+    /// sets current tracking
+    virtual void setTracking(int tracking) {
+        if (_tracking == tracking)
+            return;
+        _tracking = tracking;
+        _glyph_cache.clear();
+        _wcache.clear();
+    }
+
+    virtual int getTracking() const { return _tracking; }
+
     /// get bitmap mode (true=bitmap, false=antialiased)
     virtual bool getBitmapMode() { return _drawMonochrome; }
     /// set bitmap mode (true=bitmap, false=antialiased)
@@ -873,6 +890,7 @@ public:
         FONT_GUARD
         _hintingMode = fontMan->GetHintingMode();
         _embolding = fontMan->GetEmbolding();
+        _tracking = fontMan->GetTracking();
         _drawMonochrome = monochrome;
         _fontFamily = fontFamily;
         int error = FT_New_Memory_Face( _library, buf->get(), buf->length(), index, &_face ); /* create face object */
@@ -938,6 +956,7 @@ public:
         FONT_GUARD
         _hintingMode = fontMan->GetHintingMode();
         _embolding = fontMan->GetEmbolding();
+        _tracking = fontMan->GetTracking();
         _drawMonochrome = monochrome;
         _fontFamily = fontFamily;
         if ( fname )
@@ -1055,7 +1074,10 @@ public:
         glyph->blackBoxY = (lUInt8)(_slot->metrics.height >> 6);
         glyph->originX =   (lInt8)(_slot->metrics.horiBearingX >> 6);
         glyph->originY =   (lInt8)(_slot->metrics.horiBearingY >> 6);
-        glyph->width =     (lUInt8)(myabs(_slot->metrics.horiAdvance) >> 6);
+        int tempTracking = _slot->face->height * _tracking / 1000;
+        if ((myabs(_slot->metrics.horiAdvance) + tempTracking) < 0)
+            tempTracking = 0;
+        glyph->width = (lUInt8)((myabs(_slot->metrics.horiAdvance) + tempTracking) >> 6);
         return true;
     }
 /*
@@ -2007,6 +2029,24 @@ public:
 
     virtual int GetEmbolding() {
         return _embolding;
+    }
+
+    virtual void SetTracking(int tracking) {
+        if (_tracking == tracking)
+            return;
+        FONT_MAN_GUARD
+        CRLog::debug("Tracking is changed: %d", tracking);
+        _tracking = tracking;
+        gc();
+        clearGlyphCache();
+        LVPtrVector< LVFontCacheItem > * fonts = _cache.getInstances();
+        for ( int i=0; i<fonts->length(); i++ ) {
+            fonts->get(i)->getFont()->setTracking(tracking);
+        }
+    }
+
+    virtual int GetTracking() {
+        return _tracking;
     }
 
     /// set antialiasing mode

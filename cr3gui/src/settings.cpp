@@ -1103,6 +1103,40 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t tracking[] = {
+        {"-50",  "-50"},
+        {"-40",  "-40"},
+        {"-30",  "-30"},
+        {"-25",  "-25"},
+        {"-20",  "-20"},
+        {"-15",  "-15"},
+        {"-10",  "-10"},
+        {"-5",   "-5"},
+        {"0",    "0"},
+        {"5",    "5"},
+        {"10" ,  "10"},
+        {"15" ,  "15"},
+        {"20" ,  "20"},
+        {"25" ,  "25"},
+        {"30" ,  "30"},
+        {"35" ,  "35"},
+        {"40" ,  "40"},
+        {"45" ,  "45"},
+        {"50" ,  "50"},
+        {"60" ,  "60"},
+        {"70" ,  "70"},
+        {"80" ,  "80"},
+        {"90" ,  "90"},
+        {"100",  "100"},
+        {"125",  "125"},
+        {"150",  "150"},
+        {"175",  "175"},
+        {"200",  "200"},
+        {"250",  "250"},
+        {NULL, NULL}
+    };
+
+
     item_def_t inverse_mode[] = {
         {_("Normal"), "0"},
         {_("Inverse"), "1"},
@@ -1405,6 +1439,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            valueFont, PROP_FONT_KERNING_ENABLED, on_off_option);
     createSettingsMenuItem(fontSettingsMenu, mm_Embolding, _("Font embolding"),
                            valueFont, PROP_FONT_EMBOLDING, font_embolding);
+    createSettingsMenuItem(fontSettingsMenu, mm_Tracking, _("Tracking"),
+                           valueFont, PROP_FONT_TRACKING, tracking);
     createSettingsMenuItem(fontSettingsMenu, mm_fontGamma, _("Font Gamma"),
                            valueFont, PROP_FONT_GAMMA, font_gammas);
     createSettingsMenuItem(fontSettingsMenu, mm_EmbeddedFonts, _("Document embedded fonts"),
