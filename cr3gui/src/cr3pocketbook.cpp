@@ -4040,7 +4040,7 @@ int main_handler(int type, int par1, int par2)
             ibitmap *cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
-                ScreenHeight()/* - PanelHeight()*/
+                ScreenHeight()
                 );
             CRLog::trace("GetBookCover(): GetBookCover(%s, %d, %d);",
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
@@ -4116,23 +4116,27 @@ int main_handler(int type, int par1, int par2)
                 }
             }
 
-            #ifndef POCKETBOOK_PRO_602
+            #endif
 
             // If none worked - generate an ugly ass cover
             if( !cover ) {
 
                 LVGrayDrawBuf tmpBuf( ScreenWidth(), ScreenHeight(), GetHardwareDepth() );
 
-                bookinfo *info = GetBookInfoExt(UnicodeToLocal(pbGlobals->getFileName()).c_str(),"/");
+                lString16 authors = main_win->getDocView()->getAuthors();
+                lString16 title = main_win->getDocView()->getTitle();
+                lString16 series = main_win->getDocView()->getSeries();
+                if (title.empty())
+                    title = _("Untitled");
 
                 LVDrawBookCover(
                     tmpBuf,
                     main_win->getDocView()->getCoverPageImage(),
                     lString8(DEFAULTFONT),
-                    lString16(info->title),
-                    lString16(info->author),
-                    lString16(info->series),
-                    info->numinseries
+                    title,
+                    authors,
+                    series,
+                    0
                     );
 
                 cover = NewBitmap(ScreenWidth(), ScreenHeight());
@@ -4142,10 +4146,6 @@ int main_handler(int type, int par1, int par2)
                     memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
                 }
             }
-
-            #endif
-            
-            #endif
 
             // If somehow there is a cover
             if (cover) {
