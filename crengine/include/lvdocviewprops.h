@@ -4,7 +4,7 @@
 // standard properties supported by LVDocView
 #define PROP_FONT_GAMMA              "font.gamma" // currently supported: 0.65 .. 1.35, see gammatbl.h
 #define PROP_FONT_GAMMA_INDEX        "font.gamma.index" // currently supported: 0..30 ~= 0.65 .. 1.35, see gammatbl.h
-#define PROP_FONT_EMBOLDING          "font.embolding" // currently supported: -8..10
+#define PROP_FONT_EMBOLDING          "font.embolding" // currently supported: -16..64
 #define PROP_FONT_TRACKING           "crengine.style.tracking"
 #define PROP_FONT_ANTIALIASING       "font.antialiasing.mode"
 #define PROP_FONT_HINTING            "font.hinting.mode"

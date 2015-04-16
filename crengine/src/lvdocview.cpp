@@ -5803,7 +5803,7 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             }
         } else if (name == PROP_FONT_EMBOLDING) {
             int embolding = props->getIntDef(PROP_FONT_EMBOLDING, 0);
-            if (fontMan->GetEmbolding() != embolding && embolding >= -18 && embolding <= 20) {
+            if (fontMan->GetEmbolding() != embolding && embolding >= -16 && embolding <= 64) {
                 fontMan->SetEmbolding(embolding);
                 REQUEST_RENDER("propsApply - font embolding")
             }

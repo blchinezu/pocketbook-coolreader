@@ -59,7 +59,7 @@
 #include "freetype2/ftoutln.h"
 #else
 #include <config/ftheader.h>
-#include "ftoutln.h"
+#include <ftoutln.h>
 #endif
 //#include <ft2build.h>
 #include FT_FREETYPE_H
@@ -1287,8 +1287,15 @@ public:
                 return NULL;  /* ignore errors */
             }
             if (_embolding != 0) {
-                FT_Pos embold = FT_MulFix(_face->units_per_EM, _face->size->metrics.y_scale) * _embolding / 256;
-                FT_Outline_Embolden( &_face->glyph->outline, embold );
+                FT_Pos emboldX = _embolding * 8;
+                FT_Pos emboldY;
+                if (_hintingMode != HINTING_MODE_DISABLED) {
+                    emboldY = emboldX / 64 * 64;
+                }
+                else {
+                    emboldY = emboldX;
+                }
+                FT_Outline_EmboldenXY(&_face->glyph->outline, emboldX, emboldY);
             }
             FT_Render_Glyph( _face->glyph, (!_drawMonochrome ? FT_RENDER_MODE_NORMAL : FT_RENDER_MODE_MONO));
             item = newItem( &_glyph_cache, ch, _slot ); //, _drawMonochrome
