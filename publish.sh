@@ -29,6 +29,12 @@ if [ "$1" = "dev" -a "$2" != "" ]; then
 		exit
 	fi
 
+	# Mark package.version
+	echo "Version: $VERSION" > "$releases/dev/cr3-$2/package.version"
+	echo "Date:    `date +"%Y-%m-%d %H:%M:%S"`" >> "$releases/dev/cr3-$2/package.version"
+	echo "Build:   $2" >> "$releases/dev/cr3-$2/package.version"
+	echo "Branch:  dev" >> "$releases/dev/cr3-$2/package.version"
+
 	# Wait for dropbox to catch on
 	# echo
 	# echo " - DEV: Wait for dropbox to catch on..."
@@ -107,8 +113,16 @@ done
 
 # BUILD FIRMWARE SPECIFIC - DROPBOX
 for FIRMWARE in '360' '602' 'pro4' 'pro5'; do
+	
 	echo " - Firmware specific: $FIRMWARE"
 	cd $releases/dev/cr3-$FIRMWARE/
+
+	# Mark package.version
+	echo "Version: $VERSION" > "package.version"
+	echo "Date:    $DATE" >> "package.version"
+	echo "Build:   $FIRMWARE" >> "package.version"
+	echo "Branch:  master" >> "package.version"
+
 	zip -r "$releases/cr3-v$VERSION-$FIRMWARE.zip" ./*
 done
 

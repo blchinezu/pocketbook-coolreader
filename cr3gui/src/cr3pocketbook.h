@@ -73,8 +73,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-17"
-#define CR_PB_BUILD_DATE "2015-04-13"
+#define CR_PB_VERSION "0.0.6-17-18"
+#define CR_PB_BUILD_DATE "2015-04-16"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -85,6 +85,7 @@ enum CRPbCommands {
 #define PB_ROTATE_MODE_180_FAST_NEXT_PREV 6
 
 #define PB_FRESH_UPDATE_MARKER USERDATA"/.cr3updated"
+#define PB_DEV_MARKER          USERDATA"/.cr3-use-devel-branch"
 
 #if defined(POCKETBOOK_PRO_FW5)
     #define CR_PB_SDK "pro5"

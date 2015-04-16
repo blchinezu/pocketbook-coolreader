@@ -249,6 +249,10 @@ public:
     virtual void setEmbolding(int embolding) { }
     /// returns current embolding
     virtual int getEmbolding() const { return 0; }
+    /// sets current tracking
+    virtual void setTracking(int tracking) { }
+    /// returns current tracking
+    virtual int getTracking() const { return 0; }
 
     /// returns true if font is empty
     virtual bool IsNull() const = 0;
@@ -318,6 +322,7 @@ protected:
     bool _allowKerning;
     hinting_mode_t _hintingMode;
     int _embolding;
+    int _tracking;
 public:
     /// garbage collector frees unused fonts
     virtual void gc() = 0;
@@ -357,7 +362,7 @@ public:
     virtual void setKerning( bool kerningEnabled ) { _allowKerning = kerningEnabled; gc(); clearGlyphCache(); }
 
     /// constructor
-    LVFontManager() : _antialiasMode(font_aa_all), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT) { }
+    LVFontManager() : _antialiasMode(font_aa_all), _allowKerning(false), _hintingMode(HINTING_MODE_AUTOHINT), _embolding(0), _tracking(0) { }
     /// destructor
     virtual ~LVFontManager() { }
     /// returns available typefaces
@@ -383,8 +388,13 @@ public:
     virtual hinting_mode_t  GetHintingMode() { return HINTING_MODE_AUTOHINT; }
     /// sets current embolding
     virtual void SetEmbolding(int embolding) { }
-    /// returens current embolding
+    /// returns current embolding
     virtual int GetEmbolding() { return 0; }
+    /// sets current tracking
+    virtual void SetTracking(int tracking) { }
+    /// ruturns current tracking
+    virtual int GetTracking() { return 0; }
+
 
 };
 

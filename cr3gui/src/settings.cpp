@@ -66,6 +66,7 @@
 #endif
 
 extern lString16 pbSkinFileName;
+extern bool useDeveloperFeatures;
 
 typedef struct {
     const char * action_id;
@@ -1102,6 +1103,40 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
 
+    item_def_t tracking[] = {
+        {"-50",  "-50"},
+        {"-40",  "-40"},
+        {"-30",  "-30"},
+        {"-25",  "-25"},
+        {"-20",  "-20"},
+        {"-15",  "-15"},
+        {"-10",  "-10"},
+        {"-5",   "-5"},
+        {"0",    "0"},
+        {"5",    "5"},
+        {"10" ,  "10"},
+        {"15" ,  "15"},
+        {"20" ,  "20"},
+        {"25" ,  "25"},
+        {"30" ,  "30"},
+        {"35" ,  "35"},
+        {"40" ,  "40"},
+        {"45" ,  "45"},
+        {"50" ,  "50"},
+        {"60" ,  "60"},
+        {"70" ,  "70"},
+        {"80" ,  "80"},
+        {"90" ,  "90"},
+        {"100",  "100"},
+        {"125",  "125"},
+        {"150",  "150"},
+        {"175",  "175"},
+        {"200",  "200"},
+        {"250",  "250"},
+        {NULL, NULL}
+    };
+
+
     item_def_t inverse_mode[] = {
         {_("Normal"), "0"},
         {_("Inverse"), "1"},
@@ -1269,30 +1304,36 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     };
 
     item_def_t font_embolding[] = {
-        {"-18", "-18"},
-        {"-14", "-14"},
-        {"-10", "-10"},
-        {"-8",  "-8"},
-        {"-6",  "-6"},
-        {"-4",  "-4"},
-        {"-2",  "-2"},
-        {"-1",  "-1"},
-        {"Off",  "0"},
-        {"1",  "1"},
-        {"2",  "2"},
-        {"3",  "3"},
-        {"4",  "4"},
-        {"5",  "5"},
-        {"6",  "6"},
-        {"7",  "7"},
-        {"8",  "8"},
-        {"9",  "9"},
-        {"10",  "10"},
-        {"12",  "12"},
-        {"14",  "14"},
-        {"16",  "16"},
-        {"18",  "18"},
-        {"20",  "20"},
+        {"-2.0",   "-16"},
+        {"-1.75",  "-14"},
+        {"-1.5",   "-12"},
+        {"-1.25",  "-10"},
+        {"-1.0",   "-8"},
+        {"-0.875", "-7"},
+        {"-0.75",  "-6"},
+        {"-0.625", "-5"},
+        {"-0.5",   "-4"},
+        {"-0.375", "-3"},
+        {"-0.25",  "-2"},
+        {"-0.125", "-1"},
+        {"0",       "0"},
+        {"0.125",  "1"},
+        {"0.25",   "2"},
+        {"0.375",  "3"},
+        {"0.5",    "4"},
+        {"0.625",  "5"},
+        {"0.75",   "6"},
+        {"0.875",  "7"},
+        {"1.0",    "8"},
+        {"1.25",   "10"},
+        {"1.5",    "12"},
+        {"1.75",   "14"},
+        {"2.0",    "16"},
+        {"2.5",    "20"},
+        {"3.0",    "24"},
+        {"3.5",    "28"},
+        {"4.0",    "32"},
+        {"5.0",    "64"},
         {NULL, NULL}
     };
 
@@ -1404,6 +1445,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            valueFont, PROP_FONT_KERNING_ENABLED, on_off_option);
     createSettingsMenuItem(fontSettingsMenu, mm_Embolding, _("Font embolding"),
                            valueFont, PROP_FONT_EMBOLDING, font_embolding);
+    createSettingsMenuItem(fontSettingsMenu, mm_Tracking, _("Tracking"),
+                           valueFont, PROP_FONT_TRACKING, tracking);
     createSettingsMenuItem(fontSettingsMenu, mm_fontGamma, _("Font Gamma"),
                            valueFont, PROP_FONT_GAMMA, font_gammas);
     createSettingsMenuItem(fontSettingsMenu, mm_EmbeddedFonts, _("Document embedded fonts"),
@@ -1670,7 +1713,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                 _("OTA Update"),
                 LVImageSourceRef(),
                 LVFontRef() ) );
-    if( access( OTA_DEV_MARKER, F_OK ) != -1 ) {
+    if( useDeveloperFeatures ) {
         mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE_DEV,
                 _("OTA Update Dev"),
                 LVImageSourceRef(),

@@ -5,6 +5,7 @@
 #ifndef OTA_UPDATE_H
 #define OTA_UPDATE_H
 
+#include "cr3pocketbook.h"
 
 #ifndef FLASHDIR
     #ifndef DIRPREFIX
@@ -38,8 +39,6 @@
 #define OTA_URL_MASK_TEST OTA_URL_BASE "[DEVICE]/" CR_PB_SDK "/exists"
 #define OTA_VERSION       OTA_URL_BASE "current.version"
 #define OTA_LINK_MASK     OTA_URL_BASE "links/[DEVICE]"
-
-#define OTA_DEV_MARKER    FLASHDIR"/system/.cr3-use-devel-branch"
 
 
 #define OTA_VERSION_MAX_LENGTH 15

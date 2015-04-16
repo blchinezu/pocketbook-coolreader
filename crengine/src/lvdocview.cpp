@@ -5695,6 +5695,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 
     props->setStringDef(PROP_FONT_GAMMA, "1.00");
     props->setStringDef(PROP_FONT_EMBOLDING, "0");
+    props->setStringDef(PROP_FONT_TRACKING, "0");
 
     img_scaling_option_t defImgScaling;
     props->setIntDef(PROP_IMG_SCALING_ZOOMOUT_BLOCK_SCALE, defImgScaling.max_scale);
@@ -5723,6 +5724,13 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     if (q>800)
         q=800;
     props->setInt(PROP_FORMAT_MAX_SPACE_EXPANDING_PERCENT, q);
+
+    int tr = props->getIntDef(PROP_FONT_TRACKING, 0);
+    if (tr < -500)
+        tr = -500;
+    if (tr > 500)
+        tr = 500;
+    props->setInt(PROP_FONT_TRACKING, tr);
 
     props->setIntDef(PROP_FILE_PROPS_FONT_SIZE, 22);
 
@@ -5795,9 +5803,15 @@ CRPropRef LVDocView::propsApply(CRPropRef props) {
             }
         } else if (name == PROP_FONT_EMBOLDING) {
             int embolding = props->getIntDef(PROP_FONT_EMBOLDING, 0);
-            if (fontMan->GetEmbolding() != embolding && embolding >=-18 && embolding <=20) {
+            if (fontMan->GetEmbolding() != embolding && embolding >= -16 && embolding <= 64) {
                 fontMan->SetEmbolding(embolding);
                 REQUEST_RENDER("propsApply - font embolding")
+            }
+        } else if (name == PROP_FONT_TRACKING) {
+            int tracking = props->getIntDef(PROP_FONT_TRACKING, 0);
+            if (fontMan->GetTracking() != tracking && tracking >= -500 && tracking <= 500) {
+                fontMan->SetTracking(tracking);
+                REQUEST_RENDER("propsApply - font tracking")
             }
         } else if (name == PROP_FONT_HINTING) {
             int mode = props->getIntDef(PROP_FONT_HINTING, (int)HINTING_MODE_AUTOHINT);
