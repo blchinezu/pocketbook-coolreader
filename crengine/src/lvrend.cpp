@@ -1981,11 +1981,7 @@ void setNodeStyle( ldomNode * enode, css_style_ref_t parent_style, LVFontRef par
         break;
     }
     // line_height
-    if(pstyle->letter_spacing.type == css_val_unspecified)
-        pstyle->letter_spacing = parent_style->letter_spacing;
-    else
-        spreadParent( pstyle->letter_spacing, parent_style->letter_spacing );
-    // TODO: check css properties inheritance rules
+    spreadParent( pstyle->letter_spacing, parent_style->letter_spacing );
     spreadParent( pstyle->line_height, parent_style->line_height );
     spreadParent( pstyle->color, parent_style->color );
     spreadParent( pstyle->background_color, parent_style->background_color, false );
