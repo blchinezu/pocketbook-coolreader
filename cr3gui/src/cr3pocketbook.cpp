@@ -1079,6 +1079,7 @@ public:
         }
     }
     virtual void startWordSelection();
+    virtual void startWordSelection(lvPoint &pt);
     virtual void Update();
     virtual bool isDocDirty() { return _docDirty; }
     virtual void setDocDirty() { _docDirty = true; }
@@ -1169,6 +1170,11 @@ public:
     {
         _dictDlg->setDocDirty();
         _dictDlg->startWordSelection();
+    }
+    virtual void startWordSelection(lvPoint &pt)
+    {
+        _dictDlg->setDocDirty();
+        _dictDlg->startWordSelection(pt);
     }
     virtual void Update()
     {
@@ -1445,6 +1451,10 @@ protected:
                             _docview->goLink( m_link );
                             return showLinksDialog(true);
                         }
+                    } else if (command == MCMD_DICT) {
+                        lvPoint wordPoint = p.toPoint();
+                        showDictDialog(wordPoint);
+                        return true;
                     }
                 }
             }
@@ -1703,7 +1713,7 @@ public:
         return true;
     }
 
-    void showDictDialog()
+    CRPbDictionaryDialog *getDictDialog()
     {
         if (_dictDlg == NULL) {
             lString16 filename("dict.css");
@@ -1712,7 +1722,19 @@ public:
                 LVLoadStylesheetFile( _cssDir + filename, dictCss );
             _dictDlg = new CRPbDictionaryDialog( _wm, this, dictCss );
         }
-        CRPbDictionaryProxyWindow *dlg = new CRPbDictionaryProxyWindow(_dictDlg);
+        return _dictDlg;
+    }
+
+    void showDictDialog(lvPoint &pt)
+    {
+        CRPbDictionaryProxyWindow *dlg = new CRPbDictionaryProxyWindow(getDictDialog());
+        _wm->activateWindow( dlg );
+        dlg->startWordSelection(pt);
+    }
+
+    void showDictDialog()
+    {
+        CRPbDictionaryProxyWindow *dlg = new CRPbDictionaryProxyWindow(getDictDialog());
         _wm->activateWindow( dlg );
         dlg->startWordSelection();
     }
@@ -3046,6 +3068,19 @@ void CRPbDictionaryDialog::startWordSelection()
         _lastWordX = 0;
         _selText.clear();
     }
+    _wordSelector->selectWord(_lastWordX, _lastWordY);
+    onWordSelection();
+}
+
+void CRPbDictionaryDialog::startWordSelection(lvPoint &pt)
+{
+    if (isWordSelection())
+        endWordSelection();
+    _wordSelector = new LVPageWordSelector(_docview);
+    _curPage = _docview->getCurPage();
+    _selText.clear();
+    _lastWordY = pt.y;
+    _lastWordX = pt.x;
     _wordSelector->selectWord(_lastWordX, _lastWordY);
     onWordSelection();
 }
