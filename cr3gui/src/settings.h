@@ -108,15 +108,20 @@ class CRSettingsMenu : public CRFullScreenMenu
     protected:
         CRPropRef props;
         CRGUIAcceleratorTableRef _menuAccelerators;
-        void addMenuItems( CRMenu * menu, item_def_t values[] );
+        static void addMenuItems( CRMenu * menu, CRGUIAcceleratorTableRef menuAccelerators,
+                                 item_def_t values[] );
 
         lString16 getStatusText();
     public:
-        CRMenu * createFontSizeMenu( CRMenu * mainMenu, int *fontSizes, unsigned sizesCount, CRPropRef props, const char * propName );
+        static CRMenu * createFontSizeMenu( CRGUIWindowManager * wm, CRMenu * mainMenu, int *fontSizes,
+                                           unsigned sizesCount, const char *imageId, CRPropRef props,
+                                           const char * propName );
 #if CR_INTERNAL_PAGE_ORIENTATION==1 || defined(CR_POCKETBOOK)
-        CRMenu * createOrientationMenu( CRMenu * mainMenu, CRPropRef props );
+        static CRMenu * createOrientationMenu( CRGUIWindowManager * wm, CRMenu * mainMenu, CRPropRef props );
 #endif
-        CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef props, int id, LVFontRef font, CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc );
+
+        CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef props, int id, LVFontRef font,
+                       CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc );
         virtual bool onCommand( int command, int params );
         virtual ~CRSettingsMenu()
         {
@@ -126,9 +131,12 @@ class CRSettingsMenu : public CRFullScreenMenu
             CRLog::trace("Done fontMan->gc() on Settings menu destroy");
         }
     private:
-        CRMenu * createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label, lString8 property, item_def_t values[]);
-        CRMenu * createSettingsMenuItem(CRMenu * menu, int id, const char * label, LVFontRef valueFont, const char * propName, item_def_t values[]);
-        CRMenu * createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label, const char * propName);
+        CRMenu * createStyleMenuItem(CRMenu * menu, LVFontRef valueFont, const char * label,
+                                     const char * imageId, lString8 property, item_def_t values[]);
+        CRMenu * createSettingsMenuItem(CRMenu * menu, int id, const char * label, const char *imageId,
+                                        LVFontRef valueFont, const char * propName, item_def_t values[]);
+        CRMenu * createFontFaceMenuItem( CRMenu * mainMenu, LVFontRef valueFont, int id, const char * label,
+                                        const char * imageId, const char * propName);
         void createStyleMenuItems( CRMenu * menu, LVFontRef valueFont, const char * prefix );
         int _menuItemId;
 };

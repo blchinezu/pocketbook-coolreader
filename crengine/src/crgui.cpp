@@ -1309,6 +1309,30 @@ void CRDocViewWindow::setRect( const lvRect & rc )
     setDirty();
 }
 
+LVImageSourceRef CRMenuItem::getItemIcon()
+{
+    if ( _image.isNull() && _menu != NULL ) {
+        _image = _menu->getImage( _imageId );
+    }
+    return _image;
+}
+
+int CRMenuItem::DrawIcon(LVDrawBuf & buf, lvRect & rc, lvRect & bordersRc)
+{
+    int imgWidth = 0;
+
+    LVImageSourceRef image = getItemIcon();
+    if ( !image.isNull() ) {
+        int hh = rc.bottom - rc.top - bordersRc.top - bordersRc.bottom;
+        int w = image->GetWidth();
+        int h = image->GetHeight();
+        if ( h > hh)
+            h = hh;
+        buf.Draw( image, rc.left + bordersRc.left, rc.top + bordersRc.top + (hh - h)/2 , w, h );
+        imgWidth = w + ITEM_MARGIN;
+    }
+    return imgWidth;
+}
 
 void CRMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected )
 {
@@ -1317,14 +1341,8 @@ void CRMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectS
     skin->draw( buf, rc );
     buf.SetTextColor( skin->getTextColor() );
     buf.SetBackgroundColor( skin->getBackgroundColor() );
-    int imgWidth = 0;
-    int hh = rc.bottom - rc.top - itemBorders.top - itemBorders.bottom;
-    if ( !_image.isNull() ) {
-        int w = _image->GetWidth();
-        int h = _image->GetHeight();
-        buf.Draw( _image, rc.left + hh/2-w/2 + itemBorders.left, rc.top + hh/2 - h/2 + itemBorders.top, w, h );
-        imgWidth = w + ITEM_MARGIN;
-    }
+
+    int imgWidth = DrawIcon( buf, rc, itemBorders );
 
     lvRect textRect = rc;
     textRect.left += imgWidth;
@@ -1395,14 +1413,8 @@ void CRMenu::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinR
     skin->draw( buf, rc );
     buf.SetTextColor( skin->getTextColor() );
     buf.SetBackgroundColor( skin->getBackgroundColor() );
-    int imgWidth = 0;
-    int hh = rc.bottom - rc.top - itemBorders.top - itemBorders.bottom;
-    if ( !_image.isNull() ) {
-        int w = _image->GetWidth();
-        int h = _image->GetHeight();
-        buf.Draw( _image, rc.left + hh/2-w/2 + itemBorders.left, rc.top + hh/2 - h/2 + itemBorders.top, w, h );
-        imgWidth = w + ITEM_MARGIN;
-    }
+    int imgWidth = DrawIcon( buf, rc, itemBorders );
+
     lvRect textRect = rc;
     textRect.left += imgWidth;
     //textRect.shrinkBy( itemBorders );
@@ -1444,10 +1456,11 @@ lvPoint CRMenuItem::getItemSize( CRRectSkinRef skin )
 
     int w = font->getTextWidth( _label.c_str(), _label.length() );
     w += ITEM_MARGIN * 2;
-    if ( !_image.isNull() ) {
+    LVImageSourceRef image = getItemIcon();
+    if ( !image.isNull() ) {
         int hi = 0;
-        if ( _image->GetHeight()>h )
-            hi = _image->GetHeight() * 8 / 7;
+        if ( image->GetHeight()>h )
+            hi = image->GetHeight() * 8 / 7;
         if ( h < hi )
             h = hi;
         w += hi;
@@ -2111,7 +2124,7 @@ void CRMenu::draw()
 	_pages = _pageItems>0 ? (_items.length()+_pageItems-1)/_pageItems : 0;
 	_page = _pages>0 ? _topItem/_pageItems+1 : 0;
 	_caption = _label;
-	_icon = _image;
+        _icon = getItemIcon();
 
 	if (_pageUpdate) {
 		CRGUIWindowBase::draw();
@@ -2120,6 +2133,20 @@ void CRMenu::draw()
 		drawClient();
 		drawStatusBar();
 	}
+}
+
+LVImageSourceRef CRMenu::getImage(const lChar16 * imageId)
+{
+    lString16 fn( imageId );
+    CRSkinRef skin = _wm->getSkin();
+    if( !skin.isNull() && !fn.empty() ) {
+        int extPos = fn.pos(".png");
+        if( -1 == extPos) {
+            fn.append(L".png");
+        }
+        return skin->getImage(fn);
+    }
+    return LVImageSourceRef();
 }
 
 static bool readNextLine( const LVStreamRef & stream, lString16 & dst )

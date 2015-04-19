@@ -73,8 +73,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-18"
-#define CR_PB_BUILD_DATE "2015-04-16"
+#define CR_PB_VERSION "0.0.6-17-19"
+#define CR_PB_BUILD_DATE "2015-04-19"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -151,6 +151,7 @@ void pbLaunchWaitBinary(const char *binary);
 void toggleInvertDisplay();
 void toggleStatusLine();
 void launchBrowser(lString16 url);
+void exitApp();
 
 lString16 getPbModelNumber();
 

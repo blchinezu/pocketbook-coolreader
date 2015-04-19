@@ -107,8 +107,19 @@ lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
 }
 
 void OTA_DL_dialog_handler(int button) {
+
+    // Log
     CRLog::trace("OTA_DL_dialog_handler(%d)", button);
-    return;
+    
+    // Mark the required restart
+    FILE *marker;
+    char buffer[2] = "x";
+    marker = fopen(OTA_RESTART_MARK, "wb");
+    fwrite(buffer, 1, 1, marker);
+    fclose(marker);
+
+    // Exit
+    exitApp();
 }
 
 void OTA_DL_update_progress(void) {
@@ -153,7 +164,7 @@ void OTA_DL_update_progress(void) {
                 CRLog::trace("OTA_DL_update_progress(): Done");
 
                 Dialog(ICON_INFORMATION, const_cast<char*>("CoolReader"), 
-                    _("Download successfull!\nPlease restart CoolReader."),
+                    _("Download successful!\nCoolReader will restart itself."),
                     _("OK"), NULL, OTA_DL_dialog_handler);
             }
         }

@@ -1097,6 +1097,7 @@ class CRMenuItem
         LVFontRef _defFont;
         lString16 _propValue;
         bool _itemDirty;
+        lString16 _imageId;
     public:
         /// id of item
         int getId() { return _id; }
@@ -1106,19 +1107,29 @@ class CRMenuItem
         lString16 getLabel() { return _label; }
         void setLabel(lString16 label) { _label = label; setItemDirty(); }
         /// item icon
-        LVImageSourceRef getImage() { return _image; }
+        LVImageSourceRef getItemIcon();
+        void setItemIcon(LVImageSourceRef icon) { _image = icon; }
         /// item label font
         virtual LVFontRef getFont() { return _defFont; }
         /// constructor
-        CRMenuItem( CRMenu * menu, int id, lString16 label, LVImageSourceRef image, LVFontRef defFont, const lChar16 * propValue=NULL  )
-    : _menu(menu), _id(id), _label(label), _image(image), _defFont(defFont), _propValue(propValue) { }
+        CRMenuItem( CRMenu * menu, int id, lString16 label, LVImageSourceRef image, LVFontRef defFont,
+                   const lChar16 * propValue=NULL  ) :
+            _menu(menu), _id(id), _label(label), _image(image), _defFont(defFont), _propValue(propValue) { }
         /// constructor
-        CRMenuItem( CRMenu * menu, int id, const char * label, LVImageSourceRef image, LVFontRef defFont, const lChar16 * propValue=NULL  )
-    : _menu(menu), _id(id), _label(label), _image(image), _defFont(defFont), _propValue(propValue) { }
+        CRMenuItem( CRMenu * menu, int id, const char * label, LVImageSourceRef image, LVFontRef defFont,
+                   const lChar16 * propValue=NULL  ) :
+            _menu(menu), _id(id), _label(label), _image(image), _defFont(defFont), _propValue(propValue) { }
+        CRMenuItem( CRMenu * menu, int id, lString16 label, const char *imageId, LVFontRef defFont,
+                   const lChar16 * propValue=NULL  ) :
+            _menu(menu), _id(id), _label(label), _image(NULL), _defFont(defFont), _propValue(propValue), _imageId(imageId) { }
+        CRMenuItem( CRMenu * menu, int id, const char * label, const char *imageId, LVFontRef defFont,
+                   const lChar16 * propValue=NULL  ) :
+            _menu(menu), _id(id), _label(label), _image(NULL), _defFont(defFont), _propValue(propValue), _imageId(imageId) { }
         /// measures item size
         virtual lvPoint getItemSize( CRRectSkinRef skin );
         /// draws item
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
+        virtual int DrawIcon(LVDrawBuf & buf, lvRect & rc, lvRect & bordersRc);
         /// returns true if submenu
         virtual bool isSubmenu() const { return false; }
         /// returns true if main menu
@@ -1172,14 +1183,34 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual void drawClient();
         virtual int getScrollHeight();
         CRMenuSkinRef getSkin();
-        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, lString16 label, LVImageSourceRef image, LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(), const char * propName=NULL, int pageItems=8 )
-        : CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, image, defFont ), _props(props), _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0), _pageItems(pageItems),
-          _cmdToHighlight(-1), _selectedItem(-1), _pageUpdate(true)
-        { _fullscreen = false; _helpHeight=0; }
-        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, const char * label, LVImageSourceRef image, LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(), const char * propName=NULL, int pageItems=8 )
-        : CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, image, defFont ), _props(props), _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0), _pageItems(pageItems),
-        _cmdToHighlight(-1)
-        { _fullscreen = false; _helpHeight=0; }
+        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, lString16 label, LVImageSourceRef image,
+               LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(), const char * propName=NULL,
+               int pageItems=8 ) :
+            CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, image, defFont ), _props(props),
+                _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0),
+                _pageItems(pageItems), _cmdToHighlight(-1), _selectedItem(-1), _pageUpdate(true)
+                    { _fullscreen = false; _helpHeight=0; }
+        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, const char * label,
+               LVImageSourceRef image, LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(),
+               const char * propName=NULL, int pageItems=8 ) :
+            CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, image, defFont ), _props(props),
+                _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0),
+                _pageItems(pageItems), _cmdToHighlight(-1)
+                    { _fullscreen = false; _helpHeight=0; }
+        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, const char * label,
+               const char *imageId, LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(),
+               const char * propName=NULL, int pageItems=8 ) :
+            CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, imageId, defFont ), _props(props),
+                _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0),
+                _pageItems(pageItems), _cmdToHighlight(-1)
+                    { _fullscreen = false; _helpHeight=0; }
+        CRMenu( CRGUIWindowManager * wm, CRMenu * parentMenu, int id, lString16 label,
+               const char *imageId, LVFontRef defFont, LVFontRef valueFont, CRPropRef props=CRPropRef(),
+               const char * propName=NULL, int pageItems=8 ) :
+            CRGUIWindowBase( wm ), CRMenuItem( parentMenu, id, label, imageId, defFont ), _props(props),
+                _propName(Utf8ToUnicode(lString8(propName))), _valueFont(valueFont), _topItem(0),
+                _pageItems(pageItems), _cmdToHighlight(-1)
+                    { _fullscreen = false; _helpHeight=0; }
         virtual bool isSubmenu() const { return true; }
         virtual bool isMainMenu() const { return ( _menu==NULL ); }
         LVPtrVector<CRMenuItem> & getItems() { return _items; }
@@ -1235,6 +1266,8 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
                 return (_topItem + _pageItems < (int)_items.length());
             return (_topItem > 0);
         }
+        LVImageSourceRef getImage(lString16 imageId) { return getImage( imageId.c_str()); }
+        LVImageSourceRef getImage(const lChar16 * imageId);
 };
 
 class CRToolBar;

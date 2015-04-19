@@ -2834,14 +2834,7 @@ void CRPbDictionaryMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef s
     skin->draw( buf, rc );
     buf.SetTextColor( 0x000000 );
     buf.SetBackgroundColor( 0xFFFFFF );
-    int imgWidth = 0;
-    int hh = rc.bottom - rc.top - itemBorders.top - itemBorders.bottom;
-    if ( !_image.isNull() ) {
-        int w = _image->GetWidth();
-        int h = _image->GetHeight();
-        buf.Draw( _image, rc.left + hh/2-w/2 + itemBorders.left, rc.top + hh/2 - h/2 + itemBorders.top, w, h );
-        imgWidth = w + 8;
-    }
+    int imgWidth = DrawIcon( buf, rc, itemBorders );
     lvRect textRect = rc;
     textRect.left += imgWidth;
     lString16 word = _word16 + " ";
@@ -4040,7 +4033,7 @@ int main_handler(int type, int par1, int par2)
             ibitmap *cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
-                ScreenHeight()/* - PanelHeight()*/
+                ScreenHeight()
                 );
             CRLog::trace("GetBookCover(): GetBookCover(%s, %d, %d);",
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
@@ -4116,23 +4109,27 @@ int main_handler(int type, int par1, int par2)
                 }
             }
 
-            #ifndef POCKETBOOK_PRO_602
+            #endif
 
             // If none worked - generate an ugly ass cover
             if( !cover ) {
 
                 LVGrayDrawBuf tmpBuf( ScreenWidth(), ScreenHeight(), GetHardwareDepth() );
 
-                bookinfo *info = GetBookInfoExt(UnicodeToLocal(pbGlobals->getFileName()).c_str(),"/");
+                lString16 authors = main_win->getDocView()->getAuthors();
+                lString16 title = main_win->getDocView()->getTitle();
+                lString16 series = main_win->getDocView()->getSeries();
+                if (title.empty())
+                    title = _("Untitled");
 
                 LVDrawBookCover(
                     tmpBuf,
                     main_win->getDocView()->getCoverPageImage(),
                     lString8(DEFAULTFONT),
-                    lString16(info->title),
-                    lString16(info->author),
-                    lString16(info->series),
-                    info->numinseries
+                    title,
+                    authors,
+                    series,
+                    0
                     );
 
                 cover = NewBitmap(ScreenWidth(), ScreenHeight());
@@ -4142,10 +4139,6 @@ int main_handler(int type, int par1, int par2)
                     memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
                 }
             }
-
-            #endif
-            
-            #endif
 
             // If somehow there is a cover
             if (cover) {
@@ -4257,6 +4250,14 @@ const char* TR(const char *label)
     const char* tr = GetLangText(const_cast<char*> (label));
     CRLog::trace("Translation for %s is %s", label, tr);
     return tr;
+}
+
+void exitApp() {
+    exiting = false;
+    if( CRPocketBookDocView::instance )
+        CRPocketBookDocView::instance->closing();
+    else
+        CloseApp();
 }
 
 extern ifont* header_font;

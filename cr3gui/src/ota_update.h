@@ -20,6 +20,7 @@
 #define OTA_PACKAGE_NAME "latest.zip"
 #define OTA_TEMP_DIR OTA_DOWNLOAD_DIR"/.cr3update"
 #define OTA_INSTALL_SCRIPT OTA_TEMP_DIR"/install.sh"
+#define OTA_RESTART_MARK OTA_DOWNLOAD_DIR"/.cr3restart"
 
 
 // Sourceforge [old source]
@@ -44,6 +45,7 @@
 #define OTA_VERSION_MAX_LENGTH 15
 #define OTA_LINK_MAX_LENGTH    50
 #define OTA_EXISTS_STR         "yes"
+
 
 
 bool OTA_update(const char * branch);
