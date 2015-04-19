@@ -4,6 +4,11 @@ sdk="$HOME/PBDEV/sources/cr3-fork"
 package="/tmp/cr3-package-$1"
 releases="$HOME/PBDEV/releases/coolreader3"
 
+cd "$sdk"
+
+VERSION="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_VERSION | awk '{print $3}' | sed -e s/\\\"//g`"
+DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}' | sed -e s/\\\"//g`"
+
 function doUpdate {
 
 	sdk="$HOME/PBDEV/sources/cr3-fork"
@@ -152,24 +157,30 @@ if [ "$1" = "" ]; then
 # Update all builds and publish
 elif [ "$1" = "publish" ]; then
 
-	# CHECK IF IT'S ALREADY PUBLISHED
-	if [ -f "$releases/cr3-v$VERSION-pro5.zip" ]; then
-		echo " -> Version already published!"
-		exit
-	fi
+	echo
 
-	# MOVE OLD BUILDS
-	echo " - Move old builds"
-	mv $releases/*.zip $releases/old/
-
-	# CHECK FIRMWARE SPECIFIC
+	# Check firmware specific
 	for FIRMWARE in '360' '602' 'pro4' 'pro5'; do
-		echo " - Check firmware binary: $1"
+		
+		# Check if it's already published
+		echo " - Check if published:    $FIRMWARE"
+		if [ -f $releases/cr3-v$VERSION-$FIRMWARE.zip ]; then
+			echo "   ERR: Version already published!"
+			exit
+		fi
+
+		# Check if there's no binary
+		echo " - Check firmware binary: $FIRMWARE"
 		if [ ! -f $sdk/pb$FIRMWARE/cr3gui/cr3-pb.app ]; then
 			echo "   ERR: No binary found!"
 			exit
 		fi
+		echo
 	done
+
+	# Move old builds
+	echo " - Move old builds"
+	mv $releases/*.zip $releases/old/
 
 	# Publish firmware specific (dropbox)
 	for TYPE in '360' '602' 'pro4' 'pro5'; do
@@ -182,7 +193,7 @@ elif [ "$1" = "publish" ]; then
 	done
 	for DEVICE in '515' '626'; do
 		for FIRMWARE in 'pro4' 'pro5'; do
-			doUpdate "$DEVICE" "$FIRMWARE"
+			doUpdate "$FIRMWARE" "$DEVICE"
 		done
 	done
 	
