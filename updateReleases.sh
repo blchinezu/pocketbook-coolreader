@@ -122,7 +122,7 @@ function doUpdate {
 			echo " - dev > builds (git)"
 			rm -rf $sdk/builds/$2/$1/*
 			mkdir -p "$sdk/builds/$2/$1"
-			echo "yes" > "$sdk/builds/$2/$1/exists"
+			printf "yes" > "$sdk/builds/$2/$1/exists"
 			cp -f "$zip" "$sdk/builds/$2/$1/latest.zip"
 		fi
 
