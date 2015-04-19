@@ -43,7 +43,7 @@ fi
 startedTime="`date +"%s"`"
 
 # launch cr3
-exec $WORK_DIR/system/share/cr3/bin/cr3-pb.app "$1" > $WORK_DIR/system/cr3-pb.normal.log 2> $WORK_DIR/system/cr3-pb.crash.log
+$WORK_DIR/system/share/cr3/bin/cr3-pb.app "$1" > $WORK_DIR/system/cr3-pb.normal.log 2> $WORK_DIR/system/cr3-pb.crash.log
 
 # stopped time
 stoppedTime="`date +"%s"`"
@@ -55,7 +55,7 @@ if [ -f "$RESTART_MARK" ]; then
     rm -f "$RESTART_MARK"
 
     # relaunch this script
-    $WORK_DIR/system/bin/cr3-pb.app "$1" &
+    sh $WORK_DIR/system/bin/cr3-pb.app "$1" &
 
     # stop script
     exit

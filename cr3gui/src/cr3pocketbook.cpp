@@ -4259,6 +4259,14 @@ const char* TR(const char *label)
     return tr;
 }
 
+void exitApp() {
+    exiting = false;
+    if( CRPocketBookDocView::instance )
+        CRPocketBookDocView::instance->closing();
+    else
+        CloseApp();
+}
+
 extern ifont* header_font;
 int main(int argc, char **argv)
 {
