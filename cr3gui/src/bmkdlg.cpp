@@ -32,14 +32,8 @@ void CRBookmarkMenuItem::Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin,
     skin->draw( buf, rc );
     buf.SetTextColor( 0x000000 );
     buf.SetBackgroundColor( 0xFFFFFF );
-    int imgWidth = 0;
-    int hh = rc.bottom - rc.top - itemBorders.top - itemBorders.bottom;
-    if ( !_image.isNull() ) {
-        int w = _image->GetWidth();
-        int h = _image->GetHeight();
-        buf.Draw( _image, rc.left + hh/2-w/2 + itemBorders.left, rc.top + hh/2 - h/2 + itemBorders.top, w, h );
-        imgWidth = w + 8;
-    }
+    int imgWidth = DrawIcon( buf, rc, itemBorders );
+
     lvRect textRect = rc;
     textRect.left += imgWidth;
     lvRect posRect = textRect;

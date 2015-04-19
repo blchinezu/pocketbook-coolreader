@@ -719,7 +719,8 @@ void V3DocViewWin::showSettingsMenu()
     _props = _docview->propsGetCurrent() | _props;
     _newProps = LVClonePropsContainer( _props );
     lvRect rc = _wm->getScreen()->getRect();
-    CRMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont, getMenuAccelerators(), rc );
+    CRMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont,
+                                           getMenuAccelerators(), rc );
     _wm->activateWindow( mainMenu );
 }
 
@@ -729,33 +730,29 @@ void V3DocViewWin::showTocTouchMenu(tocentry *tocItems, int length)
     _props = _docview->propsGetCurrent() | _props;
     _newProps = LVClonePropsContainer( _props );
     lvRect rc = _wm->getScreen()->getRect();
-    CRMenu * mainMenu = new CRTocMenu( _wm, _newProps, MCMD_TOC_TOUCH, getMenuAccelerators(), rc, tocItems, length );
+    CRMenu * mainMenu = new CRTocMenu( _wm, _newProps, MCMD_TOC_TOUCH,
+                                      getMenuAccelerators(), rc, tocItems, length );
     _wm->activateWindow( mainMenu );
 }
 #endif
 
 void V3DocViewWin::showFontSizeMenu()
 {
-    LVFontRef menuFont( fontMan->GetFont( MENU_FONT_SIZE, 600, true, css_ff_sans_serif, lString8("Arial")) );
-    //_props->set( _docview->propsGetCurrent() );
     _props = _docview->propsGetCurrent() | _props;
     _newProps = LVClonePropsContainer( _props );
-    lvRect rc = _wm->getScreen()->getRect();
-    CRSettingsMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont, getMenuAccelerators(), rc );
-    CRMenu * menu = mainMenu->createFontSizeMenu( NULL, cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int), _newProps, PROP_FONT_SIZE );
+
+    CRMenu * menu = CRSettingsMenu::createFontSizeMenu(_wm, NULL, cr_font_sizes, sizeof(cr_font_sizes)/sizeof(int),
+                                                       "cr3_option_font_size", _newProps, PROP_FONT_SIZE);
     _wm->activateWindow( menu );
 }
 
 #if CR_INTERNAL_PAGE_ORIENTATION==1
 void V3DocViewWin::showOrientationMenu()
 {
-    LVFontRef menuFont( fontMan->GetFont( MENU_FONT_SIZE, 600, true, css_ff_sans_serif, lString8("Arial")) );
-    //_props->set( _docview->propsGetCurrent() );
     _props = _docview->propsGetCurrent() | _props;
     _newProps = LVClonePropsContainer( _props );
-    lvRect rc = _wm->getScreen()->getRect();
-    CRSettingsMenu * mainMenu = new CRSettingsMenu( _wm, _newProps, MCMD_SETTINGS_APPLY, menuFont, getMenuAccelerators(), rc );
-    CRMenu * menu = mainMenu->createOrientationMenu( NULL, _newProps );
+
+    CRMenu * menu = CRSettingsMenu::createOrientationMenu( _wm, NULL, _newProps );
     _wm->activateWindow( menu );
 }
 #endif
