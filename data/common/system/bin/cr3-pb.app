@@ -26,17 +26,17 @@ if [ -f "$UPDATE_PACKAGE" ]; then
     # remove the update package
     rm -f "$UPDATE_PACKAGE"
 
-    # backup if the update package has been removed
-    if [ ! -f "$UPDATE_PACKAGE" ]; then
+    # if the update package has been removed and there's an installer
+    if [ -f "$INSTALLER" -a ! -f "$UPDATE_PACKAGE" ]; then
 
         # full backup. it'll be done at some point
+
+        # launch installer
+        sh "$INSTALLER" "$1"
+
+        # stop script. it's relaunched from the installer.
+        exit
     fi
-
-    # launch installer
-    sh "$INSTALLER" "$1"
-
-    # stop script. it's relaunched from the installer.
-    exit
 fi
 
 # keep starting time
