@@ -157,6 +157,8 @@ if [ "$1" = "" ]; then
 # Update all builds and publish
 elif [ "$1" = "publish" ]; then
 
+	printf "$VERSION" > "$sdk/builds/current.version"
+
 	echo
 
 	# Check firmware specific
