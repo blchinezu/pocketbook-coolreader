@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr 3gui\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2014-02-18 16:46+0700\n"
+"POT-Creation-Date: 2015-04-19 20:09+0300\n"
 "PO-Revision-Date: 2010-02-24 21:50+0300\n"
 "Last-Translator: Stanislovas Zacharovas\n"
 "Language-Team: Lithuanian\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
 "%100<10 || n%100>=20) ? 1 : 2);\n"
 
-#: ../src/citedlg.cpp:103
+#: ../src/citedlg.cpp:190
 msgid "Select next/prev paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:106
+#: ../src/citedlg.cpp:193
 msgid "Select one more paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:109
+#: ../src/citedlg.cpp:196
 msgid "Deselect paragraph"
 msgstr ""
 
-#: ../src/citedlg.cpp:112
+#: ../src/citedlg.cpp:199
 msgid "Select one more phrase"
 msgstr ""
 
-#: ../src/citedlg.cpp:115
+#: ../src/citedlg.cpp:202
 msgid "Deselect phrase"
 msgstr ""
 
-#: ../src/citedlg.cpp:130
+#: ../src/citedlg.cpp:216
 msgid "Select text"
 msgstr "Išskirti tekstą"
 
@@ -49,55 +49,55 @@ msgstr "1..9"
 msgid "1..8"
 msgstr "1..8"
 
-#: ../src/mainwnd.cpp:798
+#: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
 msgstr "Kol kas nėra vartotojo instrukcijos lietuvių kalba."
 
-#: ../src/mainwnd.cpp:809 ../src/mainwnd.cpp:919
+#: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
 msgstr "Pagalba"
 
-#: ../src/mainwnd.cpp:836
+#: ../src/mainwnd.cpp:844
 msgid "Main Menu"
 msgstr "Pagrindinis meniu"
 
-#: ../src/mainwnd.cpp:870 ../src/viewdlg.cpp:573
+#: ../src/mainwnd.cpp:878 ../src/viewdlg.cpp:573
 msgid "About"
 msgstr "Apie"
 
-#: ../src/mainwnd.cpp:880 ../src/viewdlg.cpp:537
+#: ../src/mainwnd.cpp:888 ../src/viewdlg.cpp:537
 msgid "Go to page"
 msgstr "Atversti puslapį"
 
-#: ../src/mainwnd.cpp:891 ../src/recentdlg.cpp:121
+#: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
 msgid "Open recent book"
 msgstr "Atversti neseniai skaitytą knygą"
 
-#: ../src/mainwnd.cpp:897 ../src/viewdlg.cpp:164
+#: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
 msgid "Dictionary"
 msgstr "Žodynas"
 
-#: ../src/mainwnd.cpp:902 ../src/settings.cpp:1239
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1410
 msgid "Cite"
 msgstr "Citatos"
 
-#: ../src/mainwnd.cpp:906 ../src/bmkdlg.cpp:188
+#: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
 msgid "Bookmarks"
 msgstr "Žymės"
 
-#: ../src/mainwnd.cpp:910 ../src/viewdlg.cpp:221
+#: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
 msgid "Search"
 msgstr "Paieška"
 
-#: ../src/mainwnd.cpp:914 ../src/settings.cpp:978
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1054
 msgid "Settings"
 msgstr "Nustatymai"
 
-#: ../src/mainwnd.cpp:923 ../src/viewdlg.cpp:651
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:667
 msgid "Keyboard layout"
 msgstr "Klavišų priskyrimas"
 
-#: ../src/mainwnd.cpp:930
+#: ../src/mainwnd.cpp:938
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
@@ -105,231 +105,235 @@ msgstr ""
 "$1 - pasirinkti komandą\n"
 "$2, $3 - uždaryti"
 
-#: ../src/mainwnd.cpp:1038
+#: ../src/mainwnd.cpp:1046
 msgid "Current page"
 msgstr "Esamas puslapis"
 
-#: ../src/mainwnd.cpp:1039
+#: ../src/mainwnd.cpp:1047
 msgid "Total pages"
 msgstr "Viso puslapių"
 
-#: ../src/mainwnd.cpp:1040
+#: ../src/mainwnd.cpp:1048
 msgid "Battery state"
 msgstr "Baterijos būvis"
 
-#: ../src/mainwnd.cpp:1040
+#: ../src/mainwnd.cpp:1048
 msgid "charging..."
 msgstr "kraunasi..."
 
-#: ../src/mainwnd.cpp:1041
+#: ../src/mainwnd.cpp:1049
 msgid "Current Time"
 msgstr "Esamas laikas"
 
-#: ../src/mainwnd.cpp:1046
+#: ../src/mainwnd.cpp:1054
 msgid "Current chapter"
 msgstr "Esamas skyrius"
 
-#: ../src/mainwnd.cpp:1049
+#: ../src/mainwnd.cpp:1057
 msgid "Status"
 msgstr "Būsena"
 
-#: ../src/mainwnd.cpp:1052
+#: ../src/mainwnd.cpp:1060
 msgid "Archive name"
 msgstr "Archyvo pavadinimas"
 
-#: ../src/mainwnd.cpp:1053
+#: ../src/mainwnd.cpp:1061
 msgid "Archive path"
 msgstr "Kelias prie archyvo"
 
-#: ../src/mainwnd.cpp:1054
+#: ../src/mainwnd.cpp:1062
 msgid "Archive size"
 msgstr "Archyvo dydis"
 
-#: ../src/mainwnd.cpp:1055
+#: ../src/mainwnd.cpp:1063
 msgid "File name"
 msgstr "Failo pavadinimas"
 
-#: ../src/mainwnd.cpp:1056
+#: ../src/mainwnd.cpp:1064
 msgid "File path"
 msgstr "Kelias prie failo"
 
-#: ../src/mainwnd.cpp:1057
+#: ../src/mainwnd.cpp:1065
 msgid "File size"
 msgstr "Failo dydis"
 
-#: ../src/mainwnd.cpp:1058
+#: ../src/mainwnd.cpp:1066
 msgid "File format"
 msgstr "Failo formatas"
 
-#: ../src/mainwnd.cpp:1059
+#: ../src/mainwnd.cpp:1067
 msgid "File info"
 msgstr "Informacija apie failą"
 
-#: ../src/mainwnd.cpp:1062
+#: ../src/mainwnd.cpp:1070
 #, fuzzy
 msgctxt "Book"
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: ../src/mainwnd.cpp:1063
+#: ../src/mainwnd.cpp:1071
 msgid "Author(s)"
 msgstr "Autorius(ai)"
 
-#: ../src/mainwnd.cpp:1064
+#: ../src/mainwnd.cpp:1072
 msgid "Series name"
 msgstr "Serijos pavadinimas"
 
-#: ../src/mainwnd.cpp:1065
+#: ../src/mainwnd.cpp:1073
 msgid "Series number"
 msgstr "Numeris serijoje"
 
-#: ../src/mainwnd.cpp:1066
+#: ../src/mainwnd.cpp:1074
 msgid "Date"
 msgstr "Data"
 
-#: ../src/mainwnd.cpp:1067
+#: ../src/mainwnd.cpp:1075
 msgid "Genres"
 msgstr "Žanras"
 
-#: ../src/mainwnd.cpp:1068
+#: ../src/mainwnd.cpp:1076
 msgid "Language"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1069
+#: ../src/mainwnd.cpp:1077
 msgid "Translator"
 msgstr "Vertėjas"
 
-#: ../src/mainwnd.cpp:1070
+#: ../src/mainwnd.cpp:1078
 msgid "Source language"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1071
+#: ../src/mainwnd.cpp:1079
 msgid "Book info"
 msgstr "Kita informacija"
 
-#: ../src/mainwnd.cpp:1074
+#: ../src/mainwnd.cpp:1082
 msgid "Document author"
 msgstr "Dokumento autorius"
 
-#: ../src/mainwnd.cpp:1075
+#: ../src/mainwnd.cpp:1083
 msgid "Document date"
 msgstr "Dokumento data"
 
-#: ../src/mainwnd.cpp:1076
+#: ../src/mainwnd.cpp:1084
 msgid "Document source URL"
 msgstr "Dokumento šaltinio URL"
 
-#: ../src/mainwnd.cpp:1077
+#: ../src/mainwnd.cpp:1085
 msgid "OCR by"
 msgstr "Nuskaityta"
 
-#: ../src/mainwnd.cpp:1078
+#: ../src/mainwnd.cpp:1086
 msgid "Document version"
 msgstr "Dokumento versija"
 
-#: ../src/mainwnd.cpp:1079
+#: ../src/mainwnd.cpp:1087
 msgid "Change history"
 msgstr "Pakeitimų istorija"
 
-#: ../src/mainwnd.cpp:1080
+#: ../src/mainwnd.cpp:1088
 msgid "ID"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1081
+#: ../src/mainwnd.cpp:1089
 msgid "Program used"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1082
+#: ../src/mainwnd.cpp:1090
 msgid "Document info"
 msgstr "Dokumento informacija"
 
-#: ../src/mainwnd.cpp:1085
+#: ../src/mainwnd.cpp:1093
 msgid "Publication name"
 msgstr "Leidinio pavadinimas"
 
-#: ../src/mainwnd.cpp:1086
+#: ../src/mainwnd.cpp:1094
 msgid "Publisher"
 msgstr "Leidėjas"
 
-#: ../src/mainwnd.cpp:1087
+#: ../src/mainwnd.cpp:1095
 msgid "Publisher city"
 msgstr "Leidybos miestas"
 
-#: ../src/mainwnd.cpp:1088
+#: ../src/mainwnd.cpp:1096
 msgid "Publication year"
 msgstr "Leidybos metai"
 
-#: ../src/mainwnd.cpp:1089
+#: ../src/mainwnd.cpp:1097
 msgid "ISBN"
 msgstr "ISBN"
 
-#: ../src/mainwnd.cpp:1090
+#: ../src/mainwnd.cpp:1098
 msgid "Publication info"
 msgstr "Leidybinė informacija"
 
-#: ../src/mainwnd.cpp:1092
+#: ../src/mainwnd.cpp:1100
 msgid "Custom info"
 msgstr "Kita informacija"
 
-#: ../src/mainwnd.cpp:1096
+#: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1097
+#: ../src/mainwnd.cpp:1105
 msgid "Build date"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1098
+#: ../src/mainwnd.cpp:1106
+msgid "Build type"
+msgstr ""
+
+#: ../src/mainwnd.cpp:1107
 msgid "About program"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1101
+#: ../src/mainwnd.cpp:1110
 msgid "Hardware type"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1102
+#: ../src/mainwnd.cpp:1111
 #, fuzzy
 msgid "Firmware version"
 msgstr "Dokumento versija"
 
-#: ../src/mainwnd.cpp:1103
+#: ../src/mainwnd.cpp:1112
 #, fuzzy
 msgid "Keyboard type"
 msgstr "Klavišų priskyrimas"
 
-#: ../src/mainwnd.cpp:1104
+#: ../src/mainwnd.cpp:1113
 msgid "Screen type"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1105
+#: ../src/mainwnd.cpp:1114
 msgid "Config file"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1106
+#: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1107
+#: ../src/mainwnd.cpp:1116
 msgid "Skin file"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1108
+#: ../src/mainwnd.cpp:1117
 msgid "Debug information"
 msgstr ""
 
-#: ../src/mainwnd.cpp:1238
+#: ../src/mainwnd.cpp:1268
 msgid "Loading: please wait..."
 msgstr "Atidaromas failas, prašome palaukti..."
 
-#: ../src/recentdlg.cpp:103
+#: ../src/recentdlg.cpp:97
 msgid "Open book"
 msgstr "Atidaryti knygą"
 
-#: ../src/recentdlg.cpp:104
+#: ../src/recentdlg.cpp:98
 msgid "Delete record"
 msgstr "Ištrinti įrašą"
 
-#: ../src/recentdlg.cpp:139
+#: ../src/recentdlg.cpp:133
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
@@ -349,15 +353,15 @@ msgstr "Įveskite puslapio numerį"
 msgid "Empty slot"
 msgstr "Nėra žymių"
 
-#: ../src/bmkdlg.cpp:51
+#: ../src/bmkdlg.cpp:45
 msgid "Page $1 ($2%)"
 msgstr "Psl. $1 ($2%)"
 
-#: ../src/bmkdlg.cpp:74 ../src/bmkdlg.cpp:167
+#: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
 msgid "Go to bookmark"
 msgstr "Eiti prie žymės Nr."
 
-#: ../src/bmkdlg.cpp:78
+#: ../src/bmkdlg.cpp:72
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
@@ -365,7 +369,7 @@ msgstr ""
 "Trumpas paspaudimas $1 - pereiti prie žymės,\n"
 "$2 - žymės nustatymo būsena"
 
-#: ../src/bmkdlg.cpp:79
+#: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
@@ -373,11 +377,11 @@ msgstr ""
 "Trumpas paspaudimas $1 - pereiti prie žymės,\n"
 "ilgas paspaudimas - nustatyti žymę"
 
-#: ../src/bmkdlg.cpp:82 ../src/bmkdlg.cpp:166
+#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
 msgstr "Žymės nustatymas"
 
-#: ../src/bmkdlg.cpp:86
+#: ../src/bmkdlg.cpp:80
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
@@ -385,7 +389,7 @@ msgstr ""
 "$1 - nustatyti žymę,\n"
 "$2 - persijungti į perėjimo režimą"
 
-#: ../src/bmkdlg.cpp:87
+#: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
@@ -393,25 +397,25 @@ msgstr ""
 "Trumpas paspaudimas $1 - nustatyti žymę,\n"
 "ilgas paspaudimas - eiti prie žymės"
 
-#: ../src/bmkdlg.cpp:168
+#: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
 msgstr "Ištrinti žymes"
 
-#: ../src/bmkdlg.cpp:322
+#: ../src/bmkdlg.cpp:316
 #, fuzzy
 msgid "Go to citation"
 msgstr "Prie pozicijos"
 
-#: ../src/bmkdlg.cpp:323
+#: ../src/bmkdlg.cpp:317
 #, fuzzy
 msgid "Delete citation"
 msgstr "Ištrinti įrašą"
 
-#: ../src/bmkdlg.cpp:337
+#: ../src/bmkdlg.cpp:331
 msgid "Citations"
 msgstr ""
 
-#: ../src/bmkdlg.cpp:453 ../src/viewdlg.cpp:574
+#: ../src/bmkdlg.cpp:447 ../src/viewdlg.cpp:574
 msgid "Cite selection dialog"
 msgstr "Išskirti citatą"
 
@@ -423,890 +427,961 @@ msgstr "Rasti žodyne"
 msgid "[cannot read article]"
 msgstr "[nepavyko perskaityti straipsnio]"
 
-#: ../src/settings.cpp:153
+#: ../src/settings.cpp:195
 msgid "choose command"
 msgstr "išsirinkti komandą"
 
-#: ../src/settings.cpp:171
+#: ../src/settings.cpp:213
 msgid "Controls"
 msgstr "Klavišų paskirtis"
 
-#: ../src/settings.cpp:325
+#: ../src/settings.cpp:379
 msgid "(No action)"
 msgstr ""
 
-#: ../src/settings.cpp:478
+#: ../src/settings.cpp:532
 msgid "[Command is not assigned]"
 msgstr "[Komanda nepriskirta]"
 
-#: ../src/settings.cpp:499
+#: ../src/settings.cpp:553
 msgid "0` (Portrait)"
 msgstr "Vertikaliai"
 
-#: ../src/settings.cpp:500
+#: ../src/settings.cpp:554
 msgid "90 `"
 msgstr "Horizontaliai"
 
-#: ../src/settings.cpp:501
+#: ../src/settings.cpp:555
 msgid "180 `"
 msgstr "Vertikaliai (apversta)"
 
-#: ../src/settings.cpp:502
+#: ../src/settings.cpp:556
 msgid "270 `"
 msgstr "Horizontaliai (apversta)"
 
-#: ../src/settings.cpp:513
+#: ../src/settings.cpp:567
 msgid "Page orientation"
 msgstr "Puslapio orientacija"
 
-#: ../src/settings.cpp:530
+#: ../src/settings.cpp:588
 msgid "Default font size"
 msgstr "Šrifto dydis"
 
-#: ../src/settings.cpp:586
+#: ../src/settings.cpp:643
 msgid "The quick brown fox jumps over lazy dog"
 msgstr "Įlinkdama fechtuotojo špaga sublykčiojusi pragręžė apvalų arbūzą"
 
-#: ../src/settings.cpp:761
+#: ../src/settings.cpp:823
 msgid "Justify"
 msgstr ""
 
-#: ../src/settings.cpp:762
+#: ../src/settings.cpp:824
 #, fuzzy
 msgctxt "CSS"
 msgid "Left"
 msgstr "Į kairė"
 
-#: ../src/settings.cpp:763
+#: ../src/settings.cpp:825
 msgid "Center"
 msgstr ""
 
-#: ../src/settings.cpp:764
+#: ../src/settings.cpp:826
 #, fuzzy
 msgctxt "CSS"
 msgid "Right"
 msgstr "Į dešinę"
 
-#: ../src/settings.cpp:770
+#: ../src/settings.cpp:832
 msgid "No indent"
 msgstr ""
 
-#: ../src/settings.cpp:771
+#: ../src/settings.cpp:833
 msgid "Small indent"
 msgstr ""
 
-#: ../src/settings.cpp:772
+#: ../src/settings.cpp:834
 msgid "Big indent"
 msgstr ""
 
-#: ../src/settings.cpp:773
+#: ../src/settings.cpp:835
 msgid "Small outdent"
 msgstr ""
 
-#: ../src/settings.cpp:774
+#: ../src/settings.cpp:836
 msgid "Big outdent"
 msgstr ""
 
-#: ../src/settings.cpp:780
+#: ../src/settings.cpp:842
 msgid "[Default sans-serif font]"
 msgstr ""
 
-#: ../src/settings.cpp:781
+#: ../src/settings.cpp:843
 #, fuzzy
 msgid "[Default serif font]"
 msgstr "Šrifto dydis"
 
-#: ../src/settings.cpp:782
+#: ../src/settings.cpp:844
 #, fuzzy
 msgid "[Default monospace font]"
 msgstr "Šriftas"
 
-#: ../src/settings.cpp:788
+#: ../src/settings.cpp:850
 msgid "Bigger (105%)"
 msgstr ""
 
-#: ../src/settings.cpp:789
+#: ../src/settings.cpp:851
 msgid "Bigger (110%)"
 msgstr ""
 
-#: ../src/settings.cpp:790
+#: ../src/settings.cpp:852
 msgid "Bigger (115%)"
 msgstr ""
 
-#: ../src/settings.cpp:791
+#: ../src/settings.cpp:853
 msgid "Bigger (120%)"
 msgstr ""
 
-#: ../src/settings.cpp:792
+#: ../src/settings.cpp:854
 msgid "Bigger (150%)"
 msgstr ""
 
-#: ../src/settings.cpp:793
+#: ../src/settings.cpp:855
 msgid "Smaller (95%)"
 msgstr ""
 
-#: ../src/settings.cpp:794
+#: ../src/settings.cpp:856
 msgid "Smaller (90%)"
 msgstr ""
 
-#: ../src/settings.cpp:795
+#: ../src/settings.cpp:857
 msgid "Smaller (85%)"
 msgstr ""
 
-#: ../src/settings.cpp:796
+#: ../src/settings.cpp:858
 msgid "Smaller (80%)"
 msgstr ""
 
-#: ../src/settings.cpp:797
+#: ../src/settings.cpp:859
 msgid "Smaller (70%)"
 msgstr ""
 
-#: ../src/settings.cpp:798
+#: ../src/settings.cpp:860
 msgid "Smaller (60%)"
 msgstr ""
 
-#: ../src/settings.cpp:804 ../src/settings.cpp:813 ../src/settings.cpp:1027
-#: ../src/settings.cpp:1033
+#: ../src/settings.cpp:866 ../src/settings.cpp:875 ../src/settings.cpp:1152
+#: ../src/settings.cpp:1158
 msgid "Normal"
 msgstr "Normalus "
 
-#: ../src/settings.cpp:805 ../src/settings.cpp:1034
+#: ../src/settings.cpp:867 ../src/settings.cpp:1159
 msgid "Bold"
 msgstr "Pastorintas"
 
-#: ../src/settings.cpp:806
+#: ../src/settings.cpp:868
 #, fuzzy
 msgid "Bolder"
 msgstr "Pastorintas"
 
-#: ../src/settings.cpp:807
+#: ../src/settings.cpp:869
 #, fuzzy
 msgid "Lighter"
 msgstr "Į dešinę"
 
-#: ../src/settings.cpp:814
+#: ../src/settings.cpp:876
 msgid "Italic"
 msgstr ""
 
-#: ../src/settings.cpp:838 ../src/settings.cpp:1000
+#: ../src/settings.cpp:911 ../src/settings.cpp:1079
 msgid "None"
 msgstr ""
 
-#: ../src/settings.cpp:839 ../src/settings.cpp:1002
+#: ../src/settings.cpp:912 ../src/settings.cpp:1081
 msgid "Underline"
 msgstr ""
 
-#: ../src/settings.cpp:840
+#: ../src/settings.cpp:913
 msgid "Line through"
 msgstr ""
 
-#: ../src/settings.cpp:841
+#: ../src/settings.cpp:914
 msgid "Overline"
 msgstr ""
 
-#: ../src/settings.cpp:847
+#: ../src/settings.cpp:920
 #, fuzzy
 msgid "Baseline"
 msgstr "Informacinė eilutė"
 
-#: ../src/settings.cpp:848
+#: ../src/settings.cpp:921
 msgid "Subscript"
 msgstr ""
 
-#: ../src/settings.cpp:849
+#: ../src/settings.cpp:922
 msgid "Superscript"
 msgstr ""
 
-#: ../src/settings.cpp:855 ../src/settings.cpp:863
+#: ../src/settings.cpp:928 ../src/settings.cpp:936
 msgid "Black"
 msgstr ""
 
-#: ../src/settings.cpp:856 ../src/settings.cpp:864
+#: ../src/settings.cpp:929 ../src/settings.cpp:937
 msgid "Gray"
 msgstr ""
 
-#: ../src/settings.cpp:857 ../src/settings.cpp:865
+#: ../src/settings.cpp:930 ../src/settings.cpp:938
 msgid "White"
 msgstr ""
 
-#: ../src/settings.cpp:872 ../src/settings.cpp:883
+#: ../src/settings.cpp:945 ../src/settings.cpp:956
 msgid "0.2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:873 ../src/settings.cpp:884
+#: ../src/settings.cpp:946 ../src/settings.cpp:957
 msgid "0.3 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:874 ../src/settings.cpp:885 ../src/settings.cpp:894
-#: ../src/settings.cpp:910
+#: ../src/settings.cpp:947 ../src/settings.cpp:958 ../src/settings.cpp:967
+#: ../src/settings.cpp:983
 msgid "0.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:875 ../src/settings.cpp:886 ../src/settings.cpp:895
-#: ../src/settings.cpp:911
+#: ../src/settings.cpp:948 ../src/settings.cpp:959 ../src/settings.cpp:968
+#: ../src/settings.cpp:984
 msgid "1 line height"
 msgstr ""
 
-#: ../src/settings.cpp:876 ../src/settings.cpp:887 ../src/settings.cpp:897
-#: ../src/settings.cpp:913
+#: ../src/settings.cpp:949 ../src/settings.cpp:960 ../src/settings.cpp:970
+#: ../src/settings.cpp:986
 msgid "2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:896 ../src/settings.cpp:912
+#: ../src/settings.cpp:969 ../src/settings.cpp:985
 msgid "1.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:898 ../src/settings.cpp:914
+#: ../src/settings.cpp:971 ../src/settings.cpp:987
 msgid "4 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:899 ../src/settings.cpp:915
+#: ../src/settings.cpp:972 ../src/settings.cpp:988
 #, c-format
 msgid "5% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:900 ../src/settings.cpp:916
+#: ../src/settings.cpp:973 ../src/settings.cpp:989
 #, c-format
 msgid "10% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:901 ../src/settings.cpp:917
+#: ../src/settings.cpp:974 ../src/settings.cpp:990
 #, c-format
 msgid "15% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:902 ../src/settings.cpp:918
+#: ../src/settings.cpp:975 ../src/settings.cpp:991
 #, c-format
 msgid "20% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:903 ../src/settings.cpp:919
+#: ../src/settings.cpp:976 ../src/settings.cpp:992
 #, c-format
 msgid "30% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:922
+#: ../src/settings.cpp:995
 #, fuzzy
 msgid "Text alignment"
 msgstr "Sekanti nuoroda"
 
-#: ../src/settings.cpp:924
+#: ../src/settings.cpp:997
 #, fuzzy
 msgid "First line indent"
 msgstr "Pirma nuoroda"
 
-#: ../src/settings.cpp:927 ../src/settings.cpp:1365
+#: ../src/settings.cpp:1000 ../src/settings.cpp:1573
 #, fuzzy
 msgid "Font face"
 msgstr "Šriftas"
 
-#: ../src/settings.cpp:941
+#: ../src/settings.cpp:1014
 #, fuzzy
 msgid "Font size"
 msgstr "Šrifto dydžio nustatymai"
 
-#: ../src/settings.cpp:943 ../src/settings.cpp:1278 ../src/settings.cpp:1373
+#: ../src/settings.cpp:1016 ../src/settings.cpp:1467 ../src/settings.cpp:1582
 msgid "Font weight"
 msgstr "Šrifto storis"
 
-#: ../src/settings.cpp:945
+#: ../src/settings.cpp:1018
 #, fuzzy
 msgid "Font style"
 msgstr "Šrifto dydžio nustatymai"
 
-#: ../src/settings.cpp:947 ../src/settings.cpp:1301
+#: ../src/settings.cpp:1020 ../src/settings.cpp:1496
 msgid "Interline space"
 msgstr "Atstumas tarp eilučių"
 
-#: ../src/settings.cpp:949
+#: ../src/settings.cpp:1022
+msgid "Letter spacing"
+msgstr ""
+
+#: ../src/settings.cpp:1024
 #, fuzzy
 msgid "Text decoration"
 msgstr "Ištrinti įrašą"
 
-#: ../src/settings.cpp:951
+#: ../src/settings.cpp:1026
 #, fuzzy
 msgid "Text vertical alignment"
 msgstr "Sekanti nuoroda"
 
-#: ../src/settings.cpp:953
+#: ../src/settings.cpp:1028
 msgid "Text color"
 msgstr ""
 
-#: ../src/settings.cpp:955
+#: ../src/settings.cpp:1030
 msgid "Background color"
 msgstr ""
 
-#: ../src/settings.cpp:957
+#: ../src/settings.cpp:1032
 msgid "Margin before"
 msgstr ""
 
-#: ../src/settings.cpp:959
+#: ../src/settings.cpp:1034
 msgid "Margin after"
 msgstr ""
 
-#: ../src/settings.cpp:961
+#: ../src/settings.cpp:1036
 msgid "Margin left"
 msgstr ""
 
-#: ../src/settings.cpp:963
+#: ../src/settings.cpp:1038
 msgid "Margin right"
 msgstr ""
 
-#: ../src/settings.cpp:987
+#: ../src/settings.cpp:1066
 msgid "On for all fonts"
 msgstr "Visose šriftuose"
 
-#: ../src/settings.cpp:988
+#: ../src/settings.cpp:1067
 msgid "On for big fonts only"
 msgstr "Tik didelėse šriftuose"
 
-#: ../src/settings.cpp:989 ../src/settings.cpp:995 ../src/settings.cpp:1047
+#: ../src/settings.cpp:1068 ../src/settings.cpp:1074 ../src/settings.cpp:1172
 msgid "Off"
 msgstr "Išjungta"
 
-#: ../src/settings.cpp:994
+#: ../src/settings.cpp:1073
 msgid "On"
 msgstr "Įjungta"
 
-#: ../src/settings.cpp:1001
+#: ../src/settings.cpp:1080
 msgid "Solid"
 msgstr ""
 
-#: ../src/settings.cpp:1028
+#: ../src/settings.cpp:1153
 msgid "Inverse"
 msgstr "Negatyvinis"
 
-#: ../src/settings.cpp:1039
+#: ../src/settings.cpp:1164
 msgid "One"
 msgstr "Viena"
 
-#: ../src/settings.cpp:1040
+#: ../src/settings.cpp:1165
 msgid "Two"
 msgstr "Dvi"
 
-#: ../src/settings.cpp:1045
+#: ../src/settings.cpp:1170
 msgid "Top"
 msgstr "Viršuje"
 
-#: ../src/settings.cpp:1052
+#: ../src/settings.cpp:1177
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1053
+#: ../src/settings.cpp:1178
 msgid "75%"
 msgstr "75%%"
 
-#: ../src/settings.cpp:1054
+#: ../src/settings.cpp:1179
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1055
+#: ../src/settings.cpp:1180
 #, fuzzy
 msgid "85%"
 msgstr "75%%"
 
-#: ../src/settings.cpp:1056
+#: ../src/settings.cpp:1181
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1057
+#: ../src/settings.cpp:1182
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1058
+#: ../src/settings.cpp:1183
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1059
+#: ../src/settings.cpp:1184
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1060
+#: ../src/settings.cpp:1185
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1061
+#: ../src/settings.cpp:1186
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1062
+#: ../src/settings.cpp:1187
 msgid "120%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1063
+#: ../src/settings.cpp:1188
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1064
+#: ../src/settings.cpp:1189
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1065
+#: ../src/settings.cpp:1190
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1066
+#: ../src/settings.cpp:1191
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1067
+#: ../src/settings.cpp:1192
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1068
+#: ../src/settings.cpp:1193
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1069
+#: ../src/settings.cpp:1194
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1070
+#: ../src/settings.cpp:1195
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1071
+#: ../src/settings.cpp:1196
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1115
+#: ../src/settings.cpp:1241
 msgid "Always use fast updates"
 msgstr "Visada greitas atnaujinimas"
 
-#: ../src/settings.cpp:1116
+#: ../src/settings.cpp:1242
 msgid "Don't use fast updates"
 msgstr "Nenaudoti greito atnaujinimo"
 
-#: ../src/settings.cpp:1117
+#: ../src/settings.cpp:1243
 msgid "Full updates every 2 pages"
 msgstr "Pilnai atnaujinti kas 2 puslapiai"
 
-#: ../src/settings.cpp:1118
+#: ../src/settings.cpp:1244
 msgid "Full updates every 3 pages"
 msgstr "Pilnai atnaujinti kas 3 puslapiai"
 
-#: ../src/settings.cpp:1119
+#: ../src/settings.cpp:1245
 msgid "Full updates every 4 pages"
 msgstr "Pilnai atnaujinti kas 4 puslapiai"
 
-#: ../src/settings.cpp:1120
+#: ../src/settings.cpp:1246
 msgid "Full updates every 5 pages"
 msgstr "Pilnai atnaujinti kas 5 puslapiai"
 
-#: ../src/settings.cpp:1121
+#: ../src/settings.cpp:1247
 msgid "Full updates every 6 pages"
 msgstr "Pilnai atnaujinti kas 6 puslapiai"
 
-#: ../src/settings.cpp:1122
+#: ../src/settings.cpp:1248
+#, fuzzy
+msgid "Full updates every 7 pages"
+msgstr "Pilnai atnaujinti kas 2 puslapiai"
+
+#: ../src/settings.cpp:1249
 msgid "Full updates every 8 pages"
 msgstr "Pilnai atnaujinti kas 8 puslapiai"
 
-#: ../src/settings.cpp:1123
+#: ../src/settings.cpp:1250
+#, fuzzy
+msgid "Full updates every 9 pages"
+msgstr "Pilnai atnaujinti kas 2 puslapiai"
+
+#: ../src/settings.cpp:1251
 msgid "Full updates every 10 pages"
 msgstr "Pilnai atnaujinti kas 10 puslapiai"
 
-#: ../src/settings.cpp:1124
+#: ../src/settings.cpp:1252
 msgid "Full updates every 14 pages"
 msgstr "Pilnai atnaujinti kas 14 puslapiai"
 
-#: ../src/settings.cpp:1129
+#: ../src/settings.cpp:1253
+#, fuzzy
+msgid "Full updates every 20 pages"
+msgstr "Pilnai atnaujinti kas 2 puslapiai"
+
+#: ../src/settings.cpp:1254
+#, fuzzy
+msgid "Full updates every 25 pages"
+msgstr "Pilnai atnaujinti kas 2 puslapiai"
+
+#: ../src/settings.cpp:1255
+#, fuzzy
+msgid "Full updates every 30 pages"
+msgstr "Pilnai atnaujinti kas 3 puslapiai"
+
+#: ../src/settings.cpp:1256
+#, fuzzy
+msgid "Full updates every 35 pages"
+msgstr "Pilnai atnaujinti kas 3 puslapiai"
+
+#: ../src/settings.cpp:1257
+#, fuzzy
+msgid "Full updates every 40 pages"
+msgstr "Pilnai atnaujinti kas 4 puslapiai"
+
+#: ../src/settings.cpp:1258
+#, fuzzy
+msgid "Full updates every 45 pages"
+msgstr "Pilnai atnaujinti kas 4 puslapiai"
+
+#: ../src/settings.cpp:1259
+#, fuzzy
+msgid "Full updates every 50 pages"
+msgstr "Pilnai atnaujinti kas 5 puslapiai"
+
+#: ../src/settings.cpp:1264
 msgid "Turbo mode disabled"
 msgstr "Turbo režimas išjungtas"
 
-#: ../src/settings.cpp:1130
+#: ../src/settings.cpp:1265
 msgid "Turbo mode enabled"
 msgstr "Turbo režimas įjungtas"
 
-#: ../src/settings.cpp:1137
+#: ../src/settings.cpp:1272
 msgid "180+slow next page"
 msgstr ""
 
-#: ../src/settings.cpp:1138
+#: ../src/settings.cpp:1273
 msgid "180+slow prev/next page"
 msgstr ""
 
-#: ../src/settings.cpp:1139
+#: ../src/settings.cpp:1274
 msgid "180+FAST next page"
 msgstr ""
 
-#: ../src/settings.cpp:1140
+#: ../src/settings.cpp:1275
 msgid "180+FAST prev/next page"
 msgstr ""
 
-#: ../src/settings.cpp:1141
+#: ../src/settings.cpp:1276
 msgid "180+FAST next/prev page"
 msgstr ""
 
-#: ../src/settings.cpp:1159
+#: ../src/settings.cpp:1294
 msgid "2 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1160
+#: ../src/settings.cpp:1295
 msgid "3 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1161
+#: ../src/settings.cpp:1296
 msgid "4 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1162
+#: ../src/settings.cpp:1297
 msgid "8 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1168
+#: ../src/settings.cpp:1303
 msgid "Disabled (1:1)"
 msgstr ""
 
-#: ../src/settings.cpp:1169
+#: ../src/settings.cpp:1304
 #, fuzzy
 msgid "Integer scale"
 msgstr "Atstumas tarp eilučių"
 
-#: ../src/settings.cpp:1170
+#: ../src/settings.cpp:1305
 msgid "Arbitrary scale"
 msgstr ""
 
-#: ../src/settings.cpp:1175
+#: ../src/settings.cpp:1310
 msgid "Auto"
 msgstr ""
 
-#: ../src/settings.cpp:1176
+#: ../src/settings.cpp:1311
 msgid "*1"
 msgstr ""
 
-#: ../src/settings.cpp:1177
+#: ../src/settings.cpp:1312
 msgid "*2"
 msgstr ""
 
-#: ../src/settings.cpp:1178
+#: ../src/settings.cpp:1313
 msgid "*3"
 msgstr ""
 
-#: ../src/settings.cpp:1226
+#: ../src/settings.cpp:1397
 #, fuzzy
 msgid "No hinting"
 msgstr "[Išjungti perkėlimus]"
 
-#: ../src/settings.cpp:1227
+#: ../src/settings.cpp:1398
 msgid "Use bytecode"
 msgstr ""
 
-#: ../src/settings.cpp:1228
+#: ../src/settings.cpp:1399
 msgid "Autohinting"
 msgstr ""
 
-#: ../src/settings.cpp:1229
+#: ../src/settings.cpp:1400
 #, fuzzy
 msgid "Light"
 msgstr "Į dešinę"
 
-#: ../src/settings.cpp:1234
+#: ../src/settings.cpp:1405
 msgid "Default paragraph formatting"
 msgstr ""
 
-#: ../src/settings.cpp:1235
+#: ../src/settings.cpp:1406
 #, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "Pavadinimas"
 
-#: ../src/settings.cpp:1236
+#: ../src/settings.cpp:1407
 #, fuzzy
 msgid "Subtitle"
 msgstr "Rodyti laiką"
 
-#: ../src/settings.cpp:1237
+#: ../src/settings.cpp:1408
 #, fuzzy
 msgid "Preformatted text / code"
 msgstr "Formatuotas tekstas"
 
-#: ../src/settings.cpp:1238
+#: ../src/settings.cpp:1409
 msgid "Link"
 msgstr ""
 
-#: ../src/settings.cpp:1240
+#: ../src/settings.cpp:1411
 msgid "Epigraph"
 msgstr ""
 
-#: ../src/settings.cpp:1241
+#: ../src/settings.cpp:1412
 msgid "Poem"
 msgstr ""
 
-#: ../src/settings.cpp:1242
+#: ../src/settings.cpp:1413
 msgid "Text / Cite / Epigraph author"
 msgstr ""
 
-#: ../src/settings.cpp:1243
+#: ../src/settings.cpp:1414
 msgid "Footnote"
 msgstr ""
 
-#: ../src/settings.cpp:1244
+#: ../src/settings.cpp:1415
 #, fuzzy
 msgid "Footnote link"
 msgstr "Eiti link nuorodos"
 
-#: ../src/settings.cpp:1245
+#: ../src/settings.cpp:1416
 msgid "Footnote title"
 msgstr ""
 
-#: ../src/settings.cpp:1246
+#: ../src/settings.cpp:1417
 msgid "Annotation"
 msgstr ""
 
-#: ../src/settings.cpp:1270
+#: ../src/settings.cpp:1457
 msgid "Default font face"
 msgstr "Šriftas"
 
-#: ../src/settings.cpp:1273
+#: ../src/settings.cpp:1462
 #, fuzzy
 msgid "Font settings"
 msgstr "Šrifto dydžio nustatymai"
 
-#: ../src/settings.cpp:1280
+#: ../src/settings.cpp:1469
 msgid "Font antialiasing"
 msgstr "Šrifto sulyginimas"
 
-#: ../src/settings.cpp:1282
+#: ../src/settings.cpp:1472
 #, fuzzy
 msgid "Font hinting"
 msgstr "Šrifto suglaudinimas"
 
-#: ../src/settings.cpp:1284
+#: ../src/settings.cpp:1474
 msgid "Font kerning"
 msgstr "Šrifto suglaudinimas"
 
-#: ../src/settings.cpp:1286
+#: ../src/settings.cpp:1476
+#, fuzzy
+msgid "Font embolding"
+msgstr "Šrifto suglaudinimas"
+
+#: ../src/settings.cpp:1478
+msgid "Tracking"
+msgstr ""
+
+#: ../src/settings.cpp:1480
 msgid "Font Gamma"
 msgstr ""
 
-#: ../src/settings.cpp:1288
+#: ../src/settings.cpp:1482
 #, fuzzy
 msgid "Document embedded fonts"
 msgstr "Naudoti dokumento stilius"
 
-#: ../src/settings.cpp:1290
+#: ../src/settings.cpp:1485
 #, fuzzy
 msgid "Fallback font face"
 msgstr "Šriftas"
 
-#: ../src/settings.cpp:1296
+#: ../src/settings.cpp:1491
 #, fuzzy
 msgid "Formatting settings"
 msgstr "Šrifto dydžio nustatymai"
 
-#: ../src/settings.cpp:1307
+#: ../src/settings.cpp:1503
 msgid "[No Hyphenation]"
 msgstr "[Išjungti perkėlimus]"
 
-#: ../src/settings.cpp:1308
+#: ../src/settings.cpp:1504
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Algoritminiai perkėlimai"
 
-#: ../src/settings.cpp:1310
+#: ../src/settings.cpp:1506
 msgid "Hyphenation"
 msgstr "Perkėlimai"
 
-#: ../src/settings.cpp:1324
+#: ../src/settings.cpp:1520
 msgid "Preformatted text"
 msgstr "Formatuotas tekstas"
 
-#: ../src/settings.cpp:1326
+#: ../src/settings.cpp:1523
 #, fuzzy
 msgid "Space condensing percent"
 msgstr "Įveskite pozicija procentais"
 
-#: ../src/settings.cpp:1328
+#: ../src/settings.cpp:1526
+#, fuzzy
+msgid "Space expanding percent"
+msgstr "Įveskite pozicija procentais"
+
+#: ../src/settings.cpp:1529
 msgid "Floating punctuation"
 msgstr "Kabanti skyryba"
 
-#: ../src/settings.cpp:1333
+#: ../src/settings.cpp:1535
 msgid "Image scaling"
 msgstr ""
 
-#: ../src/settings.cpp:1337
+#: ../src/settings.cpp:1540
 msgid "Block image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1339
+#: ../src/settings.cpp:1543
 msgid "Block image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1341
+#: ../src/settings.cpp:1546
 msgid "Inline image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1343
+#: ../src/settings.cpp:1549
 msgid "Inline image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1351
+#: ../src/settings.cpp:1558
 #, fuzzy
 msgid "Page settings"
 msgstr "Puslapio orientacija"
 
-#: ../src/settings.cpp:1356
+#: ../src/settings.cpp:1563
 msgid "Status line"
 msgstr "Informacinė eilutė"
 
-#: ../src/settings.cpp:1361
+#: ../src/settings.cpp:1568
 #, fuzzy
 msgid "Status line settings"
 msgstr "Informacinė eilutė"
 
-#: ../src/settings.cpp:1375
+#: ../src/settings.cpp:1585
 msgid "Show time"
 msgstr "Rodyti laiką"
 
-#: ../src/settings.cpp:1377
+#: ../src/settings.cpp:1587
 #, fuzzy
 msgid "Show title"
 msgstr "Rodyti laiką"
 
-#: ../src/settings.cpp:1379
+#: ../src/settings.cpp:1589
 #, fuzzy
 msgid "Show battery"
 msgstr "Rodyti laiką"
 
-#: ../src/settings.cpp:1381
+#: ../src/settings.cpp:1591
 #, fuzzy
 msgid "Show battery percent"
 msgstr "Baterijos būvis"
 
-#: ../src/settings.cpp:1383
+#: ../src/settings.cpp:1594
 #, fuzzy
 msgid "Show position percent"
 msgstr "Įveskite pozicija procentais"
 
-#: ../src/settings.cpp:1385
+#: ../src/settings.cpp:1596
 #, fuzzy
 msgid "Show page count"
 msgstr "Įveskite puslapio numerį"
 
-#: ../src/settings.cpp:1387
+#: ../src/settings.cpp:1598
 #, fuzzy
 msgid "Show page count till chapter end"
 msgstr "Įveskite puslapio numerį"
 
-#: ../src/settings.cpp:1389
+#: ../src/settings.cpp:1601
 #, fuzzy
 msgid "Show page number"
 msgstr "Įveskite puslapio numerį"
 
-#: ../src/settings.cpp:1391
+#: ../src/settings.cpp:1603
 #, fuzzy
 msgid "Show chapter marks"
 msgstr "Rodyti laiką"
 
-#: ../src/settings.cpp:1399
+#: ../src/settings.cpp:1612
 msgid "Page margins"
 msgstr "Puslapio laukai"
 
-#: ../src/settings.cpp:1404
+#: ../src/settings.cpp:1617
 msgid "Top margin"
 msgstr "Viršutinis laukas"
 
-#: ../src/settings.cpp:1406
+#: ../src/settings.cpp:1619
 msgid "Bottom margin"
 msgstr "Apatinis laukas"
 
-#: ../src/settings.cpp:1408
+#: ../src/settings.cpp:1621
 msgid "Left margin"
 msgstr "Kairysis laukas"
 
-#: ../src/settings.cpp:1410
+#: ../src/settings.cpp:1623
 msgid "Right margin"
 msgstr "Dešinysis laukas"
 
-#: ../src/settings.cpp:1415
+#: ../src/settings.cpp:1628
 msgid "Footnotes at page bottom"
 msgstr "Išnašos puslapio apačioje"
 
-#: ../src/settings.cpp:1421
+#: ../src/settings.cpp:1634
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1430
+#: ../src/settings.cpp:1643
 msgid "Landscape pages"
 msgstr "Stulpeliai horizontaliame puslapyje"
 
-#: ../src/settings.cpp:1432
+#: ../src/settings.cpp:1645
 msgid "Inverse display"
 msgstr "Negatyvinis vaizdas"
 
-#: ../src/settings.cpp:1435
+#: ../src/settings.cpp:1648
 msgid "Show bookmark icons"
 msgstr "Rodyti žymių ženkliukus"
 
-#: ../src/settings.cpp:1438
+#: ../src/settings.cpp:1651
 #, fuzzy
 msgid "Highlight bookmarks"
 msgstr "Ištrinti žymes"
 
-#: ../src/settings.cpp:1441
+#: ../src/settings.cpp:1655
 msgid "Display update mode"
 msgstr "Ekrano atnaujinimo režimas"
 
-#: ../src/settings.cpp:1445
+#: ../src/settings.cpp:1660
 msgid "Turbo update mode"
 msgstr "Turbo režimas"
 
-#: ../src/settings.cpp:1449
+#: ../src/settings.cpp:1665
 msgid "Gray buffer depth(need restart)"
 msgstr ""
 
-#: ../src/settings.cpp:1455
+#: ../src/settings.cpp:1672
 msgid "Skin"
 msgstr ""
 
-#: ../src/settings.cpp:1471
+#: ../src/settings.cpp:1688
 #, fuzzy
 msgid "Control settings"
 msgstr "Šrifto dydžio nustatymai"
 
-#: ../src/settings.cpp:1478
+#: ../src/settings.cpp:1695
 #, fuzzy
 msgid "Rotate"
 msgstr "Pasukti kampu"
 
-#: ../src/settings.cpp:1480
+#: ../src/settings.cpp:1698
 msgid "Page turn angle"
 msgstr ""
 
-#: ../src/settings.cpp:1495
+#: ../src/settings.cpp:1714
 msgid "Tap action"
 msgstr ""
 
-#: ../src/settings.cpp:1497
+#: ../src/settings.cpp:1716
 #, fuzzy
 msgid "Long tap action"
 msgstr "Prie pozicijos"
 
-#: ../src/settings.cpp:1501
+#: ../src/settings.cpp:1720
 msgid "Height of the upper tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1503
+#: ../src/settings.cpp:1723
 msgid "Height of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1505
+#: ../src/settings.cpp:1726
 msgid "Width of the left tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1507
+#: ../src/settings.cpp:1729
 msgid "Width of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1525
+#: ../src/settings.cpp:1748
 #, fuzzy
 msgid "Style settings"
 msgstr "Nustatymai"
 
-#: ../src/settings.cpp:1530
+#: ../src/settings.cpp:1753
 msgid "Document embedded styles"
 msgstr "Naudoti dokumento stilius"
 
-#: ../src/settings.cpp:1559
+#: ../src/settings.cpp:1771 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+msgid "OTA Update"
+msgstr ""
+
+#: ../src/settings.cpp:1776 ../src/viewdlg.cpp:597
+msgid "OTA Update Dev"
+msgstr ""
+
+#: ../src/settings.cpp:1799
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1589,68 +1664,169 @@ msgstr "Pereiti prie pozicijos %"
 
 #: ../src/viewdlg.cpp:586
 #, fuzzy
+msgid "Front light"
+msgstr "Šrifto storis"
+
+#: ../src/viewdlg.cpp:587
+#, fuzzy
+msgid "Invert display"
+msgstr "Negatyvinis vaizdas"
+
+#: ../src/viewdlg.cpp:588
+msgid "Full screen update"
+msgstr ""
+
+#: ../src/viewdlg.cpp:589
+#, fuzzy
+msgid "Toggle status bar"
+msgstr "Pakeisti teksto formatavimą"
+
+#: ../src/viewdlg.cpp:591
+#, fuzzy
+msgid "Tasks list"
+msgstr "Žymių sąrašas"
+
+#: ../src/viewdlg.cpp:593
+msgid "Toggle system panel"
+msgstr ""
+
+#: ../src/viewdlg.cpp:595
+msgid "Lock device"
+msgstr ""
+
+#: ../src/viewdlg.cpp:599
+msgid "Open system panel"
+msgstr ""
+
+#: ../src/viewdlg.cpp:602
+#, fuzzy
 msgid "PocketBook Main menu"
 msgstr "Pagrindinis meniu"
 
-#: ../src/viewdlg.cpp:588
+#: ../src/viewdlg.cpp:604
 msgid "Unknown command"
 msgstr "Nepažįstama komanda"
 
-#: ../src/viewdlg.cpp:595
+#: ../src/viewdlg.cpp:611
 msgid "Previous Page"
 msgstr "Prieš tai buvęs puslapis"
 
-#: ../src/viewdlg.cpp:597
+#: ../src/viewdlg.cpp:613
 msgid "Next Page"
 msgstr "Sekantis puslapis"
 
-#: ../src/viewdlg.cpp:599
+#: ../src/viewdlg.cpp:615
 msgid "Back by 10 Pages"
 msgstr "Atgal per 10 puslapių"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:617
 msgid "Forward by 10 Pages"
 msgstr " Pirmyn 10 puslapių "
 
-#: ../src/viewdlg.cpp:603
+#: ../src/viewdlg.cpp:619
 msgid "Next Chapter"
 msgstr "Sekantis skyrius"
 
-#: ../src/viewdlg.cpp:605
+#: ../src/viewdlg.cpp:621
 msgid "Previous Chapter"
 msgstr "Prieš tai buvęs skyrius"
 
-#: ../src/viewdlg.cpp:607
+#: ../src/viewdlg.cpp:623
 msgid "Add Bookmark"
 msgstr "Pridėti žymę"
 
-#: ../src/viewdlg.cpp:609
+#: ../src/viewdlg.cpp:625
 msgid "Rotate Clockwise"
 msgstr "Pasukti pagal laikrodžio rodyklę"
 
-#: ../src/viewdlg.cpp:611
+#: ../src/viewdlg.cpp:627
 msgid "Rotate Anti-Clockwise"
 msgstr "Pasukti prieš laikrodžio rodyklę"
 
-#: ../src/viewdlg.cpp:613
+#: ../src/viewdlg.cpp:629
 msgid "Portrait View"
 msgstr "Vertikaliai"
 
-#: ../src/viewdlg.cpp:615
+#: ../src/viewdlg.cpp:631
 msgid "Landscape View"
 msgstr "Horizontaliai"
 
-#: ../src/viewdlg.cpp:639
+#: ../src/viewdlg.cpp:655
 msgid "Key"
 msgstr "Klavišas"
 
-#: ../src/viewdlg.cpp:639
+#: ../src/viewdlg.cpp:655
 msgid "Assigned function"
 msgstr "Priskirti veiksmą"
 
-#: ../src/cr3pocketbook.cpp:2952
+#: ../src/ota_update.cpp:135
+msgid "Couldn't connect to server!"
+msgstr ""
+
+#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
+#: ../src/ota_update.cpp:287
+msgid "Downloading..."
+msgstr ""
+
+#: ../src/ota_update.cpp:154
+msgid "Server returned error response: "
+msgstr ""
+
+#: ../src/ota_update.cpp:167
+msgid ""
+"Download successful!\n"
+"CoolReader will restart itself."
+msgstr ""
+
+#: ../src/ota_update.cpp:168
+msgid "OK"
+msgstr ""
+
+#: ../src/ota_update.cpp:194
+msgid "Couldn't remove existing package!"
+msgstr ""
+
+#: ../src/ota_update.cpp:231
+msgid "Couldn't connect to the network!"
+msgstr ""
+
+#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
+#: ../src/ota_update.cpp:266
+#, fuzzy
+msgid "Searching..."
+msgstr "kraunasi..."
+
+#: ../src/ota_update.cpp:244
+msgid "You have the latest version."
+msgstr ""
+
+#: ../src/ota_update.cpp:276
+msgid ""
+"Update is not available for your device!\n"
+"Device model: "
+msgstr ""
+
+#: ../src/ota_update.cpp:298
+msgid "Failed updating!"
+msgstr ""
+
+#: ../src/pb_toc.cpp:21
+#, fuzzy
+msgid "Contents"
+msgstr "Klavišų paskirtis"
+
+#: ../src/cr3pocketbook.cpp:3137
 msgid "Press $1 to translate"
 msgstr "Paspauskite $1 kad išversti"
+
+#: ../src/cr3pocketbook.cpp:4013
+msgid "Updated to v"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:4123
+#, fuzzy
+msgid "Untitled"
+msgstr "Rodyti laiką"
 
 #, fuzzy
 #~ msgid "Remove phrase from selection"
