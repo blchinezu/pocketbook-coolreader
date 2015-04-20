@@ -1,5 +1,5 @@
 #!/bin/sh 
-echo "Updating po files"
+echo " - updating po files"
 msgmerge --update cr3_bg.po cr3.pot
 msgmerge --update cr3_ca.po cr3.pot
 msgmerge --update cr3_cs.po cr3.pot
