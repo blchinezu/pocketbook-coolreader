@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-19 20:09+0300\n"
+"POT-Creation-Date: 2015-04-21 07:03+0300\n"
 "PO-Revision-Date: 2009-03-05 15:25+0300\n"
 "Last-Translator: LVE <vadim.lopatin@coolreader.org>\n"
 "Language-Team: German\n"
@@ -640,27 +640,22 @@ msgid "4 of line height"
 msgstr ""
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
-#, c-format
 msgid "5% of line width"
 msgstr ""
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, c-format
 msgid "10% of line width"
 msgstr ""
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, c-format
 msgid "15% of line width"
 msgstr ""
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, c-format
 msgid "20% of line width"
 msgstr ""
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, c-format
 msgid "30% of line width"
 msgstr ""
 

@@ -1,21 +1,24 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # Elidevin <unexpected@ya.ru>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-19 20:09+0300\n"
+"POT-Creation-Date: 2015-04-21 07:03+0300\n"
 "PO-Revision-Date: 2015-04-20 16:22+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-pocketbook/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../src/citedlg.cpp:190
 msgid "Select next/prev paragraph"
@@ -101,7 +104,9 @@ msgstr "Назначение клавиш"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - выберите команду\n$2, $3 - отмена"
+msgstr ""
+"$1 - выберите команду\n"
+"$2, $3 - отмена"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -332,7 +337,9 @@ msgstr "Удалить запись"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - открыть книгу\n$2, $3 - отмена"
+msgstr ""
+"$1 - открыть книгу\n"
+"$2, $3 - отмена"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -358,13 +365,17 @@ msgstr "Перейти на закладку"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr "Короткое нажатие $1 - перейти на закладку,\n$2 - режим установки закладок"
+msgstr ""
+"Короткое нажатие $1 - перейти на закладку,\n"
+"$2 - режим установки закладок"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Короткое нажатие $1 - перейти на закладку,\nдлинное нажатие - установить закладку"
+msgstr ""
+"Короткое нажатие $1 - перейти на закладку,\n"
+"длинное нажатие - установить закладку"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
@@ -374,13 +385,17 @@ msgstr "Установка закладки"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - установить закладку,\n$2 - переключиться в режим перехода"
+msgstr ""
+"$1 - установить закладку,\n"
+"$2 - переключиться в режим перехода"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr "Короткое нажатие $1 - установить закладку,\nдлинное нажатие - перейти на закладку"
+msgstr ""
+"Короткое нажатие $1 - установить закладку,\n"
+"длинное нажатие - перейти на закладку"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
@@ -641,27 +656,27 @@ msgid "4 of line height"
 msgstr "4 высоты строки"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
-#, c-format
+#, fuzzy
 msgid "5% of line width"
 msgstr "5% ширины строки"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, c-format
+#, fuzzy
 msgid "10% of line width"
 msgstr "10% ширины строки"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, c-format
+#, fuzzy
 msgid "15% of line width"
 msgstr "15% ширины строки"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, c-format
+#, fuzzy
 msgid "20% of line width"
 msgstr "20% ширины строки"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, c-format
+#, fuzzy
 msgid "30% of line width"
 msgstr "30% ширины строки"
 
@@ -1314,7 +1329,9 @@ msgstr "OTA-обновление (до новейшей версии в разр
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Нажмите $1 для изменения параметра\n$2 для применения, $3 для отмены"
+msgstr ""
+"Нажмите $1 для изменения параметра\n"
+"$2 для применения, $3 для отмены"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1330,9 +1347,11 @@ msgstr "Поддерживаются словари в формате .dict (к�
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
-msgstr "Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса слов (.index)."
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса "
+"слов (.index)."
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1693,7 +1712,9 @@ msgstr "Сервер сообщил об ошибке: "
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr "Загрузка завершена!\nОжидайте перезапуск программы."
+msgstr ""
+"Загрузка завершена!\n"
+"Ожидайте перезапуск программы."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
@@ -1720,7 +1741,9 @@ msgstr "У Вас установлена последняя версия."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "Для вашего устройства нет обновлений.\nМодель устройства: "
+msgstr ""
+"Для вашего устройства нет обновлений.\n"
+"Модель устройства: "
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"

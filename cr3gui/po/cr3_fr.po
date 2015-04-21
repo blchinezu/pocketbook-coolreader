@@ -1,20 +1,21 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # Druss Lahache <drusslahache@orange.fr>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-19 20:09+0300\n"
+"POT-Creation-Date: 2015-04-21 07:03+0300\n"
 "PO-Revision-Date: 2015-04-20 20:23+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/coolreader-pocketbook/language/fr/)\n"
+"Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/fr/)\n"
+"Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../src/citedlg.cpp:190
@@ -51,7 +52,8 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr "Il n'y a pas actuellement de manuel disponible pour cette langue, désolé !"
+msgstr ""
+"Il n'y a pas actuellement de manuel disponible pour cette langue, désolé !"
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
@@ -101,7 +103,9 @@ msgstr "Configuration du clavier"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - choisir commande\n$2, $3 - fermer"
+msgstr ""
+"$1 - choisir commande\n"
+"$2, $3 - fermer"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -332,7 +336,9 @@ msgstr "Effacer enregistrement"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - ouvrir livre\n$2, $3 - fermer"
+msgstr ""
+"$1 - ouvrir livre\n"
+"$2, $3 - fermer"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -358,13 +364,17 @@ msgstr "Aller au marque-page"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr "Appui court $1 - aller au marque-page,\n$2 - passer en mode réglage"
+msgstr ""
+"Appui court $1 - aller au marque-page,\n"
+"$2 - passer en mode réglage"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Appui court $1 - aller au marque-page,\nappui long - définir marque-page"
+msgstr ""
+"Appui court $1 - aller au marque-page,\n"
+"appui long - définir marque-page"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
@@ -374,13 +384,17 @@ msgstr "Définir marque-page"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - définir marque-page\n$2 - passer en mode GO"
+msgstr ""
+"$1 - définir marque-page\n"
+"$2 - passer en mode GO"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr "Appui court $1 - définir marque-page,\nappui long - aller au marque-page"
+msgstr ""
+"Appui court $1 - définir marque-page,\n"
+"appui long - aller au marque-page"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
@@ -641,27 +655,27 @@ msgid "4 of line height"
 msgstr "4 de hauteur de ligne"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
-#, c-format
+#, fuzzy
 msgid "5% of line width"
 msgstr "5% de largeur de ligne"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, c-format
+#, fuzzy
 msgid "10% of line width"
 msgstr "10% de largeur de ligne"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, c-format
+#, fuzzy
 msgid "15% of line width"
 msgstr "15% de largeur de ligne"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, c-format
+#, fuzzy
 msgid "20% of line width"
 msgstr "20% de largeur de ligne"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, c-format
+#, fuzzy
 msgid "30% of line width"
 msgstr "30% de largeur de ligne"
 
@@ -1314,7 +1328,9 @@ msgstr "Mise à jour OTA Développement"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Appuyer $1 pour changer l'option\n$2 pour appliquer, $3 pour annuler"
+msgstr ""
+"Appuyer $1 pour changer l'option\n"
+"$2 pour appliquer, $3 pour annuler"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1330,9 +1346,12 @@ msgstr "Les dictionnaires au format unix standard \".dict\" sont supportés."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
-msgstr "Pour chaque dictionnaire, deux fichiers sont nécessaires : fichier de données (avec l'extension .dict ou .dict.dz et le fichier d'index, extension .index"
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Pour chaque dictionnaire, deux fichiers sont nécessaires : fichier de "
+"données (avec l'extension .dict ou .dict.dz et le fichier d'index, "
+"extension .index"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1693,7 +1712,9 @@ msgstr "Le serveur à renvoyer un message d'erreur :"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr "Téléchargement réussi !\nCoolReader va redémarrer."
+msgstr ""
+"Téléchargement réussi !\n"
+"CoolReader va redémarrer."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
@@ -1720,7 +1741,9 @@ msgstr "Vous avez la dernière version."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "La mise à jour n'est pas disponible pour votre appareil !\nModèle de l'appareil :"
+msgstr ""
+"La mise à jour n'est pas disponible pour votre appareil !\n"
+"Modèle de l'appareil :"
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
