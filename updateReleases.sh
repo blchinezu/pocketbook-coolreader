@@ -127,14 +127,14 @@ function doUpdate {
 		fi
 
 		if [ "$2" = "" -a "$1" = "pro5" ]; then
-			old="`cat $sdk/cr3gui/po/cr3.pot | grep -v '#:' | grep -v 'POT-Creation-Date' | sort | uniq`"
-			new="`cat $sdk/pbpro5/cr3gui/po/cr3.pot | grep -v '#:' | grep -v 'POT-Creation-Date' | sort | uniq`"
+			old="`cat $sdk/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
+			new="`cat $sdk/pbpro5/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
 			diff="`diff  <(echo "$old" ) <(echo "$new")`"
 
 			if [ "$diff" != "" ]; then
 				echo " - update i18n template"
 				rm -f "$sdk/cr3gui/po/cr3.pot"
-				cp "$sdk/pbpro5/cr3gui/po/cr3.pot" "$sdk/cr3gui/po/cr3.pot"
+				cat "$sdk/pbpro5/cr3gui/po/cr3.pot" | grep -v '#, c-format' > "$sdk/cr3gui/po/cr3.pot"
 				cd "$sdk/cr3gui/po"
 				bash update-po
 				cd "$sdk"
