@@ -19,6 +19,10 @@ The forum thread is at mobileread.com:
   http://www.mobileread.com/forums/showthread.php?t=256917
 
 
+Help translating the app:
+  https://www.transifex.com/projects/p/coolreader-pocketbook/
+
+
 Directories:
   crengine   - CREngine (DOM/XML/CSS ebook rendering library) sources
   cr3gui     - CR3 with CR3GUI for e-ink devices sources

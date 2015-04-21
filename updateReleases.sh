@@ -126,6 +126,21 @@ function doUpdate {
 			cp -f "$zip" "$sdk/builds/$2/$1/latest.zip"
 		fi
 
+		if [ "$2" = "" -a "$1" = "pro5" ]; then
+			old="`cat $sdk/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
+			new="`cat $sdk/pbpro5/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
+			diff="`diff  <(echo "$old" ) <(echo "$new")`"
+
+			if [ "$diff" != "" ]; then
+				echo " - update i18n template"
+				rm -f "$sdk/cr3gui/po/cr3.pot"
+				cat "$sdk/pbpro5/cr3gui/po/cr3.pot" | grep -v '#, c-format' > "$sdk/cr3gui/po/cr3.pot"
+				cd "$sdk/cr3gui/po"
+				bash update-po
+				cd "$sdk"
+			fi
+		fi
+
 		if [ "$2" = "" -a "$1" = "pro5" -a -f "$releases/dev/cr3-v$VERSION-$1.zip" ]; then
 			echo
 			echo "Update git dev branch?"
