@@ -1,17 +1,21 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# 
+# Translators:
+# Elidevin <unexpected@ya.ru>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: cr3 3.0.17\n"
+"Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-19 20:09+0300\n"
-"PO-Revision-Date: 2011-05-08 16:02+0700\n"
-"Last-Translator: Vladimir <v@v>\n"
-"Language-Team: Russian\n"
-"Language: \n"
+"PO-Revision-Date: 2015-04-20 16:22+0000\n"
+"Last-Translator: Elidevin <unexpected@ya.ru>\n"
+"Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-pocketbook/language/ru/)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../src/citedlg.cpp:190
 msgid "Select next/prev paragraph"
@@ -97,9 +101,7 @@ msgstr "Назначение клавиш"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - выберите команду\n"
-"$2, $3 - отмена"
+msgstr "$1 - выберите команду\n$2, $3 - отмена"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -275,9 +277,8 @@ msgid "Build date"
 msgstr "Дата создания"
 
 #: ../src/mainwnd.cpp:1106
-#, fuzzy
 msgid "Build type"
-msgstr "Дата создания"
+msgstr "Тип сборки"
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
@@ -331,9 +332,7 @@ msgstr "Удалить запись"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - открыть книгу\n"
-"$2, $3 - отмена"
+msgstr "$1 - открыть книгу\n$2, $3 - отмена"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -359,17 +358,13 @@ msgstr "Перейти на закладку"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr ""
-"Короткое нажатие $1 - перейти на закладку,\n"
-"$2 - режим установки закладок"
+msgstr "Короткое нажатие $1 - перейти на закладку,\n$2 - режим установки закладок"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr ""
-"Короткое нажатие $1 - перейти на закладку,\n"
-"длинное нажатие - установить закладку"
+msgstr "Короткое нажатие $1 - перейти на закладку,\nдлинное нажатие - установить закладку"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
@@ -379,17 +374,13 @@ msgstr "Установка закладки"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr ""
-"$1 - установить закладку,\n"
-"$2 - переключиться в режим перехода"
+msgstr "$1 - установить закладку,\n$2 - переключиться в режим перехода"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr ""
-"Короткое нажатие $1 - установить закладку,\n"
-"длинное нажатие - перейти на закладку"
+msgstr "Короткое нажатие $1 - установить закладку,\nдлинное нажатие - перейти на закладку"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
@@ -650,27 +641,27 @@ msgid "4 of line height"
 msgstr "4 высоты строки"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "5% of line width"
 msgstr "5% ширины строки"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "10% of line width"
 msgstr "10% ширины строки"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "15% of line width"
 msgstr "15% ширины строки"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, fuzzy, c-format
+#, c-format
 msgid "20% of line width"
 msgstr "20% ширины строки"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, fuzzy, c-format
+#, c-format
 msgid "30% of line width"
 msgstr "30% ширины строки"
 
@@ -704,7 +695,7 @@ msgstr "Межстрочный интервал"
 
 #: ../src/settings.cpp:1022
 msgid "Letter spacing"
-msgstr ""
+msgstr "Межбуквенный интервал"
 
 #: ../src/settings.cpp:1024
 msgid "Text decoration"
@@ -883,18 +874,16 @@ msgid "Full updates every 6 pages"
 msgstr "раз в 6 страниц"
 
 #: ../src/settings.cpp:1248
-#, fuzzy
 msgid "Full updates every 7 pages"
-msgstr "раз в 2 страницы"
+msgstr "раз в 7 страниц"
 
 #: ../src/settings.cpp:1249
 msgid "Full updates every 8 pages"
 msgstr "раз в 8 страниц"
 
 #: ../src/settings.cpp:1250
-#, fuzzy
 msgid "Full updates every 9 pages"
-msgstr "раз в 2 страницы"
+msgstr "раз в 9 страниц"
 
 #: ../src/settings.cpp:1251
 msgid "Full updates every 10 pages"
@@ -905,39 +894,32 @@ msgid "Full updates every 14 pages"
 msgstr "раз в 14 страниц"
 
 #: ../src/settings.cpp:1253
-#, fuzzy
 msgid "Full updates every 20 pages"
-msgstr "раз в 2 страницы"
+msgstr "раз в 20 страниц"
 
 #: ../src/settings.cpp:1254
-#, fuzzy
 msgid "Full updates every 25 pages"
-msgstr "раз в 2 страницы"
+msgstr "раз в 25 страниц"
 
 #: ../src/settings.cpp:1255
-#, fuzzy
 msgid "Full updates every 30 pages"
-msgstr "раз в 3 страницы"
+msgstr "раз в 30 страниц"
 
 #: ../src/settings.cpp:1256
-#, fuzzy
 msgid "Full updates every 35 pages"
-msgstr "раз в 3 страницы"
+msgstr "раз в 35 страниц"
 
 #: ../src/settings.cpp:1257
-#, fuzzy
 msgid "Full updates every 40 pages"
-msgstr "раз в 4 страницы"
+msgstr "раз в 40 страниц"
 
 #: ../src/settings.cpp:1258
-#, fuzzy
 msgid "Full updates every 45 pages"
-msgstr "раз в 4 страницы"
+msgstr "раз в 45 страниц"
 
 #: ../src/settings.cpp:1259
-#, fuzzy
 msgid "Full updates every 50 pages"
-msgstr "раз в 5 страниц"
+msgstr "раз в 50 страниц"
 
 #: ../src/settings.cpp:1264
 msgid "Turbo mode disabled"
@@ -969,19 +951,19 @@ msgstr "180°+назад/вперед быстро"
 
 #: ../src/settings.cpp:1294
 msgid "2 BPP"
-msgstr "2 бита на пиксель"
+msgstr "2 бита на пиксель (4 цвета)"
 
 #: ../src/settings.cpp:1295
 msgid "3 BPP"
-msgstr "3 бита на пиксель"
+msgstr "3 бита на пиксель (8 цветов)"
 
 #: ../src/settings.cpp:1296
 msgid "4 BPP"
-msgstr "4 бита на пиксель"
+msgstr "4 бита на пиксель (16 цветов)"
 
 #: ../src/settings.cpp:1297
 msgid "8 BPP"
-msgstr "8 бит на пиксель"
+msgstr "8 бит на пиксель (256 цветов)"
 
 #: ../src/settings.cpp:1303
 msgid "Disabled (1:1)"
@@ -1025,7 +1007,7 @@ msgstr "Автохинтинг"
 
 #: ../src/settings.cpp:1400
 msgid "Light"
-msgstr "Легкий"
+msgstr "Лёгкий"
 
 #: ../src/settings.cpp:1405
 msgid "Default paragraph formatting"
@@ -1097,13 +1079,12 @@ msgid "Font kerning"
 msgstr "Кернинг шрифта"
 
 #: ../src/settings.cpp:1476
-#, fuzzy
 msgid "Font embolding"
-msgstr "Кернинг шрифта"
+msgstr "Утолщение шрифта"
 
 #: ../src/settings.cpp:1478
 msgid "Tracking"
-msgstr ""
+msgstr "Трекинг шрифта"
 
 #: ../src/settings.cpp:1480
 msgid "Font Gamma"
@@ -1142,9 +1123,8 @@ msgid "Space condensing percent"
 msgstr "Сжимать пробелы до"
 
 #: ../src/settings.cpp:1526
-#, fuzzy
 msgid "Space expanding percent"
-msgstr "Сжимать пробелы до"
+msgstr "Расширять пробелы до"
 
 #: ../src/settings.cpp:1529
 msgid "Floating punctuation"
@@ -1324,19 +1304,17 @@ msgstr "Использовать стили документа"
 
 #: ../src/settings.cpp:1771 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
-msgstr ""
+msgstr "OTA-обновление программы"
 
 #: ../src/settings.cpp:1776 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
-msgstr ""
+msgstr "OTA-обновление (до новейшей версии в разработке)"
 
 #: ../src/settings.cpp:1799
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr ""
-"Нажмите $1 для изменения параметра\n"
-"$2 для применения, $3 для отмены"
+msgstr "Нажмите $1 для изменения параметра\n$2 для применения, $3 для отмены"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1352,11 +1330,9 @@ msgstr "Поддерживаются словари в формате .dict (к�
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict "
-"or .dict.dz extension, and index file with .index extension"
-msgstr ""
-"Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса "
-"слов (.index)."
+"For each dictionary, pair of files should be provided: data file (with .dict"
+" or .dict.dz extension, and index file with .index extension"
+msgstr "Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса слов (.index)."
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1610,15 +1586,15 @@ msgstr "Перейти на позицию (%)..."
 
 #: ../src/viewdlg.cpp:586
 msgid "Front light"
-msgstr "Подсветка"
+msgstr "Управление подсветкой"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr "Инвертирование"
+msgstr "Инвертировать содержимое экрана"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Обновить содержимое экрана"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
@@ -1626,20 +1602,19 @@ msgstr "Тумблер строки состояния"
 
 #: ../src/viewdlg.cpp:591
 msgid "Tasks list"
-msgstr "Диспетчер задач"
+msgstr "Список открытых программ"
 
 #: ../src/viewdlg.cpp:593
 msgid "Toggle system panel"
-msgstr "Тумблер системной панели"
+msgstr "Показать системную панель"
 
 #: ../src/viewdlg.cpp:595
 msgid "Lock device"
-msgstr "Блокировка ридера"
+msgstr "Режим блокировки"
 
 #: ../src/viewdlg.cpp:599
-#, fuzzy
 msgid "Open system panel"
-msgstr "Тумблер системной панели"
+msgstr "Открыть системную панель"
 
 #: ../src/viewdlg.cpp:602
 msgid "PocketBook Main menu"
@@ -1703,69 +1678,66 @@ msgstr "Действие"
 
 #: ../src/ota_update.cpp:135
 msgid "Couldn't connect to server!"
-msgstr ""
+msgstr "Нет соединения с сервером"
 
 #: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
 #: ../src/ota_update.cpp:287
 msgid "Downloading..."
-msgstr ""
+msgstr "Загрузка..."
 
 #: ../src/ota_update.cpp:154
 msgid "Server returned error response: "
-msgstr ""
+msgstr "Сервер сообщил об ошибке: "
 
 #: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr ""
+msgstr "Загрузка завершена!\nОжидайте перезапуск программы."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/ota_update.cpp:194
 msgid "Couldn't remove existing package!"
-msgstr ""
+msgstr "Не удалось удалить существующий пакет!"
 
 #: ../src/ota_update.cpp:231
 msgid "Couldn't connect to the network!"
-msgstr ""
+msgstr "Невозможно присоединиться к сети!"
 
 #: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
 #: ../src/ota_update.cpp:266
-#, fuzzy
 msgid "Searching..."
-msgstr "заряжается..."
+msgstr "Поиск..."
 
 #: ../src/ota_update.cpp:244
 msgid "You have the latest version."
-msgstr ""
+msgstr "У Вас установлена последняя версия."
 
 #: ../src/ota_update.cpp:276
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr ""
+msgstr "Для вашего устройства нет обновлений.\nМодель устройства: "
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
-msgstr ""
+msgstr "Ошибка обновления!"
 
 #: ../src/pb_toc.cpp:21
-#, fuzzy
 msgid "Contents"
-msgstr "Функции клавиш"
+msgstr "Содержание"
 
 #: ../src/cr3pocketbook.cpp:3137
 msgid "Press $1 to translate"
-msgstr "Нажмите чтобы перевести"
+msgstr "Нажмите $1 чтобы перевести"
 
 #: ../src/cr3pocketbook.cpp:4013
 msgid "Updated to v"
-msgstr ""
+msgstr "Обновлено до версии "
 
 #: ../src/cr3pocketbook.cpp:4123
-#, fuzzy
 msgid "Untitled"
-msgstr "Подзаголовок"
+msgstr "Без названия"

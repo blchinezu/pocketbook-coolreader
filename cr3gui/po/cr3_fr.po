@@ -1,16 +1,20 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+# 
+# Translators:
+# Druss Lahache <drusslahache@orange.fr>, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: Fork CoolReader\n"
+"Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-19 20:09+0300\n"
-"PO-Revision-Date: 2015-03-15 19:02+0000\n"
+"PO-Revision-Date: 2015-04-20 20:23+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/fork-coolreader/"
-"language/fr/)\n"
-"Language: fr\n"
+"Language-Team: French (http://www.transifex.com/projects/p/coolreader-pocketbook/language/fr/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../src/citedlg.cpp:190
@@ -47,8 +51,7 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr ""
-"Il n'y a pas de actuellement de manuel disponible pour cette langue, désolé !"
+msgstr "Il n'y a pas actuellement de manuel disponible pour cette langue, désolé !"
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
@@ -98,9 +101,7 @@ msgstr "Configuration du clavier"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - choisir commande\n"
-"$2, $3 - fermer"
+msgstr "$1 - choisir commande\n$2, $3 - fermer"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -217,7 +218,7 @@ msgstr "URL de la source du document"
 
 #: ../src/mainwnd.cpp:1085
 msgid "OCR by"
-msgstr "OCR"
+msgstr "OCR par"
 
 #: ../src/mainwnd.cpp:1086
 msgid "Document version"
@@ -276,9 +277,8 @@ msgid "Build date"
 msgstr "Date de création"
 
 #: ../src/mainwnd.cpp:1106
-#, fuzzy
 msgid "Build type"
-msgstr "Date de création"
+msgstr "Type de construction"
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
@@ -332,9 +332,7 @@ msgstr "Effacer enregistrement"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - ouvrir livre\n"
-"$2, $3 - fermer"
+msgstr "$1 - ouvrir livre\n$2, $3 - fermer"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -360,17 +358,13 @@ msgstr "Aller au marque-page"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr ""
-"Appui court $1 - aller au marque-page,\n"
-"$2 - passer en mode réglage"
+msgstr "Appui court $1 - aller au marque-page,\n$2 - passer en mode réglage"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr ""
-"Appui court $1 - aller au marque-page,\n"
-"appui long - définir marque-page"
+msgstr "Appui court $1 - aller au marque-page,\nappui long - définir marque-page"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
@@ -380,17 +374,13 @@ msgstr "Définir marque-page"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr ""
-"$1 - définir marque-page\n"
-"$2 - passer en mode GO"
+msgstr "$1 - définir marque-page\n$2 - passer en mode GO"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr ""
-"Appui court $1 - définir marque-page,\n"
-"appui long - aller au marque-page"
+msgstr "Appui court $1 - définir marque-page,\nappui long - aller au marque-page"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
@@ -651,27 +641,27 @@ msgid "4 of line height"
 msgstr "4 de hauteur de ligne"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
-#, fuzzy, c-format
+#, c-format
 msgid "5% of line width"
 msgstr "5% de largeur de ligne"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, fuzzy, c-format
+#, c-format
 msgid "10% of line width"
 msgstr "10% de largeur de ligne"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, fuzzy, c-format
+#, c-format
 msgid "15% of line width"
 msgstr "15% de largeur de ligne"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, fuzzy, c-format
+#, c-format
 msgid "20% of line width"
 msgstr "20% de largeur de ligne"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, fuzzy, c-format
+#, c-format
 msgid "30% of line width"
 msgstr "30% de largeur de ligne"
 
@@ -705,7 +695,7 @@ msgstr "Espace d'interligne"
 
 #: ../src/settings.cpp:1022
 msgid "Letter spacing"
-msgstr ""
+msgstr "Espacement des lettres"
 
 #: ../src/settings.cpp:1024
 msgid "Text decoration"
@@ -857,88 +847,79 @@ msgstr "200%"
 
 #: ../src/settings.cpp:1241
 msgid "Always use fast updates"
-msgstr "Toujours utilser des mises à jour rapides"
+msgstr "Toujours utiliser des mises à jour rapides"
 
 #: ../src/settings.cpp:1242
 msgid "Don't use fast updates"
-msgstr "Ne pas utilser de mises à jour rapides"
+msgstr "Ne pas utiliser de mises à jour rapides"
 
 #: ../src/settings.cpp:1243
 msgid "Full updates every 2 pages"
-msgstr "Mise à jour toutes les 2 pages"
+msgstr "Mise à jour complète toutes les 2 pages"
 
 #: ../src/settings.cpp:1244
 msgid "Full updates every 3 pages"
-msgstr "Mise à jour toutes les 3 pages"
+msgstr "Mise à jour complète toutes les 3 pages"
 
 #: ../src/settings.cpp:1245
 msgid "Full updates every 4 pages"
-msgstr "Mise à jour toutes les 4 pages"
+msgstr "Mise à jour complète toutes les 4 pages"
 
 #: ../src/settings.cpp:1246
 msgid "Full updates every 5 pages"
-msgstr "Mise à jour toutes les 5 pages"
+msgstr "Mise à jour complète toutes les 5 pages"
 
 #: ../src/settings.cpp:1247
 msgid "Full updates every 6 pages"
-msgstr "Mise à jour toutes les 6 pages"
+msgstr "Mise à jour complète toutes les 6 pages"
 
 #: ../src/settings.cpp:1248
-#, fuzzy
 msgid "Full updates every 7 pages"
-msgstr "Mise à jour toutes les 2 pages"
+msgstr "Mise à jour complète toutes les 7 pages"
 
 #: ../src/settings.cpp:1249
 msgid "Full updates every 8 pages"
-msgstr "Mise à jour toutes les 8 pages"
+msgstr "Mise à jour complète toutes les 8 pages"
 
 #: ../src/settings.cpp:1250
-#, fuzzy
 msgid "Full updates every 9 pages"
-msgstr "Mise à jour toutes les 2 pages"
+msgstr "Mise à jour complète toutes les 9 pages"
 
 #: ../src/settings.cpp:1251
 msgid "Full updates every 10 pages"
-msgstr "Mise à jour toutes les 10 pages"
+msgstr "Mise à jour complète toutes les 10 pages"
 
 #: ../src/settings.cpp:1252
 msgid "Full updates every 14 pages"
-msgstr "Mise à jour toutes les 14 pages"
+msgstr "Mise à jour complète toutes les 14 pages"
 
 #: ../src/settings.cpp:1253
-#, fuzzy
 msgid "Full updates every 20 pages"
-msgstr "Mise à jour toutes les 2 pages"
+msgstr "Mise à jour complète toutes les 20 pages"
 
 #: ../src/settings.cpp:1254
-#, fuzzy
 msgid "Full updates every 25 pages"
-msgstr "Mise à jour toutes les 2 pages"
+msgstr "Mise à jour complète toutes les 25 pages"
 
 #: ../src/settings.cpp:1255
-#, fuzzy
 msgid "Full updates every 30 pages"
-msgstr "Mise à jour toutes les 3 pages"
+msgstr "Mise à jour complète toutes les 30 pages"
 
 #: ../src/settings.cpp:1256
-#, fuzzy
 msgid "Full updates every 35 pages"
-msgstr "Mise à jour toutes les 3 pages"
+msgstr "Mise à jour complète toutes les 35 pages"
 
 #: ../src/settings.cpp:1257
-#, fuzzy
 msgid "Full updates every 40 pages"
-msgstr "Mise à jour toutes les 4 pages"
+msgstr "Mise à jour complète toutes les 40 pages"
 
 #: ../src/settings.cpp:1258
-#, fuzzy
 msgid "Full updates every 45 pages"
-msgstr "Mise à jour toutes les 4 pages"
+msgstr "Mise à jour complète toutes les 45 pages"
 
 #: ../src/settings.cpp:1259
-#, fuzzy
 msgid "Full updates every 50 pages"
-msgstr "Mise à jour toutes les 5 pages"
+msgstr "Mise à jour complète toutes les 50 pages"
 
 #: ../src/settings.cpp:1264
 msgid "Turbo mode disabled"
@@ -1026,7 +1007,7 @@ msgstr "Optimisation automatique"
 
 #: ../src/settings.cpp:1400
 msgid "Light"
-msgstr "Eclairage"
+msgstr "Éclairage"
 
 #: ../src/settings.cpp:1405
 msgid "Default paragraph formatting"
@@ -1051,11 +1032,11 @@ msgstr "Lien"
 
 #: ../src/settings.cpp:1411
 msgid "Epigraph"
-msgstr "Epigraphe"
+msgstr "Épigraphe"
 
 #: ../src/settings.cpp:1412
 msgid "Poem"
-msgstr "Poeme"
+msgstr "Poème"
 
 #: ../src/settings.cpp:1413
 msgid "Text / Cite / Epigraph author"
@@ -1087,7 +1068,7 @@ msgstr "Réglage de la police"
 
 #: ../src/settings.cpp:1469
 msgid "Font antialiasing"
-msgstr "Police anti-aliasing"
+msgstr "Police antialiasing"
 
 #: ../src/settings.cpp:1472
 msgid "Font hinting"
@@ -1098,13 +1079,12 @@ msgid "Font kerning"
 msgstr "Crénage de la police"
 
 #: ../src/settings.cpp:1476
-#, fuzzy
 msgid "Font embolding"
-msgstr "Crénage de la police"
+msgstr "Épaississement police "
 
 #: ../src/settings.cpp:1478
 msgid "Tracking"
-msgstr ""
+msgstr "Traçage"
 
 #: ../src/settings.cpp:1480
 msgid "Font Gamma"
@@ -1140,12 +1120,11 @@ msgstr "Texte préformaté"
 
 #: ../src/settings.cpp:1523
 msgid "Space condensing percent"
-msgstr "Pourcentage de l\"espace condensé"
+msgstr "Pourcentage de l'espace condensé"
 
 #: ../src/settings.cpp:1526
-#, fuzzy
 msgid "Space expanding percent"
-msgstr "Pourcentage de l\"espace condensé"
+msgstr "Pourcentage de l'espace d'expansion"
 
 #: ../src/settings.cpp:1529
 msgid "Floating punctuation"
@@ -1325,23 +1304,21 @@ msgstr "Styles incorporés dans le document"
 
 #: ../src/settings.cpp:1771 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
-msgstr ""
+msgstr "Mise à jour OTA"
 
 #: ../src/settings.cpp:1776 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
-msgstr ""
+msgstr "Mise à jour OTA Développement"
 
 #: ../src/settings.cpp:1799
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr ""
-"Appuyer $1 pour changer l'option\n"
-"$2 pour appliquer, $3 pour annuler"
+msgstr "Appuyer $1 pour changer l'option\n$2 pour appliquer, $3 pour annuler"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
-msgstr "Pas de dictionnaire trouver"
+msgstr "Pas de dictionnaire trouvé"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
@@ -1353,12 +1330,9 @@ msgstr "Les dictionnaires au format unix standard \".dict\" sont supportés."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict "
-"or .dict.dz extension, and index file with .index extension"
-msgstr ""
-"Pour chaque dictionnaire, deux fichiers sont nécessaires : fichier de "
-"données (avec l'extension .dict ou .dict.dz et le fichier d'index, "
-"extension .index"
+"For each dictionary, pair of files should be provided: data file (with .dict"
+" or .dict.dz extension, and index file with .index extension"
+msgstr "Pour chaque dictionnaire, deux fichiers sont nécessaires : fichier de données (avec l'extension .dict ou .dict.dz et le fichier d'index, extension .index"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1488,7 +1462,7 @@ msgstr "Basculer le format du texte"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr "Suaver les marque-pages par nombre"
+msgstr "Sauver les marque-pages par nombre"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
@@ -1611,40 +1585,36 @@ msgid "Go to percent..."
 msgstr "Aller à  (%)..."
 
 #: ../src/viewdlg.cpp:586
-#, fuzzy
 msgid "Front light"
-msgstr "Épaisseur de la police "
+msgstr "Éclairage frontal"
 
 #: ../src/viewdlg.cpp:587
-#, fuzzy
 msgid "Invert display"
-msgstr "Inverser affichage"
+msgstr "Inversion de l'affichage"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Rafraîchissement complet de l'écran"
 
 #: ../src/viewdlg.cpp:589
-#, fuzzy
 msgid "Toggle status bar"
-msgstr "Basculer le format du texte"
+msgstr "Affichage barre de statut"
 
 #: ../src/viewdlg.cpp:591
-#, fuzzy
 msgid "Tasks list"
-msgstr "Liste des marque-pages"
+msgstr "Liste des tâches"
 
 #: ../src/viewdlg.cpp:593
 msgid "Toggle system panel"
-msgstr ""
+msgstr "Affichage panneau système"
 
 #: ../src/viewdlg.cpp:595
 msgid "Lock device"
-msgstr ""
+msgstr "Verrouiller l'appareil"
 
 #: ../src/viewdlg.cpp:599
 msgid "Open system panel"
-msgstr ""
+msgstr "Ouvrir le panneau système"
 
 #: ../src/viewdlg.cpp:602
 msgid "PocketBook Main menu"
@@ -1708,59 +1678,57 @@ msgstr "Fonction assignée"
 
 #: ../src/ota_update.cpp:135
 msgid "Couldn't connect to server!"
-msgstr ""
+msgstr "Connexion au serveur impossible !"
 
 #: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
 #: ../src/ota_update.cpp:287
 msgid "Downloading..."
-msgstr ""
+msgstr "Chargement..."
 
 #: ../src/ota_update.cpp:154
 msgid "Server returned error response: "
-msgstr ""
+msgstr "Le serveur à renvoyer un message d'erreur :"
 
 #: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr ""
+msgstr "Téléchargement réussi !\nCoolReader va redémarrer."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/ota_update.cpp:194
 msgid "Couldn't remove existing package!"
-msgstr ""
+msgstr "Ne peut supprimer le paquet existant !"
 
 #: ../src/ota_update.cpp:231
 msgid "Couldn't connect to the network!"
-msgstr ""
+msgstr "Ne peut se connecter au réseau !"
 
 #: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
 #: ../src/ota_update.cpp:266
-#, fuzzy
 msgid "Searching..."
-msgstr "chargement..."
+msgstr "Recherche..."
 
 #: ../src/ota_update.cpp:244
 msgid "You have the latest version."
-msgstr ""
+msgstr "Vous avez la dernière version."
 
 #: ../src/ota_update.cpp:276
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr ""
+msgstr "La mise à jour n'est pas disponible pour votre appareil !\nModèle de l'appareil :"
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
-msgstr ""
+msgstr "Mise à jour interrompu !"
 
 #: ../src/pb_toc.cpp:21
-#, fuzzy
 msgid "Contents"
-msgstr "Contrôles"
+msgstr "Contenu"
 
 #: ../src/cr3pocketbook.cpp:3137
 msgid "Press $1 to translate"
@@ -1768,9 +1736,8 @@ msgstr "Appuyer sur $1 pour traduire"
 
 #: ../src/cr3pocketbook.cpp:4013
 msgid "Updated to v"
-msgstr ""
+msgstr "Mis à jour vers v"
 
 #: ../src/cr3pocketbook.cpp:4123
-#, fuzzy
 msgid "Untitled"
-msgstr "Sous-titre"
+msgstr "Sans titre"
