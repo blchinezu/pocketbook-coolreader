@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-21 07:03+0300\n"
-"PO-Revision-Date: 2015-04-20 18:52+0000\n"
+"PO-Revision-Date: 2015-04-22 05:21+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/pl/)\n"
@@ -82,7 +82,7 @@ msgstr "Słownik"
 
 #: ../src/mainwnd.cpp:910 ../src/settings.cpp:1410
 msgid "Cite"
-msgstr "Cytuj"
+msgstr "Cytat"
 
 #: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
 msgid "Bookmarks"
@@ -211,7 +211,7 @@ msgstr "Informacje o książce"
 
 #: ../src/mainwnd.cpp:1082
 msgid "Document author"
-msgstr "Autor documentu"
+msgstr "Autor dokumentu"
 
 #: ../src/mainwnd.cpp:1083
 msgid "Document date"
@@ -657,23 +657,23 @@ msgstr "4 wysokości linii"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
 msgid "5% of line width"
-msgstr "5% o szerokości linii"
+msgstr "5% szerokości linii"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
 msgid "10% of line width"
-msgstr "10% oszerokości linii"
+msgstr "10% szerokości linii"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
 msgid "15% of line width"
-msgstr "15% oszerokości linii"
+msgstr "15% szerokości linii"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
 msgid "20% of line width"
-msgstr "20% oszerokości linii"
+msgstr "20% szerokości linii"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
 msgid "30% of line width"
-msgstr "30% oszerokości linii"
+msgstr "30% szerokości linii"
 
 #: ../src/settings.cpp:995
 msgid "Text alignment"
@@ -757,7 +757,7 @@ msgstr "Włączone"
 
 #: ../src/settings.cpp:1080
 msgid "Solid"
-msgstr "Stały"
+msgstr "Wypełnienie"
 
 #: ../src/settings.cpp:1153
 msgid "Inverse"
@@ -941,23 +941,23 @@ msgstr "Tryb turbo włączony"
 
 #: ../src/settings.cpp:1272
 msgid "180+slow next page"
-msgstr ""
+msgstr "180+powoli następna strona"
 
 #: ../src/settings.cpp:1273
 msgid "180+slow prev/next page"
-msgstr ""
+msgstr "180+powoli poprzednia/następna strona"
 
 #: ../src/settings.cpp:1274
 msgid "180+FAST next page"
-msgstr ""
+msgstr "180+SZYBKO następna strona"
 
 #: ../src/settings.cpp:1275
 msgid "180+FAST prev/next page"
-msgstr ""
+msgstr "180+SZYBKO poprzednia/następna strona"
 
 #: ../src/settings.cpp:1276
 msgid "180+FAST next/prev page"
-msgstr ""
+msgstr "180+SZYBKO następna/poprzednia strona"
 
 #: ../src/settings.cpp:1294
 msgid "2 BPP"
@@ -1130,11 +1130,11 @@ msgstr "Tekst przeformatowany"
 
 #: ../src/settings.cpp:1523
 msgid "Space condensing percent"
-msgstr "Procent zwężenia spacji"
+msgstr "Minimalny odstęp między wyrazami"
 
 #: ../src/settings.cpp:1526
 msgid "Space expanding percent"
-msgstr "Procent rozszerzenia spacji"
+msgstr "Maksymalny odstęp między wyrazami"
 
 #: ../src/settings.cpp:1529
 msgid "Floating punctuation"
@@ -1318,7 +1318,7 @@ msgstr "Aktualizacja OTA"
 
 #: ../src/settings.cpp:1776 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
-msgstr ""
+msgstr "OTA Update Dev"
 
 #: ../src/settings.cpp:1799
 msgid ""
