@@ -1,0 +1,1760 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+#
+# Translators:
+# BruceLee, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: coolreader-pocketbook\n"
+"Report-Msgid-Bugs-To: foo@bar.com\n"
+"POT-Creation-Date: 2015-04-21 07:03+0300\n"
+"PO-Revision-Date: 2015-04-21 10:11+0000\n"
+"Last-Translator: BruceLee\n"
+"Language-Team: Romanian (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/ro/)\n"
+"Language: ro\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
+
+#: ../src/citedlg.cpp:190
+msgid "Select next/prev paragraph"
+msgstr "Selectează paragraful următor/anterior"
+
+#: ../src/citedlg.cpp:193
+msgid "Select one more paragraph"
+msgstr "Selectează încă un paragraf"
+
+#: ../src/citedlg.cpp:196
+msgid "Deselect paragraph"
+msgstr "Deselectează paragraf"
+
+#: ../src/citedlg.cpp:199
+msgid "Select one more phrase"
+msgstr "Selectează încă o frază"
+
+#: ../src/citedlg.cpp:202
+msgid "Deselect phrase"
+msgstr "Deselectează frază"
+
+#: ../src/citedlg.cpp:216
+msgid "Select text"
+msgstr "Selectează text"
+
+#: ../src/fsmenu.cpp:41
+msgid "1..9"
+msgstr "1..9"
+
+#: ../src/fsmenu.cpp:43
+msgid "1..8"
+msgstr "1..8"
+
+#: ../src/mainwnd.cpp:806
+msgid "No manual currently available for this language, sorry!"
+msgstr "Nu există manual pentru această limbă, scuze!"
+
+#: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
+msgid "Help"
+msgstr "Ajutor"
+
+#: ../src/mainwnd.cpp:844
+msgid "Main Menu"
+msgstr "Meniu Principal"
+
+#: ../src/mainwnd.cpp:878 ../src/viewdlg.cpp:573
+msgid "About"
+msgstr "Despre"
+
+#: ../src/mainwnd.cpp:888 ../src/viewdlg.cpp:537
+msgid "Go to page"
+msgstr "Mergi la pagină"
+
+#: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
+msgid "Open recent book"
+msgstr "Deschide carte recentă"
+
+#: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
+msgid "Dictionary"
+msgstr "Dicţionar"
+
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1410
+msgid "Cite"
+msgstr "Citat"
+
+#: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
+msgid "Bookmarks"
+msgstr "Semne de carte"
+
+#: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
+msgid "Search"
+msgstr "Caută"
+
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1054
+msgid "Settings"
+msgstr "Setări"
+
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:667
+msgid "Keyboard layout"
+msgstr "Tastatură"
+
+#: ../src/mainwnd.cpp:938
+msgid ""
+"$1 - choose command\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - alege comandă\n"
+"$2, $3 - închide"
+
+#: ../src/mainwnd.cpp:1046
+msgid "Current page"
+msgstr "Pagina curentă"
+
+#: ../src/mainwnd.cpp:1047
+msgid "Total pages"
+msgstr "Număr total de pagini"
+
+#: ../src/mainwnd.cpp:1048
+msgid "Battery state"
+msgstr "Status baterie"
+
+#: ../src/mainwnd.cpp:1048
+msgid "charging..."
+msgstr "se încarcă..."
+
+#: ../src/mainwnd.cpp:1049
+msgid "Current Time"
+msgstr "Ora Curentă"
+
+#: ../src/mainwnd.cpp:1054
+msgid "Current chapter"
+msgstr "Capitolul curent"
+
+#: ../src/mainwnd.cpp:1057
+msgid "Status"
+msgstr "Status"
+
+#: ../src/mainwnd.cpp:1060
+msgid "Archive name"
+msgstr "Numele arhivei"
+
+#: ../src/mainwnd.cpp:1061
+msgid "Archive path"
+msgstr "Locaţia arhivei"
+
+#: ../src/mainwnd.cpp:1062
+msgid "Archive size"
+msgstr "Dimensiunea arhivei"
+
+#: ../src/mainwnd.cpp:1063
+msgid "File name"
+msgstr "Numele fişierului"
+
+#: ../src/mainwnd.cpp:1064
+msgid "File path"
+msgstr "Locaţia fişierului"
+
+#: ../src/mainwnd.cpp:1065
+msgid "File size"
+msgstr "Dimensiunea fişierului"
+
+#: ../src/mainwnd.cpp:1066
+msgid "File format"
+msgstr "Formatul fişierului"
+
+#: ../src/mainwnd.cpp:1067
+msgid "File info"
+msgstr "Informaţii fişier"
+
+#: ../src/mainwnd.cpp:1070
+msgctxt "Book"
+msgid "Title"
+msgstr "Titlu"
+
+#: ../src/mainwnd.cpp:1071
+msgid "Author(s)"
+msgstr "Autor(i)"
+
+#: ../src/mainwnd.cpp:1072
+msgid "Series name"
+msgstr "Numele seriei"
+
+#: ../src/mainwnd.cpp:1073
+msgid "Series number"
+msgstr "Numărul din serie"
+
+#: ../src/mainwnd.cpp:1074
+msgid "Date"
+msgstr "Data"
+
+#: ../src/mainwnd.cpp:1075
+msgid "Genres"
+msgstr "Genuri"
+
+#: ../src/mainwnd.cpp:1076
+msgid "Language"
+msgstr "Limba"
+
+#: ../src/mainwnd.cpp:1077
+msgid "Translator"
+msgstr "Traducător"
+
+#: ../src/mainwnd.cpp:1078
+msgid "Source language"
+msgstr "Limba iniţială"
+
+#: ../src/mainwnd.cpp:1079
+msgid "Book info"
+msgstr "Informaţii despre carte"
+
+#: ../src/mainwnd.cpp:1082
+msgid "Document author"
+msgstr "Autorul documentului"
+
+#: ../src/mainwnd.cpp:1083
+msgid "Document date"
+msgstr "Data documentului"
+
+#: ../src/mainwnd.cpp:1084
+msgid "Document source URL"
+msgstr "URL-ul documentului"
+
+#: ../src/mainwnd.cpp:1085
+msgid "OCR by"
+msgstr "OCR de"
+
+#: ../src/mainwnd.cpp:1086
+msgid "Document version"
+msgstr "Versiunea documentului"
+
+#: ../src/mainwnd.cpp:1087
+msgid "Change history"
+msgstr "Istoric schimbări"
+
+#: ../src/mainwnd.cpp:1088
+msgid "ID"
+msgstr "ID"
+
+#: ../src/mainwnd.cpp:1089
+msgid "Program used"
+msgstr "Program folosit"
+
+#: ../src/mainwnd.cpp:1090
+msgid "Document info"
+msgstr "Informaţii document"
+
+#: ../src/mainwnd.cpp:1093
+msgid "Publication name"
+msgstr "Nume publicaţie"
+
+#: ../src/mainwnd.cpp:1094
+msgid "Publisher"
+msgstr "Editor"
+
+#: ../src/mainwnd.cpp:1095
+msgid "Publisher city"
+msgstr "Oraş editor"
+
+#: ../src/mainwnd.cpp:1096
+msgid "Publication year"
+msgstr "An publicaţie"
+
+#: ../src/mainwnd.cpp:1097
+msgid "ISBN"
+msgstr "ISBN"
+
+#: ../src/mainwnd.cpp:1098
+msgid "Publication info"
+msgstr "Informaţii publicaţie"
+
+#: ../src/mainwnd.cpp:1100
+msgid "Custom info"
+msgstr "Informaţii personalizate"
+
+#: ../src/mainwnd.cpp:1104
+msgid "CoolReader for PocketBook"
+msgstr "CoolReader pentru PocketBook"
+
+#: ../src/mainwnd.cpp:1105
+msgid "Build date"
+msgstr "Data compilării"
+
+#: ../src/mainwnd.cpp:1106
+msgid "Build type"
+msgstr "Tip compilare"
+
+#: ../src/mainwnd.cpp:1107
+msgid "About program"
+msgstr "Despre program"
+
+#: ../src/mainwnd.cpp:1110
+msgid "Hardware type"
+msgstr "Tip hardware"
+
+#: ../src/mainwnd.cpp:1111
+msgid "Firmware version"
+msgstr "Versiune firmware"
+
+#: ../src/mainwnd.cpp:1112
+msgid "Keyboard type"
+msgstr "Tip tastatură"
+
+#: ../src/mainwnd.cpp:1113
+msgid "Screen type"
+msgstr "Tip ecran"
+
+#: ../src/mainwnd.cpp:1114
+msgid "Config file"
+msgstr "Fişier configuraţie"
+
+#: ../src/mainwnd.cpp:1115
+msgid "Keymap file"
+msgstr "Fişier keymap"
+
+#: ../src/mainwnd.cpp:1116
+msgid "Skin file"
+msgstr "Fişier temă"
+
+#: ../src/mainwnd.cpp:1117
+msgid "Debug information"
+msgstr "Informaţii debug"
+
+#: ../src/mainwnd.cpp:1268
+msgid "Loading: please wait..."
+msgstr "Se încarcă..."
+
+#: ../src/recentdlg.cpp:97
+msgid "Open book"
+msgstr "Deschide carte"
+
+#: ../src/recentdlg.cpp:98
+msgid "Delete record"
+msgstr "Şterge înregistrare"
+
+#: ../src/recentdlg.cpp:133
+msgid ""
+"$1 - open book\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - deschide carte\n"
+"$2, $3 - închide"
+
+#: ../src/tocdlg.cpp:150
+msgid "Current page: $1 of $2\n"
+msgstr "Pagina curentă: $1 din $2\n"
+
+#: ../src/tocdlg.cpp:153
+msgid "Enter page number:"
+msgstr "Scrie numărul paginii:"
+
+#: ../src/bmkdlg.cpp:19
+msgid "Empty slot"
+msgstr "Slot gol"
+
+#: ../src/bmkdlg.cpp:45
+msgid "Page $1 ($2%)"
+msgstr "Pagina $1 ($2%)"
+
+#: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
+msgid "Go to bookmark"
+msgstr "Mergi la semn de carte"
+
+#: ../src/bmkdlg.cpp:72
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"$2 - switch to SET mode"
+msgstr ""
+"Apăsare scurtă $1 - mergi la semn de carte,\n"
+"$2 - activează modul SETARE"
+
+#: ../src/bmkdlg.cpp:73
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"long press - set bookmark"
+msgstr ""
+"Apăsare scurtă $1 - mergi la semn de carte,\n"
+"apăsare lungă - setează semn de carte"
+
+#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
+msgid "Set bookmark"
+msgstr "Setează semn de carte"
+
+#: ../src/bmkdlg.cpp:80
+msgid ""
+"$1 - set bookmark,\n"
+"$2 - switch to GO mode"
+msgstr ""
+"$1 - setează semn de carte,\n"
+"$2 - activează modul LANSARE"
+
+#: ../src/bmkdlg.cpp:81
+msgid ""
+"Short press $1 - set bookmark,\n"
+"long press - go to bookmark"
+msgstr ""
+"Apăsare scurtă $1 - setează semn de carte,\n"
+"apăsare lungă - mergi la semn de carte"
+
+#: ../src/bmkdlg.cpp:162
+msgid "Delete bookmark"
+msgstr "Şterge semn de carte"
+
+#: ../src/bmkdlg.cpp:316
+msgid "Go to citation"
+msgstr "Mergi la citat"
+
+#: ../src/bmkdlg.cpp:317
+msgid "Delete citation"
+msgstr "Şterge citat"
+
+#: ../src/bmkdlg.cpp:331
+msgid "Citations"
+msgstr "Citate"
+
+#: ../src/bmkdlg.cpp:447 ../src/viewdlg.cpp:574
+msgid "Cite selection dialog"
+msgstr "Dialog de selectare citate"
+
+#: ../src/dictdlg.cpp:80
+msgid "From dictionary "
+msgstr "Din dicţionar"
+
+#: ../src/dictdlg.cpp:89
+msgid "[cannot read article]"
+msgstr "[nu se poate citi articolul]"
+
+#: ../src/settings.cpp:195
+msgid "choose command"
+msgstr "alege comanda"
+
+#: ../src/settings.cpp:213
+msgid "Controls"
+msgstr "Controale"
+
+#: ../src/settings.cpp:379
+msgid "(No action)"
+msgstr "(Fără acţiune)"
+
+#: ../src/settings.cpp:532
+msgid "[Command is not assigned]"
+msgstr "[Comanda nu e setată]"
+
+#: ../src/settings.cpp:553
+msgid "0` (Portrait)"
+msgstr "0` (Portret)"
+
+#: ../src/settings.cpp:554
+msgid "90 `"
+msgstr "90 `"
+
+#: ../src/settings.cpp:555
+msgid "180 `"
+msgstr "180 `"
+
+#: ../src/settings.cpp:556
+msgid "270 `"
+msgstr "270 `"
+
+#: ../src/settings.cpp:567
+msgid "Page orientation"
+msgstr "Orientare pagină"
+
+#: ../src/settings.cpp:588
+msgid "Default font size"
+msgstr "Dimensiune implicită a font-ului"
+
+#: ../src/settings.cpp:643
+msgid "The quick brown fox jumps over lazy dog"
+msgstr "The quick brown fox jumps over lazy dog"
+
+#: ../src/settings.cpp:823
+msgid "Justify"
+msgstr "Justify"
+
+#: ../src/settings.cpp:824
+msgctxt "CSS"
+msgid "Left"
+msgstr "Stânga"
+
+#: ../src/settings.cpp:825
+msgid "Center"
+msgstr "Centru"
+
+#: ../src/settings.cpp:826
+msgctxt "CSS"
+msgid "Right"
+msgstr "Dreapta"
+
+#: ../src/settings.cpp:832
+msgid "No indent"
+msgstr "Fără indentare"
+
+#: ../src/settings.cpp:833
+msgid "Small indent"
+msgstr "Indentare mică"
+
+#: ../src/settings.cpp:834
+msgid "Big indent"
+msgstr "Indentare mare"
+
+#: ../src/settings.cpp:835
+msgid "Small outdent"
+msgstr "Outdentare mică"
+
+#: ../src/settings.cpp:836
+msgid "Big outdent"
+msgstr "Outdentare mare"
+
+#: ../src/settings.cpp:842
+msgid "[Default sans-serif font]"
+msgstr "[Implicit sans-serif font]"
+
+#: ../src/settings.cpp:843
+msgid "[Default serif font]"
+msgstr "[Implicit serif font]"
+
+#: ../src/settings.cpp:844
+msgid "[Default monospace font]"
+msgstr "[Implicit monospace font]"
+
+#: ../src/settings.cpp:850
+msgid "Bigger (105%)"
+msgstr "Mai mare (105%)"
+
+#: ../src/settings.cpp:851
+msgid "Bigger (110%)"
+msgstr "Mai mare (110%)"
+
+#: ../src/settings.cpp:852
+msgid "Bigger (115%)"
+msgstr "Mai mare (115%)"
+
+#: ../src/settings.cpp:853
+msgid "Bigger (120%)"
+msgstr "Mai mare (120%)"
+
+#: ../src/settings.cpp:854
+msgid "Bigger (150%)"
+msgstr "Mai mare (150%)"
+
+#: ../src/settings.cpp:855
+msgid "Smaller (95%)"
+msgstr "Mai mic (95%)"
+
+#: ../src/settings.cpp:856
+msgid "Smaller (90%)"
+msgstr "Mai mic (90%)"
+
+#: ../src/settings.cpp:857
+msgid "Smaller (85%)"
+msgstr "Mai mic (85%)"
+
+#: ../src/settings.cpp:858
+msgid "Smaller (80%)"
+msgstr "Mai mic (80%)"
+
+#: ../src/settings.cpp:859
+msgid "Smaller (70%)"
+msgstr "Mai mic (70%)"
+
+#: ../src/settings.cpp:860
+msgid "Smaller (60%)"
+msgstr "Mai mic (60%)"
+
+#: ../src/settings.cpp:866 ../src/settings.cpp:875 ../src/settings.cpp:1152
+#: ../src/settings.cpp:1158
+msgid "Normal"
+msgstr "Normal"
+
+#: ../src/settings.cpp:867 ../src/settings.cpp:1159
+msgid "Bold"
+msgstr "Bold"
+
+#: ../src/settings.cpp:868
+msgid "Bolder"
+msgstr "Mai mult bold"
+
+#: ../src/settings.cpp:869
+msgid "Lighter"
+msgstr "Mai subţire"
+
+#: ../src/settings.cpp:876
+msgid "Italic"
+msgstr "Italic"
+
+#: ../src/settings.cpp:911 ../src/settings.cpp:1079
+msgid "None"
+msgstr "Nimic"
+
+#: ../src/settings.cpp:912 ../src/settings.cpp:1081
+msgid "Underline"
+msgstr "Subliniere"
+
+#: ../src/settings.cpp:913
+msgid "Line through"
+msgstr "Tăiat"
+
+#: ../src/settings.cpp:914
+msgid "Overline"
+msgstr "Linie deasupra"
+
+#: ../src/settings.cpp:920
+msgid "Baseline"
+msgstr "Linie dedesubt"
+
+#: ../src/settings.cpp:921
+msgid "Subscript"
+msgstr "Subscript"
+
+#: ../src/settings.cpp:922
+msgid "Superscript"
+msgstr "Superscript"
+
+#: ../src/settings.cpp:928 ../src/settings.cpp:936
+msgid "Black"
+msgstr "Negru"
+
+#: ../src/settings.cpp:929 ../src/settings.cpp:937
+msgid "Gray"
+msgstr "Gri"
+
+#: ../src/settings.cpp:930 ../src/settings.cpp:938
+msgid "White"
+msgstr "Alb"
+
+#: ../src/settings.cpp:945 ../src/settings.cpp:956
+msgid "0.2 of line height"
+msgstr "0.2 din înălţimea liniei"
+
+#: ../src/settings.cpp:946 ../src/settings.cpp:957
+msgid "0.3 of line height"
+msgstr "0.3 din înălţimea liniei"
+
+#: ../src/settings.cpp:947 ../src/settings.cpp:958 ../src/settings.cpp:967
+#: ../src/settings.cpp:983
+msgid "0.5 of line height"
+msgstr "0.5 din înălţimea liniei"
+
+#: ../src/settings.cpp:948 ../src/settings.cpp:959 ../src/settings.cpp:968
+#: ../src/settings.cpp:984
+msgid "1 line height"
+msgstr "1 înălţime de linie"
+
+#: ../src/settings.cpp:949 ../src/settings.cpp:960 ../src/settings.cpp:970
+#: ../src/settings.cpp:986
+msgid "2 of line height"
+msgstr "2 înălţimi de linie"
+
+#: ../src/settings.cpp:969 ../src/settings.cpp:985
+msgid "1.5 of line height"
+msgstr "1.5 înălţimi de linie"
+
+#: ../src/settings.cpp:971 ../src/settings.cpp:987
+msgid "4 of line height"
+msgstr "4 înălţimi de linie"
+
+#: ../src/settings.cpp:972 ../src/settings.cpp:988
+msgid "5% of line width"
+msgstr "5% din lăţimea liniei"
+
+#: ../src/settings.cpp:973 ../src/settings.cpp:989
+msgid "10% of line width"
+msgstr "10% din lăţimea liniei"
+
+#: ../src/settings.cpp:974 ../src/settings.cpp:990
+msgid "15% of line width"
+msgstr "15% din lăţimea liniei"
+
+#: ../src/settings.cpp:975 ../src/settings.cpp:991
+msgid "20% of line width"
+msgstr "20% din lăţimea liniei"
+
+#: ../src/settings.cpp:976 ../src/settings.cpp:992
+msgid "30% of line width"
+msgstr "30% din lăţimea liniei"
+
+#: ../src/settings.cpp:995
+msgid "Text alignment"
+msgstr "Alinierea textului"
+
+#: ../src/settings.cpp:997
+msgid "First line indent"
+msgstr "Indentarea primei linii"
+
+#: ../src/settings.cpp:1000 ../src/settings.cpp:1573
+msgid "Font face"
+msgstr "Font"
+
+#: ../src/settings.cpp:1014
+msgid "Font size"
+msgstr "Mărime font"
+
+#: ../src/settings.cpp:1016 ../src/settings.cpp:1467 ../src/settings.cpp:1582
+msgid "Font weight"
+msgstr "Grosime font"
+
+#: ../src/settings.cpp:1018
+msgid "Font style"
+msgstr "Sil font"
+
+#: ../src/settings.cpp:1020 ../src/settings.cpp:1496
+msgid "Interline space"
+msgstr "Spaţiu între linii"
+
+#: ../src/settings.cpp:1022
+msgid "Letter spacing"
+msgstr "Distanţă litere"
+
+#: ../src/settings.cpp:1024
+msgid "Text decoration"
+msgstr "Decorare text"
+
+#: ../src/settings.cpp:1026
+msgid "Text vertical alignment"
+msgstr "Aliniere verticală a textului"
+
+#: ../src/settings.cpp:1028
+msgid "Text color"
+msgstr "Culoarea textului"
+
+#: ../src/settings.cpp:1030
+msgid "Background color"
+msgstr "Culoare fundal"
+
+#: ../src/settings.cpp:1032
+msgid "Margin before"
+msgstr "Margine înainte"
+
+#: ../src/settings.cpp:1034
+msgid "Margin after"
+msgstr "Margine după"
+
+#: ../src/settings.cpp:1036
+msgid "Margin left"
+msgstr "Margine stânga"
+
+#: ../src/settings.cpp:1038
+msgid "Margin right"
+msgstr "Margine dreapta"
+
+#: ../src/settings.cpp:1066
+msgid "On for all fonts"
+msgstr "Activat pentru toate font-urile"
+
+#: ../src/settings.cpp:1067
+msgid "On for big fonts only"
+msgstr "Activat doar pentru font-urile mari"
+
+#: ../src/settings.cpp:1068 ../src/settings.cpp:1074 ../src/settings.cpp:1172
+msgid "Off"
+msgstr "Dezactivat"
+
+#: ../src/settings.cpp:1073
+msgid "On"
+msgstr "Activat"
+
+#: ../src/settings.cpp:1080
+msgid "Solid"
+msgstr "Solid"
+
+#: ../src/settings.cpp:1153
+msgid "Inverse"
+msgstr "Invers"
+
+#: ../src/settings.cpp:1164
+msgid "One"
+msgstr "Unu"
+
+#: ../src/settings.cpp:1165
+msgid "Two"
+msgstr "Doi"
+
+#: ../src/settings.cpp:1170
+msgid "Top"
+msgstr "Sus"
+
+#: ../src/settings.cpp:1177
+msgid "70%"
+msgstr "70%"
+
+#: ../src/settings.cpp:1178
+msgid "75%"
+msgstr "75%"
+
+#: ../src/settings.cpp:1179
+msgid "80%"
+msgstr "80%"
+
+#: ../src/settings.cpp:1180
+msgid "85%"
+msgstr "85%"
+
+#: ../src/settings.cpp:1181
+msgid "90%"
+msgstr "90%"
+
+#: ../src/settings.cpp:1182
+msgid "95%"
+msgstr "95%"
+
+#: ../src/settings.cpp:1183
+msgid "100%"
+msgstr "100%"
+
+#: ../src/settings.cpp:1184
+msgid "105%"
+msgstr "105%"
+
+#: ../src/settings.cpp:1185
+msgid "110%"
+msgstr "110%"
+
+#: ../src/settings.cpp:1186
+msgid "115%"
+msgstr "115%"
+
+#: ../src/settings.cpp:1187
+msgid "120%"
+msgstr "120%"
+
+#: ../src/settings.cpp:1188
+msgid "125%"
+msgstr "125%"
+
+#: ../src/settings.cpp:1189
+msgid "130%"
+msgstr "130%"
+
+#: ../src/settings.cpp:1190
+msgid "135%"
+msgstr "135%"
+
+#: ../src/settings.cpp:1191
+msgid "140%"
+msgstr "140%"
+
+#: ../src/settings.cpp:1192
+msgid "145%"
+msgstr "145%"
+
+#: ../src/settings.cpp:1193
+msgid "150%"
+msgstr "150%"
+
+#: ../src/settings.cpp:1194
+msgid "160%"
+msgstr "160%"
+
+#: ../src/settings.cpp:1195
+msgid "180%"
+msgstr "180%"
+
+#: ../src/settings.cpp:1196
+msgid "200%"
+msgstr "200%"
+
+#: ../src/settings.cpp:1241
+msgid "Always use fast updates"
+msgstr "Foloseşte mereu actualizări rapide"
+
+#: ../src/settings.cpp:1242
+msgid "Don't use fast updates"
+msgstr "Nu foloseşte actualizări rapide"
+
+#: ../src/settings.cpp:1243
+msgid "Full updates every 2 pages"
+msgstr "Actualizare completă la 2 pagini"
+
+#: ../src/settings.cpp:1244
+msgid "Full updates every 3 pages"
+msgstr "Actualizare completă la 3 pagini"
+
+#: ../src/settings.cpp:1245
+msgid "Full updates every 4 pages"
+msgstr "Actualizare completă la 4 pagini"
+
+#: ../src/settings.cpp:1246
+msgid "Full updates every 5 pages"
+msgstr "Actualizare completă la 5 pagini"
+
+#: ../src/settings.cpp:1247
+msgid "Full updates every 6 pages"
+msgstr "Actualizare completă la 6 pagini"
+
+#: ../src/settings.cpp:1248
+msgid "Full updates every 7 pages"
+msgstr "Actualizare completă la 7 pagini"
+
+#: ../src/settings.cpp:1249
+msgid "Full updates every 8 pages"
+msgstr "Actualizare completă la 8 pagini"
+
+#: ../src/settings.cpp:1250
+msgid "Full updates every 9 pages"
+msgstr "Actualizare completă la 9 pagini"
+
+#: ../src/settings.cpp:1251
+msgid "Full updates every 10 pages"
+msgstr "Actualizare completă la 10 pagini"
+
+#: ../src/settings.cpp:1252
+msgid "Full updates every 14 pages"
+msgstr "Actualizare completă la 14 pagini"
+
+#: ../src/settings.cpp:1253
+msgid "Full updates every 20 pages"
+msgstr "Actualizare completă la 20 pagini"
+
+#: ../src/settings.cpp:1254
+msgid "Full updates every 25 pages"
+msgstr "Actualizare completă la 25 pagini"
+
+#: ../src/settings.cpp:1255
+msgid "Full updates every 30 pages"
+msgstr "Actualizare completă la 30 pagini"
+
+#: ../src/settings.cpp:1256
+msgid "Full updates every 35 pages"
+msgstr "Actualizare completă la 35 pagini"
+
+#: ../src/settings.cpp:1257
+msgid "Full updates every 40 pages"
+msgstr "Actualizare completă la 40 pagini"
+
+#: ../src/settings.cpp:1258
+msgid "Full updates every 45 pages"
+msgstr "Actualizare completă la 45 pagini"
+
+#: ../src/settings.cpp:1259
+msgid "Full updates every 50 pages"
+msgstr "Actualizare completă la 50 pagini"
+
+#: ../src/settings.cpp:1264
+msgid "Turbo mode disabled"
+msgstr "Mod turbo dezactivat"
+
+#: ../src/settings.cpp:1265
+msgid "Turbo mode enabled"
+msgstr "Mod turbo activat"
+
+#: ../src/settings.cpp:1272
+msgid "180+slow next page"
+msgstr "180+lent pagina următoare"
+
+#: ../src/settings.cpp:1273
+msgid "180+slow prev/next page"
+msgstr "180+lent pagina anterioară/următoare"
+
+#: ../src/settings.cpp:1274
+msgid "180+FAST next page"
+msgstr "180+rapid pagina următoare"
+
+#: ../src/settings.cpp:1275
+msgid "180+FAST prev/next page"
+msgstr "180+rapid pagina anterioară/următoare"
+
+#: ../src/settings.cpp:1276
+msgid "180+FAST next/prev page"
+msgstr "180+rapid pagina următoare/anterioară"
+
+#: ../src/settings.cpp:1294
+msgid "2 BPP"
+msgstr "2 BPP"
+
+#: ../src/settings.cpp:1295
+msgid "3 BPP"
+msgstr "3 BPP"
+
+#: ../src/settings.cpp:1296
+msgid "4 BPP"
+msgstr "4 BPP"
+
+#: ../src/settings.cpp:1297
+msgid "8 BPP"
+msgstr "8 BPP"
+
+#: ../src/settings.cpp:1303
+msgid "Disabled (1:1)"
+msgstr "Dezactivat (1:1)"
+
+#: ../src/settings.cpp:1304
+msgid "Integer scale"
+msgstr "Scală întreagă"
+
+#: ../src/settings.cpp:1305
+msgid "Arbitrary scale"
+msgstr "Scală arbitrară"
+
+#: ../src/settings.cpp:1310
+msgid "Auto"
+msgstr "Auto"
+
+#: ../src/settings.cpp:1311
+msgid "*1"
+msgstr "*1"
+
+#: ../src/settings.cpp:1312
+msgid "*2"
+msgstr "*2"
+
+#: ../src/settings.cpp:1313
+msgid "*3"
+msgstr "*3"
+
+#: ../src/settings.cpp:1397
+msgid "No hinting"
+msgstr "Fără hinting"
+
+#: ../src/settings.cpp:1398
+msgid "Use bytecode"
+msgstr "Foloseşte bytecode"
+
+#: ../src/settings.cpp:1399
+msgid "Autohinting"
+msgstr "Autohinting"
+
+#: ../src/settings.cpp:1400
+msgid "Light"
+msgstr "Uşor"
+
+#: ../src/settings.cpp:1405
+msgid "Default paragraph formatting"
+msgstr "Formatare implicită paragrafe"
+
+#: ../src/settings.cpp:1406
+msgctxt "CSS"
+msgid "Title"
+msgstr "Titlu"
+
+#: ../src/settings.cpp:1407
+msgid "Subtitle"
+msgstr "Subtitlu"
+
+#: ../src/settings.cpp:1408
+msgid "Preformatted text / code"
+msgstr "Text / cod preformatat"
+
+#: ../src/settings.cpp:1409
+msgid "Link"
+msgstr "Link"
+
+#: ../src/settings.cpp:1411
+msgid "Epigraph"
+msgstr "Epigraf"
+
+#: ../src/settings.cpp:1412
+msgid "Poem"
+msgstr "Poem"
+
+#: ../src/settings.cpp:1413
+msgid "Text / Cite / Epigraph author"
+msgstr "Autor text / citat / epigraf"
+
+#: ../src/settings.cpp:1414
+msgid "Footnote"
+msgstr "Notă de subsol"
+
+#: ../src/settings.cpp:1415
+msgid "Footnote link"
+msgstr "Link notă de subsol"
+
+#: ../src/settings.cpp:1416
+msgid "Footnote title"
+msgstr "Titlu notă de subsol"
+
+#: ../src/settings.cpp:1417
+msgid "Annotation"
+msgstr "Adnotare"
+
+#: ../src/settings.cpp:1457
+msgid "Default font face"
+msgstr "Font implicit"
+
+#: ../src/settings.cpp:1462
+msgid "Font settings"
+msgstr "Setări font"
+
+#: ../src/settings.cpp:1469
+msgid "Font antialiasing"
+msgstr "Antialiasing font"
+
+#: ../src/settings.cpp:1472
+msgid "Font hinting"
+msgstr "Hinting font"
+
+#: ../src/settings.cpp:1474
+msgid "Font kerning"
+msgstr "Kerning font"
+
+#: ../src/settings.cpp:1476
+msgid "Font embolding"
+msgstr "Îngroşare font"
+
+#: ../src/settings.cpp:1478
+msgid "Tracking"
+msgstr "Distanţare litere"
+
+#: ../src/settings.cpp:1480
+msgid "Font Gamma"
+msgstr "Gamma font"
+
+#: ../src/settings.cpp:1482
+msgid "Document embedded fonts"
+msgstr "Font-uri incluse în document"
+
+#: ../src/settings.cpp:1485
+msgid "Fallback font face"
+msgstr "Font de rezervă"
+
+#: ../src/settings.cpp:1491
+msgid "Formatting settings"
+msgstr "Setări formatare"
+
+#: ../src/settings.cpp:1503
+msgid "[No Hyphenation]"
+msgstr "[Nu desparte în silabe]"
+
+#: ../src/settings.cpp:1504
+msgid "[Algorythmic Hyphenation]"
+msgstr "[Desparte în silabe algoritmic]"
+
+#: ../src/settings.cpp:1506
+msgid "Hyphenation"
+msgstr "Despărţire în silabe"
+
+#: ../src/settings.cpp:1520
+msgid "Preformatted text"
+msgstr "Text preformatat"
+
+#: ../src/settings.cpp:1523
+msgid "Space condensing percent"
+msgstr "Procent comprimare spaţiu"
+
+#: ../src/settings.cpp:1526
+msgid "Space expanding percent"
+msgstr "Procent extindere spaţiu"
+
+#: ../src/settings.cpp:1529
+msgid "Floating punctuation"
+msgstr "Poziţie punctuaţie"
+
+#: ../src/settings.cpp:1535
+msgid "Image scaling"
+msgstr "Scalare imagine"
+
+#: ../src/settings.cpp:1540
+msgid "Block image scaling mode"
+msgstr "Mod scalare bloc imagine"
+
+#: ../src/settings.cpp:1543
+msgid "Block image max zoom"
+msgstr "Zoom maxim bloc imagine"
+
+#: ../src/settings.cpp:1546
+msgid "Inline image scaling mode"
+msgstr "Mod scalare imagine inline"
+
+#: ../src/settings.cpp:1549
+msgid "Inline image max zoom"
+msgstr "Zoom maxim imagine inline"
+
+#: ../src/settings.cpp:1558
+msgid "Page settings"
+msgstr "Setări pagină"
+
+#: ../src/settings.cpp:1563
+msgid "Status line"
+msgstr "Linie status"
+
+#: ../src/settings.cpp:1568
+msgid "Status line settings"
+msgstr "Setări linie status"
+
+#: ../src/settings.cpp:1585
+msgid "Show time"
+msgstr "Arată timp"
+
+#: ../src/settings.cpp:1587
+msgid "Show title"
+msgstr "Arată titlu"
+
+#: ../src/settings.cpp:1589
+msgid "Show battery"
+msgstr "Arată baterie"
+
+#: ../src/settings.cpp:1591
+msgid "Show battery percent"
+msgstr "Arată procent baterie"
+
+#: ../src/settings.cpp:1594
+msgid "Show position percent"
+msgstr "Arată procent poziţie"
+
+#: ../src/settings.cpp:1596
+msgid "Show page count"
+msgstr "Arată numărul de pagini"
+
+#: ../src/settings.cpp:1598
+msgid "Show page count till chapter end"
+msgstr "Arată numărul de pagini până la sfârşitul capitolului"
+
+#: ../src/settings.cpp:1601
+msgid "Show page number"
+msgstr "Arată numărul paginii"
+
+#: ../src/settings.cpp:1603
+msgid "Show chapter marks"
+msgstr "Arată markeri capitole"
+
+#: ../src/settings.cpp:1612
+msgid "Page margins"
+msgstr "Margini pagină"
+
+#: ../src/settings.cpp:1617
+msgid "Top margin"
+msgstr "Margine sus"
+
+#: ../src/settings.cpp:1619
+msgid "Bottom margin"
+msgstr "Margine jos"
+
+#: ../src/settings.cpp:1621
+msgid "Left margin"
+msgstr "Margine stânga"
+
+#: ../src/settings.cpp:1623
+msgid "Right margin"
+msgstr "Margine dreapta"
+
+#: ../src/settings.cpp:1628
+msgid "Footnotes at page bottom"
+msgstr "Note de subsol in josul paginii"
+
+#: ../src/settings.cpp:1634
+msgid "Display settings"
+msgstr "Setări display"
+
+#: ../src/settings.cpp:1643
+msgid "Landscape pages"
+msgstr "Pagini landscape"
+
+#: ../src/settings.cpp:1645
+msgid "Inverse display"
+msgstr "Inversează afişare"
+
+#: ../src/settings.cpp:1648
+msgid "Show bookmark icons"
+msgstr "Arată icon-uri pentru semne de carte"
+
+#: ../src/settings.cpp:1651
+msgid "Highlight bookmarks"
+msgstr "Evidenţiază semne de carte"
+
+#: ../src/settings.cpp:1655
+msgid "Display update mode"
+msgstr "Mod actualizare display"
+
+#: ../src/settings.cpp:1660
+msgid "Turbo update mode"
+msgstr "Mod actualizare turbo"
+
+#: ../src/settings.cpp:1665
+msgid "Gray buffer depth(need restart)"
+msgstr "Adâncime buffer gri (necesită restart)"
+
+#: ../src/settings.cpp:1672
+msgid "Skin"
+msgstr "Temă"
+
+#: ../src/settings.cpp:1688
+msgid "Control settings"
+msgstr "Setări control"
+
+#: ../src/settings.cpp:1695
+msgid "Rotate"
+msgstr "Roteşte"
+
+#: ../src/settings.cpp:1698
+msgid "Page turn angle"
+msgstr "Unghi întoarcere pagină"
+
+#: ../src/settings.cpp:1714
+msgid "Tap action"
+msgstr "Acţiune atingere ecran"
+
+#: ../src/settings.cpp:1716
+msgid "Long tap action"
+msgstr "Acţiune atingere prelungită ecran"
+
+#: ../src/settings.cpp:1720
+msgid "Height of the upper tap zone"
+msgstr "Înălţimea zonei de sus"
+
+#: ../src/settings.cpp:1723
+msgid "Height of the middle tap zone"
+msgstr "Înălţimea zonei de mijloc"
+
+#: ../src/settings.cpp:1726
+msgid "Width of the left tap zone"
+msgstr "Lăţimea zonei din stanga"
+
+#: ../src/settings.cpp:1729
+msgid "Width of the middle tap zone"
+msgstr "Lăţimea zonei din centru"
+
+#: ../src/settings.cpp:1748
+msgid "Style settings"
+msgstr "Setări stil"
+
+#: ../src/settings.cpp:1753
+msgid "Document embedded styles"
+msgstr "Stil inclus în document"
+
+#: ../src/settings.cpp:1771 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+msgid "OTA Update"
+msgstr "OTA Update"
+
+#: ../src/settings.cpp:1776 ../src/viewdlg.cpp:597
+msgid "OTA Update Dev"
+msgstr "OTA Update Dev"
+
+#: ../src/settings.cpp:1799
+msgid ""
+"Press $1 to change option\n"
+"$2 to apply, $3 to cancel"
+msgstr ""
+"Apasă $1 pentru a schimba opţiunea\n"
+"$2 pentru a aplica, $3 pentru a anula"
+
+#: ../src/viewdlg.cpp:159
+msgid "No dictionaries found"
+msgstr "Nici un dicţionar găsit"
+
+#: ../src/viewdlg.cpp:160
+msgid "Place dictionaries to directory 'dict' of SD card."
+msgstr "Pune dicţionarele în folder-ul 'dict' din cardul SD."
+
+#: ../src/viewdlg.cpp:161
+msgid "Dictionaries in standard unix .dict format are supported."
+msgstr "Dicţionarele în formatul standard unix .dict sunt suportate."
+
+#: ../src/viewdlg.cpp:162
+msgid ""
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Pentru fiecare dicţionar, o pereche de file trebuie sa fie furnizate: fişier "
+"cu date (.dict sau .dict.dz) şi fişier index (.index)"
+
+#: ../src/viewdlg.cpp:176
+msgid "Table of contents"
+msgstr "Cuprins"
+
+#: ../src/viewdlg.cpp:181
+msgid "Enter page number"
+msgstr "Scrie numărul paginii:"
+
+#: ../src/viewdlg.cpp:194
+msgid "Enter position percent"
+msgstr "Scrie procent poziţie"
+
+#: ../src/viewdlg.cpp:355
+msgid "Find in dictionary"
+msgstr "Caută în dicţionar"
+
+#: ../src/viewdlg.cpp:485
+msgid "M"
+msgstr "M"
+
+#: ../src/viewdlg.cpp:487
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/viewdlg.cpp:489
+msgid "Up"
+msgstr "Sus"
+
+#: ../src/viewdlg.cpp:491
+msgid "Down"
+msgstr "Jos"
+
+#: ../src/viewdlg.cpp:493
+msgid "C"
+msgstr "C"
+
+#: ../src/viewdlg.cpp:495
+msgctxt "Key"
+msgid "Left"
+msgstr "Stânga"
+
+#: ../src/viewdlg.cpp:497
+msgctxt "Key"
+msgid "Right"
+msgstr "Dreapta"
+
+#: ../src/viewdlg.cpp:499
+msgid "Side Up"
+msgstr "Lateral sus"
+
+#: ../src/viewdlg.cpp:501
+msgid "Side Down"
+msgstr "Lateral jos"
+
+#: ../src/viewdlg.cpp:503
+msgid "Side Press"
+msgstr "Apăsare lateral"
+
+#: ../src/viewdlg.cpp:505
+msgid "Menu"
+msgstr "Meniu"
+
+#: ../src/viewdlg.cpp:507
+msgid "Zoom"
+msgstr "Zoom"
+
+#: ../src/viewdlg.cpp:518
+msgid "Long"
+msgstr "Lung"
+
+#: ../src/viewdlg.cpp:525
+msgid "To first page"
+msgstr "La prima pagină"
+
+#: ../src/viewdlg.cpp:527
+msgid "Back by page"
+msgstr "Pagină înapoi"
+
+#: ../src/viewdlg.cpp:529
+msgid "Forward by page"
+msgstr "Pagină înainte"
+
+#: ../src/viewdlg.cpp:530
+msgid "Forward in move history"
+msgstr "Înainte în istoricul de mutări"
+
+#: ../src/viewdlg.cpp:531
+msgid "Back in move history"
+msgstr "Înapoi în istoricul de mutări"
+
+#: ../src/viewdlg.cpp:532
+msgid "Next link"
+msgstr "Link-ul următor"
+
+#: ../src/viewdlg.cpp:533
+msgid "Previous link"
+msgstr "Link-ul anterior"
+
+#: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
+msgid "Go to link"
+msgstr "Mergi la link"
+
+#: ../src/viewdlg.cpp:535
+msgid "To last page"
+msgstr "La ultima pagină"
+
+#: ../src/viewdlg.cpp:536
+msgid "Go to position"
+msgstr "Mergi la poziţie"
+
+#: ../src/viewdlg.cpp:538
+msgid "Zoom in"
+msgstr "Zoom in"
+
+#: ../src/viewdlg.cpp:539
+msgid "Zoom out"
+msgstr "Zoom out"
+
+#: ../src/viewdlg.cpp:540
+msgid "Toggle bold text"
+msgstr "Comutare bold text"
+
+#: ../src/viewdlg.cpp:541
+msgid "Toggle text format"
+msgstr "Comutare format text"
+
+#: ../src/viewdlg.cpp:542
+msgid "Save bookmark by number"
+msgstr "Salvează semn de carte după număr"
+
+#: ../src/viewdlg.cpp:543
+msgid "Go to bookmark by number"
+msgstr "Mergi la semn de carte după număr"
+
+#: ../src/viewdlg.cpp:544
+msgid "Move by chapter"
+msgstr "Mută după capitol"
+
+#: ../src/viewdlg.cpp:545
+msgid "First link"
+msgstr "Primul link"
+
+#: ../src/viewdlg.cpp:546
+msgid "Rotate by"
+msgstr "Roteşte cu"
+
+#: ../src/viewdlg.cpp:547
+msgid "Set rotate angle"
+msgstr "Setează unghi rotaţie"
+
+#: ../src/viewdlg.cpp:548
+msgid "Save history and bookmarks"
+msgstr "Salvează istoric si semne de carte"
+
+#: ../src/viewdlg.cpp:549
+msgid "Save document to cache"
+msgstr "Salvează documentul în cache"
+
+#: ../src/viewdlg.cpp:550
+msgid "Close dialog"
+msgstr "Închide dialog"
+
+#: ../src/viewdlg.cpp:553
+msgid "Scroll forward"
+msgstr "Scroll înainte"
+
+#: ../src/viewdlg.cpp:554
+msgid "Scroll back"
+msgstr "Scroll înapoi"
+
+#: ../src/viewdlg.cpp:555
+msgid "Close book"
+msgstr "Închide carte"
+
+#: ../src/viewdlg.cpp:556
+msgid "Main menu"
+msgstr "Meniu principal"
+
+#: ../src/viewdlg.cpp:557
+msgid "Go to page dialog"
+msgstr "Dialog mergi la pagina"
+
+#: ../src/viewdlg.cpp:558
+msgid "Settings menu"
+msgstr "Meniu setări"
+
+#: ../src/viewdlg.cpp:559
+msgid "Font size settings"
+msgstr "Setări mărime font"
+
+#: ../src/viewdlg.cpp:560
+msgid "Page orientation settings"
+msgstr "Setări orientare pagină"
+
+#: ../src/viewdlg.cpp:565
+msgid "Find in Dictionary (T5)"
+msgstr "Caută în dicţionar (T5)"
+
+#: ../src/viewdlg.cpp:567
+msgid "Bookmark list"
+msgstr "Listă semne de carte"
+
+#: ../src/viewdlg.cpp:568
+msgid "Citations list"
+msgstr "Listă citate"
+
+#: ../src/viewdlg.cpp:569
+msgid "Go to bookmark..."
+msgstr "Mergi la semn de carte..."
+
+#: ../src/viewdlg.cpp:570
+msgid "Recent books list"
+msgstr "Listă cărţi recente"
+
+#: ../src/viewdlg.cpp:571
+msgid "Open recent book by number"
+msgstr "Deschide carte recentă după număr"
+
+#: ../src/viewdlg.cpp:572
+msgid "Switch to recent book"
+msgstr "Schimbă cu o carte recentă"
+
+#: ../src/viewdlg.cpp:575
+msgid "Search dialog"
+msgstr "Dialog căutare"
+
+#: ../src/viewdlg.cpp:576
+msgid "Find in Dictionary (virtual keyboard)"
+msgstr "Caută în dicţionar (tastatură virtuală)"
+
+#: ../src/viewdlg.cpp:577
+msgid "Next keyboard layout"
+msgstr "Tipul următor de tastatură"
+
+#: ../src/viewdlg.cpp:578
+msgid "Previous keyboard layout"
+msgstr "Tipul anterior de tastatură"
+
+#: ../src/viewdlg.cpp:579
+msgid "Show manual"
+msgstr "Arată manual"
+
+#: ../src/viewdlg.cpp:580
+msgid "Show key mapping"
+msgstr "Arată mapare butoane"
+
+#: ../src/viewdlg.cpp:581
+msgid "Go to percent..."
+msgstr "Mergi la procent..."
+
+#: ../src/viewdlg.cpp:586
+msgid "Front light"
+msgstr "Lumină"
+
+#: ../src/viewdlg.cpp:587
+msgid "Invert display"
+msgstr "Inversează display"
+
+#: ../src/viewdlg.cpp:588
+msgid "Full screen update"
+msgstr "Actualizare completă display"
+
+#: ../src/viewdlg.cpp:589
+msgid "Toggle status bar"
+msgstr "Comutare linie status"
+
+#: ../src/viewdlg.cpp:591
+msgid "Tasks list"
+msgstr "Listă de aplicaţii deschise"
+
+#: ../src/viewdlg.cpp:593
+msgid "Toggle system panel"
+msgstr "Comutare panou sistem"
+
+#: ../src/viewdlg.cpp:595
+msgid "Lock device"
+msgstr "Blochează dispozitiv"
+
+#: ../src/viewdlg.cpp:599
+msgid "Open system panel"
+msgstr "Deschide panou sistem"
+
+#: ../src/viewdlg.cpp:602
+msgid "PocketBook Main menu"
+msgstr "Meniu principal PocketBook"
+
+#: ../src/viewdlg.cpp:604
+msgid "Unknown command"
+msgstr "Comandă necunoscută"
+
+#: ../src/viewdlg.cpp:611
+msgid "Previous Page"
+msgstr "Pagina anterioară"
+
+#: ../src/viewdlg.cpp:613
+msgid "Next Page"
+msgstr "Pagina următoare"
+
+#: ../src/viewdlg.cpp:615
+msgid "Back by 10 Pages"
+msgstr "Înapoi 10 pagini"
+
+#: ../src/viewdlg.cpp:617
+msgid "Forward by 10 Pages"
+msgstr "Înainte 10 pagini"
+
+#: ../src/viewdlg.cpp:619
+msgid "Next Chapter"
+msgstr "Capitolul următor"
+
+#: ../src/viewdlg.cpp:621
+msgid "Previous Chapter"
+msgstr "Capitolul anterior"
+
+#: ../src/viewdlg.cpp:623
+msgid "Add Bookmark"
+msgstr "Adauga semn de carte"
+
+#: ../src/viewdlg.cpp:625
+msgid "Rotate Clockwise"
+msgstr "Roteşte în sensul acelor de ceasornic"
+
+#: ../src/viewdlg.cpp:627
+msgid "Rotate Anti-Clockwise"
+msgstr "Roteşte invers acelor de ceasornic"
+
+#: ../src/viewdlg.cpp:629
+msgid "Portrait View"
+msgstr "Portret"
+
+#: ../src/viewdlg.cpp:631
+msgid "Landscape View"
+msgstr "Landscape"
+
+#: ../src/viewdlg.cpp:655
+msgid "Key"
+msgstr "Buton"
+
+#: ../src/viewdlg.cpp:655
+msgid "Assigned function"
+msgstr "Funcţie atribuită"
+
+#: ../src/ota_update.cpp:135
+msgid "Couldn't connect to server!"
+msgstr "Nu m-am putut conecta la server!"
+
+#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
+#: ../src/ota_update.cpp:287
+msgid "Downloading..."
+msgstr "Se descarcă..."
+
+#: ../src/ota_update.cpp:154
+msgid "Server returned error response: "
+msgstr "Server-ul a întors mesaj de eroare:"
+
+#: ../src/ota_update.cpp:167
+msgid ""
+"Download successful!\n"
+"CoolReader will restart itself."
+msgstr ""
+"Descărcare reuşită!\n"
+"CoolReader se va restarta."
+
+#: ../src/ota_update.cpp:168
+msgid "OK"
+msgstr "OK"
+
+#: ../src/ota_update.cpp:194
+msgid "Couldn't remove existing package!"
+msgstr "Nu s-a putut şterge pachetul curent!"
+
+#: ../src/ota_update.cpp:231
+msgid "Couldn't connect to the network!"
+msgstr "Nu m-am putut conecta la reţea!"
+
+#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
+#: ../src/ota_update.cpp:266
+msgid "Searching..."
+msgstr "Se caută..."
+
+#: ../src/ota_update.cpp:244
+msgid "You have the latest version."
+msgstr "Ai ultima versiune."
+
+#: ../src/ota_update.cpp:276
+msgid ""
+"Update is not available for your device!\n"
+"Device model: "
+msgstr ""
+"Nu s-a găsit update pentru dispozitivul tău!\n"
+"Model dispozitiv:"
+
+#: ../src/ota_update.cpp:298
+msgid "Failed updating!"
+msgstr "Update eşuat!"
+
+#: ../src/pb_toc.cpp:21
+msgid "Contents"
+msgstr "Cuprins"
+
+#: ../src/cr3pocketbook.cpp:3137
+msgid "Press $1 to translate"
+msgstr "Apasă $1 pentru a traduce"
+
+#: ../src/cr3pocketbook.cpp:4013
+msgid "Updated to v"
+msgstr "Actualizat la v"
+
+#: ../src/cr3pocketbook.cpp:4123
+msgid "Untitled"
+msgstr "Fără titlu"
