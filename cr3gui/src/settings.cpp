@@ -61,6 +61,7 @@
 #define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
 #define CR3_ACTION_PB_OTA_UPDATE "PB_OTA_UPDATE"
 #define CR3_ACTION_PB_OTA_UPDATE_DEV "PB_OTA_UPDATE_DEV"
+#define CR3_ACTION_PB_CLEAR_CACHE "PB_CLEAR_CACHE"
 #ifdef POCKETBOOK_PRO_FW5
 #define CR3_ACTION_PB_OPEN_SYSTEM_PANEL "PB_OPEN_SYSTEM_PANEL"
 #endif
@@ -1766,11 +1767,22 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     stylesMenu->reconfigure( 0 );
     mainMenu->addItem( stylesMenu );
 
+    // CLEAR CACHE
+    if( ldomDocCache::enabled() ) {
+        mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_CLEAR_CACHE,
+                _("Clear cache"),
+                LVImageSourceRef(),
+                LVFontRef() ) );
+    }
+
+    // OTA UPDATE
     #ifdef POCKETBOOK_PRO
     mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE,
                 _("OTA Update"),
                 LVImageSourceRef(),
                 LVFontRef() ) );
+
+    // OTA UPDATE DEV
     if( useDeveloperFeatures ) {
         mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE_DEV,
                 _("OTA Update Dev"),

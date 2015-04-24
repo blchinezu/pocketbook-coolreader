@@ -2,6 +2,7 @@
  *  CR3 for PocketBook, port by pkb
  */
 
+#include <vector>
 #include <crengine.h>
 #include <crgui.h>
 #include "viewdlg.h"
@@ -42,6 +43,8 @@ bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
 lString16 pbSkinFileName;
+lString16 currentCacheDir;
+lString16 openedCacheFile;
 
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
@@ -80,6 +83,25 @@ typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
 typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
 typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
 typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
+
+int getdir(const char* dir, vector<lString16> &files) {
+    CRLog::trace("getdir(): Open: %s", dir);
+
+    DIR *dp;
+    struct dirent *dirp;
+    if( (dp = opendir(dir)) == NULL ) {
+        CRLog::trace("getdir(): ERR=%d", errno);
+        return errno;
+    }
+
+    while( (dirp = readdir(dp)) != NULL ) {
+        files.push_back(lString16(dirp->d_name));
+    }
+    closedir(dp);
+
+    CRLog::trace("getdir(): OK");
+    return 0;
+}
 
 class CRPocketBookProStateSaver
 {
@@ -362,6 +384,7 @@ static const struct {
     { "@KA_blnk", DCMD_LINK_BACK , 0},
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
+    { "@KA_clca", PB_CMD_CLEAR_CACHE, 0},
     #ifdef POCKETBOOK_PRO
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
@@ -1640,6 +1663,38 @@ public:
             return true;
         #endif
 
+        case PB_CMD_CLEAR_CACHE:
+            if( ldomDocCache::enabled() && !openedCacheFile.empty() && !currentCacheDir.empty() ) {
+
+                // Get cache files
+                vector<lString16> files = vector<lString16>();
+                if( getdir(UnicodeToUtf8(currentCacheDir).c_str(), files) == 0 ) {
+
+                    lString16 skip = lString16("cr3cache.inx");
+                    lString16 delimiter = lString16("/");
+                    for( unsigned int i = 0; i < files.size(); i++ ) {
+                        if( files[i] == openedCacheFile || files[i] == skip )
+                            continue;
+                        unlink(UnicodeToUtf8( currentCacheDir + delimiter + files[i] ).c_str());
+                    }
+
+                    // Message
+                    CRLog::trace("PB_CMD_CLEAR_CACHE: Cache cleared.");
+                    Message(ICON_INFORMATION, const_cast<char*>("CoolReader"),
+                        _("Cache cleared."), 2000);
+                }
+                else {
+                    CRLog::trace("PB_CMD_CLEAR_CACHE: Unable list dir contents!");
+                    Message(ICON_WARNING, const_cast<char*>("CoolReader"),
+                        _("Unable list dir contents!"), 2000);
+                }
+            }
+            else {
+                CRLog::trace("PB_CMD_CLEAR_CACHE: Unable to clear cache!");
+                Message(ICON_WARNING, const_cast<char*>("CoolReader"),
+                    _("Unable to clear cache!"), 2000);
+            }
+            return true;
         case PB_CMD_FULL_UPDATE:
             FullUpdate();
             return true;

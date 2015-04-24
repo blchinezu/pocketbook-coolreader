@@ -37,6 +37,7 @@ enum CRPbCommands {
     PB_CMD_PAGEUP_REPEAT,
     PB_CMD_PAGEDOWN_REPEAT,
     PB_CMD_REPEAT_FINISH,
+    PB_CMD_CLEAR_CACHE,
 
     #ifdef POCKETBOOK_PRO
         PB_CMD_TASK_MANAGER,
@@ -74,7 +75,7 @@ enum CRPbCommands {
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
 #define CR_PB_VERSION "0.0.6-17-20"
-#define CR_PB_BUILD_DATE "2015-04-21"
+#define CR_PB_BUILD_DATE "2015-04-24"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1

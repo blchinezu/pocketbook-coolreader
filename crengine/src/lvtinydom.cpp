@@ -8821,6 +8821,7 @@ ContinuousOperationResult ldomDocument::updateMap(CRTimerUtil & maxTime)
 #endif
 
 static const char * doccache_magic = "CoolReader3 Document Cache Directory Index\nV1.00\n";
+extern lString16 openedCacheFile;
 
 /// document cache
 class ldomDocCacheImpl : public ldomDocCache
@@ -9097,6 +9098,8 @@ public:
             return res;
         }
 
+        openedCacheFile = fn;
+
 #if ENABLED_BLOCK_WRITE_CACHE
         res = LVCreateBlockWriteStream( res, WRITE_CACHE_BLOCK_SIZE, WRITE_CACHE_BLOCK_COUNT );
 #if TEST_BLOCK_STREAM
@@ -9152,6 +9155,7 @@ public:
 };
 
 static ldomDocCacheImpl * _cacheInstance = NULL;
+extern lString16 currentCacheDir;
 
 bool ldomDocCache::init( lString16 cacheDir, lvsize_t maxSize )
 {
@@ -9164,6 +9168,7 @@ bool ldomDocCache::init( lString16 cacheDir, lvsize_t maxSize )
         _cacheInstance = NULL;
         return false;
     }
+    currentCacheDir = cacheDir;
     return true;
 }
 
