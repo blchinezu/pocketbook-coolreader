@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-24 19:20+0300\n"
-"PO-Revision-Date: 2015-04-21 10:11+0000\n"
+"PO-Revision-Date: 2015-04-24 16:34+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ro/)\n"
@@ -1313,7 +1313,7 @@ msgstr "Stil inclus în document"
 
 #: ../src/settings.cpp:1772 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Şterge cache"
 
 #: ../src/settings.cpp:1780 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
@@ -1753,16 +1753,15 @@ msgstr "Cuprins"
 
 #: ../src/cr3pocketbook.cpp:1684
 msgid "Cache cleared."
-msgstr ""
+msgstr "Fişierele cache au fost şterse."
 
 #: ../src/cr3pocketbook.cpp:1689
-#, fuzzy
 msgid "Unable list dir contents!"
-msgstr "Cuprins"
+msgstr "Nu s-a putut lista conţinutul folder-ului!"
 
 #: ../src/cr3pocketbook.cpp:1695
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Nu s-au putut şterge fişierele!"
 
 #: ../src/cr3pocketbook.cpp:3192
 msgid "Press $1 to translate"
