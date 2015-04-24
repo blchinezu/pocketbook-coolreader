@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-24 19:20+0300\n"
-"PO-Revision-Date: 2015-04-20 20:23+0000\n"
+"PO-Revision-Date: 2015-04-24 17:25+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/fr/)\n"
@@ -655,27 +655,22 @@ msgid "4 of line height"
 msgstr "4 de hauteur de ligne"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, fuzzy
 msgid "5% of line width"
 msgstr "5% de largeur de ligne"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, fuzzy
 msgid "10% of line width"
 msgstr "10% de largeur de ligne"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, fuzzy
 msgid "15% of line width"
 msgstr "15% de largeur de ligne"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, fuzzy
 msgid "20% of line width"
 msgstr "20% de largeur de ligne"
 
 #: ../src/settings.cpp:977 ../src/settings.cpp:993
-#, fuzzy
 msgid "30% of line width"
 msgstr "30% de largeur de ligne"
 
@@ -1318,7 +1313,7 @@ msgstr "Styles incorporés dans le document"
 
 #: ../src/settings.cpp:1772 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Vider le cache"
 
 #: ../src/settings.cpp:1780 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
@@ -1759,16 +1754,15 @@ msgstr "Contenu"
 
 #: ../src/cr3pocketbook.cpp:1684
 msgid "Cache cleared."
-msgstr ""
+msgstr "Cache vidé."
 
 #: ../src/cr3pocketbook.cpp:1689
-#, fuzzy
 msgid "Unable list dir contents!"
-msgstr "Sommaire"
+msgstr "Impossible de lister le contenu du répertoire !"
 
 #: ../src/cr3pocketbook.cpp:1695
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Impossible de vider le cache !"
 
 #: ../src/cr3pocketbook.cpp:3192
 msgid "Press $1 to translate"
