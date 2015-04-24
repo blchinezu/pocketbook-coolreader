@@ -3,12 +3,13 @@
 #
 # Translators:
 # Elidevin <unexpected@ya.ru>, 2015
+# Elidevin <unexpected@ya.ru>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-24 19:20+0300\n"
-"PO-Revision-Date: 2015-04-20 16:22+0000\n"
+"PO-Revision-Date: 2015-04-24 21:15+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ru/)\n"
@@ -315,7 +316,7 @@ msgstr "Файл раскладки"
 
 #: ../src/mainwnd.cpp:1116
 msgid "Skin file"
-msgstr "Обложка(?)"
+msgstr "Используемый скин"
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
@@ -656,27 +657,22 @@ msgid "4 of line height"
 msgstr "4 высоты строки"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
-#, fuzzy
 msgid "5% of line width"
 msgstr "5% ширины строки"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
-#, fuzzy
 msgid "10% of line width"
 msgstr "10% ширины строки"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
-#, fuzzy
 msgid "15% of line width"
 msgstr "15% ширины строки"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
-#, fuzzy
 msgid "20% of line width"
 msgstr "20% ширины строки"
 
 #: ../src/settings.cpp:977 ../src/settings.cpp:993
-#, fuzzy
 msgid "30% of line width"
 msgstr "30% ширины строки"
 
@@ -966,19 +962,19 @@ msgstr "180°+назад/вперед быстро"
 
 #: ../src/settings.cpp:1295
 msgid "2 BPP"
-msgstr "2 бита на пиксель (4 цвета)"
+msgstr "2 бита на пиксель (4 оттенка)"
 
 #: ../src/settings.cpp:1296
 msgid "3 BPP"
-msgstr "3 бита на пиксель (8 цветов)"
+msgstr "3 бита на пиксель (8 оттенков)"
 
 #: ../src/settings.cpp:1297
 msgid "4 BPP"
-msgstr "4 бита на пиксель (16 цветов)"
+msgstr "4 бита на пиксель (16 оттенков)"
 
 #: ../src/settings.cpp:1298
 msgid "8 BPP"
-msgstr "8 бит на пиксель (256 цветов)"
+msgstr "8 бит на пиксель (256 оттенков)"
 
 #: ../src/settings.cpp:1304
 msgid "Disabled (1:1)"
@@ -1319,7 +1315,7 @@ msgstr "Использовать стили документа"
 
 #: ../src/settings.cpp:1772 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Очистить кэш"
 
 #: ../src/settings.cpp:1780 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
@@ -1759,16 +1755,15 @@ msgstr "Содержание"
 
 #: ../src/cr3pocketbook.cpp:1684
 msgid "Cache cleared."
-msgstr ""
+msgstr "Кэш очищен."
 
 #: ../src/cr3pocketbook.cpp:1689
-#, fuzzy
 msgid "Unable list dir contents!"
-msgstr "Содержание"
+msgstr "Невозможно отобразить содержание! (?)"
 
 #: ../src/cr3pocketbook.cpp:1695
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Не удалось очистить кэш!"
 
 #: ../src/cr3pocketbook.cpp:3192
 msgid "Press $1 to translate"
