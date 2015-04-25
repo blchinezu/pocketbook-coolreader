@@ -2,6 +2,7 @@
 # This file is put in the public domain.
 #
 # Translators:
+# BruceLee, 2015
 # Elidevin <unexpected@ya.ru>, 2015
 # Elidevin <unexpected@ya.ru>, 2015
 msgid ""
@@ -9,8 +10,8 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-25 09:21+0300\n"
-"PO-Revision-Date: 2015-04-24 21:15+0000\n"
-"Last-Translator: Elidevin <unexpected@ya.ru>\n"
+"PO-Revision-Date: 2015-04-25 06:33+0000\n"
+"Last-Translator: BruceLee\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ru/)\n"
 "Language: ru\n"
@@ -1758,7 +1759,6 @@ msgid "Cache cleared."
 msgstr "Кэш очищен."
 
 #: ../src/cr3pocketbook.cpp:1688
-#, fuzzy
 msgid "Unable to list the directory contents!"
 msgstr "Невозможно отобразить содержание! (?)"
 

@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-25 09:21+0300\n"
-"PO-Revision-Date: 2015-04-24 16:34+0000\n"
+"PO-Revision-Date: 2015-04-25 06:32+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ro/)\n"
@@ -1756,7 +1756,6 @@ msgid "Cache cleared."
 msgstr "Fişierele cache au fost şterse."
 
 #: ../src/cr3pocketbook.cpp:1688
-#, fuzzy
 msgid "Unable to list the directory contents!"
 msgstr "Nu s-a putut lista conţinutul folder-ului!"
 
