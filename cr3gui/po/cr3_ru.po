@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-24 19:20+0300\n"
+"POT-Creation-Date: 2015-04-25 09:21+0300\n"
 "PO-Revision-Date: 2015-04-24 21:15+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
@@ -1313,19 +1313,19 @@ msgstr "Настройки стилей"
 msgid "Document embedded styles"
 msgstr "Использовать стили документа"
 
-#: ../src/settings.cpp:1772 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1773 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr "Очистить кэш"
 
-#: ../src/settings.cpp:1780 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1781 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr "OTA-обновление программы"
 
-#: ../src/settings.cpp:1786 ../src/viewdlg.cpp:597
+#: ../src/settings.cpp:1788 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr "OTA-обновление (до новейшей версии в разработке)"
 
-#: ../src/settings.cpp:1809
+#: ../src/settings.cpp:1811
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1753,26 +1753,27 @@ msgstr "Ошибка обновления!"
 msgid "Contents"
 msgstr "Содержание"
 
-#: ../src/cr3pocketbook.cpp:1684
+#: ../src/cr3pocketbook.cpp:1683
 msgid "Cache cleared."
 msgstr "Кэш очищен."
 
-#: ../src/cr3pocketbook.cpp:1689
-msgid "Unable list dir contents!"
+#: ../src/cr3pocketbook.cpp:1688
+#, fuzzy
+msgid "Unable to list the directory contents!"
 msgstr "Невозможно отобразить содержание! (?)"
 
-#: ../src/cr3pocketbook.cpp:1695
+#: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
 msgstr "Не удалось очистить кэш!"
 
-#: ../src/cr3pocketbook.cpp:3192
+#: ../src/cr3pocketbook.cpp:3191
 msgid "Press $1 to translate"
 msgstr "Нажмите $1 чтобы перевести"
 
-#: ../src/cr3pocketbook.cpp:4068
+#: ../src/cr3pocketbook.cpp:4067
 msgid "Updated to v"
 msgstr "Обновлено до версии "
 
-#: ../src/cr3pocketbook.cpp:4178
+#: ../src/cr3pocketbook.cpp:4177
 msgid "Untitled"
 msgstr "Без названия"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-24 19:20+0300\n"
+"POT-Creation-Date: 2015-04-25 09:21+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1296,19 +1296,19 @@ msgstr ""
 msgid "Document embedded styles"
 msgstr ""
 
-#: ../src/settings.cpp:1772 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1773 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1780 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1781 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1786 ../src/viewdlg.cpp:597
+#: ../src/settings.cpp:1788 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr ""
 
-#: ../src/settings.cpp:1809
+#: ../src/settings.cpp:1811
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1728,26 +1728,26 @@ msgstr ""
 msgid "Contents"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:1684
+#: ../src/cr3pocketbook.cpp:1683
 msgid "Cache cleared."
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:1689
-msgid "Unable list dir contents!"
+#: ../src/cr3pocketbook.cpp:1688
+msgid "Unable to list the directory contents!"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:1695
+#: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:3192
+#: ../src/cr3pocketbook.cpp:3191
 msgid "Press $1 to translate"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4068
+#: ../src/cr3pocketbook.cpp:4067
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4178
+#: ../src/cr3pocketbook.cpp:4177
 msgid "Untitled"
 msgstr ""
