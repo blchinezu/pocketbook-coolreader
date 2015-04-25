@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-24 19:20+0300\n"
-"PO-Revision-Date: 2015-04-24 21:33+0000\n"
+"PO-Revision-Date: 2015-04-24 21:52+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/de/)\n"
@@ -237,7 +237,7 @@ msgstr "ID"
 
 #: ../src/mainwnd.cpp:1089
 msgid "Program used"
-msgstr ""
+msgstr "Verwendetes Prgramm"
 
 #: ../src/mainwnd.cpp:1090
 msgid "Document info"
@@ -1428,7 +1428,7 @@ msgstr "Seitenweise zurück"
 
 #: ../src/viewdlg.cpp:529
 msgid "Forward by page"
-msgstr ""
+msgstr "Seitenweise vorwärts"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
@@ -1484,7 +1484,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
-msgstr ""
+msgstr "Kapitelweise bewegen"
 
 #: ../src/viewdlg.cpp:545
 msgid "First link"
@@ -1552,7 +1552,7 @@ msgstr "Lesezeichenliste"
 
 #: ../src/viewdlg.cpp:568
 msgid "Citations list"
-msgstr ""
+msgstr "Verzeichnis der Zitate"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
@@ -1596,7 +1596,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
-msgstr ""
+msgstr "Gehe zu Prozent ..."
 
 #: ../src/viewdlg.cpp:586
 msgid "Front light"
@@ -1608,7 +1608,7 @@ msgstr "Display invertieren"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Vollständige Bildschirmaktualsierung"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
