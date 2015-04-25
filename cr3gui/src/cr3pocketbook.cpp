@@ -2,7 +2,6 @@
  *  CR3 for PocketBook, port by pkb
  */
 
-#include <vector>
 #include <crengine.h>
 #include <crgui.h>
 #include "viewdlg.h"
@@ -78,13 +77,7 @@ static void paused_rotate_timer();
 static void cache_timer();
 #endif
 
-#ifdef PB_DB_STATE_SUPPORTED
-typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
-typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
-typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
-typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
-
-int getdir(const char* dir, vector<lString16> &files) {
+int getdir(const char* dir, LVArray<lString16> &files) {
     CRLog::trace("getdir(): Open: %s", dir);
 
     DIR *dp;
@@ -95,13 +88,19 @@ int getdir(const char* dir, vector<lString16> &files) {
     }
 
     while( (dirp = readdir(dp)) != NULL ) {
-        files.push_back(lString16(dirp->d_name));
+        files.add(lString16(dirp->d_name));
     }
     closedir(dp);
 
     CRLog::trace("getdir(): OK");
     return 0;
 }
+
+#ifdef PB_DB_STATE_SUPPORTED
+typedef bsHandle (*bsLoadFuncPtr_t)(char *bookpath);
+typedef void (*bsSetPageFuncPtr_t)(bsHandle bstate, int cpage);
+typedef void (*bsSetOpenTimeFuncPtr_t)(bsHandle bstate, time_t opentime);
+typedef int (*bsSaveCloseFuncPtr_t)(bsHandle bstate);
 
 class CRPocketBookProStateSaver
 {
@@ -1667,12 +1666,12 @@ public:
             if( ldomDocCache::enabled() && !openedCacheFile.empty() && !currentCacheDir.empty() ) {
 
                 // Get cache files
-                vector<lString16> files = vector<lString16>();
+                LVArray<lString16> files = LVArray<lString16>();
                 if( getdir(UnicodeToUtf8(currentCacheDir).c_str(), files) == 0 ) {
 
                     lString16 skip = lString16("cr3cache.inx");
                     lString16 delimiter = lString16("/");
-                    for( unsigned int i = 0; i < files.size(); i++ ) {
+                    for( unsigned int i = 0; i < (unsigned int)files.length(); i++ ) {
                         if( files[i] == openedCacheFile || files[i] == skip )
                             continue;
                         unlink(UnicodeToUtf8( currentCacheDir + delimiter + files[i] ).c_str());
@@ -1684,9 +1683,9 @@ public:
                         _("Cache cleared."), 2000);
                 }
                 else {
-                    CRLog::trace("PB_CMD_CLEAR_CACHE: Unable list dir contents!");
+                    CRLog::trace("PB_CMD_CLEAR_CACHE: Unable to list the directory contents!");
                     Message(ICON_WARNING, const_cast<char*>("CoolReader"),
-                        _("Unable list dir contents!"), 2000);
+                        _("Unable to list the directory contents!"), 2000);
                 }
             }
             else {
