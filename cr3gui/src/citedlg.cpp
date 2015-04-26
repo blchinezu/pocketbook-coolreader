@@ -68,7 +68,7 @@ class CiteWindow : public BackgroundFitWindow
             return -1;
         CRToolButton *button = toolbar->getCurrentButton();
         if (NULL != button && DCMD_BUTTON_PRESSED == button->getCommand() )
-            return button->getId();
+            return button->getParam();
         return -1;
     }
 
