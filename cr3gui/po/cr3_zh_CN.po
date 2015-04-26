@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-04-25 09:21+0300\n"
+"POT-Creation-Date: 2015-04-26 16:39+0300\n"
 "PO-Revision-Date: 2009-03-05 15:24+0300\n"
 "Last-Translator: LVE <vadim.lopatin@coolreader.org>\n"
 "Language-Team: Chinese\n"
@@ -75,7 +75,7 @@ msgstr "打开最近的书籍"
 msgid "Dictionary"
 msgstr "词典"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1411
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1417
 msgid "Cite"
 msgstr "引用"
 
@@ -566,12 +566,12 @@ msgstr ""
 msgid "Smaller (60%)"
 msgstr ""
 
-#: ../src/settings.cpp:867 ../src/settings.cpp:876 ../src/settings.cpp:1153
-#: ../src/settings.cpp:1159
+#: ../src/settings.cpp:867 ../src/settings.cpp:876 ../src/settings.cpp:1159
+#: ../src/settings.cpp:1165
 msgid "Normal"
 msgstr "正常"
 
-#: ../src/settings.cpp:868 ../src/settings.cpp:1160
+#: ../src/settings.cpp:868 ../src/settings.cpp:1166
 msgid "Bold"
 msgstr "粗体"
 
@@ -589,11 +589,11 @@ msgstr "右"
 msgid "Italic"
 msgstr ""
 
-#: ../src/settings.cpp:912 ../src/settings.cpp:1080
+#: ../src/settings.cpp:912 ../src/settings.cpp:1086
 msgid "None"
 msgstr ""
 
-#: ../src/settings.cpp:913 ../src/settings.cpp:1082
+#: ../src/settings.cpp:913 ../src/settings.cpp:1088
 msgid "Underline"
 msgstr ""
 
@@ -691,7 +691,7 @@ msgstr "下一个链接"
 msgid "First line indent"
 msgstr "第一个链接"
 
-#: ../src/settings.cpp:1001 ../src/settings.cpp:1574
+#: ../src/settings.cpp:1001 ../src/settings.cpp:1580
 #, fuzzy
 msgid "Font face"
 msgstr "默认字体"
@@ -701,7 +701,7 @@ msgstr "默认字体"
 msgid "Font size"
 msgstr "字体大小设置"
 
-#: ../src/settings.cpp:1017 ../src/settings.cpp:1468 ../src/settings.cpp:1583
+#: ../src/settings.cpp:1017 ../src/settings.cpp:1474 ../src/settings.cpp:1589
 msgid "Font weight"
 msgstr "字体粗细"
 
@@ -710,7 +710,7 @@ msgstr "字体粗细"
 msgid "Font style"
 msgstr "字体大小设置"
 
-#: ../src/settings.cpp:1021 ../src/settings.cpp:1497
+#: ../src/settings.cpp:1021 ../src/settings.cpp:1503
 msgid "Interline space"
 msgstr "行间距"
 
@@ -760,7 +760,7 @@ msgstr "支持所有字体"
 msgid "On for big fonts only"
 msgstr "只支持大字体"
 
-#: ../src/settings.cpp:1069 ../src/settings.cpp:1075 ../src/settings.cpp:1173
+#: ../src/settings.cpp:1069 ../src/settings.cpp:1075 ../src/settings.cpp:1179
 msgid "Off"
 msgstr "关闭"
 
@@ -768,618 +768,631 @@ msgstr "关闭"
 msgid "On"
 msgstr "打开"
 
+#: ../src/settings.cpp:1080
+msgid "AM/PM"
+msgstr ""
+
 #: ../src/settings.cpp:1081
+msgid "24h"
+msgstr ""
+
+#: ../src/settings.cpp:1087
 msgid "Solid"
 msgstr ""
 
-#: ../src/settings.cpp:1154
+#: ../src/settings.cpp:1160
 msgid "Inverse"
 msgstr "反转"
 
-#: ../src/settings.cpp:1165
+#: ../src/settings.cpp:1171
 msgid "One"
 msgstr "一"
 
-#: ../src/settings.cpp:1166
+#: ../src/settings.cpp:1172
 msgid "Two"
 msgstr "二"
 
-#: ../src/settings.cpp:1171
+#: ../src/settings.cpp:1177
 msgid "Top"
 msgstr "顶部"
 
-#: ../src/settings.cpp:1178
+#: ../src/settings.cpp:1184
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1179
+#: ../src/settings.cpp:1185
 msgid "75%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1180
+#: ../src/settings.cpp:1186
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1181
+#: ../src/settings.cpp:1187
 #, fuzzy
 msgid "85%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1182
+#: ../src/settings.cpp:1188
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1183
+#: ../src/settings.cpp:1189
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1184
+#: ../src/settings.cpp:1190
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1185
+#: ../src/settings.cpp:1191
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1186
+#: ../src/settings.cpp:1192
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1187
+#: ../src/settings.cpp:1193
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1188
+#: ../src/settings.cpp:1194
 msgid "120%"
 msgstr "120%"
 
-#: ../src/settings.cpp:1189
+#: ../src/settings.cpp:1195
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1190
+#: ../src/settings.cpp:1196
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1191
+#: ../src/settings.cpp:1197
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1192
+#: ../src/settings.cpp:1198
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1193
+#: ../src/settings.cpp:1199
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1194
+#: ../src/settings.cpp:1200
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1195
+#: ../src/settings.cpp:1201
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1196
+#: ../src/settings.cpp:1202
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1197
+#: ../src/settings.cpp:1203
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1242
+#: ../src/settings.cpp:1248
 msgid "Always use fast updates"
 msgstr "始终使用快速刷新"
 
-#: ../src/settings.cpp:1243
+#: ../src/settings.cpp:1249
 msgid "Don't use fast updates"
 msgstr "不使用快速刷新"
 
-#: ../src/settings.cpp:1244
+#: ../src/settings.cpp:1250
 msgid "Full updates every 2 pages"
 msgstr "每2页整体刷新"
 
-#: ../src/settings.cpp:1245
+#: ../src/settings.cpp:1251
 msgid "Full updates every 3 pages"
 msgstr "每3页整体刷新"
 
-#: ../src/settings.cpp:1246
+#: ../src/settings.cpp:1252
 msgid "Full updates every 4 pages"
 msgstr "每4页整体刷新"
 
-#: ../src/settings.cpp:1247
+#: ../src/settings.cpp:1253
 msgid "Full updates every 5 pages"
 msgstr "每5页整体刷新"
 
-#: ../src/settings.cpp:1248
+#: ../src/settings.cpp:1254
 msgid "Full updates every 6 pages"
 msgstr "每6页整体刷新"
 
-#: ../src/settings.cpp:1249
+#: ../src/settings.cpp:1255
 #, fuzzy
 msgid "Full updates every 7 pages"
 msgstr "每2页整体刷新"
 
-#: ../src/settings.cpp:1250
+#: ../src/settings.cpp:1256
 msgid "Full updates every 8 pages"
 msgstr "每8页整体刷新"
 
-#: ../src/settings.cpp:1251
+#: ../src/settings.cpp:1257
 #, fuzzy
 msgid "Full updates every 9 pages"
 msgstr "每2页整体刷新"
 
-#: ../src/settings.cpp:1252
+#: ../src/settings.cpp:1258
 msgid "Full updates every 10 pages"
 msgstr "每10页整体刷新"
 
-#: ../src/settings.cpp:1253
+#: ../src/settings.cpp:1259
 msgid "Full updates every 14 pages"
 msgstr "每14页整体刷新"
 
-#: ../src/settings.cpp:1254
+#: ../src/settings.cpp:1260
 #, fuzzy
 msgid "Full updates every 20 pages"
 msgstr "每2页整体刷新"
 
-#: ../src/settings.cpp:1255
+#: ../src/settings.cpp:1261
 #, fuzzy
 msgid "Full updates every 25 pages"
 msgstr "每2页整体刷新"
 
-#: ../src/settings.cpp:1256
+#: ../src/settings.cpp:1262
 #, fuzzy
 msgid "Full updates every 30 pages"
 msgstr "每3页整体刷新"
 
-#: ../src/settings.cpp:1257
+#: ../src/settings.cpp:1263
 #, fuzzy
 msgid "Full updates every 35 pages"
 msgstr "每3页整体刷新"
 
-#: ../src/settings.cpp:1258
+#: ../src/settings.cpp:1264
 #, fuzzy
 msgid "Full updates every 40 pages"
 msgstr "每4页整体刷新"
 
-#: ../src/settings.cpp:1259
+#: ../src/settings.cpp:1265
 #, fuzzy
 msgid "Full updates every 45 pages"
 msgstr "每4页整体刷新"
 
-#: ../src/settings.cpp:1260
+#: ../src/settings.cpp:1266
 #, fuzzy
 msgid "Full updates every 50 pages"
 msgstr "每5页整体刷新"
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1271
 msgid "Turbo mode disabled"
 msgstr "加速模式禁用"
 
-#: ../src/settings.cpp:1266
+#: ../src/settings.cpp:1272
 msgid "Turbo mode enabled"
 msgstr "加速模式启用"
 
-#: ../src/settings.cpp:1273
+#: ../src/settings.cpp:1279
 msgid "180+slow next page"
 msgstr "180+慢 下一页"
 
-#: ../src/settings.cpp:1274
+#: ../src/settings.cpp:1280
 msgid "180+slow prev/next page"
 msgstr "180+慢 上/下一页"
 
-#: ../src/settings.cpp:1275
+#: ../src/settings.cpp:1281
 msgid "180+FAST next page"
 msgstr "180+快 下一页"
 
-#: ../src/settings.cpp:1276
+#: ../src/settings.cpp:1282
 msgid "180+FAST prev/next page"
 msgstr "180+快 上/下一页"
 
-#: ../src/settings.cpp:1277
+#: ../src/settings.cpp:1283
 msgid "180+FAST next/prev page"
 msgstr "180+快 下/上一页"
 
-#: ../src/settings.cpp:1295
+#: ../src/settings.cpp:1301
 msgid "2 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1296
+#: ../src/settings.cpp:1302
 msgid "3 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1297
+#: ../src/settings.cpp:1303
 msgid "4 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1298
+#: ../src/settings.cpp:1304
 msgid "8 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1304
+#: ../src/settings.cpp:1310
 msgid "Disabled (1:1)"
 msgstr "禁用(1:1)"
 
-#: ../src/settings.cpp:1305
+#: ../src/settings.cpp:1311
 #, fuzzy
 msgid "Integer scale"
 msgstr "整数比例"
 
-#: ../src/settings.cpp:1306
+#: ../src/settings.cpp:1312
 msgid "Arbitrary scale"
 msgstr "任意比例"
 
-#: ../src/settings.cpp:1311
+#: ../src/settings.cpp:1317
 msgid "Auto"
 msgstr "自动"
 
-#: ../src/settings.cpp:1312
+#: ../src/settings.cpp:1318
 msgid "*1"
 msgstr ""
 
-#: ../src/settings.cpp:1313
+#: ../src/settings.cpp:1319
 msgid "*2"
 msgstr ""
 
-#: ../src/settings.cpp:1314
+#: ../src/settings.cpp:1320
 msgid "*3"
 msgstr ""
 
-#: ../src/settings.cpp:1398
+#: ../src/settings.cpp:1404
 #, fuzzy
 msgid "No hinting"
 msgstr "不使用断字"
 
-#: ../src/settings.cpp:1399
+#: ../src/settings.cpp:1405
 msgid "Use bytecode"
 msgstr ""
 
-#: ../src/settings.cpp:1400
+#: ../src/settings.cpp:1406
 msgid "Autohinting"
 msgstr ""
 
-#: ../src/settings.cpp:1401
+#: ../src/settings.cpp:1407
 #, fuzzy
 msgid "Light"
 msgstr "右"
 
-#: ../src/settings.cpp:1406
+#: ../src/settings.cpp:1412
 #, fuzzy
 msgid "Default paragraph formatting"
 msgstr "取消选择段落"
 
-#: ../src/settings.cpp:1407
+#: ../src/settings.cpp:1413
 #, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "标题"
 
-#: ../src/settings.cpp:1408
+#: ../src/settings.cpp:1414
 #, fuzzy
 msgid "Subtitle"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1409
+#: ../src/settings.cpp:1415
 #, fuzzy
 msgid "Preformatted text / code"
 msgstr "预格式化文本"
 
-#: ../src/settings.cpp:1410
+#: ../src/settings.cpp:1416
 msgid "Link"
 msgstr ""
 
-#: ../src/settings.cpp:1412
+#: ../src/settings.cpp:1418
 msgid "Epigraph"
 msgstr ""
 
-#: ../src/settings.cpp:1413
+#: ../src/settings.cpp:1419
 msgid "Poem"
 msgstr ""
 
-#: ../src/settings.cpp:1414
+#: ../src/settings.cpp:1420
 msgid "Text / Cite / Epigraph author"
 msgstr ""
 
-#: ../src/settings.cpp:1415
+#: ../src/settings.cpp:1421
 msgid "Footnote"
 msgstr ""
 
-#: ../src/settings.cpp:1416
+#: ../src/settings.cpp:1422
 #, fuzzy
 msgid "Footnote link"
 msgstr "跳转到链接"
 
-#: ../src/settings.cpp:1417
+#: ../src/settings.cpp:1423
 msgid "Footnote title"
 msgstr ""
 
-#: ../src/settings.cpp:1418
+#: ../src/settings.cpp:1424
 #, fuzzy
 msgid "Annotation"
 msgstr "引用"
 
-#: ../src/settings.cpp:1458
+#: ../src/settings.cpp:1464
 msgid "Default font face"
 msgstr "默认字体"
 
-#: ../src/settings.cpp:1463
+#: ../src/settings.cpp:1469
 #, fuzzy
 msgid "Font settings"
 msgstr "字体大小设置"
 
-#: ../src/settings.cpp:1470
+#: ../src/settings.cpp:1476
 msgid "Font antialiasing"
 msgstr "字体平滑"
 
-#: ../src/settings.cpp:1473
+#: ../src/settings.cpp:1479
 #, fuzzy
 msgid "Font hinting"
 msgstr "字体字距调整"
 
-#: ../src/settings.cpp:1475
+#: ../src/settings.cpp:1481
 msgid "Font kerning"
 msgstr "字体字距调整"
 
-#: ../src/settings.cpp:1477
+#: ../src/settings.cpp:1483
 #, fuzzy
 msgid "Font embolding"
 msgstr "字体字距调整"
 
-#: ../src/settings.cpp:1479
+#: ../src/settings.cpp:1485
 msgid "Tracking"
 msgstr ""
 
-#: ../src/settings.cpp:1481
+#: ../src/settings.cpp:1487
 msgid "Font Gamma"
 msgstr ""
 
-#: ../src/settings.cpp:1483
+#: ../src/settings.cpp:1489
 #, fuzzy
 msgid "Document embedded fonts"
 msgstr "文档内嵌风格"
 
-#: ../src/settings.cpp:1486
+#: ../src/settings.cpp:1492
 #, fuzzy
 msgid "Fallback font face"
 msgstr "默认字体"
 
-#: ../src/settings.cpp:1492
+#: ../src/settings.cpp:1498
 #, fuzzy
 msgid "Formatting settings"
 msgstr "字体大小设置"
 
-#: ../src/settings.cpp:1504
+#: ../src/settings.cpp:1510
 msgid "[No Hyphenation]"
 msgstr "不使用断字"
 
-#: ../src/settings.cpp:1505
+#: ../src/settings.cpp:1511
 msgid "[Algorythmic Hyphenation]"
 msgstr "算法断字"
 
-#: ../src/settings.cpp:1507
+#: ../src/settings.cpp:1513
 msgid "Hyphenation"
 msgstr "断字"
 
-#: ../src/settings.cpp:1521
+#: ../src/settings.cpp:1527
 msgid "Preformatted text"
 msgstr "预格式化文本"
 
-#: ../src/settings.cpp:1524
+#: ../src/settings.cpp:1530
 #, fuzzy
 msgid "Space condensing percent"
 msgstr "输入位置百分比"
 
-#: ../src/settings.cpp:1527
+#: ../src/settings.cpp:1533
 #, fuzzy
 msgid "Space expanding percent"
 msgstr "输入位置百分比"
 
-#: ../src/settings.cpp:1530
+#: ../src/settings.cpp:1536
 msgid "Floating punctuation"
 msgstr "浮动标点符号"
 
-#: ../src/settings.cpp:1536
+#: ../src/settings.cpp:1542
 msgid "Image scaling"
 msgstr "图像缩放比例"
 
-#: ../src/settings.cpp:1541
+#: ../src/settings.cpp:1547
 msgid "Block image scaling mode"
 msgstr "块图像缩放模式"
 
-#: ../src/settings.cpp:1544
+#: ../src/settings.cpp:1550
 msgid "Block image max zoom"
 msgstr "块图像最大缩放"
 
-#: ../src/settings.cpp:1547
+#: ../src/settings.cpp:1553
 msgid "Inline image scaling mode"
 msgstr "内嵌图像缩放模式"
 
-#: ../src/settings.cpp:1550
+#: ../src/settings.cpp:1556
 msgid "Inline image max zoom"
 msgstr "内嵌图像最大缩放"
 
-#: ../src/settings.cpp:1559
+#: ../src/settings.cpp:1565
 #, fuzzy
 msgid "Page settings"
 msgstr "屏幕方向"
 
-#: ../src/settings.cpp:1564
+#: ../src/settings.cpp:1570
 msgid "Status line"
 msgstr "状态行"
 
-#: ../src/settings.cpp:1569
+#: ../src/settings.cpp:1575
 #, fuzzy
 msgid "Status line settings"
 msgstr "状态行"
 
-#: ../src/settings.cpp:1586
+#: ../src/settings.cpp:1592
+#, fuzzy
+msgid "Time format"
+msgstr "文件格式"
+
+#: ../src/settings.cpp:1594
 msgid "Show time"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1588
+#: ../src/settings.cpp:1596
 #, fuzzy
 msgid "Show title"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1590
+#: ../src/settings.cpp:1598
 #, fuzzy
 msgid "Show battery"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1592
+#: ../src/settings.cpp:1600
 #, fuzzy
 msgid "Show battery percent"
 msgstr "电池状态"
 
-#: ../src/settings.cpp:1595
+#: ../src/settings.cpp:1603
 #, fuzzy
 msgid "Show position percent"
 msgstr "输入位置百分比"
 
-#: ../src/settings.cpp:1597
+#: ../src/settings.cpp:1605
 #, fuzzy
 msgid "Show page count"
 msgstr "输入页数"
 
-#: ../src/settings.cpp:1599
+#: ../src/settings.cpp:1607
 #, fuzzy
 msgid "Show page count till chapter end"
 msgstr "输入页数"
 
-#: ../src/settings.cpp:1602
+#: ../src/settings.cpp:1610
 #, fuzzy
 msgid "Show page number"
 msgstr "输入页数"
 
-#: ../src/settings.cpp:1604
+#: ../src/settings.cpp:1612
 #, fuzzy
 msgid "Show chapter marks"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1613
+#: ../src/settings.cpp:1621
 msgid "Page margins"
 msgstr "页边距"
 
-#: ../src/settings.cpp:1618
+#: ../src/settings.cpp:1626
 msgid "Top margin"
 msgstr "上边距"
 
-#: ../src/settings.cpp:1620
+#: ../src/settings.cpp:1628
 msgid "Bottom margin"
 msgstr "下边距"
 
-#: ../src/settings.cpp:1622
+#: ../src/settings.cpp:1630
 msgid "Left margin"
 msgstr "左边距"
 
-#: ../src/settings.cpp:1624
+#: ../src/settings.cpp:1632
 msgid "Right margin"
 msgstr "右边距"
 
-#: ../src/settings.cpp:1629
+#: ../src/settings.cpp:1637
 msgid "Footnotes at page bottom"
 msgstr "脚注"
 
-#: ../src/settings.cpp:1635
+#: ../src/settings.cpp:1643
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1644
+#: ../src/settings.cpp:1652
 msgid "Landscape pages"
 msgstr "横屏页数"
 
-#: ../src/settings.cpp:1646
+#: ../src/settings.cpp:1654
 msgid "Inverse display"
 msgstr "反转显示"
 
-#: ../src/settings.cpp:1649
+#: ../src/settings.cpp:1657
 msgid "Show bookmark icons"
 msgstr "显示书签图标"
 
-#: ../src/settings.cpp:1652
+#: ../src/settings.cpp:1660
 #, fuzzy
 msgid "Highlight bookmarks"
 msgstr "删除书签"
 
-#: ../src/settings.cpp:1656
+#: ../src/settings.cpp:1664
 msgid "Display update mode"
 msgstr "显示刷新模式"
 
-#: ../src/settings.cpp:1661
+#: ../src/settings.cpp:1669
 msgid "Turbo update mode"
 msgstr "加速刷新模式"
 
-#: ../src/settings.cpp:1666
+#: ../src/settings.cpp:1674
 msgid "Gray buffer depth(need restart)"
 msgstr ""
 
-#: ../src/settings.cpp:1673
+#: ../src/settings.cpp:1681
 msgid "Skin"
 msgstr ""
 
-#: ../src/settings.cpp:1689
+#: ../src/settings.cpp:1697
 #, fuzzy
 msgid "Control settings"
 msgstr "字体大小设置"
 
-#: ../src/settings.cpp:1696
+#: ../src/settings.cpp:1704
 #, fuzzy
 msgid "Rotate"
 msgstr "旋转"
 
-#: ../src/settings.cpp:1699
+#: ../src/settings.cpp:1707
 msgid "Page turn angle"
 msgstr "页旋转角度"
 
-#: ../src/settings.cpp:1715
+#: ../src/settings.cpp:1723
 msgid "Tap action"
 msgstr ""
 
-#: ../src/settings.cpp:1717
+#: ../src/settings.cpp:1725
 #, fuzzy
 msgid "Long tap action"
 msgstr "跳到引用"
 
-#: ../src/settings.cpp:1721
+#: ../src/settings.cpp:1729
 msgid "Height of the upper tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1724
+#: ../src/settings.cpp:1732
 msgid "Height of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1727
+#: ../src/settings.cpp:1735
 msgid "Width of the left tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1730
+#: ../src/settings.cpp:1738
 msgid "Width of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1749
+#: ../src/settings.cpp:1757
 #, fuzzy
 msgid "Style settings"
 msgstr "设置"
 
-#: ../src/settings.cpp:1754
+#: ../src/settings.cpp:1762
 msgid "Document embedded styles"
 msgstr "文档内嵌风格"
 
-#: ../src/settings.cpp:1773 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1781 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1781 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1789 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1788 ../src/viewdlg.cpp:597
+#: ../src/settings.cpp:1796 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr ""
 
-#: ../src/settings.cpp:1811
+#: ../src/settings.cpp:1819
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"

@@ -1076,6 +1076,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL},
     };
 
+    item_def_t time_format_option[] = {
+        {_("AM/PM"), "1"},
+        {_("24h"), "0"},
+        {NULL, NULL},
+    };
+
     item_def_t highlight_bookmark[] = {
         {_("None"), "0"},
         {_("Solid"), "1"},
@@ -1583,6 +1589,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     createSettingsMenuItem(statusMenu, mm_StatusFontEmbolden, _("Font weight"),
                            "cr3_option_status_font_weight", valueFont, PROP_STATUS_FONT_EMBOLDEN,
                            embolden_mode);
+    createSettingsMenuItem(statusMenu, mm_TimeFormat, _("Time format"),
+                           "cr3_option_status_time_format", valueFont, PROP_TIME_FORMAT, time_format_option);
     createSettingsMenuItem(statusMenu, mm_ShowTime, _("Show time"),
                            "cr3_option_status_show_time", valueFont, PROP_SHOW_TIME, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowTitle, _("Show title"),
