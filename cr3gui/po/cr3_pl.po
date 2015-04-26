@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-25 09:21+0300\n"
-"PO-Revision-Date: 2015-04-22 05:21+0000\n"
+"PO-Revision-Date: 2015-04-26 09:06+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/pl/)\n"
@@ -1314,7 +1314,7 @@ msgstr "Wbudowane style dokumentu"
 
 #: ../src/settings.cpp:1773 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Wyczyść pamięć podręczną"
 
 #: ../src/settings.cpp:1781 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
@@ -1754,16 +1754,15 @@ msgstr "Zawartość"
 
 #: ../src/cr3pocketbook.cpp:1683
 msgid "Cache cleared."
-msgstr ""
+msgstr "Pamięć podręczna wyczyszczona."
 
 #: ../src/cr3pocketbook.cpp:1688
-#, fuzzy
 msgid "Unable to list the directory contents!"
-msgstr "Spis treści"
+msgstr "Nie można wyświetlić zawartość katalogu!"
 
 #: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Nie można wyczyścić pamięci podręcznej!"
 
 #: ../src/cr3pocketbook.cpp:3191
 msgid "Press $1 to translate"
