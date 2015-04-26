@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-25 09:21+0300\n"
-"PO-Revision-Date: 2015-04-24 21:52+0000\n"
+"PO-Revision-Date: 2015-04-25 21:10+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/de/)\n"
@@ -217,7 +217,7 @@ msgstr "Dokumentendatum"
 
 #: ../src/mainwnd.cpp:1084
 msgid "Document source URL"
-msgstr ""
+msgstr "Source-URL des Dokuments"
 
 #: ../src/mainwnd.cpp:1085
 msgid "OCR by"
@@ -592,7 +592,7 @@ msgstr "Unterstrichen"
 
 #: ../src/settings.cpp:914
 msgid "Line through"
-msgstr ""
+msgstr "Durchgestrichen"
 
 #: ../src/settings.cpp:915
 msgid "Overline"
@@ -939,23 +939,23 @@ msgstr "Turbo-Modus Aktiviert"
 
 #: ../src/settings.cpp:1273
 msgid "180+slow next page"
-msgstr ""
+msgstr "180+slow nächste Seite"
 
 #: ../src/settings.cpp:1274
 msgid "180+slow prev/next page"
-msgstr ""
+msgstr "180+slow vorherige/nächste Seite"
 
 #: ../src/settings.cpp:1275
 msgid "180+FAST next page"
-msgstr ""
+msgstr "180+FAST nächste Seite"
 
 #: ../src/settings.cpp:1276
 msgid "180+FAST prev/next page"
-msgstr ""
+msgstr "180+FAST vorherige/nächste Seite"
 
 #: ../src/settings.cpp:1277
 msgid "180+FAST next/prev page"
-msgstr ""
+msgstr "180+FAST nächste/vorherige Seite"
 
 #: ../src/settings.cpp:1295
 msgid "2 BPP"
@@ -1088,7 +1088,7 @@ msgstr "Schrift-Kerning"
 
 #: ../src/settings.cpp:1477
 msgid "Font embolding"
-msgstr ""
+msgstr "Schrift verstärken"
 
 #: ../src/settings.cpp:1479
 msgid "Tracking"
@@ -1144,19 +1144,19 @@ msgstr "Bild skalieren"
 
 #: ../src/settings.cpp:1541
 msgid "Block image scaling mode"
-msgstr ""
+msgstr "Skalierungsmodus für Blockbild "
 
 #: ../src/settings.cpp:1544
 msgid "Block image max zoom"
-msgstr ""
+msgstr "Maximale Vergrößerung für Blockbild "
 
 #: ../src/settings.cpp:1547
 msgid "Inline image scaling mode"
-msgstr ""
+msgstr "Skalierungsmodus für eingebunde Bilder"
 
 #: ../src/settings.cpp:1550
 msgid "Inline image max zoom"
-msgstr ""
+msgstr "Maximale Vergrößerung für eingebunde Bilder"
 
 #: ../src/settings.cpp:1559
 msgid "Page settings"
@@ -1236,7 +1236,7 @@ msgstr "Bildschirm Einstellungen"
 
 #: ../src/settings.cpp:1644
 msgid "Landscape pages"
-msgstr ""
+msgstr "Anzahl Seiten im Querformat"
 
 #: ../src/settings.cpp:1646
 msgid "Inverse display"
@@ -1347,6 +1347,8 @@ msgid ""
 "For each dictionary, pair of files should be provided: data file (with .dict "
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
+"Für jedes  Wörterbuch sollten folgende Dateien vorhanden sein: Daten-Datei "
+"(im .dict oder dict.dz - Format) und eine Index-Datei (im .index - Format)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1404,7 +1406,7 @@ msgstr "Seite runter"
 
 #: ../src/viewdlg.cpp:503
 msgid "Side Press"
-msgstr ""
+msgstr "Rand drücken"
 
 #: ../src/viewdlg.cpp:505
 msgid "Menu"
@@ -1432,11 +1434,11 @@ msgstr "Seitenweise vorwärts"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
-msgstr ""
+msgstr "Forward in move history"
 
 #: ../src/viewdlg.cpp:531
 msgid "Back in move history"
-msgstr ""
+msgstr "Back in move history"
 
 #: ../src/viewdlg.cpp:532
 msgid "Next link"
@@ -1476,11 +1478,11 @@ msgstr "Textformatierung umschalten"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr ""
+msgstr "Lesezeichen nummernweise speichern"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
-msgstr ""
+msgstr "Nummernweise zu Lesezeichen springen "
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
@@ -1564,7 +1566,7 @@ msgstr "Liste der kürzlich geöffneten Bücher"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
-msgstr ""
+msgstr "URL der Dokmentenquelle"
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
@@ -1592,7 +1594,7 @@ msgstr "Anleitung anzeigen"
 
 #: ../src/viewdlg.cpp:580
 msgid "Show key mapping"
-msgstr ""
+msgstr "Tastenzuordnung anzeigen"
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
@@ -1753,9 +1755,8 @@ msgid "Cache cleared."
 msgstr "Cache geleert."
 
 #: ../src/cr3pocketbook.cpp:1688
-#, fuzzy
 msgid "Unable to list the directory contents!"
-msgstr "Kann Verzeichnisinhalt nicht anzeigen!"
+msgstr "Kann den Verzeichnisinhalt nicht auflisten"
 
 #: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
