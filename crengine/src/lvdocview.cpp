@@ -27,6 +27,9 @@
 #include "../include/chmfmt.h"
 #include "../include/wordfmt.h"
 #include "../include/pdbfmt.h"
+
+#include <cri18n.h>
+
 /// to show page bounds rectangles
 //#define SHOW_PAGE_RECT
 
@@ -1208,7 +1211,19 @@ lString16 LVDocView::getTimeString() {
 	time_t t = (time_t) time(0);
 	tm * bt = localtime(&t);
 	char str[12];
-	sprintf(str, "%02d:%02d", bt->tm_hour, bt->tm_min);
+	if( m_props->getBoolDef(PROP_TIME_FORMAT, false) ) {
+		if( bt->tm_hour == 0 )
+			sprintf(str, "12:%02d %s", bt->tm_min, _("AM"));
+		else if( bt->tm_hour == 12 )
+			sprintf(str, "12:%02d %s", bt->tm_min, _("PM"));
+		else if( bt->tm_hour < 13 )
+			sprintf(str, "%02d:%02d %s", bt->tm_hour, bt->tm_min, _("AM"));
+		else
+			sprintf(str, "%02d:%02d %s", bt->tm_hour-12, bt->tm_min, _("PM"));
+	}
+	else {
+		sprintf(str, "%02d:%02d", bt->tm_hour, bt->tm_min);
+	}
 	return Utf8ToUnicode(lString8(str));
 }
 
@@ -5639,6 +5654,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	props->limitValueList(PROP_LANDSCAPE_PAGES, int_options_1_2, 2);
 	props->limitValueList(PROP_PAGE_VIEW_MODE, bool_options_def_true, 2);
 	props->limitValueList(PROP_FOOTNOTES, bool_options_def_true, 2);
+	props->limitValueList(PROP_TIME_FORMAT, bool_options_def_false, 2);
 	props->limitValueList(PROP_SHOW_TIME, bool_options_def_false, 2);
 	props->limitValueList(PROP_DISPLAY_INVERSE, bool_options_def_false, 2);
 	props->limitValueList(PROP_BOOKMARK_ICONS, bool_options_def_false, 2);
@@ -5676,6 +5692,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 #endif
 	props->setIntDef(PROP_STATUS_LINE, 0);
 	props->setIntDef(PROP_SHOW_TITLE, 1);
+	props->setIntDef(PROP_TIME_FORMAT, 0);
 	props->setIntDef(PROP_SHOW_TIME, 1);
 	props->setIntDef(PROP_SHOW_BATTERY, 1);
     props->setIntDef(PROP_SHOW_BATTERY_PERCENT, 0);

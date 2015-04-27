@@ -61,6 +61,7 @@
 #define CR3_ACTION_PB_LOCK_DEVICE "PB_LOCK_DEVICE"
 #define CR3_ACTION_PB_OTA_UPDATE "PB_OTA_UPDATE"
 #define CR3_ACTION_PB_OTA_UPDATE_DEV "PB_OTA_UPDATE_DEV"
+#define CR3_ACTION_PB_CLEAR_CACHE "PB_CLEAR_CACHE"
 #ifdef POCKETBOOK_PRO_FW5
 #define CR3_ACTION_PB_OPEN_SYSTEM_PANEL "PB_OPEN_SYSTEM_PANEL"
 #endif
@@ -1075,6 +1076,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL},
     };
 
+    item_def_t time_format_option[] = {
+        {_("AM/PM"), "1"},
+        {_("24h"), "0"},
+        {NULL, NULL},
+    };
+
     item_def_t highlight_bookmark[] = {
         {_("None"), "0"},
         {_("Solid"), "1"},
@@ -1582,6 +1589,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     createSettingsMenuItem(statusMenu, mm_StatusFontEmbolden, _("Font weight"),
                            "cr3_option_status_font_weight", valueFont, PROP_STATUS_FONT_EMBOLDEN,
                            embolden_mode);
+    createSettingsMenuItem(statusMenu, mm_TimeFormat, _("Time format"),
+                           "cr3_option_status_time_format", valueFont, PROP_TIME_FORMAT, time_format_option);
     createSettingsMenuItem(statusMenu, mm_ShowTime, _("Show time"),
                            "cr3_option_status_show_time", valueFont, PROP_SHOW_TIME, on_off_option);
     createSettingsMenuItem(statusMenu, mm_ShowTitle, _("Show title"),
@@ -1766,11 +1775,22 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     stylesMenu->reconfigure( 0 );
     mainMenu->addItem( stylesMenu );
 
+    // CLEAR CACHE
+    if( ldomDocCache::enabled() ) {
+        mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_CLEAR_CACHE,
+                _("Clear cache"),
+                LVImageSourceRef(),
+                LVFontRef() ) );
+    }
+
+    // OTA UPDATE
     #ifdef POCKETBOOK_PRO
     mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE,
                 _("OTA Update"),
                 LVImageSourceRef(),
                 LVFontRef() ) );
+
+    // OTA UPDATE DEV
     if( useDeveloperFeatures ) {
         mainMenu->addItem( new CRMenuItem( mainMenu, PB_CMD_OTA_UPDATE_DEV,
                 _("OTA Update Dev"),

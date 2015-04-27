@@ -47,6 +47,7 @@ enum MainMenuItems_t {
     mm_StatusMenu,
     mm_HighlightBookmarks,
     mm_StatusLine,
+    mm_TimeFormat,
     mm_ShowTime,
     mm_ShowTitle,
     mm_ShowBattery,

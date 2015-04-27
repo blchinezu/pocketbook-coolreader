@@ -1,45 +1,47 @@
-# Lithuanian translations for cr package.
+# SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# Automatically generated, 2010.
-# 
+#
+# Translators:
+# BruceLee, 2015
 msgid ""
 msgstr ""
-"Project-Id-Version: cr 3gui\n"
+"Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-26 16:39+0300\n"
-"PO-Revision-Date: 2010-02-24 21:50+0300\n"
-"Last-Translator: Stanislovas Zacharovas\n"
-"Language-Team: Lithuanian\n"
-"Language: \n"
+"PO-Revision-Date: 2015-04-26 14:31+0000\n"
+"Last-Translator: BruceLee\n"
+"Language-Team: Romanian (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/ro/)\n"
+"Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n"
-"%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
+"2:1));\n"
 
 #: ../src/citedlg.cpp:190
 msgid "Select next/prev paragraph"
-msgstr ""
+msgstr "Selectează paragraful următor/anterior"
 
 #: ../src/citedlg.cpp:193
 msgid "Select one more paragraph"
-msgstr ""
+msgstr "Selectează încă un paragraf"
 
 #: ../src/citedlg.cpp:196
 msgid "Deselect paragraph"
-msgstr ""
+msgstr "Deselectează paragraf"
 
 #: ../src/citedlg.cpp:199
 msgid "Select one more phrase"
-msgstr ""
+msgstr "Selectează încă o frază"
 
 #: ../src/citedlg.cpp:202
 msgid "Deselect phrase"
-msgstr ""
+msgstr "Deselectează frază"
 
 #: ../src/citedlg.cpp:216
 msgid "Select text"
-msgstr "Išskirti tekstą"
+msgstr "Selectează text"
 
 #: ../src/fsmenu.cpp:41
 msgid "1..9"
@@ -51,137 +53,136 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr "Kol kas nėra vartotojo instrukcijos lietuvių kalba."
+msgstr "Nu există manual pentru această limbă, scuze!"
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
-msgstr "Pagalba"
+msgstr "Ajutor"
 
 #: ../src/mainwnd.cpp:844
 msgid "Main Menu"
-msgstr "Pagrindinis meniu"
+msgstr "Meniu Principal"
 
 #: ../src/mainwnd.cpp:878 ../src/viewdlg.cpp:573
 msgid "About"
-msgstr "Apie"
+msgstr "Despre"
 
 #: ../src/mainwnd.cpp:888 ../src/viewdlg.cpp:537
 msgid "Go to page"
-msgstr "Atversti puslapį"
+msgstr "Mergi la pagină"
 
 #: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
 msgid "Open recent book"
-msgstr "Atversti neseniai skaitytą knygą"
+msgstr "Deschide carte recentă"
 
 #: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
 msgid "Dictionary"
-msgstr "Žodynas"
+msgstr "Dicţionar"
 
 #: ../src/mainwnd.cpp:910 ../src/settings.cpp:1417
 msgid "Cite"
-msgstr "Citatos"
+msgstr "Citat"
 
 #: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
 msgid "Bookmarks"
-msgstr "Žymės"
+msgstr "Semne de carte"
 
 #: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
 msgid "Search"
-msgstr "Paieška"
+msgstr "Caută"
 
 #: ../src/mainwnd.cpp:922 ../src/settings.cpp:1055
 msgid "Settings"
-msgstr "Nustatymai"
+msgstr "Setări"
 
 #: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:668
 msgid "Keyboard layout"
-msgstr "Klavišų priskyrimas"
+msgstr "Tastatură"
 
 #: ../src/mainwnd.cpp:938
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
 msgstr ""
-"$1 - pasirinkti komandą\n"
-"$2, $3 - uždaryti"
+"$1 - alege comandă\n"
+"$2, $3 - închide"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
-msgstr "Esamas puslapis"
+msgstr "Pagina curentă"
 
 #: ../src/mainwnd.cpp:1047
 msgid "Total pages"
-msgstr "Viso puslapių"
+msgstr "Număr total de pagini"
 
 #: ../src/mainwnd.cpp:1048
 msgid "Battery state"
-msgstr "Baterijos būvis"
+msgstr "Status baterie"
 
 #: ../src/mainwnd.cpp:1048
 msgid "charging..."
-msgstr "kraunasi..."
+msgstr "se încarcă..."
 
 #: ../src/mainwnd.cpp:1049
 msgid "Current Time"
-msgstr "Esamas laikas"
+msgstr "Ora Curentă"
 
 #: ../src/mainwnd.cpp:1054
 msgid "Current chapter"
-msgstr "Esamas skyrius"
+msgstr "Capitolul curent"
 
 #: ../src/mainwnd.cpp:1057
 msgid "Status"
-msgstr "Būsena"
+msgstr "Status"
 
 #: ../src/mainwnd.cpp:1060
 msgid "Archive name"
-msgstr "Archyvo pavadinimas"
+msgstr "Numele arhivei"
 
 #: ../src/mainwnd.cpp:1061
 msgid "Archive path"
-msgstr "Kelias prie archyvo"
+msgstr "Locaţia arhivei"
 
 #: ../src/mainwnd.cpp:1062
 msgid "Archive size"
-msgstr "Archyvo dydis"
+msgstr "Dimensiunea arhivei"
 
 #: ../src/mainwnd.cpp:1063
 msgid "File name"
-msgstr "Failo pavadinimas"
+msgstr "Numele fişierului"
 
 #: ../src/mainwnd.cpp:1064
 msgid "File path"
-msgstr "Kelias prie failo"
+msgstr "Locaţia fişierului"
 
 #: ../src/mainwnd.cpp:1065
 msgid "File size"
-msgstr "Failo dydis"
+msgstr "Dimensiunea fişierului"
 
 #: ../src/mainwnd.cpp:1066
 msgid "File format"
-msgstr "Failo formatas"
+msgstr "Formatul fişierului"
 
 #: ../src/mainwnd.cpp:1067
 msgid "File info"
-msgstr "Informacija apie failą"
+msgstr "Informaţii fişier"
 
 #: ../src/mainwnd.cpp:1070
-#, fuzzy
 msgctxt "Book"
 msgid "Title"
-msgstr "Pavadinimas"
+msgstr "Titlu"
 
 #: ../src/mainwnd.cpp:1071
 msgid "Author(s)"
-msgstr "Autorius(ai)"
+msgstr "Autor(i)"
 
 #: ../src/mainwnd.cpp:1072
 msgid "Series name"
-msgstr "Serijos pavadinimas"
+msgstr "Numele seriei"
 
 #: ../src/mainwnd.cpp:1073
 msgid "Series number"
-msgstr "Numeris serijoje"
+msgstr "Numărul din serie"
 
 #: ../src/mainwnd.cpp:1074
 msgid "Date"
@@ -189,75 +190,75 @@ msgstr "Data"
 
 #: ../src/mainwnd.cpp:1075
 msgid "Genres"
-msgstr "Žanras"
+msgstr "Genuri"
 
 #: ../src/mainwnd.cpp:1076
 msgid "Language"
-msgstr ""
+msgstr "Limba"
 
 #: ../src/mainwnd.cpp:1077
 msgid "Translator"
-msgstr "Vertėjas"
+msgstr "Traducător"
 
 #: ../src/mainwnd.cpp:1078
 msgid "Source language"
-msgstr ""
+msgstr "Limba iniţială"
 
 #: ../src/mainwnd.cpp:1079
 msgid "Book info"
-msgstr "Kita informacija"
+msgstr "Informaţii despre carte"
 
 #: ../src/mainwnd.cpp:1082
 msgid "Document author"
-msgstr "Dokumento autorius"
+msgstr "Autorul documentului"
 
 #: ../src/mainwnd.cpp:1083
 msgid "Document date"
-msgstr "Dokumento data"
+msgstr "Data documentului"
 
 #: ../src/mainwnd.cpp:1084
 msgid "Document source URL"
-msgstr "Dokumento šaltinio URL"
+msgstr "URL-ul documentului"
 
 #: ../src/mainwnd.cpp:1085
 msgid "OCR by"
-msgstr "Nuskaityta"
+msgstr "OCR de"
 
 #: ../src/mainwnd.cpp:1086
 msgid "Document version"
-msgstr "Dokumento versija"
+msgstr "Versiunea documentului"
 
 #: ../src/mainwnd.cpp:1087
 msgid "Change history"
-msgstr "Pakeitimų istorija"
+msgstr "Istoric schimbări"
 
 #: ../src/mainwnd.cpp:1088
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/mainwnd.cpp:1089
 msgid "Program used"
-msgstr ""
+msgstr "Program folosit"
 
 #: ../src/mainwnd.cpp:1090
 msgid "Document info"
-msgstr "Dokumento informacija"
+msgstr "Informaţii document"
 
 #: ../src/mainwnd.cpp:1093
 msgid "Publication name"
-msgstr "Leidinio pavadinimas"
+msgstr "Nume publicaţie"
 
 #: ../src/mainwnd.cpp:1094
 msgid "Publisher"
-msgstr "Leidėjas"
+msgstr "Editor"
 
 #: ../src/mainwnd.cpp:1095
 msgid "Publisher city"
-msgstr "Leidybos miestas"
+msgstr "Oraş editor"
 
 #: ../src/mainwnd.cpp:1096
 msgid "Publication year"
-msgstr "Leidybos metai"
+msgstr "An publicaţie"
 
 #: ../src/mainwnd.cpp:1097
 msgid "ISBN"
@@ -265,539 +266,521 @@ msgstr "ISBN"
 
 #: ../src/mainwnd.cpp:1098
 msgid "Publication info"
-msgstr "Leidybinė informacija"
+msgstr "Informaţii publicaţie"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
-msgstr "Kita informacija"
+msgstr "Informaţii personalizate"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
-msgstr ""
+msgstr "CoolReader pentru PocketBook"
 
 #: ../src/mainwnd.cpp:1105
 msgid "Build date"
-msgstr ""
+msgstr "Data compilării"
 
 #: ../src/mainwnd.cpp:1106
 msgid "Build type"
-msgstr ""
+msgstr "Tip compilare"
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
-msgstr ""
+msgstr "Despre program"
 
 #: ../src/mainwnd.cpp:1110
 msgid "Hardware type"
-msgstr ""
+msgstr "Tip hardware"
 
 #: ../src/mainwnd.cpp:1111
-#, fuzzy
 msgid "Firmware version"
-msgstr "Dokumento versija"
+msgstr "Versiune firmware"
 
 #: ../src/mainwnd.cpp:1112
-#, fuzzy
 msgid "Keyboard type"
-msgstr "Klavišų priskyrimas"
+msgstr "Tip tastatură"
 
 #: ../src/mainwnd.cpp:1113
 msgid "Screen type"
-msgstr ""
+msgstr "Tip ecran"
 
 #: ../src/mainwnd.cpp:1114
 msgid "Config file"
-msgstr ""
+msgstr "Fişier configuraţie"
 
 #: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
-msgstr ""
+msgstr "Fişier keymap"
 
 #: ../src/mainwnd.cpp:1116
 msgid "Skin file"
-msgstr ""
+msgstr "Fişier temă"
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
-msgstr ""
+msgstr "Informaţii debug"
 
 #: ../src/mainwnd.cpp:1268
 msgid "Loading: please wait..."
-msgstr "Atidaromas failas, prašome palaukti..."
+msgstr "Se încarcă..."
 
 #: ../src/recentdlg.cpp:97
 msgid "Open book"
-msgstr "Atidaryti knygą"
+msgstr "Deschide carte"
 
 #: ../src/recentdlg.cpp:98
 msgid "Delete record"
-msgstr "Ištrinti įrašą"
+msgstr "Şterge înregistrare"
 
 #: ../src/recentdlg.cpp:133
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
 msgstr ""
-"$1 - atidaryti knygą\n"
-"$2, $3 - uždaryti"
+"$1 - deschide carte\n"
+"$2, $3 - închide"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
-msgstr "Esamas puslapis: $1 of $2\n"
+msgstr "Pagina curentă: $1 din $2\n"
 
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
-msgstr "Įveskite puslapio numerį"
+msgstr "Scrie numărul paginii:"
 
 #: ../src/bmkdlg.cpp:19
 msgid "Empty slot"
-msgstr "Nėra žymių"
+msgstr "Slot gol"
 
 #: ../src/bmkdlg.cpp:45
 msgid "Page $1 ($2%)"
-msgstr "Psl. $1 ($2%)"
+msgstr "Pagina $1 ($2%)"
 
 #: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
 msgid "Go to bookmark"
-msgstr "Eiti prie žymės Nr."
+msgstr "Mergi la semn de carte"
 
 #: ../src/bmkdlg.cpp:72
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
 msgstr ""
-"Trumpas paspaudimas $1 - pereiti prie žymės,\n"
-"$2 - žymės nustatymo būsena"
+"Apăsare scurtă $1 - mergi la semn de carte,\n"
+"$2 - activează modul SETARE"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
 msgstr ""
-"Trumpas paspaudimas $1 - pereiti prie žymės,\n"
-"ilgas paspaudimas - nustatyti žymę"
+"Apăsare scurtă $1 - mergi la semn de carte,\n"
+"apăsare lungă - setează semn de carte"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
-msgstr "Žymės nustatymas"
+msgstr "Setează semn de carte"
 
 #: ../src/bmkdlg.cpp:80
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
 msgstr ""
-"$1 - nustatyti žymę,\n"
-"$2 - persijungti į perėjimo režimą"
+"$1 - setează semn de carte,\n"
+"$2 - activează modul LANSARE"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
 msgstr ""
-"Trumpas paspaudimas $1 - nustatyti žymę,\n"
-"ilgas paspaudimas - eiti prie žymės"
+"Apăsare scurtă $1 - setează semn de carte,\n"
+"apăsare lungă - mergi la semn de carte"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
-msgstr "Ištrinti žymes"
+msgstr "Şterge semn de carte"
 
 #: ../src/bmkdlg.cpp:316
-#, fuzzy
 msgid "Go to citation"
-msgstr "Prie pozicijos"
+msgstr "Mergi la citat"
 
 #: ../src/bmkdlg.cpp:317
-#, fuzzy
 msgid "Delete citation"
-msgstr "Ištrinti įrašą"
+msgstr "Şterge citat"
 
 #: ../src/bmkdlg.cpp:331
 msgid "Citations"
-msgstr ""
+msgstr "Citate"
 
 #: ../src/bmkdlg.cpp:447 ../src/viewdlg.cpp:574
 msgid "Cite selection dialog"
-msgstr "Išskirti citatą"
+msgstr "Dialog de selectare citate"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "
-msgstr "Rasti žodyne"
+msgstr "Din dicţionar"
 
 #: ../src/dictdlg.cpp:89
 msgid "[cannot read article]"
-msgstr "[nepavyko perskaityti straipsnio]"
+msgstr "[nu se poate citi articolul]"
 
 #: ../src/settings.cpp:196
 msgid "choose command"
-msgstr "išsirinkti komandą"
+msgstr "alege comanda"
 
 #: ../src/settings.cpp:214
 msgid "Controls"
-msgstr "Klavišų paskirtis"
+msgstr "Controale"
 
 #: ../src/settings.cpp:380
 msgid "(No action)"
-msgstr ""
+msgstr "(Fără acţiune)"
 
 #: ../src/settings.cpp:533
 msgid "[Command is not assigned]"
-msgstr "[Komanda nepriskirta]"
+msgstr "[Comanda nu e setată]"
 
 #: ../src/settings.cpp:554
 msgid "0` (Portrait)"
-msgstr "Vertikaliai"
+msgstr "0` (Portret)"
 
 #: ../src/settings.cpp:555
 msgid "90 `"
-msgstr "Horizontaliai"
+msgstr "90 `"
 
 #: ../src/settings.cpp:556
 msgid "180 `"
-msgstr "Vertikaliai (apversta)"
+msgstr "180 `"
 
 #: ../src/settings.cpp:557
 msgid "270 `"
-msgstr "Horizontaliai (apversta)"
+msgstr "270 `"
 
 #: ../src/settings.cpp:568
 msgid "Page orientation"
-msgstr "Puslapio orientacija"
+msgstr "Orientare pagină"
 
 #: ../src/settings.cpp:589
 msgid "Default font size"
-msgstr "Šrifto dydis"
+msgstr "Dimensiune implicită a font-ului"
 
 #: ../src/settings.cpp:644
 msgid "The quick brown fox jumps over lazy dog"
-msgstr "Įlinkdama fechtuotojo špaga sublykčiojusi pragręžė apvalų arbūzą"
+msgstr "The quick brown fox jumps over lazy dog"
 
 #: ../src/settings.cpp:824
 msgid "Justify"
-msgstr ""
+msgstr "Justify"
 
 #: ../src/settings.cpp:825
-#, fuzzy
 msgctxt "CSS"
 msgid "Left"
-msgstr "Į kairė"
+msgstr "Stânga"
 
 #: ../src/settings.cpp:826
 msgid "Center"
-msgstr ""
+msgstr "Centru"
 
 #: ../src/settings.cpp:827
-#, fuzzy
 msgctxt "CSS"
 msgid "Right"
-msgstr "Į dešinę"
+msgstr "Dreapta"
 
 #: ../src/settings.cpp:833
 msgid "No indent"
-msgstr ""
+msgstr "Fără indentare"
 
 #: ../src/settings.cpp:834
 msgid "Small indent"
-msgstr ""
+msgstr "Indentare mică"
 
 #: ../src/settings.cpp:835
 msgid "Big indent"
-msgstr ""
+msgstr "Indentare mare"
 
 #: ../src/settings.cpp:836
 msgid "Small outdent"
-msgstr ""
+msgstr "Outdentare mică"
 
 #: ../src/settings.cpp:837
 msgid "Big outdent"
-msgstr ""
+msgstr "Outdentare mare"
 
 #: ../src/settings.cpp:843
 msgid "[Default sans-serif font]"
-msgstr ""
+msgstr "[Implicit sans-serif font]"
 
 #: ../src/settings.cpp:844
-#, fuzzy
 msgid "[Default serif font]"
-msgstr "Šrifto dydis"
+msgstr "[Implicit serif font]"
 
 #: ../src/settings.cpp:845
-#, fuzzy
 msgid "[Default monospace font]"
-msgstr "Šriftas"
+msgstr "[Implicit monospace font]"
 
 #: ../src/settings.cpp:851
 msgid "Bigger (105%)"
-msgstr ""
+msgstr "Mai mare (105%)"
 
 #: ../src/settings.cpp:852
 msgid "Bigger (110%)"
-msgstr ""
+msgstr "Mai mare (110%)"
 
 #: ../src/settings.cpp:853
 msgid "Bigger (115%)"
-msgstr ""
+msgstr "Mai mare (115%)"
 
 #: ../src/settings.cpp:854
 msgid "Bigger (120%)"
-msgstr ""
+msgstr "Mai mare (120%)"
 
 #: ../src/settings.cpp:855
 msgid "Bigger (150%)"
-msgstr ""
+msgstr "Mai mare (150%)"
 
 #: ../src/settings.cpp:856
 msgid "Smaller (95%)"
-msgstr ""
+msgstr "Mai mic (95%)"
 
 #: ../src/settings.cpp:857
 msgid "Smaller (90%)"
-msgstr ""
+msgstr "Mai mic (90%)"
 
 #: ../src/settings.cpp:858
 msgid "Smaller (85%)"
-msgstr ""
+msgstr "Mai mic (85%)"
 
 #: ../src/settings.cpp:859
 msgid "Smaller (80%)"
-msgstr ""
+msgstr "Mai mic (80%)"
 
 #: ../src/settings.cpp:860
 msgid "Smaller (70%)"
-msgstr ""
+msgstr "Mai mic (70%)"
 
 #: ../src/settings.cpp:861
 msgid "Smaller (60%)"
-msgstr ""
+msgstr "Mai mic (60%)"
 
 #: ../src/settings.cpp:867 ../src/settings.cpp:876 ../src/settings.cpp:1159
 #: ../src/settings.cpp:1165
 msgid "Normal"
-msgstr "Normalus "
+msgstr "Normal"
 
 #: ../src/settings.cpp:868 ../src/settings.cpp:1166
 msgid "Bold"
-msgstr "Pastorintas"
+msgstr "Bold"
 
 #: ../src/settings.cpp:869
-#, fuzzy
 msgid "Bolder"
-msgstr "Pastorintas"
+msgstr "Mai mult bold"
 
 #: ../src/settings.cpp:870
-#, fuzzy
 msgid "Lighter"
-msgstr "Į dešinę"
+msgstr "Mai subţire"
 
 #: ../src/settings.cpp:877
 msgid "Italic"
-msgstr ""
+msgstr "Italic"
 
 #: ../src/settings.cpp:912 ../src/settings.cpp:1086
 msgid "None"
-msgstr ""
+msgstr "Nimic"
 
 #: ../src/settings.cpp:913 ../src/settings.cpp:1088
 msgid "Underline"
-msgstr ""
+msgstr "Subliniere"
 
 #: ../src/settings.cpp:914
 msgid "Line through"
-msgstr ""
+msgstr "Tăiat"
 
 #: ../src/settings.cpp:915
 msgid "Overline"
-msgstr ""
+msgstr "Linie deasupra"
 
 #: ../src/settings.cpp:921
-#, fuzzy
 msgid "Baseline"
-msgstr "Informacinė eilutė"
+msgstr "Linie dedesubt"
 
 #: ../src/settings.cpp:922
 msgid "Subscript"
-msgstr ""
+msgstr "Subscript"
 
 #: ../src/settings.cpp:923
 msgid "Superscript"
-msgstr ""
+msgstr "Superscript"
 
 #: ../src/settings.cpp:929 ../src/settings.cpp:937
 msgid "Black"
-msgstr ""
+msgstr "Negru"
 
 #: ../src/settings.cpp:930 ../src/settings.cpp:938
 msgid "Gray"
-msgstr ""
+msgstr "Gri"
 
 #: ../src/settings.cpp:931 ../src/settings.cpp:939
 msgid "White"
-msgstr ""
+msgstr "Alb"
 
 #: ../src/settings.cpp:946 ../src/settings.cpp:957
 msgid "0.2 of line height"
-msgstr ""
+msgstr "0.2 din înălţimea liniei"
 
 #: ../src/settings.cpp:947 ../src/settings.cpp:958
 msgid "0.3 of line height"
-msgstr ""
+msgstr "0.3 din înălţimea liniei"
 
 #: ../src/settings.cpp:948 ../src/settings.cpp:959 ../src/settings.cpp:968
 #: ../src/settings.cpp:984
 msgid "0.5 of line height"
-msgstr ""
+msgstr "0.5 din înălţimea liniei"
 
 #: ../src/settings.cpp:949 ../src/settings.cpp:960 ../src/settings.cpp:969
 #: ../src/settings.cpp:985
 msgid "1 line height"
-msgstr ""
+msgstr "1 înălţime de linie"
 
 #: ../src/settings.cpp:950 ../src/settings.cpp:961 ../src/settings.cpp:971
 #: ../src/settings.cpp:987
 msgid "2 of line height"
-msgstr ""
+msgstr "2 înălţimi de linie"
 
 #: ../src/settings.cpp:970 ../src/settings.cpp:986
 msgid "1.5 of line height"
-msgstr ""
+msgstr "1.5 înălţimi de linie"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
 msgid "4 of line height"
-msgstr ""
+msgstr "4 înălţimi de linie"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
 msgid "5% of line width"
-msgstr ""
+msgstr "5% din lăţimea liniei"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
 msgid "10% of line width"
-msgstr ""
+msgstr "10% din lăţimea liniei"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
 msgid "15% of line width"
-msgstr ""
+msgstr "15% din lăţimea liniei"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
 msgid "20% of line width"
-msgstr ""
+msgstr "20% din lăţimea liniei"
 
 #: ../src/settings.cpp:977 ../src/settings.cpp:993
 msgid "30% of line width"
-msgstr ""
+msgstr "30% din lăţimea liniei"
 
 #: ../src/settings.cpp:996
-#, fuzzy
 msgid "Text alignment"
-msgstr "Sekanti nuoroda"
+msgstr "Alinierea textului"
 
 #: ../src/settings.cpp:998
-#, fuzzy
 msgid "First line indent"
-msgstr "Pirma nuoroda"
+msgstr "Indentarea primei linii"
 
 #: ../src/settings.cpp:1001 ../src/settings.cpp:1580
-#, fuzzy
 msgid "Font face"
-msgstr "Šriftas"
+msgstr "Font"
 
 #: ../src/settings.cpp:1015
-#, fuzzy
 msgid "Font size"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Mărime font"
 
 #: ../src/settings.cpp:1017 ../src/settings.cpp:1474 ../src/settings.cpp:1589
 msgid "Font weight"
-msgstr "Šrifto storis"
+msgstr "Grosime font"
 
 #: ../src/settings.cpp:1019
-#, fuzzy
 msgid "Font style"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Sil font"
 
 #: ../src/settings.cpp:1021 ../src/settings.cpp:1503
 msgid "Interline space"
-msgstr "Atstumas tarp eilučių"
+msgstr "Spaţiu între linii"
 
 #: ../src/settings.cpp:1023
 msgid "Letter spacing"
-msgstr ""
+msgstr "Distanţă litere"
 
 #: ../src/settings.cpp:1025
-#, fuzzy
 msgid "Text decoration"
-msgstr "Ištrinti įrašą"
+msgstr "Decorare text"
 
 #: ../src/settings.cpp:1027
-#, fuzzy
 msgid "Text vertical alignment"
-msgstr "Sekanti nuoroda"
+msgstr "Aliniere verticală a textului"
 
 #: ../src/settings.cpp:1029
 msgid "Text color"
-msgstr ""
+msgstr "Culoarea textului"
 
 #: ../src/settings.cpp:1031
 msgid "Background color"
-msgstr ""
+msgstr "Culoare fundal"
 
 #: ../src/settings.cpp:1033
 msgid "Margin before"
-msgstr ""
+msgstr "Margine înainte"
 
 #: ../src/settings.cpp:1035
 msgid "Margin after"
-msgstr ""
+msgstr "Margine după"
 
 #: ../src/settings.cpp:1037
 msgid "Margin left"
-msgstr ""
+msgstr "Margine stânga"
 
 #: ../src/settings.cpp:1039
 msgid "Margin right"
-msgstr ""
+msgstr "Margine dreapta"
 
 #: ../src/settings.cpp:1067
 msgid "On for all fonts"
-msgstr "Visose šriftuose"
+msgstr "Activat pentru toate font-urile"
 
 #: ../src/settings.cpp:1068
 msgid "On for big fonts only"
-msgstr "Tik didelėse šriftuose"
+msgstr "Activat doar pentru font-urile mari"
 
 #: ../src/settings.cpp:1069 ../src/settings.cpp:1075 ../src/settings.cpp:1179
 msgid "Off"
-msgstr "Išjungta"
+msgstr "Dezactivat"
 
 #: ../src/settings.cpp:1074
 msgid "On"
-msgstr "Įjungta"
+msgstr "Activat"
 
 #: ../src/settings.cpp:1080
 msgid "AM/PM"
-msgstr ""
+msgstr "AM/PM"
 
 #: ../src/settings.cpp:1081
 msgid "24h"
-msgstr ""
+msgstr "24 ore"
 
 #: ../src/settings.cpp:1087
 msgid "Solid"
-msgstr ""
+msgstr "Solid"
 
 #: ../src/settings.cpp:1160
 msgid "Inverse"
-msgstr "Negatyvinis"
+msgstr "Invers"
 
 #: ../src/settings.cpp:1171
 msgid "One"
-msgstr "Viena"
+msgstr "Unu"
 
 #: ../src/settings.cpp:1172
 msgid "Two"
-msgstr "Dvi"
+msgstr "Doi"
 
 #: ../src/settings.cpp:1177
 msgid "Top"
-msgstr "Viršuje"
+msgstr "Sus"
 
 #: ../src/settings.cpp:1184
 msgid "70%"
@@ -805,16 +788,15 @@ msgstr "70%"
 
 #: ../src/settings.cpp:1185
 msgid "75%"
-msgstr "75%%"
+msgstr "75%"
 
 #: ../src/settings.cpp:1186
 msgid "80%"
 msgstr "80%"
 
 #: ../src/settings.cpp:1187
-#, fuzzy
 msgid "85%"
-msgstr "75%%"
+msgstr "85%"
 
 #: ../src/settings.cpp:1188
 msgid "90%"
@@ -842,7 +824,7 @@ msgstr "115%"
 
 #: ../src/settings.cpp:1194
 msgid "120%"
-msgstr "110%"
+msgstr "120%"
 
 #: ../src/settings.cpp:1195
 msgid "125%"
@@ -882,560 +864,520 @@ msgstr "200%"
 
 #: ../src/settings.cpp:1248
 msgid "Always use fast updates"
-msgstr "Visada greitas atnaujinimas"
+msgstr "Foloseşte mereu actualizări rapide"
 
 #: ../src/settings.cpp:1249
 msgid "Don't use fast updates"
-msgstr "Nenaudoti greito atnaujinimo"
+msgstr "Nu foloseşte actualizări rapide"
 
 #: ../src/settings.cpp:1250
 msgid "Full updates every 2 pages"
-msgstr "Pilnai atnaujinti kas 2 puslapiai"
+msgstr "Actualizare completă la 2 pagini"
 
 #: ../src/settings.cpp:1251
 msgid "Full updates every 3 pages"
-msgstr "Pilnai atnaujinti kas 3 puslapiai"
+msgstr "Actualizare completă la 3 pagini"
 
 #: ../src/settings.cpp:1252
 msgid "Full updates every 4 pages"
-msgstr "Pilnai atnaujinti kas 4 puslapiai"
+msgstr "Actualizare completă la 4 pagini"
 
 #: ../src/settings.cpp:1253
 msgid "Full updates every 5 pages"
-msgstr "Pilnai atnaujinti kas 5 puslapiai"
+msgstr "Actualizare completă la 5 pagini"
 
 #: ../src/settings.cpp:1254
 msgid "Full updates every 6 pages"
-msgstr "Pilnai atnaujinti kas 6 puslapiai"
+msgstr "Actualizare completă la 6 pagini"
 
 #: ../src/settings.cpp:1255
-#, fuzzy
 msgid "Full updates every 7 pages"
-msgstr "Pilnai atnaujinti kas 2 puslapiai"
+msgstr "Actualizare completă la 7 pagini"
 
 #: ../src/settings.cpp:1256
 msgid "Full updates every 8 pages"
-msgstr "Pilnai atnaujinti kas 8 puslapiai"
+msgstr "Actualizare completă la 8 pagini"
 
 #: ../src/settings.cpp:1257
-#, fuzzy
 msgid "Full updates every 9 pages"
-msgstr "Pilnai atnaujinti kas 2 puslapiai"
+msgstr "Actualizare completă la 9 pagini"
 
 #: ../src/settings.cpp:1258
 msgid "Full updates every 10 pages"
-msgstr "Pilnai atnaujinti kas 10 puslapiai"
+msgstr "Actualizare completă la 10 pagini"
 
 #: ../src/settings.cpp:1259
 msgid "Full updates every 14 pages"
-msgstr "Pilnai atnaujinti kas 14 puslapiai"
+msgstr "Actualizare completă la 14 pagini"
 
 #: ../src/settings.cpp:1260
-#, fuzzy
 msgid "Full updates every 20 pages"
-msgstr "Pilnai atnaujinti kas 2 puslapiai"
+msgstr "Actualizare completă la 20 pagini"
 
 #: ../src/settings.cpp:1261
-#, fuzzy
 msgid "Full updates every 25 pages"
-msgstr "Pilnai atnaujinti kas 2 puslapiai"
+msgstr "Actualizare completă la 25 pagini"
 
 #: ../src/settings.cpp:1262
-#, fuzzy
 msgid "Full updates every 30 pages"
-msgstr "Pilnai atnaujinti kas 3 puslapiai"
+msgstr "Actualizare completă la 30 pagini"
 
 #: ../src/settings.cpp:1263
-#, fuzzy
 msgid "Full updates every 35 pages"
-msgstr "Pilnai atnaujinti kas 3 puslapiai"
+msgstr "Actualizare completă la 35 pagini"
 
 #: ../src/settings.cpp:1264
-#, fuzzy
 msgid "Full updates every 40 pages"
-msgstr "Pilnai atnaujinti kas 4 puslapiai"
+msgstr "Actualizare completă la 40 pagini"
 
 #: ../src/settings.cpp:1265
-#, fuzzy
 msgid "Full updates every 45 pages"
-msgstr "Pilnai atnaujinti kas 4 puslapiai"
+msgstr "Actualizare completă la 45 pagini"
 
 #: ../src/settings.cpp:1266
-#, fuzzy
 msgid "Full updates every 50 pages"
-msgstr "Pilnai atnaujinti kas 5 puslapiai"
+msgstr "Actualizare completă la 50 pagini"
 
 #: ../src/settings.cpp:1271
 msgid "Turbo mode disabled"
-msgstr "Turbo režimas išjungtas"
+msgstr "Mod turbo dezactivat"
 
 #: ../src/settings.cpp:1272
 msgid "Turbo mode enabled"
-msgstr "Turbo režimas įjungtas"
+msgstr "Mod turbo activat"
 
 #: ../src/settings.cpp:1279
 msgid "180+slow next page"
-msgstr ""
+msgstr "180+lent pagina următoare"
 
 #: ../src/settings.cpp:1280
 msgid "180+slow prev/next page"
-msgstr ""
+msgstr "180+lent pagina anterioară/următoare"
 
 #: ../src/settings.cpp:1281
 msgid "180+FAST next page"
-msgstr ""
+msgstr "180+rapid pagina următoare"
 
 #: ../src/settings.cpp:1282
 msgid "180+FAST prev/next page"
-msgstr ""
+msgstr "180+rapid pagina anterioară/următoare"
 
 #: ../src/settings.cpp:1283
 msgid "180+FAST next/prev page"
-msgstr ""
+msgstr "180+rapid pagina următoare/anterioară"
 
 #: ../src/settings.cpp:1301
 msgid "2 BPP"
-msgstr ""
+msgstr "2 BPP"
 
 #: ../src/settings.cpp:1302
 msgid "3 BPP"
-msgstr ""
+msgstr "3 BPP"
 
 #: ../src/settings.cpp:1303
 msgid "4 BPP"
-msgstr ""
+msgstr "4 BPP"
 
 #: ../src/settings.cpp:1304
 msgid "8 BPP"
-msgstr ""
+msgstr "8 BPP"
 
 #: ../src/settings.cpp:1310
 msgid "Disabled (1:1)"
-msgstr ""
+msgstr "Dezactivat (1:1)"
 
 #: ../src/settings.cpp:1311
-#, fuzzy
 msgid "Integer scale"
-msgstr "Atstumas tarp eilučių"
+msgstr "Scală întreagă"
 
 #: ../src/settings.cpp:1312
 msgid "Arbitrary scale"
-msgstr ""
+msgstr "Scală arbitrară"
 
 #: ../src/settings.cpp:1317
 msgid "Auto"
-msgstr ""
+msgstr "Auto"
 
 #: ../src/settings.cpp:1318
 msgid "*1"
-msgstr ""
+msgstr "*1"
 
 #: ../src/settings.cpp:1319
 msgid "*2"
-msgstr ""
+msgstr "*2"
 
 #: ../src/settings.cpp:1320
 msgid "*3"
-msgstr ""
+msgstr "*3"
 
 #: ../src/settings.cpp:1404
-#, fuzzy
 msgid "No hinting"
-msgstr "[Išjungti perkėlimus]"
+msgstr "Fără hinting"
 
 #: ../src/settings.cpp:1405
 msgid "Use bytecode"
-msgstr ""
+msgstr "Foloseşte bytecode"
 
 #: ../src/settings.cpp:1406
 msgid "Autohinting"
-msgstr ""
+msgstr "Autohinting"
 
 #: ../src/settings.cpp:1407
-#, fuzzy
 msgid "Light"
-msgstr "Į dešinę"
+msgstr "Uşor"
 
 #: ../src/settings.cpp:1412
 msgid "Default paragraph formatting"
-msgstr ""
+msgstr "Formatare implicită paragrafe"
 
 #: ../src/settings.cpp:1413
-#, fuzzy
 msgctxt "CSS"
 msgid "Title"
-msgstr "Pavadinimas"
+msgstr "Titlu"
 
 #: ../src/settings.cpp:1414
-#, fuzzy
 msgid "Subtitle"
-msgstr "Rodyti laiką"
+msgstr "Subtitlu"
 
 #: ../src/settings.cpp:1415
-#, fuzzy
 msgid "Preformatted text / code"
-msgstr "Formatuotas tekstas"
+msgstr "Text / cod preformatat"
 
 #: ../src/settings.cpp:1416
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
 #: ../src/settings.cpp:1418
 msgid "Epigraph"
-msgstr ""
+msgstr "Epigraf"
 
 #: ../src/settings.cpp:1419
 msgid "Poem"
-msgstr ""
+msgstr "Poem"
 
 #: ../src/settings.cpp:1420
 msgid "Text / Cite / Epigraph author"
-msgstr ""
+msgstr "Autor text / citat / epigraf"
 
 #: ../src/settings.cpp:1421
 msgid "Footnote"
-msgstr ""
+msgstr "Notă de subsol"
 
 #: ../src/settings.cpp:1422
-#, fuzzy
 msgid "Footnote link"
-msgstr "Eiti link nuorodos"
+msgstr "Link notă de subsol"
 
 #: ../src/settings.cpp:1423
 msgid "Footnote title"
-msgstr ""
+msgstr "Titlu notă de subsol"
 
 #: ../src/settings.cpp:1424
 msgid "Annotation"
-msgstr ""
+msgstr "Adnotare"
 
 #: ../src/settings.cpp:1464
 msgid "Default font face"
-msgstr "Šriftas"
+msgstr "Font implicit"
 
 #: ../src/settings.cpp:1469
-#, fuzzy
 msgid "Font settings"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Setări font"
 
 #: ../src/settings.cpp:1476
 msgid "Font antialiasing"
-msgstr "Šrifto sulyginimas"
+msgstr "Antialiasing font"
 
 #: ../src/settings.cpp:1479
-#, fuzzy
 msgid "Font hinting"
-msgstr "Šrifto suglaudinimas"
+msgstr "Hinting font"
 
 #: ../src/settings.cpp:1481
 msgid "Font kerning"
-msgstr "Šrifto suglaudinimas"
+msgstr "Kerning font"
 
 #: ../src/settings.cpp:1483
-#, fuzzy
 msgid "Font embolding"
-msgstr "Šrifto suglaudinimas"
+msgstr "Îngroşare font"
 
 #: ../src/settings.cpp:1485
 msgid "Tracking"
-msgstr ""
+msgstr "Distanţare litere"
 
 #: ../src/settings.cpp:1487
 msgid "Font Gamma"
-msgstr ""
+msgstr "Gamma font"
 
 #: ../src/settings.cpp:1489
-#, fuzzy
 msgid "Document embedded fonts"
-msgstr "Naudoti dokumento stilius"
+msgstr "Font-uri incluse în document"
 
 #: ../src/settings.cpp:1492
-#, fuzzy
 msgid "Fallback font face"
-msgstr "Šriftas"
+msgstr "Font de rezervă"
 
 #: ../src/settings.cpp:1498
-#, fuzzy
 msgid "Formatting settings"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Setări formatare"
 
 #: ../src/settings.cpp:1510
 msgid "[No Hyphenation]"
-msgstr "[Išjungti perkėlimus]"
+msgstr "[Nu desparte în silabe]"
 
 #: ../src/settings.cpp:1511
 msgid "[Algorythmic Hyphenation]"
-msgstr "[Algoritminiai perkėlimai"
+msgstr "[Desparte în silabe algoritmic]"
 
 #: ../src/settings.cpp:1513
 msgid "Hyphenation"
-msgstr "Perkėlimai"
+msgstr "Despărţire în silabe"
 
 #: ../src/settings.cpp:1527
 msgid "Preformatted text"
-msgstr "Formatuotas tekstas"
+msgstr "Text preformatat"
 
 #: ../src/settings.cpp:1530
-#, fuzzy
 msgid "Space condensing percent"
-msgstr "Įveskite pozicija procentais"
+msgstr "Procent comprimare spaţiu"
 
 #: ../src/settings.cpp:1533
-#, fuzzy
 msgid "Space expanding percent"
-msgstr "Įveskite pozicija procentais"
+msgstr "Procent extindere spaţiu"
 
 #: ../src/settings.cpp:1536
 msgid "Floating punctuation"
-msgstr "Kabanti skyryba"
+msgstr "Poziţie punctuaţie"
 
 #: ../src/settings.cpp:1542
 msgid "Image scaling"
-msgstr ""
+msgstr "Scalare imagine"
 
 #: ../src/settings.cpp:1547
 msgid "Block image scaling mode"
-msgstr ""
+msgstr "Mod scalare bloc imagine"
 
 #: ../src/settings.cpp:1550
 msgid "Block image max zoom"
-msgstr ""
+msgstr "Zoom maxim bloc imagine"
 
 #: ../src/settings.cpp:1553
 msgid "Inline image scaling mode"
-msgstr ""
+msgstr "Mod scalare imagine inline"
 
 #: ../src/settings.cpp:1556
 msgid "Inline image max zoom"
-msgstr ""
+msgstr "Zoom maxim imagine inline"
 
 #: ../src/settings.cpp:1565
-#, fuzzy
 msgid "Page settings"
-msgstr "Puslapio orientacija"
+msgstr "Setări pagină"
 
 #: ../src/settings.cpp:1570
 msgid "Status line"
-msgstr "Informacinė eilutė"
+msgstr "Linie status"
 
 #: ../src/settings.cpp:1575
-#, fuzzy
 msgid "Status line settings"
-msgstr "Informacinė eilutė"
+msgstr "Setări linie status"
 
 #: ../src/settings.cpp:1592
-#, fuzzy
 msgid "Time format"
-msgstr "Failo formatas"
+msgstr "Format oră"
 
 #: ../src/settings.cpp:1594
 msgid "Show time"
-msgstr "Rodyti laiką"
+msgstr "Arată timp"
 
 #: ../src/settings.cpp:1596
-#, fuzzy
 msgid "Show title"
-msgstr "Rodyti laiką"
+msgstr "Arată titlu"
 
 #: ../src/settings.cpp:1598
-#, fuzzy
 msgid "Show battery"
-msgstr "Rodyti laiką"
+msgstr "Arată baterie"
 
 #: ../src/settings.cpp:1600
-#, fuzzy
 msgid "Show battery percent"
-msgstr "Baterijos būvis"
+msgstr "Arată procent baterie"
 
 #: ../src/settings.cpp:1603
-#, fuzzy
 msgid "Show position percent"
-msgstr "Įveskite pozicija procentais"
+msgstr "Arată procent poziţie"
 
 #: ../src/settings.cpp:1605
-#, fuzzy
 msgid "Show page count"
-msgstr "Įveskite puslapio numerį"
+msgstr "Arată numărul de pagini"
 
 #: ../src/settings.cpp:1607
-#, fuzzy
 msgid "Show page count till chapter end"
-msgstr "Įveskite puslapio numerį"
+msgstr "Arată numărul de pagini până la sfârşitul capitolului"
 
 #: ../src/settings.cpp:1610
-#, fuzzy
 msgid "Show page number"
-msgstr "Įveskite puslapio numerį"
+msgstr "Arată numărul paginii"
 
 #: ../src/settings.cpp:1612
-#, fuzzy
 msgid "Show chapter marks"
-msgstr "Rodyti laiką"
+msgstr "Arată markeri capitole"
 
 #: ../src/settings.cpp:1621
 msgid "Page margins"
-msgstr "Puslapio laukai"
+msgstr "Margini pagină"
 
 #: ../src/settings.cpp:1626
 msgid "Top margin"
-msgstr "Viršutinis laukas"
+msgstr "Margine sus"
 
 #: ../src/settings.cpp:1628
 msgid "Bottom margin"
-msgstr "Apatinis laukas"
+msgstr "Margine jos"
 
 #: ../src/settings.cpp:1630
 msgid "Left margin"
-msgstr "Kairysis laukas"
+msgstr "Margine stânga"
 
 #: ../src/settings.cpp:1632
 msgid "Right margin"
-msgstr "Dešinysis laukas"
+msgstr "Margine dreapta"
 
 #: ../src/settings.cpp:1637
 msgid "Footnotes at page bottom"
-msgstr "Išnašos puslapio apačioje"
+msgstr "Note de subsol in josul paginii"
 
 #: ../src/settings.cpp:1643
 msgid "Display settings"
-msgstr ""
+msgstr "Setări display"
 
 #: ../src/settings.cpp:1652
 msgid "Landscape pages"
-msgstr "Stulpeliai horizontaliame puslapyje"
+msgstr "Pagini landscape"
 
 #: ../src/settings.cpp:1654
 msgid "Inverse display"
-msgstr "Negatyvinis vaizdas"
+msgstr "Inversează afişare"
 
 #: ../src/settings.cpp:1657
 msgid "Show bookmark icons"
-msgstr "Rodyti žymių ženkliukus"
+msgstr "Arată icon-uri pentru semne de carte"
 
 #: ../src/settings.cpp:1660
-#, fuzzy
 msgid "Highlight bookmarks"
-msgstr "Ištrinti žymes"
+msgstr "Evidenţiază semne de carte"
 
 #: ../src/settings.cpp:1664
 msgid "Display update mode"
-msgstr "Ekrano atnaujinimo režimas"
+msgstr "Mod actualizare display"
 
 #: ../src/settings.cpp:1669
 msgid "Turbo update mode"
-msgstr "Turbo režimas"
+msgstr "Mod actualizare turbo"
 
 #: ../src/settings.cpp:1674
 msgid "Gray buffer depth(need restart)"
-msgstr ""
+msgstr "Adâncime buffer gri (necesită restart)"
 
 #: ../src/settings.cpp:1681
 msgid "Skin"
-msgstr ""
+msgstr "Temă"
 
 #: ../src/settings.cpp:1697
-#, fuzzy
 msgid "Control settings"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Setări control"
 
 #: ../src/settings.cpp:1704
-#, fuzzy
 msgid "Rotate"
-msgstr "Pasukti kampu"
+msgstr "Roteşte"
 
 #: ../src/settings.cpp:1707
 msgid "Page turn angle"
-msgstr ""
+msgstr "Unghi întoarcere pagină"
 
 #: ../src/settings.cpp:1723
 msgid "Tap action"
-msgstr ""
+msgstr "Acţiune atingere ecran"
 
 #: ../src/settings.cpp:1725
-#, fuzzy
 msgid "Long tap action"
-msgstr "Prie pozicijos"
+msgstr "Acţiune atingere prelungită ecran"
 
 #: ../src/settings.cpp:1729
 msgid "Height of the upper tap zone"
-msgstr ""
+msgstr "Înălţimea zonei de sus"
 
 #: ../src/settings.cpp:1732
 msgid "Height of the middle tap zone"
-msgstr ""
+msgstr "Înălţimea zonei de mijloc"
 
 #: ../src/settings.cpp:1735
 msgid "Width of the left tap zone"
-msgstr ""
+msgstr "Lăţimea zonei din stanga"
 
 #: ../src/settings.cpp:1738
 msgid "Width of the middle tap zone"
-msgstr ""
+msgstr "Lăţimea zonei din centru"
 
 #: ../src/settings.cpp:1757
-#, fuzzy
 msgid "Style settings"
-msgstr "Nustatymai"
+msgstr "Setări stil"
 
 #: ../src/settings.cpp:1762
 msgid "Document embedded styles"
-msgstr "Naudoti dokumento stilius"
+msgstr "Stil inclus în document"
 
 #: ../src/settings.cpp:1781 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Şterge cache"
 
 #: ../src/settings.cpp:1789 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
-msgstr ""
+msgstr "OTA Update"
 
 #: ../src/settings.cpp:1796 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
-msgstr ""
+msgstr "OTA Update Dev"
 
 #: ../src/settings.cpp:1819
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
 msgstr ""
-"Paspauskite $1 pakeisti parametrą\n"
-"$2 panaudoti, $3 atšaukti"
+"Apasă $1 pentru a schimba opţiunea\n"
+"$2 pentru a aplica, $3 pentru a anula"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
-msgstr "Nėra žodynų"
+msgstr "Nici un dicţionar găsit"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
-msgstr "Įdėkite žodynus į aplanką 'dict' SD kortelėje"
+msgstr "Pune dicţionarele în folder-ul 'dict' din cardul SD."
 
 #: ../src/viewdlg.cpp:161
 msgid "Dictionaries in standard unix .dict format are supported."
-msgstr "Palaikomi .dict formato žodynai"
+msgstr "Dicţionarele în formatul standard unix .dict sunt suportate."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
 "For each dictionary, pair of files should be provided: data file (with .dict "
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
-"Žodyną sudaro duomenų failas (.dict arba .dict.dz),ir žodžių indeksavimo "
-"failas (.index)."
+"Pentru fiecare dicţionar, o pereche de file trebuie sa fie furnizate: fişier "
+"cu date (.dict sau .dict.dz) şi fişier index (.index)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
-msgstr "Turinys"
+msgstr "Cuprins"
 
 #: ../src/viewdlg.cpp:181
 msgid "Enter page number"
-msgstr "Įveskite puslapio numerį"
+msgstr "Scrie numărul paginii:"
 
 #: ../src/viewdlg.cpp:194
 msgid "Enter position percent"
-msgstr "Įveskite pozicija procentais"
+msgstr "Scrie procent poziţie"
 
 #: ../src/viewdlg.cpp:355
 msgid "Find in dictionary"
-msgstr "Rasti žodyne"
+msgstr "Caută în dicţionar"
 
 #: ../src/viewdlg.cpp:485
 msgid "M"
@@ -1443,424 +1385,404 @@ msgstr "M"
 
 #: ../src/viewdlg.cpp:487
 msgid "Ok"
-msgstr "OK"
+msgstr "Ok"
 
 #: ../src/viewdlg.cpp:489
 msgid "Up"
-msgstr "Į viršų"
+msgstr "Sus"
 
 #: ../src/viewdlg.cpp:491
 msgid "Down"
-msgstr "Į apačią"
+msgstr "Jos"
 
 #: ../src/viewdlg.cpp:493
 msgid "C"
 msgstr "C"
 
 #: ../src/viewdlg.cpp:495
-#, fuzzy
 msgctxt "Key"
 msgid "Left"
-msgstr "Į kairė"
+msgstr "Stânga"
 
 #: ../src/viewdlg.cpp:497
-#, fuzzy
 msgctxt "Key"
 msgid "Right"
-msgstr "Į dešinę"
+msgstr "Dreapta"
 
 #: ../src/viewdlg.cpp:499
 msgid "Side Up"
-msgstr "Šono viršus"
+msgstr "Lateral sus"
 
 #: ../src/viewdlg.cpp:501
 msgid "Side Down"
-msgstr "Šono apačia"
+msgstr "Lateral jos"
 
 #: ../src/viewdlg.cpp:503
 msgid "Side Press"
-msgstr "Šono paspaudimas"
+msgstr "Apăsare lateral"
 
 #: ../src/viewdlg.cpp:505
 msgid "Menu"
-msgstr "Pagrindinis meniu"
+msgstr "Meniu"
 
 #: ../src/viewdlg.cpp:507
 msgid "Zoom"
-msgstr "Zumas"
+msgstr "Zoom"
 
 #: ../src/viewdlg.cpp:518
 msgid "Long"
-msgstr "Ilgas"
+msgstr "Lung"
 
 #: ../src/viewdlg.cpp:525
 msgid "To first page"
-msgstr "Į pirmą puslapį"
+msgstr "La prima pagină"
 
 #: ../src/viewdlg.cpp:527
 msgid "Back by page"
-msgstr "Puslapiu atgal"
+msgstr "Pagină înapoi"
 
 #: ../src/viewdlg.cpp:529
 msgid "Forward by page"
-msgstr "Puslapiu pirmyn"
+msgstr "Pagină înainte"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
-msgstr "Pirmyn vartymo istorija"
+msgstr "Înainte în istoricul de mutări"
 
 #: ../src/viewdlg.cpp:531
 msgid "Back in move history"
-msgstr "Atgal vartymo istorija"
+msgstr "Înapoi în istoricul de mutări"
 
 #: ../src/viewdlg.cpp:532
 msgid "Next link"
-msgstr "Sekanti nuoroda"
+msgstr "Link-ul următor"
 
 #: ../src/viewdlg.cpp:533
 msgid "Previous link"
-msgstr "Prieš tai buvusi nuoroda"
+msgstr "Link-ul anterior"
 
 #: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
 msgid "Go to link"
-msgstr "Eiti link nuorodos"
+msgstr "Mergi la link"
 
 #: ../src/viewdlg.cpp:535
 msgid "To last page"
-msgstr "Į paskutinį puslapį"
+msgstr "La ultima pagină"
 
 #: ../src/viewdlg.cpp:536
 msgid "Go to position"
-msgstr "Prie pozicijos"
+msgstr "Mergi la poziţie"
 
 #: ../src/viewdlg.cpp:538
 msgid "Zoom in"
-msgstr "Padidinti šriftą"
+msgstr "Zoom in"
 
 #: ../src/viewdlg.cpp:539
 msgid "Zoom out"
-msgstr "Sumažinti šriftą"
+msgstr "Zoom out"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
-msgstr "Pakeisti šrifto storį"
+msgstr "Comutare bold text"
 
 #: ../src/viewdlg.cpp:541
 msgid "Toggle text format"
-msgstr "Pakeisti teksto formatavimą"
+msgstr "Comutare format text"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr "Išsaugoti žyme numeriu"
+msgstr "Salvează semn de carte după număr"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
-msgstr "Eiti prie žymės numeriu"
+msgstr "Mergi la semn de carte după număr"
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
-msgstr "Versti skyriais"
+msgstr "Mută după capitol"
 
 #: ../src/viewdlg.cpp:545
 msgid "First link"
-msgstr "Pirma nuoroda"
+msgstr "Primul link"
 
 #: ../src/viewdlg.cpp:546
 msgid "Rotate by"
-msgstr "Pasukti kampu"
+msgstr "Roteşte cu"
 
 #: ../src/viewdlg.cpp:547
 msgid "Set rotate angle"
-msgstr "Nustatyti pasukimo kampą"
+msgstr "Setează unghi rotaţie"
 
 #: ../src/viewdlg.cpp:548
 msgid "Save history and bookmarks"
-msgstr "Išsaugoti skaitymo istorija ir žymes"
+msgstr "Salvează istoric si semne de carte"
 
 #: ../src/viewdlg.cpp:549
 msgid "Save document to cache"
-msgstr "Išsaugoti dokumentą laikinoje atmintyje"
+msgstr "Salvează documentul în cache"
 
 #: ../src/viewdlg.cpp:550
 msgid "Close dialog"
-msgstr "Uždaryti langą"
+msgstr "Închide dialog"
 
 #: ../src/viewdlg.cpp:553
 msgid "Scroll forward"
-msgstr "Slinkti į priekį"
+msgstr "Scroll înainte"
 
 #: ../src/viewdlg.cpp:554
 msgid "Scroll back"
-msgstr "Slinkti atgal"
+msgstr "Scroll înapoi"
 
 #: ../src/viewdlg.cpp:555
 msgid "Close book"
-msgstr "Uždaryti knygą"
+msgstr "Închide carte"
 
 #: ../src/viewdlg.cpp:556
 msgid "Main menu"
-msgstr "Pagrindinis meniu"
+msgstr "Meniu principal"
 
 #: ../src/viewdlg.cpp:557
 msgid "Go to page dialog"
-msgstr "Pereiti prie puslapio"
+msgstr "Dialog mergi la pagina"
 
 #: ../src/viewdlg.cpp:558
 msgid "Settings menu"
-msgstr "Nustatymai"
+msgstr "Meniu setări"
 
 #: ../src/viewdlg.cpp:559
 msgid "Font size settings"
-msgstr "Šrifto dydžio nustatymai"
+msgstr "Setări mărime font"
 
 #: ../src/viewdlg.cpp:560
 msgid "Page orientation settings"
-msgstr "Puslapio orientacijos nustatymai"
+msgstr "Setări orientare pagină"
 
 #: ../src/viewdlg.cpp:565
 msgid "Find in Dictionary (T5)"
-msgstr "Rasti žodyne"
+msgstr "Caută în dicţionar (T5)"
 
 #: ../src/viewdlg.cpp:567
 msgid "Bookmark list"
-msgstr "Žymių sąrašas"
+msgstr "Listă semne de carte"
 
 #: ../src/viewdlg.cpp:568
-#, fuzzy
 msgid "Citations list"
-msgstr "Citatos"
+msgstr "Listă citate"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
-msgstr "Eiti prie žymės"
+msgstr "Mergi la semn de carte..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
-msgstr "Neseniai skaitytų knygų sąrašas"
+msgstr "Listă cărţi recente"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
-msgstr "Vėl atversti knygą Nr."
+msgstr "Deschide carte recentă după număr"
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
-msgstr "Atversti paskutinę knygą"
+msgstr "Schimbă cu o carte recentă"
 
 #: ../src/viewdlg.cpp:575
 msgid "Search dialog"
-msgstr "Paieška"
+msgstr "Dialog căutare"
 
 #: ../src/viewdlg.cpp:576
 msgid "Find in Dictionary (virtual keyboard)"
-msgstr "Rasti žodyne (virtuali klaviatūra)"
+msgstr "Caută în dicţionar (tastatură virtuală)"
 
 #: ../src/viewdlg.cpp:577
 msgid "Next keyboard layout"
-msgstr "Sekanti klaviatūra"
+msgstr "Tipul următor de tastatură"
 
 #: ../src/viewdlg.cpp:578
 msgid "Previous keyboard layout"
-msgstr "Prieš tai buvusi klaviatūra"
+msgstr "Tipul anterior de tastatură"
 
 #: ../src/viewdlg.cpp:579
 msgid "Show manual"
-msgstr "Vartotojo instrukcija"
+msgstr "Arată manual"
 
 #: ../src/viewdlg.cpp:580
 msgid "Show key mapping"
-msgstr "Klavišų priskirimas"
+msgstr "Arată mapare butoane"
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
-msgstr "Pereiti prie pozicijos %"
+msgstr "Mergi la procent..."
 
 #: ../src/viewdlg.cpp:586
-#, fuzzy
 msgid "Front light"
-msgstr "Šrifto storis"
+msgstr "Lumină"
 
 #: ../src/viewdlg.cpp:587
-#, fuzzy
 msgid "Invert display"
-msgstr "Negatyvinis vaizdas"
+msgstr "Inversează display"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Actualizare completă display"
 
 #: ../src/viewdlg.cpp:589
-#, fuzzy
 msgid "Toggle status bar"
-msgstr "Pakeisti teksto formatavimą"
+msgstr "Comutare linie status"
 
 #: ../src/viewdlg.cpp:591
-#, fuzzy
 msgid "Tasks list"
-msgstr "Žymių sąrašas"
+msgstr "Listă de aplicaţii deschise"
 
 #: ../src/viewdlg.cpp:593
 msgid "Toggle system panel"
-msgstr ""
+msgstr "Comutare panou sistem"
 
 #: ../src/viewdlg.cpp:595
 msgid "Lock device"
-msgstr ""
+msgstr "Blochează dispozitiv"
 
 #: ../src/viewdlg.cpp:600
 msgid "Open system panel"
-msgstr ""
+msgstr "Deschide panou sistem"
 
 #: ../src/viewdlg.cpp:603
-#, fuzzy
 msgid "PocketBook Main menu"
-msgstr "Pagrindinis meniu"
+msgstr "Meniu principal PocketBook"
 
 #: ../src/viewdlg.cpp:605
 msgid "Unknown command"
-msgstr "Nepažįstama komanda"
+msgstr "Comandă necunoscută"
 
 #: ../src/viewdlg.cpp:612
 msgid "Previous Page"
-msgstr "Prieš tai buvęs puslapis"
+msgstr "Pagina anterioară"
 
 #: ../src/viewdlg.cpp:614
 msgid "Next Page"
-msgstr "Sekantis puslapis"
+msgstr "Pagina următoare"
 
 #: ../src/viewdlg.cpp:616
 msgid "Back by 10 Pages"
-msgstr "Atgal per 10 puslapių"
+msgstr "Înapoi 10 pagini"
 
 #: ../src/viewdlg.cpp:618
 msgid "Forward by 10 Pages"
-msgstr " Pirmyn 10 puslapių "
+msgstr "Înainte 10 pagini"
 
 #: ../src/viewdlg.cpp:620
 msgid "Next Chapter"
-msgstr "Sekantis skyrius"
+msgstr "Capitolul următor"
 
 #: ../src/viewdlg.cpp:622
 msgid "Previous Chapter"
-msgstr "Prieš tai buvęs skyrius"
+msgstr "Capitolul anterior"
 
 #: ../src/viewdlg.cpp:624
 msgid "Add Bookmark"
-msgstr "Pridėti žymę"
+msgstr "Adauga semn de carte"
 
 #: ../src/viewdlg.cpp:626
 msgid "Rotate Clockwise"
-msgstr "Pasukti pagal laikrodžio rodyklę"
+msgstr "Roteşte în sensul acelor de ceasornic"
 
 #: ../src/viewdlg.cpp:628
 msgid "Rotate Anti-Clockwise"
-msgstr "Pasukti prieš laikrodžio rodyklę"
+msgstr "Roteşte invers acelor de ceasornic"
 
 #: ../src/viewdlg.cpp:630
 msgid "Portrait View"
-msgstr "Vertikaliai"
+msgstr "Portret"
 
 #: ../src/viewdlg.cpp:632
 msgid "Landscape View"
-msgstr "Horizontaliai"
+msgstr "Landscape"
 
 #: ../src/viewdlg.cpp:656
 msgid "Key"
-msgstr "Klavišas"
+msgstr "Buton"
 
 #: ../src/viewdlg.cpp:656
 msgid "Assigned function"
-msgstr "Priskirti veiksmą"
+msgstr "Funcţie atribuită"
 
 #: ../src/ota_update.cpp:135
 msgid "Couldn't connect to server!"
-msgstr ""
+msgstr "Nu m-am putut conecta la server!"
 
 #: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
 #: ../src/ota_update.cpp:287
 msgid "Downloading..."
-msgstr ""
+msgstr "Se descarcă..."
 
 #: ../src/ota_update.cpp:154
 msgid "Server returned error response: "
-msgstr ""
+msgstr "Server-ul a întors mesaj de eroare:"
 
 #: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
+"Descărcare reuşită!\n"
+"CoolReader se va restarta."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/ota_update.cpp:194
 msgid "Couldn't remove existing package!"
-msgstr ""
+msgstr "Nu s-a putut şterge pachetul curent!"
 
 #: ../src/ota_update.cpp:231
 msgid "Couldn't connect to the network!"
-msgstr ""
+msgstr "Nu m-am putut conecta la reţea!"
 
 #: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
 #: ../src/ota_update.cpp:266
-#, fuzzy
 msgid "Searching..."
-msgstr "kraunasi..."
+msgstr "Se caută..."
 
 #: ../src/ota_update.cpp:244
 msgid "You have the latest version."
-msgstr ""
+msgstr "Ai ultima versiune."
 
 #: ../src/ota_update.cpp:276
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
 msgstr ""
+"Nu s-a găsit update pentru dispozitivul tău!\n"
+"Model dispozitiv:"
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
-msgstr ""
+msgstr "Update eşuat!"
 
 #: ../src/pb_toc.cpp:21
-#, fuzzy
 msgid "Contents"
-msgstr "Klavišų paskirtis"
+msgstr "Cuprins"
 
 #: ../src/cr3pocketbook.cpp:1683
 msgid "Cache cleared."
-msgstr ""
+msgstr "Fişierele cache au fost şterse."
 
 #: ../src/cr3pocketbook.cpp:1688
-#, fuzzy
 msgid "Unable to list the directory contents!"
-msgstr "Turinys"
+msgstr "Nu s-a putut lista conţinutul folder-ului!"
 
 #: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Nu s-au putut şterge fişierele!"
 
 #: ../src/cr3pocketbook.cpp:3191
 msgid "Press $1 to translate"
-msgstr "Paspauskite $1 kad išversti"
+msgstr "Apasă $1 pentru a traduce"
 
 #: ../src/cr3pocketbook.cpp:4067
 msgid "Updated to v"
-msgstr ""
+msgstr "Actualizat la v"
 
 #: ../src/cr3pocketbook.cpp:4177
-#, fuzzy
 msgid "Untitled"
-msgstr "Rodyti laiką"
-
-#, fuzzy
-#~ msgid "Remove phrase from selection"
-#~ msgstr "Išskirti citatą"
-
-#, fuzzy
-#~ msgid "Cites"
-#~ msgstr "Citatos"
-
-#, fuzzy
-#~ msgid "Go to cite"
-#~ msgstr "Atversti puslapį"
+msgstr "Fără titlu"
