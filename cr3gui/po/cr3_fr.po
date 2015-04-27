@@ -9,8 +9,8 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-26 16:39+0300\n"
-"PO-Revision-Date: 2015-04-25 06:30+0000\n"
-"Last-Translator: BruceLee\n"
+"PO-Revision-Date: 2015-04-26 21:05+0000\n"
+"Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/fr/)\n"
 "Language: fr\n"
@@ -757,11 +757,11 @@ msgstr "Activé"
 
 #: ../src/settings.cpp:1080
 msgid "AM/PM"
-msgstr ""
+msgstr "AM/PM"
 
 #: ../src/settings.cpp:1081
 msgid "24h"
-msgstr ""
+msgstr "24h"
 
 #: ../src/settings.cpp:1087
 msgid "Solid"
@@ -1181,9 +1181,8 @@ msgid "Status line settings"
 msgstr "Paramètres de la ligne de status"
 
 #: ../src/settings.cpp:1592
-#, fuzzy
 msgid "Time format"
-msgstr "Format du fichier"
+msgstr "Format heure"
 
 #: ../src/settings.cpp:1594
 msgid "Show time"
