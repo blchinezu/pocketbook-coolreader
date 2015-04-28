@@ -38,16 +38,16 @@ External dependencies:
 
 
 Build:
-  bash make.sh [360|602|pro4|pro5]
+  bash make.sh [360|pro2|pro4|pro5]
 
 
-SDK for 360 and PRO devices (including 602):
+SDK for 360 and PRO devices (including pro2):
   https://sourceforge.net/projects/pocketbook-free/files/PocketBook_Pro_SDK_Linux_1.1/
   For 360 use the PBSDK dir from the archive
-  For 602 and pro4 use the FRSCSDK dir from the archive
+  For pro2 and pro4 use the FRSCSDK dir from the archive
 
   libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/
-    For 602 you have to rename it to libinkview.1.1a.so
+    For pro2 you have to rename it to libinkview.1.1a.so
       (a symlink is created by make.sh when needed)
     For pro4 you have to add libinkview.pb626.fw4.4.so from a FW4 device to the lib dir
       (also a symlink is created by make.sh when needed)
