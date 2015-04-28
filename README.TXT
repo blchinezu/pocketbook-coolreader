@@ -32,7 +32,7 @@ Directories:
 
 
 External dependencies: 
-  common: zlib, libpng, libjpeg, freetype
+  common: zlib, libpng, libjpeg, freetype, libcurl
   cr3gui/xcb: libxcb, fontconfig
   cr3gui/nanoX: libnanoX
 
