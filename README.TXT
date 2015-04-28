@@ -41,7 +41,7 @@ Build:
   bash make.sh [360|pro2|pro4|pro5]
 
 
-SDK for 360 and PRO devices (including pro2):
+SDK for 360 and PRO devices:
   https://sourceforge.net/projects/pocketbook-free/files/PocketBook_Pro_SDK_Linux_1.1/
   For 360 use the PBSDK dir from the archive
   For pro2 and pro4 use the FRSCSDK dir from the archive
