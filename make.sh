@@ -42,14 +42,14 @@ if [ "$1" = "" -o "$1" = "360" ]; then
 
 fi
 
-if [ "$1" = "" -o "$1" = "602" ]; then
+if [ "$1" = "" -o "$1" = "pro2" ]; then
 
     if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
         echo
         echo 'Invalid SDK structure!'
         echo
         echo 'libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/'
-        echo '  For 602 you have to rename it to libinkview.1.1a.so'
+        echo '  For pro2 you have to rename it to libinkview.1.1a.so'
         echo '  (a symlink is created by make.sh when needed)'
         echo
         exit
@@ -60,13 +60,13 @@ if [ "$1" = "" -o "$1" = "602" ]; then
         $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so \
         $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
 
-    if [ -f pb602/cr3gui/cr3-pb.app ]; then
+    if [ -f pbpro2/cr3gui/cr3-pb.app ]; then
         echo 'Remove previous build'
-        rm -f pb602/cr3gui/cr3-pb.app
+        rm -f pbpro2/cr3gui/cr3-pb.app
     fi
 
-    mkdir -p pb602
-    cd pb602
+    mkdir -p pbpro2
+    cd pbpro2
     cmake \
         -D CMAKE_TOOLCHAIN_FILE=../tools/toolchain-arm-gnu-eabi-pocketbook.cmake \
         -D TARGET_TYPE=ARM \
@@ -79,12 +79,12 @@ if [ "$1" = "" -o "$1" = "602" ]; then
         -D ENABLE_PB_DB_STATE=1 \
         -D BACKGROUND_CACHE_FILE_CREATION=1 \
         -D POCKETBOOK_PRO=1 \
-        -D POCKETBOOK_PRO_602=1 \
+        -D POCKETBOOK_PRO_PRO2=1 \
         ..
     make
 
     cd ..
-    if [ -f pb602/cr3gui/cr3-pb.app ]; then
+    if [ -f pbpro2/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
         ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
     else
@@ -93,7 +93,7 @@ if [ "$1" = "" -o "$1" = "602" ]; then
     fi
     echo 'Done'
 
-    bash updateReleases.sh 602
+    bash updateReleases.sh pro2
 
 fi
 

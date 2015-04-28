@@ -2,47 +2,45 @@
 # This file is put in the public domain.
 #
 # Translators:
-# Rafał <galon3@wp.pl>, 2015
-# Tomasz Długosz <tomek3d@gmail.com>, 2009
+# Frits van der Blij <f.blij@hccnet.nl>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-04-26 16:39+0300\n"
-"PO-Revision-Date: 2015-04-27 15:56+0000\n"
-"Last-Translator: Rafał <galon3@wp.pl>\n"
-"Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/pl/)\n"
-"Language: pl\n"
+"PO-Revision-Date: 2015-04-27 23:36+0000\n"
+"Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
+"Language-Team: Dutch (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/nl/)\n"
+"Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/citedlg.cpp:190
 msgid "Select next/prev paragraph"
-msgstr "Zaznacz nstępny/poprzedni akapit"
+msgstr "Selecteer volgende/vorige alinea"
 
 #: ../src/citedlg.cpp:193
 msgid "Select one more paragraph"
-msgstr "Zaznacz jeszcze jeden akapit"
+msgstr "Selecteer nog een alinea"
 
 #: ../src/citedlg.cpp:196
 msgid "Deselect paragraph"
-msgstr "Usuń zaznaczenie akapitu"
+msgstr "Annuleer selectie van alinea"
 
 #: ../src/citedlg.cpp:199
 msgid "Select one more phrase"
-msgstr "Zaznacz jeszcze jedno zdanie"
+msgstr "Selecteer nog een woordgroep"
 
 #: ../src/citedlg.cpp:202
 msgid "Deselect phrase"
-msgstr "Usuń zaznaczenie zdania"
+msgstr "Annuleer selectie van woordgroep"
 
 #: ../src/citedlg.cpp:216
 msgid "Select text"
-msgstr "Wybierz tekst"
+msgstr "Selecteer tekst"
 
 #: ../src/fsmenu.cpp:41
 msgid "1..9"
@@ -54,83 +52,83 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr "Przepraszamy, obecnie nie ma instrukcji w tym języku."
+msgstr "Er is geen handleiding beschikbaar in deze taal . Sorry!"
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
-msgstr "Pomoc"
+msgstr "Help"
 
 #: ../src/mainwnd.cpp:844
 msgid "Main Menu"
-msgstr "Menu główne"
+msgstr "Hoofdmenu"
 
 #: ../src/mainwnd.cpp:878 ../src/viewdlg.cpp:573
 msgid "About"
-msgstr "O książce"
+msgstr "Info"
 
 #: ../src/mainwnd.cpp:888 ../src/viewdlg.cpp:537
 msgid "Go to page"
-msgstr "Idź do strony"
+msgstr "Ga naar pagina"
 
 #: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
 msgid "Open recent book"
-msgstr "Ostatnio otwierane książki"
+msgstr "Open recent boek"
 
 #: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
 msgid "Dictionary"
-msgstr "Słownik"
+msgstr "Woordenboek"
 
 #: ../src/mainwnd.cpp:910 ../src/settings.cpp:1417
 msgid "Cite"
-msgstr "Cytat"
+msgstr "Citeren"
 
 #: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
 msgid "Bookmarks"
-msgstr "Zakładki"
+msgstr "Bladwijzers"
 
 #: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
 msgid "Search"
-msgstr "Szukaj"
+msgstr "Zoeken"
 
 #: ../src/mainwnd.cpp:922 ../src/settings.cpp:1055
 msgid "Settings"
-msgstr "Ustawienia"
+msgstr "Instellingen"
 
 #: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:668
 msgid "Keyboard layout"
-msgstr "Układ klawiatury"
+msgstr "Toetsenbordlayout"
 
 #: ../src/mainwnd.cpp:938
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
 msgstr ""
-"$1 - wybierz polecenie\n"
-"$2, $3 - zamknij"
+"$1 - opdracht kiezen\n"
+"$2, $3 - sluiten"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
-msgstr "Bieżąca strona"
+msgstr "Huidige pagina"
 
 #: ../src/mainwnd.cpp:1047
 msgid "Total pages"
-msgstr "Wszystkich stron"
+msgstr "Totaal aantal pagina's"
 
 #: ../src/mainwnd.cpp:1048
 msgid "Battery state"
-msgstr "Stan baterii"
+msgstr "Batterijstatus"
 
 #: ../src/mainwnd.cpp:1048
 msgid "charging..."
-msgstr "ładowanie..."
+msgstr "bezig met opladen..."
 
 #: ../src/mainwnd.cpp:1049
 msgid "Current Time"
-msgstr "Aktualny czas"
+msgstr "Huidige tijd"
 
 #: ../src/mainwnd.cpp:1054
 msgid "Current chapter"
-msgstr "Bieżący rozdział"
+msgstr "Huidig hoofdstuk"
 
 #: ../src/mainwnd.cpp:1057
 msgid "Status"
@@ -138,100 +136,100 @@ msgstr "Status"
 
 #: ../src/mainwnd.cpp:1060
 msgid "Archive name"
-msgstr "Nazwa archiwum"
+msgstr "Naam van archief"
 
 #: ../src/mainwnd.cpp:1061
 msgid "Archive path"
-msgstr "Ścieżka do archiwum"
+msgstr "Pad van archief"
 
 #: ../src/mainwnd.cpp:1062
 msgid "Archive size"
-msgstr "Rozmiar archiwum"
+msgstr "Groote van archief"
 
 #: ../src/mainwnd.cpp:1063
 msgid "File name"
-msgstr "Nazwa pliku"
+msgstr "Bestandsnaam"
 
 #: ../src/mainwnd.cpp:1064
 msgid "File path"
-msgstr "Ścieżka do pliku"
+msgstr "Bestandspad"
 
 #: ../src/mainwnd.cpp:1065
 msgid "File size"
-msgstr "Rozmiar pliku"
+msgstr "Bestandsgrootte"
 
 #: ../src/mainwnd.cpp:1066
 msgid "File format"
-msgstr "Format pliku"
+msgstr "Bestandsformaat"
 
 #: ../src/mainwnd.cpp:1067
 msgid "File info"
-msgstr "Informacje o pliku"
+msgstr "Bestandsinfo"
 
 #: ../src/mainwnd.cpp:1070
 msgctxt "Book"
 msgid "Title"
-msgstr "Tytuł"
+msgstr "Titel"
 
 #: ../src/mainwnd.cpp:1071
 msgid "Author(s)"
-msgstr "Autor(zy)"
+msgstr "Auteur(s)"
 
 #: ../src/mainwnd.cpp:1072
 msgid "Series name"
-msgstr "Nazwa cyklu"
+msgstr "Serienaam"
 
 #: ../src/mainwnd.cpp:1073
 msgid "Series number"
-msgstr "Numer w cyklu"
+msgstr "Serienummer"
 
 #: ../src/mainwnd.cpp:1074
 msgid "Date"
-msgstr "Data"
+msgstr "Datum"
 
 #: ../src/mainwnd.cpp:1075
 msgid "Genres"
-msgstr "Gatunek"
+msgstr "Genres"
 
 #: ../src/mainwnd.cpp:1076
 msgid "Language"
-msgstr "Język"
+msgstr "Taal"
 
 #: ../src/mainwnd.cpp:1077
 msgid "Translator"
-msgstr "Tłumaczenie"
+msgstr "Vertaler"
 
 #: ../src/mainwnd.cpp:1078
 msgid "Source language"
-msgstr "Język oryginalny"
+msgstr "Brontaal"
 
 #: ../src/mainwnd.cpp:1079
 msgid "Book info"
-msgstr "Informacje o książce"
+msgstr "Boekinfo"
 
 #: ../src/mainwnd.cpp:1082
 msgid "Document author"
-msgstr "Autor dokumentu"
+msgstr "Auteur van document"
 
 #: ../src/mainwnd.cpp:1083
 msgid "Document date"
-msgstr "Data dokumentu"
+msgstr "Documentdatum"
 
 #: ../src/mainwnd.cpp:1084
 msgid "Document source URL"
-msgstr "Źródło dokumentu"
+msgstr "URL van bron van document"
 
 #: ../src/mainwnd.cpp:1085
 msgid "OCR by"
-msgstr "OCR"
+msgstr "OCR door"
 
 #: ../src/mainwnd.cpp:1086
 msgid "Document version"
-msgstr "wersja dokumentu"
+msgstr "Documentversie"
 
 #: ../src/mainwnd.cpp:1087
 msgid "Change history"
-msgstr "Historia zmian"
+msgstr "WIjzigingsoverzicht"
 
 #: ../src/mainwnd.cpp:1088
 msgid "ID"
@@ -239,27 +237,27 @@ msgstr "ID"
 
 #: ../src/mainwnd.cpp:1089
 msgid "Program used"
-msgstr "Używany program"
+msgstr "Gebruikt programma"
 
 #: ../src/mainwnd.cpp:1090
 msgid "Document info"
-msgstr "O dokumencie"
+msgstr "Documentinfo"
 
 #: ../src/mainwnd.cpp:1093
 msgid "Publication name"
-msgstr "Nazwa publikacji"
+msgstr "Naam van publicatie"
 
 #: ../src/mainwnd.cpp:1094
 msgid "Publisher"
-msgstr "Wydawaca"
+msgstr "Uitgever"
 
 #: ../src/mainwnd.cpp:1095
 msgid "Publisher city"
-msgstr "Miasto wydania"
+msgstr "Stad van uitgever"
 
 #: ../src/mainwnd.cpp:1096
 msgid "Publication year"
-msgstr "Rok wydania"
+msgstr "Jaar van uitgave"
 
 #: ../src/mainwnd.cpp:1097
 msgid "ISBN"
@@ -267,521 +265,521 @@ msgstr "ISBN"
 
 #: ../src/mainwnd.cpp:1098
 msgid "Publication info"
-msgstr "Informacje o wydaniu"
+msgstr "Publicatie-info"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
-msgstr "Inne informacje"
+msgstr "Aangepaste info"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
-msgstr "CoolReader dla PocketBook"
+msgstr "CoolReader voor PocketBook"
 
 #: ../src/mainwnd.cpp:1105
 msgid "Build date"
-msgstr "Data budowy"
+msgstr "Builddatum"
 
 #: ../src/mainwnd.cpp:1106
 msgid "Build type"
-msgstr "Typ budowy"
+msgstr "Buildtype"
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
-msgstr "O programie"
+msgstr "Over het programma"
 
 #: ../src/mainwnd.cpp:1110
 msgid "Hardware type"
-msgstr "Typ sprzętu"
+msgstr "Hardwaretype"
 
 #: ../src/mainwnd.cpp:1111
 msgid "Firmware version"
-msgstr "Wersja firmware"
+msgstr "Firmwareversie"
 
 #: ../src/mainwnd.cpp:1112
 msgid "Keyboard type"
-msgstr "Typ klawiatury"
+msgstr "Toetsenbordtype"
 
 #: ../src/mainwnd.cpp:1113
 msgid "Screen type"
-msgstr "Typ ekranu"
+msgstr "Schermtype"
 
 #: ../src/mainwnd.cpp:1114
 msgid "Config file"
-msgstr "Plik konfiguracyjny"
+msgstr "Configbestand"
 
 #: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
-msgstr "Konfiguracja przycisków"
+msgstr "Toetsenbordindelingsbestand"
 
 #: ../src/mainwnd.cpp:1116
 msgid "Skin file"
-msgstr "Plik skórki"
+msgstr "Skinbestand"
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
-msgstr "Informacje debugowania"
+msgstr "Debuginformatie"
 
 #: ../src/mainwnd.cpp:1268
 msgid "Loading: please wait..."
-msgstr "Otwieranie: proszę czekać..."
+msgstr "Bezig met laden: even geduld alstublieft..."
 
 #: ../src/recentdlg.cpp:97
 msgid "Open book"
-msgstr "Otwórz książkę"
+msgstr "Open boek"
 
 #: ../src/recentdlg.cpp:98
 msgid "Delete record"
-msgstr "Usuń rekord"
+msgstr "Verwijder record"
 
 #: ../src/recentdlg.cpp:133
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
 msgstr ""
-"$1 - otwórz książkę\n"
-"$2, $3 - zamknij"
+"$1 - boek openen\n"
+"$2, $3 - sluiten"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
-msgstr "Bieżąca strona: $1 z $2\n"
+msgstr "Huidige pagina: $1 van $2\n"
 
 #: ../src/tocdlg.cpp:153
 msgid "Enter page number:"
-msgstr "Podaj numer strony:"
+msgstr "Geef paginanummer op:"
 
 #: ../src/bmkdlg.cpp:19
 msgid "Empty slot"
-msgstr "Wolne miejsce"
+msgstr "Lege ruimte"
 
 #: ../src/bmkdlg.cpp:45
 msgid "Page $1 ($2%)"
-msgstr "Strona $1 ($2%)"
+msgstr "Pagina $1 ($2%)"
 
 #: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
 msgid "Go to bookmark"
-msgstr "Idź do zakładki"
+msgstr "Ga naar bladwijzer"
 
 #: ../src/bmkdlg.cpp:72
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
 msgstr ""
-"Krótkie wciśnięcie $1 - idź do zakładki,\n"
-"$2 - przejdź do trybu dodawania zakładek"
+"Kort indrukken $1 - ga naar bladwijzer,\n"
+"$2 - ga naar instellingsmodus"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
 msgstr ""
-"Krótkie wciśnięcie $1 - idź do zakładki,\n"
-"przytrzymanie - dodanie zakładki"
+"Kort indrukken $1 - ga naar bladwijzer,\n"
+"lang indrukken - stel bladwijzer in"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
 msgid "Set bookmark"
-msgstr "Dodaj zakładkę"
+msgstr "Stel bladwijzer in"
 
 #: ../src/bmkdlg.cpp:80
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
 msgstr ""
-"$1 - dodaj zakładkę,\n"
-"$2 - przejdź do trybu wybierania zakładek"
+"$1 - stel bladwijzer in,\n"
+"$2 - ga naar uitvoeringsmodus"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
 msgstr ""
-"Krótkie wciśnięcie $1 - ustaw zakładkę,\n"
-"przytrzymanie - idź do zakładki"
+"Kort indrukken $1 - stel bladwijzer in,\n"
+"lang indrukken - ga naar bladwijzer"
 
 #: ../src/bmkdlg.cpp:162
 msgid "Delete bookmark"
-msgstr "Usuń zakładkę"
+msgstr "Verwijder bladwijzer"
 
 #: ../src/bmkdlg.cpp:316
 msgid "Go to citation"
-msgstr "Idź do cytatu"
+msgstr "Ga naar citaat"
 
 #: ../src/bmkdlg.cpp:317
 msgid "Delete citation"
-msgstr "Usuń cytat"
+msgstr "Verwijder citaat"
 
 #: ../src/bmkdlg.cpp:331
 msgid "Citations"
-msgstr "Cytaty"
+msgstr "Citaten"
 
 #: ../src/bmkdlg.cpp:447 ../src/viewdlg.cpp:574
 msgid "Cite selection dialog"
-msgstr "Zaznacz cytat"
+msgstr "Dialoogvenster citaat selecteren"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "
-msgstr "Ze słownika "
+msgstr "Van woordenboek"
 
 #: ../src/dictdlg.cpp:89
 msgid "[cannot read article]"
-msgstr "[nie można otworzyć tłumaczenia]"
+msgstr "[kan artikel niet lezen]"
 
 #: ../src/settings.cpp:196
 msgid "choose command"
-msgstr "Wybierz komendę"
+msgstr "kies opdracht"
 
 #: ../src/settings.cpp:214
 msgid "Controls"
-msgstr "Sterowanie"
+msgstr "Bediening"
 
 #: ../src/settings.cpp:380
 msgid "(No action)"
-msgstr "(Brak działania)"
+msgstr "(Geen actie)"
 
 #: ../src/settings.cpp:533
 msgid "[Command is not assigned]"
-msgstr "[Brak przypisania komendy]"
+msgstr "[Opdracht is niet toegewezen]"
 
 #: ../src/settings.cpp:554
 msgid "0` (Portrait)"
-msgstr "0° (Pionowo)"
+msgstr "0` (Staand)"
 
 #: ../src/settings.cpp:555
 msgid "90 `"
-msgstr "90°"
+msgstr "90 `"
 
 #: ../src/settings.cpp:556
 msgid "180 `"
-msgstr "180°"
+msgstr "180 `"
 
 #: ../src/settings.cpp:557
 msgid "270 `"
-msgstr "270°"
+msgstr "270 `"
 
 #: ../src/settings.cpp:568
 msgid "Page orientation"
-msgstr "Orientacja strony"
+msgstr "Paginastand"
 
 #: ../src/settings.cpp:589
 msgid "Default font size"
-msgstr "Domyślny rozmiar czcionki"
+msgstr "Standaard tekengrootte"
 
 #: ../src/settings.cpp:644
 msgid "The quick brown fox jumps over lazy dog"
-msgstr "W Szczebrzeszynie chrząszcz brzmi w trzcinie"
+msgstr "Pa's wijze lynx bezag vroom het fikse aquaduct"
 
 #: ../src/settings.cpp:824
 msgid "Justify"
-msgstr "Do prawej i lewej"
+msgstr "Uitlijnen"
 
 #: ../src/settings.cpp:825
 msgctxt "CSS"
 msgid "Left"
-msgstr "Do lewej"
+msgstr "Links"
 
 #: ../src/settings.cpp:826
 msgid "Center"
-msgstr "Do środka"
+msgstr "Gecentreerd"
 
 #: ../src/settings.cpp:827
 msgctxt "CSS"
 msgid "Right"
-msgstr "Do prawej"
+msgstr "Rechts"
 
 #: ../src/settings.cpp:833
 msgid "No indent"
-msgstr "Bez wcięcia"
+msgstr "Geen inspringing"
 
 #: ../src/settings.cpp:834
 msgid "Small indent"
-msgstr "Małe wcięcie"
+msgstr "Kleine inspringing"
 
 #: ../src/settings.cpp:835
 msgid "Big indent"
-msgstr "Duże wcięcie"
+msgstr "Grote inspringing"
 
 #: ../src/settings.cpp:836
 msgid "Small outdent"
-msgstr "Małe wysunięcie"
+msgstr "Kleine negatieve inspringing"
 
 #: ../src/settings.cpp:837
 msgid "Big outdent"
-msgstr "Duże wysunięcie"
+msgstr "Grote negatieve inspringing"
 
 #: ../src/settings.cpp:843
 msgid "[Default sans-serif font]"
-msgstr "[Domyślna czcionka sans-serif]"
+msgstr "[Standaard schreefloos lettertype]"
 
 #: ../src/settings.cpp:844
 msgid "[Default serif font]"
-msgstr "[Domyślna czcionka serif]"
+msgstr "[Standaard schreeflettertype]"
 
 #: ../src/settings.cpp:845
 msgid "[Default monospace font]"
-msgstr "[Domyślna czcionka monospace]"
+msgstr "[Standaard lettertype met vaste breedte]"
 
 #: ../src/settings.cpp:851
 msgid "Bigger (105%)"
-msgstr "Większa (105%)"
+msgstr "Groter (105%)"
 
 #: ../src/settings.cpp:852
 msgid "Bigger (110%)"
-msgstr "Większa (110%)"
+msgstr "Groter (110%)"
 
 #: ../src/settings.cpp:853
 msgid "Bigger (115%)"
-msgstr "Większa (115%)"
+msgstr "Groter (115%)"
 
 #: ../src/settings.cpp:854
 msgid "Bigger (120%)"
-msgstr "Większa (120%)"
+msgstr "Groter (120%)"
 
 #: ../src/settings.cpp:855
 msgid "Bigger (150%)"
-msgstr "Większa (150%)"
+msgstr "Groter (150%)"
 
 #: ../src/settings.cpp:856
 msgid "Smaller (95%)"
-msgstr "Mniejsza (95%)"
+msgstr "Kleiner (95%)"
 
 #: ../src/settings.cpp:857
 msgid "Smaller (90%)"
-msgstr "Mniejsza (90%)"
+msgstr "Kleiner (90%)"
 
 #: ../src/settings.cpp:858
 msgid "Smaller (85%)"
-msgstr "Mniejsza (85%)"
+msgstr "Kleiner (85%)"
 
 #: ../src/settings.cpp:859
 msgid "Smaller (80%)"
-msgstr "Mniejsza (80%)"
+msgstr "Kleiner (80%)"
 
 #: ../src/settings.cpp:860
 msgid "Smaller (70%)"
-msgstr "Mniejsza (70%)"
+msgstr "Kleiner (70%)"
 
 #: ../src/settings.cpp:861
 msgid "Smaller (60%)"
-msgstr "Mniejsza (60%)"
+msgstr "Kleiner (60%)"
 
 #: ../src/settings.cpp:867 ../src/settings.cpp:876 ../src/settings.cpp:1159
 #: ../src/settings.cpp:1165
 msgid "Normal"
-msgstr "Normalne"
+msgstr "Normaal"
 
 #: ../src/settings.cpp:868 ../src/settings.cpp:1166
 msgid "Bold"
-msgstr "Wytłuszczenie"
+msgstr "Vet"
 
 #: ../src/settings.cpp:869
 msgid "Bolder"
-msgstr "Grubsza"
+msgstr "Vetter"
 
 #: ../src/settings.cpp:870
 msgid "Lighter"
-msgstr "Cieńsza"
+msgstr "Lichter"
 
 #: ../src/settings.cpp:877
 msgid "Italic"
-msgstr "Kursywa"
+msgstr "Cursief"
 
 #: ../src/settings.cpp:912 ../src/settings.cpp:1086
 msgid "None"
-msgstr "Brak"
+msgstr "Geen"
 
 #: ../src/settings.cpp:913 ../src/settings.cpp:1088
 msgid "Underline"
-msgstr "Podkreślenie"
+msgstr "Onderstrepen"
 
 #: ../src/settings.cpp:914
 msgid "Line through"
-msgstr "Przekreślenie"
+msgstr "Doorhalen"
 
 #: ../src/settings.cpp:915
 msgid "Overline"
-msgstr "Linia nad"
+msgstr "Bovenstrepen"
 
 #: ../src/settings.cpp:921
 msgid "Baseline"
-msgstr "Linia bazowa"
+msgstr "Basislijn"
 
 #: ../src/settings.cpp:922
 msgid "Subscript"
-msgstr "Indeks dolny"
+msgstr "Subscript"
 
 #: ../src/settings.cpp:923
 msgid "Superscript"
-msgstr "Indeks górny"
+msgstr "Superscript"
 
 #: ../src/settings.cpp:929 ../src/settings.cpp:937
 msgid "Black"
-msgstr "Czarny"
+msgstr "Zwart"
 
 #: ../src/settings.cpp:930 ../src/settings.cpp:938
 msgid "Gray"
-msgstr "Szary"
+msgstr "Grijs"
 
 #: ../src/settings.cpp:931 ../src/settings.cpp:939
 msgid "White"
-msgstr "Biały"
+msgstr "Wit"
 
 #: ../src/settings.cpp:946 ../src/settings.cpp:957
 msgid "0.2 of line height"
-msgstr "0.2 wysokości linii"
+msgstr "0.2 van regelhoogte"
 
 #: ../src/settings.cpp:947 ../src/settings.cpp:958
 msgid "0.3 of line height"
-msgstr "0.3 wysokości linii"
+msgstr "0.3 van regelhoogte"
 
 #: ../src/settings.cpp:948 ../src/settings.cpp:959 ../src/settings.cpp:968
 #: ../src/settings.cpp:984
 msgid "0.5 of line height"
-msgstr "0.5 wysokości linii"
+msgstr "0.5 van regelhoogte"
 
 #: ../src/settings.cpp:949 ../src/settings.cpp:960 ../src/settings.cpp:969
 #: ../src/settings.cpp:985
 msgid "1 line height"
-msgstr "1 wysokości linii"
+msgstr "Enkele regelhoogte"
 
 #: ../src/settings.cpp:950 ../src/settings.cpp:961 ../src/settings.cpp:971
 #: ../src/settings.cpp:987
 msgid "2 of line height"
-msgstr "2 wysokości linii"
+msgstr "Dubbele regelhoogte"
 
 #: ../src/settings.cpp:970 ../src/settings.cpp:986
 msgid "1.5 of line height"
-msgstr "1.5 wysokości linii"
+msgstr "1,5 regelhoogte"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
 msgid "4 of line height"
-msgstr "4 wysokości linii"
+msgstr "4 maal regelhoogte"
 
 #: ../src/settings.cpp:973 ../src/settings.cpp:989
 msgid "5% of line width"
-msgstr "5% szerokości linii"
+msgstr "5% van regelbreedte"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
 msgid "10% of line width"
-msgstr "10% szerokości linii"
+msgstr "10% van regelbreedte"
 
 #: ../src/settings.cpp:975 ../src/settings.cpp:991
 msgid "15% of line width"
-msgstr "15% szerokości linii"
+msgstr "15% van regelbreedte"
 
 #: ../src/settings.cpp:976 ../src/settings.cpp:992
 msgid "20% of line width"
-msgstr "20% szerokości linii"
+msgstr "20% van regelbreedte"
 
 #: ../src/settings.cpp:977 ../src/settings.cpp:993
 msgid "30% of line width"
-msgstr "30% szerokości linii"
+msgstr "30% van regelbreedte"
 
 #: ../src/settings.cpp:996
 msgid "Text alignment"
-msgstr "Wyrównanie tekstu"
+msgstr "Uitlijning"
 
 #: ../src/settings.cpp:998
 msgid "First line indent"
-msgstr "Wcięcie pierwszej linii"
+msgstr "Inspringing eerste regel"
 
 #: ../src/settings.cpp:1001 ../src/settings.cpp:1580
 msgid "Font face"
-msgstr "Krój czcionki"
+msgstr "Lettertype"
 
 #: ../src/settings.cpp:1015
 msgid "Font size"
-msgstr "Rozmiar czcionki"
+msgstr "Tekengrootte"
 
 #: ../src/settings.cpp:1017 ../src/settings.cpp:1474 ../src/settings.cpp:1589
 msgid "Font weight"
-msgstr "Waga czcionki"
+msgstr "Tekengewicht"
 
 #: ../src/settings.cpp:1019
 msgid "Font style"
-msgstr "Styl czcionki"
+msgstr "Tekenstijl"
 
 #: ../src/settings.cpp:1021 ../src/settings.cpp:1503
 msgid "Interline space"
-msgstr "Interlinia"
+msgstr "Regelafstand"
 
 #: ../src/settings.cpp:1023
 msgid "Letter spacing"
-msgstr "Odstępy między literami"
+msgstr "Letterafstand"
 
 #: ../src/settings.cpp:1025
 msgid "Text decoration"
-msgstr "Dekoracja tekstu"
+msgstr "Teksteffecten"
 
 #: ../src/settings.cpp:1027
 msgid "Text vertical alignment"
-msgstr "Wyrównanie tekstu w pionie"
+msgstr "Verticale uitvulling"
 
 #: ../src/settings.cpp:1029
 msgid "Text color"
-msgstr "Kolor tekstu"
+msgstr "Tekstkleur"
 
 #: ../src/settings.cpp:1031
 msgid "Background color"
-msgstr "Kolor tła"
+msgstr "Achtergrondkleur"
 
 #: ../src/settings.cpp:1033
 msgid "Margin before"
-msgstr "Margines przed"
+msgstr "Marge boven"
 
 #: ../src/settings.cpp:1035
 msgid "Margin after"
-msgstr "Margines po"
+msgstr "Marge onder"
 
 #: ../src/settings.cpp:1037
 msgid "Margin left"
-msgstr "Margines z lewej"
+msgstr "Marge links"
 
 #: ../src/settings.cpp:1039
 msgid "Margin right"
-msgstr "Margines z prawej"
+msgstr "Marge rechts"
 
 #: ../src/settings.cpp:1067
 msgid "On for all fonts"
-msgstr "Włącz dla wszystkich czcionek"
+msgstr "Aan voor alle lettertypen"
 
 #: ../src/settings.cpp:1068
 msgid "On for big fonts only"
-msgstr "Tylko dla dużych czcionek"
+msgstr "Aan voor grote lettertypen"
 
 #: ../src/settings.cpp:1069 ../src/settings.cpp:1075 ../src/settings.cpp:1179
 msgid "Off"
-msgstr "Wyłączone"
+msgstr "Uit"
 
 #: ../src/settings.cpp:1074
 msgid "On"
-msgstr "Włączone"
+msgstr "Aan"
 
 #: ../src/settings.cpp:1080
 msgid "AM/PM"
-msgstr "AM/PM"
+msgstr "VM/NM"
 
 #: ../src/settings.cpp:1081
 msgid "24h"
-msgstr "24g"
+msgstr "24-uurs"
 
 #: ../src/settings.cpp:1087
 msgid "Solid"
-msgstr "Wypełnienie"
+msgstr "Solide"
 
 #: ../src/settings.cpp:1160
 msgid "Inverse"
-msgstr "Negatyw"
+msgstr "Omkeren"
 
 #: ../src/settings.cpp:1171
 msgid "One"
-msgstr "Jedna"
+msgstr "Een"
 
 #: ../src/settings.cpp:1172
 msgid "Two"
-msgstr "Dwie"
+msgstr "Twee"
 
 #: ../src/settings.cpp:1177
 msgid "Top"
-msgstr "Góra"
+msgstr "Bovenaan"
 
 #: ../src/settings.cpp:1184
 msgid "70%"
@@ -865,107 +863,107 @@ msgstr "200%"
 
 #: ../src/settings.cpp:1248
 msgid "Always use fast updates"
-msgstr "Zawsze rób szybkie odświeżanie"
+msgstr "Altijd snel verversen"
 
 #: ../src/settings.cpp:1249
 msgid "Don't use fast updates"
-msgstr "Nigdy nie rób szybkiego odświeżania"
+msgstr "Nooit snel verversen"
 
 #: ../src/settings.cpp:1250
 msgid "Full updates every 2 pages"
-msgstr "Pełne odświeżenie co 2 strony"
+msgstr "Volledig verversen per 2 pagina's"
 
 #: ../src/settings.cpp:1251
 msgid "Full updates every 3 pages"
-msgstr "Pełne odświeżenie co 3 strony"
+msgstr "Volledig verversen per 3 pagina's"
 
 #: ../src/settings.cpp:1252
 msgid "Full updates every 4 pages"
-msgstr "Pełne odświeżenie co 4 strony"
+msgstr "Volledig verversen per 4 pagina's"
 
 #: ../src/settings.cpp:1253
 msgid "Full updates every 5 pages"
-msgstr "Pełne odświeżenie co 5 stron"
+msgstr "Volledig verversen per 5 pagina's"
 
 #: ../src/settings.cpp:1254
 msgid "Full updates every 6 pages"
-msgstr "Pełne odświeżenie co 6 stron"
+msgstr "Volledig verversen per 6 pagina's"
 
 #: ../src/settings.cpp:1255
 msgid "Full updates every 7 pages"
-msgstr "Pełne odświeżenie co 7 stron"
+msgstr "Volledig verversen per 7 pagina's"
 
 #: ../src/settings.cpp:1256
 msgid "Full updates every 8 pages"
-msgstr "Pełne odświeżenie co 8 stron"
+msgstr "Volledig verversen per 8 pagina's"
 
 #: ../src/settings.cpp:1257
 msgid "Full updates every 9 pages"
-msgstr "Pełne odświeżenie co 9 stron"
+msgstr "Volledig verversen per 9 pagina's"
 
 #: ../src/settings.cpp:1258
 msgid "Full updates every 10 pages"
-msgstr "Pełne odświeżenie co 10 stron"
+msgstr "Volledig verversen per 10 pagina's"
 
 #: ../src/settings.cpp:1259
 msgid "Full updates every 14 pages"
-msgstr "Pełne odświeżenie co 14 stron"
+msgstr "Volledig verversen per 14 pagina's"
 
 #: ../src/settings.cpp:1260
 msgid "Full updates every 20 pages"
-msgstr "Pełne odświeżenie co 20 stron"
+msgstr "Volledig verversen per 20 pagina's"
 
 #: ../src/settings.cpp:1261
 msgid "Full updates every 25 pages"
-msgstr "Pełne odświeżenie co 25 stron"
+msgstr "Volledig verversen per 25 pagina's"
 
 #: ../src/settings.cpp:1262
 msgid "Full updates every 30 pages"
-msgstr "Pełne odświeżenie co 30 stron"
+msgstr "Volledig verversen per 30 pagina's"
 
 #: ../src/settings.cpp:1263
 msgid "Full updates every 35 pages"
-msgstr "Pełne odświeżenie co 35 stron"
+msgstr "Volledig verversen per 35 pagina's"
 
 #: ../src/settings.cpp:1264
 msgid "Full updates every 40 pages"
-msgstr "Pełne odświeżenie co 40 stron"
+msgstr "Volledig verversen per 40 pagina's"
 
 #: ../src/settings.cpp:1265
 msgid "Full updates every 45 pages"
-msgstr "Pełne odświeżenie co 45 stron"
+msgstr "Volledig verversen per 45 pagina's"
 
 #: ../src/settings.cpp:1266
 msgid "Full updates every 50 pages"
-msgstr "Pełne odświeżenie co 50 stron"
+msgstr "Volledig verversen per 50 pagina's"
 
 #: ../src/settings.cpp:1271
 msgid "Turbo mode disabled"
-msgstr "Tryb turbo wyłączony"
+msgstr "Turbomodus uitgeschakeld"
 
 #: ../src/settings.cpp:1272
 msgid "Turbo mode enabled"
-msgstr "Tryb turbo włączony"
+msgstr "Turbomodus ingeschakeld"
 
 #: ../src/settings.cpp:1279
 msgid "180+slow next page"
-msgstr "180+powoli następna strona"
+msgstr "180+langzaam volgende pagina"
 
 #: ../src/settings.cpp:1280
 msgid "180+slow prev/next page"
-msgstr "180+powoli poprzednia/następna strona"
+msgstr "180+langzaam vorige/volgende pagina"
 
 #: ../src/settings.cpp:1281
 msgid "180+FAST next page"
-msgstr "180+SZYBKO następna strona"
+msgstr "180+SNEL volgende pagina"
 
 #: ../src/settings.cpp:1282
 msgid "180+FAST prev/next page"
-msgstr "180+SZYBKO poprzednia/następna strona"
+msgstr "180+SNEL vorige/volgende pagina"
 
 #: ../src/settings.cpp:1283
 msgid "180+FAST next/prev page"
-msgstr "180+SZYBKO następna/poprzednia strona"
+msgstr "180+SNEL volgende/vorige pagina"
 
 #: ../src/settings.cpp:1301
 msgid "2 BPP"
@@ -985,19 +983,19 @@ msgstr "8 BPP"
 
 #: ../src/settings.cpp:1310
 msgid "Disabled (1:1)"
-msgstr "Wyłączone (1:1)"
+msgstr "Uitgeschakeld (1:1)"
 
 #: ../src/settings.cpp:1311
 msgid "Integer scale"
-msgstr "Skalowanie całkowite"
+msgstr "Integerschaal"
 
 #: ../src/settings.cpp:1312
 msgid "Arbitrary scale"
-msgstr "Skalowanie swobodne"
+msgstr "Arbitraire schaal"
 
 #: ../src/settings.cpp:1317
 msgid "Auto"
-msgstr "Automatycznie"
+msgstr "Auto"
 
 #: ../src/settings.cpp:1318
 msgid "*1"
@@ -1013,324 +1011,324 @@ msgstr "*3"
 
 #: ../src/settings.cpp:1404
 msgid "No hinting"
-msgstr "Bez hintingu"
+msgstr "Niet hinten"
 
 #: ../src/settings.cpp:1405
 msgid "Use bytecode"
-msgstr "Użycie kodu bajtowego"
+msgstr "Gebruik bytecode"
 
 #: ../src/settings.cpp:1406
 msgid "Autohinting"
-msgstr "Hinting automatyczny"
+msgstr "Automatisch hinten"
 
 #: ../src/settings.cpp:1407
 msgid "Light"
-msgstr "Lekki"
+msgstr "Licht"
 
 #: ../src/settings.cpp:1412
 msgid "Default paragraph formatting"
-msgstr "Domyślne formatowanie akapitu"
+msgstr "Standaard alinea-opmaak"
 
 #: ../src/settings.cpp:1413
 msgctxt "CSS"
 msgid "Title"
-msgstr "Tytuł"
+msgstr "Titel"
 
 #: ../src/settings.cpp:1414
 msgid "Subtitle"
-msgstr "Podtytuł"
+msgstr "Ondertitel"
 
 #: ../src/settings.cpp:1415
 msgid "Preformatted text / code"
-msgstr "Wstępnie sformatowany tekst / kod"
+msgstr "Voorgeformatteerde tekst / code "
 
 #: ../src/settings.cpp:1416
 msgid "Link"
-msgstr "Łącze"
+msgstr "Verwijzing"
 
 #: ../src/settings.cpp:1418
 msgid "Epigraph"
-msgstr "Motto"
+msgstr "Epigraaf"
 
 #: ../src/settings.cpp:1419
 msgid "Poem"
-msgstr "Wiersz"
+msgstr "Gedicht"
 
 #: ../src/settings.cpp:1420
 msgid "Text / Cite / Epigraph author"
-msgstr "Autor tekstu / cytatu / motta"
+msgstr "Auteur van tekst / citaat / epigraaf"
 
 #: ../src/settings.cpp:1421
 msgid "Footnote"
-msgstr "Przypis"
+msgstr "Voetnoot"
 
 #: ../src/settings.cpp:1422
 msgid "Footnote link"
-msgstr "Łącze do przypisu"
+msgstr "Voetnootverwijzing"
 
 #: ../src/settings.cpp:1423
 msgid "Footnote title"
-msgstr "Tytuł przypisu"
+msgstr "Voetnoottitel"
 
 #: ../src/settings.cpp:1424
 msgid "Annotation"
-msgstr "Komentarz"
+msgstr "Annotatie"
 
 #: ../src/settings.cpp:1464
 msgid "Default font face"
-msgstr "Domyślna czcionka"
+msgstr "Standaard lettertype"
 
 #: ../src/settings.cpp:1469
 msgid "Font settings"
-msgstr "Ustawienia czcionki"
+msgstr "Lettertype-instellingen"
 
 #: ../src/settings.cpp:1476
 msgid "Font antialiasing"
-msgstr "Wygładzanie czcionki"
+msgstr "Anti-aliasing"
 
 #: ../src/settings.cpp:1479
 msgid "Font hinting"
-msgstr "Hinting czcionki"
+msgstr "Hinten"
 
 #: ../src/settings.cpp:1481
 msgid "Font kerning"
-msgstr "Kerning czcionki"
+msgstr "Overhang"
 
 #: ../src/settings.cpp:1483
 msgid "Font embolding"
-msgstr "Pogrubianie czcionki"
+msgstr "Vetter maken"
 
 #: ../src/settings.cpp:1485
 msgid "Tracking"
-msgstr "Odstępy między literami"
+msgstr "Letterafstand"
 
 #: ../src/settings.cpp:1487
 msgid "Font Gamma"
-msgstr "Gamma czcionek"
+msgstr "Gamma"
 
 #: ../src/settings.cpp:1489
 msgid "Document embedded fonts"
-msgstr "Wbudowane czcionki dokumentu"
+msgstr "In document opgenomen lettertypen"
 
 #: ../src/settings.cpp:1492
 msgid "Fallback font face"
-msgstr "Czcionka awaryjna"
+msgstr "Alternatief letertype"
 
 #: ../src/settings.cpp:1498
 msgid "Formatting settings"
-msgstr "Ustawienia formatowania"
+msgstr "Opmaakinstellingen"
 
 #: ../src/settings.cpp:1510
 msgid "[No Hyphenation]"
-msgstr "[bez dzielenia wyrazów]"
+msgstr "[Geen woordafbreking]"
 
 #: ../src/settings.cpp:1511
 msgid "[Algorythmic Hyphenation]"
-msgstr "[dzielenie algorytem]"
+msgstr "[Afbreking met behulp van algoritme]"
 
 #: ../src/settings.cpp:1513
 msgid "Hyphenation"
-msgstr "Dzielenie wyrazów"
+msgstr "Woordafbreking"
 
 #: ../src/settings.cpp:1527
 msgid "Preformatted text"
-msgstr "Tekst przeformatowany"
+msgstr "Opgemaakte tekst"
 
 #: ../src/settings.cpp:1530
 msgid "Space condensing percent"
-msgstr "Minimalny odstęp między wyrazami"
+msgstr "Spaties verkleinen"
 
 #: ../src/settings.cpp:1533
 msgid "Space expanding percent"
-msgstr "Maksymalny odstęp między wyrazami"
+msgstr "Spaties vergroten tot maximaal"
 
 #: ../src/settings.cpp:1536
 msgid "Floating punctuation"
-msgstr "Wysunięta interpunkcja"
+msgstr "Drijvende interpunctie"
 
 #: ../src/settings.cpp:1542
 msgid "Image scaling"
-msgstr "Skalowanie obrazów"
+msgstr "Grootte van afbeeldingen aanpassen"
 
 #: ../src/settings.cpp:1547
 msgid "Block image scaling mode"
-msgstr "Skalowanie osobnych bloków obrazu"
+msgstr "Methode voor block images"
 
 #: ../src/settings.cpp:1550
 msgid "Block image max zoom"
-msgstr "Maksymalne powiększenie obrazów w bloku"
+msgstr "Max zoom voor block images"
 
 #: ../src/settings.cpp:1553
 msgid "Inline image scaling mode"
-msgstr "Skalowanie obrazów w linii tekstu"
+msgstr "Methode voor inline images"
 
 #: ../src/settings.cpp:1556
 msgid "Inline image max zoom"
-msgstr "Maksymalne powiększenie obrazów w linii"
+msgstr "Max zoom voor inline images"
 
 #: ../src/settings.cpp:1565
 msgid "Page settings"
-msgstr "Ustawienia strony"
+msgstr "Pagina-instellingen"
 
 #: ../src/settings.cpp:1570
 msgid "Status line"
-msgstr "Linia stanu"
+msgstr "Statusregel"
 
 #: ../src/settings.cpp:1575
 msgid "Status line settings"
-msgstr "Ustawienia linii stanu"
+msgstr "Instellingen voor statusregel"
 
 #: ../src/settings.cpp:1592
 msgid "Time format"
-msgstr "Format czasu"
+msgstr "Tijdnotatie"
 
 #: ../src/settings.cpp:1594
 msgid "Show time"
-msgstr "Pokaż zegarek"
+msgstr "Tijd weergeven"
 
 #: ../src/settings.cpp:1596
 msgid "Show title"
-msgstr "Pokaż tytuł"
+msgstr "Titel weergeven"
 
 #: ../src/settings.cpp:1598
 msgid "Show battery"
-msgstr "Pokaż stan baterii"
+msgstr "Batterijstatus weergeven"
 
 #: ../src/settings.cpp:1600
 msgid "Show battery percent"
-msgstr "Stan baterii w procentach"
+msgstr "Batterijpercentage weergeven"
 
 #: ../src/settings.cpp:1603
 msgid "Show position percent"
-msgstr "Procent przeczytania książki"
+msgstr "Percentage voor positie weergeven"
 
 #: ../src/settings.cpp:1605
 msgid "Show page count"
-msgstr "Ilość stron książki"
+msgstr "Aantal pagina's weergeven"
 
 #: ../src/settings.cpp:1607
 msgid "Show page count till chapter end"
-msgstr "Ilość stron do końca rozdziału"
+msgstr "Aantal pagina's tot einde van hoofdstuk weergeven"
 
 #: ../src/settings.cpp:1610
 msgid "Show page number"
-msgstr "pokaż numer strony"
+msgstr "Paginanummer weergeven"
 
 #: ../src/settings.cpp:1612
 msgid "Show chapter marks"
-msgstr "Pokaż znaczniki rozdziałów"
+msgstr "Hoofdstukmarkeringen weergeven"
 
 #: ../src/settings.cpp:1621
 msgid "Page margins"
-msgstr "Marginesy"
+msgstr "Marges"
 
 #: ../src/settings.cpp:1626
 msgid "Top margin"
-msgstr "Górny margines"
+msgstr "Bovenmarge"
 
 #: ../src/settings.cpp:1628
 msgid "Bottom margin"
-msgstr "Dolny margines"
+msgstr "Ondermarge"
 
 #: ../src/settings.cpp:1630
 msgid "Left margin"
-msgstr "Lewy margines"
+msgstr "Linkermarge"
 
 #: ../src/settings.cpp:1632
 msgid "Right margin"
-msgstr "Prawy margines"
+msgstr "Rechtermarge"
 
 #: ../src/settings.cpp:1637
 msgid "Footnotes at page bottom"
-msgstr "Przypisy na dole strony"
+msgstr "Voetnoten onder aan pagina"
 
 #: ../src/settings.cpp:1643
 msgid "Display settings"
-msgstr "Ustawienia ekranu"
+msgstr "Beeldinstellingen"
 
 #: ../src/settings.cpp:1652
 msgid "Landscape pages"
-msgstr "Strony w trybie poziomym"
+msgstr "Aantal kolommen in liggende stand"
 
 #: ../src/settings.cpp:1654
 msgid "Inverse display"
-msgstr "Kolory wyświetlacza"
+msgstr "Negatief beeld"
 
 #: ../src/settings.cpp:1657
 msgid "Show bookmark icons"
-msgstr "Pokazuj ikony zakładek"
+msgstr "Bladwijzersymbolen weergeven"
 
 #: ../src/settings.cpp:1660
 msgid "Highlight bookmarks"
-msgstr "Wyróżnij zakładki"
+msgstr "Weergave van bladwijzers"
 
 #: ../src/settings.cpp:1664
 msgid "Display update mode"
-msgstr "Tryb odświeżania ekranu"
+msgstr "Methode van beeldverversing"
 
 #: ../src/settings.cpp:1669
 msgid "Turbo update mode"
-msgstr "Tryb turbo"
+msgstr "Turbomodus voor verversing"
 
 #: ../src/settings.cpp:1674
 msgid "Gray buffer depth(need restart)"
-msgstr "Głębokość bufora szarości (konieczny restart)"
+msgstr "Grijsbufferdiepte (vereist herstart)"
 
 #: ../src/settings.cpp:1681
 msgid "Skin"
-msgstr "Skórka"
+msgstr "Skin"
 
 #: ../src/settings.cpp:1697
 msgid "Control settings"
-msgstr "Ustawienia sterowania"
+msgstr "Bedieningsinstellingen"
 
 #: ../src/settings.cpp:1704
 msgid "Rotate"
-msgstr "Obrót"
+msgstr "Draaien"
 
 #: ../src/settings.cpp:1707
 msgid "Page turn angle"
-msgstr "Kąt obrotu strony"
+msgstr "Draaihoek voor bladeren"
 
 #: ../src/settings.cpp:1723
 msgid "Tap action"
-msgstr "Ustawienia dotyku"
+msgstr "Acties bij tikken"
 
 #: ../src/settings.cpp:1725
 msgid "Long tap action"
-msgstr "Ustawienia długiego dotyku"
+msgstr "Acties bij aanraken en vasthouden"
 
 #: ../src/settings.cpp:1729
 msgid "Height of the upper tap zone"
-msgstr "Wysokość górnej strefy dotyku"
+msgstr "Hoogte van de bovenste tikzone"
 
 #: ../src/settings.cpp:1732
 msgid "Height of the middle tap zone"
-msgstr "Wysokość środkowej strefy dotyku"
+msgstr "Hoogte van de middelste tikzone"
 
 #: ../src/settings.cpp:1735
 msgid "Width of the left tap zone"
-msgstr "Szerokość lewej strefy dotyku"
+msgstr "Breedte van de linkertikzone"
 
 #: ../src/settings.cpp:1738
 msgid "Width of the middle tap zone"
-msgstr "Szerokość środkowej strefy dotyku"
+msgstr "Breedte van de middelste tikzone"
 
 #: ../src/settings.cpp:1757
 msgid "Style settings"
-msgstr "Ustawienia stylów"
+msgstr "Stijlinstellingen"
 
 #: ../src/settings.cpp:1762
 msgid "Document embedded styles"
-msgstr "Wbudowane style dokumentu"
+msgstr "In document opgenomen lettertypen"
 
 #: ../src/settings.cpp:1781 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr "Wyczyść pamięć podręczną"
+msgstr "Cache wissen"
 
 #: ../src/settings.cpp:1789 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
-msgstr "Aktualizacja OTA"
+msgstr "OTA Update"
 
 #: ../src/settings.cpp:1796 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
@@ -1341,44 +1339,45 @@ msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
 msgstr ""
-"Wciśnij $1 by zmienić opcje\n"
-"$2 by zaakceptować, $3 by anulować"
+"Kies $1 om optie te wijzigen\n"
+"$2 om toe te passen, $3 om te annuleren"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
-msgstr "Nie znaleziono słowników"
+msgstr "Geen woordenboeken gevonden"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
-msgstr "Umieść słowniki w katalogu 'dict' na karcie SD."
+msgstr "Zet woordenboeken in de directory 'dict' op de SD-kaart."
 
 #: ../src/viewdlg.cpp:161
 msgid "Dictionaries in standard unix .dict format are supported."
-msgstr "Wspierane są słowniki w standardowym uniksowym formacie .dict"
+msgstr "Woordenboeken in het standaard unix .dict formaat worden ondersteund."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
 "For each dictionary, pair of files should be provided: data file (with .dict "
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
-"Dla każdego słownika należy wgrać dwa pliki: plik z danymi (rozszerzenie ."
-"dict lub .dict.dz) i plik z indeksem o rozszerzeniu .index"
+"Voor elk woordenboek moeten twee bestanden beschikbaar zijn: een "
+"gegevensbestand (met de extensie .dict of .dict.dz), en een indexbestand "
+"(met de extensie .index)."
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
-msgstr "Spis treści"
+msgstr "Inhoudsopgave"
 
 #: ../src/viewdlg.cpp:181
 msgid "Enter page number"
-msgstr "Podaj numer strony"
+msgstr "Geef paginanummer op"
 
 #: ../src/viewdlg.cpp:194
 msgid "Enter position percent"
-msgstr "Podaj procent pozycji"
+msgstr "Geef positie op in procenten"
 
 #: ../src/viewdlg.cpp:355
 msgid "Find in dictionary"
-msgstr "Znajdź w słowniku"
+msgstr "Zoek op in woordenboek"
 
 #: ../src/viewdlg.cpp:485
 msgid "M"
@@ -1386,15 +1385,15 @@ msgstr "M"
 
 #: ../src/viewdlg.cpp:487
 msgid "Ok"
-msgstr "Ok"
+msgstr "OK"
 
 #: ../src/viewdlg.cpp:489
 msgid "Up"
-msgstr "do góry"
+msgstr "Naar boven"
 
 #: ../src/viewdlg.cpp:491
 msgid "Down"
-msgstr "w dół"
+msgstr "Naar beneden"
 
 #: ../src/viewdlg.cpp:493
 msgid "C"
@@ -1403,24 +1402,24 @@ msgstr "C"
 #: ../src/viewdlg.cpp:495
 msgctxt "Key"
 msgid "Left"
-msgstr "W lewo"
+msgstr "Links"
 
 #: ../src/viewdlg.cpp:497
 msgctxt "Key"
 msgid "Right"
-msgstr "W prawo"
+msgstr "Rechts"
 
 #: ../src/viewdlg.cpp:499
 msgid "Side Up"
-msgstr "boczny do góry"
+msgstr "Zijkant omhoog"
 
 #: ../src/viewdlg.cpp:501
 msgid "Side Down"
-msgstr "boczny w dół"
+msgstr "Zijkant omlaag"
 
 #: ../src/viewdlg.cpp:503
 msgid "Side Press"
-msgstr "wciśnij "
+msgstr "Zijkant drukken"
 
 #: ../src/viewdlg.cpp:505
 msgid "Menu"
@@ -1428,304 +1427,304 @@ msgstr "Menu"
 
 #: ../src/viewdlg.cpp:507
 msgid "Zoom"
-msgstr "Powiększenie"
+msgstr "Zoomen"
 
 #: ../src/viewdlg.cpp:518
 msgid "Long"
-msgstr "trzymaj"
+msgstr "Lang"
 
 #: ../src/viewdlg.cpp:525
 msgid "To first page"
-msgstr "Do pierwszej strony"
+msgstr "Naar eerste pagina"
 
 #: ../src/viewdlg.cpp:527
 msgid "Back by page"
-msgstr "Cofnij o stronę"
+msgstr "Terug per pagina"
 
 #: ../src/viewdlg.cpp:529
 msgid "Forward by page"
-msgstr "Dalej o stronę"
+msgstr "Vooruit per pagina"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
-msgstr "Do przodu w historii nawigacji"
+msgstr "Vooruit in de geschiedenis"
 
 #: ../src/viewdlg.cpp:531
 msgid "Back in move history"
-msgstr "Cofnij w historii nawigacji"
+msgstr "Terug in de geschiedenis"
 
 #: ../src/viewdlg.cpp:532
 msgid "Next link"
-msgstr "Nastęny link"
+msgstr "Volgende verwijzing"
 
 #: ../src/viewdlg.cpp:533
 msgid "Previous link"
-msgstr "Poprzedni link"
+msgstr "Vorige verwijzing"
 
 #: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
 msgid "Go to link"
-msgstr "Idź do linku"
+msgstr "Ga naar verwijzing"
 
 #: ../src/viewdlg.cpp:535
 msgid "To last page"
-msgstr "Do ostatniej strony"
+msgstr "Naar laatste pagina"
 
 #: ../src/viewdlg.cpp:536
 msgid "Go to position"
-msgstr "Do położenia"
+msgstr "Ga naar positie"
 
 #: ../src/viewdlg.cpp:538
 msgid "Zoom in"
-msgstr "Powiększ"
+msgstr "Inzoomen"
 
 #: ../src/viewdlg.cpp:539
 msgid "Zoom out"
-msgstr "Pomniejsz"
+msgstr "Uitzoomen"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
-msgstr "Zmień wytłuszczanie tekstu"
+msgstr "Vet in-/uitschakelen"
 
 #: ../src/viewdlg.cpp:541
 msgid "Toggle text format"
-msgstr "Zmień format tekstu"
+msgstr "Tekstopmaak in-/uitschakelen"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr "Zapisz zakładkę pod numerem"
+msgstr "Bladwijzer opslaan met nummer"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
-msgstr "Idź do zakładki w/g numeru"
+msgstr "Ga naar bladwijzer met nummer"
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
-msgstr "Przesuń o rozdział"
+msgstr "Verplaatsen per hoofdstuk"
 
 #: ../src/viewdlg.cpp:545
 msgid "First link"
-msgstr "Pierwszy link"
+msgstr "Eerste verwijzing"
 
 #: ../src/viewdlg.cpp:546
 msgid "Rotate by"
-msgstr "Obróć o"
+msgstr "Draaien met"
 
 #: ../src/viewdlg.cpp:547
 msgid "Set rotate angle"
-msgstr "Ustaw kąt obrotu"
+msgstr "Stel draaihoek in"
 
 #: ../src/viewdlg.cpp:548
 msgid "Save history and bookmarks"
-msgstr "Zapisz historię i zakładki"
+msgstr "Sla geschiedenis en bladwijzers op"
 
 #: ../src/viewdlg.cpp:549
 msgid "Save document to cache"
-msgstr "Zapisz dokument w cache"
+msgstr "Sla document in cache op"
 
 #: ../src/viewdlg.cpp:550
 msgid "Close dialog"
-msgstr "Zamykanie"
+msgstr "Sluit dialoogvenster"
 
 #: ../src/viewdlg.cpp:553
 msgid "Scroll forward"
-msgstr "Do przodu"
+msgstr "Blader vooruit"
 
 #: ../src/viewdlg.cpp:554
 msgid "Scroll back"
-msgstr "Wycofaj"
+msgstr "Blader terug"
 
 #: ../src/viewdlg.cpp:555
 msgid "Close book"
-msgstr "Zamknij książkę"
+msgstr "Sluit boek"
 
 #: ../src/viewdlg.cpp:556
 msgid "Main menu"
-msgstr "Główne menu"
+msgstr "Hoofdmenu"
 
 #: ../src/viewdlg.cpp:557
 msgid "Go to page dialog"
-msgstr "Idź do strony"
+msgstr "Ga naar pagina"
 
 #: ../src/viewdlg.cpp:558
 msgid "Settings menu"
-msgstr "Menu ustawień"
+msgstr "Instellingenmenu"
 
 #: ../src/viewdlg.cpp:559
 msgid "Font size settings"
-msgstr "Ustawienia rozmiaru czcionki"
+msgstr "Instellingen voor tekengrootte"
 
 #: ../src/viewdlg.cpp:560
 msgid "Page orientation settings"
-msgstr "Ustawienia orientacji strony"
+msgstr "Instellingen voor paginastand"
 
 #: ../src/viewdlg.cpp:565
 msgid "Find in Dictionary (T5)"
-msgstr "Znajdź w słowniku (T5)"
+msgstr "Zoek op in woordenboek (T5)"
 
 #: ../src/viewdlg.cpp:567
 msgid "Bookmark list"
-msgstr "Lista zakładek"
+msgstr "Bladwijzerlijst"
 
 #: ../src/viewdlg.cpp:568
 msgid "Citations list"
-msgstr "Lista cytatów"
+msgstr "Citatenlijst"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
-msgstr "Idź do zakładki..."
+msgstr "Ga naar bladwijzer..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
-msgstr "Lista ostatnio czytanych książek"
+msgstr "Lijst van recente boeken"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
-msgstr "Otwórz ostatnio otwieraną książkę w/g numeru"
+msgstr "Open recent boek met nummer"
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
-msgstr "Przejdź do ostatnio otwieranych książek"
+msgstr "Ga naar recent boek"
 
 #: ../src/viewdlg.cpp:575
 msgid "Search dialog"
-msgstr "Wyszukiwanie"
+msgstr "Zoekvenster"
 
 #: ../src/viewdlg.cpp:576
 msgid "Find in Dictionary (virtual keyboard)"
-msgstr "Znajdź w słowniku (wirtualna klawiatura)"
+msgstr "Zoek op in woordenboek (virtueel toetsenbord)"
 
 #: ../src/viewdlg.cpp:577
 msgid "Next keyboard layout"
-msgstr "Następny układ klawiatury"
+msgstr "Volgende toetsenbordindeling"
 
 #: ../src/viewdlg.cpp:578
 msgid "Previous keyboard layout"
-msgstr "Poprzedni układ klawiatury"
+msgstr "Vorige toetsenbordindeling"
 
 #: ../src/viewdlg.cpp:579
 msgid "Show manual"
-msgstr "Pokaż instrukcję"
+msgstr "Toon handleiding"
 
 #: ../src/viewdlg.cpp:580
 msgid "Show key mapping"
-msgstr "Pokaż mapowanie klawiatury"
+msgstr "Toon toetsenbordindeling"
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
-msgstr "Idź do procenta..."
+msgstr "Ga naar percentage..."
 
 #: ../src/viewdlg.cpp:586
 msgid "Front light"
-msgstr "Podświetlenie ekranu"
+msgstr "Voorverlichting"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr "Odwróć kolory wyświetlacza"
+msgstr "Negatief beeld"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr "Pełne odświeżenie ekranu"
+msgstr "Scherm volledig verversen"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
-msgstr "Przełącz belkę statusu"
+msgstr "Toon/verberg statusbalk"
 
 #: ../src/viewdlg.cpp:591
 msgid "Tasks list"
-msgstr "Lista zadań"
+msgstr "Takenlijst"
 
 #: ../src/viewdlg.cpp:593
 msgid "Toggle system panel"
-msgstr "Przełącz panel systemowy"
+msgstr "Toon/verberg systeempaneel"
 
 #: ../src/viewdlg.cpp:595
 msgid "Lock device"
-msgstr "Zablokuj urządzenie"
+msgstr "Apparaat vergrendelen"
 
 #: ../src/viewdlg.cpp:600
 msgid "Open system panel"
-msgstr "Otwórz panel systemowy"
+msgstr "Open systeempaneel"
 
 #: ../src/viewdlg.cpp:603
 msgid "PocketBook Main menu"
-msgstr "Menu główne czytnika"
+msgstr "PocketBook hoofdmenu"
 
 #: ../src/viewdlg.cpp:605
 msgid "Unknown command"
-msgstr "Nieznana komenda"
+msgstr "Onbekende opdracht"
 
 #: ../src/viewdlg.cpp:612
 msgid "Previous Page"
-msgstr "Poprzednia strona"
+msgstr "Vorige pagina"
 
 #: ../src/viewdlg.cpp:614
 msgid "Next Page"
-msgstr "Następna strona"
+msgstr "Volgende pagina"
 
 #: ../src/viewdlg.cpp:616
 msgid "Back by 10 Pages"
-msgstr "Cofnij o 10 stron"
+msgstr "Terug per 10 pagina's"
 
 #: ../src/viewdlg.cpp:618
 msgid "Forward by 10 Pages"
-msgstr "Dalej o 10 stron"
+msgstr "Vooruit per 10 pagina's"
 
 #: ../src/viewdlg.cpp:620
 msgid "Next Chapter"
-msgstr "Następny rozdział"
+msgstr "Volgend hoofdstuk"
 
 #: ../src/viewdlg.cpp:622
 msgid "Previous Chapter"
-msgstr "Poprzedni rozdział"
+msgstr "Vorig hoofdstuk"
 
 #: ../src/viewdlg.cpp:624
 msgid "Add Bookmark"
-msgstr "Dodaj Zakładkę"
+msgstr "Voeg bladwijzer toe"
 
 #: ../src/viewdlg.cpp:626
 msgid "Rotate Clockwise"
-msgstr "Obróć w prawo"
+msgstr "Rechtsom"
 
 #: ../src/viewdlg.cpp:628
 msgid "Rotate Anti-Clockwise"
-msgstr "Obróc w lewo"
+msgstr "Linksom"
 
 #: ../src/viewdlg.cpp:630
 msgid "Portrait View"
-msgstr "Układ pionowy"
+msgstr "Staand"
 
 #: ../src/viewdlg.cpp:632
 msgid "Landscape View"
-msgstr "Układ poziomy"
+msgstr "Liggend"
 
 #: ../src/viewdlg.cpp:656
 msgid "Key"
-msgstr "Klawisz"
+msgstr "Sleutel"
 
 #: ../src/viewdlg.cpp:656
 msgid "Assigned function"
-msgstr "Przypisana funkcja"
+msgstr "Toegewezen functie"
 
 #: ../src/ota_update.cpp:135
 msgid "Couldn't connect to server!"
-msgstr "Nie można połączyć się z serwerem!"
+msgstr "Kan geen verbinding maken met server!"
 
 #: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
 #: ../src/ota_update.cpp:287
 msgid "Downloading..."
-msgstr "Pobieranie..."
+msgstr "Bezig met downloaden..."
 
 #: ../src/ota_update.cpp:154
 msgid "Server returned error response: "
-msgstr "Serwer zwrócił błąd:"
+msgstr "Server heeft een foutmelding gestuurd:"
 
 #: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
-"Pobieranie zakończone!\n"
-"CoolReader zostanie uruchomiony ponownie."
+"Download geslaagd!\n"
+"CoolReader start automatisch opnieuw."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
@@ -1733,57 +1732,57 @@ msgstr "OK"
 
 #: ../src/ota_update.cpp:194
 msgid "Couldn't remove existing package!"
-msgstr "Nie można usunąć istniejącego pakietu!"
+msgstr "Kan bestaand pakket niet verwijderen!"
 
 #: ../src/ota_update.cpp:231
 msgid "Couldn't connect to the network!"
-msgstr "Nie można połączyć się z siecią!"
+msgstr "Kan geen verbinding maken met het netwerk!"
 
 #: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
 #: ../src/ota_update.cpp:266
 msgid "Searching..."
-msgstr "Szukam..."
+msgstr "Bezig met zoeken..."
 
 #: ../src/ota_update.cpp:244
 msgid "You have the latest version."
-msgstr "Masz najnowszą wersję."
+msgstr "U hebt de meest recente versie."
 
 #: ../src/ota_update.cpp:276
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
 msgstr ""
-"Brak aktualizacji dla twojego urządzenia\n"
-"Model urządzenia:"
+"Er is geen update beschikbaar voor uw apparaat!\n"
+"Model: "
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
-msgstr "Aktualizacja zakończona niepowodzeniem!"
+msgstr "Update is mislukt!"
 
 #: ../src/pb_toc.cpp:21
 msgid "Contents"
-msgstr "Zawartość"
+msgstr "Inhoud"
 
 #: ../src/cr3pocketbook.cpp:1683
 msgid "Cache cleared."
-msgstr "Pamięć podręczna wyczyszczona."
+msgstr "Cache is gewist."
 
 #: ../src/cr3pocketbook.cpp:1688
 msgid "Unable to list the directory contents!"
-msgstr "Nie można wyświetlić zawartość katalogu!"
+msgstr "Kan de inhoud van de directory niet weergeven!"
 
 #: ../src/cr3pocketbook.cpp:1694
 msgid "Unable to clear cache!"
-msgstr "Nie można wyczyścić pamięci podręcznej!"
+msgstr "Kan de cache niet wissen!"
 
 #: ../src/cr3pocketbook.cpp:3191
 msgid "Press $1 to translate"
-msgstr "Krótkie wciśnięcie $1 aby przetłumaczyć"
+msgstr "Druk op $1 om te vertalen"
 
 #: ../src/cr3pocketbook.cpp:4067
 msgid "Updated to v"
-msgstr "Zaktualizowane do v"
+msgstr "Bijgewerkt naar v"
 
 #: ../src/cr3pocketbook.cpp:4177
 msgid "Untitled"
-msgstr "Bez tytułu"
+msgstr "Zonder titel"

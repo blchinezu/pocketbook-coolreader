@@ -41,7 +41,7 @@ enum CRPbCommands {
 
     #ifdef POCKETBOOK_PRO
         PB_CMD_TASK_MANAGER,
-        #ifndef POCKETBOOK_PRO_602
+        #ifndef POCKETBOOK_PRO_PRO2
             PB_CMD_SYSTEM_PANEL,
         #endif
         PB_CMD_LOCK_DEVICE,
@@ -74,8 +74,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-21"
-#define CR_PB_BUILD_DATE "2015-04-27"
+#define CR_PB_VERSION "0.0.6-17-22"
+#define CR_PB_BUILD_DATE "2015-04-28"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -91,10 +91,10 @@ enum CRPbCommands {
 #if defined(POCKETBOOK_PRO_FW5)
     #define CR_PB_SDK "pro5"
 #elif defined(POCKETBOOK_PRO)
-    #if !defined(POCKETBOOK_PRO_602)
+    #if !defined(POCKETBOOK_PRO_PRO2)
         #define CR_PB_SDK "pro4"
     #else
-        #define CR_PB_SDK "602"
+        #define CR_PB_SDK "pro2"
     #endif
 #else
     #define CR_PB_SDK "360"

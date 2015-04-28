@@ -80,7 +80,7 @@ function doUpdate {
 		# if [ "$1" = "360" ]; then
 			cp -f $sdk/pb$1/cr3gui/default.cr3skin $package/system/share/cr3/skins/
 		# fi
-		if [ "$1" = "602" -o "$1" = "pro4" -o "$1" = "pro5" ]; then
+		if [ "$1" = "pro2" -o "$1" = "pro4" -o "$1" = "pro5" ]; then
 			cp -f $sdk/pb$1/cr3gui/pb62x.cr3skin $package/system/share/cr3/skins/
 		fi
 		if [ "$1" = "pro4" -o "$1" = "pro5" ]; then
@@ -165,7 +165,7 @@ function doUpdate {
 
 # Update all packages
 if [ "$1" = "" ]; then
-	for TYPE in '360' '602' 'pro4' 'pro5'; do
+	for TYPE in '360' 'pro2' 'pro4' 'pro5'; do
 		doUpdate "$TYPE"
 	done
 
@@ -177,7 +177,7 @@ elif [ "$1" = "publish" ]; then
 	echo
 
 	# Check firmware specific
-	for FIRMWARE in '360' '602' 'pro4' 'pro5'; do
+	for FIRMWARE in '360' 'pro2' 'pro4' 'pro5'; do
 		
 		# Check if it's already published
 		echo " - Check if published:    $FIRMWARE"
@@ -200,13 +200,20 @@ elif [ "$1" = "publish" ]; then
 	mv $releases/*.zip $releases/old/
 
 	# Publish firmware specific (dropbox)
-	for TYPE in '360' '602' 'pro4' 'pro5'; do
+	for TYPE in '360' 'pro2' 'pro4' 'pro5'; do
 		doUpdate "$TYPE" "publish"
 	done
 
 	# Publish device specific (git)
-	for DEVICE in '360' '602'; do
-		doUpdate "$DEVICE" "$DEVICE"
+	for DEVICE in '360'; do
+		for FIRMWARE in '360'; do
+			doUpdate "$FIRMWARE" "$DEVICE"
+		done
+	done
+	for DEVICE in '602'; do
+		for FIRMWARE in 'pro2'; do
+			doUpdate "$FIRMWARE" "$DEVICE"
+		done
 	done
 	for DEVICE in '515' '626'; do
 		for FIRMWARE in 'pro4' 'pro5'; do

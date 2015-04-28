@@ -589,7 +589,7 @@ static const char * getCommandName( int command )
     case PB_CMD_STATUS_LINE: return _("Toggle status bar");
     #ifdef POCKETBOOK_PRO
     case PB_CMD_TASK_MANAGER: return _("Tasks list");
-    #ifndef POCKETBOOK_PRO_602
+    #ifndef POCKETBOOK_PRO_PRO2
     case PB_CMD_SYSTEM_PANEL: return _("Toggle system panel");
     #endif
     case PB_CMD_LOCK_DEVICE: return _("Lock device");
