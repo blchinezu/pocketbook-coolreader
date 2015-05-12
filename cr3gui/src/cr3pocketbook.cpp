@@ -16,6 +16,9 @@
 #include <inkview.h>
 #ifdef POCKETBOOK_PRO
     #include <inkplatform.h>
+    #ifdef POCKETBOOK_PRO_FW5
+        #include <inkinternal.h>
+    #endif
     #include "web.h"
     #include "ota_update.h"
     #include "pb_toc.h"
@@ -394,6 +397,7 @@ static const struct {
     #endif
     #ifdef POCKETBOOK_PRO_FW5
     { "@KA_ossp", PB_CMD_OPEN_SYSTEM_PANEL, 0},
+    { "@KA_tmgr", PB_CMD_FRONT_LIGHT_TOGGLE, 0},
     #endif
     #endif
     { "@KA_stln", PB_CMD_STATUS_LINE, 0},
@@ -1633,6 +1637,9 @@ public:
         #endif
 
         #ifdef POCKETBOOK_PRO_FW5
+        case PB_CMD_FRONT_LIGHT_TOGGLE:
+            toggleFrontLight();
+            return true;
         case PB_CMD_OPEN_SYSTEM_PANEL:
             OpenControlPanel(NULL);
             return true;
@@ -1857,6 +1864,13 @@ public:
     }
 
     #ifdef POCKETBOOK_PRO
+    
+    #ifdef POCKETBOOK_PRO_FW5
+    void toggleFrontLight() {
+        SwitchFrontlightState();
+    }
+    #endif
+
     void showTaskManager() {
         if( isTaskManagerSupported() ) {
             CRLog::trace("showTaskManager(): OpenTaskList()");
