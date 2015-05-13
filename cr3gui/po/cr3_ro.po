@@ -1636,7 +1636,7 @@ msgstr "Listă de aplicaţii deschise"
 #: ../src/viewdlg.cpp:593
 #, fuzzy
 msgid "Toggle front light"
-msgstr "Lumină"
+msgstr "Aprinde/Stinge lumina"
 
 #: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
