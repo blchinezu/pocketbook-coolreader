@@ -598,6 +598,7 @@ static const char * getCommandName( int command )
     case PB_CMD_CLEAR_CACHE: return _("Clear cache");
     #ifdef POCKETBOOK_PRO_FW5
     case PB_CMD_OPEN_SYSTEM_PANEL: return _("Open system panel");
+    case PB_CMD_FRONT_LIGHT_TOGGLE: return _("Toggle front light");
     #endif
     #endif
     case PB_CMD_MAIN_MENU: return _("PocketBook Main menu");

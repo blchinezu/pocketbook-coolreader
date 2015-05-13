@@ -5674,8 +5674,8 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
 	props->limitValueList(PROP_PAGE_MARGIN_BOTTOM, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_LEFT, def_margin, sizeof(def_margin)/sizeof(int));
 	props->limitValueList(PROP_PAGE_MARGIN_RIGHT, def_margin, sizeof(def_margin)/sizeof(int));
-	static int def_updates[] = { 1, 0, 2, 3, 4, 5, 6, 7, 8, 10, 14 };
-	props->limitValueList(PROP_DISPLAY_FULL_UPDATE_INTERVAL, def_updates, 11);
+	static int def_updates[] = { 1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 14, 20, 25, 30, 35, 40, 45, 50 };
+	props->limitValueList(PROP_DISPLAY_FULL_UPDATE_INTERVAL, def_updates, 19);
         props->limitValueRange(PROP_STATUS_FONT_SIZE, DEF_STATUS_FONT_SIZE,
                                MIN_STATUS_FONT_SIZE, MAX_STATUS_FONT_SIZE);
 	lString16 hyph = props->getStringDef(PROP_HYPHENATION_DICT,
