@@ -44,6 +44,8 @@
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
+bool isStandByMode = false;
+ibitmap *standByImage = NULL;
 lString16 pbSkinFileName;
 lString16 currentCacheDir;
 lString16 openedCacheFile;
@@ -1511,8 +1513,10 @@ public:
         }
         V3DocViewWin::closing();
         pbGlobals->saveState(getDocView()->getCurPage(), getDocView()->getPageCount());
-        if (!exiting)
+        if (!exiting) {
+            free(standByImage);
             CloseApp();
+        }
     }
 
     void reconfigure( int flags )
@@ -1864,13 +1868,6 @@ public:
     }
 
     #ifdef POCKETBOOK_PRO
-    
-    #ifdef POCKETBOOK_PRO_FW5
-    void toggleFrontLight() {
-        SwitchFrontlightState();
-    }
-    #endif
-
     void showTaskManager() {
         if( isTaskManagerSupported() ) {
             CRLog::trace("showTaskManager(): OpenTaskList()");
@@ -4016,6 +4013,28 @@ void SetSaveStateTimer(){
     CRPocketBookDocView::instance->closing();
     exiting = false;
 }
+
+#ifdef POCKETBOOK_PRO_FW5
+
+bool restoringFrontLightRequired = false;
+
+void toggleFrontLight() {
+    SwitchFrontlightState();
+}
+void turnOffFrontLightIfNeeded() {
+    restoringFrontLightRequired = GetFrontlightState() >= 0;
+    if( restoringFrontLightRequired )
+        SwitchFrontlightState();
+}
+void restoreFronLightIfNeeded() {
+    if( restoringFrontLightRequired ) {
+        SwitchFrontlightState();
+        restoringFrontLightRequired = false;
+    }
+}
+
+#endif
+
 bool pbNetworkConnected() {
     return strlen(web::get(PB_NETWORK_TEST_URL).c_str()) > 100;
 }
@@ -4057,9 +4076,75 @@ bool pbNetwork(const char *action) {
 
 #endif 
 
+void stopStandByTimer();
+void restartStandByTimer();
+void enterStandByMode() {
+
+    if( isStandByMode )
+        return;
+
+    if( standByImage ) {
+        // ClearScreen();
+        DrawBitmap(0, 0, standByImage);
+    }
+    else {
+        DimArea(0, 0, ScreenWidth(), ScreenHeight(), 128);
+    }
+    FullUpdate();
+    #ifdef POCKETBOOK_PRO_FW5
+    turnOffFrontLightIfNeeded();
+    #endif
+    isStandByMode = true;
+    stopStandByTimer();
+}
+void exitStandByMode() {
+    if( !isStandByMode )
+        return;
+    #ifdef POCKETBOOK_PRO_FW5
+    restoreFronLightIfNeeded();
+    #endif
+    CRPocketBookWindowManager::instance->update(true);
+    isStandByMode = false;
+    restartStandByTimer();
+}
+void restartStandByTimer() {
+    stopStandByTimer();
+    SetHardTimer("enterStandByMode", enterStandByMode, 300000 /* 5 minutes */);
+    // SetWeakTimer("enterStandByMode", enterStandByMode, 10000);
+}
+void stopStandByTimer() {
+    ClearTimer(enterStandByMode);
+}
+
 static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
+
+    if( isStandByMode ) switch (type) {
+
+        // Events that restore the normal mode
+        case EVT_PREVPAGE:
+        case EVT_NEXTPAGE:
+        case EVT_ORIENTATION:
+        case EVT_POINTERUP:
+        case EVT_KEYRELEASE:
+            exitStandByMode();
+            return 0;
+
+        // Ignored events
+        case EVT_KEYPRESS:
+        case EVT_KEYREPEAT:
+        case EVT_POINTERDOWN:
+        case EVT_POINTERMOVE:
+        case EVT_POINTERLONG:
+        case EVT_SHOW:
+            return 0;
+
+        // Anything else goes normally
+        default:
+            break;
+    }
+
     bool process_events = false;
     int ret = 0;
     if (CRLog::LL_TRACE == CRLog::getLogLevel()) {
@@ -4221,26 +4306,34 @@ int main_handler(int type, int par1, int par2)
                         need_save_cover = 0;
                     }
                 }
+                // free(cover_prev);
 
                 // Save new cover if needed
                 if (need_save_cover) {
                     CRLog::trace("Save bookcover for power off logo");
                     SaveBitmap( USERLOGOPATH"/bookcover", cover);
                     // WriteStartupLogo(cover); // Not used but added here... just in case it might be needed
+                    standByImage = cover;
+                    free(cover_prev);
                 }
-                free(cover_prev);
-                free(cover);
+                else {
+                    standByImage = cover_prev;
+                    free(cover);
+                }
             }
             need_save_cover = false;
         }
+        restartStandByTimer();
         break;
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
-	SetWeakTimer("SaveStateTimer", SetSaveStateTimer, 500);
+    	SetWeakTimer("SaveStateTimer", SetSaveStateTimer, 500);
+        stopStandByTimer();
         break;
 #endif 
     case EVT_EXIT:
         exiting = true;
+        stopStandByTimer();
         if (CRPocketBookWindowManager::instance->getWindowCount() != 0)
             CRPocketBookWindowManager::instance->closeAllWindows();
         ShutdownCREngine();
@@ -4248,13 +4341,16 @@ int main_handler(int type, int par1, int par2)
     case EVT_PREVPAGE:
         CRPocketBookWindowManager::instance->postCommand(DCMD_PAGEUP, 0);
         process_events = true;
+        restartStandByTimer();
         break;
     case EVT_NEXTPAGE:
         CRPocketBookWindowManager::instance->postCommand(DCMD_PAGEDOWN, 0);
         process_events = true;
+        restartStandByTimer();
         break;
     case EVT_ORIENTATION:
         CRPocketBookDocView::instance->onAutoRotation(par1);
+        restartStandByTimer();
         break;
     case EVT_KEYPRESS:
         if (par1 == KEY_POWER) {
@@ -4267,6 +4363,7 @@ int main_handler(int type, int par1, int par2)
         } else
             keyPressed = -1;
         ret = 1;
+        restartStandByTimer();
         break;
     case EVT_KEYREPEAT:
     case EVT_KEYRELEASE:
@@ -4290,9 +4387,11 @@ int main_handler(int type, int par1, int par2)
         process_events = true;
         keyPressed = -1;
         ret = 1;
+        restartStandByTimer();
         break;
     case EVT_SNAPSHOT:
         CRPocketBookScreen::instance->MakeSnapShot();
+        restartStandByTimer();
         break;
     case EVT_POINTERDOWN:
     case EVT_POINTERUP:
@@ -4300,6 +4399,7 @@ int main_handler(int type, int par1, int par2)
     case EVT_POINTERLONG:
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
+        restartStandByTimer();
         break;
     case EVT_INIT:
         SetPanelType(0);
@@ -4322,10 +4422,13 @@ const char* TR(const char *label)
 
 void exitApp() {
     exiting = false;
-    if( CRPocketBookDocView::instance )
+    if( CRPocketBookDocView::instance ) {
         CRPocketBookDocView::instance->closing();
-    else
+    }
+    else {
+        free(standByImage);
         CloseApp();
+    }
 }
 
 extern ifont* header_font;
