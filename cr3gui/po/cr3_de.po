@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-05-12 09:34+0300\n"
-"PO-Revision-Date: 2015-04-26 15:10+0000\n"
+"PO-Revision-Date: 2015-05-14 14:26+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/de/)\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
-msgstr "Nächster/vorheriger Absatz markieren"
+msgstr "Nächsten/vorherigen Absatz markieren"
 
 #: ../src/citedlg.cpp:197
 msgid "Select one more paragraph"
@@ -72,7 +72,7 @@ msgstr "Gehe zu Seite"
 
 #: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
 msgid "Open recent book"
-msgstr "Letztes Bcuh öffnen"
+msgstr "Letztes Buch öffnen"
 
 #: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
 msgid "Dictionary"
@@ -297,7 +297,7 @@ msgstr "Firmware-Version"
 
 #: ../src/mainwnd.cpp:1112
 msgid "Keyboard type"
-msgstr "Tastatur-Art"
+msgstr "Tastatur-Typ"
 
 #: ../src/mainwnd.cpp:1113
 msgid "Screen type"
@@ -305,7 +305,7 @@ msgstr "Bildschirmtyp"
 
 #: ../src/mainwnd.cpp:1114
 msgid "Config file"
-msgstr "Kofigurationsdatei"
+msgstr "Konfigurationsdatei"
 
 #: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
@@ -608,7 +608,7 @@ msgstr "tiefgestellt"
 
 #: ../src/settings.cpp:925
 msgid "Superscript"
-msgstr "tiefgestellt"
+msgstr "hochgestellt"
 
 #: ../src/settings.cpp:931 ../src/settings.cpp:939
 msgid "Black"
@@ -624,16 +624,16 @@ msgstr "Weiß"
 
 #: ../src/settings.cpp:948 ../src/settings.cpp:959
 msgid "0.2 of line height"
-msgstr "a"
+msgstr "0,2-fache der Zeilenhöhe"
 
 #: ../src/settings.cpp:949 ../src/settings.cpp:960
 msgid "0.3 of line height"
-msgstr "0.3-fache der Zeilenhöhe"
+msgstr "0,3-fache der Zeilenhöhe"
 
 #: ../src/settings.cpp:950 ../src/settings.cpp:961 ../src/settings.cpp:970
 #: ../src/settings.cpp:986
 msgid "0.5 of line height"
-msgstr "0.5-fache der Zeilenhöhe"
+msgstr "0,5-fache der Zeilenhöhe"
 
 #: ../src/settings.cpp:951 ../src/settings.cpp:962 ../src/settings.cpp:971
 #: ../src/settings.cpp:987
@@ -647,7 +647,7 @@ msgstr "2-fache der Zeilenhöhe"
 
 #: ../src/settings.cpp:972 ../src/settings.cpp:988
 msgid "1.5 of line height"
-msgstr "1.5-fache der Zeilenhöhe"
+msgstr "1,5-fache der Zeilenhöhe"
 
 #: ../src/settings.cpp:974 ../src/settings.cpp:990
 msgid "4 of line height"
@@ -771,7 +771,7 @@ msgstr "Invertiert"
 
 #: ../src/settings.cpp:1173
 msgid "One"
-msgstr "Eins"
+msgstr "Eine"
 
 #: ../src/settings.cpp:1174
 msgid "Two"
@@ -943,7 +943,7 @@ msgstr "Turbo-Modus deaktiviert"
 
 #: ../src/settings.cpp:1274
 msgid "Turbo mode enabled"
-msgstr "Turbo-Modus Aktiviert"
+msgstr "Turbo-Modus aktiviert"
 
 #: ../src/settings.cpp:1281
 msgid "180+slow next page"
@@ -991,7 +991,7 @@ msgstr "Ganzzahlskalierung"
 
 #: ../src/settings.cpp:1314
 msgid "Arbitrary scale"
-msgstr "Beliebiger Maßstan"
+msgstr "Beliebiger Maßstab"
 
 #: ../src/settings.cpp:1319
 msgid "Auto"
@@ -1108,7 +1108,7 @@ msgstr "Schrift Gamma"
 
 #: ../src/settings.cpp:1491
 msgid "Document embedded fonts"
-msgstr "Im Dokument eingebttete Schrift"
+msgstr "Ins Dokument eingebttete Schrift"
 
 #: ../src/settings.cpp:1494
 msgid "Fallback font face"
@@ -1376,7 +1376,7 @@ msgstr "Position in % eingeben"
 
 #: ../src/viewdlg.cpp:355
 msgid "Find in dictionary"
-msgstr "In Wörterbuch suchen"
+msgstr "Im Wörterbuch suchen"
 
 #: ../src/viewdlg.cpp:485
 msgid "M"
@@ -1474,11 +1474,11 @@ msgstr "Zur Position"
 
 #: ../src/viewdlg.cpp:538
 msgid "Zoom in"
-msgstr "Zoom herein"
+msgstr "Herein zoomen"
 
 #: ../src/viewdlg.cpp:539
 msgid "Zoom out"
-msgstr "Zoom heraus"
+msgstr "Heraus zoomen"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
@@ -1633,9 +1633,8 @@ msgid "Tasks list"
 msgstr "Task-Liste"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Beleuchtung"
+msgstr "Beleuchtung umschalten"
 
 #: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
@@ -1651,7 +1650,7 @@ msgstr "Öffne System-Panel"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
-msgstr "PocketBookHauptmenü"
+msgstr "PocketBook Hauptmenü"
 
 #: ../src/viewdlg.cpp:606
 msgid "Unknown command"
@@ -1671,7 +1670,7 @@ msgstr "10 Seiten zurück"
 
 #: ../src/viewdlg.cpp:619
 msgid "Forward by 10 Pages"
-msgstr "10 Seiten vprwärts"
+msgstr "10 Seiten vorwärts"
 
 #: ../src/viewdlg.cpp:621
 msgid "Next Chapter"
