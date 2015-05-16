@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-05-12 09:34+0300\n"
-"PO-Revision-Date: 2015-04-26 14:34+0000\n"
+"PO-Revision-Date: 2015-05-14 07:43+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ru/)\n"
@@ -1637,9 +1637,8 @@ msgid "Tasks list"
 msgstr "Список открытых программ"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Управление подсветкой"
+msgstr "Тумблер подсветки"
 
 #: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
