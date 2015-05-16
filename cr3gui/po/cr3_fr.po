@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-05-12 09:34+0300\n"
-"PO-Revision-Date: 2015-04-26 21:05+0000\n"
+"PO-Revision-Date: 2015-05-14 12:18+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/fr/)\n"
@@ -1636,9 +1636,8 @@ msgid "Tasks list"
 msgstr "Liste des tâches"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Éclairage frontal"
+msgstr "Activer l'éclairage frontal"
 
 #: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
