@@ -1841,16 +1841,16 @@ public:
             return;
         }
 
-        #ifdef POCKETBOOK_PRO
+        // #ifdef POCKETBOOK_PRO
 
-        // If device supports touch and resolution is greater than 800x600
-        if( useDeveloperFeatures && // FIXME: TODO: XXX: Remove when releasing
-            QueryTouchpanel() != 0 && ScreenWidth() > 600 && ScreenHeight() > 800 ) {
-            showTocTouchMenu(_toc, _tocLength);
-            return;
-        }
+        // // If device supports touch and resolution is greater than 800x600
+        // if( useDeveloperFeatures && // FIXME: TODO: XXX: Remove when releasing
+        //     QueryTouchpanel() != 0 && ScreenWidth() > 600 && ScreenHeight() > 800 ) {
+        //     showTocTouchMenu(_toc, _tocLength);
+        //     return;
+        // }
 
-        #endif
+        // #endif
 
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
@@ -4026,7 +4026,7 @@ void turnOffFrontLightIfNeeded() {
     if( restoringFrontLightRequired )
         SwitchFrontlightState();
 }
-void restoreFronLightIfNeeded() {
+void restoreFrontLightIfNeeded() {
     if( restoringFrontLightRequired ) {
         SwitchFrontlightState();
         restoringFrontLightRequired = false;
@@ -4101,7 +4101,7 @@ void exitStandByMode() {
     if( !isStandByMode )
         return;
     #ifdef POCKETBOOK_PRO_FW5
-    restoreFronLightIfNeeded();
+    restoreFrontLightIfNeeded();
     #endif
     CRPocketBookWindowManager::instance->update(true);
     isStandByMode = false;
