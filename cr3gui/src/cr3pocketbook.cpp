@@ -4109,6 +4109,10 @@ void exitStandByMode() {
     restartStandByTimer();
 }
 void restartStandByTimer() {
+
+    if( !isTouchSupported )
+        return;
+
     stopStandByTimer();
     SetHardTimer("enterStandByMode", enterStandByMode, 300000 /* 5 minutes */);
     // SetWeakTimer("enterStandByMode", enterStandByMode, 10000);
