@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
 "PO-Revision-Date: 2015-05-13 22:44+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/coolreader-"
@@ -1324,15 +1324,15 @@ msgstr "Nastavení stylů"
 msgid "Document embedded styles"
 msgstr "Styly vložené do dokumentu"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr "Vymazat cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr ""
 
@@ -1635,20 +1635,20 @@ msgid "Tasks list"
 msgstr "Správce úloh"
 
 #: ../src/viewdlg.cpp:593
-msgid "Toggle front light"
-msgstr ""
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr ""
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
 msgstr "Zamknou zařízení"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:600
 msgid "Open system panel"
 msgstr "Otevřít systémový panel"
+
+#: ../src/viewdlg.cpp:601
+msgid "Toggle front light"
+msgstr ""
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
@@ -1768,15 +1768,15 @@ msgstr "Aktualizace selhala!"
 msgid "Contents"
 msgstr "Obsah"
 
-#: ../src/cr3pocketbook.cpp:1688
+#: ../src/cr3pocketbook.cpp:1695
 msgid "Cache cleared."
 msgstr "Cache vymazána."
 
-#: ../src/cr3pocketbook.cpp:1693
+#: ../src/cr3pocketbook.cpp:1700
 msgid "Unable to list the directory contents!"
 msgstr "Nelze procházet obsah složky!"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
 msgstr "Nelze vymazat cache!"
 
@@ -1784,10 +1784,10 @@ msgstr "Nelze vymazat cache!"
 msgid "Press $1 to translate"
 msgstr "Stisknout $1 pro překlad"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4189
+#: ../src/cr3pocketbook.cpp:4281
 msgid "Untitled"
 msgstr ""

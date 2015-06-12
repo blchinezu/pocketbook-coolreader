@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
 "PO-Revision-Date: 2015-05-14 12:18+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
@@ -1324,15 +1324,15 @@ msgstr "Paramètres de style"
 msgid "Document embedded styles"
 msgstr "Styles incorporés dans le document"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr "Vider le cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr "Mise à jour OTA"
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr "Mise à jour OTA Développement"
 
@@ -1636,20 +1636,20 @@ msgid "Tasks list"
 msgstr "Liste des tâches"
 
 #: ../src/viewdlg.cpp:593
-msgid "Toggle front light"
-msgstr "Activer l'éclairage frontal"
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr "Affichage panneau système"
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
 msgstr "Verrouiller l'appareil"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:600
 msgid "Open system panel"
 msgstr "Ouvrir le panneau système"
+
+#: ../src/viewdlg.cpp:601
+msgid "Toggle front light"
+msgstr "Activer l'éclairage frontal"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
@@ -1769,15 +1769,15 @@ msgstr "Mise à jour interrompu !"
 msgid "Contents"
 msgstr "Contenu"
 
-#: ../src/cr3pocketbook.cpp:1688
+#: ../src/cr3pocketbook.cpp:1695
 msgid "Cache cleared."
 msgstr "Cache vidé."
 
-#: ../src/cr3pocketbook.cpp:1693
+#: ../src/cr3pocketbook.cpp:1700
 msgid "Unable to list the directory contents!"
 msgstr "Impossible de lister le contenu du répertoire !"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
 msgstr "Impossible de vider le cache !"
 
@@ -1785,10 +1785,10 @@ msgstr "Impossible de vider le cache !"
 msgid "Press $1 to translate"
 msgstr "Appuyer sur $1 pour traduire"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr "Mis à jour vers v"
 
-#: ../src/cr3pocketbook.cpp:4189
+#: ../src/cr3pocketbook.cpp:4281
 msgid "Untitled"
 msgstr "Sans titre"

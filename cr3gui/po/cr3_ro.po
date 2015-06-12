@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
 "PO-Revision-Date: 2015-04-26 14:31+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/projects/p/coolreader-"
@@ -1323,15 +1323,15 @@ msgstr "Setări stil"
 msgid "Document embedded styles"
 msgstr "Stil inclus în document"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr "Şterge cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr "OTA Update"
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr "OTA Update Dev"
 
@@ -1634,21 +1634,21 @@ msgid "Tasks list"
 msgstr "Listă de aplicaţii deschise"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
-msgid "Toggle front light"
-msgstr "Aprinde/Stinge lumina"
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr "Comutare panou sistem"
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
 msgstr "Blochează dispozitiv"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:600
 msgid "Open system panel"
 msgstr "Deschide panou sistem"
+
+#: ../src/viewdlg.cpp:601
+#, fuzzy
+msgid "Toggle front light"
+msgstr "Aprinde/Stinge lumina"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
@@ -1768,15 +1768,15 @@ msgstr "Update eşuat!"
 msgid "Contents"
 msgstr "Cuprins"
 
-#: ../src/cr3pocketbook.cpp:1688
+#: ../src/cr3pocketbook.cpp:1695
 msgid "Cache cleared."
 msgstr "Fişierele cache au fost şterse."
 
-#: ../src/cr3pocketbook.cpp:1693
+#: ../src/cr3pocketbook.cpp:1700
 msgid "Unable to list the directory contents!"
 msgstr "Nu s-a putut lista conţinutul folder-ului!"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
 msgstr "Nu s-au putut şterge fişierele!"
 
@@ -1784,10 +1784,10 @@ msgstr "Nu s-au putut şterge fişierele!"
 msgid "Press $1 to translate"
 msgstr "Apasă $1 pentru a traduce"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr "Actualizat la v"
 
-#: ../src/cr3pocketbook.cpp:4189
+#: ../src/cr3pocketbook.cpp:4281
 msgid "Untitled"
 msgstr "Fără titlu"
