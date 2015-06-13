@@ -39,3 +39,11 @@ Package structure:
 
   /system/share/
     Must be copied to device (contains all the CR3 required files)
+
+
+Package types:
+  
+  360  - Use it for 360 devices
+  pro2 - Use it for devices having firmware 2
+  pro4 - Use it for devices gaving firmware 4
+  pro5 - Use it for devices gaving firmware 5
