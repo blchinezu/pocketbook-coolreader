@@ -44,6 +44,7 @@
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
+bool touchSupported = false;
 bool isStandByMode = false;
 ibitmap *standByImage = NULL;
 lString16 pbSkinFileName;
@@ -357,7 +358,7 @@ public:
     }
     bool isTouchSupported()
     {
-        return (QueryTouchpanel() != 0);
+        return touchSupported;
     }
 };
 
@@ -1841,16 +1842,16 @@ public:
             return;
         }
 
-        #ifdef POCKETBOOK_PRO
+        // #ifdef POCKETBOOK_PRO
 
-        // If device supports touch and resolution is greater than 800x600
-        if( useDeveloperFeatures && // FIXME: TODO: XXX: Remove when releasing
-            QueryTouchpanel() != 0 && ScreenWidth() > 600 && ScreenHeight() > 800 ) {
-            showTocTouchMenu(_toc, _tocLength);
-            return;
-        }
+        // // If device supports touch and resolution is greater than 800x600
+        // if( useDeveloperFeatures && // FIXME: TODO: XXX: Remove when releasing
+        //     QueryTouchpanel() != 0 && ScreenWidth() > 600 && ScreenHeight() > 800 ) {
+        //     showTocTouchMenu(_toc, _tocLength);
+        //     return;
+        // }
 
-        #endif
+        // #endif
 
         CRPocketBookContentsWindow *wnd = new CRPocketBookContentsWindow(_wm, _toc,
                                                                          _tocLength, _docview->getCurPage() + 1);
@@ -4026,7 +4027,7 @@ void turnOffFrontLightIfNeeded() {
     if( restoringFrontLightRequired )
         SwitchFrontlightState();
 }
-void restoreFronLightIfNeeded() {
+void restoreFrontLightIfNeeded() {
     if( restoringFrontLightRequired ) {
         SwitchFrontlightState();
         restoringFrontLightRequired = false;
@@ -4101,13 +4102,17 @@ void exitStandByMode() {
     if( !isStandByMode )
         return;
     #ifdef POCKETBOOK_PRO_FW5
-    restoreFronLightIfNeeded();
+    restoreFrontLightIfNeeded();
     #endif
     CRPocketBookWindowManager::instance->update(true);
     isStandByMode = false;
     restartStandByTimer();
 }
 void restartStandByTimer() {
+
+    if( !touchSupported )
+        return;
+
     stopStandByTimer();
     SetHardTimer("enterStandByMode", enterStandByMode, 300000 /* 5 minutes */);
     // SetWeakTimer("enterStandByMode", enterStandByMode, 10000);
@@ -4437,6 +4442,7 @@ int main(int argc, char **argv)
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
     useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
+    touchSupported = (QueryTouchpanel() != 0);
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);

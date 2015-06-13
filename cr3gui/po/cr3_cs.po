@@ -1,23 +1,24 @@
-# Translation for CoolReader3
+# SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
 #
-# LVE <vadim.lopatin@coolreader.org>, 2009.
-# Pavel Fric <pavelfric@seznam.cz>, 2012.
+# Translators:
+# evzen schulz <eugen@post.cz>, 2015
+# LVE <vadim.lopatin@coolreader.org>, 2009
+# fri, 2012
 msgid ""
 msgstr ""
-"Project-Id-Version: cr3 3.0.17\n"
+"Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
-"PO-Revision-Date: 2012-04-17 14:52+0200\n"
-"Last-Translator: Pavel Fric <pavelfric@seznam.cz>\n"
-"Language-Team: Czech <kde-i18n-doc@kde.org>\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"PO-Revision-Date: 2015-05-13 22:44+0000\n"
+"Last-Translator: BruceLee\n"
+"Language-Team: Czech (http://www.transifex.com/projects/p/coolreader-"
+"pocketbook/language/cs/)\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Lokalize 1.0\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Language: cs_CZ\n"
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
@@ -53,7 +54,7 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr "Pro tento jazyk není v současnosti dostupný žádný návod."
+msgstr "Pro tento jazyk není dostupný žádný návod."
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
@@ -109,7 +110,7 @@ msgstr ""
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
-msgstr "Nynější strana"
+msgstr "Aktuální strana"
 
 #: ../src/mainwnd.cpp:1047
 msgid "Total pages"
@@ -125,11 +126,11 @@ msgstr "Nabíjí se..."
 
 #: ../src/mainwnd.cpp:1049
 msgid "Current Time"
-msgstr "Nynější čas"
+msgstr "Aktuální čas"
 
 #: ../src/mainwnd.cpp:1054
 msgid "Current chapter"
-msgstr "Nynější kapitola"
+msgstr "Aktuální kapitola"
 
 #: ../src/mainwnd.cpp:1057
 msgid "Status"
@@ -168,7 +169,6 @@ msgid "File info"
 msgstr "Informace o souboru"
 
 #: ../src/mainwnd.cpp:1070
-#, fuzzy
 msgctxt "Book"
 msgid "Title"
 msgstr "Název"
@@ -195,7 +195,7 @@ msgstr "Žánry"
 
 #: ../src/mainwnd.cpp:1076
 msgid "Language"
-msgstr ""
+msgstr "Jazyk"
 
 #: ../src/mainwnd.cpp:1077
 msgid "Translator"
@@ -203,7 +203,7 @@ msgstr "Překladatel"
 
 #: ../src/mainwnd.cpp:1078
 msgid "Source language"
-msgstr ""
+msgstr "Výchozí jazyk"
 
 #: ../src/mainwnd.cpp:1079
 msgid "Book info"
@@ -235,7 +235,7 @@ msgstr "Historie změn"
 
 #: ../src/mainwnd.cpp:1088
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: ../src/mainwnd.cpp:1089
 msgid "Program used"
@@ -282,9 +282,8 @@ msgid "Build date"
 msgstr "Datum sestavení"
 
 #: ../src/mainwnd.cpp:1106
-#, fuzzy
 msgid "Build type"
-msgstr "Datum sestavení"
+msgstr ""
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
@@ -295,14 +294,12 @@ msgid "Hardware type"
 msgstr ""
 
 #: ../src/mainwnd.cpp:1111
-#, fuzzy
 msgid "Firmware version"
-msgstr "Verze dokumentu"
+msgstr ""
 
 #: ../src/mainwnd.cpp:1112
-#, fuzzy
 msgid "Keyboard type"
-msgstr "Rozvržení klávesnice"
+msgstr ""
 
 #: ../src/mainwnd.cpp:1113
 msgid "Screen type"
@@ -326,7 +323,7 @@ msgstr ""
 
 #: ../src/mainwnd.cpp:1268
 msgid "Loading: please wait..."
-msgstr "Nahrává se: Počkejte, prosím..."
+msgstr "Nahrává se. Počkejte, prosím..."
 
 #: ../src/recentdlg.cpp:97
 msgid "Open book"
@@ -438,7 +435,7 @@ msgstr "Ovládání"
 
 #: ../src/settings.cpp:382
 msgid "(No action)"
-msgstr ""
+msgstr "(nic nedělat)"
 
 #: ../src/settings.cpp:535
 msgid "[Command is not assigned]"
@@ -474,20 +471,18 @@ msgstr "Rychlá liška skáče přes pomalého ježka"
 
 #: ../src/settings.cpp:826
 msgid "Justify"
-msgstr ""
+msgstr "Zarovnat"
 
 #: ../src/settings.cpp:827
-#, fuzzy
 msgctxt "CSS"
 msgid "Left"
 msgstr "Vlevo"
 
 #: ../src/settings.cpp:828
 msgid "Center"
-msgstr ""
+msgstr "Na střed"
 
 #: ../src/settings.cpp:829
-#, fuzzy
 msgctxt "CSS"
 msgid "Right"
 msgstr "Vpravo"
@@ -517,89 +512,85 @@ msgid "[Default sans-serif font]"
 msgstr ""
 
 #: ../src/settings.cpp:846
-#, fuzzy
 msgid "[Default serif font]"
-msgstr "Výchozí velikost písma"
+msgstr ""
 
 #: ../src/settings.cpp:847
-#, fuzzy
 msgid "[Default monospace font]"
-msgstr "Výchozí druh písma"
+msgstr ""
 
 #: ../src/settings.cpp:853
 msgid "Bigger (105%)"
-msgstr ""
+msgstr "Větší (105%)"
 
 #: ../src/settings.cpp:854
 msgid "Bigger (110%)"
-msgstr ""
+msgstr "Větší (110%)"
 
 #: ../src/settings.cpp:855
 msgid "Bigger (115%)"
-msgstr ""
+msgstr "Větší (115%)"
 
 #: ../src/settings.cpp:856
 msgid "Bigger (120%)"
-msgstr ""
+msgstr "Větší (120%)"
 
 #: ../src/settings.cpp:857
 msgid "Bigger (150%)"
-msgstr ""
+msgstr "Větší (150%)"
 
 #: ../src/settings.cpp:858
 msgid "Smaller (95%)"
-msgstr ""
+msgstr "Menší (95%)"
 
 #: ../src/settings.cpp:859
 msgid "Smaller (90%)"
-msgstr ""
+msgstr "Menší (90%)"
 
 #: ../src/settings.cpp:860
 msgid "Smaller (85%)"
-msgstr ""
+msgstr "Menší (85%)"
 
 #: ../src/settings.cpp:861
 msgid "Smaller (80%)"
-msgstr ""
+msgstr "Menší (80%)"
 
 #: ../src/settings.cpp:862
 msgid "Smaller (70%)"
-msgstr ""
+msgstr "Menší (70%)"
 
 #: ../src/settings.cpp:863
 msgid "Smaller (60%)"
-msgstr ""
+msgstr "Menší (60%)"
 
 #: ../src/settings.cpp:869 ../src/settings.cpp:878 ../src/settings.cpp:1161
 #: ../src/settings.cpp:1167
 msgid "Normal"
-msgstr "Obvyklé"
+msgstr "Normální"
 
 #: ../src/settings.cpp:870 ../src/settings.cpp:1168
 msgid "Bold"
 msgstr "Tučné"
 
 #: ../src/settings.cpp:871
-#, fuzzy
 msgid "Bolder"
-msgstr "Tučné"
+msgstr ""
 
 #: ../src/settings.cpp:872
-#, fuzzy
 msgid "Lighter"
-msgstr "Vpravo"
+msgstr ""
 
 #: ../src/settings.cpp:879
 msgid "Italic"
-msgstr ""
+msgstr "Kurzíva"
 
 #: ../src/settings.cpp:914 ../src/settings.cpp:1088
 msgid "None"
-msgstr ""
+msgstr "Nic"
 
 #: ../src/settings.cpp:915 ../src/settings.cpp:1090
 msgid "Underline"
-msgstr ""
+msgstr "Podtržené"
 
 #: ../src/settings.cpp:916
 msgid "Line through"
@@ -610,9 +601,8 @@ msgid "Overline"
 msgstr ""
 
 #: ../src/settings.cpp:923
-#, fuzzy
 msgid "Baseline"
-msgstr "Stavový řádek"
+msgstr ""
 
 #: ../src/settings.cpp:924
 msgid "Subscript"
@@ -624,15 +614,15 @@ msgstr ""
 
 #: ../src/settings.cpp:931 ../src/settings.cpp:939
 msgid "Black"
-msgstr ""
+msgstr "Černá"
 
 #: ../src/settings.cpp:932 ../src/settings.cpp:940
 msgid "Gray"
-msgstr ""
+msgstr "Šedá"
 
 #: ../src/settings.cpp:933 ../src/settings.cpp:941
 msgid "White"
-msgstr ""
+msgstr "Bílá"
 
 #: ../src/settings.cpp:948 ../src/settings.cpp:959
 msgid "0.2 of line height"
@@ -686,33 +676,28 @@ msgid "30% of line width"
 msgstr ""
 
 #: ../src/settings.cpp:998
-#, fuzzy
 msgid "Text alignment"
-msgstr "Další odkaz"
+msgstr "Zarovnání textu"
 
 #: ../src/settings.cpp:1000
-#, fuzzy
 msgid "First line indent"
-msgstr "První odkaz"
+msgstr ""
 
 #: ../src/settings.cpp:1003 ../src/settings.cpp:1582
-#, fuzzy
 msgid "Font face"
-msgstr "Záložní druh písma"
+msgstr "Vzhled písma"
 
 #: ../src/settings.cpp:1017
-#, fuzzy
 msgid "Font size"
-msgstr "Nastavení velikosti písma"
+msgstr "Velikost písma"
 
 #: ../src/settings.cpp:1019 ../src/settings.cpp:1476 ../src/settings.cpp:1591
 msgid "Font weight"
 msgstr "Váha písma"
 
 #: ../src/settings.cpp:1021
-#, fuzzy
 msgid "Font style"
-msgstr "Nastavení velikosti písma"
+msgstr "Styl písma"
 
 #: ../src/settings.cpp:1023 ../src/settings.cpp:1505
 msgid "Interline space"
@@ -720,41 +705,39 @@ msgstr "Mezera mezi řádky"
 
 #: ../src/settings.cpp:1025
 msgid "Letter spacing"
-msgstr ""
+msgstr "Mezera mezi písmeny"
 
 #: ../src/settings.cpp:1027
-#, fuzzy
 msgid "Text decoration"
-msgstr "Smazat citaci"
+msgstr ""
 
 #: ../src/settings.cpp:1029
-#, fuzzy
 msgid "Text vertical alignment"
-msgstr "Další odkaz"
+msgstr "Svislé zarovnání textu"
 
 #: ../src/settings.cpp:1031
 msgid "Text color"
-msgstr ""
+msgstr "Barva textu"
 
 #: ../src/settings.cpp:1033
 msgid "Background color"
-msgstr ""
+msgstr "Barva pozadí"
 
 #: ../src/settings.cpp:1035
 msgid "Margin before"
-msgstr ""
+msgstr "Okraj před"
 
 #: ../src/settings.cpp:1037
 msgid "Margin after"
-msgstr ""
+msgstr "Okraj po"
 
 #: ../src/settings.cpp:1039
 msgid "Margin left"
-msgstr ""
+msgstr "Levý okraj"
 
 #: ../src/settings.cpp:1041
 msgid "Margin right"
-msgstr ""
+msgstr "Pravý okraj"
 
 #: ../src/settings.cpp:1069
 msgid "On for all fonts"
@@ -774,11 +757,11 @@ msgstr "Zapnuto"
 
 #: ../src/settings.cpp:1082
 msgid "AM/PM"
-msgstr ""
+msgstr "AM/PM"
 
 #: ../src/settings.cpp:1083
 msgid "24h"
-msgstr ""
+msgstr "24h"
 
 #: ../src/settings.cpp:1089
 msgid "Solid"
@@ -890,80 +873,71 @@ msgstr "Nepoužívat rychlé obnovení"
 
 #: ../src/settings.cpp:1252
 msgid "Full updates every 2 pages"
-msgstr "Úplné obnovení každé dvě strany"
+msgstr "Úplné obnovení každé 2 strany"
 
 #: ../src/settings.cpp:1253
 msgid "Full updates every 3 pages"
-msgstr "Úplné obnovení každé tři strany"
+msgstr "Úplné obnovení každé 3 strany"
 
 #: ../src/settings.cpp:1254
 msgid "Full updates every 4 pages"
-msgstr "Úplné obnovení každé čtyři strany"
+msgstr "Úplné obnovení každé 4 strany"
 
 #: ../src/settings.cpp:1255
 msgid "Full updates every 5 pages"
-msgstr "Úplné obnovení každých pět stran"
+msgstr "Úplné obnovení každých 5 stran"
 
 #: ../src/settings.cpp:1256
 msgid "Full updates every 6 pages"
-msgstr "Úplné obnovení každých šest stran"
+msgstr "Úplné obnovení každých 6 stran"
 
 #: ../src/settings.cpp:1257
-#, fuzzy
 msgid "Full updates every 7 pages"
-msgstr "Úplné obnovení každé dvě strany"
+msgstr "Úplné obnovení každých 7 stran"
 
 #: ../src/settings.cpp:1258
 msgid "Full updates every 8 pages"
-msgstr "Úplné obnovení každých osm stran"
+msgstr "Úplné obnovení každých 8 stran"
 
 #: ../src/settings.cpp:1259
-#, fuzzy
 msgid "Full updates every 9 pages"
-msgstr "Úplné obnovení každé dvě strany"
+msgstr "Úplné obnovení každých 9 stran"
 
 #: ../src/settings.cpp:1260
 msgid "Full updates every 10 pages"
-msgstr "Úplné obnovení každých deset stran"
+msgstr "Úplné obnovení každých 10 stran"
 
 #: ../src/settings.cpp:1261
 msgid "Full updates every 14 pages"
-msgstr "Úplné obnovení každých čtrnáct stran"
+msgstr "Úplné obnovení každých 14 stran"
 
 #: ../src/settings.cpp:1262
-#, fuzzy
 msgid "Full updates every 20 pages"
-msgstr "Úplné obnovení každé dvě strany"
+msgstr "Úplné obnovení každých 20 stran"
 
 #: ../src/settings.cpp:1263
-#, fuzzy
 msgid "Full updates every 25 pages"
-msgstr "Úplné obnovení každé dvě strany"
+msgstr "Úplné obnovení každých 25 stran"
 
 #: ../src/settings.cpp:1264
-#, fuzzy
 msgid "Full updates every 30 pages"
-msgstr "Úplné obnovení každé tři strany"
+msgstr "Úplné obnovení každých 30 stran"
 
 #: ../src/settings.cpp:1265
-#, fuzzy
 msgid "Full updates every 35 pages"
-msgstr "Úplné obnovení každé tři strany"
+msgstr "Úplné obnovení každých 35 stran"
 
 #: ../src/settings.cpp:1266
-#, fuzzy
 msgid "Full updates every 40 pages"
-msgstr "Úplné obnovení každé čtyři strany"
+msgstr "Úplné obnovení každých 40 stran"
 
 #: ../src/settings.cpp:1267
-#, fuzzy
 msgid "Full updates every 45 pages"
-msgstr "Úplné obnovení každé čtyři strany"
+msgstr "Úplné obnovení každých 45 stran"
 
 #: ../src/settings.cpp:1268
-#, fuzzy
 msgid "Full updates every 50 pages"
-msgstr "Úplné obnovení každých pět stran"
+msgstr "Úplné obnovení každých 50 stran"
 
 #: ../src/settings.cpp:1273
 msgid "Turbo mode disabled"
@@ -995,19 +969,19 @@ msgstr "180+RYCHLE další/předchozí strana"
 
 #: ../src/settings.cpp:1303
 msgid "2 BPP"
-msgstr ""
+msgstr "2 bity na bod"
 
 #: ../src/settings.cpp:1304
 msgid "3 BPP"
-msgstr ""
+msgstr "3 bity na bod"
 
 #: ../src/settings.cpp:1305
 msgid "4 BPP"
-msgstr ""
+msgstr "4 bity na bod"
 
 #: ../src/settings.cpp:1306
 msgid "8 BPP"
-msgstr ""
+msgstr "8 bity na bod"
 
 #: ../src/settings.cpp:1312
 msgid "Disabled (1:1)"
@@ -1038,9 +1012,8 @@ msgid "*3"
 msgstr "*3"
 
 #: ../src/settings.cpp:1406
-#, fuzzy
 msgid "No hinting"
-msgstr "Instruování písma"
+msgstr ""
 
 #: ../src/settings.cpp:1407
 msgid "Use bytecode"
@@ -1051,30 +1024,25 @@ msgid "Autohinting"
 msgstr "Instruování písma"
 
 #: ../src/settings.cpp:1409
-#, fuzzy
 msgid "Light"
-msgstr "Vpravo"
+msgstr ""
 
 #: ../src/settings.cpp:1414
-#, fuzzy
 msgid "Default paragraph formatting"
-msgstr "Zrušit výběr odstavce"
+msgstr "Výchozí formátování odstavce"
 
 #: ../src/settings.cpp:1415
-#, fuzzy
 msgctxt "CSS"
 msgid "Title"
-msgstr "Název"
+msgstr "Nadpis"
 
 #: ../src/settings.cpp:1416
-#, fuzzy
 msgid "Subtitle"
-msgstr "Název"
+msgstr ""
 
 #: ../src/settings.cpp:1417
-#, fuzzy
 msgid "Preformatted text / code"
-msgstr "Předformátovaný text"
+msgstr ""
 
 #: ../src/settings.cpp:1418
 msgid "Link"
@@ -1097,27 +1065,24 @@ msgid "Footnote"
 msgstr ""
 
 #: ../src/settings.cpp:1424
-#, fuzzy
 msgid "Footnote link"
-msgstr "Jít na odkaz"
+msgstr ""
 
 #: ../src/settings.cpp:1425
 msgid "Footnote title"
 msgstr ""
 
 #: ../src/settings.cpp:1426
-#, fuzzy
 msgid "Annotation"
-msgstr "Citace"
+msgstr ""
 
 #: ../src/settings.cpp:1466
 msgid "Default font face"
 msgstr "Výchozí druh písma"
 
 #: ../src/settings.cpp:1471
-#, fuzzy
 msgid "Font settings"
-msgstr "Nastavení velikosti písma"
+msgstr "Nastavení písma"
 
 #: ../src/settings.cpp:1478
 msgid "Font antialiasing"
@@ -1132,9 +1097,8 @@ msgid "Font kerning"
 msgstr "Vyrovnání písma"
 
 #: ../src/settings.cpp:1485
-#, fuzzy
 msgid "Font embolding"
-msgstr "Vyrovnání písma"
+msgstr ""
 
 #: ../src/settings.cpp:1487
 msgid "Tracking"
@@ -1153,9 +1117,8 @@ msgid "Fallback font face"
 msgstr "Záložní druh písma"
 
 #: ../src/settings.cpp:1500
-#, fuzzy
 msgid "Formatting settings"
-msgstr "Nastavení velikosti písma"
+msgstr "Nastavení formátování"
 
 #: ../src/settings.cpp:1512
 msgid "[No Hyphenation]"
@@ -1174,14 +1137,12 @@ msgid "Preformatted text"
 msgstr "Předformátovaný text"
 
 #: ../src/settings.cpp:1532
-#, fuzzy
 msgid "Space condensing percent"
-msgstr "Zadat procento polohy"
+msgstr "Zúžení mezer v procentech"
 
 #: ../src/settings.cpp:1535
-#, fuzzy
 msgid "Space expanding percent"
-msgstr "Zadat procento polohy"
+msgstr "Roztažení mezer v procentech"
 
 #: ../src/settings.cpp:1538
 msgid "Floating punctuation"
@@ -1208,67 +1169,56 @@ msgid "Inline image max zoom"
 msgstr "Největší zvětšení vloženého obrázku"
 
 #: ../src/settings.cpp:1567
-#, fuzzy
 msgid "Page settings"
-msgstr "Natočení strany"
+msgstr "Nastavení stránky"
 
 #: ../src/settings.cpp:1572
 msgid "Status line"
 msgstr "Stavový řádek"
 
 #: ../src/settings.cpp:1577
-#, fuzzy
 msgid "Status line settings"
-msgstr "Stavový řádek"
+msgstr "Nastavení stavové řádky"
 
 #: ../src/settings.cpp:1594
-#, fuzzy
 msgid "Time format"
-msgstr "Formát souboru"
+msgstr "Formát času"
 
 #: ../src/settings.cpp:1596
 msgid "Show time"
 msgstr "Ukázat čas"
 
 #: ../src/settings.cpp:1598
-#, fuzzy
 msgid "Show title"
-msgstr "Ukázat čas"
+msgstr "Zobrazit název"
 
 #: ../src/settings.cpp:1600
-#, fuzzy
 msgid "Show battery"
-msgstr "Ukázat čas"
+msgstr "Zobrazit baterii"
 
 #: ../src/settings.cpp:1602
-#, fuzzy
 msgid "Show battery percent"
-msgstr "Stav baterie"
+msgstr "Zobrazit baterii v procentech"
 
 #: ../src/settings.cpp:1605
-#, fuzzy
 msgid "Show position percent"
-msgstr "Zadat procento polohy"
+msgstr "Zobrazit pozici v procentech"
 
 #: ../src/settings.cpp:1607
-#, fuzzy
 msgid "Show page count"
-msgstr "Zadat číslo strany"
+msgstr "Zobrazit počitadlo stránek"
 
 #: ../src/settings.cpp:1609
-#, fuzzy
 msgid "Show page count till chapter end"
-msgstr "Zadat číslo strany"
+msgstr "Zobrazit počet stran do konce kapitoly"
 
 #: ../src/settings.cpp:1612
-#, fuzzy
 msgid "Show page number"
-msgstr "Zadat číslo strany"
+msgstr "Zobrazit počet stránek"
 
 #: ../src/settings.cpp:1614
-#, fuzzy
 msgid "Show chapter marks"
-msgstr "Ukázat čas"
+msgstr "Zobrazit značky kapitol"
 
 #: ../src/settings.cpp:1623
 msgid "Page margins"
@@ -1296,7 +1246,7 @@ msgstr "Poznámky pod čarou na straně dole"
 
 #: ../src/settings.cpp:1645
 msgid "Display settings"
-msgstr ""
+msgstr "Nastavení displeje"
 
 #: ../src/settings.cpp:1654
 msgid "Landscape pages"
@@ -1324,16 +1274,15 @@ msgstr "Režim obnovení Turbo"
 
 #: ../src/settings.cpp:1676
 msgid "Gray buffer depth(need restart)"
-msgstr ""
+msgstr "Stupně šedivé (vyžaduje restart)"
 
 #: ../src/settings.cpp:1683
 msgid "Skin"
-msgstr ""
+msgstr "Vzhled"
 
 #: ../src/settings.cpp:1699
-#, fuzzy
 msgid "Control settings"
-msgstr "Nastavení velikosti písma"
+msgstr "Nastavení ovládání"
 
 #: ../src/settings.cpp:1706
 msgid "Rotate"
@@ -1345,47 +1294,45 @@ msgstr "Úhel otočení strany"
 
 #: ../src/settings.cpp:1725
 msgid "Tap action"
-msgstr ""
+msgstr "Akce dotyku"
 
 #: ../src/settings.cpp:1727
-#, fuzzy
 msgid "Long tap action"
-msgstr "Jít na citaci"
+msgstr "Akce dlouhého dotyku"
 
 #: ../src/settings.cpp:1731
 msgid "Height of the upper tap zone"
-msgstr ""
+msgstr "Výška horní dotykové zóny"
 
 #: ../src/settings.cpp:1734
 msgid "Height of the middle tap zone"
-msgstr ""
+msgstr "Výška střední dotykové zóny"
 
 #: ../src/settings.cpp:1737
 msgid "Width of the left tap zone"
-msgstr ""
+msgstr "Šířka levé dotykové zóny"
 
 #: ../src/settings.cpp:1740
 msgid "Width of the middle tap zone"
-msgstr ""
+msgstr "Šířka střední dotykové zóny"
 
 #: ../src/settings.cpp:1759
-#, fuzzy
 msgid "Style settings"
-msgstr "Nastavení"
+msgstr "Nastavení stylů"
 
 #: ../src/settings.cpp:1764
 msgid "Document embedded styles"
 msgstr "Styly vložené do dokumentu"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
-msgstr ""
+msgstr "Vymazat cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr ""
 
@@ -1407,7 +1354,7 @@ msgstr "Slovníky umístěte do adresáře 'dict' na kartě SD."
 
 #: ../src/viewdlg.cpp:161
 msgid "Dictionaries in standard unix .dict format are supported."
-msgstr "Jsou podporovány slovníky v běžném unixovém formáty .dict."
+msgstr "Jsou podporovány slovníky v běžném unixovém formátu .dict."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
@@ -1454,13 +1401,11 @@ msgid "C"
 msgstr "C"
 
 #: ../src/viewdlg.cpp:495
-#, fuzzy
 msgctxt "Key"
 msgid "Left"
 msgstr "Vlevo"
 
 #: ../src/viewdlg.cpp:497
-#, fuzzy
 msgctxt "Key"
 msgid "Right"
 msgstr "Vpravo"
@@ -1475,7 +1420,7 @@ msgstr "O stranu dolů"
 
 #: ../src/viewdlg.cpp:503
 msgid "Side Press"
-msgstr "Stisknutí strany"
+msgstr "Stisknutí okraje"
 
 #: ../src/viewdlg.cpp:505
 msgid "Menu"
@@ -1670,44 +1615,39 @@ msgid "Go to percent..."
 msgstr "Jít na procento..."
 
 #: ../src/viewdlg.cpp:586
-#, fuzzy
 msgid "Front light"
-msgstr "Váha písma"
+msgstr ""
 
 #: ../src/viewdlg.cpp:587
-#, fuzzy
 msgid "Invert display"
-msgstr "Převrácené zobrazení"
+msgstr ""
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Úplné obnovení obrazu"
 
 #: ../src/viewdlg.cpp:589
-#, fuzzy
 msgid "Toggle status bar"
-msgstr "Přepnout formát textu"
+msgstr ""
 
 #: ../src/viewdlg.cpp:591
-#, fuzzy
 msgid "Tasks list"
-msgstr "Seznam záložek"
+msgstr "Správce úloh"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
-msgid "Toggle front light"
-msgstr "Váha písma"
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr ""
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
-msgstr ""
+msgstr "Zamknou zařízení"
+
+#: ../src/viewdlg.cpp:600
+msgid "Open system panel"
+msgstr "Otevřít systémový panel"
 
 #: ../src/viewdlg.cpp:601
-msgid "Open system panel"
+msgid "Toggle front light"
 msgstr ""
 
 #: ../src/viewdlg.cpp:604
@@ -1772,12 +1712,12 @@ msgstr "Přiřazená funkce"
 
 #: ../src/ota_update.cpp:135
 msgid "Couldn't connect to server!"
-msgstr ""
+msgstr "Nemohu se připojit k serveru!"
 
 #: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
 #: ../src/ota_update.cpp:287
 msgid "Downloading..."
-msgstr ""
+msgstr "Stahuji..."
 
 #: ../src/ota_update.cpp:154
 msgid "Server returned error response: "
@@ -1788,10 +1728,12 @@ msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
+"Stažení dokončeno!\n"
+"CoolReader se restartuje."
 
 #: ../src/ota_update.cpp:168
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: ../src/ota_update.cpp:194
 msgid "Couldn't remove existing package!"
@@ -1799,61 +1741,53 @@ msgstr ""
 
 #: ../src/ota_update.cpp:231
 msgid "Couldn't connect to the network!"
-msgstr ""
+msgstr "Nelze se připojit k síti."
 
 #: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
 #: ../src/ota_update.cpp:266
-#, fuzzy
 msgid "Searching..."
-msgstr "Nabíjí se..."
+msgstr "Vyhledávání ..."
 
 #: ../src/ota_update.cpp:244
 msgid "You have the latest version."
-msgstr ""
+msgstr "Máte poslední verzi."
 
 #: ../src/ota_update.cpp:276
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
 msgstr ""
+"Aktualizace není dostupná pro vaše zařízení!\n"
+"Model zařízení:"
 
 #: ../src/ota_update.cpp:298
 msgid "Failed updating!"
-msgstr ""
+msgstr "Aktualizace selhala!"
 
 #: ../src/pb_toc.cpp:21
-#, fuzzy
 msgid "Contents"
-msgstr "Ovládání"
-
-#: ../src/cr3pocketbook.cpp:1688
-msgid "Cache cleared."
-msgstr ""
-
-#: ../src/cr3pocketbook.cpp:1693
-#, fuzzy
-msgid "Unable to list the directory contents!"
 msgstr "Obsah"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1695
+msgid "Cache cleared."
+msgstr "Cache vymazána."
+
+#: ../src/cr3pocketbook.cpp:1700
+msgid "Unable to list the directory contents!"
+msgstr "Nelze procházet obsah složky!"
+
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Nelze vymazat cache!"
 
 #: ../src/cr3pocketbook.cpp:3203
 msgid "Press $1 to translate"
 msgstr "Stisknout $1 pro překlad"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4189
-#, fuzzy
+#: ../src/cr3pocketbook.cpp:4281
 msgid "Untitled"
-msgstr "Název"
-
-#~ msgid "Disable"
-#~ msgstr "Zakázat"
-
-#~ msgid "About..."
-#~ msgstr "O programu..."
+msgstr ""

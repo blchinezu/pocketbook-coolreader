@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr 3gui\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
 "PO-Revision-Date: 2010-02-24 21:50+0300\n"
 "Last-Translator: Stanislovas Zacharovas\n"
 "Language-Team: Lithuanian\n"
@@ -1381,15 +1381,15 @@ msgstr "Nustatymai"
 msgid "Document embedded styles"
 msgstr "Naudoti dokumento stilius"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr ""
 
@@ -1699,21 +1699,21 @@ msgid "Tasks list"
 msgstr "Žymių sąrašas"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
-msgid "Toggle front light"
-msgstr "Šrifto storis"
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr ""
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
 msgstr ""
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:600
 msgid "Open system panel"
 msgstr ""
+
+#: ../src/viewdlg.cpp:601
+#, fuzzy
+msgid "Toggle front light"
+msgstr "Šrifto storis"
 
 #: ../src/viewdlg.cpp:604
 #, fuzzy
@@ -1832,16 +1832,16 @@ msgstr ""
 msgid "Contents"
 msgstr "Klavišų paskirtis"
 
-#: ../src/cr3pocketbook.cpp:1688
+#: ../src/cr3pocketbook.cpp:1695
 msgid "Cache cleared."
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:1693
+#: ../src/cr3pocketbook.cpp:1700
 #, fuzzy
 msgid "Unable to list the directory contents!"
 msgstr "Turinys"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
 msgstr ""
 
@@ -1849,11 +1849,11 @@ msgstr ""
 msgid "Press $1 to translate"
 msgstr "Paspauskite $1 kad išversti"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4189
+#: ../src/cr3pocketbook.cpp:4281
 #, fuzzy
 msgid "Untitled"
 msgstr "Rodyti laiką"

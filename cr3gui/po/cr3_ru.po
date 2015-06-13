@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-05-12 09:34+0300\n"
-"PO-Revision-Date: 2015-04-26 14:34+0000\n"
+"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"PO-Revision-Date: 2015-05-14 07:43+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/ru/)\n"
@@ -1326,15 +1326,15 @@ msgstr "Настройки стилей"
 msgid "Document embedded styles"
 msgstr "Использовать стили документа"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
 msgstr "Очистить кэш"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:597 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
 msgid "OTA Update"
 msgstr "OTA-обновление программы"
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
 msgid "OTA Update Dev"
 msgstr "OTA-обновление (до новейшей версии в разработке)"
 
@@ -1637,21 +1637,20 @@ msgid "Tasks list"
 msgstr "Список открытых программ"
 
 #: ../src/viewdlg.cpp:593
-#, fuzzy
-msgid "Toggle front light"
-msgstr "Управление подсветкой"
-
-#: ../src/viewdlg.cpp:594
 msgid "Toggle system panel"
 msgstr "Показать системную панель"
 
-#: ../src/viewdlg.cpp:596
+#: ../src/viewdlg.cpp:595
 msgid "Lock device"
 msgstr "Режим блокировки"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:600
 msgid "Open system panel"
 msgstr "Открыть системную панель"
+
+#: ../src/viewdlg.cpp:601
+msgid "Toggle front light"
+msgstr "Тумблер подсветки"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
@@ -1771,15 +1770,15 @@ msgstr "Ошибка обновления!"
 msgid "Contents"
 msgstr "Содержание"
 
-#: ../src/cr3pocketbook.cpp:1688
+#: ../src/cr3pocketbook.cpp:1695
 msgid "Cache cleared."
 msgstr "Кэш очищен."
 
-#: ../src/cr3pocketbook.cpp:1693
+#: ../src/cr3pocketbook.cpp:1700
 msgid "Unable to list the directory contents!"
 msgstr "Невозможно отобразить содержание! (?)"
 
-#: ../src/cr3pocketbook.cpp:1699
+#: ../src/cr3pocketbook.cpp:1706
 msgid "Unable to clear cache!"
 msgstr "Не удалось очистить кэш!"
 
@@ -1787,10 +1786,10 @@ msgstr "Не удалось очистить кэш!"
 msgid "Press $1 to translate"
 msgstr "Нажмите $1 чтобы перевести"
 
-#: ../src/cr3pocketbook.cpp:4079
+#: ../src/cr3pocketbook.cpp:4171
 msgid "Updated to v"
 msgstr "Обновлено до версии "
 
-#: ../src/cr3pocketbook.cpp:4189
+#: ../src/cr3pocketbook.cpp:4281
 msgid "Untitled"
 msgstr "Без названия"
