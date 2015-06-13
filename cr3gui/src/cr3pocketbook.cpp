@@ -44,7 +44,6 @@
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
-bool touchSupported = false;
 bool isStandByMode = false;
 ibitmap *standByImage = NULL;
 lString16 pbSkinFileName;
@@ -358,7 +357,7 @@ public:
     }
     bool isTouchSupported()
     {
-        return touchSupported;
+        return (QueryTouchpanel() != 0);
     }
 };
 
@@ -4110,7 +4109,7 @@ void exitStandByMode() {
 }
 void restartStandByTimer() {
 
-    if( !touchSupported )
+    if( !(QueryTouchpanel() != 0) )
         return;
 
     stopStandByTimer();
@@ -4442,7 +4441,6 @@ int main(int argc, char **argv)
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
     useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
-    touchSupported = (QueryTouchpanel() != 0);
     OpenScreen();
     if (argc < 2) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
