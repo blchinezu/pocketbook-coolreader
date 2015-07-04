@@ -14,5 +14,4 @@ msgmerge --update cr3_pl.po cr3.pot
 msgmerge --update cr3_ro.po cr3.pot
 msgmerge --update cr3_ru.po cr3.pot
 msgmerge --update cr3_uk.po cr3.pot
-msgmerge --update cr3_zh_CN.po cr3.pot
-msgmerge --update cr3_zh_TW.po cr3.pot
+msgmerge --update cr3_zh.po cr3.pot

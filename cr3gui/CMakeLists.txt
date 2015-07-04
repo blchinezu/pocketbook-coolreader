@@ -19,7 +19,7 @@ SET(KWWidgets_CMAKE_DIR ${CMAKE_SOURCE_DIR}/tools/)
 INCLUDE(${KWWidgets_CMAKE_DIR}FindGettext.cmake)
 INCLUDE(${KWWidgets_CMAKE_DIR}KWWidgetsInternationalizationMacros.cmake)
 
-SET (LANGUAGES bg ca cs de es fr he it lt nl pl ro ru uk zh_CN zh_TW)
+SET (LANGUAGES bg ca cs de es fr he it lt nl pl ro ru uk zh)
 message( "Languages: ${LANGUAGES}" )
 
 if (DEFINED POCKETBOOK_PRO)
