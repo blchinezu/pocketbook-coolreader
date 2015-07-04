@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-06-12 08:08+0300\n"
-"PO-Revision-Date: 2015-04-27 23:36+0000\n"
+"PO-Revision-Date: 2015-07-02 15:48+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/nl/)\n"
@@ -1320,7 +1320,7 @@ msgstr "Stijlinstellingen"
 
 #: ../src/settings.cpp:1764
 msgid "Document embedded styles"
-msgstr "In document opgenomen lettertypen"
+msgstr "In document opgenomen stijlen"
 
 #: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
 msgid "Clear cache"
@@ -1646,9 +1646,8 @@ msgid "Open system panel"
 msgstr "Open systeempaneel"
 
 #: ../src/viewdlg.cpp:601
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Voorverlichting"
+msgstr "Zet voorverlichting aan/uit"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
