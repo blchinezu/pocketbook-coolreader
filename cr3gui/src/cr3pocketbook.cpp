@@ -46,6 +46,7 @@ bool forcePartialUpdates;
 bool useDeveloperFeatures;
 bool isStandByMode = false;
 ibitmap *standByImage = NULL;
+ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
 lString16 currentCacheDir;
 lString16 openedCacheFile;
@@ -4083,13 +4084,26 @@ void enterStandByMode() {
     if( isStandByMode )
         return;
 
+    // Draw cover
     if( standByImage ) {
         // ClearScreen();
         DrawBitmap(0, 0, standByImage);
     }
+
+    // Or dim screen
     else {
         DimArea(0, 0, ScreenWidth(), ScreenHeight(), 128);
     }
+
+    // Draw bottom centered lock image
+    if( standByLockImage ) {
+        DrawBitmap(
+            (ScreenWidth() - standByLockImage->width) / 2,
+            ScreenHeight() - standByLockImage->height - 10,
+            standByLockImage
+            );
+    }
+
     FullUpdate();
     #ifdef POCKETBOOK_PRO_FW5
     turnOffFrontLightIfNeeded();
@@ -4271,7 +4285,7 @@ int main_handler(int type, int par1, int par2)
             // If none worked - generate an ugly ass cover
             if( !cover ) {
 
-                LVGrayDrawBuf tmpBuf( ScreenWidth(), ScreenHeight(), GetHardwareDepth() );
+                LVGrayDrawBuf tmpBufCover( ScreenWidth(), ScreenHeight(), GetHardwareDepth() );
 
                 lString16 authors = main_win->getDocView()->getAuthors();
                 lString16 title = main_win->getDocView()->getTitle();
@@ -4280,7 +4294,7 @@ int main_handler(int type, int par1, int par2)
                     title = _("Untitled");
 
                 LVDrawBookCover(
-                    tmpBuf,
+                    tmpBufCover,
                     main_win->getDocView()->getCoverPageImage(),
                     lString8(DEFAULTFONT),
                     title,
@@ -4291,9 +4305,9 @@ int main_handler(int type, int par1, int par2)
 
                 cover = NewBitmap(ScreenWidth(), ScreenHeight());
                 if(4 == cover->depth) {
-                    Draw4Bits(tmpBuf, cover->data, 0, 0, ScreenWidth(), ScreenHeight());
+                    Draw4Bits(tmpBufCover, cover->data, 0, 0, ScreenWidth(), ScreenHeight());
                 } else {
-                    memcpy(cover->data, tmpBuf.GetScanLine(0), cover->height * cover->scanline);
+                    memcpy(cover->data, tmpBufCover.GetScanLine(0), cover->height * cover->scanline);
                 }
             }
 
@@ -4325,6 +4339,24 @@ int main_handler(int type, int par1, int par2)
                     free(cover);
                 }
             }
+
+            // Load standby lock image
+            LVImageSourceRef standByLockImageTmp = CRPocketBookWindowManager::instance->getSkin()->getImage(L"standby.png");
+            if( !standByLockImageTmp.isNull() ) {
+
+                // Convert to ibitmap
+                standByLockImage = NewBitmap(standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight());
+                LVGrayDrawBuf tmpBufLock( standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight(), standByLockImage->depth );
+
+                tmpBufLock.Draw(standByLockImageTmp, 0, 0, standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight(), true);
+
+                if(4 == standByLockImage->depth) {
+                    Draw4Bits(tmpBufLock, standByLockImage->data, 0, 0, standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight());
+                } else {
+                    memcpy(standByLockImage->data, tmpBufLock.GetScanLine(0), standByLockImage->height * standByLockImage->scanline);
+                }
+            }
+
             need_save_cover = false;
         }
         restartStandByTimer();

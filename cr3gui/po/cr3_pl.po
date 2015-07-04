@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-06-12 08:08+0300\n"
-"PO-Revision-Date: 2015-04-27 15:56+0000\n"
+"PO-Revision-Date: 2015-06-17 07:23+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/pl/)\n"
@@ -22,7 +22,7 @@ msgstr ""
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
-msgstr "Zaznacz nstępny/poprzedni akapit"
+msgstr "Zaznacz następny/poprzedni akapit"
 
 #: ../src/citedlg.cpp:197
 msgid "Select one more paragraph"
@@ -227,7 +227,7 @@ msgstr "OCR"
 
 #: ../src/mainwnd.cpp:1086
 msgid "Document version"
-msgstr "wersja dokumentu"
+msgstr "Wersja dokumentu"
 
 #: ../src/mainwnd.cpp:1087
 msgid "Change history"
@@ -1647,9 +1647,8 @@ msgid "Open system panel"
 msgstr "Otwórz panel systemowy"
 
 #: ../src/viewdlg.cpp:601
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Podświetlenie ekranu"
+msgstr "Przełącz podświetlenie ekranu"
 
 #: ../src/viewdlg.cpp:604
 msgid "PocketBook Main menu"
