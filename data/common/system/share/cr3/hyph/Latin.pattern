@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+%
+%                  ********** hyph-la.tex *************
+%
+% Copyright 1999-2014 Claudio Beccari
+%                [latin hyphenation patterns]
+%
+% -----------------------------------------------------------------
+% IMPORTANT NOTICE:
+%
+% This program can be redistributed and/or modified under the terms
+% of the LaTeX Project Public License Distributed from CTAN
+% archives in directory macros/latex/base/lppl.txt; either
+% version 1 of the License, or any later version.
+% -----------------------------------------------------------------
+%
+% Patterns for the latin language mainly in modern spelling
+% (u when u is needed and v when v is needed); medieval spelling
+% with the ligatures \ae and \oe  and the (uncial) lowercase `v'
+% written as a `u' is also supported; apparently there is no conflict
+% between the patterns of modern  Latin and those of medieval Latin.
+%
+%
+% Prepared by  Claudio Beccari
+%              Politecnico di Torino
+%              Torino, Italy
+%              e-mail claudio dot beccari at gmail.com
+%
+% \versionnumber{3.2a}   \versiondate{2014/06/04}
+%
+% For more information please read the babel-latin documentation.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  For documentation see:
+%  C. Beccari, "Computer aided hyphenation for Italian and Modern
+%        Latin", TUG vol. 13, n. 1, pp. 23-33 (1992)
+%
+%  see also
+%
+%  C. Beccari, "Typesetting of ancient languages",
+%              TUG vol.15, n.1, pp. 9-16 (1994)
+%
+%  In the former paper  the  code  was  described  as  being contained in file
+%  ITALAT.TEX; this is substantially the same code,  but  the  file  has  been
+%  renamed and included in hyph-utf8.
+%
+%  A corresponding file (ITHYPH.TEX) has been extracted in order to  eliminate
+%  the  (few)  patterns specific to Latin and leave those specific to Italian;
+%  ITHYPH.TEX has been further  extended  with  many  new patterns in order to
+%  cope with the many neologisms and technical terms with foreign roots.
+%
+%  Should you find any word that gets hyphenated in a wrong way, please, AFTER
+%  CHECKING  ON A RELIABLE MODERN DICTIONARY, report to the author, preferably
+%  by e-mail.  Please  do  not  report  about  wrong  break  points concerning
+%  prefixes and/or suffixes; see at the bottom of this file.
+%
+%  Compared with the previous versions, this file has been extended so  as  to
+%  cope also with the medieval Latin spelling, where the letter `V' played the
+%  roles of both `U' and `V', as in the Roman times, save that the Romans used
+%  only capitals. In the middle ages the availability of soft writing supports
+%  and the necessity of copying books with a reasonable speed, several scripts
+%  evolved  in  (practically)  all  of  which  there was a lower case alphabet
+%  different from the upper case  one,  and  where  the lower case `v' had the
+%  rounded shape of our modern lower case `u', and where the Latin  diphthongs
+%  `AE'  and  `OE',  both in upper and lower case, where written as ligatures,
+%  not to mention the habit of  substituting  them with their sound, that is a
+%  simple `E'.
+%
+%  According  to  Leon  Battista  Alberti,  who  in  1466  wrote  a  book   on
+%  cryptography  where  he  thoroughly  analyzed  the hyphenation of the Latin
+%  language of his (still  medieval)  times,  the  differences from the Tuscan
+%  language (the Italian language, as it was named  at  his  time)  were  very
+%  limited,  in particular for what concerns the handling of the ascending and
+%  descending diphthongs; in  Central  and  Northern  Europe,  and later on in
+%  North America, the Scholars perceived the above diphthongs as made  of  two
+%  distinct  vowels;  the  hyphenation of medieval Latin, therefore, was quite
+%  different in the northern countries compared to the southern ones, at least
+%  for what concerns these  diphthongs.  If  you need hyphenation patterns for
+%  medieval Latin that suite you better according to the  habits  of  Northern
+%  Europe  you  should  resort  to the hyphenation patterns prepared by Yannis
+%  Haralambous (TUGboat, vol.13 n.4 (1992)).
+%
+%
+%
+%                            PREFIXES AND SUFFIXES
+%
+% For what concerns prefixes and suffixes, the latter are generally  separated
+% according  to  "natural"  syllabification,  while  the  former are generally
+% divided etimologically. In order to  avoid  an excessive number of patterns,
+% care has been paid to some prefixes,  especially  "ex",  "trans",  "circum",
+% "prae",  but  this set of patterns is NOT capable of separating the prefixes
+% in all circumstances.
+%
+%                         BABEL SHORTCUTS AND FACILITIES
+%
+% Read  the  documentation  coming  with the discription of the Latin language
+% interface of  Babel  in  order  to  see  the  shortcuts  and  the facilities
+% introduced in order to facilitate the insertion  of  "compound  word  marks"
+% which are very useful for inserting etimological break points.
+%
+% Happy Latin and multilingual typesetting!
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% \message{Latin Hyphenation Patterns Version 3.2a <2014/06/04>}
+%
+-->
+<HyphenationDescription>
+    <pattern>.a2b3l</pattern>
+    <pattern>.anti1</pattern>
+    <pattern>.anti3m2n</pattern>
+    <pattern>.circu2m1</pattern>
+    <pattern>.co2n1iun</pattern>
+    <pattern>.di2s3cine</pattern>
+    <pattern>.e2x1</pattern>
+    <pattern>.o2b3</pattern>
+    <pattern>.para1i</pattern>
+    <pattern>.para1u</pattern>
+    <pattern>.su2b3lu</pattern>
+    <pattern>.su2b3r</pattern>
+    <pattern>2s3que.</pattern>
+    <pattern>2s3dem.</pattern>
+    <pattern>3p2sic</pattern>
+    <pattern>3p2neu</pattern>
+    <pattern>æ1</pattern>
+    <pattern>œ1</pattern>
+    <pattern>a1ia</pattern>
+    <pattern>a1ie</pattern>
+    <pattern>a1io</pattern>
+    <pattern>a1iu</pattern>
+    <pattern>ae1a</pattern>
+    <pattern>ae1o</pattern>
+    <pattern>ae1u</pattern>
+    <pattern>e1iu</pattern>
+    <pattern>io1i</pattern>
+    <pattern>o1ia</pattern>
+    <pattern>o1ie</pattern>
+    <pattern>o1io</pattern>
+    <pattern>o1iu</pattern>
+    <pattern>uo3u</pattern>
+    <pattern>1b</pattern>
+    <pattern>2bb</pattern>
+    <pattern>2bd</pattern>
+    <pattern>b2l</pattern>
+    <pattern>2bm</pattern>
+    <pattern>2bn</pattern>
+    <pattern>b2r</pattern>
+    <pattern>2bt</pattern>
+    <pattern>2bs</pattern>
+    <pattern>2b.</pattern>
+    <pattern>1c</pattern>
+    <pattern>2cc</pattern>
+    <pattern>c2h2</pattern>
+    <pattern>c2l</pattern>
+    <pattern>2cm</pattern>
+    <pattern>2cn</pattern>
+    <pattern>2cq</pattern>
+    <pattern>c2r</pattern>
+    <pattern>2cs</pattern>
+    <pattern>2ct</pattern>
+    <pattern>2cz</pattern>
+    <pattern>2c.</pattern>
+    <pattern>1d</pattern>
+    <pattern>2dd</pattern>
+    <pattern>2dg</pattern>
+    <pattern>2dm</pattern>
+    <pattern>d2r</pattern>
+    <pattern>2ds</pattern>
+    <pattern>2dv</pattern>
+    <pattern>2d.</pattern>
+    <pattern>1f</pattern>
+    <pattern>2ff</pattern>
+    <pattern>f2l</pattern>
+    <pattern>2fn</pattern>
+    <pattern>f2r</pattern>
+    <pattern>2ft</pattern>
+    <pattern>2f.</pattern>
+    <pattern>1g</pattern>
+    <pattern>2gg</pattern>
+    <pattern>2gd</pattern>
+    <pattern>2gf</pattern>
+    <pattern>g2l</pattern>
+    <pattern>2gm</pattern>
+    <pattern>g2n</pattern>
+    <pattern>g2r</pattern>
+    <pattern>2gs</pattern>
+    <pattern>2gv</pattern>
+    <pattern>2g.</pattern>
+    <pattern>1h</pattern>
+    <pattern>2hp</pattern>
+    <pattern>2ht</pattern>
+    <pattern>2h.</pattern>
+    <pattern>1j</pattern>
+    <pattern>1k</pattern>
+    <pattern>2kk</pattern>
+    <pattern>k2h2</pattern>
+    <pattern>1l</pattern>
+    <pattern>2lb</pattern>
+    <pattern>2lc</pattern>
+    <pattern>2ld</pattern>
+    <pattern>2lf</pattern>
+    <pattern>l3f2t</pattern>
+    <pattern>2lg</pattern>
+    <pattern>2lk</pattern>
+    <pattern>2ll</pattern>
+    <pattern>2lm</pattern>
+    <pattern>2ln</pattern>
+    <pattern>2lp</pattern>
+    <pattern>2lq</pattern>
+    <pattern>2lr</pattern>
+    <pattern>2ls</pattern>
+    <pattern>2lt</pattern>
+    <pattern>2lv</pattern>
+    <pattern>2l.</pattern>
+    <pattern>1m</pattern>
+    <pattern>2mm</pattern>
+    <pattern>2mb</pattern>
+    <pattern>2mp</pattern>
+    <pattern>2ml</pattern>
+    <pattern>2mn</pattern>
+    <pattern>2mq</pattern>
+    <pattern>2mr</pattern>
+    <pattern>2mv</pattern>
+    <pattern>2m.</pattern>
+    <pattern>1n</pattern>
+    <pattern>2nb</pattern>
+    <pattern>2nc</pattern>
+    <pattern>2nd</pattern>
+    <pattern>2nf</pattern>
+    <pattern>2ng</pattern>
+    <pattern>2nl</pattern>
+    <pattern>2nm</pattern>
+    <pattern>2nn</pattern>
+    <pattern>2np</pattern>
+    <pattern>2nq</pattern>
+    <pattern>2nr</pattern>
+    <pattern>2ns</pattern>
+    <pattern>n2s3m</pattern>
+    <pattern>n2s3f</pattern>
+    <pattern>2nt</pattern>
+    <pattern>2nv</pattern>
+    <pattern>2nx</pattern>
+    <pattern>2n.</pattern>
+    <pattern>1p</pattern>
+    <pattern>p2h</pattern>
+    <pattern>p2l</pattern>
+    <pattern>2pn</pattern>
+    <pattern>2pp</pattern>
+    <pattern>p2r</pattern>
+    <pattern>2ps</pattern>
+    <pattern>2pt</pattern>
+    <pattern>2pz</pattern>
+    <pattern>2php</pattern>
+    <pattern>2pht</pattern>
+    <pattern>2p.</pattern>
+    <pattern>1qu2</pattern>
+    <pattern>1r</pattern>
+    <pattern>2rb</pattern>
+    <pattern>2rc</pattern>
+    <pattern>2rd</pattern>
+    <pattern>2rf</pattern>
+    <pattern>2rg</pattern>
+    <pattern>r2h</pattern>
+    <pattern>2rl</pattern>
+    <pattern>2rm</pattern>
+    <pattern>2rn</pattern>
+    <pattern>2rp</pattern>
+    <pattern>2rq</pattern>
+    <pattern>2rr</pattern>
+    <pattern>2rs</pattern>
+    <pattern>2rt</pattern>
+    <pattern>2rv</pattern>
+    <pattern>2rz</pattern>
+    <pattern>2r.</pattern>
+    <pattern>1s2</pattern>
+    <pattern>2s3ph</pattern>
+    <pattern>2s3s</pattern>
+    <pattern>2stb</pattern>
+    <pattern>2stc</pattern>
+    <pattern>2std</pattern>
+    <pattern>2stf</pattern>
+    <pattern>2stg</pattern>
+    <pattern>2st3l</pattern>
+    <pattern>2stm</pattern>
+    <pattern>2stn</pattern>
+    <pattern>2stp</pattern>
+    <pattern>2stq</pattern>
+    <pattern>2sts</pattern>
+    <pattern>2stt</pattern>
+    <pattern>2stv</pattern>
+    <pattern>2s.</pattern>
+    <pattern>2st.</pattern>
+    <pattern>1t</pattern>
+    <pattern>2tb</pattern>
+    <pattern>2tc</pattern>
+    <pattern>2td</pattern>
+    <pattern>2tf</pattern>
+    <pattern>2tg</pattern>
+    <pattern>t2h</pattern>
+    <pattern>t2l</pattern>
+    <pattern>t2r</pattern>
+    <pattern>2tm</pattern>
+    <pattern>2tn</pattern>
+    <pattern>2tp</pattern>
+    <pattern>2tq</pattern>
+    <pattern>2tt</pattern>
+    <pattern>2tv</pattern>
+    <pattern>2t.</pattern>
+    <pattern>1v</pattern>
+    <pattern>v2l</pattern>
+    <pattern>v2r</pattern>
+    <pattern>2vv</pattern>
+    <pattern>1x</pattern>
+    <pattern>2xt</pattern>
+    <pattern>2xx</pattern>
+    <pattern>2x.</pattern>
+    <pattern>1z</pattern>
+    <pattern>2z.</pattern>
+    <pattern>a1ua</pattern>
+    <pattern>a1ue</pattern>
+    <pattern>a1ui</pattern>
+    <pattern>a1uo</pattern>
+    <pattern>a1uu</pattern>
+    <pattern>e1ua</pattern>
+    <pattern>e1ue</pattern>
+    <pattern>e1ui</pattern>
+    <pattern>e1uo</pattern>
+    <pattern>e1uu</pattern>
+    <pattern>i1ua</pattern>
+    <pattern>i1ue</pattern>
+    <pattern>i1ui</pattern>
+    <pattern>i1uo</pattern>
+    <pattern>i1uu</pattern>
+    <pattern>o1ua</pattern>
+    <pattern>o1ue</pattern>
+    <pattern>o1ui</pattern>
+    <pattern>o1uo</pattern>
+    <pattern>o1uu</pattern>
+    <pattern>u1ua</pattern>
+    <pattern>u1ue</pattern>
+    <pattern>u1ui</pattern>
+    <pattern>u1uo</pattern>
+    <pattern>u1uu</pattern>
+    <pattern>a2l1ua</pattern>
+    <pattern>a2l1ue</pattern>
+    <pattern>a2l1ui</pattern>
+    <pattern>a2l1uo</pattern>
+    <pattern>a2l1uu</pattern>
+    <pattern>e2l1ua</pattern>
+    <pattern>e2l1ue</pattern>
+    <pattern>e2l1ui</pattern>
+    <pattern>e2l1uo</pattern>
+    <pattern>e2l1uu</pattern>
+    <pattern>i2l1ua</pattern>
+    <pattern>i2l1ue</pattern>
+    <pattern>i2l1ui</pattern>
+    <pattern>i2l1uo</pattern>
+    <pattern>i2l1uu</pattern>
+    <pattern>o2l1ua</pattern>
+    <pattern>o2l1ue</pattern>
+    <pattern>o2l1ui</pattern>
+    <pattern>o2l1uo</pattern>
+    <pattern>o2l1uu</pattern>
+    <pattern>u2l1ua</pattern>
+    <pattern>u2l1ue</pattern>
+    <pattern>u2l1ui</pattern>
+    <pattern>u2l1uo</pattern>
+    <pattern>u2l1uu</pattern>
+    <pattern>a2m1ua</pattern>
+    <pattern>a2m1ue</pattern>
+    <pattern>a2m1ui</pattern>
+    <pattern>a2m1uo</pattern>
+    <pattern>a2m1uu</pattern>
+    <pattern>e2m1ua</pattern>
+    <pattern>e2m1ue</pattern>
+    <pattern>e2m1ui</pattern>
+    <pattern>e2m1uo</pattern>
+    <pattern>e2m1uu</pattern>
+    <pattern>i2m1ua</pattern>
+    <pattern>i2m1ue</pattern>
+    <pattern>i2m1ui</pattern>
+    <pattern>i2m1uo</pattern>
+    <pattern>i2m1uu</pattern>
+    <pattern>o2m1ua</pattern>
+    <pattern>o2m1ue</pattern>
+    <pattern>o2m1ui</pattern>
+    <pattern>o2m1uo</pattern>
+    <pattern>o2m1uu</pattern>
+    <pattern>u2m1ua</pattern>
+    <pattern>u2m1ue</pattern>
+    <pattern>u2m1ui</pattern>
+    <pattern>u2m1uo</pattern>
+    <pattern>u2m1uu</pattern>
+    <pattern>a2n1ua</pattern>
+    <pattern>a2n1ue</pattern>
+    <pattern>a2n1ui</pattern>
+    <pattern>a2n1uo</pattern>
+    <pattern>a2n1uu</pattern>
+    <pattern>e2n1ua</pattern>
+    <pattern>e2n1ue</pattern>
+    <pattern>e2n1ui</pattern>
+    <pattern>e2n1uo</pattern>
+    <pattern>e2n1uu</pattern>
+    <pattern>i2n1ua</pattern>
+    <pattern>i2n1ue</pattern>
+    <pattern>i2n1ui</pattern>
+    <pattern>i2n1uo</pattern>
+    <pattern>i2n1uu</pattern>
+    <pattern>o2n1ua</pattern>
+    <pattern>o2n1ue</pattern>
+    <pattern>o2n1ui</pattern>
+    <pattern>o2n1uo</pattern>
+    <pattern>o2n1uu</pattern>
+    <pattern>u2n1ua</pattern>
+    <pattern>u2n1ue</pattern>
+    <pattern>u2n1ui</pattern>
+    <pattern>u2n1uo</pattern>
+    <pattern>u2n1uu</pattern>
+    <pattern>a2r1ua</pattern>
+    <pattern>a2r1ue</pattern>
+    <pattern>a2r1ui</pattern>
+    <pattern>a2r1uo</pattern>
+    <pattern>a2r1uu</pattern>
+    <pattern>e2r1ua</pattern>
+    <pattern>e2r1ue</pattern>
+    <pattern>e2r1ui</pattern>
+    <pattern>e2r1uo</pattern>
+    <pattern>e2r1uu</pattern>
+    <pattern>i2r1ua</pattern>
+    <pattern>i2r1ue</pattern>
+    <pattern>i2r1ui</pattern>
+    <pattern>i2r1uo</pattern>
+    <pattern>i2r1uu</pattern>
+    <pattern>o2r1ua</pattern>
+    <pattern>o2r1ue</pattern>
+    <pattern>o2r1ui</pattern>
+    <pattern>o2r1uo</pattern>
+    <pattern>o2r1uu</pattern>
+    <pattern>u2r1ua</pattern>
+    <pattern>u2r1ue</pattern>
+    <pattern>u2r1ui</pattern>
+    <pattern>u2r1uo</pattern>
+    <pattern>u2r1uu</pattern>
+</HyphenationDescription>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Bengali
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>অ1</pattern>
+    <pattern>আ1</pattern>
+    <pattern>ই1</pattern>
+    <pattern>ঈ1</pattern>
+    <pattern>উ1</pattern>
+    <pattern>ঊ1</pattern>
+    <pattern>ঋ1</pattern>
+    <pattern>ৠ1</pattern>
+    <pattern>ঌ1</pattern>
+    <pattern>ৡ1</pattern>
+    <pattern>এ1</pattern>
+    <pattern>ঐ1</pattern>
+    <pattern>ও1</pattern>
+    <pattern>ঔ1</pattern>
+    <pattern>া1</pattern>
+    <pattern>ি1</pattern>
+    <pattern>ী1</pattern>
+    <pattern>ু1</pattern>
+    <pattern>ূ1</pattern>
+    <pattern>ৃ1</pattern>
+    <pattern>ৄ1</pattern>
+    <pattern>ৢ1</pattern>
+    <pattern>ৣ1</pattern>
+    <pattern>ে1</pattern>
+    <pattern>ৈ1</pattern>
+    <pattern>ো1</pattern>
+    <pattern>ৌ1</pattern>
+    <pattern>2়2</pattern>
+    <pattern>ৗ1</pattern>
+    <pattern>1ক</pattern>
+    <pattern>1খ</pattern>
+    <pattern>1গ</pattern>
+    <pattern>1ঘ</pattern>
+    <pattern>1ঙ</pattern>
+    <pattern>1চ</pattern>
+    <pattern>1ছ</pattern>
+    <pattern>1জ</pattern>
+    <pattern>1ঝ</pattern>
+    <pattern>1ঞ</pattern>
+    <pattern>1ট</pattern>
+    <pattern>1ঠ</pattern>
+    <pattern>1ড</pattern>
+    <pattern>1ড়</pattern>
+    <pattern>1ঢ</pattern>
+    <pattern>1ঢ়</pattern>
+    <pattern>1ণ</pattern>
+    <pattern>1ত</pattern>
+    <pattern>1থ</pattern>
+    <pattern>1দ</pattern>
+    <pattern>1ধ</pattern>
+    <pattern>1ন</pattern>
+    <pattern>1প</pattern>
+    <pattern>1ফ</pattern>
+    <pattern>1ব</pattern>
+    <pattern>1ভ</pattern>
+    <pattern>1ম</pattern>
+    <pattern>1য</pattern>
+    <pattern>1য়</pattern>
+    <pattern>1র</pattern>
+    <pattern>1ল</pattern>
+    <pattern>1শ</pattern>
+    <pattern>1ষ</pattern>
+    <pattern>1স</pattern>
+    <pattern>1হ</pattern>
+    <pattern>ৎ1</pattern>
+    <pattern>2ঃ1</pattern>
+    <pattern>2ং1</pattern>
+    <pattern>2ঁ1</pattern>
+    <pattern>2ঽ1</pattern>
+    <pattern>2্2</pattern>
+</HyphenationDescription>

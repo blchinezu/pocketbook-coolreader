@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Kannada
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>ಅ1</pattern>
+    <pattern>ಆ1</pattern>
+    <pattern>ಇ1</pattern>
+    <pattern>ಈ1</pattern>
+    <pattern>ಉ1</pattern>
+    <pattern>ಊ1</pattern>
+    <pattern>ಋ1</pattern>
+    <pattern>ೠ1</pattern>
+    <pattern>ಌ1</pattern>
+    <pattern>ೡ1</pattern>
+    <pattern>ಎ1</pattern>
+    <pattern>ಏ1</pattern>
+    <pattern>ಐ1</pattern>
+    <pattern>ಒ1</pattern>
+    <pattern>ಓ1</pattern>
+    <pattern>ಔ1</pattern>
+    <pattern>ಾ1</pattern>
+    <pattern>ಿ1</pattern>
+    <pattern>ೀ1</pattern>
+    <pattern>ು1</pattern>
+    <pattern>ೂ1</pattern>
+    <pattern>ೃ1</pattern>
+    <pattern>ೄ1</pattern>
+    <pattern>ೆ1</pattern>
+    <pattern>ೇ1</pattern>
+    <pattern>ೈ1</pattern>
+    <pattern>ೊ1</pattern>
+    <pattern>ೋ1</pattern>
+    <pattern>ೌ1</pattern>
+    <pattern>1ಕ</pattern>
+    <pattern>1ಖ</pattern>
+    <pattern>1ಗ</pattern>
+    <pattern>1ಘ</pattern>
+    <pattern>1ಙ</pattern>
+    <pattern>1ಚ</pattern>
+    <pattern>1ಛ</pattern>
+    <pattern>1ಜ</pattern>
+    <pattern>1ಝ</pattern>
+    <pattern>1ಞ</pattern>
+    <pattern>1ಟ</pattern>
+    <pattern>1ಠ</pattern>
+    <pattern>1ಡ</pattern>
+    <pattern>1ಢ</pattern>
+    <pattern>1ಣ</pattern>
+    <pattern>1ತ</pattern>
+    <pattern>1ಥ</pattern>
+    <pattern>1ದ</pattern>
+    <pattern>1ಧ</pattern>
+    <pattern>1ನ</pattern>
+    <pattern>1ಪ</pattern>
+    <pattern>1ಫ</pattern>
+    <pattern>1ಬ</pattern>
+    <pattern>1ಭ</pattern>
+    <pattern>1ಮ</pattern>
+    <pattern>1ಯ</pattern>
+    <pattern>1ರ</pattern>
+    <pattern>1ಱ</pattern>
+    <pattern>1ಲ</pattern>
+    <pattern>1ಳ</pattern>
+    <pattern>1ೞ</pattern>
+    <pattern>1ವ</pattern>
+    <pattern>1ಶ</pattern>
+    <pattern>1ಷ</pattern>
+    <pattern>1ಸ</pattern>
+    <pattern>1ಹ</pattern>
+    <pattern>2ಂ1</pattern>
+    <pattern>2ಃ1</pattern>
+    <pattern>2ಽ1</pattern>
+    <pattern>2ೕ1</pattern>
+    <pattern>2ೖ1</pattern>
+    <pattern>2್2</pattern>
+</HyphenationDescription>

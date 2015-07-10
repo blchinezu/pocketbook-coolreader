@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Marathi
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>अ1</pattern>
+    <pattern>आ1</pattern>
+    <pattern>इ1</pattern>
+    <pattern>ई1</pattern>
+    <pattern>उ1</pattern>
+    <pattern>ऊ1</pattern>
+    <pattern>ऋ1</pattern>
+    <pattern>ॠ1</pattern>
+    <pattern>ऌ1</pattern>
+    <pattern>ॡ1</pattern>
+    <pattern>ए1</pattern>
+    <pattern>ऐ1</pattern>
+    <pattern>ओ1</pattern>
+    <pattern>औ1</pattern>
+    <pattern>ा1</pattern>
+    <pattern>ि1</pattern>
+    <pattern>ी1</pattern>
+    <pattern>ु1</pattern>
+    <pattern>ू1</pattern>
+    <pattern>ृ1</pattern>
+    <pattern>ॄ1</pattern>
+    <pattern>ॢ1</pattern>
+    <pattern>ॣ1</pattern>
+    <pattern>े1</pattern>
+    <pattern>ै1</pattern>
+    <pattern>ो1</pattern>
+    <pattern>ौ1</pattern>
+    <pattern>1क</pattern>
+    <pattern>1ख</pattern>
+    <pattern>1ग</pattern>
+    <pattern>1घ</pattern>
+    <pattern>1ङ</pattern>
+    <pattern>1च</pattern>
+    <pattern>1छ</pattern>
+    <pattern>1ज</pattern>
+    <pattern>1झ</pattern>
+    <pattern>1ञ</pattern>
+    <pattern>1ट</pattern>
+    <pattern>1ठ</pattern>
+    <pattern>1ड</pattern>
+    <pattern>1ढ</pattern>
+    <pattern>1ण</pattern>
+    <pattern>1त</pattern>
+    <pattern>1थ</pattern>
+    <pattern>1द</pattern>
+    <pattern>1ध</pattern>
+    <pattern>1न</pattern>
+    <pattern>1प</pattern>
+    <pattern>1फ</pattern>
+    <pattern>1ब</pattern>
+    <pattern>1भ</pattern>
+    <pattern>1म</pattern>
+    <pattern>1य</pattern>
+    <pattern>1र</pattern>
+    <pattern>1ल</pattern>
+    <pattern>1ळ</pattern>
+    <pattern>1व</pattern>
+    <pattern>1श</pattern>
+    <pattern>1ष</pattern>
+    <pattern>1स</pattern>
+    <pattern>1ह</pattern>
+    <pattern>2ँ1</pattern>
+    <pattern>2ं1</pattern>
+    <pattern>2ः1</pattern>
+    <pattern>2ऽ1</pattern>
+    <pattern>2॑1</pattern>
+    <pattern>2॒1</pattern>
+    <pattern>2्2</pattern>
+</HyphenationDescription>

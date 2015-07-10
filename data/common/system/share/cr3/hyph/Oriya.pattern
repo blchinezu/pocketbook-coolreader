@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Oriya
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>ଅ1</pattern>
+    <pattern>ଆ1</pattern>
+    <pattern>ଇ1</pattern>
+    <pattern>ଈ1</pattern>
+    <pattern>ଉ1</pattern>
+    <pattern>ଊ1</pattern>
+    <pattern>ଋ1</pattern>
+    <pattern>ୠ1</pattern>
+    <pattern>ଌ1</pattern>
+    <pattern>ୡ1</pattern>
+    <pattern>ଏ1</pattern>
+    <pattern>ଐ1</pattern>
+    <pattern>ଓ1</pattern>
+    <pattern>ଔ1</pattern>
+    <pattern>ା1</pattern>
+    <pattern>ି1</pattern>
+    <pattern>ୀ1</pattern>
+    <pattern>ୁ1</pattern>
+    <pattern>ୂ1</pattern>
+    <pattern>ୃ1</pattern>
+    <pattern>େ1</pattern>
+    <pattern>ୈ1</pattern>
+    <pattern>ୋ1</pattern>
+    <pattern>ୌ1</pattern>
+    <pattern>1କ</pattern>
+    <pattern>1ଖ</pattern>
+    <pattern>1ଗ</pattern>
+    <pattern>1ଘ</pattern>
+    <pattern>1ଙ</pattern>
+    <pattern>1ଚ</pattern>
+    <pattern>1ଛ</pattern>
+    <pattern>1ଜ</pattern>
+    <pattern>1ଝ</pattern>
+    <pattern>1ଞ</pattern>
+    <pattern>1ଟ</pattern>
+    <pattern>1ଠ</pattern>
+    <pattern>1ଡ</pattern>
+    <pattern>1ଢ</pattern>
+    <pattern>1ଣ</pattern>
+    <pattern>1ତ</pattern>
+    <pattern>1ଥ</pattern>
+    <pattern>1ଦ</pattern>
+    <pattern>1ଧ</pattern>
+    <pattern>1ନ</pattern>
+    <pattern>1ପ</pattern>
+    <pattern>1ଫ</pattern>
+    <pattern>1ବ</pattern>
+    <pattern>1ଭ</pattern>
+    <pattern>1ମ</pattern>
+    <pattern>1ଯ</pattern>
+    <pattern>1ର</pattern>
+    <pattern>1ଲ</pattern>
+    <pattern>1ଳ</pattern>
+    <pattern>1ଵ</pattern>
+    <pattern>1ଶ</pattern>
+    <pattern>1ଷ</pattern>
+    <pattern>1ସ</pattern>
+    <pattern>1ହ</pattern>
+    <pattern>2ଂ1</pattern>
+    <pattern>2ଃ1</pattern>
+    <pattern>2ୗ1</pattern>
+    <pattern>2ଁ1</pattern>
+    <pattern>2୍2</pattern>
+</HyphenationDescription>
