@@ -13,6 +13,15 @@ string web::get(const string &url)
     return easycurl(url, usepost, params);
 }
 //---------------------------------------------------------------------------
+bool web::getBinary(const string &url, const string &outfilename)
+{
+    CRLog::trace("web::getBinary(%s, %s)", url.c_str(), outfilename.c_str());
+
+    bool   usepost=false;
+    string params ="";
+    return easycurlBinary(url, usepost, params, outfilename);
+}
+//---------------------------------------------------------------------------
 string web::get(const string &url, map<string, string> &m)
 {
     bool usepost=false;
@@ -100,6 +109,76 @@ string web::easycurl(const string &url, bool post, const string &postparamstring
     return "";
 }
 //---------------------------------------------------------------------------
+bool web::easycurlBinary(const string &url, bool post, const string &postparamstring, const string &outfilename)
+{
+    CRLog::trace("web::easycurlBinary(%s, bool, %s, %s)", url.c_str(), postparamstring.c_str(), outfilename.c_str());
+ 
+    // Our curl objects
+    errorBuffer[0]=0;
+ 
+    FILE *fp;
+    CURL *curl;
+    CURLcode result;
+ 
+    // Create curl handle
+    CRLog::trace("web::easycurlBinary(): Create curl handle");
+    curl = curl_easy_init();
+ 
+    if (curl)
+    {
+      // Open file for writing
+      CRLog::trace("web::easycurlBinary(): Open file for writing");
+      fp = fopen(outfilename.c_str(),"wb");
+
+      // Now set up all of the curl options
+      CRLog::trace("web::easycurlBinary(): Now set up all of the curl options");
+      curl_easy_setopt(curl, CURLOPT_ERRORBUFFER, errorBuffer);
+      curl_easy_setopt(curl, CURLOPT_URL, url.c_str() );
+      curl_easy_setopt(curl, CURLOPT_HEADER, 0);
+      curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1);
+      curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, writerBinary);
+      curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
+      if (post)
+      {
+          curl_easy_setopt(curl, CURLOPT_POST,1);
+          curl_easy_setopt(curl, CURLOPT_POSTFIELDS,postparamstring.c_str());
+      }
+      curl_easy_setopt(curl, CURLOPT_SSL_VERIFYHOST,  2);
+      curl_easy_setopt(curl, CURLOPT_USERAGENT, "Mozilla/4.0 (compatible; MSIE 5.01; Windows NT 5.0)");
+      curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, false);  // this line makes it work under https
+      curl_easy_setopt(curl, CURLOPT_COOKIEFILE, LIB_CURL_COOKIES_FILE);//read from
+      curl_easy_setopt(curl, CURLOPT_COOKIEJAR, LIB_CURL_COOKIES_FILE); //write to
+ 
+      // Attempt to retrieve the remote page
+      CRLog::trace("web::easycurlBinary(): Attempt to retrieve the remote binary");
+      result = curl_easy_perform(curl);
+ 
+      // Always cleanup
+      CRLog::trace("web::easycurlBinary(): Cleanup");
+      curl_easy_cleanup(curl);
+ 
+      // Close file handle
+      CRLog::trace("web::easycurlBinary(): Close file handle");
+      fclose(fp);
+
+      // Did we succeed?
+      if (result == CURLE_OK)
+      {
+          CRLog::trace("web::easycurlBinary(): Got page");
+          return true;
+      }
+      else
+      {
+          CRLog::trace("web::easycurlBinary(): Couldn't get page");
+          cerr << "error:" << errorBuffer <<endl;
+          return false;
+      }
+    }
+ 
+    CRLog::trace("web::easycurlBinary(): Couldn't initialize curl");
+    return false;
+}
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 int web::writer(char *data, size_t size, size_t nmemb, string *buffer)
 {
@@ -110,6 +189,11 @@ int web::writer(char *data, size_t size, size_t nmemb, string *buffer)
     result = size * nmemb;
   }
   return result;
+}
+//---------------------------------------------------------------------------
+size_t web::writerBinary(void *ptr, size_t size, size_t nmemb, FILE *stream) {
+    size_t written = fwrite(ptr, size, nmemb, stream);
+    return written;
 }
 //---------------------------------------------------------------------------
 string web::urlencode(const string &c)
