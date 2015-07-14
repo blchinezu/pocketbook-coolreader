@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"POT-Creation-Date: 2015-07-09 18:35+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1312,7 +1312,7 @@ msgstr ""
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
 msgid "OTA Update"
 msgstr ""
 
@@ -1691,52 +1691,52 @@ msgid "Assigned function"
 msgstr ""
 
 #: ../src/ota_update.cpp:135
-msgid "Couldn't connect to server!"
-msgstr ""
-
-#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
-#: ../src/ota_update.cpp:287
-msgid "Downloading..."
-msgstr ""
-
-#: ../src/ota_update.cpp:154
-msgid "Server returned error response: "
-msgstr ""
-
-#: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
 
-#: ../src/ota_update.cpp:168
+#: ../src/ota_update.cpp:136
 msgid "OK"
 msgstr ""
 
-#: ../src/ota_update.cpp:194
+#: ../src/ota_update.cpp:142
+msgid "Downloading... (2nd Method)"
+msgstr ""
+
+#: ../src/ota_update.cpp:153
+msgid "Couldn't download the update package!"
+msgstr ""
+
+#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
+#: ../src/ota_update.cpp:306
+msgid "Downloading..."
+msgstr ""
+
+#: ../src/ota_update.cpp:213
 msgid "Couldn't remove existing package!"
 msgstr ""
 
-#: ../src/ota_update.cpp:231
+#: ../src/ota_update.cpp:250
 msgid "Couldn't connect to the network!"
 msgstr ""
 
-#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
-#: ../src/ota_update.cpp:266
+#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
+#: ../src/ota_update.cpp:285
 msgid "Searching..."
 msgstr ""
 
-#: ../src/ota_update.cpp:244
+#: ../src/ota_update.cpp:263
 msgid "You have the latest version."
 msgstr ""
 
-#: ../src/ota_update.cpp:276
+#: ../src/ota_update.cpp:295
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
 msgstr ""
 
-#: ../src/ota_update.cpp:298
+#: ../src/ota_update.cpp:317
 msgid "Failed updating!"
 msgstr ""
 
@@ -1760,10 +1760,10 @@ msgstr ""
 msgid "Press $1 to translate"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4171
+#: ../src/cr3pocketbook.cpp:4184
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4281
+#: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr ""

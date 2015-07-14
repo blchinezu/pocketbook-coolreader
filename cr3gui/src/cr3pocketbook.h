@@ -75,8 +75,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-26"
-#define CR_PB_BUILD_DATE "2015-07-04"
+#define CR_PB_VERSION "0.0.6-17-27"
+#define CR_PB_BUILD_DATE "2015-07-14"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -119,10 +119,15 @@ enum CRPbCommands {
     #define PB_AUTO_CONNECT_BIN SYSTEMDATA"/bin/auto_connect.app"
 #endif
 
+#ifdef POCKETBOOK_PRO_FW5
+    #define PB_BROWSER_SCRIPT SYSTEMDATA"/bin/webbrowser.sh"
+    #define PB_BROWSER_EXEC_SCRIPT SYSTEMDATA"/bin/run_script"
+#endif
 #define PB_BROWSER_BINARY SYSTEMDATA"/bin/browser.app"
 #define PB_BROWSER_EXEC SYSTEMDATA"/bin/openbook"
 #define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
 #define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
+
 
 #define PB_NETWORK_TEST_URL "https://www.google.com"
 

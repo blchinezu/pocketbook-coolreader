@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Tamil
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>1அ1</pattern>
+    <pattern>1ஆ1</pattern>
+    <pattern>1இ1</pattern>
+    <pattern>1ஈ1</pattern>
+    <pattern>1உ1</pattern>
+    <pattern>1ஊ1</pattern>
+    <pattern>1எ1</pattern>
+    <pattern>1ஏ1</pattern>
+    <pattern>1ஐ1</pattern>
+    <pattern>1ஒ1</pattern>
+    <pattern>1ஓ1</pattern>
+    <pattern>1ஔ1</pattern>
+    <pattern>ா1</pattern>
+    <pattern>ி1</pattern>
+    <pattern>ீ1</pattern>
+    <pattern>ு1</pattern>
+    <pattern>ூ1</pattern>
+    <pattern>ெ1</pattern>
+    <pattern>ே1</pattern>
+    <pattern>ை1</pattern>
+    <pattern>ொ1</pattern>
+    <pattern>ோ1</pattern>
+    <pattern>ௌ1</pattern>
+    <pattern>1க</pattern>
+    <pattern>1ங</pattern>
+    <pattern>1ச</pattern>
+    <pattern>1ஜ</pattern>
+    <pattern>1ஞ</pattern>
+    <pattern>1ட</pattern>
+    <pattern>1ண</pattern>
+    <pattern>1த</pattern>
+    <pattern>1ந</pattern>
+    <pattern>1ப</pattern>
+    <pattern>1ம</pattern>
+    <pattern>1ய</pattern>
+    <pattern>1ர</pattern>
+    <pattern>1ற</pattern>
+    <pattern>1ல</pattern>
+    <pattern>1ள</pattern>
+    <pattern>1ழ</pattern>
+    <pattern>1வ</pattern>
+    <pattern>1ஷ</pattern>
+    <pattern>1ஸ</pattern>
+    <pattern>1ஹ</pattern>
+    <pattern>2க்1</pattern>
+    <pattern>2ங்1</pattern>
+    <pattern>2ச்1</pattern>
+    <pattern>2ஞ்1</pattern>
+    <pattern>2ட்1</pattern>
+    <pattern>2ண்1</pattern>
+    <pattern>2த்1</pattern>
+    <pattern>2ன்1</pattern>
+    <pattern>2ந்1</pattern>
+    <pattern>2ப்1</pattern>
+    <pattern>2ம்1</pattern>
+    <pattern>2ய்1</pattern>
+    <pattern>2ர்1</pattern>
+    <pattern>2ற்1</pattern>
+    <pattern>2ல்1</pattern>
+    <pattern>2ள்1</pattern>
+    <pattern>2ழ்1</pattern>
+    <pattern>2வ்1</pattern>
+    <pattern>2ஷ்1</pattern>
+    <pattern>2ஸ்1</pattern>
+    <pattern>2ஹ்1</pattern>
+    <pattern>2ஂ1</pattern>
+    <pattern>2ஃ1</pattern>
+    <pattern>2ௗ1</pattern>
+    <pattern>2்1</pattern>
+</HyphenationDescription>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+% These patterns originate from
+%    http://git.savannah.gnu.org/cgit/smc/hyphenation.git/tree/)
+% and have been adapted for hyph-utf8 (for use in TeX).
+%
+%  Hyphenation for Telugu
+%  Copyright (C) 2008-2010 Santhosh Thottingal <santhosh.thottingal@gmail.com>
+%
+%  This library is free software; you can redistribute it and/or
+%  modify it under the terms of the GNU Lesser General Public
+%  License as published by the Free Software Foundation;
+%  version 3 or later version of the License.
+%
+%  This library is distributed in the hope that it will be useful,
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+%  Lesser General Public License for more details.
+%
+%  You should have received a copy of the GNU Lesser General Public
+%  License along with this library; if not, write to the Free Software
+%  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307  USA
+%
+-->
+<HyphenationDescription>
+    <pattern>2‍2</pattern>
+    <pattern>1‌1</pattern>
+    <pattern>అ1</pattern>
+    <pattern>ఆ1</pattern>
+    <pattern>ఇ1</pattern>
+    <pattern>ఈ1</pattern>
+    <pattern>ఉ1</pattern>
+    <pattern>ఊ1</pattern>
+    <pattern>ఋ1</pattern>
+    <pattern>ౠ1</pattern>
+    <pattern>ఌ1</pattern>
+    <pattern>ౡ1</pattern>
+    <pattern>ఎ1</pattern>
+    <pattern>ఏ1</pattern>
+    <pattern>ఐ1</pattern>
+    <pattern>ఒ1</pattern>
+    <pattern>ఓ1</pattern>
+    <pattern>ఔ1</pattern>
+    <pattern>ా1</pattern>
+    <pattern>ి1</pattern>
+    <pattern>ీ1</pattern>
+    <pattern>ు1</pattern>
+    <pattern>ూ1</pattern>
+    <pattern>ృ1</pattern>
+    <pattern>ౄ1</pattern>
+    <pattern>ె1</pattern>
+    <pattern>ే1</pattern>
+    <pattern>ై1</pattern>
+    <pattern>ొ1</pattern>
+    <pattern>ో1</pattern>
+    <pattern>ౌ1</pattern>
+    <pattern>1క</pattern>
+    <pattern>1ఖ</pattern>
+    <pattern>1గ</pattern>
+    <pattern>1ఘ</pattern>
+    <pattern>1ఙ</pattern>
+    <pattern>1చ</pattern>
+    <pattern>1ఛ</pattern>
+    <pattern>1జ</pattern>
+    <pattern>1ఝ</pattern>
+    <pattern>1ఞ</pattern>
+    <pattern>1ట</pattern>
+    <pattern>1ఠ</pattern>
+    <pattern>1డ</pattern>
+    <pattern>1ఢ</pattern>
+    <pattern>1ణ</pattern>
+    <pattern>1త</pattern>
+    <pattern>1థ</pattern>
+    <pattern>1ద</pattern>
+    <pattern>1ధ</pattern>
+    <pattern>1న</pattern>
+    <pattern>1ప</pattern>
+    <pattern>1ఫ</pattern>
+    <pattern>1బ</pattern>
+    <pattern>1భ</pattern>
+    <pattern>1మ</pattern>
+    <pattern>1య</pattern>
+    <pattern>1ర</pattern>
+    <pattern>1ఱ</pattern>
+    <pattern>1ల</pattern>
+    <pattern>1ళ</pattern>
+    <pattern>1వ</pattern>
+    <pattern>1శ</pattern>
+    <pattern>1ష</pattern>
+    <pattern>1స</pattern>
+    <pattern>1హ</pattern>
+    <pattern>2ఁ1</pattern>
+    <pattern>2ం1</pattern>
+    <pattern>2ః1</pattern>
+    <pattern>2ౕ1</pattern>
+    <pattern>2ౖ1</pattern>
+    <pattern>2్2</pattern>
+</HyphenationDescription>

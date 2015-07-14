@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"POT-Creation-Date: 2015-07-09 18:35+0300\n"
 "PO-Revision-Date: 2015-07-02 15:48+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/coolreader-"
@@ -1326,7 +1326,7 @@ msgstr "In document opgenomen stijlen"
 msgid "Clear cache"
 msgstr "Cache wissen"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
 msgid "OTA Update"
 msgstr "OTA Update"
 
@@ -1710,19 +1710,6 @@ msgid "Assigned function"
 msgstr "Toegewezen functie"
 
 #: ../src/ota_update.cpp:135
-msgid "Couldn't connect to server!"
-msgstr "Kan geen verbinding maken met server!"
-
-#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
-#: ../src/ota_update.cpp:287
-msgid "Downloading..."
-msgstr "Bezig met downloaden..."
-
-#: ../src/ota_update.cpp:154
-msgid "Server returned error response: "
-msgstr "Server heeft een foutmelding gestuurd:"
-
-#: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
@@ -1730,28 +1717,43 @@ msgstr ""
 "Download geslaagd!\n"
 "CoolReader start automatisch opnieuw."
 
-#: ../src/ota_update.cpp:168
+#: ../src/ota_update.cpp:136
 msgid "OK"
 msgstr "OK"
 
-#: ../src/ota_update.cpp:194
+#: ../src/ota_update.cpp:142
+#, fuzzy
+msgid "Downloading... (2nd Method)"
+msgstr "Bezig met downloaden..."
+
+#: ../src/ota_update.cpp:153
+#, fuzzy
+msgid "Couldn't download the update package!"
+msgstr "Kan bestaand pakket niet verwijderen!"
+
+#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
+#: ../src/ota_update.cpp:306
+msgid "Downloading..."
+msgstr "Bezig met downloaden..."
+
+#: ../src/ota_update.cpp:213
 msgid "Couldn't remove existing package!"
 msgstr "Kan bestaand pakket niet verwijderen!"
 
-#: ../src/ota_update.cpp:231
+#: ../src/ota_update.cpp:250
 msgid "Couldn't connect to the network!"
 msgstr "Kan geen verbinding maken met het netwerk!"
 
-#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
-#: ../src/ota_update.cpp:266
+#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
+#: ../src/ota_update.cpp:285
 msgid "Searching..."
 msgstr "Bezig met zoeken..."
 
-#: ../src/ota_update.cpp:244
+#: ../src/ota_update.cpp:263
 msgid "You have the latest version."
 msgstr "U hebt de meest recente versie."
 
-#: ../src/ota_update.cpp:276
+#: ../src/ota_update.cpp:295
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
@@ -1759,7 +1761,7 @@ msgstr ""
 "Er is geen update beschikbaar voor uw apparaat!\n"
 "Model: "
 
-#: ../src/ota_update.cpp:298
+#: ../src/ota_update.cpp:317
 msgid "Failed updating!"
 msgstr "Update is mislukt!"
 
@@ -1783,10 +1785,16 @@ msgstr "Kan de cache niet wissen!"
 msgid "Press $1 to translate"
 msgstr "Druk op $1 om te vertalen"
 
-#: ../src/cr3pocketbook.cpp:4171
+#: ../src/cr3pocketbook.cpp:4184
 msgid "Updated to v"
 msgstr "Bijgewerkt naar v"
 
-#: ../src/cr3pocketbook.cpp:4281
+#: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Zonder titel"
+
+#~ msgid "Couldn't connect to server!"
+#~ msgstr "Kan geen verbinding maken met server!"
+
+#~ msgid "Server returned error response: "
+#~ msgstr "Server heeft een foutmelding gestuurd:"

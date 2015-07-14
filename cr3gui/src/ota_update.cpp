@@ -22,6 +22,11 @@ int OTA_sessionId;
 lString16 OTA_branch;
 
 /**
+ * URL target to the update package
+ */
+lString16 packageUrl;
+
+/**
  * Check if there is a new version
  *  - If using dev branch this always returns true
  *
@@ -106,6 +111,11 @@ lString16 OTA_genUrl(const char *mask, const lString16 deviceModel) {
     return url;
 }
 
+/**
+ * Handle restart button (success dialog)
+ *
+ * @param button [description]
+ */
 void OTA_DL_dialog_handler(int button) {
 
     // Log
@@ -122,6 +132,42 @@ void OTA_DL_dialog_handler(int button) {
     exitApp();
 }
 
+/**
+ * Close progress bar, show message
+ */
+void OTA_downloadSuccessful() {
+    CRLog::trace("OTA_downloadSuccessful(): Done");
+    
+    CloseProgressbar();
+    Dialog(ICON_INFORMATION, const_cast<char*>("CoolReader"), 
+        _("Download successful!\nCoolReader will restart itself."),
+        _("OK"), NULL, OTA_DL_dialog_handler);
+}
+
+/**
+ * Try downloading with curl
+ */
+void OTA_tryDownloadMethod2() {
+    CRLog::trace("OTA_tryDownloadMethod2()");
+
+    UpdateProgressbar(_("Downloading... (2nd Method)"), 0);
+
+    if( web::getBinary(UnicodeToUtf8(packageUrl).c_str(), OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME) ) {
+
+        CRLog::trace("OTA_tryDownloadMethod2(): Done");
+        OTA_downloadSuccessful();
+    } else {
+        
+        CloseProgressbar();
+        CRLog::trace("OTA_tryDownloadMethod2(): Couldn't download the package!");
+        Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
+            _("Couldn't download the update package!"), 3000);
+    }
+}
+
+/**
+ * Update progress bar while downloading
+ */
 void OTA_DL_update_progress(void) {
     CRLog::trace("OTA_DL_update_progress()");
     iv_sessioninfo *si;
@@ -129,10 +175,8 @@ void OTA_DL_update_progress(void) {
     si = GetSessionInfo(OTA_sessionId);
 
     if (si->length <= 0) {
-        CloseProgressbar();
         CRLog::trace("OTA_DL_update_progress(): Couldn't connect to server!");
-        Message(ICON_ERROR,  const_cast<char*>("CoolReader"),
-            _("Couldn't connect to server!"), 3000);
+        OTA_tryDownloadMethod2();
     }
     else {
         int progress = 100*si->progress/si->length;
@@ -141,7 +185,6 @@ void OTA_DL_update_progress(void) {
 
         if (si->progress >= si->length) {
             CloseSession(OTA_sessionId);
-            CloseProgressbar();
             
             if (si->response >= 400) {
                 CRLog::trace("OTA_DL_update_progress(): ERR: url = %s", si->url);
@@ -149,23 +192,11 @@ void OTA_DL_update_progress(void) {
                 CRLog::trace("OTA_DL_update_progress(): ERR: length = %s", si->length);
                 CRLog::trace("OTA_DL_update_progress(): ERR: progress = %s", si->progress);
 
-                Dialog(ICON_ERROR, const_cast<char*>("CoolReader"), 
-                    (
-                    lString8(_("Server returned error response: ")) +
-                    lString8::itoa((int)si->response) +
-                    lString8("\nurl: ") + lString8(si->url) +
-                    lString8("\nctype: ") + lString8(si->ctype) +
-                    lString8("\nlength: ") + lString8::itoa(si->length) +
-                    lString8("\nprogress: ") + lString8::itoa(si->progress)
-                    ).c_str(),
-                    GetLangText("@Close"), NULL, OTA_DL_dialog_handler);
+                OTA_tryDownloadMethod2();
             }
             else {
                 CRLog::trace("OTA_DL_update_progress(): Done");
-
-                Dialog(ICON_INFORMATION, const_cast<char*>("CoolReader"), 
-                    _("Download successful!\nCoolReader will restart itself."),
-                    _("OK"), NULL, OTA_DL_dialog_handler);
+                OTA_downloadSuccessful();
             }
         }
         else {
@@ -183,6 +214,8 @@ void OTA_DL_update_progress(void) {
  */
 bool OTA_updateFrom(const lString16 url) {
     CRLog::trace("OTA_updateFrom(%s)", UnicodeToUtf8(url).c_str());
+
+    packageUrl = url;
 
     // Remove old package
     CRLog::trace("OTA_updateFrom(): Remove old package from "OTA_DOWNLOAD_DIR"/"OTA_PACKAGE_NAME);

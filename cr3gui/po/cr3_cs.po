@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"POT-Creation-Date: 2015-07-09 18:35+0300\n"
 "PO-Revision-Date: 2015-07-02 11:00+0000\n"
 "Last-Translator: Vaclav Dohnal <vdohnal@post.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/projects/p/coolreader-"
@@ -1329,7 +1329,7 @@ msgstr "Styly vložené do dokumentu"
 msgid "Clear cache"
 msgstr "Vymazat cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
 msgid "OTA Update"
 msgstr "OTA aktualizace"
 
@@ -1712,19 +1712,6 @@ msgid "Assigned function"
 msgstr "Přiřazená funkce"
 
 #: ../src/ota_update.cpp:135
-msgid "Couldn't connect to server!"
-msgstr "Nemohu se připojit k serveru!"
-
-#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
-#: ../src/ota_update.cpp:287
-msgid "Downloading..."
-msgstr "Stahuji..."
-
-#: ../src/ota_update.cpp:154
-msgid "Server returned error response: "
-msgstr "Server vrátil chybový kód:"
-
-#: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
@@ -1732,28 +1719,43 @@ msgstr ""
 "Stažení dokončeno!\n"
 "CoolReader se restartuje."
 
-#: ../src/ota_update.cpp:168
+#: ../src/ota_update.cpp:136
 msgid "OK"
 msgstr "OK"
 
-#: ../src/ota_update.cpp:194
+#: ../src/ota_update.cpp:142
+#, fuzzy
+msgid "Downloading... (2nd Method)"
+msgstr "Stahuji..."
+
+#: ../src/ota_update.cpp:153
+#, fuzzy
+msgid "Couldn't download the update package!"
+msgstr "Nelze smazat existující balíček!"
+
+#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
+#: ../src/ota_update.cpp:306
+msgid "Downloading..."
+msgstr "Stahuji..."
+
+#: ../src/ota_update.cpp:213
 msgid "Couldn't remove existing package!"
 msgstr "Nelze smazat existující balíček!"
 
-#: ../src/ota_update.cpp:231
+#: ../src/ota_update.cpp:250
 msgid "Couldn't connect to the network!"
 msgstr "Nelze se připojit k síti."
 
-#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
-#: ../src/ota_update.cpp:266
+#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
+#: ../src/ota_update.cpp:285
 msgid "Searching..."
 msgstr "Vyhledávání ..."
 
-#: ../src/ota_update.cpp:244
+#: ../src/ota_update.cpp:263
 msgid "You have the latest version."
 msgstr "Máte poslední verzi."
 
-#: ../src/ota_update.cpp:276
+#: ../src/ota_update.cpp:295
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
@@ -1761,7 +1763,7 @@ msgstr ""
 "Aktualizace není dostupná pro vaše zařízení!\n"
 "Model zařízení:"
 
-#: ../src/ota_update.cpp:298
+#: ../src/ota_update.cpp:317
 msgid "Failed updating!"
 msgstr "Aktualizace selhala!"
 
@@ -1785,10 +1787,16 @@ msgstr "Nelze vymazat cache!"
 msgid "Press $1 to translate"
 msgstr "Stisknout $1 pro překlad"
 
-#: ../src/cr3pocketbook.cpp:4171
+#: ../src/cr3pocketbook.cpp:4184
 msgid "Updated to v"
 msgstr "Aktualizováno na"
 
-#: ../src/cr3pocketbook.cpp:4281
+#: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Neoznačený"
+
+#~ msgid "Couldn't connect to server!"
+#~ msgstr "Nemohu se připojit k serveru!"
+
+#~ msgid "Server returned error response: "
+#~ msgstr "Server vrátil chybový kód:"

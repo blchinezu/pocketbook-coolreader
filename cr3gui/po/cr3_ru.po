@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-06-12 08:08+0300\n"
+"POT-Creation-Date: 2015-07-09 18:35+0300\n"
 "PO-Revision-Date: 2015-05-14 07:43+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
@@ -1330,7 +1330,7 @@ msgstr "Использовать стили документа"
 msgid "Clear cache"
 msgstr "Очистить кэш"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:236
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
 msgid "OTA Update"
 msgstr "OTA-обновление программы"
 
@@ -1713,19 +1713,6 @@ msgid "Assigned function"
 msgstr "Действие"
 
 #: ../src/ota_update.cpp:135
-msgid "Couldn't connect to server!"
-msgstr "Нет соединения с сервером"
-
-#: ../src/ota_update.cpp:140 ../src/ota_update.cpp:259
-#: ../src/ota_update.cpp:287
-msgid "Downloading..."
-msgstr "Загрузка..."
-
-#: ../src/ota_update.cpp:154
-msgid "Server returned error response: "
-msgstr "Сервер сообщил об ошибке: "
-
-#: ../src/ota_update.cpp:167
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
@@ -1733,28 +1720,43 @@ msgstr ""
 "Загрузка завершена!\n"
 "Ожидайте перезапуск программы."
 
-#: ../src/ota_update.cpp:168
+#: ../src/ota_update.cpp:136
 msgid "OK"
 msgstr "OK"
 
-#: ../src/ota_update.cpp:194
+#: ../src/ota_update.cpp:142
+#, fuzzy
+msgid "Downloading... (2nd Method)"
+msgstr "Загрузка..."
+
+#: ../src/ota_update.cpp:153
+#, fuzzy
+msgid "Couldn't download the update package!"
+msgstr "Не удалось удалить существующий пакет!"
+
+#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
+#: ../src/ota_update.cpp:306
+msgid "Downloading..."
+msgstr "Загрузка..."
+
+#: ../src/ota_update.cpp:213
 msgid "Couldn't remove existing package!"
 msgstr "Не удалось удалить существующий пакет!"
 
-#: ../src/ota_update.cpp:231
+#: ../src/ota_update.cpp:250
 msgid "Couldn't connect to the network!"
 msgstr "Невозможно присоединиться к сети!"
 
-#: ../src/ota_update.cpp:237 ../src/ota_update.cpp:253
-#: ../src/ota_update.cpp:266
+#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
+#: ../src/ota_update.cpp:285
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: ../src/ota_update.cpp:244
+#: ../src/ota_update.cpp:263
 msgid "You have the latest version."
 msgstr "У Вас установлена последняя версия."
 
-#: ../src/ota_update.cpp:276
+#: ../src/ota_update.cpp:295
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
@@ -1762,7 +1764,7 @@ msgstr ""
 "Для вашего устройства нет обновлений.\n"
 "Модель устройства: "
 
-#: ../src/ota_update.cpp:298
+#: ../src/ota_update.cpp:317
 msgid "Failed updating!"
 msgstr "Ошибка обновления!"
 
@@ -1786,10 +1788,16 @@ msgstr "Не удалось очистить кэш!"
 msgid "Press $1 to translate"
 msgstr "Нажмите $1 чтобы перевести"
 
-#: ../src/cr3pocketbook.cpp:4171
+#: ../src/cr3pocketbook.cpp:4184
 msgid "Updated to v"
 msgstr "Обновлено до версии "
 
-#: ../src/cr3pocketbook.cpp:4281
+#: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Без названия"
+
+#~ msgid "Couldn't connect to server!"
+#~ msgstr "Нет соединения с сервером"
+
+#~ msgid "Server returned error response: "
+#~ msgstr "Сервер сообщил об ошибке: "
