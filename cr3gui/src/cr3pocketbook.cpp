@@ -1,7 +1,6 @@
 /*
  *  CR3 for PocketBook, port by pkb
  */
-
 #include <crengine.h>
 #include <crgui.h>
 #include "viewdlg.h"
@@ -3496,7 +3495,7 @@ bool systemPanelShown() {
     return GetPanelType()!=PANEL_DISABLED;
 }
 
-void toggleSystemPanel() {
+void toggleSystemPanel(bool screenUpdate) {
     int currentMode = GetPanelType();
     currentMode = currentMode==PANEL_DISABLED?PANEL_ENABLED:PANEL_DISABLED;
     
@@ -3504,13 +3503,19 @@ void toggleSystemPanel() {
         CRLog::trace("toggleSystemPanel(): PANEL_ENABLED");
         SetPanelType(PANEL_ENABLED);
         DrawPanel(NULL, "", "", 0);
-        PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+        if( screenUpdate )
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
     }
     else {
         CRLog::trace("toggleSystemPanel(): PANEL_DISABLED");
         SetPanelType(PANEL_DISABLED);
-        CRPocketBookWindowManager::instance->update(true);
+        if( screenUpdate )
+            CRPocketBookWindowManager::instance->update(true);
     }
+}
+
+void toggleSystemPanel() {
+    toggleSystemPanel(true);
 }
 
 #endif
@@ -3586,6 +3591,12 @@ bool isBrowserSupported() {
     return access( PB_BROWSER_BINARY, F_OK ) != -1;
 }
 
+#ifdef POCKETBOOK_PRO_FW5
+bool isBrowserScriptSupported() {
+    return access( PB_BROWSER_EXEC_SCRIPT, F_OK ) != -1 && access( PB_BROWSER_SCRIPT, F_OK ) != -1;
+}
+#endif
+
 lString16 lastClock;
 void startStatusUpdateThread(int ms);
 void statusUpdateThread() {
@@ -3642,6 +3653,17 @@ void pbLaunchWaitBinary(const char *binary, const char *param1, const char *para
             CRLog::trace("pbLaunchWaitBinary(): Parent: Waiting for %d to finish", cpid);
             waitpid(cpid, NULL, 0);
             CRLog::trace("pbLaunchWaitBinary(): Parent: Returned from %s", binary);
+
+            #ifdef POCKETBOOK_PRO_FW5
+
+            if( isBrowserScriptSupported() ) {
+                CRLog::trace("pbLaunchWaitBinary(): Parent: Restore system panel state (failsafe)");
+                toggleSystemPanel(false);
+                toggleSystemPanel(false);
+            }
+
+            #endif
+
             CRPocketBookWindowManager::instance->update(true);
     }
 }
@@ -3656,6 +3678,13 @@ void pbLaunchWaitBinary(const char *binary) {
 }
 
 void launchBrowser(lString16 url) {
+
+#ifdef POCKETBOOK_PRO_FW5
+    if( isBrowserScriptSupported() ) {
+        pbLaunchWaitBinary(PB_BROWSER_EXEC_SCRIPT, PB_BROWSER_SCRIPT, UnicodeToUtf8(url).c_str());
+        return;
+    }
+#endif
     if( isBrowserSupported() ) {
         pbLaunchWaitBinary(PB_BROWSER_EXEC, PB_BROWSER_BINARY, UnicodeToUtf8(url).c_str());
     }
