@@ -11,10 +11,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-07-09 18:35+0300\n"
-"PO-Revision-Date: 2015-07-02 11:00+0000\n"
+"PO-Revision-Date: 2015-07-15 12:34+0000\n"
 "Last-Translator: Vaclav Dohnal <vdohnal@post.cz>\n"
-"Language-Team: Czech (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/cs/)\n"
+"Language-Team: Czech (http://www.transifex.com/p/coolreader-pocketbook/"
+"language/cs/)\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1724,14 +1724,12 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/ota_update.cpp:142
-#, fuzzy
 msgid "Downloading... (2nd Method)"
-msgstr "Stahuji..."
+msgstr "Stahuji...(druhá metoda)"
 
 #: ../src/ota_update.cpp:153
-#, fuzzy
 msgid "Couldn't download the update package!"
-msgstr "Nelze smazat existující balíček!"
+msgstr "Nelze stáhnout aktualizaci!"
 
 #: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
 #: ../src/ota_update.cpp:306
@@ -1794,9 +1792,3 @@ msgstr "Aktualizováno na"
 #: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Neoznačený"
-
-#~ msgid "Couldn't connect to server!"
-#~ msgstr "Nemohu se připojit k serveru!"
-
-#~ msgid "Server returned error response: "
-#~ msgstr "Server vrátil chybový kód:"
