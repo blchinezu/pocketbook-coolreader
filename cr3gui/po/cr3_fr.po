@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-07-09 18:35+0300\n"
-"PO-Revision-Date: 2015-05-14 12:18+0000\n"
+"PO-Revision-Date: 2015-07-24 20:49+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/fr/)\n"
@@ -1724,14 +1724,12 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/ota_update.cpp:142
-#, fuzzy
 msgid "Downloading... (2nd Method)"
-msgstr "Chargement..."
+msgstr "Téléchargement... (2éme Méthode)"
 
 #: ../src/ota_update.cpp:153
-#, fuzzy
 msgid "Couldn't download the update package!"
-msgstr "Ne peut supprimer le paquet existant !"
+msgstr "Impossible de télécharger le paquet mis à jour !"
 
 #: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
 #: ../src/ota_update.cpp:306
@@ -1794,9 +1792,3 @@ msgstr "Mis à jour vers v"
 #: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Sans titre"
-
-#~ msgid "Couldn't connect to server!"
-#~ msgstr "Connexion au serveur impossible !"
-
-#~ msgid "Server returned error response: "
-#~ msgstr "Le serveur à renvoyer un message d'erreur :"
