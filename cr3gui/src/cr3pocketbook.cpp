@@ -44,6 +44,7 @@ bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
 bool isStandByMode = false;
+bool ignoreNextTouchRelease = false;
 ibitmap *standByImage = NULL;
 ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
@@ -1458,6 +1459,11 @@ protected:
     {
         bool longTap = (CRTOUCH_DOWN_LONG == evType);
         if (CRTOUCH_UP == evType ||  longTap) {
+
+            if( ignoreNextTouchRelease && !longTap ) {
+                ignoreNextTouchRelease = false;
+                return true;
+            }
             int tapZone = getTapZone(pt.x, pt.y, getProps());
             int command = 0, param = 0;
             getCommandForTapZone(tapZone, getProps(), longTap, command, param);
@@ -1491,6 +1497,31 @@ protected:
                 return true;
             }
         }
+
+        #ifdef POCKETBOOK_PRO_FW5
+        else if( evType == CRTOUCH_MOVE ) {
+            setFrontLightValue(
+                /* bottom to top */
+                100 -
+                /* value (%) */
+                (
+                    100 *
+                    (
+                        /* touch point (PX) */
+                        pt.y -
+                        /* offset (PX) used to center the region */
+                        ScreenHeight() * FRONTLIGHT_DRAG_USABLE_SCREEN / 2
+                    )
+                    /
+                    /* usable screeen (PX) */
+                    ( ScreenHeight() * FRONTLIGHT_DRAG_USABLE_SCREEN )
+                )
+                );
+            ignoreNextTouchRelease = true;
+            return true;
+        }
+        #endif
+
         return false;
     }
 public:
@@ -4062,6 +4093,25 @@ void restoreFrontLightIfNeeded() {
         restoringFrontLightRequired = false;
     }
 }
+void setFrontLightValue(int value) {
+    
+    // Turn off front light
+    if( value <= 0 ) {
+        if( GetFrontlightState() > 0 )
+            SetFrontlightState(-1);
+    }
+
+    // Max value
+    else if( value >= 100 ) {
+        if( GetFrontlightState() < 100 )
+            SetFrontlightState(100);
+    }
+
+    // Adjust brightness
+    else {
+        SetFrontlightState(value);
+    }
+}
 
 #endif
 
@@ -4460,7 +4510,10 @@ int main_handler(int type, int par1, int par2)
         break;
     case EVT_POINTERDOWN:
     case EVT_POINTERUP:
-    case EVT_POINTERMOVE:
+    // case EVT_POINTERMOVE:
+#ifdef EVT_POINTERDRAG
+    case EVT_POINTERDRAG:
+#endif
     case EVT_POINTERLONG:
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
