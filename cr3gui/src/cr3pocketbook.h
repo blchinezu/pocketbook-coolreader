@@ -75,7 +75,7 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-29"
+#define CR_PB_VERSION "0.0.6-17-30"
 #define CR_PB_BUILD_DATE "2015-07-28"
 
 #define PB_ROTATE_MODE_360 0
@@ -162,14 +162,18 @@ void exitApp();
 
 lString16 getPbModelNumber();
 
+#define MIN_PAGE_TURN_SWIPE_WIDTH 0.1 /* 10% */
+
 #ifdef POCKETBOOK_PRO
 void toggleSystemPanel();
 bool systemPanelShown();
+
 #ifdef POCKETBOOK_PRO_FW5
-#define FRONTLIGHT_DRAG_USABLE_SCREEN 0.6 /* 60% */
+#define FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT 0.6 /* 60% */
 void toggleFrontLight();
 void setFrontLightValue(int value);
 #endif
+
 #endif
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
