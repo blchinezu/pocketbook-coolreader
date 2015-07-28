@@ -50,6 +50,7 @@ ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
 lString16 currentCacheDir;
 lString16 openedCacheFile;
+lvPoint touchDown(0,0);
 
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
@@ -1457,13 +1458,31 @@ protected:
     }
     virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
+        if( evType == CRTOUCH_DOWN ) {
+            touchDown.x = pt.x;
+            touchDown.y = pt.y;
+        }
+
         bool longTap = (CRTOUCH_DOWN_LONG == evType);
         if (CRTOUCH_UP == evType ||  longTap) {
 
+            // If it should be ignored (triggered front light swipe)
             if( ignoreNextTouchRelease && !longTap ) {
                 ignoreNextTouchRelease = false;
                 return true;
             }
+
+            // If page turn swipe
+            if( abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH ) {
+
+                if( touchDown.x-pt.x > 0 )
+                    SendEvent(main_handler, EVT_NEXTPAGE, 0, 0);
+                else
+                    SendEvent(main_handler, EVT_PREVPAGE, 0, 0);
+                return true;
+            }
+
+            // If tap/long tap
             int tapZone = getTapZone(pt.x, pt.y, getProps());
             int command = 0, param = 0;
             getCommandForTapZone(tapZone, getProps(), longTap, command, param);
@@ -1500,25 +1519,35 @@ protected:
 
         #ifdef POCKETBOOK_PRO_FW5
         else if( evType == CRTOUCH_MOVE ) {
-            setFrontLightValue(
-                /* bottom to top */
-                100 -
-                /* value (%) */
-                (
-                    100 *
+
+            // VERTICAL
+            if( abs(touchDown.x-pt.x) < abs(touchDown.y-pt.y) ) {
+                setFrontLightValue(
+                    /* bottom to top */
+                    100 -
+                    /* value (%) */
                     (
-                        /* touch point (PX) */
-                        pt.y -
-                        /* offset (PX) used to center the region */
-                        ScreenHeight() * FRONTLIGHT_DRAG_USABLE_SCREEN / 2
+                        100 *
+                        (
+                            /* touch point (PX) */
+                            pt.y -
+                            /* offset (PX) used to center the region */
+                            ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                        )
+                        /
+                        /* usable screen (PX) */
+                        ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
                     )
-                    /
-                    /* usable screeen (PX) */
-                    ( ScreenHeight() * FRONTLIGHT_DRAG_USABLE_SCREEN )
-                )
-                );
-            ignoreNextTouchRelease = true;
-            return true;
+                    );
+                ignoreNextTouchRelease = true;
+                return true;
+            }
+
+            // HORIZONTALY
+            else {
+
+            }
+
         }
         #endif
 
@@ -4235,6 +4264,9 @@ int main_handler(int type, int par1, int par2)
         case EVT_POINTERMOVE:
         case EVT_POINTERLONG:
         case EVT_SHOW:
+#ifdef EVT_POINTERDRAG
+        case EVT_POINTERDRAG:
+#endif
             return 0;
 
         // Anything else goes normally
