@@ -1473,7 +1473,7 @@ protected:
             }
 
             // If page turn swipe
-            if( abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH ) {
+            if( !longTap && abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH ) {
 
                 if( touchDown.x-pt.x > 0 )
                     SendEvent(main_handler, EVT_NEXTPAGE, 0, 0);
