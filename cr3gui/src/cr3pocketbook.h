@@ -162,15 +162,18 @@ void exitApp();
 
 lString16 getPbModelNumber();
 
+#define MIN_PAGE_TURN_SWIPE_WIDTH 0.1 /* 10% */
+
 #ifdef POCKETBOOK_PRO
 void toggleSystemPanel();
 bool systemPanelShown();
+
 #ifdef POCKETBOOK_PRO_FW5
 #define FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT 0.6 /* 60% */
-#define MIN_PAGE_TURN_SWIPE_WIDTH 0.1 /* 10% */
 void toggleFrontLight();
 void setFrontLightValue(int value);
 #endif
+
 #endif
 
 //#ifndef BACKGROUND_CACHE_FILE_CREATION
