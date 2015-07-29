@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-07-09 18:35+0300\n"
-"PO-Revision-Date: 2015-06-17 07:23+0000\n"
+"PO-Revision-Date: 2015-07-29 07:48+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/pl/)\n"
@@ -1146,7 +1146,7 @@ msgstr "Maksymalny odstęp między wyrazami"
 
 #: ../src/settings.cpp:1538
 msgid "Floating punctuation"
-msgstr "Wysunięta interpunkcja"
+msgstr "Pływająca interpunkcja"
 
 #: ../src/settings.cpp:1544
 msgid "Image scaling"
@@ -1154,7 +1154,7 @@ msgstr "Skalowanie obrazów"
 
 #: ../src/settings.cpp:1549
 msgid "Block image scaling mode"
-msgstr "Skalowanie osobnych bloków obrazu"
+msgstr "Skalowanie bloków obrazu"
 
 #: ../src/settings.cpp:1552
 msgid "Block image max zoom"
@@ -1620,7 +1620,7 @@ msgstr "Podświetlenie ekranu"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr "Odwróć kolory wyświetlacza"
+msgstr "Odwróć kolory"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
@@ -1723,14 +1723,12 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/ota_update.cpp:142
-#, fuzzy
 msgid "Downloading... (2nd Method)"
-msgstr "Pobieranie..."
+msgstr "Pobieranie... (2-gi sposób)"
 
 #: ../src/ota_update.cpp:153
-#, fuzzy
 msgid "Couldn't download the update package!"
-msgstr "Nie można usunąć istniejącego pakietu!"
+msgstr "Nie można pobrać aktualizacji!"
 
 #: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
 #: ../src/ota_update.cpp:306
@@ -1784,7 +1782,7 @@ msgstr "Nie można wyczyścić pamięci podręcznej!"
 
 #: ../src/cr3pocketbook.cpp:3203
 msgid "Press $1 to translate"
-msgstr "Krótkie wciśnięcie $1 aby przetłumaczyć"
+msgstr "Naciśnij $1 aby przetłumaczyć"
 
 #: ../src/cr3pocketbook.cpp:4184
 msgid "Updated to v"
@@ -1793,9 +1791,3 @@ msgstr "Zaktualizowane do v"
 #: ../src/cr3pocketbook.cpp:4294
 msgid "Untitled"
 msgstr "Bez tytułu"
-
-#~ msgid "Couldn't connect to server!"
-#~ msgstr "Nie można połączyć się z serwerem!"
-
-#~ msgid "Server returned error response: "
-#~ msgstr "Serwer zwrócił błąd:"
