@@ -128,6 +128,10 @@ void OTA_DL_dialog_handler(int button) {
     fwrite(buffer, 1, 1, marker);
     fclose(marker);
 
+    // Show hour glass
+    ShowHourglass();
+    PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+
     // Exit
     exitApp();
 }
