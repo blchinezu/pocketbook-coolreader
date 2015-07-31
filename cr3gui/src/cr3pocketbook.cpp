@@ -1211,6 +1211,7 @@ public:
 
     virtual bool TouchMenuCanBeUsed() {
         return
+            pbSkinFileName == lString16("pb626fw5.cr3skin") &&
             CRPocketBookScreen::instance->isTouchSupported() && /*touch device*/
             max(ScreenWidth(), ScreenHeight()) > 800; /*resolution greater than 600x800*/
     }
