@@ -76,7 +76,7 @@ enum CRPbCommands {
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
 #define CR_PB_VERSION "0.0.6-17-30"
-#define CR_PB_BUILD_DATE "2015-07-28"
+#define CR_PB_BUILD_DATE "2015-07-31"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -166,6 +166,9 @@ lString16 getPbModelNumber();
 
 #ifdef POCKETBOOK_PRO
 void toggleSystemPanel();
+void toggleSystemPanel(bool screenUpdate);
+void showSystemPanel(bool screenUpdate);
+void hideSystemPanel(bool screenUpdate);
 bool systemPanelShown();
 
 #ifdef POCKETBOOK_PRO_FW5
