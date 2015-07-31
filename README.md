@@ -63,6 +63,7 @@ My development dir looks like this:
 
 Screenshots:
 
+![0.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/0.jpg)
 ![1.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/1.jpg)
 ![2.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/2.jpg)
 ![3.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/3.jpg)
