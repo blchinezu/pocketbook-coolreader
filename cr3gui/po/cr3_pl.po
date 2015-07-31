@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-07-09 18:35+0300\n"
-"PO-Revision-Date: 2015-06-17 07:23+0000\n"
+"POT-Creation-Date: 2015-07-31 15:33+0300\n"
+"PO-Revision-Date: 2015-07-29 07:48+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
 "pocketbook/language/pl/)\n"
@@ -1146,7 +1146,7 @@ msgstr "Maksymalny odstęp między wyrazami"
 
 #: ../src/settings.cpp:1538
 msgid "Floating punctuation"
-msgstr "Wysunięta interpunkcja"
+msgstr "Pływająca interpunkcja"
 
 #: ../src/settings.cpp:1544
 msgid "Image scaling"
@@ -1154,7 +1154,7 @@ msgstr "Skalowanie obrazów"
 
 #: ../src/settings.cpp:1549
 msgid "Block image scaling mode"
-msgstr "Skalowanie osobnych bloków obrazu"
+msgstr "Skalowanie bloków obrazu"
 
 #: ../src/settings.cpp:1552
 msgid "Block image max zoom"
@@ -1328,7 +1328,7 @@ msgstr "Wbudowane style dokumentu"
 msgid "Clear cache"
 msgstr "Wyczyść pamięć podręczną"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "Aktualizacja OTA"
 
@@ -1620,7 +1620,7 @@ msgstr "Podświetlenie ekranu"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr "Odwróć kolory wyświetlacza"
+msgstr "Odwróć kolory"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
@@ -1710,7 +1710,7 @@ msgstr "Klawisz"
 msgid "Assigned function"
 msgstr "Przypisana funkcja"
 
-#: ../src/ota_update.cpp:135
+#: ../src/ota_update.cpp:151
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
@@ -1718,43 +1718,41 @@ msgstr ""
 "Pobieranie zakończone!\n"
 "CoolReader zostanie uruchomiony ponownie."
 
-#: ../src/ota_update.cpp:136
+#: ../src/ota_update.cpp:152
 msgid "OK"
 msgstr "OK"
 
-#: ../src/ota_update.cpp:142
-#, fuzzy
+#: ../src/ota_update.cpp:161
 msgid "Downloading... (2nd Method)"
-msgstr "Pobieranie..."
+msgstr "Pobieranie... (2-gi sposób)"
 
-#: ../src/ota_update.cpp:153
-#, fuzzy
+#: ../src/ota_update.cpp:172
 msgid "Couldn't download the update package!"
-msgstr "Nie można usunąć istniejącego pakietu!"
+msgstr "Nie można pobrać aktualizacji!"
 
-#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
-#: ../src/ota_update.cpp:306
+#: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
+#: ../src/ota_update.cpp:328
 msgid "Downloading..."
 msgstr "Pobieranie..."
 
-#: ../src/ota_update.cpp:213
+#: ../src/ota_update.cpp:235
 msgid "Couldn't remove existing package!"
 msgstr "Nie można usunąć istniejącego pakietu!"
 
-#: ../src/ota_update.cpp:250
+#: ../src/ota_update.cpp:272
 msgid "Couldn't connect to the network!"
 msgstr "Nie można połączyć się z siecią!"
 
-#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
-#: ../src/ota_update.cpp:285
+#: ../src/ota_update.cpp:278 ../src/ota_update.cpp:294
+#: ../src/ota_update.cpp:307
 msgid "Searching..."
 msgstr "Szukam..."
 
-#: ../src/ota_update.cpp:263
+#: ../src/ota_update.cpp:285
 msgid "You have the latest version."
 msgstr "Masz najnowszą wersję."
 
-#: ../src/ota_update.cpp:295
+#: ../src/ota_update.cpp:317
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
@@ -1762,7 +1760,7 @@ msgstr ""
 "Brak aktualizacji dla twojego urządzenia\n"
 "Model urządzenia:"
 
-#: ../src/ota_update.cpp:317
+#: ../src/ota_update.cpp:339
 msgid "Failed updating!"
 msgstr "Aktualizacja zakończona niepowodzeniem!"
 
@@ -1770,32 +1768,30 @@ msgstr "Aktualizacja zakończona niepowodzeniem!"
 msgid "Contents"
 msgstr "Zawartość"
 
-#: ../src/cr3pocketbook.cpp:1695
+#: ../src/cr3pocketbook.cpp:2109
 msgid "Cache cleared."
 msgstr "Pamięć podręczna wyczyszczona."
 
-#: ../src/cr3pocketbook.cpp:1700
+#: ../src/cr3pocketbook.cpp:2114
 msgid "Unable to list the directory contents!"
 msgstr "Nie można wyświetlić zawartość katalogu!"
 
-#: ../src/cr3pocketbook.cpp:1706
+#: ../src/cr3pocketbook.cpp:2120
 msgid "Unable to clear cache!"
 msgstr "Nie można wyczyścić pamięci podręcznej!"
 
-#: ../src/cr3pocketbook.cpp:3203
+#: ../src/cr3pocketbook.cpp:3618
 msgid "Press $1 to translate"
-msgstr "Krótkie wciśnięcie $1 aby przetłumaczyć"
+msgstr "Naciśnij $1 aby przetłumaczyć"
 
-#: ../src/cr3pocketbook.cpp:4184
+#: ../src/cr3pocketbook.cpp:4668
 msgid "Updated to v"
 msgstr "Zaktualizowane do v"
 
-#: ../src/cr3pocketbook.cpp:4294
+#: ../src/cr3pocketbook.cpp:4778
 msgid "Untitled"
 msgstr "Bez tytułu"
 
-#~ msgid "Couldn't connect to server!"
-#~ msgstr "Nie można połączyć się z serwerem!"
-
-#~ msgid "Server returned error response: "
-#~ msgstr "Serwer zwrócił błąd:"
+#, fuzzy
+#~ msgid "Page"
+#~ msgstr "Następna strona"

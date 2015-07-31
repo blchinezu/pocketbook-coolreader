@@ -45,6 +45,8 @@ bool forcePartialUpdates;
 bool useDeveloperFeatures;
 bool isStandByMode = false;
 bool ignoreNextTouchRelease = false;
+bool isTouchMenuVisible = false;
+int TM_lastDragPage = 0;
 ibitmap *standByImage = NULL;
 ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
@@ -636,6 +638,18 @@ void searchHandler(char *s)
         executeCommand(GCMD_PASS_TO_PARENT, 0);
 } 
 
+void goToPageKeyboardHandler(char *s)
+{
+    if (s  && *s) {
+        int page = 0;
+        lString16(s).atoi(page);
+        pageSelector(page);
+    }
+    else {
+        executeCommand(GCMD_PASS_TO_PARENT, 0);
+    }
+} 
+
 void tocHandler(long long position) 
 {
     executeCommand(MCMD_GO_PAGE_APPLY, position);
@@ -676,6 +690,27 @@ void Draw4Bits(LVDrawBuf & src, lUInt8 *dest, int x, int y, int w, int h)
         line += src.GetRowSize();
         dest += scanline;
     }
+}
+
+ibitmap* LVImageSourceRef_to_ibitmab(LVImageSourceRef &img) {
+
+    if( !img.isNull() ) {
+
+        ibitmap *bmp = NewBitmap(img->GetWidth(), img->GetHeight());
+        LVGrayDrawBuf tmpBufLock( img->GetWidth(), img->GetHeight(), bmp->depth );
+
+        tmpBufLock.Draw(img, 0, 0, img->GetWidth(), img->GetHeight(), true);
+
+        if(4 == bmp->depth) {
+            Draw4Bits(tmpBufLock, bmp->data, 0, 0, img->GetWidth(), img->GetHeight());
+        } else {
+            memcpy(bmp->data, tmpBufLock.GetScanLine(0), bmp->height * bmp->scanline);
+        }
+
+        return bmp;
+    }
+
+    return NULL;
 }
 
 void CRPocketBookScreen::draw(int x, int y, int w, int h)
@@ -857,28 +892,353 @@ public:
     }
 };
 
-class CRPocketBookPageSelectorWindow : public CRPocketBookInkViewWindow
-{
-public:
-    CRPocketBookPageSelectorWindow( CRGUIWindowManager * wm )
-        : CRPocketBookInkViewWindow( wm )	{}
-    virtual void showWindow()
-    {
-        OpenPageSelector(pageSelector);
-    }
+#define TM_NB_ICONS 7
+
+const char *touchMenuIcons[TM_NB_ICONS] = {
+    "home",
+    "toc",
+    // "goto",
+    // "cite",
+    "bookmarks",
+    "dictionary",
+    "search",
+    "rotate",
+    "settings"
 };
 
 class CRPocketBookQuickMenuWindow : public CRPocketBookInkViewWindow
 {
 private:
+    // 3x3 menu
     ibitmap *_menuBitmap;
     const char **_strings;
+
+    // Touch top
+    int icon_width;
+    int icon_height;
+    int icon_space;
+
+    // Touch bottom
+    int bottomH;
+    int bottomY;
+    int barW;
+    int barX1;
+    int barX2;
+    int barY;
+    int textW;
+    int textX;
+    int textY;
+
+    // Track events
+    bool draggingPage;
+
 public:
+    static CRPocketBookQuickMenuWindow* instance;
+
     CRPocketBookQuickMenuWindow( CRGUIWindowManager * wm, ibitmap *menu_bitmap, const char **strings)
-        : CRPocketBookInkViewWindow( wm ), _menuBitmap(menu_bitmap), _strings(strings)	{}
+        : CRPocketBookInkViewWindow( wm ), _menuBitmap(menu_bitmap), _strings(strings) {
+            instance = this;
+        }
+        
+    virtual void showWindow() {
+
+    #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+        // Touch menu
+        if( TouchMenuCanBeUsed() )
+            OpenTouchMenu();
+        // Or old menu
+        else
+    #endif
+            OpenMenu3x3(_menuBitmap, _strings, quickMenuHandler);
+    }
+
+    #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+
+    virtual bool onTouch( int x, int y, CRGUITouchEventType evType ) {
+
+        // PRESS
+        if( evType == CRTOUCH_DOWN ) {
+
+            touchDown.x = x;
+            touchDown.y = y;
+
+            // BOTTOM Page Bar
+            if( y >= bottomY + (int)(bottomH/2) && y < bottomY+bottomH ) {
+                draggingPage = true;
+                TM_lastDragPage = -1;
+            }
+            else {
+                draggingPage = false;
+            }
+        }
+
+        // DRAG
+        else if( evType == CRTOUCH_MOVE ) {
+
+            // BOTTOM
+            if( draggingPage ) {
+                DrawBottom(true, -1, x);
+            }
+        }
+
+        // RELEASE
+        else if( evType == CRTOUCH_UP ) {
+
+            // TOP
+            if( max(touchDown.y, y) <= icon_height ) {
+
+                // Match tapped icon
+                int position = icon_space;
+                for( int i = 0; i < TM_NB_ICONS; i++ ) {
+
+                    // If found icon
+                    if( x >= position && x <= position + icon_width ) {
+                        IconTapped(i, position);
+                        return true;
+                    }
+
+                    // Increase position
+                    position += icon_width + icon_space;
+                }
+
+                return true;
+            }
+
+            // Dragged page bar
+            if( draggingPage ) {
+
+                if( TM_lastDragPage == -1 )
+                    DrawBottom(true, -1, x);
+
+                draggingPage = false;
+
+                if( TM_lastDragPage != main_win->getDocView()->getCurPage() ) {
+                    SelfClose();
+                    pageSelector(TM_lastDragPage);
+                    return true;
+                }
+                return true;
+            }
+
+            // Go to page (progress text)
+            if( y >= bottomY && y < bottomY+(int)(bottomH/2) ) {
+
+                if( x >= textX-20 && x <= textX+textW+20 ) {
+                    lString16 pageTmp = lString16::itoa(TM_lastDragPage);
+                    strcpy( key_buffer, UnicodeToUtf8(pageTmp).c_str() );
+                    SelfClose();
+                    OpenKeyboard(const_cast<char *>("@Page"), key_buffer, KEY_BUFFER_LEN, KBD_NUMERIC, goToPageKeyboardHandler);
+                    // OpenKeyboard(const_cast<char *>("@Page"), key_buffer, KEY_BUFFER_LEN, 0, goToPageKeyboardHandler);
+                    return true;
+                }
+                return true;
+            }
+
+            // If tapped the reading area
+            SelfClose();
+            return true;
+        }
+
+        return true;
+    }
+
+    virtual void IconTapped(int iconKey, int position) {
+
+        // Image name
+        lString16 path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_tap.png");
+
+        // Get image
+        LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
+        ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
+
+        // Draw
+        DrawBitmap(position, 0, bmp);
+
+        // Free memory
+        free(bmp);
+
+        // Highlight tapped icon
+        // InvertAreaBW(position, 0, icon_width, icon_height);
+        PartialUpdateBW(position, 0, icon_width, icon_height);
+
+        // Close current window
+        SelfClose();
+
+        // Execute proper command
+             if( strcmp(touchMenuIcons[iconKey], "home")       == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 1);
+        else if( strcmp(touchMenuIcons[iconKey], "toc")        == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 7);
+        // else if( strcmp(touchMenuIcons[iconKey], "cite")       == 0 ) executeCommand(MCMD_CITES_LIST, 0);
+        else if( strcmp(touchMenuIcons[iconKey], "bookmarks")  == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 3);
+        else if( strcmp(touchMenuIcons[iconKey], "dictionary") == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 6);
+        else if( strcmp(touchMenuIcons[iconKey], "search")     == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 2);
+        else if( strcmp(touchMenuIcons[iconKey], "rotate")     == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 5);
+        else if( strcmp(touchMenuIcons[iconKey], "settings")   == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 8);
+    }
+
+    virtual void DrawTop(bool updateScreen) {
+
+        // Draw top background
+        FillArea(0, 0, ScreenWidth(), icon_height+2, 0x00FFFFFF);
+        FillArea(0, icon_height, ScreenWidth(), 1, 0x00000000);
+
+        // Draw top icons
+        int position = icon_space;
+        for( int i = 0; i < TM_NB_ICONS; i++ ) {
+
+            // Image name
+            lString16 path = lString16("icon_") + lString16(touchMenuIcons[i]) + lString16(".png");
+
+            // Get image
+            LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
+            ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
+
+            // Draw
+            DrawBitmap(position, 0, bmp);
+
+            // Free memory
+            free(bmp);
+
+            // Increase position
+            position += icon_width + icon_space;
+        }
+
+        if( updateScreen ) {
+            PartialUpdate(0, 0, ScreenWidth(), icon_height+1);
+        }
+    }
+
+    virtual void DrawBottom(bool updateScreen, int page, int px) {
+
+        int drawPosition;
+        int pageCount;
+        int curPage;
+        bool dragging = false;
+
+        // Draw bottom background
+        FillArea(0, bottomY-1, ScreenWidth(), bottomH+1, 0x00FFFFFF);
+        FillArea(0, bottomY, ScreenWidth(), 1, 0x00000000);
+
+        // Draw bar
+        FillArea(barX1, barY, barW, 1, 0x00000000);
+        #ifdef POCKETBOOK_PRO_FW5
+        DrawCircle(barX1-3, barY, 3, 0x00000000);
+        DrawCircle(barX2+3, barY, 3, 0x00000000);
+        #else
+        FillArea(barX1-3, barY-3, 6, 6, 0x00000000);
+        FillArea(barX2+3, barY-3, 6, 6, 0x00000000);
+        #endif
+
+        pageCount = main_win->getDocView()->getPageCount();
+
+        // Draw by X axis
+        if( px > -1 ) {
+            drawPosition = min(max(px-barX1,0), barW);
+            curPage = barW == 0 ? 0 : (int)(drawPosition * pageCount / barW);
+            dragging = true;
+        }
+
+        // Draw by page
+        else {
+            curPage = page > -1 ? page : main_win->getDocView()->getCurPage()+1;
+            drawPosition = pageCount == 0 ? 0 : (curPage * barW / pageCount);
+        }
+
+        // Mark page
+        TM_lastDragPage = curPage;
+
+        // Draw current position bar
+        FillArea(barX1, barY-1, drawPosition, 3, 0x00000000);
+        if( !dragging ) {
+            #ifdef POCKETBOOK_PRO_FW5
+            DrawCircle(barX1+drawPosition, barY, 18, 0x00000000);
+            #else
+            FillArea(barX1+drawPosition-18, barY-18, 36, 36, 0x00000000);
+            #endif
+        }
+
+        // Draw current position text
+        lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
+        textW = StringWidth( UnicodeToUtf8(progress).c_str() );
+        if( textW < 1 )
+            textW = (int)(ScreenWidth()*0.2);
+        textX = (int)((ScreenWidth()-textW)/2);
+        DrawString( textX, textY, UnicodeToUtf8(progress).c_str() );
+
+        if( updateScreen ) {
+            if( dragging )
+                PartialUpdateBW(0, bottomY, ScreenWidth(), bottomH);
+            else
+                PartialUpdate(0, bottomY, ScreenWidth(), PanelHeight()+bottomH);
+        }
+    }
+
+    virtual void OpenTouchMenu() {
+
+        isTouchMenuVisible = true;
+        TM_lastDragPage = -1;
+
+        // Activate panel
+        showSystemPanel(false);
+
+        // Offset the background
+        ibitmap * bkg = BitmapFromScreen(0, PanelHeight(), ScreenWidth(), ScreenHeight()-PanelHeight());
+        DrawBitmap(0, 0, bkg);
+        free(bkg);
+        
+        // Draw side lines
+        FillArea(0, 0, 1, ScreenHeight()-PanelHeight(), 0x00000000);
+        FillArea(ScreenWidth()-1, 0, 1, ScreenHeight()-PanelHeight(), 0x00000000);
+
+        // Set class vars
+        icon_width = 75;
+        icon_height = 75;
+        icon_space = (ScreenWidth() - icon_width * TM_NB_ICONS) / (TM_NB_ICONS + 1);
+
+        bottomH = icon_height*2+1;
+        bottomY = ScreenHeight()-PanelHeight()-bottomH;
+
+        barW = (int)(ScreenWidth()*0.9);
+        barX1 = (int)(ScreenWidth()*0.05);
+        barX2 = barX1 + barW;
+        barY = bottomY + bottomH - (int)(bottomH/4);
+        textY = bottomY+20;
+
+        // Draw
+        DrawTop(false);
+        DrawBottom(false, -1, -1);
+        PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+    }
+
+    virtual bool TouchMenuCanBeUsed() {
+        return
+            pbSkinFileName == lString16("pb626fw5.cr3skin") &&
+            CRPocketBookScreen::instance->isTouchSupported() && /*touch device*/
+            max(ScreenWidth(), ScreenHeight()) > 800; /*resolution greater than 600x800*/
+    }
+
+    virtual void SelfClose() {
+        isTouchMenuVisible = false;
+        _wm->closeWindow( this );
+        hideSystemPanel(false);
+        ClearScreen();
+        CRPocketBookWindowManager::instance->update(true);
+        PartialUpdate(0,0,ScreenWidth(),ScreenHeight());
+    }
+
+    #endif
+
+};
+
+CRPocketBookQuickMenuWindow * CRPocketBookQuickMenuWindow::instance = NULL;
+
+class CRPocketBookPageSelectorWindow : public CRPocketBookInkViewWindow
+{
+public:
+    CRPocketBookPageSelectorWindow( CRGUIWindowManager * wm )
+        : CRPocketBookInkViewWindow( wm )   {}
     virtual void showWindow()
     {
-        OpenMenu3x3(_menuBitmap, _strings, quickMenuHandler);
+        OpenPageSelector(pageSelector);
     }
 };
 
@@ -2457,9 +2817,10 @@ void CRPbDictionaryView::setCurItem(int index)
 void CRPbDictionaryView::searchDictionary()
 {
     _searchPattern.clear();
-   // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
+    
+    strcpy(key_buffer, UnicodeToUtf8(lString16(_word)).c_str());
+    // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
     OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
-
 }
 
 void CRPbDictionaryView::launchDictBrowser(const char *urlBase) {
@@ -3554,26 +3915,29 @@ void toggleInvertDisplay() {
 bool systemPanelShown() {
     return GetPanelType()!=PANEL_DISABLED;
 }
-
-void toggleSystemPanel(bool screenUpdate) {
-    int currentMode = GetPanelType();
-    currentMode = currentMode==PANEL_DISABLED?PANEL_ENABLED:PANEL_DISABLED;
-    
-    if( currentMode == PANEL_ENABLED ) {
-        CRLog::trace("toggleSystemPanel(): PANEL_ENABLED");
-        SetPanelType(PANEL_ENABLED);
-        DrawPanel(NULL, "", "", 0);
-        if( screenUpdate )
-            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
-    }
-    else {
-        CRLog::trace("toggleSystemPanel(): PANEL_DISABLED");
+void hideSystemPanel(bool screenUpdate) {
+    if( systemPanelShown() ) {
+        CRLog::trace("hideSystemPanel(): PANEL_DISABLED");
         SetPanelType(PANEL_DISABLED);
         if( screenUpdate )
             CRPocketBookWindowManager::instance->update(true);
     }
 }
-
+void showSystemPanel(bool screenUpdate) {
+    if( !systemPanelShown() ) {
+        CRLog::trace("showSystemPanel(): PANEL_ENABLED");
+        SetPanelType(PANEL_ENABLED);
+        DrawPanel(NULL, "", "", 0);
+        if( screenUpdate )
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+    }
+}
+void toggleSystemPanel(bool screenUpdate) {
+    if( systemPanelShown() )
+        hideSystemPanel(screenUpdate);
+    else
+        showSystemPanel(screenUpdate);
+}
 void toggleSystemPanel() {
     toggleSystemPanel(true);
 }
@@ -4192,6 +4556,18 @@ void enterStandByMode() {
     if( isStandByMode )
         return;
 
+    #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+
+    // Hide menu if visible
+    if( isTouchMenuVisible ) {
+        CRPocketBookQuickMenuWindow::instance->SelfClose();
+    }
+
+    // Hide system panel if visible
+    hideSystemPanel(false);
+
+    #endif
+
     // Draw cover
     if( standByImage ) {
         // ClearScreen();
@@ -4211,6 +4587,8 @@ void enterStandByMode() {
             standByLockImage
             );
     }
+
+    // DitherArea(0, 0, ScreenWidth(), ScreenHeight(), A2DITHER, DITHER_DIFFUSION);
 
     FullUpdate();
     #ifdef POCKETBOOK_PRO_FW5
@@ -4454,18 +4832,7 @@ int main_handler(int type, int par1, int par2)
             // Load standby lock image
             LVImageSourceRef standByLockImageTmp = CRPocketBookWindowManager::instance->getSkin()->getImage(L"standby.png");
             if( !standByLockImageTmp.isNull() ) {
-
-                // Convert to ibitmap
-                standByLockImage = NewBitmap(standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight());
-                LVGrayDrawBuf tmpBufLock( standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight(), standByLockImage->depth );
-
-                tmpBufLock.Draw(standByLockImageTmp, 0, 0, standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight(), true);
-
-                if(4 == standByLockImage->depth) {
-                    Draw4Bits(tmpBufLock, standByLockImage->data, 0, 0, standByLockImageTmp->GetWidth(), standByLockImageTmp->GetHeight());
-                } else {
-                    memcpy(standByLockImage->data, tmpBufLock.GetScanLine(0), standByLockImage->height * standByLockImage->scanline);
-                }
+                standByLockImage = LVImageSourceRef_to_ibitmab(standByLockImageTmp);
             }
 
             need_save_cover = false;

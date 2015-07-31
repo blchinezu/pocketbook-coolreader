@@ -2,6 +2,8 @@
 (c) Vadim Lopatin, 1998-2009  
 All source codes (except thirdparty directory) are provided under the terms of GNU GPL license, version 2
 
+--------------------------------------------------------------------------------
+
 This is a fork of [pocketbook-port (sourceforge.net)](https://sourceforge.net/p/crengine/crengine/ci/pocketbook-port/tree/)
 
 Source code is available at [github.com](https://github.com/blchinezu/pocketbook-coolreader)
@@ -9,6 +11,13 @@ Source code is available at [github.com](https://github.com/blchinezu/pocketbook
 The forum thread is at [mobileread.com](http://www.mobileread.com/forums/showthread.php?t=256917)
 
 Help translating the app at [transifex.com](https://www.transifex.com/projects/p/coolreader-pocketbook/)
+
+Donate through PayPal at [brucelee.duckdns.org/donation/cr3-pb](http://brucelee.duckdns.org/donation/cr3-pb/)
+
+    Since I can't directly add the PayPal donation button here, I've created a simple page which
+    has the Donate button.
+
+--------------------------------------------------------------------------------
 
 Directories:
 
@@ -51,6 +60,8 @@ My development dir looks like this:
     ~/PBDEV/system/
     
     With this structure you should be able to build the source without any changes.
+
+Screenshots:
 
 ![1.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/1.jpg)
 ![2.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/2.jpg)

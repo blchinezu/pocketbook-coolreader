@@ -128,6 +128,14 @@ void OTA_DL_dialog_handler(int button) {
     fwrite(buffer, 1, 1, marker);
     fclose(marker);
 
+    // Show hour glass
+    #ifdef POCKETBOOK_PRO_FW5
+    ShowPureHourglassForce();
+    #elif !defined(POCKETBOOK_PRO_PRO2)
+    ShowHourglassForce();
+    #endif
+    PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+
     // Exit
     exitApp();
 }

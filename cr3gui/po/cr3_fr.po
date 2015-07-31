@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-07-09 18:35+0300\n"
+"POT-Creation-Date: 2015-07-31 15:33+0300\n"
 "PO-Revision-Date: 2015-07-24 20:49+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
@@ -1328,7 +1328,7 @@ msgstr "Styles incorporés dans le document"
 msgid "Clear cache"
 msgstr "Vider le cache"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:255
+#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "Mise à jour OTA"
 
@@ -1711,7 +1711,7 @@ msgstr "Touche"
 msgid "Assigned function"
 msgstr "Fonction assignée"
 
-#: ../src/ota_update.cpp:135
+#: ../src/ota_update.cpp:151
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
@@ -1719,41 +1719,41 @@ msgstr ""
 "Téléchargement réussi !\n"
 "CoolReader va redémarrer."
 
-#: ../src/ota_update.cpp:136
+#: ../src/ota_update.cpp:152
 msgid "OK"
 msgstr "OK"
 
-#: ../src/ota_update.cpp:142
+#: ../src/ota_update.cpp:161
 msgid "Downloading... (2nd Method)"
 msgstr "Téléchargement... (2éme Méthode)"
 
-#: ../src/ota_update.cpp:153
+#: ../src/ota_update.cpp:172
 msgid "Couldn't download the update package!"
 msgstr "Impossible de télécharger le paquet mis à jour !"
 
-#: ../src/ota_update.cpp:170 ../src/ota_update.cpp:278
-#: ../src/ota_update.cpp:306
+#: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
+#: ../src/ota_update.cpp:328
 msgid "Downloading..."
 msgstr "Chargement..."
 
-#: ../src/ota_update.cpp:213
+#: ../src/ota_update.cpp:235
 msgid "Couldn't remove existing package!"
 msgstr "Ne peut supprimer le paquet existant !"
 
-#: ../src/ota_update.cpp:250
+#: ../src/ota_update.cpp:272
 msgid "Couldn't connect to the network!"
 msgstr "Ne peut se connecter au réseau !"
 
-#: ../src/ota_update.cpp:256 ../src/ota_update.cpp:272
-#: ../src/ota_update.cpp:285
+#: ../src/ota_update.cpp:278 ../src/ota_update.cpp:294
+#: ../src/ota_update.cpp:307
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: ../src/ota_update.cpp:263
+#: ../src/ota_update.cpp:285
 msgid "You have the latest version."
 msgstr "Vous avez la dernière version."
 
-#: ../src/ota_update.cpp:295
+#: ../src/ota_update.cpp:317
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
@@ -1761,7 +1761,7 @@ msgstr ""
 "La mise à jour n'est pas disponible pour votre appareil !\n"
 "Modèle de l'appareil :"
 
-#: ../src/ota_update.cpp:317
+#: ../src/ota_update.cpp:339
 msgid "Failed updating!"
 msgstr "Mise à jour interrompu !"
 
@@ -1769,26 +1769,30 @@ msgstr "Mise à jour interrompu !"
 msgid "Contents"
 msgstr "Contenu"
 
-#: ../src/cr3pocketbook.cpp:1695
+#: ../src/cr3pocketbook.cpp:2109
 msgid "Cache cleared."
 msgstr "Cache vidé."
 
-#: ../src/cr3pocketbook.cpp:1700
+#: ../src/cr3pocketbook.cpp:2114
 msgid "Unable to list the directory contents!"
 msgstr "Impossible de lister le contenu du répertoire !"
 
-#: ../src/cr3pocketbook.cpp:1706
+#: ../src/cr3pocketbook.cpp:2120
 msgid "Unable to clear cache!"
 msgstr "Impossible de vider le cache !"
 
-#: ../src/cr3pocketbook.cpp:3203
+#: ../src/cr3pocketbook.cpp:3618
 msgid "Press $1 to translate"
 msgstr "Appuyer sur $1 pour traduire"
 
-#: ../src/cr3pocketbook.cpp:4184
+#: ../src/cr3pocketbook.cpp:4668
 msgid "Updated to v"
 msgstr "Mis à jour vers v"
 
-#: ../src/cr3pocketbook.cpp:4294
+#: ../src/cr3pocketbook.cpp:4778
 msgid "Untitled"
 msgstr "Sans titre"
+
+#, fuzzy
+#~ msgid "Page"
+#~ msgstr "Page suivante"
