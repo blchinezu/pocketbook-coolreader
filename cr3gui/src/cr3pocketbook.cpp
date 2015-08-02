@@ -1201,7 +1201,7 @@ public:
         barX1 = (int)(ScreenWidth()*0.05);
         barX2 = barX1 + barW;
         barY = bottomY + bottomH - (int)(bottomH/4);
-        textY = bottomY+20;
+        textY = bottomY+33;
 
         // Draw
         DrawTop(false);
