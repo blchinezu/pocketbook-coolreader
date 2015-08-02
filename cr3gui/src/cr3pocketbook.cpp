@@ -1060,7 +1060,7 @@ public:
 
         // Image name
         lString16 path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_tap.png");
-        CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): [%d] %s", i, UnicodeToUtf8(path).c_str());
+        CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): [%d] %s", iconKey, UnicodeToUtf8(path).c_str());
 
         // Get image
         LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
@@ -1080,7 +1080,7 @@ public:
             PartialUpdateBW(position, 0, icon_width, icon_height);
         }
         else {
-            CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): NOT FOUND: [%d] %s", i, UnicodeToUtf8(path).c_str());
+            CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): NOT FOUND: [%d] %s", iconKey, UnicodeToUtf8(path).c_str());
         }
 
         // Close current window
