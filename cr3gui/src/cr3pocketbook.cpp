@@ -941,6 +941,8 @@ public:
         }
         
     virtual void showWindow() {
+        CRLog::trace("CRPocketBookQuickMenuWindow::showWindow()");
+
 
     #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
         // Touch menu
@@ -955,15 +957,18 @@ public:
     #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 
     virtual bool onTouch( int x, int y, CRGUITouchEventType evType ) {
+        CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(%d, %d, ?)", x, y);
 
         // PRESS
         if( evType == CRTOUCH_DOWN ) {
+            CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_DOWN");
 
             touchDown.x = x;
             touchDown.y = y;
 
             // BOTTOM Page Bar
             if( y >= bottomY + (int)(bottomH/2) && y < bottomY+bottomH ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): bottom page bar");
                 draggingPage = true;
                 TM_lastDragPage = -1;
             }
@@ -974,18 +979,22 @@ public:
 
         // DRAG
         else if( evType == CRTOUCH_MOVE ) {
+            CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_MOVE");
 
             // BOTTOM
             if( draggingPage ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): draggingPage");
                 DrawBottom(true, -1, x);
             }
         }
 
         // RELEASE
         else if( evType == CRTOUCH_UP ) {
+            CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_UP");
 
             // TOP
             if( max(touchDown.y, y) <= icon_height ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): TOP");
 
                 // Match tapped icon
                 int position = icon_space;
@@ -1006,6 +1015,7 @@ public:
 
             // Dragged page bar
             if( draggingPage ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): Dragged page bar");
 
                 if( TM_lastDragPage == -1 )
                     DrawBottom(true, -1, x);
@@ -1013,6 +1023,7 @@ public:
                 draggingPage = false;
 
                 if( TM_lastDragPage != main_win->getDocView()->getCurPage() ) {
+                    CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): go to page %d", TM_lastDragPage);
                     SelfClose();
                     pageSelector(TM_lastDragPage);
                     return true;
@@ -1022,13 +1033,15 @@ public:
 
             // Go to page (progress text)
             if( y >= bottomY && y < bottomY+(int)(bottomH/2) ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): Bottom");
 
                 if( x >= textX-20 && x <= textX+textW+20 ) {
+                    CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): progress text");
                     lString16 pageTmp = lString16::itoa(TM_lastDragPage);
                     strcpy( key_buffer, UnicodeToUtf8(pageTmp).c_str() );
                     SelfClose();
+                    CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): OpenKeyboard(..., KBD_NUMERIC)");
                     OpenKeyboard(const_cast<char *>("@Page"), key_buffer, KEY_BUFFER_LEN, KBD_NUMERIC, goToPageKeyboardHandler);
-                    // OpenKeyboard(const_cast<char *>("@Page"), key_buffer, KEY_BUFFER_LEN, 0, goToPageKeyboardHandler);
                     return true;
                 }
                 return true;
@@ -1043,23 +1056,32 @@ public:
     }
 
     virtual void IconTapped(int iconKey, int position) {
+        CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(%d, %d)", iconKey, position);
 
         // Image name
         lString16 path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_tap.png");
+        CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): [%d] %s", i, UnicodeToUtf8(path).c_str());
 
         // Get image
         LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
-        ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
-        // Draw
-        DrawBitmap(position, 0, bmp);
+        if( !img.isNull() ) {
+            
+            // Convert
+            ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
-        // Free memory
-        free(bmp);
+            // Draw
+            DrawBitmap(position, 0, bmp);
 
-        // Highlight tapped icon
-        // InvertAreaBW(position, 0, icon_width, icon_height);
-        PartialUpdateBW(position, 0, icon_width, icon_height);
+            // Free memory
+            free(bmp);
+
+            // Highlight tapped icon
+            PartialUpdateBW(position, 0, icon_width, icon_height);
+        }
+        else {
+            CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): NOT FOUND: [%d] %s", i, UnicodeToUtf8(path).c_str());
+        }
 
         // Close current window
         SelfClose();
@@ -1076,6 +1098,7 @@ public:
     }
 
     virtual void DrawTop(bool updateScreen) {
+        CRLog::trace("CRPocketBookQuickMenuWindow::DrawTop(%d)", updateScreen?1:0);
 
         // Draw top background
         FillArea(0, 0, ScreenWidth(), icon_height+2, 0x00FFFFFF);
@@ -1087,27 +1110,38 @@ public:
 
             // Image name
             lString16 path = lString16("icon_") + lString16(touchMenuIcons[i]) + lString16(".png");
+            CRLog::trace("CRPocketBookQuickMenuWindow::DrawTop(): [%d] %s", i, UnicodeToUtf8(path).c_str());
 
             // Get image
             LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
-            ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
-            // Draw
-            DrawBitmap(position, 0, bmp);
+            if( !img.isNull() ) {
+                
+                // Convert
+                ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
-            // Free memory
-            free(bmp);
+                // Draw
+                DrawBitmap(position, 0, bmp);
+
+                // Free memory
+                free(bmp);
+            }
+            else {
+                CRLog::trace("CRPocketBookQuickMenuWindow::DrawTop(): NOT FOUND: [%d] %s", i, UnicodeToUtf8(path).c_str());
+            }
 
             // Increase position
             position += icon_width + icon_space;
         }
 
         if( updateScreen ) {
+            CRLog::trace("CRPocketBookQuickMenuWindow::DrawTop(): PartialUpdate(0, 0, %d, %d);", ScreenWidth(), icon_height+1);
             PartialUpdate(0, 0, ScreenWidth(), icon_height+1);
         }
     }
 
     virtual void DrawBottom(bool updateScreen, int page, int px) {
+        CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(%d, %d, %d)", updateScreen?1:0, page, px);
 
         int drawPosition;
         int pageCount;
@@ -1165,31 +1199,43 @@ public:
         DrawString( textX, textY, UnicodeToUtf8(progress).c_str() );
 
         if( updateScreen ) {
-            if( dragging )
+            if( dragging ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdateBW(0, %d, %d, %d);",
+                    bottomY, ScreenWidth(), bottomH);
                 PartialUpdateBW(0, bottomY, ScreenWidth(), bottomH);
-            else
+            }
+            else {
+                CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdate(0, %d, %d, %d);",
+                    bottomY, ScreenWidth(), PanelHeight()+bottomH);
                 PartialUpdate(0, bottomY, ScreenWidth(), PanelHeight()+bottomH);
+            }
         }
     }
 
     virtual void OpenTouchMenu() {
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu()");
 
         isTouchMenuVisible = true;
         TM_lastDragPage = -1;
 
-        // Activate panel
+
+        // Activate system panel
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Activate system panel");
         showSystemPanel(false);
 
         // Offset the background
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Offset the background");
         ibitmap * bkg = BitmapFromScreen(0, PanelHeight(), ScreenWidth(), ScreenHeight()-PanelHeight());
         DrawBitmap(0, 0, bkg);
         free(bkg);
         
         // Draw side lines
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Draw side lines");
         FillArea(0, 0, 1, ScreenHeight()-PanelHeight(), 0x00000000);
         FillArea(ScreenWidth()-1, 0, 1, ScreenHeight()-PanelHeight(), 0x00000000);
 
         // Set class vars
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Set class vars");
         icon_width = 75;
         icon_height = 75;
         icon_space = (ScreenWidth() - icon_width * TM_NB_ICONS) / (TM_NB_ICONS + 1);
@@ -1204,12 +1250,18 @@ public:
         textY = bottomY+33;
 
         // Draw
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Draw");
         DrawTop(false);
         DrawBottom(false, -1, -1);
+
+        // Update screen
+        CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): PartialUpdate(0, 0, %d);",
+            ScreenWidth(), ScreenHeight());
         PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
     }
 
     virtual bool TouchMenuCanBeUsed() {
+        CRLog::trace("CRPocketBookQuickMenuWindow::TouchMenuCanBeUsed()");
         return
             pbSkinFileName == lString16("pb626fw5.cr3skin") &&
             CRPocketBookScreen::instance->isTouchSupported() && /*touch device*/
@@ -1217,6 +1269,7 @@ public:
     }
 
     virtual void SelfClose() {
+        CRLog::trace("CRPocketBookQuickMenuWindow::SelfClose()");
         isTouchMenuVisible = false;
         _wm->closeWindow( this );
         hideSystemPanel(false);
