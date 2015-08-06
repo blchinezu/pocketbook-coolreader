@@ -604,8 +604,8 @@ bool CRPropAccessor::loadFromStream( LVStream * stream )
             elp++;
         }
         if ( eqpos!=NULL && eqpos>p && *elp!='#' ) {
-            lString8 name( p, eqpos-p );
-            lString8 value( eqpos+1, elp - eqpos - 1);
+            lString8 name( p, (int)(eqpos - p) );
+            lString8 value( eqpos+1, (int)(elp - eqpos - 1));
             setString( name.c_str(), Utf8ToUnicode(removeBackslashChars(value)) );
         }
         for ( p=elp; *elp && *elp!='\r' && *elp!='\n'; elp++)

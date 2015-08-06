@@ -13,7 +13,7 @@
 
 /// change in case of incompatible changes in swap/cache file format to avoid using incompatible swap file
 // increment to force complete reload/reparsing of old file
-#define CACHE_FILE_FORMAT_VERSION "3.12.52"
+#define CACHE_FILE_FORMAT_VERSION "3.12.53"
 /// increment following value to force re-formatting of old book after load
 #define FORMATTING_VERSION_ID 0x0003
 
@@ -3180,7 +3180,7 @@ bool ldomDocument::setRenderProps( int width, int dy, bool /*showCover*/, int /*
         changed = true;
     }
     if ( _page_height != dy ) {
-        CRLog::trace("ldomDocument::setRenderProps() - page height is changed");
+        CRLog::trace("ldomDocument::setRenderProps() - page height is changed: %d != %d", _page_height, dy);
         _page_height = dy;
         changed = true;
     }
@@ -8179,15 +8179,6 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
             return false;
         }
 
-        if ( formatCallback ) {
-            int fmt = getProps()->getIntDef(DOC_PROP_FILE_FORMAT_ID,
-                    doc_format_fb2);
-            if (fmt < doc_format_fb2 || fmt > doc_format_max)
-                fmt = doc_format_fb2;
-            // notify about format detection, to allow setting format-specific CSS
-            formatCallback->OnCacheFileFormatDetected((doc_format_t)fmt);
-        }
-
         CRLog::trace("ldomDocument::loadCacheFileContent() - ID data");
         SerialBuf idbuf(0, true);
         if ( !_cacheFile->read( CBT_MAPS_DATA, idbuf ) ) {
@@ -8242,7 +8233,7 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
             return false;
         }
         _hdr = h;
-        CRLog::info("Loaded render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
+        CRLog::info("Loaded render properties: styleHash=%x, stylesheetHash=%x, docflags=%04x, width=%d, height=%d",
                 _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
     }
 
@@ -8284,6 +8275,15 @@ bool ldomDocument::loadCacheFileContent(CacheLoadingCallback * formatCallback)
             CRLog::error("TOC data deserialization is failed");
             return false;
         }
+    }
+
+    if ( formatCallback ) {
+        int fmt = getProps()->getIntDef(DOC_PROP_FILE_FORMAT_ID,
+                doc_format_fb2);
+        if (fmt < doc_format_fb2 || fmt > doc_format_max)
+            fmt = doc_format_fb2;
+        // notify about format detection, to allow setting format-specific CSS
+        formatCallback->OnCacheFileFormatDetected((doc_format_t)fmt);
     }
 
     if ( loadStylesData() ) {
@@ -8461,7 +8461,7 @@ ContinuousOperationResult ldomDocument::saveChanges( CRTimerUtil & maxTime )
                 return CR_ERROR;
             }
         }
-        CRLog::info("Saving render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
+        CRLog::info("Saving render properties: styleHash=%x, stylesheetHash=%x, docflags=%04x, width=%d, height=%d",
                     _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
 
 
@@ -8573,7 +8573,7 @@ bool tinyNodeCollection::loadStylesData()
     stylebuf.checkMagic(styles_magic);
     stylebuf >> stHash;
     if ( stHash != myHash ) {
-        CRLog::info("tinyNodeCollection::loadStylesData() - stylesheet hash is changed: skip loading styles");
+        CRLog::info("tinyNodeCollection::loadStylesData() - stylesheet hash is changed: skip loading styles %08x != %08x", stHash, myHash);
         return false;
     }
     stylebuf >> len; // index
@@ -9249,7 +9249,7 @@ void ldomDocument::updateRenderContext()
     _hdr.render_dx = dx;
     _hdr.render_dy = dy;
     _hdr.render_docflags = _docFlags;
-    CRLog::info("Updating render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
+    CRLog::info("Updating render properties: styleHash=%x, stylesheetHash=%x, docflags=%04x, width=%d, height=%d",
                 _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
 }
 
@@ -9297,7 +9297,7 @@ bool ldomDocument::checkRenderContext()
 //    _hdr.render_dx = dx;
 //    _hdr.render_dy = dy;
 //    _hdr.render_docflags = _docFlags;
-//    CRLog::info("New render properties: styleHash=%x, stylesheetHash=%x, docflags=%x, width=%x, height=%x",
+//    CRLog::info("New render properties: styleHash=%x, stylesheetHash=%x, docflags=%04x, width=%d, height=%d",
 //                _hdr.render_style_hash, _hdr.stylesheet_hash, _hdr.render_docflags, _hdr.render_dx, _hdr.render_dy);
     return false;
 }
@@ -9306,6 +9306,9 @@ bool ldomDocument::checkRenderContext()
 
 void lxmlDocBase::setStyleSheet( const char * css, bool replace )
 {
+    lString8 s(css);
+
+    //CRLog::trace("lxmlDocBase::setStyleSheet(length:%d replace:%s css text hash: %x)", strlen(css), replace ? "yes" : "no", s.getHash());
     lUInt32 oldHash = _stylesheet.getHash();
     if ( replace ) {
         //CRLog::debug("cleaning stylesheet contents");
@@ -11179,17 +11182,40 @@ void ldomDocument::registerEmbeddedFonts()
 {
     if (_fontList.empty())
         return;
-    for (int i=0; i<_fontList.length(); i++) {
-        LVEmbeddedFontDef * item =  _fontList.get(i);
+    int list = _fontList.length();
+    lString8 lastface = lString8("");
+    for (int i = list; i > 0; i--) {
+        LVEmbeddedFontDef *item = _fontList.get(i - 1);
         lString16 url = item->getUrl();
+        lString8 face = item->getFace();
+        if (face.empty()) face = lastface;
+        else lastface = face;
+        CRLog::debug("url is %s\n", UnicodeToLocal(url).c_str());
         if (url.startsWithNoCase(lString16("res://")) || url.startsWithNoCase(lString16("file://"))) {
             if (!fontMan->RegisterExternalFont(item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
                 CRLog::error("Failed to register external font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
             }
             continue;
         }
-        if (!fontMan->RegisterDocumentFont(getDocIndex(), _container, item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
-            CRLog::error("Failed to register document font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
+        else {
+            if (!fontMan->RegisterDocumentFont(getDocIndex(), _container, item->getUrl(), item->getFace(), item->getBold(), item->getItalic())) {
+                CRLog::error("Failed to register document font face: %s file: %s", item->getFace().c_str(), LCSTR(item->getUrl()));
+            lString16Collection flist;
+            fontMan->getFaceList(flist);
+            int cnt = flist.length();
+            lString16 fontface = lString16("");
+                CRLog::debug("fontlist has %d fontfaces\n", cnt);
+            for (int j = 0; j < cnt; j = j + 1) {
+                fontface = flist[j];
+                do { (fontface.replace(lString16(" "), lString16("\0"))); }
+                while (fontface.pos(lString16(" ")) != -1);
+                if (fontface.lowercase().pos(url.lowercase()) != -1) {
+                    CRLog::debug("****found %s\n", UnicodeToLocal(fontface).c_str());
+                    fontMan->setalias(face, UnicodeToLocal(flist[j]), getDocIndex(),item->getItalic(),item->getBold()) ;
+                    break;
+                }
+            }
+            }
         }
     }
 }

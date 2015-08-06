@@ -320,6 +320,7 @@ private:
     lvRect m_pageMargins;
     lvRect m_pageRects[2];
     int    m_pagesVisible;
+    int    m_pagesVisibleOverride;
     int m_pageHeaderInfo;
     bool m_showCover;
     LVRefVec<LVImageSource> m_headerIcons;
@@ -620,7 +621,9 @@ public:
     /// set list of battery icons to display battery state
     void setBatteryIcons( LVRefVec<LVImageSource> icons );
     /// sets page margins
-    void setPageMargins( const lvRect & rc );
+    void setPageMargins(lvRect rc);
+    /// update page margins based on current settings
+    void updatePageMargins();
     /// returns page margins
     lvRect getPageMargins() const { return m_pageMargins; }
 #if CR_INTERNAL_PAGE_ORIENTATION==1
@@ -665,10 +668,14 @@ public:
     LVDocViewMode getViewMode();
     /// toggle pages/scroll view mode
     void toggleViewMode();
+    /// returns current pages visible setting value (independent on window and font size)
+    int getPagesVisibleSetting();
     /// get window visible page count (1 or 2)
     int getVisiblePageCount();
     /// set window visible page count (1 or 2)
     void setVisiblePageCount( int n );
+    /// set window visible page count, to use exact value independent of font size and window sides
+    void overrideVisiblePageCount(int n);
 
     /// get page header info mask
     int getPageHeaderInfo() { return m_pageHeaderInfo; }
@@ -804,6 +811,8 @@ public:
     int scrollPosToDocPos( int scrollpos );
     /// returns position in 1/100 of percents (0..10000)
     int getPosPercent();
+    /// returns position in 1/100 of percents (0..10000)
+    int getPosEndPagePercent();
 
     /// execute command
     int doCommand( LVDocCmd cmd, int param=0 );

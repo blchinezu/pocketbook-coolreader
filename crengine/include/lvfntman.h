@@ -382,10 +382,6 @@ public:
     /// sets current gamma level
     virtual void SetGamma( double gamma );
 
-    /// sets current hinting mode
-    virtual void SetHintingMode(hinting_mode_t /*mode*/) { }
-    /// returns current hinting mode
-    virtual hinting_mode_t  GetHintingMode() { return HINTING_MODE_AUTOHINT; }
     /// sets current embolding
     virtual void SetEmbolding(int embolding) { }
     /// returns current embolding
@@ -394,7 +390,14 @@ public:
     virtual void SetTracking(int tracking) { }
     /// ruturns current tracking
     virtual int GetTracking() { return 0; }
-
+    /// sets current hinting mode
+    virtual void SetHintingMode(hinting_mode_t /*mode*/) { }
+    /// returns current hinting mode
+    virtual hinting_mode_t  GetHintingMode() { return HINTING_MODE_AUTOHINT; }
+    virtual bool setalias(lString8 alias,lString8 facename,int id,bool italic,bool bold){
+        CR_UNUSED5(alias, facename, id, italic, bold);
+        return false;
+    }
 
 };
 

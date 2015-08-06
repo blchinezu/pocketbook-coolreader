@@ -337,7 +337,11 @@ public:
     lUInt32 getHash() const;
 
     /// get character at specified position with range check
-    value_type & at( size_type pos ) { if (pos > (size_type)pchunk->len) crFatalError(); return modify()[pos]; }
+    value_type & at(size_type pos) {
+    	if (pos > pchunk->len)
+    		crFatalError();
+    	return modify()[pos];
+    }
     /// get character at specified position without range check
     value_type operator [] ( size_type pos ) const { return pchunk->buf8[pos]; }
     /// get reference to character at specified position
@@ -627,6 +631,8 @@ public:
     /// trims all unused space at end of string (sets size to length)
     lString16 & pack();
 
+    /// trims non alpha at beginning and end of string
+    lString16 & trimNonAlpha();
     /// trims spaces at beginning and end of string
     lString16 & trim();
     /// trims duplicate space characters inside string and (optionally) at end and beginning of string
@@ -893,6 +899,7 @@ template <int BUFSIZE> class lStringBuf16 {
     int pos;
 	lStringBuf16 & operator = (lStringBuf16 & v)
 	{
+        CR_UNUSED(v);
 		// not available
 		return *this;
 	}
