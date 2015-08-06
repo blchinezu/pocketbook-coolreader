@@ -5008,8 +5008,9 @@ int main(int argc, char **argv)
     forcePartialUpdates = false;
     useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
     OpenScreen();
-    if (argc < 2) {
-        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("@Cant_open_file"), 2000);
+    if (argc < 2 || strlen(argv[1]) == 0 ) {
+        Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("No book to open!"), 2000);
+        printf("No book to open!\n");
         return 1;
     }
     if (!InitDoc(argv[0], argv[1])) {
