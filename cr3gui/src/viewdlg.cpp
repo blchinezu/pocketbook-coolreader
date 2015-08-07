@@ -587,6 +587,7 @@ static const char * getCommandName( int command )
     case PB_CMD_INVERT_DISPLAY: return _("Invert display");
     case PB_CMD_FULL_UPDATE: return _("Full screen update");
     case PB_CMD_STATUS_LINE: return _("Toggle status bar");
+    case PB_CMD_SET_BOOKMARK: return _("Set bookmark");
     #ifdef POCKETBOOK_PRO
     case PB_CMD_TASK_MANAGER: return _("Tasks list");
     #ifndef POCKETBOOK_PRO_PRO2

@@ -28,6 +28,7 @@
 #include "../include/wordfmt.h"
 #include "../include/pdbfmt.h"
 
+#include <inkview.h>
 #include <cri18n.h>
 
 /// to show page bounds rectangles
@@ -5140,6 +5141,7 @@ CRBookmark * LVDocView::saveCurrentPageShortcutBookmark(int number) {
 		number = rec->getFirstFreeShortcutBookmark();
 	if (number == -1) {
 		CRLog::error("Cannot add bookmark: no space left in bookmarks storage.");
+        Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), _("Cannot add bookmark: no space left in bookmarks storage."), 2000);
 		return NULL;
 	}
 	CRBookmark * bm = rec->setShortcutBookmark(number, p);

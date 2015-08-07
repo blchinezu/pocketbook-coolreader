@@ -393,6 +393,7 @@ static const struct {
     { "@KA_cnts", PB_CMD_CONTENTS, 0},
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
     { "@KA_clca", PB_CMD_CLEAR_CACHE, 0},
+    { "@KA_sbmk", PB_CMD_SET_BOOKMARK, 0},
     #ifdef POCKETBOOK_PRO
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
@@ -2145,6 +2146,11 @@ public:
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
             return true;
         #endif
+
+        case PB_CMD_SET_BOOKMARK:
+            CRLog::trace("PB_CMD_SET_BOOKMARK");
+            main_win->getDocView()->saveCurrentPageShortcutBookmark(0);
+            return true;
 
         case PB_CMD_CLEAR_CACHE:
             if( ldomDocCache::enabled() && !openedCacheFile.empty() && !currentCacheDir.empty() ) {
