@@ -10,10 +10,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-07-31 15:33+0300\n"
-"PO-Revision-Date: 2015-05-14 07:43+0000\n"
+"PO-Revision-Date: 2015-08-08 21:38+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
-"Language-Team: Russian (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/ru/)\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1725,14 +1725,12 @@ msgid "OK"
 msgstr "OK"
 
 #: ../src/ota_update.cpp:161
-#, fuzzy
 msgid "Downloading... (2nd Method)"
-msgstr "Загрузка..."
+msgstr "Загрузка... (второй метод)"
 
 #: ../src/ota_update.cpp:172
-#, fuzzy
 msgid "Couldn't download the update package!"
-msgstr "Не удалось удалить существующий пакет!"
+msgstr "Невозможно загрузить пакет обновления!"
 
 #: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
 #: ../src/ota_update.cpp:328
@@ -1795,13 +1793,3 @@ msgstr "Обновлено до версии "
 #: ../src/cr3pocketbook.cpp:4778
 msgid "Untitled"
 msgstr "Без названия"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Следующая страница"
-
-#~ msgid "Couldn't connect to server!"
-#~ msgstr "Нет соединения с сервером"
-
-#~ msgid "Server returned error response: "
-#~ msgstr "Сервер сообщил об ошибке: "
