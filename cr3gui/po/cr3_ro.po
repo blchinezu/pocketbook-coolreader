@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-13 20:54+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/p/coolreader-pocketbook/"
@@ -396,7 +396,7 @@ msgstr ""
 "Apăsare scurtă $1 - setează semn de carte,\n"
 "apăsare lungă - mergi la semn de carte"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Şterge semn de carte"
 
@@ -1629,11 +1629,6 @@ msgstr "Actualizare completă display"
 msgid "Toggle status bar"
 msgstr "Comutare linie status"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Setează semn de carte"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Listă de aplicaţii deschise"
@@ -1772,29 +1767,33 @@ msgstr "Update eşuat!"
 msgid "Contents"
 msgstr "Cuprins"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Fişierele cache au fost şterse."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Nu s-a putut lista conţinutul folder-ului!"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Nu s-au putut şterge fişierele!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Apasă $1 pentru a traduce"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Actualizat la v"
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Fără titlu"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Setează semn de carte"
 
 #, fuzzy
 #~ msgid "Page"

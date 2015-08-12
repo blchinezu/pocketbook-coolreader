@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-21 17:38+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/projects/p/coolreader-"
@@ -395,7 +395,7 @@ msgstr ""
 "Kort indrukken $1 - stel bladwijzer in,\n"
 "lang indrukken - ga naar bladwijzer"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Verwijder bladwijzer"
 
@@ -1629,11 +1629,6 @@ msgstr "Scherm volledig verversen"
 msgid "Toggle status bar"
 msgstr "Toon/verberg statusbalk"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Stel bladwijzer in"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Takenlijst"
@@ -1772,29 +1767,33 @@ msgstr "Update is mislukt!"
 msgid "Contents"
 msgstr "Inhoud"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Cache is gewist."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Kan de inhoud van de directory niet weergeven!"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Kan de cache niet wissen!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Druk op $1 om te vertalen"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Bijgewerkt naar v"
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Zonder titel"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Stel bladwijzer in"
 
 #, fuzzy
 #~ msgid "Page"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-15 20:29+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/p/coolreader-pocketbook/"
@@ -395,7 +395,7 @@ msgstr ""
 "Kurz drücken $1 - Lesezeichen setzen\n"
 "lang drücken - gehe zu Lesezeichen"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Lesezeichen löschen"
 
@@ -1628,11 +1628,6 @@ msgstr "Vollständige Bildschirmaktualsierung"
 msgid "Toggle status bar"
 msgstr "Statusleiste umschalten"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Lesezeichen anlegen"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Task-Liste"
@@ -1771,29 +1766,33 @@ msgstr "Akualisierung fehlgeschlagen!"
 msgid "Contents"
 msgstr "Inhalte"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Cache geleert."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Kann den Verzeichnisinhalt nicht auflisten"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Kann Cache nicht leeren!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Drücke $1 zum Übersetzen"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Aktualisiert auf v"
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Ohne Titel"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Lesezeichen anlegen"
 
 #, fuzzy
 #~ msgid "Page"

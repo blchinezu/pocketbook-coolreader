@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-08-08 21:38+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
@@ -399,7 +399,7 @@ msgstr ""
 "Короткое нажатие $1 - установить закладку,\n"
 "длинное нажатие - перейти на закладку"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Удалить закладку"
 
@@ -1632,11 +1632,6 @@ msgstr "Обновить содержимое экрана"
 msgid "Toggle status bar"
 msgstr "Тумблер строки состояния"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Установка закладки"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Список открытых программ"
@@ -1775,26 +1770,30 @@ msgstr "Ошибка обновления!"
 msgid "Contents"
 msgstr "Содержание"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Кэш очищен."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Невозможно отобразить содержание! (?)"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Не удалось очистить кэш!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Нажмите $1 чтобы перевести"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Обновлено до версии "
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Без названия"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Установка закладки"

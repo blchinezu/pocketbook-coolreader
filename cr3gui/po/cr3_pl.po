@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-29 07:48+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
@@ -397,7 +397,7 @@ msgstr ""
 "Krótkie wciśnięcie $1 - ustaw zakładkę,\n"
 "przytrzymanie - idź do zakładki"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Usuń zakładkę"
 
@@ -1630,11 +1630,6 @@ msgstr "Pełne odświeżenie ekranu"
 msgid "Toggle status bar"
 msgstr "Przełącz belkę statusu"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Dodaj zakładkę"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Lista zadań"
@@ -1773,29 +1768,33 @@ msgstr "Aktualizacja zakończona niepowodzeniem!"
 msgid "Contents"
 msgstr "Zawartość"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Pamięć podręczna wyczyszczona."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Nie można wyświetlić zawartość katalogu!"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Nie można wyczyścić pamięci podręcznej!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Naciśnij $1 aby przetłumaczyć"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Zaktualizowane do v"
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Bez tytułu"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Dodaj zakładkę"
 
 #, fuzzy
 #~ msgid "Page"

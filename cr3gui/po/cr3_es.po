@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Cool Reader 3 Spanish Translation\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2010-03-02 19:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: jotas\n"
@@ -402,7 +402,7 @@ msgstr ""
 "Pulsar $1 - colocar,\n"
 "mantener pulsado - ir a marcador"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Eliminar marcador"
 
@@ -1695,11 +1695,6 @@ msgstr ""
 msgid "Toggle status bar"
 msgstr "Cambiar el formato de texto"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Colocar marcador"
-
 #: ../src/viewdlg.cpp:593
 #, fuzzy
 msgid "Tasks list"
@@ -1839,31 +1834,35 @@ msgstr ""
 msgid "Contents"
 msgstr "Cambiar la función de las teclas"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 #, fuzzy
 msgid "Unable to list the directory contents!"
 msgstr "Índice del libro"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "pulse $1 para traducir"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 #, fuzzy
 msgid "Untitled"
 msgstr "Mostrar hora"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Colocar marcador"
 
 #, fuzzy
 #~ msgid "Page"

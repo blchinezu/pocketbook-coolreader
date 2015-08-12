@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-11 19:24+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-15 12:34+0000\n"
 "Last-Translator: Vaclav Dohnal <vdohnal@post.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/p/coolreader-pocketbook/"
@@ -398,7 +398,7 @@ msgstr ""
 "Krátké stisknutí $1 - nastavit záložku,\n"
 "dlouhé stisknutí - jít na záložku"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "Smazat záložku"
 
@@ -1631,11 +1631,6 @@ msgstr "Úplné obnovení obrazu"
 msgid "Toggle status bar"
 msgstr "Přepnout stavový pruh"
 
-#: ../src/viewdlg.cpp:591
-#, fuzzy
-msgid "Remove bookmark"
-msgstr "Nastavit záložku"
-
 #: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "Správce úloh"
@@ -1774,29 +1769,33 @@ msgstr "Aktualizace selhala!"
 msgid "Contents"
 msgstr "Obsah"
 
-#: ../src/cr3pocketbook.cpp:2236
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "Cache vymazána."
 
-#: ../src/cr3pocketbook.cpp:2241
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "Nelze procházet obsah složky!"
 
-#: ../src/cr3pocketbook.cpp:2247
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "Nelze vymazat cache!"
 
-#: ../src/cr3pocketbook.cpp:3745
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "Stisknout $1 pro překlad"
 
-#: ../src/cr3pocketbook.cpp:4795
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "Aktualizováno na"
 
-#: ../src/cr3pocketbook.cpp:4905
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "Neoznačený"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "Nastavit záložku"
 
 #, fuzzy
 #~ msgid "Page"
