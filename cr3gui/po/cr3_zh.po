@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-07-31 15:33+0300\n"
+"POT-Creation-Date: 2015-08-12 17:49+0300\n"
 "PO-Revision-Date: 2015-07-22 01:55+0000\n"
 "Last-Translator: keinejiang <keinejiang@gmail.com>\n"
 "Language-Team: Chinese (http://www.transifex.com/projects/p/coolreader-"
@@ -79,7 +79,7 @@ msgstr "打开最近的书籍"
 msgid "Dictionary"
 msgstr "词典"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1419
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1423
 msgid "Cite"
 msgstr "引用"
 
@@ -91,11 +91,11 @@ msgstr "书签"
 msgid "Search"
 msgstr "查找"
 
-#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1057
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1061
 msgid "Settings"
 msgstr "设置"
 
-#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:669
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:671
 msgid "Keyboard layout"
 msgstr "键盘布局"
 
@@ -376,7 +376,7 @@ msgstr ""
 "短按 $1 - 跳到书签,\n"
 "长按 - 设置书签"
 
-#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160
+#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
 msgstr "设置书签"
 
@@ -396,7 +396,7 @@ msgstr ""
 "短按 $1 - 设置书签,\n"
 "长按 - 跳到书签"
 
-#: ../src/bmkdlg.cpp:162
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
 msgstr "删除书签"
 
@@ -424,918 +424,918 @@ msgstr "从词典"
 msgid "[cannot read article]"
 msgstr "[无法阅读此项]"
 
-#: ../src/settings.cpp:198
+#: ../src/settings.cpp:202
 msgid "choose command"
 msgstr "选择命令"
 
-#: ../src/settings.cpp:216
+#: ../src/settings.cpp:220
 msgid "Controls"
 msgstr "控制"
 
-#: ../src/settings.cpp:382
+#: ../src/settings.cpp:386
 msgid "(No action)"
 msgstr "(无动作)"
 
-#: ../src/settings.cpp:535
+#: ../src/settings.cpp:539
 msgid "[Command is not assigned]"
 msgstr "[命令尚未分配]"
 
-#: ../src/settings.cpp:556
+#: ../src/settings.cpp:560
 msgid "0` (Portrait)"
 msgstr "0`(竖屏)"
 
-#: ../src/settings.cpp:557
+#: ../src/settings.cpp:561
 msgid "90 `"
 msgstr "90`"
 
-#: ../src/settings.cpp:558
+#: ../src/settings.cpp:562
 msgid "180 `"
 msgstr "180`"
 
-#: ../src/settings.cpp:559
+#: ../src/settings.cpp:563
 msgid "270 `"
 msgstr "270`"
 
-#: ../src/settings.cpp:570
+#: ../src/settings.cpp:574
 msgid "Page orientation"
 msgstr "屏幕方向"
 
-#: ../src/settings.cpp:591
+#: ../src/settings.cpp:595
 msgid "Default font size"
 msgstr "默认字体大小"
 
-#: ../src/settings.cpp:646
+#: ../src/settings.cpp:650
 msgid "The quick brown fox jumps over lazy dog"
 msgstr "The quick brown fox jumps over lazy dog"
 
-#: ../src/settings.cpp:826
+#: ../src/settings.cpp:830
 msgid "Justify"
 msgstr "两端对齐"
 
-#: ../src/settings.cpp:827
+#: ../src/settings.cpp:831
 msgctxt "CSS"
 msgid "Left"
 msgstr "左对齐"
 
-#: ../src/settings.cpp:828
+#: ../src/settings.cpp:832
 msgid "Center"
 msgstr "居中对齐"
 
-#: ../src/settings.cpp:829
+#: ../src/settings.cpp:833
 msgctxt "CSS"
 msgid "Right"
 msgstr "右对齐"
 
-#: ../src/settings.cpp:835
+#: ../src/settings.cpp:839
 msgid "No indent"
 msgstr "无缩进"
 
-#: ../src/settings.cpp:836
+#: ../src/settings.cpp:840
 msgid "Small indent"
 msgstr "小缩进"
 
-#: ../src/settings.cpp:837
+#: ../src/settings.cpp:841
 msgid "Big indent"
 msgstr "大缩进"
 
-#: ../src/settings.cpp:838
+#: ../src/settings.cpp:842
 msgid "Small outdent"
 msgstr "小探出"
 
-#: ../src/settings.cpp:839
+#: ../src/settings.cpp:843
 msgid "Big outdent"
 msgstr "大探出"
 
-#: ../src/settings.cpp:845
+#: ../src/settings.cpp:849
 msgid "[Default sans-serif font]"
 msgstr "[默认无衬线字体]"
 
-#: ../src/settings.cpp:846
+#: ../src/settings.cpp:850
 msgid "[Default serif font]"
 msgstr "[默认衬线字体]"
 
-#: ../src/settings.cpp:847
+#: ../src/settings.cpp:851
 msgid "[Default monospace font]"
 msgstr "[默认等宽字体]"
 
-#: ../src/settings.cpp:853
+#: ../src/settings.cpp:857
 msgid "Bigger (105%)"
 msgstr "更大(105%)"
 
-#: ../src/settings.cpp:854
+#: ../src/settings.cpp:858
 msgid "Bigger (110%)"
 msgstr "更大(110%)"
 
-#: ../src/settings.cpp:855
+#: ../src/settings.cpp:859
 msgid "Bigger (115%)"
 msgstr "更大(115%)"
 
-#: ../src/settings.cpp:856
+#: ../src/settings.cpp:860
 msgid "Bigger (120%)"
 msgstr "更大(120%)"
 
-#: ../src/settings.cpp:857
+#: ../src/settings.cpp:861
 msgid "Bigger (150%)"
 msgstr "更大(150%)"
 
-#: ../src/settings.cpp:858
+#: ../src/settings.cpp:862
 msgid "Smaller (95%)"
 msgstr "更小(95%)"
 
-#: ../src/settings.cpp:859
+#: ../src/settings.cpp:863
 msgid "Smaller (90%)"
 msgstr "更小(90%)"
 
-#: ../src/settings.cpp:860
+#: ../src/settings.cpp:864
 msgid "Smaller (85%)"
 msgstr "更小(85%)"
 
-#: ../src/settings.cpp:861
+#: ../src/settings.cpp:865
 msgid "Smaller (80%)"
 msgstr "更小(80%)"
 
-#: ../src/settings.cpp:862
+#: ../src/settings.cpp:866
 msgid "Smaller (70%)"
 msgstr "更小(70%)"
 
-#: ../src/settings.cpp:863
+#: ../src/settings.cpp:867
 msgid "Smaller (60%)"
 msgstr "更小(60%)"
 
-#: ../src/settings.cpp:869 ../src/settings.cpp:878 ../src/settings.cpp:1161
-#: ../src/settings.cpp:1167
+#: ../src/settings.cpp:873 ../src/settings.cpp:882 ../src/settings.cpp:1165
+#: ../src/settings.cpp:1171
 msgid "Normal"
 msgstr "正常"
 
-#: ../src/settings.cpp:870 ../src/settings.cpp:1168
+#: ../src/settings.cpp:874 ../src/settings.cpp:1172
 msgid "Bold"
 msgstr "粗体"
 
-#: ../src/settings.cpp:871
+#: ../src/settings.cpp:875
 msgid "Bolder"
 msgstr "粗黑体"
 
-#: ../src/settings.cpp:872
+#: ../src/settings.cpp:876
 msgid "Lighter"
 msgstr "细线体"
 
-#: ../src/settings.cpp:879
+#: ../src/settings.cpp:883
 msgid "Italic"
 msgstr "斜体"
 
-#: ../src/settings.cpp:914 ../src/settings.cpp:1088
+#: ../src/settings.cpp:918 ../src/settings.cpp:1092
 msgid "None"
 msgstr "无"
 
-#: ../src/settings.cpp:915 ../src/settings.cpp:1090
+#: ../src/settings.cpp:919 ../src/settings.cpp:1094
 msgid "Underline"
 msgstr "下划线"
 
-#: ../src/settings.cpp:916
+#: ../src/settings.cpp:920
 msgid "Line through"
 msgstr "删除线"
 
-#: ../src/settings.cpp:917
+#: ../src/settings.cpp:921
 msgid "Overline"
 msgstr "上划线"
 
-#: ../src/settings.cpp:923
+#: ../src/settings.cpp:927
 msgid "Baseline"
 msgstr "基线"
 
-#: ../src/settings.cpp:924
+#: ../src/settings.cpp:928
 msgid "Subscript"
 msgstr "下标"
 
-#: ../src/settings.cpp:925
+#: ../src/settings.cpp:929
 msgid "Superscript"
 msgstr "上标"
 
-#: ../src/settings.cpp:931 ../src/settings.cpp:939
+#: ../src/settings.cpp:935 ../src/settings.cpp:943
 msgid "Black"
 msgstr "黑色"
 
-#: ../src/settings.cpp:932 ../src/settings.cpp:940
+#: ../src/settings.cpp:936 ../src/settings.cpp:944
 msgid "Gray"
 msgstr "灰色"
 
-#: ../src/settings.cpp:933 ../src/settings.cpp:941
+#: ../src/settings.cpp:937 ../src/settings.cpp:945
 msgid "White"
 msgstr "白色"
 
-#: ../src/settings.cpp:948 ../src/settings.cpp:959
+#: ../src/settings.cpp:952 ../src/settings.cpp:963
 msgid "0.2 of line height"
 msgstr "0.2倍行距"
 
-#: ../src/settings.cpp:949 ../src/settings.cpp:960
+#: ../src/settings.cpp:953 ../src/settings.cpp:964
 msgid "0.3 of line height"
 msgstr "0.3倍行距"
 
-#: ../src/settings.cpp:950 ../src/settings.cpp:961 ../src/settings.cpp:970
-#: ../src/settings.cpp:986
+#: ../src/settings.cpp:954 ../src/settings.cpp:965 ../src/settings.cpp:974
+#: ../src/settings.cpp:990
 msgid "0.5 of line height"
 msgstr "0.5倍行距"
 
-#: ../src/settings.cpp:951 ../src/settings.cpp:962 ../src/settings.cpp:971
-#: ../src/settings.cpp:987
+#: ../src/settings.cpp:955 ../src/settings.cpp:966 ../src/settings.cpp:975
+#: ../src/settings.cpp:991
 msgid "1 line height"
 msgstr "1倍行距"
 
-#: ../src/settings.cpp:952 ../src/settings.cpp:963 ../src/settings.cpp:973
-#: ../src/settings.cpp:989
+#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:977
+#: ../src/settings.cpp:993
 msgid "2 of line height"
 msgstr "2倍行距"
 
-#: ../src/settings.cpp:972 ../src/settings.cpp:988
+#: ../src/settings.cpp:976 ../src/settings.cpp:992
 msgid "1.5 of line height"
 msgstr "1.5倍行距"
 
-#: ../src/settings.cpp:974 ../src/settings.cpp:990
+#: ../src/settings.cpp:978 ../src/settings.cpp:994
 msgid "4 of line height"
 msgstr "4倍行距"
 
-#: ../src/settings.cpp:975 ../src/settings.cpp:991
+#: ../src/settings.cpp:979 ../src/settings.cpp:995
 msgid "5% of line width"
 msgstr "5%行宽"
 
-#: ../src/settings.cpp:976 ../src/settings.cpp:992
+#: ../src/settings.cpp:980 ../src/settings.cpp:996
 msgid "10% of line width"
 msgstr "10%行宽"
 
-#: ../src/settings.cpp:977 ../src/settings.cpp:993
+#: ../src/settings.cpp:981 ../src/settings.cpp:997
 msgid "15% of line width"
 msgstr "15%行宽"
 
-#: ../src/settings.cpp:978 ../src/settings.cpp:994
+#: ../src/settings.cpp:982 ../src/settings.cpp:998
 msgid "20% of line width"
 msgstr "20%行宽"
 
-#: ../src/settings.cpp:979 ../src/settings.cpp:995
+#: ../src/settings.cpp:983 ../src/settings.cpp:999
 msgid "30% of line width"
 msgstr "30%行宽"
 
-#: ../src/settings.cpp:998
+#: ../src/settings.cpp:1002
 msgid "Text alignment"
 msgstr "文本对齐"
 
-#: ../src/settings.cpp:1000
+#: ../src/settings.cpp:1004
 msgid "First line indent"
 msgstr "首行缩进"
 
-#: ../src/settings.cpp:1003 ../src/settings.cpp:1582
+#: ../src/settings.cpp:1007 ../src/settings.cpp:1586
 msgid "Font face"
 msgstr "字体"
 
-#: ../src/settings.cpp:1017
+#: ../src/settings.cpp:1021
 msgid "Font size"
 msgstr "字号"
 
-#: ../src/settings.cpp:1019 ../src/settings.cpp:1476 ../src/settings.cpp:1591
+#: ../src/settings.cpp:1023 ../src/settings.cpp:1480 ../src/settings.cpp:1595
 msgid "Font weight"
 msgstr "字体粗细"
 
-#: ../src/settings.cpp:1021
+#: ../src/settings.cpp:1025
 msgid "Font style"
 msgstr "字体类型"
 
-#: ../src/settings.cpp:1023 ../src/settings.cpp:1505
+#: ../src/settings.cpp:1027 ../src/settings.cpp:1509
 msgid "Interline space"
 msgstr "行间距"
 
-#: ../src/settings.cpp:1025
+#: ../src/settings.cpp:1029
 msgid "Letter spacing"
 msgstr "字间距"
 
-#: ../src/settings.cpp:1027
+#: ../src/settings.cpp:1031
 msgid "Text decoration"
 msgstr "文本修饰"
 
-#: ../src/settings.cpp:1029
+#: ../src/settings.cpp:1033
 msgid "Text vertical alignment"
 msgstr "文本垂直对齐"
 
-#: ../src/settings.cpp:1031
+#: ../src/settings.cpp:1035
 msgid "Text color"
 msgstr "文本颜色"
 
-#: ../src/settings.cpp:1033
+#: ../src/settings.cpp:1037
 msgid "Background color"
 msgstr "背景颜色"
 
-#: ../src/settings.cpp:1035
+#: ../src/settings.cpp:1039
 msgid "Margin before"
 msgstr "段前间距"
 
-#: ../src/settings.cpp:1037
+#: ../src/settings.cpp:1041
 msgid "Margin after"
 msgstr "段后间距"
 
-#: ../src/settings.cpp:1039
+#: ../src/settings.cpp:1043
 msgid "Margin left"
 msgstr "段左边距"
 
-#: ../src/settings.cpp:1041
+#: ../src/settings.cpp:1045
 msgid "Margin right"
 msgstr "段右边距"
 
-#: ../src/settings.cpp:1069
+#: ../src/settings.cpp:1073
 msgid "On for all fonts"
 msgstr "支持所有字体"
 
-#: ../src/settings.cpp:1070
+#: ../src/settings.cpp:1074
 msgid "On for big fonts only"
 msgstr "只支持大字体"
 
-#: ../src/settings.cpp:1071 ../src/settings.cpp:1077 ../src/settings.cpp:1181
+#: ../src/settings.cpp:1075 ../src/settings.cpp:1081 ../src/settings.cpp:1185
 msgid "Off"
 msgstr "关闭"
 
-#: ../src/settings.cpp:1076
+#: ../src/settings.cpp:1080
 msgid "On"
 msgstr "打开"
 
-#: ../src/settings.cpp:1082
+#: ../src/settings.cpp:1086
 msgid "AM/PM"
 msgstr "上午/下午"
 
-#: ../src/settings.cpp:1083
+#: ../src/settings.cpp:1087
 msgid "24h"
 msgstr "24小时"
 
-#: ../src/settings.cpp:1089
+#: ../src/settings.cpp:1093
 msgid "Solid"
 msgstr "反色块"
 
-#: ../src/settings.cpp:1162
+#: ../src/settings.cpp:1166
 msgid "Inverse"
 msgstr "反白"
 
-#: ../src/settings.cpp:1173
+#: ../src/settings.cpp:1177
 msgid "One"
 msgstr "一"
 
-#: ../src/settings.cpp:1174
+#: ../src/settings.cpp:1178
 msgid "Two"
 msgstr "二"
 
-#: ../src/settings.cpp:1179
+#: ../src/settings.cpp:1183
 msgid "Top"
 msgstr "顶部"
 
-#: ../src/settings.cpp:1186
+#: ../src/settings.cpp:1190
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1187
+#: ../src/settings.cpp:1191
 msgid "75%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1188
+#: ../src/settings.cpp:1192
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1189
+#: ../src/settings.cpp:1193
 msgid "85%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1190
+#: ../src/settings.cpp:1194
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1191
+#: ../src/settings.cpp:1195
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1192
+#: ../src/settings.cpp:1196
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1193
+#: ../src/settings.cpp:1197
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1194
+#: ../src/settings.cpp:1198
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1195
+#: ../src/settings.cpp:1199
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1196
+#: ../src/settings.cpp:1200
 msgid "120%"
 msgstr "120%"
 
-#: ../src/settings.cpp:1197
+#: ../src/settings.cpp:1201
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1198
+#: ../src/settings.cpp:1202
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1199
+#: ../src/settings.cpp:1203
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1200
+#: ../src/settings.cpp:1204
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1201
+#: ../src/settings.cpp:1205
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1202
+#: ../src/settings.cpp:1206
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1203
+#: ../src/settings.cpp:1207
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1204
+#: ../src/settings.cpp:1208
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1205
+#: ../src/settings.cpp:1209
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1250
+#: ../src/settings.cpp:1254
 msgid "Always use fast updates"
 msgstr "始终使用快速刷新"
 
-#: ../src/settings.cpp:1251
+#: ../src/settings.cpp:1255
 msgid "Don't use fast updates"
 msgstr "不使用快速刷新"
 
-#: ../src/settings.cpp:1252
+#: ../src/settings.cpp:1256
 msgid "Full updates every 2 pages"
 msgstr "每2页全屏刷新"
 
-#: ../src/settings.cpp:1253
+#: ../src/settings.cpp:1257
 msgid "Full updates every 3 pages"
 msgstr "每3页全屏刷新"
 
-#: ../src/settings.cpp:1254
+#: ../src/settings.cpp:1258
 msgid "Full updates every 4 pages"
 msgstr "每4页全屏刷新"
 
-#: ../src/settings.cpp:1255
+#: ../src/settings.cpp:1259
 msgid "Full updates every 5 pages"
 msgstr "每5页全屏刷新"
 
-#: ../src/settings.cpp:1256
+#: ../src/settings.cpp:1260
 msgid "Full updates every 6 pages"
 msgstr "每6页全屏刷新"
 
-#: ../src/settings.cpp:1257
+#: ../src/settings.cpp:1261
 msgid "Full updates every 7 pages"
 msgstr "每7页全屏刷新"
 
-#: ../src/settings.cpp:1258
+#: ../src/settings.cpp:1262
 msgid "Full updates every 8 pages"
 msgstr "每8页全屏刷新"
 
-#: ../src/settings.cpp:1259
+#: ../src/settings.cpp:1263
 msgid "Full updates every 9 pages"
 msgstr "每9页全屏刷新"
 
-#: ../src/settings.cpp:1260
+#: ../src/settings.cpp:1264
 msgid "Full updates every 10 pages"
 msgstr "每10页全屏刷新"
 
-#: ../src/settings.cpp:1261
+#: ../src/settings.cpp:1265
 msgid "Full updates every 14 pages"
 msgstr "每14页全屏刷新"
 
-#: ../src/settings.cpp:1262
+#: ../src/settings.cpp:1266
 msgid "Full updates every 20 pages"
 msgstr "每20页全屏刷新"
 
-#: ../src/settings.cpp:1263
+#: ../src/settings.cpp:1267
 msgid "Full updates every 25 pages"
 msgstr "每25页全屏刷新"
 
-#: ../src/settings.cpp:1264
+#: ../src/settings.cpp:1268
 msgid "Full updates every 30 pages"
 msgstr "每30页全屏刷新"
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1269
 msgid "Full updates every 35 pages"
 msgstr "每35页全屏刷新"
 
-#: ../src/settings.cpp:1266
+#: ../src/settings.cpp:1270
 msgid "Full updates every 40 pages"
 msgstr "每40页全屏刷新"
 
-#: ../src/settings.cpp:1267
+#: ../src/settings.cpp:1271
 msgid "Full updates every 45 pages"
 msgstr "每45页全屏刷新"
 
-#: ../src/settings.cpp:1268
+#: ../src/settings.cpp:1272
 msgid "Full updates every 50 pages"
 msgstr "每50页全屏刷新"
 
-#: ../src/settings.cpp:1273
+#: ../src/settings.cpp:1277
 msgid "Turbo mode disabled"
 msgstr "加速模式已禁用"
 
-#: ../src/settings.cpp:1274
+#: ../src/settings.cpp:1278
 msgid "Turbo mode enabled"
 msgstr "加速模式已启用"
 
-#: ../src/settings.cpp:1281
+#: ../src/settings.cpp:1285
 msgid "180+slow next page"
 msgstr "180+慢 下一页"
 
-#: ../src/settings.cpp:1282
+#: ../src/settings.cpp:1286
 msgid "180+slow prev/next page"
 msgstr "180+慢 上/下一页"
 
-#: ../src/settings.cpp:1283
+#: ../src/settings.cpp:1287
 msgid "180+FAST next page"
 msgstr "180+快 下一页"
 
-#: ../src/settings.cpp:1284
+#: ../src/settings.cpp:1288
 msgid "180+FAST prev/next page"
 msgstr "180+快 上/下一页"
 
-#: ../src/settings.cpp:1285
+#: ../src/settings.cpp:1289
 msgid "180+FAST next/prev page"
 msgstr "180+快 下/上一页"
 
-#: ../src/settings.cpp:1303
+#: ../src/settings.cpp:1307
 msgid "2 BPP"
 msgstr "2 BPP"
 
-#: ../src/settings.cpp:1304
+#: ../src/settings.cpp:1308
 msgid "3 BPP"
 msgstr "3 BPP"
 
-#: ../src/settings.cpp:1305
+#: ../src/settings.cpp:1309
 msgid "4 BPP"
 msgstr "4 BPP"
 
-#: ../src/settings.cpp:1306
+#: ../src/settings.cpp:1310
 msgid "8 BPP"
 msgstr "8 BPP"
 
-#: ../src/settings.cpp:1312
+#: ../src/settings.cpp:1316
 msgid "Disabled (1:1)"
 msgstr "禁用(1:1)"
 
-#: ../src/settings.cpp:1313
+#: ../src/settings.cpp:1317
 msgid "Integer scale"
 msgstr "整数比例"
 
-#: ../src/settings.cpp:1314
+#: ../src/settings.cpp:1318
 msgid "Arbitrary scale"
 msgstr "任意比例"
 
-#: ../src/settings.cpp:1319
+#: ../src/settings.cpp:1323
 msgid "Auto"
 msgstr "自动"
 
-#: ../src/settings.cpp:1320
+#: ../src/settings.cpp:1324
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1321
+#: ../src/settings.cpp:1325
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1322
+#: ../src/settings.cpp:1326
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1406
+#: ../src/settings.cpp:1410
 msgid "No hinting"
 msgstr "无微调"
 
-#: ../src/settings.cpp:1407
+#: ../src/settings.cpp:1411
 msgid "Use bytecode"
 msgstr "仅用字节码微调"
 
-#: ../src/settings.cpp:1408
+#: ../src/settings.cpp:1412
 msgid "Autohinting"
 msgstr "自动微调"
 
-#: ../src/settings.cpp:1409
+#: ../src/settings.cpp:1413
 msgid "Light"
 msgstr "轻度微调"
 
-#: ../src/settings.cpp:1414
+#: ../src/settings.cpp:1418
 msgid "Default paragraph formatting"
 msgstr "默认段落格式"
 
-#: ../src/settings.cpp:1415
+#: ../src/settings.cpp:1419
 msgctxt "CSS"
 msgid "Title"
 msgstr "标题"
 
-#: ../src/settings.cpp:1416
+#: ../src/settings.cpp:1420
 msgid "Subtitle"
 msgstr "子标题"
 
-#: ../src/settings.cpp:1417
+#: ../src/settings.cpp:1421
 msgid "Preformatted text / code"
 msgstr "已格式化的文本/代码"
 
-#: ../src/settings.cpp:1418
+#: ../src/settings.cpp:1422
 msgid "Link"
 msgstr "链接"
 
-#: ../src/settings.cpp:1420
+#: ../src/settings.cpp:1424
 msgid "Epigraph"
 msgstr "引语"
 
-#: ../src/settings.cpp:1421
+#: ../src/settings.cpp:1425
 msgid "Poem"
 msgstr "诗词"
 
-#: ../src/settings.cpp:1422
+#: ../src/settings.cpp:1426
 msgid "Text / Cite / Epigraph author"
 msgstr "文本/引用/引语作者"
 
-#: ../src/settings.cpp:1423
+#: ../src/settings.cpp:1427
 msgid "Footnote"
 msgstr "脚注"
 
-#: ../src/settings.cpp:1424
+#: ../src/settings.cpp:1428
 msgid "Footnote link"
 msgstr "脚注链接"
 
-#: ../src/settings.cpp:1425
+#: ../src/settings.cpp:1429
 msgid "Footnote title"
 msgstr "脚注标题"
 
-#: ../src/settings.cpp:1426
+#: ../src/settings.cpp:1430
 msgid "Annotation"
 msgstr "注解"
 
-#: ../src/settings.cpp:1466
+#: ../src/settings.cpp:1470
 msgid "Default font face"
 msgstr "默认字体"
 
-#: ../src/settings.cpp:1471
+#: ../src/settings.cpp:1475
 msgid "Font settings"
 msgstr "字体设置"
 
-#: ../src/settings.cpp:1478
+#: ../src/settings.cpp:1482
 msgid "Font antialiasing"
 msgstr "字体平滑"
 
-#: ../src/settings.cpp:1481
+#: ../src/settings.cpp:1485
 msgid "Font hinting"
 msgstr "字体微调"
 
-#: ../src/settings.cpp:1483
+#: ../src/settings.cpp:1487
 msgid "Font kerning"
 msgstr "字体字距"
 
-#: ../src/settings.cpp:1485
+#: ../src/settings.cpp:1489
 msgid "Font embolding"
 msgstr "字体加粗"
 
-#: ../src/settings.cpp:1487
+#: ../src/settings.cpp:1491
 msgid "Tracking"
 msgstr "字体间距"
 
-#: ../src/settings.cpp:1489
+#: ../src/settings.cpp:1493
 msgid "Font Gamma"
 msgstr "字体伽马值"
 
-#: ../src/settings.cpp:1491
+#: ../src/settings.cpp:1495
 msgid "Document embedded fonts"
 msgstr "文档嵌入字体"
 
-#: ../src/settings.cpp:1494
+#: ../src/settings.cpp:1498
 msgid "Fallback font face"
 msgstr "备选字体"
 
-#: ../src/settings.cpp:1500
+#: ../src/settings.cpp:1504
 msgid "Formatting settings"
 msgstr "排版设置"
 
-#: ../src/settings.cpp:1512
+#: ../src/settings.cpp:1516
 msgid "[No Hyphenation]"
 msgstr "不使用断字"
 
-#: ../src/settings.cpp:1513
+#: ../src/settings.cpp:1517
 msgid "[Algorythmic Hyphenation]"
 msgstr "算法断字"
 
-#: ../src/settings.cpp:1515
+#: ../src/settings.cpp:1519
 msgid "Hyphenation"
 msgstr "断字"
 
-#: ../src/settings.cpp:1529
+#: ../src/settings.cpp:1533
 msgid "Preformatted text"
 msgstr "已格式化文本"
 
-#: ../src/settings.cpp:1532
+#: ../src/settings.cpp:1536
 msgid "Space condensing percent"
 msgstr "空白收缩百分比"
 
-#: ../src/settings.cpp:1535
+#: ../src/settings.cpp:1539
 msgid "Space expanding percent"
 msgstr "空白展宽百分比"
 
-#: ../src/settings.cpp:1538
+#: ../src/settings.cpp:1542
 msgid "Floating punctuation"
 msgstr "浮动标点符号"
 
-#: ../src/settings.cpp:1544
+#: ../src/settings.cpp:1548
 msgid "Image scaling"
 msgstr "图像缩放比例"
 
-#: ../src/settings.cpp:1549
+#: ../src/settings.cpp:1553
 msgid "Block image scaling mode"
 msgstr "块图像缩放模式"
 
-#: ../src/settings.cpp:1552
+#: ../src/settings.cpp:1556
 msgid "Block image max zoom"
 msgstr "块图像最大缩放"
 
-#: ../src/settings.cpp:1555
+#: ../src/settings.cpp:1559
 msgid "Inline image scaling mode"
 msgstr "内嵌图像缩放模式"
 
-#: ../src/settings.cpp:1558
+#: ../src/settings.cpp:1562
 msgid "Inline image max zoom"
 msgstr "内嵌图像最大缩放"
 
-#: ../src/settings.cpp:1567
+#: ../src/settings.cpp:1571
 msgid "Page settings"
 msgstr "页面设置"
 
-#: ../src/settings.cpp:1572
+#: ../src/settings.cpp:1576
 msgid "Status line"
 msgstr "状态行"
 
-#: ../src/settings.cpp:1577
+#: ../src/settings.cpp:1581
 msgid "Status line settings"
 msgstr "状态行设置"
 
-#: ../src/settings.cpp:1594
+#: ../src/settings.cpp:1598
 msgid "Time format"
 msgstr "时间格式"
 
-#: ../src/settings.cpp:1596
+#: ../src/settings.cpp:1600
 msgid "Show time"
 msgstr "显示时间"
 
-#: ../src/settings.cpp:1598
+#: ../src/settings.cpp:1602
 msgid "Show title"
 msgstr "显示标题"
 
-#: ../src/settings.cpp:1600
+#: ../src/settings.cpp:1604
 msgid "Show battery"
 msgstr "显示电池"
 
-#: ../src/settings.cpp:1602
+#: ../src/settings.cpp:1606
 msgid "Show battery percent"
 msgstr "显示电池百分数"
 
-#: ../src/settings.cpp:1605
+#: ../src/settings.cpp:1609
 msgid "Show position percent"
 msgstr "显示阅读位置百分数"
 
-#: ../src/settings.cpp:1607
+#: ../src/settings.cpp:1611
 msgid "Show page count"
 msgstr "显示已读页数"
 
-#: ../src/settings.cpp:1609
+#: ../src/settings.cpp:1613
 msgid "Show page count till chapter end"
 msgstr "显示本章未读页数"
 
-#: ../src/settings.cpp:1612
+#: ../src/settings.cpp:1616
 msgid "Show page number"
 msgstr "显示总页数"
 
-#: ../src/settings.cpp:1614
+#: ../src/settings.cpp:1618
 msgid "Show chapter marks"
 msgstr "显示章节边界"
 
-#: ../src/settings.cpp:1623
+#: ../src/settings.cpp:1627
 msgid "Page margins"
 msgstr "页边距"
 
-#: ../src/settings.cpp:1628
+#: ../src/settings.cpp:1632
 msgid "Top margin"
 msgstr "上边距"
 
-#: ../src/settings.cpp:1630
+#: ../src/settings.cpp:1634
 msgid "Bottom margin"
 msgstr "下边距"
 
-#: ../src/settings.cpp:1632
+#: ../src/settings.cpp:1636
 msgid "Left margin"
 msgstr "左边距"
 
-#: ../src/settings.cpp:1634
+#: ../src/settings.cpp:1638
 msgid "Right margin"
 msgstr "右边距"
 
-#: ../src/settings.cpp:1639
+#: ../src/settings.cpp:1643
 msgid "Footnotes at page bottom"
 msgstr "脚注"
 
-#: ../src/settings.cpp:1645
+#: ../src/settings.cpp:1649
 msgid "Display settings"
 msgstr "显示设置"
 
-#: ../src/settings.cpp:1654
+#: ../src/settings.cpp:1658
 msgid "Landscape pages"
 msgstr "横屏页数"
 
-#: ../src/settings.cpp:1656
+#: ../src/settings.cpp:1660
 msgid "Inverse display"
 msgstr "反白显示"
 
-#: ../src/settings.cpp:1659
+#: ../src/settings.cpp:1663
 msgid "Show bookmark icons"
 msgstr "显示书签图标"
 
-#: ../src/settings.cpp:1662
+#: ../src/settings.cpp:1666
 msgid "Highlight bookmarks"
 msgstr "高亮书签"
 
-#: ../src/settings.cpp:1666
+#: ../src/settings.cpp:1670
 msgid "Display update mode"
 msgstr "显示刷新模式"
 
-#: ../src/settings.cpp:1671
+#: ../src/settings.cpp:1675
 msgid "Turbo update mode"
 msgstr "加速刷新模式"
 
-#: ../src/settings.cpp:1676
+#: ../src/settings.cpp:1680
 msgid "Gray buffer depth(need restart)"
 msgstr "灰阶深度(需重启)"
 
-#: ../src/settings.cpp:1683
+#: ../src/settings.cpp:1687
 msgid "Skin"
 msgstr "皮肤"
 
-#: ../src/settings.cpp:1699
+#: ../src/settings.cpp:1703
 msgid "Control settings"
 msgstr "控制设置"
 
-#: ../src/settings.cpp:1706
+#: ../src/settings.cpp:1710
 msgid "Rotate"
 msgstr "旋转"
 
-#: ../src/settings.cpp:1709
+#: ../src/settings.cpp:1713
 msgid "Page turn angle"
 msgstr "页旋转角度"
 
-#: ../src/settings.cpp:1725
+#: ../src/settings.cpp:1729
 msgid "Tap action"
 msgstr "单击动作"
 
-#: ../src/settings.cpp:1727
+#: ../src/settings.cpp:1731
 msgid "Long tap action"
 msgstr "长按动作"
 
-#: ../src/settings.cpp:1731
+#: ../src/settings.cpp:1735
 msgid "Height of the upper tap zone"
 msgstr "上部触摸区域高度"
 
-#: ../src/settings.cpp:1734
+#: ../src/settings.cpp:1738
 msgid "Height of the middle tap zone"
 msgstr "中部触摸区域高度"
 
-#: ../src/settings.cpp:1737
+#: ../src/settings.cpp:1741
 msgid "Width of the left tap zone"
 msgstr "左部触摸区域宽度"
 
-#: ../src/settings.cpp:1740
+#: ../src/settings.cpp:1744
 msgid "Width of the middle tap zone"
 msgstr "中部触摸区域宽度"
 
-#: ../src/settings.cpp:1759
+#: ../src/settings.cpp:1763
 msgid "Style settings"
 msgstr "风格设置"
 
-#: ../src/settings.cpp:1764
+#: ../src/settings.cpp:1768
 msgid "Document embedded styles"
 msgstr "文档内嵌风格"
 
-#: ../src/settings.cpp:1783 ../src/viewdlg.cpp:598
+#: ../src/settings.cpp:1787 ../src/viewdlg.cpp:600
 msgid "Clear cache"
 msgstr "清除缓存"
 
-#: ../src/settings.cpp:1791 ../src/viewdlg.cpp:596 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1795 ../src/viewdlg.cpp:598 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "在线升级"
 
-#: ../src/settings.cpp:1798 ../src/viewdlg.cpp:597
+#: ../src/settings.cpp:1802 ../src/viewdlg.cpp:599
 msgid "OTA Update Dev"
 msgstr "在线升级开发版"
 
-#: ../src/settings.cpp:1821
+#: ../src/settings.cpp:1825
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1629,83 +1629,83 @@ msgstr "全屏刷新"
 msgid "Toggle status bar"
 msgstr "切换状态栏"
 
-#: ../src/viewdlg.cpp:591
+#: ../src/viewdlg.cpp:593
 msgid "Tasks list"
 msgstr "任务管理器"
 
-#: ../src/viewdlg.cpp:593
+#: ../src/viewdlg.cpp:595
 msgid "Toggle system panel"
 msgstr "切换系统面板"
 
-#: ../src/viewdlg.cpp:595
+#: ../src/viewdlg.cpp:597
 msgid "Lock device"
 msgstr "锁定设备"
 
-#: ../src/viewdlg.cpp:600
+#: ../src/viewdlg.cpp:602
 msgid "Open system panel"
 msgstr "打开系统面板"
 
-#: ../src/viewdlg.cpp:601
+#: ../src/viewdlg.cpp:603
 msgid "Toggle front light"
 msgstr "切换前光"
 
-#: ../src/viewdlg.cpp:604
+#: ../src/viewdlg.cpp:606
 msgid "PocketBook Main menu"
 msgstr "PocketBook主菜单"
 
-#: ../src/viewdlg.cpp:606
+#: ../src/viewdlg.cpp:608
 msgid "Unknown command"
 msgstr "未知命令"
 
-#: ../src/viewdlg.cpp:613
+#: ../src/viewdlg.cpp:615
 msgid "Previous Page"
 msgstr "上一页"
 
-#: ../src/viewdlg.cpp:615
+#: ../src/viewdlg.cpp:617
 msgid "Next Page"
 msgstr "下一页"
 
-#: ../src/viewdlg.cpp:617
+#: ../src/viewdlg.cpp:619
 msgid "Back by 10 Pages"
 msgstr "后退10页"
 
-#: ../src/viewdlg.cpp:619
+#: ../src/viewdlg.cpp:621
 msgid "Forward by 10 Pages"
 msgstr "前进10页"
 
-#: ../src/viewdlg.cpp:621
+#: ../src/viewdlg.cpp:623
 msgid "Next Chapter"
 msgstr "下一章"
 
-#: ../src/viewdlg.cpp:623
+#: ../src/viewdlg.cpp:625
 msgid "Previous Chapter"
 msgstr "上一章"
 
-#: ../src/viewdlg.cpp:625
+#: ../src/viewdlg.cpp:627
 msgid "Add Bookmark"
 msgstr "添加书签"
 
-#: ../src/viewdlg.cpp:627
+#: ../src/viewdlg.cpp:629
 msgid "Rotate Clockwise"
 msgstr "顺时针旋转"
 
-#: ../src/viewdlg.cpp:629
+#: ../src/viewdlg.cpp:631
 msgid "Rotate Anti-Clockwise"
 msgstr "逆时针旋转"
 
-#: ../src/viewdlg.cpp:631
+#: ../src/viewdlg.cpp:633
 msgid "Portrait View"
 msgstr "竖屏观看"
 
-#: ../src/viewdlg.cpp:633
+#: ../src/viewdlg.cpp:635
 msgid "Landscape View"
 msgstr "横屏观看"
 
-#: ../src/viewdlg.cpp:657
+#: ../src/viewdlg.cpp:659
 msgid "Key"
 msgstr "按键"
 
-#: ../src/viewdlg.cpp:657
+#: ../src/viewdlg.cpp:659
 msgid "Assigned function"
 msgstr "分配的功能"
 
@@ -1767,29 +1767,33 @@ msgstr "升级失败！"
 msgid "Contents"
 msgstr "目录"
 
-#: ../src/cr3pocketbook.cpp:2109
+#: ../src/cr3pocketbook.cpp:2249
 msgid "Cache cleared."
 msgstr "缓存已清除。"
 
-#: ../src/cr3pocketbook.cpp:2114
+#: ../src/cr3pocketbook.cpp:2254
 msgid "Unable to list the directory contents!"
 msgstr "无法列出目录内容！"
 
-#: ../src/cr3pocketbook.cpp:2120
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to clear cache!"
 msgstr "无法清除缓存！"
 
-#: ../src/cr3pocketbook.cpp:3618
+#: ../src/cr3pocketbook.cpp:3758
 msgid "Press $1 to translate"
 msgstr "按 $1 翻译"
 
-#: ../src/cr3pocketbook.cpp:4668
+#: ../src/cr3pocketbook.cpp:4808
 msgid "Updated to v"
 msgstr "升级到V"
 
-#: ../src/cr3pocketbook.cpp:4778
+#: ../src/cr3pocketbook.cpp:4918
 msgid "Untitled"
 msgstr "无标题"
+
+#, fuzzy
+#~ msgid "Remove bookmark"
+#~ msgstr "设置书签"
 
 #, fuzzy
 #~ msgid "Page"

@@ -28,6 +28,7 @@
 #include "../include/wordfmt.h"
 #include "../include/pdbfmt.h"
 
+#include <inkview.h>
 #include <cri18n.h>
 
 /// to show page bounds rectangles
@@ -5140,6 +5141,7 @@ CRBookmark * LVDocView::saveCurrentPageShortcutBookmark(int number) {
 		number = rec->getFirstFreeShortcutBookmark();
 	if (number == -1) {
 		CRLog::error("Cannot add bookmark: no space left in bookmarks storage.");
+        Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), _("Cannot add bookmark: no space left in bookmarks storage."), 2000);
 		return NULL;
 	}
 	CRBookmark * bm = rec->setShortcutBookmark(number, p);
@@ -5151,6 +5153,31 @@ CRBookmark * LVDocView::saveCurrentPageShortcutBookmark(int number) {
 		return bm;
 	}
 	return NULL;
+}
+
+CRBookmark * LVDocView::currentPageIsBookmarked() {
+    CRFileHistRecord * bookmarks = getCurrentFileHistRecord();
+    int curPage = getCurPage();
+    int n = bookmarks->getLastShortcutBookmark()+1;
+    for ( int i=1; i<=n; i++ ) {
+        CRBookmark * bm = bookmarks->getShortcutBookmark(i);
+        int page = 0;
+        if ( bm ) {
+            ldomXPointer p = getDocument()->createXPointer( bm->getStartPos() );
+            if ( !p.isNull() ) {
+                /// get page number by bookmark
+                page = getBookmarkPage( p );
+                /// get bookmark position text
+                if ( page>0 && page==curPage )
+                    return bm;
+            }
+        }
+    }
+    return NULL;
+}
+
+bool LVDocView::removeCurrentPageShortcutBookmark() {
+    return removeBookmark( currentPageIsBookmarked() );
 }
 
 /// saves current page bookmark under numbered shortcut
