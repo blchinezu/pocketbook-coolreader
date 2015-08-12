@@ -473,6 +473,10 @@ public:
 	bool exportBookmarks( lString16 filename );
 	/// saves current page bookmark under numbered shortcut
     CRBookmark * saveCurrentPageShortcutBookmark( int number );
+    /// check if current page is bookmarked
+    CRBookmark * currentPageIsBookmarked();
+    /// remove current page bookmark
+    bool removeCurrentPageShortcutBookmark();
     /// saves current page bookmark under numbered shortcut
     CRBookmark * saveCurrentPageBookmark( lString16 comment );
     /// removes bookmark from list, and deletes it, false if not found

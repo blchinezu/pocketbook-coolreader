@@ -5155,6 +5155,31 @@ CRBookmark * LVDocView::saveCurrentPageShortcutBookmark(int number) {
 	return NULL;
 }
 
+CRBookmark * LVDocView::currentPageIsBookmarked() {
+    CRFileHistRecord * bookmarks = getCurrentFileHistRecord();
+    int curPage = getCurPage();
+    int n = bookmarks->getLastShortcutBookmark()+1;
+    for ( int i=1; i<=n; i++ ) {
+        CRBookmark * bm = bookmarks->getShortcutBookmark(i);
+        int page = 0;
+        if ( bm ) {
+            ldomXPointer p = getDocument()->createXPointer( bm->getStartPos() );
+            if ( !p.isNull() ) {
+                /// get page number by bookmark
+                page = getBookmarkPage( p );
+                /// get bookmark position text
+                if ( page>0 && page==curPage )
+                    return bm;
+            }
+        }
+    }
+    return NULL;
+}
+
+bool LVDocView::removeCurrentPageShortcutBookmark() {
+    return removeBookmark( currentPageIsBookmarked() );
+}
+
 /// saves current page bookmark under numbered shortcut
 CRBookmark * LVDocView::saveCurrentPageBookmark(lString16 comment) {
 	CRFileHistRecord * rec = getCurrentFileHistRecord();

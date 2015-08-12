@@ -394,6 +394,7 @@ static const struct {
     { "@KA_lght", PB_CMD_FRONT_LIGHT, 0},
     { "@KA_clca", PB_CMD_CLEAR_CACHE, 0},
     { "@KA_sbmk", PB_CMD_SET_BOOKMARK, 0},
+    { "@KA_sbmk", PB_CMD_UNSET_BOOKMARK, 0},
     #ifdef POCKETBOOK_PRO
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
@@ -989,6 +990,36 @@ public:
             }
         }
 
+        // LONG
+        else if( evType == CRTOUCH_DOWN_LONG ) {
+            CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_DOWN_LONG");
+
+            // TOP
+            if( max(touchDown.y, y) <= icon_height ) {
+                CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): TOP");
+
+                // Match tapped icon
+                int position = icon_space;
+                for( int i = 0; i < TM_NB_ICONS; i++ ) {
+
+                    // If found icon
+                    if( x >= position && x <= position + icon_width ) {
+                        IconTapped(i, position, CRTOUCH_DOWN_LONG);
+                        return true;
+                    }
+
+                    // Increase position
+                    position += icon_width + icon_space;
+                }
+
+                return true;
+            }
+
+            // If tapped the reading area
+            SelfClose();
+            return true;
+        }
+
         // RELEASE
         else if( evType == CRTOUCH_UP ) {
             CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_UP");
@@ -1003,7 +1034,7 @@ public:
 
                     // If found icon
                     if( x >= position && x <= position + icon_width ) {
-                        IconTapped(i, position);
+                        IconTapped(i, position, CRTOUCH_UP);
                         return true;
                     }
 
@@ -1056,11 +1087,17 @@ public:
         return true;
     }
 
-    virtual void IconTapped(int iconKey, int position) {
+    virtual void IconTapped(int iconKey, int position, CRGUITouchEventType evType) {
         CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(%d, %d)", iconKey, position);
 
         // Image name
-        lString16 path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_tap.png");
+        lString16 path;
+        if( strcmp(touchMenuIcons[iconKey], "bookmarks") == 0 && main_win->getDocView()->currentPageIsBookmarked() ) {
+            path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_alt_tap.png");
+        }
+        else {
+            path = lString16("icon_") + lString16(touchMenuIcons[iconKey]) + lString16("_tap.png");
+        }
         CRLog::trace("CRPocketBookQuickMenuWindow::IconTapped(): [%d] %s", iconKey, UnicodeToUtf8(path).c_str());
 
         // Get image
@@ -1088,14 +1125,41 @@ public:
         SelfClose();
 
         // Execute proper command
-             if( strcmp(touchMenuIcons[iconKey], "home")       == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 1);
-        else if( strcmp(touchMenuIcons[iconKey], "toc")        == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 7);
-        // else if( strcmp(touchMenuIcons[iconKey], "cite")       == 0 ) executeCommand(MCMD_CITES_LIST, 0);
-        else if( strcmp(touchMenuIcons[iconKey], "bookmarks")  == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 3);
-        else if( strcmp(touchMenuIcons[iconKey], "dictionary") == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 6);
-        else if( strcmp(touchMenuIcons[iconKey], "search")     == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 2);
-        else if( strcmp(touchMenuIcons[iconKey], "rotate")     == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 5);
-        else if( strcmp(touchMenuIcons[iconKey], "settings")   == 0 ) executeCommand(PB_QUICK_MENU_SELECT, 8);
+        if( strcmp(touchMenuIcons[iconKey], "home") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 1);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "toc") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 7);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "cite") == 0 ) {
+            executeCommand(MCMD_CITES_LIST, 0);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "bookmarks") == 0 ) {
+            if( evType == CRTOUCH_UP ) {
+                executeCommand(PB_QUICK_MENU_SELECT, 3);
+            }
+            else if( evType == CRTOUCH_DOWN_LONG ) {
+                CRBookmark * bm = main_win->getDocView()->currentPageIsBookmarked();
+                if( bm ) {
+                    executeCommand(PB_CMD_UNSET_BOOKMARK, 0);
+                }
+                else {
+                    executeCommand(PB_CMD_SET_BOOKMARK, 0);
+                }
+            }
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "dictionary") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 6);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "search") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 2);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "rotate") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 5);
+        }
+        else if( strcmp(touchMenuIcons[iconKey], "settings") == 0 ) {
+            executeCommand(PB_QUICK_MENU_SELECT, 8);
+        }
     }
 
     virtual void DrawTop(bool updateScreen) {
@@ -1109,8 +1173,15 @@ public:
         int position = icon_space;
         for( int i = 0; i < TM_NB_ICONS; i++ ) {
 
+
             // Image name
-            lString16 path = lString16("icon_") + lString16(touchMenuIcons[i]) + lString16(".png");
+            lString16 path;
+            if( strcmp(touchMenuIcons[i], "bookmarks") == 0 && main_win->getDocView()->currentPageIsBookmarked() ) {
+                path = lString16("icon_") + lString16(touchMenuIcons[i]) + lString16("_alt.png");
+            }
+            else {
+                path = lString16("icon_") + lString16(touchMenuIcons[i]) + lString16(".png");
+            }
             CRLog::trace("CRPocketBookQuickMenuWindow::DrawTop(): [%d] %s", i, UnicodeToUtf8(path).c_str());
 
             // Get image
@@ -2150,6 +2221,11 @@ public:
         case PB_CMD_SET_BOOKMARK:
             CRLog::trace("PB_CMD_SET_BOOKMARK");
             main_win->getDocView()->saveCurrentPageShortcutBookmark(0);
+            return true;
+
+        case PB_CMD_UNSET_BOOKMARK:
+            CRLog::trace("PB_CMD_UNSET_BOOKMARK");
+            main_win->getDocView()->removeCurrentPageShortcutBookmark();
             return true;
 
         case PB_CMD_CLEAR_CACHE:
