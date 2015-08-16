@@ -93,6 +93,9 @@ enum MainMenuItems_t {
     mm_StatusFontEmbolden,
     mm_Skin,
     mm_TapZoneSize,
+    mm_Standby,
+    mm_StandbyActive,
+    mm_StandbyDelay,
     mm_Last
 };
 

@@ -4750,12 +4750,14 @@ void exitStandByMode() {
 }
 void restartStandByTimer() {
 
-    if( !(QueryTouchpanel() != 0) )
+    CRPropRef props = CRPocketBookDocView::instance->getProps();
+    int delay = props->getIntDef(PROP_DISPLAY_STANDBY, 5);
+
+    if( delay < 1 || !(QueryTouchpanel() != 0) )
         return;
 
     stopStandByTimer();
-    SetHardTimer("enterStandByMode", enterStandByMode, 300000 /* 5 minutes */);
-    // SetWeakTimer("enterStandByMode", enterStandByMode, 10000);
+    SetHardTimer("enterStandByMode", enterStandByMode, delay * 60000);
 }
 void stopStandByTimer() {
     ClearTimer(enterStandByMode);

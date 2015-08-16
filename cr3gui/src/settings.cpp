@@ -1280,6 +1280,31 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("Turbo mode enabled"), "1"},
         {NULL, NULL},
     };
+    item_def_t standby[] = {
+        {_("Off"), "0"},
+        {_("1 minute"), "1"},
+        {_("2 minutes"), "2"},
+        {_("3 minutes"), "3"},
+        {_("4 minutes"), "4"},
+        {_("5 minutes"), "5"},
+        {_("6 minutes"), "6"},
+        {_("7 minutes"), "7"},
+        {_("8 minutes"), "8"},
+        {_("9 minutes"), "9"},
+        {_("10 minutes"), "10"},
+        {_("15 minutes"), "15"},
+        {_("20 minutes"), "20"},
+        {_("25 minutes"), "25"},
+        {_("30 minutes"), "30"},
+        {_("35 minutes"), "35"},
+        {_("40 minutes"), "40"},
+        {_("45 minutes"), "45"},
+        {_("50 minutes"), "50"},
+        {_("55 minutes"), "55"},
+        {_("1 hour"), "60"},
+        {_("2 hours"), "120"},
+        {NULL, NULL},
+    };
 #ifdef CR_POCKETBOOK
     item_def_t rotate_mode_options[] = {
         {"360°", "0"},
@@ -1673,6 +1698,16 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            "cr3_option_display_update_mode", valueFont, PROP_DISPLAY_FULL_UPDATE_INTERVAL,
                            screen_update_options);
 #endif
+
+
+    //====== Display Settings > Standby Settings ========
+    if( (QueryTouchpanel() != 0) ) {
+        createSettingsMenuItem(displaySettingsMenu, mm_StandbyDelay, _("Standby"),
+                               "cr3_option_display_standby", valueFont, PROP_DISPLAY_STANDBY, standby);
+    }
+    //====== Display Settings > Standby Settings ========
+
+
     if ( _wm->getScreen()->getTurboUpdateSupported() ) {
         createSettingsMenuItem(displaySettingsMenu, mm_TurboUpdateMode, _("Turbo update mode"),
                                "cr3_option_display_turbo", valueFont, PROP_DISPLAY_TURBO_UPDATE_MODE,

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: translate-apps-to-hebrew\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-16 14:20+0300\n"
+"POT-Creation-Date: 2015-08-16 17:57+0300\n"
 "PO-Revision-Date: 2014-04-30 06:01-0400\n"
 "Last-Translator: arthurzam <arthurzam@gmail.com>\n"
 "Language-Team: Hebrew\n"
@@ -77,7 +77,7 @@ msgstr "פתח ספר אחרון"
 msgid "Dictionary"
 msgstr "מילון"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1425
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1450
 msgid "Cite"
 msgstr "ציטוט"
 
@@ -690,7 +690,7 @@ msgstr "הקישור הבא"
 msgid "First line indent"
 msgstr "החוליה הראשונה"
 
-#: ../src/settings.cpp:1009 ../src/settings.cpp:1588
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1613
 #, fuzzy
 msgid "Font face"
 msgstr "משקל גופן"
@@ -700,7 +700,7 @@ msgstr "משקל גופן"
 msgid "Font size"
 msgstr "הגדרות גודל גופן"
 
-#: ../src/settings.cpp:1025 ../src/settings.cpp:1482 ../src/settings.cpp:1597
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1507 ../src/settings.cpp:1622
 msgid "Font weight"
 msgstr "משקל גופן"
 
@@ -708,7 +708,7 @@ msgstr "משקל גופן"
 msgid "Font style"
 msgstr ""
 
-#: ../src/settings.cpp:1029 ../src/settings.cpp:1511
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1536
 msgid "Interline space"
 msgstr ""
 
@@ -758,6 +758,7 @@ msgid "On for big fonts only"
 msgstr "מופעל על כל הגופנים הגדולים"
 
 #: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
+#: ../src/settings.cpp:1284
 msgid "Off"
 msgstr "כבוי"
 
@@ -966,418 +967,507 @@ msgstr "מצע טורבו מושבת"
 msgid "Turbo mode enabled"
 msgstr "מצב טורבו מופעל"
 
+#: ../src/settings.cpp:1285
+msgid "1 minute"
+msgstr ""
+
+#: ../src/settings.cpp:1286
+msgid "2 minutes"
+msgstr ""
+
 #: ../src/settings.cpp:1287
-msgid "180+slow next page"
-msgstr "180+לאט עמוד הבא"
+msgid "3 minutes"
+msgstr ""
 
 #: ../src/settings.cpp:1288
-msgid "180+slow prev/next page"
-msgstr "180+הצג עמוד הקודם/הבא"
+msgid "4 minutes"
+msgstr ""
 
 #: ../src/settings.cpp:1289
-msgid "180+FAST next page"
-msgstr "180+עמוד הבא מהר"
+msgid "5 minutes"
+msgstr ""
 
 #: ../src/settings.cpp:1290
-msgid "180+FAST prev/next page"
-msgstr "180+דף הקודם/הבא מהר"
+msgid "6 minutes"
+msgstr ""
 
 #: ../src/settings.cpp:1291
-msgid "180+FAST next/prev page"
-msgstr "180+דף הבא/הקודם מהר"
-
-#: ../src/settings.cpp:1309
-msgid "2 BPP"
+msgid "7 minutes"
 msgstr ""
 
-#: ../src/settings.cpp:1310
-msgid "3 BPP"
+#: ../src/settings.cpp:1292
+msgid "8 minutes"
 msgstr ""
 
-#: ../src/settings.cpp:1311
-msgid "4 BPP"
+#: ../src/settings.cpp:1293
+msgid "9 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1294
+msgid "10 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1295
+msgid "15 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1296
+msgid "20 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1297
+msgid "25 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1298
+msgid "30 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1299
+msgid "35 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1300
+msgid "40 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1301
+msgid "45 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1302
+msgid "50 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1303
+msgid "55 minutes"
+msgstr ""
+
+#: ../src/settings.cpp:1304
+msgid "1 hour"
+msgstr ""
+
+#: ../src/settings.cpp:1305
+msgid "2 hours"
 msgstr ""
 
 #: ../src/settings.cpp:1312
+msgid "180+slow next page"
+msgstr "180+לאט עמוד הבא"
+
+#: ../src/settings.cpp:1313
+msgid "180+slow prev/next page"
+msgstr "180+הצג עמוד הקודם/הבא"
+
+#: ../src/settings.cpp:1314
+msgid "180+FAST next page"
+msgstr "180+עמוד הבא מהר"
+
+#: ../src/settings.cpp:1315
+msgid "180+FAST prev/next page"
+msgstr "180+דף הקודם/הבא מהר"
+
+#: ../src/settings.cpp:1316
+msgid "180+FAST next/prev page"
+msgstr "180+דף הבא/הקודם מהר"
+
+#: ../src/settings.cpp:1334
+msgid "2 BPP"
+msgstr ""
+
+#: ../src/settings.cpp:1335
+msgid "3 BPP"
+msgstr ""
+
+#: ../src/settings.cpp:1336
+msgid "4 BPP"
+msgstr ""
+
+#: ../src/settings.cpp:1337
 msgid "8 BPP"
 msgstr ""
 
-#: ../src/settings.cpp:1318
+#: ../src/settings.cpp:1343
 msgid "Disabled (1:1)"
 msgstr "מושבת (1:1)"
 
-#: ../src/settings.cpp:1319
+#: ../src/settings.cpp:1344
 msgid "Integer scale"
 msgstr "סולם בשלמים"
 
-#: ../src/settings.cpp:1320
+#: ../src/settings.cpp:1345
 msgid "Arbitrary scale"
 msgstr "סולם שרירותי"
 
-#: ../src/settings.cpp:1325
+#: ../src/settings.cpp:1350
 msgid "Auto"
 msgstr "אוטומטי"
 
-#: ../src/settings.cpp:1326
+#: ../src/settings.cpp:1351
 msgid "*1"
 msgstr ""
 
-#: ../src/settings.cpp:1327
+#: ../src/settings.cpp:1352
 msgid "*2"
 msgstr ""
 
-#: ../src/settings.cpp:1328
+#: ../src/settings.cpp:1353
 msgid "*3"
 msgstr ""
 
-#: ../src/settings.cpp:1412
+#: ../src/settings.cpp:1437
 msgid "No hinting"
 msgstr ""
 
-#: ../src/settings.cpp:1413
+#: ../src/settings.cpp:1438
 msgid "Use bytecode"
 msgstr "השתמש ב-bytecode"
 
-#: ../src/settings.cpp:1414
+#: ../src/settings.cpp:1439
 msgid "Autohinting"
 msgstr ""
 
-#: ../src/settings.cpp:1415
+#: ../src/settings.cpp:1440
 #, fuzzy
 msgid "Light"
 msgstr "ימינה"
 
-#: ../src/settings.cpp:1420
+#: ../src/settings.cpp:1445
 #, fuzzy
 msgid "Default paragraph formatting"
 msgstr "בטל בחירת פסקה"
 
-#: ../src/settings.cpp:1421
+#: ../src/settings.cpp:1446
 #, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "כותרת"
 
-#: ../src/settings.cpp:1422
+#: ../src/settings.cpp:1447
 #, fuzzy
 msgid "Subtitle"
 msgstr "כותרת"
 
-#: ../src/settings.cpp:1423
+#: ../src/settings.cpp:1448
 #, fuzzy
 msgid "Preformatted text / code"
 msgstr "טקסט מעוצב מראש"
 
-#: ../src/settings.cpp:1424
+#: ../src/settings.cpp:1449
 msgid "Link"
 msgstr ""
 
-#: ../src/settings.cpp:1426
+#: ../src/settings.cpp:1451
 msgid "Epigraph"
 msgstr ""
 
-#: ../src/settings.cpp:1427
+#: ../src/settings.cpp:1452
 msgid "Poem"
 msgstr ""
 
-#: ../src/settings.cpp:1428
+#: ../src/settings.cpp:1453
 msgid "Text / Cite / Epigraph author"
 msgstr ""
 
-#: ../src/settings.cpp:1429
+#: ../src/settings.cpp:1454
 msgid "Footnote"
 msgstr ""
 
-#: ../src/settings.cpp:1430
+#: ../src/settings.cpp:1455
 #, fuzzy
 msgid "Footnote link"
 msgstr "לך לקישור"
 
-#: ../src/settings.cpp:1431
+#: ../src/settings.cpp:1456
 msgid "Footnote title"
 msgstr ""
 
-#: ../src/settings.cpp:1432
+#: ../src/settings.cpp:1457
 #, fuzzy
 msgid "Annotation"
 msgstr "אזכורים"
 
-#: ../src/settings.cpp:1472
+#: ../src/settings.cpp:1497
 msgid "Default font face"
 msgstr ""
 
-#: ../src/settings.cpp:1477
+#: ../src/settings.cpp:1502
 #, fuzzy
 msgid "Font settings"
 msgstr "הגדרות גודל גופן"
 
-#: ../src/settings.cpp:1484
+#: ../src/settings.cpp:1509
 msgid "Font antialiasing"
 msgstr ""
 
-#: ../src/settings.cpp:1487
+#: ../src/settings.cpp:1512
 msgid "Font hinting"
 msgstr ""
 
-#: ../src/settings.cpp:1489
+#: ../src/settings.cpp:1514
 msgid "Font kerning"
 msgstr ""
 
-#: ../src/settings.cpp:1491
+#: ../src/settings.cpp:1516
 #, fuzzy
 msgid "Font embolding"
 msgstr "משקל גופן"
 
-#: ../src/settings.cpp:1493
+#: ../src/settings.cpp:1518
 msgid "Tracking"
 msgstr ""
 
-#: ../src/settings.cpp:1495
+#: ../src/settings.cpp:1520
 msgid "Font Gamma"
 msgstr ""
 
-#: ../src/settings.cpp:1497
+#: ../src/settings.cpp:1522
 msgid "Document embedded fonts"
 msgstr ""
 
-#: ../src/settings.cpp:1500
+#: ../src/settings.cpp:1525
 msgid "Fallback font face"
 msgstr ""
 
-#: ../src/settings.cpp:1506
+#: ../src/settings.cpp:1531
 #, fuzzy
 msgid "Formatting settings"
 msgstr "הגדרות גודל גופן"
 
-#: ../src/settings.cpp:1518
+#: ../src/settings.cpp:1543
 msgid "[No Hyphenation]"
 msgstr ""
 
-#: ../src/settings.cpp:1519
+#: ../src/settings.cpp:1544
 msgid "[Algorythmic Hyphenation]"
 msgstr ""
 
-#: ../src/settings.cpp:1521
+#: ../src/settings.cpp:1546
 msgid "Hyphenation"
 msgstr ""
 
-#: ../src/settings.cpp:1535
+#: ../src/settings.cpp:1560
 msgid "Preformatted text"
 msgstr "טקסט מעוצב מראש"
 
-#: ../src/settings.cpp:1538
+#: ../src/settings.cpp:1563
 #, fuzzy
 msgid "Space condensing percent"
 msgstr "הזן מיקום באחוזים"
 
-#: ../src/settings.cpp:1541
+#: ../src/settings.cpp:1566
 msgid "Space expanding percent"
 msgstr ""
 
-#: ../src/settings.cpp:1544
+#: ../src/settings.cpp:1569
 msgid "Floating punctuation"
 msgstr ""
 
-#: ../src/settings.cpp:1550
+#: ../src/settings.cpp:1575
 msgid "Image scaling"
 msgstr "שינוי גודל תמונה"
 
-#: ../src/settings.cpp:1555
+#: ../src/settings.cpp:1580
 msgid "Block image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1558
+#: ../src/settings.cpp:1583
 msgid "Block image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1561
+#: ../src/settings.cpp:1586
 msgid "Inline image scaling mode"
 msgstr ""
 
-#: ../src/settings.cpp:1564
+#: ../src/settings.cpp:1589
 msgid "Inline image max zoom"
 msgstr ""
 
-#: ../src/settings.cpp:1573
+#: ../src/settings.cpp:1598
 #, fuzzy
 msgid "Page settings"
 msgstr "כיוון העמוד"
 
-#: ../src/settings.cpp:1578
+#: ../src/settings.cpp:1603
 msgid "Status line"
 msgstr "שורת מצב"
 
-#: ../src/settings.cpp:1583
+#: ../src/settings.cpp:1608
 #, fuzzy
 msgid "Status line settings"
 msgstr "שורת מצב"
 
-#: ../src/settings.cpp:1600
+#: ../src/settings.cpp:1625
 #, fuzzy
 msgid "Time format"
 msgstr "מבנה הקובץ"
 
-#: ../src/settings.cpp:1602
+#: ../src/settings.cpp:1627
 msgid "Show time"
 msgstr "הצג זמן"
 
-#: ../src/settings.cpp:1604
+#: ../src/settings.cpp:1629
 #, fuzzy
 msgid "Show title"
 msgstr "הצג זמן"
 
-#: ../src/settings.cpp:1606
+#: ../src/settings.cpp:1631
 #, fuzzy
 msgid "Show battery"
 msgstr "הצג זמן"
 
-#: ../src/settings.cpp:1608
+#: ../src/settings.cpp:1633
 #, fuzzy
 msgid "Show battery percent"
 msgstr "לך לאחוז..."
 
-#: ../src/settings.cpp:1611
+#: ../src/settings.cpp:1636
 #, fuzzy
 msgid "Show position percent"
 msgstr "הזן מיקום באחוזים"
 
-#: ../src/settings.cpp:1613
+#: ../src/settings.cpp:1638
 msgid "Show page count"
 msgstr ""
 
-#: ../src/settings.cpp:1615
+#: ../src/settings.cpp:1640
 msgid "Show page count till chapter end"
 msgstr ""
 
-#: ../src/settings.cpp:1618
+#: ../src/settings.cpp:1643
 #, fuzzy
 msgid "Show page number"
 msgstr "הזן מספר עמוד"
 
-#: ../src/settings.cpp:1620
+#: ../src/settings.cpp:1645
 msgid "Show chapter marks"
 msgstr ""
 
-#: ../src/settings.cpp:1629
+#: ../src/settings.cpp:1654
 msgid "Page margins"
 msgstr "שולי העמוד"
 
-#: ../src/settings.cpp:1634
+#: ../src/settings.cpp:1659
 msgid "Top margin"
 msgstr "שוליים עליונים"
 
-#: ../src/settings.cpp:1636
+#: ../src/settings.cpp:1661
 msgid "Bottom margin"
 msgstr "שוליים תחתונים"
 
-#: ../src/settings.cpp:1638
+#: ../src/settings.cpp:1663
 msgid "Left margin"
 msgstr "שוליים שמאליים"
 
-#: ../src/settings.cpp:1640
+#: ../src/settings.cpp:1665
 msgid "Right margin"
 msgstr "שוליים ימניים"
 
-#: ../src/settings.cpp:1645
+#: ../src/settings.cpp:1670
 msgid "Footnotes at page bottom"
 msgstr ""
 
-#: ../src/settings.cpp:1651
+#: ../src/settings.cpp:1676
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1660
+#: ../src/settings.cpp:1685
 msgid "Landscape pages"
 msgstr "עמודים שוכבים"
 
-#: ../src/settings.cpp:1662
+#: ../src/settings.cpp:1687
 msgid "Inverse display"
 msgstr "תצוגה הפוכה"
 
-#: ../src/settings.cpp:1665
+#: ../src/settings.cpp:1690
 msgid "Show bookmark icons"
 msgstr "הצג סמלי סימניות"
 
-#: ../src/settings.cpp:1668
+#: ../src/settings.cpp:1693
 msgid "Highlight bookmarks"
 msgstr "סמן סימניות"
 
-#: ../src/settings.cpp:1672
+#: ../src/settings.cpp:1697
 msgid "Display update mode"
 msgstr "הצג מצב עדכון"
 
-#: ../src/settings.cpp:1677
+#: ../src/settings.cpp:1705
+#, fuzzy
+msgid "Standby"
+msgstr "העדפות"
+
+#: ../src/settings.cpp:1712
 msgid "Turbo update mode"
 msgstr "מצב עדכון טורבו"
 
-#: ../src/settings.cpp:1682
+#: ../src/settings.cpp:1717
 msgid "Gray buffer depth(need restart)"
 msgstr ""
 
-#: ../src/settings.cpp:1689
+#: ../src/settings.cpp:1724
 msgid "Skin"
 msgstr ""
 
-#: ../src/settings.cpp:1705
+#: ../src/settings.cpp:1740
 #, fuzzy
 msgid "Control settings"
 msgstr "הגדרות גודל גופן"
 
-#: ../src/settings.cpp:1712
+#: ../src/settings.cpp:1747
 msgid "Rotate"
 msgstr "לסובב"
 
-#: ../src/settings.cpp:1715
+#: ../src/settings.cpp:1750
 msgid "Page turn angle"
 msgstr ""
 
-#: ../src/settings.cpp:1731
+#: ../src/settings.cpp:1766
 msgid "Tap action"
 msgstr ""
 
-#: ../src/settings.cpp:1733
+#: ../src/settings.cpp:1768
 #, fuzzy
 msgid "Long tap action"
 msgstr "ללכת לציטוט"
 
-#: ../src/settings.cpp:1737
+#: ../src/settings.cpp:1772
 msgid "Height of the upper tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1740
+#: ../src/settings.cpp:1775
 msgid "Height of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1743
+#: ../src/settings.cpp:1778
 msgid "Width of the left tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1746
+#: ../src/settings.cpp:1781
 msgid "Width of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1765
+#: ../src/settings.cpp:1800
 #, fuzzy
 msgid "Style settings"
 msgstr "העדפות"
 
-#: ../src/settings.cpp:1770
+#: ../src/settings.cpp:1805
 msgid "Document embedded styles"
 msgstr ""
 
-#: ../src/settings.cpp:1789 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1824 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1797 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1832 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1804 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1839 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr ""
 
-#: ../src/settings.cpp:1827
+#: ../src/settings.cpp:1862
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1833,11 +1923,11 @@ msgstr ""
 msgid "Press $1 to translate"
 msgstr "לחץ $1 כדי לתרגם"
 
-#: ../src/cr3pocketbook.cpp:4814
+#: ../src/cr3pocketbook.cpp:4816
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4924
+#: ../src/cr3pocketbook.cpp:4926
 #, fuzzy
 msgid "Untitled"
 msgstr "כותרת"
