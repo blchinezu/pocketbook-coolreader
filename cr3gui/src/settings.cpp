@@ -1702,7 +1702,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
 
     //====== Display Settings > Standby Settings ========
     if( (QueryTouchpanel() != 0) ) {
-        createSettingsMenuItem(displaySettingsMenu, mm_StandbyDelay, _("Standby"),
+        createSettingsMenuItem(displaySettingsMenu, mm_Standby, _("Standby"),
                                "cr3_option_display_standby", valueFont, PROP_DISPLAY_STANDBY, standby);
     }
     //====== Display Settings > Standby Settings ========
