@@ -40,6 +40,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 **Settings**
 
  - Formatting settings > Space expanding percent [xl743]
+ - Display settings > Standby
  - Font settings > Font embolding [xl743]
  - Font settings > Tracking [xl743]
  - Style settings > * > Letter spacing [xl743]
