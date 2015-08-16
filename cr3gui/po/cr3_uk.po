@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-12 17:49+0300\n"
+"POT-Creation-Date: 2015-08-16 14:20+0300\n"
 "PO-Revision-Date: 2011-06-17 02:51+0200\n"
 "Last-Translator: Vitalii Stopchans'kyi <stopchanПЕСgmail.com>\n"
 "Language-Team: Ukrainian\n"
@@ -77,7 +77,7 @@ msgstr "Відкрити останню книгу"
 msgid "Dictionary"
 msgstr "Словник"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1423
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1425
 msgid "Cite"
 msgstr "Цитата"
 
@@ -89,11 +89,11 @@ msgstr "Закладки"
 msgid "Search"
 msgstr "Пошук"
 
-#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1061
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1063
 msgid "Settings"
 msgstr "Налаштування"
 
-#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:671
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:672
 msgid "Keyboard layout"
 msgstr "Функції клавіш"
 
@@ -426,965 +426,965 @@ msgstr "Знайти у словнику "
 msgid "[cannot read article]"
 msgstr "[неможливо відкрити файл]"
 
-#: ../src/settings.cpp:202
+#: ../src/settings.cpp:204
 msgid "choose command"
 msgstr "оберіть команду"
 
-#: ../src/settings.cpp:220
+#: ../src/settings.cpp:222
 msgid "Controls"
 msgstr "Керування"
 
-#: ../src/settings.cpp:386
+#: ../src/settings.cpp:388
 msgid "(No action)"
 msgstr ""
 
-#: ../src/settings.cpp:539
+#: ../src/settings.cpp:541
 msgid "[Command is not assigned]"
 msgstr "[Команда не призначена]"
 
-#: ../src/settings.cpp:560
+#: ../src/settings.cpp:562
 msgid "0` (Portrait)"
 msgstr "Книжкова (0°)"
 
-#: ../src/settings.cpp:561
+#: ../src/settings.cpp:563
 msgid "90 `"
 msgstr "Альбомна (90°)"
 
-#: ../src/settings.cpp:562
+#: ../src/settings.cpp:564
 msgid "180 `"
 msgstr "Книжкова перевернута (180°)"
 
-#: ../src/settings.cpp:563
+#: ../src/settings.cpp:565
 msgid "270 `"
 msgstr "Альбомна перевернута (270°)"
 
-#: ../src/settings.cpp:574
+#: ../src/settings.cpp:576
 msgid "Page orientation"
 msgstr "Орієнтація сторінки"
 
-#: ../src/settings.cpp:595
+#: ../src/settings.cpp:597
 msgid "Default font size"
 msgstr "Розмір шрифту (в пікселях)"
 
-#: ../src/settings.cpp:650
+#: ../src/settings.cpp:652
 msgid "The quick brown fox jumps over lazy dog"
 msgstr "У ґаздині є їжак"
 
-#: ../src/settings.cpp:830
-msgid "Justify"
-msgstr ""
-
-#: ../src/settings.cpp:831
-#, fuzzy
-msgctxt "CSS"
-msgid "Left"
-msgstr "Ліворуч"
-
 #: ../src/settings.cpp:832
-msgid "Center"
+msgid "Justify"
 msgstr ""
 
 #: ../src/settings.cpp:833
 #, fuzzy
 msgctxt "CSS"
+msgid "Left"
+msgstr "Ліворуч"
+
+#: ../src/settings.cpp:834
+msgid "Center"
+msgstr ""
+
+#: ../src/settings.cpp:835
+#, fuzzy
+msgctxt "CSS"
 msgid "Right"
 msgstr "Праворуч"
 
-#: ../src/settings.cpp:839
+#: ../src/settings.cpp:841
 msgid "No indent"
 msgstr ""
 
-#: ../src/settings.cpp:840
+#: ../src/settings.cpp:842
 msgid "Small indent"
 msgstr ""
 
-#: ../src/settings.cpp:841
+#: ../src/settings.cpp:843
 msgid "Big indent"
 msgstr ""
 
-#: ../src/settings.cpp:842
+#: ../src/settings.cpp:844
 msgid "Small outdent"
 msgstr ""
 
-#: ../src/settings.cpp:843
+#: ../src/settings.cpp:845
 msgid "Big outdent"
 msgstr ""
 
-#: ../src/settings.cpp:849
+#: ../src/settings.cpp:851
 msgid "[Default sans-serif font]"
 msgstr ""
 
-#: ../src/settings.cpp:850
+#: ../src/settings.cpp:852
 #, fuzzy
 msgid "[Default serif font]"
 msgstr "Розмір шрифту (в пікселях)"
 
-#: ../src/settings.cpp:851
+#: ../src/settings.cpp:853
 #, fuzzy
 msgid "[Default monospace font]"
 msgstr "Шрифт за замовчуванням"
 
-#: ../src/settings.cpp:857
+#: ../src/settings.cpp:859
 msgid "Bigger (105%)"
 msgstr ""
 
-#: ../src/settings.cpp:858
+#: ../src/settings.cpp:860
 msgid "Bigger (110%)"
 msgstr ""
 
-#: ../src/settings.cpp:859
+#: ../src/settings.cpp:861
 msgid "Bigger (115%)"
 msgstr ""
 
-#: ../src/settings.cpp:860
+#: ../src/settings.cpp:862
 msgid "Bigger (120%)"
 msgstr ""
 
-#: ../src/settings.cpp:861
+#: ../src/settings.cpp:863
 msgid "Bigger (150%)"
 msgstr ""
 
-#: ../src/settings.cpp:862
+#: ../src/settings.cpp:864
 msgid "Smaller (95%)"
 msgstr ""
 
-#: ../src/settings.cpp:863
+#: ../src/settings.cpp:865
 msgid "Smaller (90%)"
 msgstr ""
 
-#: ../src/settings.cpp:864
+#: ../src/settings.cpp:866
 msgid "Smaller (85%)"
 msgstr ""
 
-#: ../src/settings.cpp:865
+#: ../src/settings.cpp:867
 msgid "Smaller (80%)"
 msgstr ""
 
-#: ../src/settings.cpp:866
+#: ../src/settings.cpp:868
 msgid "Smaller (70%)"
 msgstr ""
 
-#: ../src/settings.cpp:867
+#: ../src/settings.cpp:869
 msgid "Smaller (60%)"
 msgstr ""
 
-#: ../src/settings.cpp:873 ../src/settings.cpp:882 ../src/settings.cpp:1165
-#: ../src/settings.cpp:1171
+#: ../src/settings.cpp:875 ../src/settings.cpp:884 ../src/settings.cpp:1167
+#: ../src/settings.cpp:1173
 msgid "Normal"
 msgstr "Звичайний"
 
-#: ../src/settings.cpp:874 ../src/settings.cpp:1172
+#: ../src/settings.cpp:876 ../src/settings.cpp:1174
 msgid "Bold"
 msgstr "Жирний"
 
-#: ../src/settings.cpp:875
+#: ../src/settings.cpp:877
 #, fuzzy
 msgid "Bolder"
 msgstr "Жирний"
 
-#: ../src/settings.cpp:876
+#: ../src/settings.cpp:878
 #, fuzzy
 msgid "Lighter"
 msgstr "Праворуч"
 
-#: ../src/settings.cpp:883
+#: ../src/settings.cpp:885
 msgid "Italic"
 msgstr ""
 
-#: ../src/settings.cpp:918 ../src/settings.cpp:1092
+#: ../src/settings.cpp:920 ../src/settings.cpp:1094
 msgid "None"
 msgstr ""
 
-#: ../src/settings.cpp:919 ../src/settings.cpp:1094
+#: ../src/settings.cpp:921 ../src/settings.cpp:1096
 msgid "Underline"
 msgstr ""
 
-#: ../src/settings.cpp:920
+#: ../src/settings.cpp:922
 msgid "Line through"
 msgstr ""
 
-#: ../src/settings.cpp:921
+#: ../src/settings.cpp:923
 msgid "Overline"
 msgstr ""
 
-#: ../src/settings.cpp:927
+#: ../src/settings.cpp:929
 #, fuzzy
 msgid "Baseline"
 msgstr "Колонтитул"
 
-#: ../src/settings.cpp:928
+#: ../src/settings.cpp:930
 msgid "Subscript"
 msgstr ""
 
-#: ../src/settings.cpp:929
+#: ../src/settings.cpp:931
 msgid "Superscript"
 msgstr ""
 
-#: ../src/settings.cpp:935 ../src/settings.cpp:943
+#: ../src/settings.cpp:937 ../src/settings.cpp:945
 msgid "Black"
 msgstr ""
 
-#: ../src/settings.cpp:936 ../src/settings.cpp:944
+#: ../src/settings.cpp:938 ../src/settings.cpp:946
 msgid "Gray"
 msgstr ""
 
-#: ../src/settings.cpp:937 ../src/settings.cpp:945
+#: ../src/settings.cpp:939 ../src/settings.cpp:947
 msgid "White"
 msgstr ""
 
-#: ../src/settings.cpp:952 ../src/settings.cpp:963
+#: ../src/settings.cpp:954 ../src/settings.cpp:965
 msgid "0.2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:953 ../src/settings.cpp:964
+#: ../src/settings.cpp:955 ../src/settings.cpp:966
 msgid "0.3 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:954 ../src/settings.cpp:965 ../src/settings.cpp:974
-#: ../src/settings.cpp:990
+#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
+#: ../src/settings.cpp:992
 msgid "0.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:955 ../src/settings.cpp:966 ../src/settings.cpp:975
-#: ../src/settings.cpp:991
+#: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
+#: ../src/settings.cpp:993
 msgid "1 line height"
 msgstr ""
 
-#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:977
-#: ../src/settings.cpp:993
+#: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
+#: ../src/settings.cpp:995
 msgid "2 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:976 ../src/settings.cpp:992
+#: ../src/settings.cpp:978 ../src/settings.cpp:994
 msgid "1.5 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:978 ../src/settings.cpp:994
+#: ../src/settings.cpp:980 ../src/settings.cpp:996
 msgid "4 of line height"
 msgstr ""
 
-#: ../src/settings.cpp:979 ../src/settings.cpp:995
+#: ../src/settings.cpp:981 ../src/settings.cpp:997
 msgid "5% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:980 ../src/settings.cpp:996
+#: ../src/settings.cpp:982 ../src/settings.cpp:998
 msgid "10% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:981 ../src/settings.cpp:997
+#: ../src/settings.cpp:983 ../src/settings.cpp:999
 msgid "15% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:982 ../src/settings.cpp:998
+#: ../src/settings.cpp:984 ../src/settings.cpp:1000
 msgid "20% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:983 ../src/settings.cpp:999
+#: ../src/settings.cpp:985 ../src/settings.cpp:1001
 msgid "30% of line width"
 msgstr ""
 
-#: ../src/settings.cpp:1002
+#: ../src/settings.cpp:1004
 #, fuzzy
 msgid "Text alignment"
 msgstr "Наступне посилання"
 
-#: ../src/settings.cpp:1004
+#: ../src/settings.cpp:1006
 #, fuzzy
 msgid "First line indent"
 msgstr "Перше посилання"
 
-#: ../src/settings.cpp:1007 ../src/settings.cpp:1586
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1588
 #, fuzzy
 msgid "Font face"
 msgstr "Резервний шрифт"
 
-#: ../src/settings.cpp:1021
+#: ../src/settings.cpp:1023
 #, fuzzy
 msgid "Font size"
 msgstr "Налаштування розмір шрифту"
 
-#: ../src/settings.cpp:1023 ../src/settings.cpp:1480 ../src/settings.cpp:1595
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1482 ../src/settings.cpp:1597
 msgid "Font weight"
 msgstr "Насиченість шрифту"
 
-#: ../src/settings.cpp:1025
+#: ../src/settings.cpp:1027
 #, fuzzy
 msgid "Font style"
 msgstr "Налаштування розмір шрифту"
 
-#: ../src/settings.cpp:1027 ../src/settings.cpp:1509
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1511
 msgid "Interline space"
 msgstr "Міжрядковий інтервал"
 
-#: ../src/settings.cpp:1029
+#: ../src/settings.cpp:1031
 msgid "Letter spacing"
 msgstr ""
 
-#: ../src/settings.cpp:1031
+#: ../src/settings.cpp:1033
 #, fuzzy
 msgid "Text decoration"
 msgstr "Видалити цитату"
 
-#: ../src/settings.cpp:1033
+#: ../src/settings.cpp:1035
 #, fuzzy
 msgid "Text vertical alignment"
 msgstr "Наступне посилання"
 
-#: ../src/settings.cpp:1035
+#: ../src/settings.cpp:1037
 msgid "Text color"
 msgstr ""
 
-#: ../src/settings.cpp:1037
+#: ../src/settings.cpp:1039
 msgid "Background color"
 msgstr ""
 
-#: ../src/settings.cpp:1039
+#: ../src/settings.cpp:1041
 msgid "Margin before"
 msgstr ""
 
-#: ../src/settings.cpp:1041
+#: ../src/settings.cpp:1043
 msgid "Margin after"
 msgstr ""
 
-#: ../src/settings.cpp:1043
+#: ../src/settings.cpp:1045
 msgid "Margin left"
 msgstr ""
 
-#: ../src/settings.cpp:1045
+#: ../src/settings.cpp:1047
 msgid "Margin right"
 msgstr ""
 
-#: ../src/settings.cpp:1073
+#: ../src/settings.cpp:1075
 msgid "On for all fonts"
 msgstr "Для усіх шрифтів"
 
-#: ../src/settings.cpp:1074
+#: ../src/settings.cpp:1076
 msgid "On for big fonts only"
 msgstr "Лише для великих шрифтів"
 
-#: ../src/settings.cpp:1075 ../src/settings.cpp:1081 ../src/settings.cpp:1185
+#: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
 msgid "Off"
 msgstr "Вимк."
 
-#: ../src/settings.cpp:1080
+#: ../src/settings.cpp:1082
 msgid "On"
 msgstr "Увімк."
 
-#: ../src/settings.cpp:1086
+#: ../src/settings.cpp:1088
 msgid "AM/PM"
 msgstr ""
 
-#: ../src/settings.cpp:1087
+#: ../src/settings.cpp:1089
 msgid "24h"
 msgstr ""
 
-#: ../src/settings.cpp:1093
+#: ../src/settings.cpp:1095
 msgid "Solid"
 msgstr ""
 
-#: ../src/settings.cpp:1166
+#: ../src/settings.cpp:1168
 msgid "Inverse"
 msgstr "Інвертоване"
 
-#: ../src/settings.cpp:1177
+#: ../src/settings.cpp:1179
 msgid "One"
 msgstr "Одна"
 
-#: ../src/settings.cpp:1178
+#: ../src/settings.cpp:1180
 msgid "Two"
 msgstr "Дві"
 
-#: ../src/settings.cpp:1183
+#: ../src/settings.cpp:1185
 msgid "Top"
 msgstr "Вгорі"
 
-#: ../src/settings.cpp:1190
+#: ../src/settings.cpp:1192
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1191
+#: ../src/settings.cpp:1193
 msgid "75%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1192
+#: ../src/settings.cpp:1194
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1193
+#: ../src/settings.cpp:1195
 msgid "85%"
 msgstr "85%"
 
-#: ../src/settings.cpp:1194
+#: ../src/settings.cpp:1196
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1195
+#: ../src/settings.cpp:1197
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1196
+#: ../src/settings.cpp:1198
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1197
+#: ../src/settings.cpp:1199
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1198
+#: ../src/settings.cpp:1200
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1199
+#: ../src/settings.cpp:1201
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1200
+#: ../src/settings.cpp:1202
 msgid "120%"
 msgstr "120%"
 
-#: ../src/settings.cpp:1201
+#: ../src/settings.cpp:1203
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1202
+#: ../src/settings.cpp:1204
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1203
+#: ../src/settings.cpp:1205
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1204
+#: ../src/settings.cpp:1206
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1205
+#: ../src/settings.cpp:1207
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1206
+#: ../src/settings.cpp:1208
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1207
+#: ../src/settings.cpp:1209
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1208
+#: ../src/settings.cpp:1210
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1209
+#: ../src/settings.cpp:1211
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1254
+#: ../src/settings.cpp:1256
 msgid "Always use fast updates"
 msgstr "Ніколи"
 
-#: ../src/settings.cpp:1255
+#: ../src/settings.cpp:1257
 msgid "Don't use fast updates"
 msgstr "Завжди"
 
-#: ../src/settings.cpp:1256
+#: ../src/settings.cpp:1258
 msgid "Full updates every 2 pages"
 msgstr "кожні 2 сторінки"
 
-#: ../src/settings.cpp:1257
+#: ../src/settings.cpp:1259
 msgid "Full updates every 3 pages"
 msgstr "кожні 3 сторінки"
 
-#: ../src/settings.cpp:1258
+#: ../src/settings.cpp:1260
 msgid "Full updates every 4 pages"
 msgstr "кожні 4 сторінки"
 
-#: ../src/settings.cpp:1259
+#: ../src/settings.cpp:1261
 msgid "Full updates every 5 pages"
 msgstr "кожні 5 сторінок"
 
-#: ../src/settings.cpp:1260
+#: ../src/settings.cpp:1262
 msgid "Full updates every 6 pages"
 msgstr "кожні 6 сторінок"
 
-#: ../src/settings.cpp:1261
+#: ../src/settings.cpp:1263
 #, fuzzy
 msgid "Full updates every 7 pages"
 msgstr "кожні 2 сторінки"
 
-#: ../src/settings.cpp:1262
+#: ../src/settings.cpp:1264
 msgid "Full updates every 8 pages"
 msgstr "кожні 8 сторінок"
 
-#: ../src/settings.cpp:1263
+#: ../src/settings.cpp:1265
 #, fuzzy
 msgid "Full updates every 9 pages"
 msgstr "кожні 2 сторінки"
 
-#: ../src/settings.cpp:1264
+#: ../src/settings.cpp:1266
 msgid "Full updates every 10 pages"
 msgstr "кожні 10 сторінок"
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1267
 msgid "Full updates every 14 pages"
 msgstr "кожні 14 сторінок"
 
-#: ../src/settings.cpp:1266
+#: ../src/settings.cpp:1268
 #, fuzzy
 msgid "Full updates every 20 pages"
 msgstr "кожні 2 сторінки"
 
-#: ../src/settings.cpp:1267
+#: ../src/settings.cpp:1269
 #, fuzzy
 msgid "Full updates every 25 pages"
 msgstr "кожні 2 сторінки"
 
-#: ../src/settings.cpp:1268
+#: ../src/settings.cpp:1270
 #, fuzzy
 msgid "Full updates every 30 pages"
 msgstr "кожні 3 сторінки"
 
-#: ../src/settings.cpp:1269
+#: ../src/settings.cpp:1271
 #, fuzzy
 msgid "Full updates every 35 pages"
 msgstr "кожні 3 сторінки"
 
-#: ../src/settings.cpp:1270
+#: ../src/settings.cpp:1272
 #, fuzzy
 msgid "Full updates every 40 pages"
 msgstr "кожні 4 сторінки"
 
-#: ../src/settings.cpp:1271
+#: ../src/settings.cpp:1273
 #, fuzzy
 msgid "Full updates every 45 pages"
 msgstr "кожні 4 сторінки"
 
-#: ../src/settings.cpp:1272
+#: ../src/settings.cpp:1274
 #, fuzzy
 msgid "Full updates every 50 pages"
 msgstr "кожні 5 сторінок"
 
-#: ../src/settings.cpp:1277
+#: ../src/settings.cpp:1279
 msgid "Turbo mode disabled"
 msgstr "Турбо режим вимкнений"
 
-#: ../src/settings.cpp:1278
+#: ../src/settings.cpp:1280
 msgid "Turbo mode enabled"
 msgstr "Турбо режим увімкнений"
 
-#: ../src/settings.cpp:1285
+#: ../src/settings.cpp:1287
 msgid "180+slow next page"
 msgstr "180°+вперед повільно"
 
-#: ../src/settings.cpp:1286
+#: ../src/settings.cpp:1288
 msgid "180+slow prev/next page"
 msgstr "180°+вперед/назад повільно"
 
-#: ../src/settings.cpp:1287
+#: ../src/settings.cpp:1289
 msgid "180+FAST next page"
 msgstr "180°+вперед швидко"
 
-#: ../src/settings.cpp:1288
+#: ../src/settings.cpp:1290
 msgid "180+FAST prev/next page"
 msgstr "180°+вперед/назад швидко"
 
-#: ../src/settings.cpp:1289
+#: ../src/settings.cpp:1291
 msgid "180+FAST next/prev page"
 msgstr "180°+назад/вперед швидко"
 
-#: ../src/settings.cpp:1307
+#: ../src/settings.cpp:1309
 msgid "2 BPP"
 msgstr "2 біти на піксель"
 
-#: ../src/settings.cpp:1308
+#: ../src/settings.cpp:1310
 msgid "3 BPP"
 msgstr "3 біти на піксель"
 
-#: ../src/settings.cpp:1309
+#: ../src/settings.cpp:1311
 msgid "4 BPP"
 msgstr "4 біти на піксель"
 
-#: ../src/settings.cpp:1310
+#: ../src/settings.cpp:1312
 msgid "8 BPP"
 msgstr "8 біт на піксель"
 
-#: ../src/settings.cpp:1316
+#: ../src/settings.cpp:1318
 msgid "Disabled (1:1)"
 msgstr "Не масштабувати (1:1)"
 
-#: ../src/settings.cpp:1317
+#: ../src/settings.cpp:1319
 msgid "Integer scale"
 msgstr "У ціле число разів"
 
-#: ../src/settings.cpp:1318
+#: ../src/settings.cpp:1320
 msgid "Arbitrary scale"
 msgstr "Довільне масштабування"
 
-#: ../src/settings.cpp:1323
+#: ../src/settings.cpp:1325
 msgid "Auto"
 msgstr "Авто"
 
-#: ../src/settings.cpp:1324
+#: ../src/settings.cpp:1326
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1325
+#: ../src/settings.cpp:1327
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1326
+#: ../src/settings.cpp:1328
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1410
+#: ../src/settings.cpp:1412
 msgid "No hinting"
 msgstr "Вимкнуто"
 
-#: ../src/settings.cpp:1411
+#: ../src/settings.cpp:1413
 msgid "Use bytecode"
 msgstr "Використовувати байт-код"
 
-#: ../src/settings.cpp:1412
+#: ../src/settings.cpp:1414
 msgid "Autohinting"
 msgstr "Автохінтінг"
 
-#: ../src/settings.cpp:1413
+#: ../src/settings.cpp:1415
 #, fuzzy
 msgid "Light"
 msgstr "Праворуч"
 
-#: ../src/settings.cpp:1418
+#: ../src/settings.cpp:1420
 #, fuzzy
 msgid "Default paragraph formatting"
 msgstr "Зняти виділення абзацу"
 
-#: ../src/settings.cpp:1419
+#: ../src/settings.cpp:1421
 #, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "Назва"
 
-#: ../src/settings.cpp:1420
+#: ../src/settings.cpp:1422
 #, fuzzy
 msgid "Subtitle"
 msgstr "Показати заголовок"
 
-#: ../src/settings.cpp:1421
+#: ../src/settings.cpp:1423
 #, fuzzy
 msgid "Preformatted text / code"
 msgstr "Попередньо форматований текст"
 
-#: ../src/settings.cpp:1422
+#: ../src/settings.cpp:1424
 msgid "Link"
 msgstr ""
 
-#: ../src/settings.cpp:1424
+#: ../src/settings.cpp:1426
 msgid "Epigraph"
 msgstr ""
 
-#: ../src/settings.cpp:1425
+#: ../src/settings.cpp:1427
 msgid "Poem"
 msgstr ""
 
-#: ../src/settings.cpp:1426
+#: ../src/settings.cpp:1428
 msgid "Text / Cite / Epigraph author"
 msgstr ""
 
-#: ../src/settings.cpp:1427
-msgid "Footnote"
-msgstr ""
-
-#: ../src/settings.cpp:1428
-#, fuzzy
-msgid "Footnote link"
-msgstr "Перейти за посиланням"
-
 #: ../src/settings.cpp:1429
-msgid "Footnote title"
+msgid "Footnote"
 msgstr ""
 
 #: ../src/settings.cpp:1430
 #, fuzzy
+msgid "Footnote link"
+msgstr "Перейти за посиланням"
+
+#: ../src/settings.cpp:1431
+msgid "Footnote title"
+msgstr ""
+
+#: ../src/settings.cpp:1432
+#, fuzzy
 msgid "Annotation"
 msgstr "Цитати"
 
-#: ../src/settings.cpp:1470
+#: ../src/settings.cpp:1472
 msgid "Default font face"
 msgstr "Шрифт за замовчуванням"
 
-#: ../src/settings.cpp:1475
+#: ../src/settings.cpp:1477
 #, fuzzy
 msgid "Font settings"
 msgstr "Налаштування розмір шрифту"
 
-#: ../src/settings.cpp:1482
+#: ../src/settings.cpp:1484
 msgid "Font antialiasing"
 msgstr "Згладжування літер"
 
-#: ../src/settings.cpp:1485
+#: ../src/settings.cpp:1487
 msgid "Font hinting"
 msgstr "Хінтінг шрифту"
 
-#: ../src/settings.cpp:1487
+#: ../src/settings.cpp:1489
 msgid "Font kerning"
 msgstr "Кернінг шрифту"
 
-#: ../src/settings.cpp:1489
+#: ../src/settings.cpp:1491
 #, fuzzy
 msgid "Font embolding"
 msgstr "Кернінг шрифту"
 
-#: ../src/settings.cpp:1491
+#: ../src/settings.cpp:1493
 msgid "Tracking"
 msgstr ""
 
-#: ../src/settings.cpp:1493
+#: ../src/settings.cpp:1495
 msgid "Font Gamma"
 msgstr "амма-корекція шрифта"
 
-#: ../src/settings.cpp:1495
+#: ../src/settings.cpp:1497
 msgid "Document embedded fonts"
 msgstr "Вбудовані шрифти документа"
 
-#: ../src/settings.cpp:1498
+#: ../src/settings.cpp:1500
 msgid "Fallback font face"
 msgstr "Резервний шрифт"
 
-#: ../src/settings.cpp:1504
+#: ../src/settings.cpp:1506
 #, fuzzy
 msgid "Formatting settings"
 msgstr "Налаштування розмір шрифту"
 
-#: ../src/settings.cpp:1516
+#: ../src/settings.cpp:1518
 msgid "[No Hyphenation]"
 msgstr "[Без переносів]"
 
-#: ../src/settings.cpp:1517
+#: ../src/settings.cpp:1519
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Автоматичні переноси]"
 
-#: ../src/settings.cpp:1519
+#: ../src/settings.cpp:1521
 msgid "Hyphenation"
 msgstr "Переноси"
 
-#: ../src/settings.cpp:1533
+#: ../src/settings.cpp:1535
 msgid "Preformatted text"
 msgstr "Попередньо форматований текст"
 
-#: ../src/settings.cpp:1536
+#: ../src/settings.cpp:1538
 msgid "Space condensing percent"
 msgstr "Стиснути відстань до"
 
-#: ../src/settings.cpp:1539
+#: ../src/settings.cpp:1541
 #, fuzzy
 msgid "Space expanding percent"
 msgstr "Стиснути відстань до"
 
-#: ../src/settings.cpp:1542
+#: ../src/settings.cpp:1544
 msgid "Floating punctuation"
 msgstr "Висяча пунктуація"
 
-#: ../src/settings.cpp:1548
+#: ../src/settings.cpp:1550
 msgid "Image scaling"
 msgstr "Масштабування зображень"
 
-#: ../src/settings.cpp:1553
+#: ../src/settings.cpp:1555
 msgid "Block image scaling mode"
 msgstr "Режим для звичайних зображень"
 
-#: ../src/settings.cpp:1556
+#: ../src/settings.cpp:1558
 msgid "Block image max zoom"
 msgstr "Макс. збільшення для звичайних зображень"
 
-#: ../src/settings.cpp:1559
+#: ../src/settings.cpp:1561
 msgid "Inline image scaling mode"
 msgstr "Режим для inline зображень"
 
-#: ../src/settings.cpp:1562
+#: ../src/settings.cpp:1564
 msgid "Inline image max zoom"
 msgstr "Макс. збільшення для inline зображень"
 
-#: ../src/settings.cpp:1571
+#: ../src/settings.cpp:1573
 #, fuzzy
 msgid "Page settings"
 msgstr "Орієнтація сторінки"
 
-#: ../src/settings.cpp:1576
+#: ../src/settings.cpp:1578
 msgid "Status line"
 msgstr "Колонтитул"
 
-#: ../src/settings.cpp:1581
+#: ../src/settings.cpp:1583
 #, fuzzy
 msgid "Status line settings"
 msgstr "Налаштування колонтитула"
 
-#: ../src/settings.cpp:1598
+#: ../src/settings.cpp:1600
 #, fuzzy
 msgid "Time format"
 msgstr "Формат файлу"
 
-#: ../src/settings.cpp:1600
+#: ../src/settings.cpp:1602
 msgid "Show time"
 msgstr "Відображення часу у колонтитулі"
 
-#: ../src/settings.cpp:1602
+#: ../src/settings.cpp:1604
 msgid "Show title"
 msgstr "Показати заголовок"
 
-#: ../src/settings.cpp:1604
+#: ../src/settings.cpp:1606
 #, fuzzy
 msgid "Show battery"
 msgstr "Показати заряд батареї"
 
-#: ../src/settings.cpp:1606
+#: ../src/settings.cpp:1608
 #, fuzzy
 msgid "Show battery percent"
 msgstr "Заряд батареи в процентах"
 
-#: ../src/settings.cpp:1609
+#: ../src/settings.cpp:1611
 #, fuzzy
 msgid "Show position percent"
 msgstr "Заряд батареї у відсотках"
 
-#: ../src/settings.cpp:1611
+#: ../src/settings.cpp:1613
 #, fuzzy
 msgid "Show page count"
 msgstr "Показати загальну к-ть сторінок"
 
-#: ../src/settings.cpp:1613
+#: ../src/settings.cpp:1615
 #, fuzzy
 msgid "Show page count till chapter end"
 msgstr "Показати загальну к-ть сторінок"
 
-#: ../src/settings.cpp:1616
+#: ../src/settings.cpp:1618
 #, fuzzy
 msgid "Show page number"
 msgstr "Показати номер поточної сторінки"
 
-#: ../src/settings.cpp:1618
+#: ../src/settings.cpp:1620
 #, fuzzy
 msgid "Show chapter marks"
 msgstr "Показати заряд батареї"
 
-#: ../src/settings.cpp:1627
+#: ../src/settings.cpp:1629
 msgid "Page margins"
 msgstr "Поля сторінки"
 
-#: ../src/settings.cpp:1632
+#: ../src/settings.cpp:1634
 msgid "Top margin"
 msgstr "Вгорі"
 
-#: ../src/settings.cpp:1634
+#: ../src/settings.cpp:1636
 msgid "Bottom margin"
 msgstr "Знизу"
 
-#: ../src/settings.cpp:1636
+#: ../src/settings.cpp:1638
 msgid "Left margin"
 msgstr "Ліворуч"
 
-#: ../src/settings.cpp:1638
+#: ../src/settings.cpp:1640
 msgid "Right margin"
 msgstr "Праворуч"
 
-#: ../src/settings.cpp:1643
+#: ../src/settings.cpp:1645
 msgid "Footnotes at page bottom"
 msgstr "Примітки внизу сторінки"
 
-#: ../src/settings.cpp:1649
+#: ../src/settings.cpp:1651
 msgid "Display settings"
 msgstr ""
 
-#: ../src/settings.cpp:1658
+#: ../src/settings.cpp:1660
 msgid "Landscape pages"
 msgstr "Колонок в альбомній орієнтації"
 
-#: ../src/settings.cpp:1660
+#: ../src/settings.cpp:1662
 msgid "Inverse display"
 msgstr "Інвертування кольорів"
 
-#: ../src/settings.cpp:1663
+#: ../src/settings.cpp:1665
 msgid "Show bookmark icons"
 msgstr "Показати значки закладок"
 
-#: ../src/settings.cpp:1666
+#: ../src/settings.cpp:1668
 msgid "Highlight bookmarks"
 msgstr "Підсвічування закладок"
 
-#: ../src/settings.cpp:1670
+#: ../src/settings.cpp:1672
 msgid "Display update mode"
 msgstr "Повне оновлення"
 
-#: ../src/settings.cpp:1675
+#: ../src/settings.cpp:1677
 msgid "Turbo update mode"
 msgstr "Турбо режим оновлення"
 
-#: ../src/settings.cpp:1680
+#: ../src/settings.cpp:1682
 msgid "Gray buffer depth(need restart)"
 msgstr "Глибина фреймбуферу(потрібен перезапуск)"
 
-#: ../src/settings.cpp:1687
+#: ../src/settings.cpp:1689
 msgid "Skin"
 msgstr ""
 
-#: ../src/settings.cpp:1703
+#: ../src/settings.cpp:1705
 #, fuzzy
 msgid "Control settings"
 msgstr "Налаштування розмір шрифту"
 
-#: ../src/settings.cpp:1710
+#: ../src/settings.cpp:1712
 msgid "Rotate"
 msgstr "Управління G-сенсором"
 
-#: ../src/settings.cpp:1713
+#: ../src/settings.cpp:1715
 msgid "Page turn angle"
 msgstr "Нахил для перегортання"
 
-#: ../src/settings.cpp:1729
+#: ../src/settings.cpp:1731
 msgid "Tap action"
 msgstr ""
 
-#: ../src/settings.cpp:1731
+#: ../src/settings.cpp:1733
 #, fuzzy
 msgid "Long tap action"
 msgstr "Перейти до цитати"
 
-#: ../src/settings.cpp:1735
+#: ../src/settings.cpp:1737
 msgid "Height of the upper tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1738
+#: ../src/settings.cpp:1740
 msgid "Height of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1741
+#: ../src/settings.cpp:1743
 msgid "Width of the left tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1744
+#: ../src/settings.cpp:1746
 msgid "Width of the middle tap zone"
 msgstr ""
 
-#: ../src/settings.cpp:1763
+#: ../src/settings.cpp:1765
 #, fuzzy
 msgid "Style settings"
 msgstr "Налаштування"
 
-#: ../src/settings.cpp:1768
+#: ../src/settings.cpp:1770
 msgid "Document embedded styles"
 msgstr "Використовувати стилі документу"
 
-#: ../src/settings.cpp:1787 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1789 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr ""
 
-#: ../src/settings.cpp:1795 ../src/viewdlg.cpp:598 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1797 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr ""
 
-#: ../src/settings.cpp:1802 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1804 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr ""
 
-#: ../src/settings.cpp:1825
+#: ../src/settings.cpp:1827
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1683,85 +1683,89 @@ msgstr ""
 msgid "Toggle status bar"
 msgstr "Змінити автоформатування"
 
-#: ../src/viewdlg.cpp:593
+#: ../src/viewdlg.cpp:592
+msgid "Enter standby mode"
+msgstr ""
+
+#: ../src/viewdlg.cpp:594
 #, fuzzy
 msgid "Tasks list"
 msgstr "Закладки"
 
-#: ../src/viewdlg.cpp:595
+#: ../src/viewdlg.cpp:596
 msgid "Toggle system panel"
 msgstr ""
 
-#: ../src/viewdlg.cpp:597
+#: ../src/viewdlg.cpp:598
 msgid "Lock device"
 msgstr ""
 
-#: ../src/viewdlg.cpp:602
+#: ../src/viewdlg.cpp:603
 msgid "Open system panel"
 msgstr ""
 
-#: ../src/viewdlg.cpp:603
+#: ../src/viewdlg.cpp:604
 #, fuzzy
 msgid "Toggle front light"
 msgstr "Насиченість шрифту"
 
-#: ../src/viewdlg.cpp:606
+#: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"
 msgstr "Головне меню пристрою"
 
-#: ../src/viewdlg.cpp:608
+#: ../src/viewdlg.cpp:609
 msgid "Unknown command"
 msgstr "Невідома команда"
 
-#: ../src/viewdlg.cpp:615
+#: ../src/viewdlg.cpp:616
 msgid "Previous Page"
 msgstr "Попередня сторінка"
 
-#: ../src/viewdlg.cpp:617
+#: ../src/viewdlg.cpp:618
 msgid "Next Page"
 msgstr "Наступна сторінка"
 
-#: ../src/viewdlg.cpp:619
+#: ../src/viewdlg.cpp:620
 msgid "Back by 10 Pages"
 msgstr "На 10 сторінок назад"
 
-#: ../src/viewdlg.cpp:621
+#: ../src/viewdlg.cpp:622
 msgid "Forward by 10 Pages"
 msgstr "На 10 сторінок вперед"
 
-#: ../src/viewdlg.cpp:623
+#: ../src/viewdlg.cpp:624
 msgid "Next Chapter"
 msgstr "Наступна глава"
 
-#: ../src/viewdlg.cpp:625
+#: ../src/viewdlg.cpp:626
 msgid "Previous Chapter"
 msgstr "Попередня глава"
 
-#: ../src/viewdlg.cpp:627
+#: ../src/viewdlg.cpp:628
 msgid "Add Bookmark"
 msgstr "Додати закладку"
 
-#: ../src/viewdlg.cpp:629
+#: ../src/viewdlg.cpp:630
 msgid "Rotate Clockwise"
 msgstr "За годинниковою стрілкою"
 
-#: ../src/viewdlg.cpp:631
+#: ../src/viewdlg.cpp:632
 msgid "Rotate Anti-Clockwise"
 msgstr "Проти годинникової стрілки"
 
-#: ../src/viewdlg.cpp:633
+#: ../src/viewdlg.cpp:634
 msgid "Portrait View"
 msgstr "Книжкова"
 
-#: ../src/viewdlg.cpp:635
+#: ../src/viewdlg.cpp:636
 msgid "Landscape View"
 msgstr "Альбомна"
 
-#: ../src/viewdlg.cpp:659
+#: ../src/viewdlg.cpp:660
 msgid "Key"
 msgstr "Кнопка"
 
-#: ../src/viewdlg.cpp:659
+#: ../src/viewdlg.cpp:660
 msgid "Assigned function"
 msgstr "Дія"
 
@@ -1821,28 +1825,28 @@ msgstr ""
 msgid "Contents"
 msgstr "Керування"
 
-#: ../src/cr3pocketbook.cpp:2249
+#: ../src/cr3pocketbook.cpp:2255
 msgid "Cache cleared."
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:2254
+#: ../src/cr3pocketbook.cpp:2260
 #, fuzzy
 msgid "Unable to list the directory contents!"
 msgstr "Зміст"
 
-#: ../src/cr3pocketbook.cpp:2260
+#: ../src/cr3pocketbook.cpp:2266
 msgid "Unable to clear cache!"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:3758
+#: ../src/cr3pocketbook.cpp:3764
 msgid "Press $1 to translate"
 msgstr "Коротке натискання $1 для перекладу"
 
-#: ../src/cr3pocketbook.cpp:4808
+#: ../src/cr3pocketbook.cpp:4814
 msgid "Updated to v"
 msgstr ""
 
-#: ../src/cr3pocketbook.cpp:4918
+#: ../src/cr3pocketbook.cpp:4924
 #, fuzzy
 msgid "Untitled"
 msgstr "Показати заголовок"

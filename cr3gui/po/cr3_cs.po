@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-12 17:49+0300\n"
+"POT-Creation-Date: 2015-08-16 14:20+0300\n"
 "PO-Revision-Date: 2015-07-15 12:34+0000\n"
 "Last-Translator: Vaclav Dohnal <vdohnal@post.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/p/coolreader-pocketbook/"
@@ -81,7 +81,7 @@ msgstr "Otevřít nedávnou knihu"
 msgid "Dictionary"
 msgstr "Slovník"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1423
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1425
 msgid "Cite"
 msgstr "Citace"
 
@@ -93,11 +93,11 @@ msgstr "Záložky"
 msgid "Search"
 msgstr "Hledání"
 
-#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1061
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1063
 msgid "Settings"
 msgstr "Nastavení"
 
-#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:671
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:672
 msgid "Keyboard layout"
 msgstr "Rozvržení klávesnice"
 
@@ -426,918 +426,918 @@ msgstr "Ze slovníku"
 msgid "[cannot read article]"
 msgstr "[nelze přečíst článek]"
 
-#: ../src/settings.cpp:202
+#: ../src/settings.cpp:204
 msgid "choose command"
 msgstr "Vybrat příkaz"
 
-#: ../src/settings.cpp:220
+#: ../src/settings.cpp:222
 msgid "Controls"
 msgstr "Ovládání"
 
-#: ../src/settings.cpp:386
+#: ../src/settings.cpp:388
 msgid "(No action)"
 msgstr "(nic nedělat)"
 
-#: ../src/settings.cpp:539
+#: ../src/settings.cpp:541
 msgid "[Command is not assigned]"
 msgstr "[příkaz není přiřazen]"
 
-#: ../src/settings.cpp:560
+#: ../src/settings.cpp:562
 msgid "0` (Portrait)"
 msgstr "0` (zobrazení na výšku)"
 
-#: ../src/settings.cpp:561
+#: ../src/settings.cpp:563
 msgid "90 `"
 msgstr "90 `"
 
-#: ../src/settings.cpp:562
+#: ../src/settings.cpp:564
 msgid "180 `"
 msgstr "180 `"
 
-#: ../src/settings.cpp:563
+#: ../src/settings.cpp:565
 msgid "270 `"
 msgstr "270 `"
 
-#: ../src/settings.cpp:574
+#: ../src/settings.cpp:576
 msgid "Page orientation"
 msgstr "Natočení strany"
 
-#: ../src/settings.cpp:595
+#: ../src/settings.cpp:597
 msgid "Default font size"
 msgstr "Výchozí velikost písma"
 
-#: ../src/settings.cpp:650
+#: ../src/settings.cpp:652
 msgid "The quick brown fox jumps over lazy dog"
 msgstr "Rychlá liška skáče přes pomalého ježka"
 
-#: ../src/settings.cpp:830
+#: ../src/settings.cpp:832
 msgid "Justify"
 msgstr "Zarovnat"
 
-#: ../src/settings.cpp:831
+#: ../src/settings.cpp:833
 msgctxt "CSS"
 msgid "Left"
 msgstr "Vlevo"
 
-#: ../src/settings.cpp:832
+#: ../src/settings.cpp:834
 msgid "Center"
 msgstr "Na střed"
 
-#: ../src/settings.cpp:833
+#: ../src/settings.cpp:835
 msgctxt "CSS"
 msgid "Right"
 msgstr "Vpravo"
 
-#: ../src/settings.cpp:839
+#: ../src/settings.cpp:841
 msgid "No indent"
 msgstr "Žádné odsazeni"
 
-#: ../src/settings.cpp:840
+#: ../src/settings.cpp:842
 msgid "Small indent"
 msgstr "Malé odsazení vpravo"
 
-#: ../src/settings.cpp:841
+#: ../src/settings.cpp:843
 msgid "Big indent"
 msgstr "Velké odsazení vpravo"
 
-#: ../src/settings.cpp:842
+#: ../src/settings.cpp:844
 msgid "Small outdent"
 msgstr "Malé odsazení vlevo"
 
-#: ../src/settings.cpp:843
+#: ../src/settings.cpp:845
 msgid "Big outdent"
 msgstr "Velké odsazení vlevo"
 
-#: ../src/settings.cpp:849
+#: ../src/settings.cpp:851
 msgid "[Default sans-serif font]"
 msgstr "[Implicitní sans-serif font]"
 
-#: ../src/settings.cpp:850
+#: ../src/settings.cpp:852
 msgid "[Default serif font]"
 msgstr "[Implicitní serif font]"
 
-#: ../src/settings.cpp:851
+#: ../src/settings.cpp:853
 msgid "[Default monospace font]"
 msgstr "[Implicitní neproporcionální font]"
 
-#: ../src/settings.cpp:857
+#: ../src/settings.cpp:859
 msgid "Bigger (105%)"
 msgstr "Větší (105%)"
 
-#: ../src/settings.cpp:858
+#: ../src/settings.cpp:860
 msgid "Bigger (110%)"
 msgstr "Větší (110%)"
 
-#: ../src/settings.cpp:859
+#: ../src/settings.cpp:861
 msgid "Bigger (115%)"
 msgstr "Větší (115%)"
 
-#: ../src/settings.cpp:860
+#: ../src/settings.cpp:862
 msgid "Bigger (120%)"
 msgstr "Větší (120%)"
 
-#: ../src/settings.cpp:861
+#: ../src/settings.cpp:863
 msgid "Bigger (150%)"
 msgstr "Větší (150%)"
 
-#: ../src/settings.cpp:862
+#: ../src/settings.cpp:864
 msgid "Smaller (95%)"
 msgstr "Menší (95%)"
 
-#: ../src/settings.cpp:863
+#: ../src/settings.cpp:865
 msgid "Smaller (90%)"
 msgstr "Menší (90%)"
 
-#: ../src/settings.cpp:864
+#: ../src/settings.cpp:866
 msgid "Smaller (85%)"
 msgstr "Menší (85%)"
 
-#: ../src/settings.cpp:865
+#: ../src/settings.cpp:867
 msgid "Smaller (80%)"
 msgstr "Menší (80%)"
 
-#: ../src/settings.cpp:866
+#: ../src/settings.cpp:868
 msgid "Smaller (70%)"
 msgstr "Menší (70%)"
 
-#: ../src/settings.cpp:867
+#: ../src/settings.cpp:869
 msgid "Smaller (60%)"
 msgstr "Menší (60%)"
 
-#: ../src/settings.cpp:873 ../src/settings.cpp:882 ../src/settings.cpp:1165
-#: ../src/settings.cpp:1171
+#: ../src/settings.cpp:875 ../src/settings.cpp:884 ../src/settings.cpp:1167
+#: ../src/settings.cpp:1173
 msgid "Normal"
 msgstr "Normální"
 
-#: ../src/settings.cpp:874 ../src/settings.cpp:1172
+#: ../src/settings.cpp:876 ../src/settings.cpp:1174
 msgid "Bold"
 msgstr "Tučné"
 
-#: ../src/settings.cpp:875
+#: ../src/settings.cpp:877
 msgid "Bolder"
 msgstr "Tučnější"
 
-#: ../src/settings.cpp:876
+#: ../src/settings.cpp:878
 msgid "Lighter"
 msgstr "Tenčí"
 
-#: ../src/settings.cpp:883
+#: ../src/settings.cpp:885
 msgid "Italic"
 msgstr "Kurzíva"
 
-#: ../src/settings.cpp:918 ../src/settings.cpp:1092
+#: ../src/settings.cpp:920 ../src/settings.cpp:1094
 msgid "None"
 msgstr "Nic"
 
-#: ../src/settings.cpp:919 ../src/settings.cpp:1094
+#: ../src/settings.cpp:921 ../src/settings.cpp:1096
 msgid "Underline"
 msgstr "Podtržené"
 
-#: ../src/settings.cpp:920
+#: ../src/settings.cpp:922
 msgid "Line through"
 msgstr "Přeškrtnuté"
 
-#: ../src/settings.cpp:921
+#: ../src/settings.cpp:923
 msgid "Overline"
 msgstr "Nad linkou"
 
-#: ../src/settings.cpp:927
+#: ../src/settings.cpp:929
 msgid "Baseline"
 msgstr "Na lince"
 
-#: ../src/settings.cpp:928
+#: ../src/settings.cpp:930
 msgid "Subscript"
 msgstr "Dolní index"
 
-#: ../src/settings.cpp:929
+#: ../src/settings.cpp:931
 msgid "Superscript"
 msgstr "Horní index"
 
-#: ../src/settings.cpp:935 ../src/settings.cpp:943
+#: ../src/settings.cpp:937 ../src/settings.cpp:945
 msgid "Black"
 msgstr "Černá"
 
-#: ../src/settings.cpp:936 ../src/settings.cpp:944
+#: ../src/settings.cpp:938 ../src/settings.cpp:946
 msgid "Gray"
 msgstr "Šedá"
 
-#: ../src/settings.cpp:937 ../src/settings.cpp:945
+#: ../src/settings.cpp:939 ../src/settings.cpp:947
 msgid "White"
 msgstr "Bílá"
 
-#: ../src/settings.cpp:952 ../src/settings.cpp:963
+#: ../src/settings.cpp:954 ../src/settings.cpp:965
 msgid "0.2 of line height"
 msgstr "0.2-krát výška řádku"
 
-#: ../src/settings.cpp:953 ../src/settings.cpp:964
+#: ../src/settings.cpp:955 ../src/settings.cpp:966
 msgid "0.3 of line height"
 msgstr "0.3-krát výška řádku"
 
-#: ../src/settings.cpp:954 ../src/settings.cpp:965 ../src/settings.cpp:974
-#: ../src/settings.cpp:990
+#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
+#: ../src/settings.cpp:992
 msgid "0.5 of line height"
 msgstr "0.5-krát výšky řádku"
 
-#: ../src/settings.cpp:955 ../src/settings.cpp:966 ../src/settings.cpp:975
-#: ../src/settings.cpp:991
+#: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
+#: ../src/settings.cpp:993
 msgid "1 line height"
 msgstr "1-krát výška řádku"
 
-#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:977
-#: ../src/settings.cpp:993
+#: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
+#: ../src/settings.cpp:995
 msgid "2 of line height"
 msgstr "2-krát výška řádku"
 
-#: ../src/settings.cpp:976 ../src/settings.cpp:992
+#: ../src/settings.cpp:978 ../src/settings.cpp:994
 msgid "1.5 of line height"
 msgstr "1.5-krát výška řádku"
 
-#: ../src/settings.cpp:978 ../src/settings.cpp:994
+#: ../src/settings.cpp:980 ../src/settings.cpp:996
 msgid "4 of line height"
 msgstr "4-krát výška řádku"
 
-#: ../src/settings.cpp:979 ../src/settings.cpp:995
+#: ../src/settings.cpp:981 ../src/settings.cpp:997
 msgid "5% of line width"
 msgstr "5% šířky řádku"
 
-#: ../src/settings.cpp:980 ../src/settings.cpp:996
+#: ../src/settings.cpp:982 ../src/settings.cpp:998
 msgid "10% of line width"
 msgstr "10% šířky řádku"
 
-#: ../src/settings.cpp:981 ../src/settings.cpp:997
+#: ../src/settings.cpp:983 ../src/settings.cpp:999
 msgid "15% of line width"
 msgstr "15% šířky řádku"
 
-#: ../src/settings.cpp:982 ../src/settings.cpp:998
+#: ../src/settings.cpp:984 ../src/settings.cpp:1000
 msgid "20% of line width"
 msgstr "20% šířky řádku"
 
-#: ../src/settings.cpp:983 ../src/settings.cpp:999
+#: ../src/settings.cpp:985 ../src/settings.cpp:1001
 msgid "30% of line width"
 msgstr "30% šířky řádku"
 
-#: ../src/settings.cpp:1002
+#: ../src/settings.cpp:1004
 msgid "Text alignment"
 msgstr "Zarovnání textu"
 
-#: ../src/settings.cpp:1004
+#: ../src/settings.cpp:1006
 msgid "First line indent"
 msgstr "Odsazení prvního řádku"
 
-#: ../src/settings.cpp:1007 ../src/settings.cpp:1586
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1588
 msgid "Font face"
 msgstr "Vzhled písma"
 
-#: ../src/settings.cpp:1021
+#: ../src/settings.cpp:1023
 msgid "Font size"
 msgstr "Velikost písma"
 
-#: ../src/settings.cpp:1023 ../src/settings.cpp:1480 ../src/settings.cpp:1595
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1482 ../src/settings.cpp:1597
 msgid "Font weight"
 msgstr "Váha písma"
 
-#: ../src/settings.cpp:1025
+#: ../src/settings.cpp:1027
 msgid "Font style"
 msgstr "Styl písma"
 
-#: ../src/settings.cpp:1027 ../src/settings.cpp:1509
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1511
 msgid "Interline space"
 msgstr "Mezera mezi řádky"
 
-#: ../src/settings.cpp:1029
+#: ../src/settings.cpp:1031
 msgid "Letter spacing"
 msgstr "Mezera mezi písmeny"
 
-#: ../src/settings.cpp:1031
+#: ../src/settings.cpp:1033
 msgid "Text decoration"
 msgstr "Ozdoby textu"
 
-#: ../src/settings.cpp:1033
+#: ../src/settings.cpp:1035
 msgid "Text vertical alignment"
 msgstr "Svislé zarovnání textu"
 
-#: ../src/settings.cpp:1035
+#: ../src/settings.cpp:1037
 msgid "Text color"
 msgstr "Barva textu"
 
-#: ../src/settings.cpp:1037
+#: ../src/settings.cpp:1039
 msgid "Background color"
 msgstr "Barva pozadí"
 
-#: ../src/settings.cpp:1039
+#: ../src/settings.cpp:1041
 msgid "Margin before"
 msgstr "Okraj před"
 
-#: ../src/settings.cpp:1041
+#: ../src/settings.cpp:1043
 msgid "Margin after"
 msgstr "Okraj po"
 
-#: ../src/settings.cpp:1043
+#: ../src/settings.cpp:1045
 msgid "Margin left"
 msgstr "Levý okraj"
 
-#: ../src/settings.cpp:1045
+#: ../src/settings.cpp:1047
 msgid "Margin right"
 msgstr "Pravý okraj"
 
-#: ../src/settings.cpp:1073
+#: ../src/settings.cpp:1075
 msgid "On for all fonts"
 msgstr "Zapnuto pro všechna písma"
 
-#: ../src/settings.cpp:1074
+#: ../src/settings.cpp:1076
 msgid "On for big fonts only"
 msgstr "Zapnuto pouze pro velká písma"
 
-#: ../src/settings.cpp:1075 ../src/settings.cpp:1081 ../src/settings.cpp:1185
+#: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
 msgid "Off"
 msgstr "Vypnuto"
 
-#: ../src/settings.cpp:1080
+#: ../src/settings.cpp:1082
 msgid "On"
 msgstr "Zapnuto"
 
-#: ../src/settings.cpp:1086
+#: ../src/settings.cpp:1088
 msgid "AM/PM"
 msgstr "AM/PM"
 
-#: ../src/settings.cpp:1087
+#: ../src/settings.cpp:1089
 msgid "24h"
 msgstr "24h"
 
-#: ../src/settings.cpp:1093
+#: ../src/settings.cpp:1095
 msgid "Solid"
 msgstr "Tučné"
 
-#: ../src/settings.cpp:1166
+#: ../src/settings.cpp:1168
 msgid "Inverse"
 msgstr "Obrácené"
 
-#: ../src/settings.cpp:1177
+#: ../src/settings.cpp:1179
 msgid "One"
 msgstr "Jeden"
 
-#: ../src/settings.cpp:1178
+#: ../src/settings.cpp:1180
 msgid "Two"
 msgstr "Dva"
 
-#: ../src/settings.cpp:1183
+#: ../src/settings.cpp:1185
 msgid "Top"
 msgstr "Nahoře"
 
-#: ../src/settings.cpp:1190
+#: ../src/settings.cpp:1192
 msgid "70%"
 msgstr "70%"
 
-#: ../src/settings.cpp:1191
+#: ../src/settings.cpp:1193
 msgid "75%"
 msgstr "75%"
 
-#: ../src/settings.cpp:1192
+#: ../src/settings.cpp:1194
 msgid "80%"
 msgstr "80%"
 
-#: ../src/settings.cpp:1193
+#: ../src/settings.cpp:1195
 msgid "85%"
 msgstr "85%"
 
-#: ../src/settings.cpp:1194
+#: ../src/settings.cpp:1196
 msgid "90%"
 msgstr "90%"
 
-#: ../src/settings.cpp:1195
+#: ../src/settings.cpp:1197
 msgid "95%"
 msgstr "95%"
 
-#: ../src/settings.cpp:1196
+#: ../src/settings.cpp:1198
 msgid "100%"
 msgstr "100%"
 
-#: ../src/settings.cpp:1197
+#: ../src/settings.cpp:1199
 msgid "105%"
 msgstr "105%"
 
-#: ../src/settings.cpp:1198
+#: ../src/settings.cpp:1200
 msgid "110%"
 msgstr "110%"
 
-#: ../src/settings.cpp:1199
+#: ../src/settings.cpp:1201
 msgid "115%"
 msgstr "115%"
 
-#: ../src/settings.cpp:1200
+#: ../src/settings.cpp:1202
 msgid "120%"
 msgstr "120%"
 
-#: ../src/settings.cpp:1201
+#: ../src/settings.cpp:1203
 msgid "125%"
 msgstr "125%"
 
-#: ../src/settings.cpp:1202
+#: ../src/settings.cpp:1204
 msgid "130%"
 msgstr "130%"
 
-#: ../src/settings.cpp:1203
+#: ../src/settings.cpp:1205
 msgid "135%"
 msgstr "135%"
 
-#: ../src/settings.cpp:1204
+#: ../src/settings.cpp:1206
 msgid "140%"
 msgstr "140%"
 
-#: ../src/settings.cpp:1205
+#: ../src/settings.cpp:1207
 msgid "145%"
 msgstr "145%"
 
-#: ../src/settings.cpp:1206
+#: ../src/settings.cpp:1208
 msgid "150%"
 msgstr "150%"
 
-#: ../src/settings.cpp:1207
+#: ../src/settings.cpp:1209
 msgid "160%"
 msgstr "160%"
 
-#: ../src/settings.cpp:1208
+#: ../src/settings.cpp:1210
 msgid "180%"
 msgstr "180%"
 
-#: ../src/settings.cpp:1209
+#: ../src/settings.cpp:1211
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1254
+#: ../src/settings.cpp:1256
 msgid "Always use fast updates"
 msgstr "Vždy použít rychlé obnovení"
 
-#: ../src/settings.cpp:1255
+#: ../src/settings.cpp:1257
 msgid "Don't use fast updates"
 msgstr "Nepoužívat rychlé obnovení"
 
-#: ../src/settings.cpp:1256
+#: ../src/settings.cpp:1258
 msgid "Full updates every 2 pages"
 msgstr "Úplné obnovení každé 2 strany"
 
-#: ../src/settings.cpp:1257
+#: ../src/settings.cpp:1259
 msgid "Full updates every 3 pages"
 msgstr "Úplné obnovení každé 3 strany"
 
-#: ../src/settings.cpp:1258
+#: ../src/settings.cpp:1260
 msgid "Full updates every 4 pages"
 msgstr "Úplné obnovení každé 4 strany"
 
-#: ../src/settings.cpp:1259
+#: ../src/settings.cpp:1261
 msgid "Full updates every 5 pages"
 msgstr "Úplné obnovení každých 5 stran"
 
-#: ../src/settings.cpp:1260
+#: ../src/settings.cpp:1262
 msgid "Full updates every 6 pages"
 msgstr "Úplné obnovení každých 6 stran"
 
-#: ../src/settings.cpp:1261
+#: ../src/settings.cpp:1263
 msgid "Full updates every 7 pages"
 msgstr "Úplné obnovení každých 7 stran"
 
-#: ../src/settings.cpp:1262
+#: ../src/settings.cpp:1264
 msgid "Full updates every 8 pages"
 msgstr "Úplné obnovení každých 8 stran"
 
-#: ../src/settings.cpp:1263
+#: ../src/settings.cpp:1265
 msgid "Full updates every 9 pages"
 msgstr "Úplné obnovení každých 9 stran"
 
-#: ../src/settings.cpp:1264
+#: ../src/settings.cpp:1266
 msgid "Full updates every 10 pages"
 msgstr "Úplné obnovení každých 10 stran"
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1267
 msgid "Full updates every 14 pages"
 msgstr "Úplné obnovení každých 14 stran"
 
-#: ../src/settings.cpp:1266
+#: ../src/settings.cpp:1268
 msgid "Full updates every 20 pages"
 msgstr "Úplné obnovení každých 20 stran"
 
-#: ../src/settings.cpp:1267
+#: ../src/settings.cpp:1269
 msgid "Full updates every 25 pages"
 msgstr "Úplné obnovení každých 25 stran"
 
-#: ../src/settings.cpp:1268
+#: ../src/settings.cpp:1270
 msgid "Full updates every 30 pages"
 msgstr "Úplné obnovení každých 30 stran"
 
-#: ../src/settings.cpp:1269
+#: ../src/settings.cpp:1271
 msgid "Full updates every 35 pages"
 msgstr "Úplné obnovení každých 35 stran"
 
-#: ../src/settings.cpp:1270
+#: ../src/settings.cpp:1272
 msgid "Full updates every 40 pages"
 msgstr "Úplné obnovení každých 40 stran"
 
-#: ../src/settings.cpp:1271
+#: ../src/settings.cpp:1273
 msgid "Full updates every 45 pages"
 msgstr "Úplné obnovení každých 45 stran"
 
-#: ../src/settings.cpp:1272
+#: ../src/settings.cpp:1274
 msgid "Full updates every 50 pages"
 msgstr "Úplné obnovení každých 50 stran"
 
-#: ../src/settings.cpp:1277
+#: ../src/settings.cpp:1279
 msgid "Turbo mode disabled"
 msgstr "Turborežim zakázán"
 
-#: ../src/settings.cpp:1278
+#: ../src/settings.cpp:1280
 msgid "Turbo mode enabled"
 msgstr "Turborežim povolen"
 
-#: ../src/settings.cpp:1285
+#: ../src/settings.cpp:1287
 msgid "180+slow next page"
 msgstr "180+pomalu další strana"
 
-#: ../src/settings.cpp:1286
+#: ../src/settings.cpp:1288
 msgid "180+slow prev/next page"
 msgstr "180+pomalu předchozí/další strana"
 
-#: ../src/settings.cpp:1287
+#: ../src/settings.cpp:1289
 msgid "180+FAST next page"
 msgstr "180+RYCHLE další strana"
 
-#: ../src/settings.cpp:1288
+#: ../src/settings.cpp:1290
 msgid "180+FAST prev/next page"
 msgstr "180+RYCHLE předchozí/další strana"
 
-#: ../src/settings.cpp:1289
+#: ../src/settings.cpp:1291
 msgid "180+FAST next/prev page"
 msgstr "180+RYCHLE další/předchozí strana"
 
-#: ../src/settings.cpp:1307
+#: ../src/settings.cpp:1309
 msgid "2 BPP"
 msgstr "2 bity na bod"
 
-#: ../src/settings.cpp:1308
+#: ../src/settings.cpp:1310
 msgid "3 BPP"
 msgstr "3 bity na bod"
 
-#: ../src/settings.cpp:1309
+#: ../src/settings.cpp:1311
 msgid "4 BPP"
 msgstr "4 bity na bod"
 
-#: ../src/settings.cpp:1310
+#: ../src/settings.cpp:1312
 msgid "8 BPP"
 msgstr "8 bity na bod"
 
-#: ../src/settings.cpp:1316
+#: ../src/settings.cpp:1318
 msgid "Disabled (1:1)"
 msgstr "Zakázáno (1:1)"
 
-#: ../src/settings.cpp:1317
+#: ../src/settings.cpp:1319
 msgid "Integer scale"
 msgstr "Celočíselná stupnice"
 
-#: ../src/settings.cpp:1318
+#: ../src/settings.cpp:1320
 msgid "Arbitrary scale"
 msgstr "Libovolná stupnice"
 
-#: ../src/settings.cpp:1323
+#: ../src/settings.cpp:1325
 msgid "Auto"
 msgstr "Automaticky"
 
-#: ../src/settings.cpp:1324
+#: ../src/settings.cpp:1326
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1325
+#: ../src/settings.cpp:1327
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1326
+#: ../src/settings.cpp:1328
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1410
+#: ../src/settings.cpp:1412
 msgid "No hinting"
 msgstr "Žádné tipy"
 
-#: ../src/settings.cpp:1411
+#: ../src/settings.cpp:1413
 msgid "Use bytecode"
 msgstr "Použít bytecode"
 
-#: ../src/settings.cpp:1412
+#: ../src/settings.cpp:1414
 msgid "Autohinting"
 msgstr "Instruování písma"
 
-#: ../src/settings.cpp:1413
+#: ../src/settings.cpp:1415
 msgid "Light"
 msgstr "Tenké"
 
-#: ../src/settings.cpp:1418
+#: ../src/settings.cpp:1420
 msgid "Default paragraph formatting"
 msgstr "Výchozí formátování odstavce"
 
-#: ../src/settings.cpp:1419
+#: ../src/settings.cpp:1421
 msgctxt "CSS"
 msgid "Title"
 msgstr "Nadpis"
 
-#: ../src/settings.cpp:1420
+#: ../src/settings.cpp:1422
 msgid "Subtitle"
 msgstr "Podtitulek"
 
-#: ../src/settings.cpp:1421
+#: ../src/settings.cpp:1423
 msgid "Preformatted text / code"
 msgstr "Předformátovaný text/kód"
 
-#: ../src/settings.cpp:1422
+#: ../src/settings.cpp:1424
 msgid "Link"
 msgstr "Odkaz"
 
-#: ../src/settings.cpp:1424
+#: ../src/settings.cpp:1426
 msgid "Epigraph"
 msgstr "Epigraf"
 
-#: ../src/settings.cpp:1425
+#: ../src/settings.cpp:1427
 msgid "Poem"
 msgstr "Báseň"
 
-#: ../src/settings.cpp:1426
+#: ../src/settings.cpp:1428
 msgid "Text / Cite / Epigraph author"
 msgstr "Autor text/citátu/epigrafu"
 
-#: ../src/settings.cpp:1427
+#: ../src/settings.cpp:1429
 msgid "Footnote"
 msgstr "Poznámka"
 
-#: ../src/settings.cpp:1428
+#: ../src/settings.cpp:1430
 msgid "Footnote link"
 msgstr "Odkaz na poznámku"
 
-#: ../src/settings.cpp:1429
+#: ../src/settings.cpp:1431
 msgid "Footnote title"
 msgstr "Titulek poznámky"
 
-#: ../src/settings.cpp:1430
+#: ../src/settings.cpp:1432
 msgid "Annotation"
 msgstr "Anotace"
 
-#: ../src/settings.cpp:1470
+#: ../src/settings.cpp:1472
 msgid "Default font face"
 msgstr "Výchozí druh písma"
 
-#: ../src/settings.cpp:1475
+#: ../src/settings.cpp:1477
 msgid "Font settings"
 msgstr "Nastavení písma"
 
-#: ../src/settings.cpp:1482
+#: ../src/settings.cpp:1484
 msgid "Font antialiasing"
 msgstr "Vyhlazování písma"
 
-#: ../src/settings.cpp:1485
+#: ../src/settings.cpp:1487
 msgid "Font hinting"
 msgstr "Instruování písma"
 
-#: ../src/settings.cpp:1487
+#: ../src/settings.cpp:1489
 msgid "Font kerning"
 msgstr "Vyrovnání písma"
 
-#: ../src/settings.cpp:1489
+#: ../src/settings.cpp:1491
 msgid "Font embolding"
 msgstr "Zvýraznění fontu"
 
-#: ../src/settings.cpp:1491
+#: ../src/settings.cpp:1493
 msgid "Tracking"
 msgstr "Sledování"
 
-#: ../src/settings.cpp:1493
+#: ../src/settings.cpp:1495
 msgid "Font Gamma"
 msgstr "Gamma písma"
 
-#: ../src/settings.cpp:1495
+#: ../src/settings.cpp:1497
 msgid "Document embedded fonts"
 msgstr "Písma vložená do dokumentu"
 
-#: ../src/settings.cpp:1498
+#: ../src/settings.cpp:1500
 msgid "Fallback font face"
 msgstr "Záložní druh písma"
 
-#: ../src/settings.cpp:1504
+#: ../src/settings.cpp:1506
 msgid "Formatting settings"
 msgstr "Nastavení formátování"
 
-#: ../src/settings.cpp:1516
+#: ../src/settings.cpp:1518
 msgid "[No Hyphenation]"
 msgstr "[Žádné dělení slov]"
 
-#: ../src/settings.cpp:1517
+#: ../src/settings.cpp:1519
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Algoritmické dělení slov]"
 
-#: ../src/settings.cpp:1519
+#: ../src/settings.cpp:1521
 msgid "Hyphenation"
 msgstr "Dělení slov"
 
-#: ../src/settings.cpp:1533
+#: ../src/settings.cpp:1535
 msgid "Preformatted text"
 msgstr "Předformátovaný text"
 
-#: ../src/settings.cpp:1536
+#: ../src/settings.cpp:1538
 msgid "Space condensing percent"
 msgstr "Zúžení mezer v procentech"
 
-#: ../src/settings.cpp:1539
+#: ../src/settings.cpp:1541
 msgid "Space expanding percent"
 msgstr "Roztažení mezer v procentech"
 
-#: ../src/settings.cpp:1542
+#: ../src/settings.cpp:1544
 msgid "Floating punctuation"
 msgstr "Volná interpunkce"
 
-#: ../src/settings.cpp:1548
+#: ../src/settings.cpp:1550
 msgid "Image scaling"
 msgstr "Změna velikosti obrázku"
 
-#: ../src/settings.cpp:1553
+#: ../src/settings.cpp:1555
 msgid "Block image scaling mode"
 msgstr "Režim změny velikosti blokového obrázku"
 
-#: ../src/settings.cpp:1556
+#: ../src/settings.cpp:1558
 msgid "Block image max zoom"
 msgstr "Největší zvětšení blokového obrázku"
 
-#: ../src/settings.cpp:1559
+#: ../src/settings.cpp:1561
 msgid "Inline image scaling mode"
 msgstr "Režim změny velikosti vloženého obrázku"
 
-#: ../src/settings.cpp:1562
+#: ../src/settings.cpp:1564
 msgid "Inline image max zoom"
 msgstr "Největší zvětšení vloženého obrázku"
 
-#: ../src/settings.cpp:1571
+#: ../src/settings.cpp:1573
 msgid "Page settings"
 msgstr "Nastavení stránky"
 
-#: ../src/settings.cpp:1576
+#: ../src/settings.cpp:1578
 msgid "Status line"
 msgstr "Stavový řádek"
 
-#: ../src/settings.cpp:1581
+#: ../src/settings.cpp:1583
 msgid "Status line settings"
 msgstr "Nastavení stavové řádky"
 
-#: ../src/settings.cpp:1598
+#: ../src/settings.cpp:1600
 msgid "Time format"
 msgstr "Formát času"
 
-#: ../src/settings.cpp:1600
+#: ../src/settings.cpp:1602
 msgid "Show time"
 msgstr "Ukázat čas"
 
-#: ../src/settings.cpp:1602
+#: ../src/settings.cpp:1604
 msgid "Show title"
 msgstr "Zobrazit název"
 
-#: ../src/settings.cpp:1604
+#: ../src/settings.cpp:1606
 msgid "Show battery"
 msgstr "Zobrazit baterii"
 
-#: ../src/settings.cpp:1606
+#: ../src/settings.cpp:1608
 msgid "Show battery percent"
 msgstr "Zobrazit baterii v procentech"
 
-#: ../src/settings.cpp:1609
+#: ../src/settings.cpp:1611
 msgid "Show position percent"
 msgstr "Zobrazit pozici v procentech"
 
-#: ../src/settings.cpp:1611
+#: ../src/settings.cpp:1613
 msgid "Show page count"
 msgstr "Zobrazit počitadlo stránek"
 
-#: ../src/settings.cpp:1613
+#: ../src/settings.cpp:1615
 msgid "Show page count till chapter end"
 msgstr "Zobrazit počet stran do konce kapitoly"
 
-#: ../src/settings.cpp:1616
+#: ../src/settings.cpp:1618
 msgid "Show page number"
 msgstr "Zobrazit počet stránek"
 
-#: ../src/settings.cpp:1618
+#: ../src/settings.cpp:1620
 msgid "Show chapter marks"
 msgstr "Zobrazit značky kapitol"
 
-#: ../src/settings.cpp:1627
+#: ../src/settings.cpp:1629
 msgid "Page margins"
 msgstr "Okraje stran"
 
-#: ../src/settings.cpp:1632
+#: ../src/settings.cpp:1634
 msgid "Top margin"
 msgstr "Horní okraj"
 
-#: ../src/settings.cpp:1634
+#: ../src/settings.cpp:1636
 msgid "Bottom margin"
 msgstr "Dolní okraj"
 
-#: ../src/settings.cpp:1636
+#: ../src/settings.cpp:1638
 msgid "Left margin"
 msgstr "Levý okraj"
 
-#: ../src/settings.cpp:1638
+#: ../src/settings.cpp:1640
 msgid "Right margin"
 msgstr "Pravý okraj"
 
-#: ../src/settings.cpp:1643
+#: ../src/settings.cpp:1645
 msgid "Footnotes at page bottom"
 msgstr "Poznámky pod čarou na straně dole"
 
-#: ../src/settings.cpp:1649
+#: ../src/settings.cpp:1651
 msgid "Display settings"
 msgstr "Nastavení displeje"
 
-#: ../src/settings.cpp:1658
+#: ../src/settings.cpp:1660
 msgid "Landscape pages"
 msgstr "Zobrazení stran na šířku"
 
-#: ../src/settings.cpp:1660
+#: ../src/settings.cpp:1662
 msgid "Inverse display"
 msgstr "Převrácené zobrazení"
 
-#: ../src/settings.cpp:1663
+#: ../src/settings.cpp:1665
 msgid "Show bookmark icons"
 msgstr "Ukázat ikony záložek"
 
-#: ../src/settings.cpp:1666
+#: ../src/settings.cpp:1668
 msgid "Highlight bookmarks"
 msgstr "Zvýraznit záložky"
 
-#: ../src/settings.cpp:1670
+#: ../src/settings.cpp:1672
 msgid "Display update mode"
 msgstr "Režim obnovení zobrazení"
 
-#: ../src/settings.cpp:1675
+#: ../src/settings.cpp:1677
 msgid "Turbo update mode"
 msgstr "Režim obnovení Turbo"
 
-#: ../src/settings.cpp:1680
+#: ../src/settings.cpp:1682
 msgid "Gray buffer depth(need restart)"
 msgstr "Stupně šedivé (vyžaduje restart)"
 
-#: ../src/settings.cpp:1687
+#: ../src/settings.cpp:1689
 msgid "Skin"
 msgstr "Vzhled"
 
-#: ../src/settings.cpp:1703
+#: ../src/settings.cpp:1705
 msgid "Control settings"
 msgstr "Nastavení ovládání"
 
-#: ../src/settings.cpp:1710
+#: ../src/settings.cpp:1712
 msgid "Rotate"
 msgstr "Otočit"
 
-#: ../src/settings.cpp:1713
+#: ../src/settings.cpp:1715
 msgid "Page turn angle"
 msgstr "Úhel otočení strany"
 
-#: ../src/settings.cpp:1729
+#: ../src/settings.cpp:1731
 msgid "Tap action"
 msgstr "Akce dotyku"
 
-#: ../src/settings.cpp:1731
+#: ../src/settings.cpp:1733
 msgid "Long tap action"
 msgstr "Akce dlouhého dotyku"
 
-#: ../src/settings.cpp:1735
+#: ../src/settings.cpp:1737
 msgid "Height of the upper tap zone"
 msgstr "Výška horní dotykové zóny"
 
-#: ../src/settings.cpp:1738
+#: ../src/settings.cpp:1740
 msgid "Height of the middle tap zone"
 msgstr "Výška střední dotykové zóny"
 
-#: ../src/settings.cpp:1741
+#: ../src/settings.cpp:1743
 msgid "Width of the left tap zone"
 msgstr "Šířka levé dotykové zóny"
 
-#: ../src/settings.cpp:1744
+#: ../src/settings.cpp:1746
 msgid "Width of the middle tap zone"
 msgstr "Šířka střední dotykové zóny"
 
-#: ../src/settings.cpp:1763
+#: ../src/settings.cpp:1765
 msgid "Style settings"
 msgstr "Nastavení stylů"
 
-#: ../src/settings.cpp:1768
+#: ../src/settings.cpp:1770
 msgid "Document embedded styles"
 msgstr "Styly vložené do dokumentu"
 
-#: ../src/settings.cpp:1787 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1789 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Vymazat cache"
 
-#: ../src/settings.cpp:1795 ../src/viewdlg.cpp:598 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1797 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "OTA aktualizace"
 
-#: ../src/settings.cpp:1802 ../src/viewdlg.cpp:599
+#: ../src/settings.cpp:1804 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA aktualizace vývojářská"
 
-#: ../src/settings.cpp:1825
+#: ../src/settings.cpp:1827
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1631,83 +1631,87 @@ msgstr "Úplné obnovení obrazu"
 msgid "Toggle status bar"
 msgstr "Přepnout stavový pruh"
 
-#: ../src/viewdlg.cpp:593
+#: ../src/viewdlg.cpp:592
+msgid "Enter standby mode"
+msgstr ""
+
+#: ../src/viewdlg.cpp:594
 msgid "Tasks list"
 msgstr "Správce úloh"
 
-#: ../src/viewdlg.cpp:595
+#: ../src/viewdlg.cpp:596
 msgid "Toggle system panel"
 msgstr "Přepnout systémový panel"
 
-#: ../src/viewdlg.cpp:597
+#: ../src/viewdlg.cpp:598
 msgid "Lock device"
 msgstr "Zamknou zařízení"
 
-#: ../src/viewdlg.cpp:602
+#: ../src/viewdlg.cpp:603
 msgid "Open system panel"
 msgstr "Otevřít systémový panel"
 
-#: ../src/viewdlg.cpp:603
+#: ../src/viewdlg.cpp:604
 msgid "Toggle front light"
 msgstr "Přepnout přední světlo"
 
-#: ../src/viewdlg.cpp:606
+#: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"
 msgstr "Hlavní nabídka PocketBook"
 
-#: ../src/viewdlg.cpp:608
+#: ../src/viewdlg.cpp:609
 msgid "Unknown command"
 msgstr "Neznámý příkaz"
 
-#: ../src/viewdlg.cpp:615
+#: ../src/viewdlg.cpp:616
 msgid "Previous Page"
 msgstr "Předchozí strana"
 
-#: ../src/viewdlg.cpp:617
+#: ../src/viewdlg.cpp:618
 msgid "Next Page"
 msgstr "Další strana"
 
-#: ../src/viewdlg.cpp:619
+#: ../src/viewdlg.cpp:620
 msgid "Back by 10 Pages"
 msgstr "Dozadu o 10 stran"
 
-#: ../src/viewdlg.cpp:621
+#: ../src/viewdlg.cpp:622
 msgid "Forward by 10 Pages"
 msgstr "Dopředu o 10 stran"
 
-#: ../src/viewdlg.cpp:623
+#: ../src/viewdlg.cpp:624
 msgid "Next Chapter"
 msgstr "Další kapitola"
 
-#: ../src/viewdlg.cpp:625
+#: ../src/viewdlg.cpp:626
 msgid "Previous Chapter"
 msgstr "Předchozí kapitola"
 
-#: ../src/viewdlg.cpp:627
+#: ../src/viewdlg.cpp:628
 msgid "Add Bookmark"
 msgstr "Přidat záložku"
 
-#: ../src/viewdlg.cpp:629
+#: ../src/viewdlg.cpp:630
 msgid "Rotate Clockwise"
 msgstr "Otočit po směru hodinových ručiček"
 
-#: ../src/viewdlg.cpp:631
+#: ../src/viewdlg.cpp:632
 msgid "Rotate Anti-Clockwise"
 msgstr "Otočit proti směru hodinových ručiček"
 
-#: ../src/viewdlg.cpp:633
+#: ../src/viewdlg.cpp:634
 msgid "Portrait View"
 msgstr "Zobrazení na výšku"
 
-#: ../src/viewdlg.cpp:635
+#: ../src/viewdlg.cpp:636
 msgid "Landscape View"
 msgstr "Zobrazení na šířku"
 
-#: ../src/viewdlg.cpp:659
+#: ../src/viewdlg.cpp:660
 msgid "Key"
 msgstr "Klávesa"
 
-#: ../src/viewdlg.cpp:659
+#: ../src/viewdlg.cpp:660
 msgid "Assigned function"
 msgstr "Přiřazená funkce"
 
@@ -1769,27 +1773,27 @@ msgstr "Aktualizace selhala!"
 msgid "Contents"
 msgstr "Obsah"
 
-#: ../src/cr3pocketbook.cpp:2249
+#: ../src/cr3pocketbook.cpp:2255
 msgid "Cache cleared."
 msgstr "Cache vymazána."
 
-#: ../src/cr3pocketbook.cpp:2254
+#: ../src/cr3pocketbook.cpp:2260
 msgid "Unable to list the directory contents!"
 msgstr "Nelze procházet obsah složky!"
 
-#: ../src/cr3pocketbook.cpp:2260
+#: ../src/cr3pocketbook.cpp:2266
 msgid "Unable to clear cache!"
 msgstr "Nelze vymazat cache!"
 
-#: ../src/cr3pocketbook.cpp:3758
+#: ../src/cr3pocketbook.cpp:3764
 msgid "Press $1 to translate"
 msgstr "Stisknout $1 pro překlad"
 
-#: ../src/cr3pocketbook.cpp:4808
+#: ../src/cr3pocketbook.cpp:4814
 msgid "Updated to v"
 msgstr "Aktualizováno na"
 
-#: ../src/cr3pocketbook.cpp:4918
+#: ../src/cr3pocketbook.cpp:4924
 msgid "Untitled"
 msgstr "Neoznačený"
 
