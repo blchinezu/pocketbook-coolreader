@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-16 14:20+0300\n"
-"PO-Revision-Date: 2015-07-13 20:54+0000\n"
+"PO-Revision-Date: 2015-08-16 11:37+0000\n"
 "Last-Translator: BruceLee\n"
-"Language-Team: Romanian (http://www.transifex.com/p/coolreader-pocketbook/"
-"language/ro/)\n"
+"Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/ro/)\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1631,7 +1631,7 @@ msgstr "Comutare linie status"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Modul standby"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
@@ -1794,11 +1794,3 @@ msgstr "Actualizat la v"
 #: ../src/cr3pocketbook.cpp:4924
 msgid "Untitled"
 msgstr "Fără titlu"
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "Setează semn de carte"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Pagina următoare"
