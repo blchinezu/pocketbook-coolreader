@@ -40,6 +40,7 @@ enum CRPbCommands {
     PB_CMD_CLEAR_CACHE,
     PB_CMD_SET_BOOKMARK,
     PB_CMD_UNSET_BOOKMARK,
+    PB_CMD_ENTER_STANDBY,
 
     #ifdef POCKETBOOK_PRO
         PB_CMD_TASK_MANAGER,
@@ -78,7 +79,7 @@ enum CRPbCommands {
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
 #define CR_PB_VERSION "0.0.6-17-33"
-#define CR_PB_BUILD_DATE "2015-08-12"
+#define CR_PB_BUILD_DATE "2015-08-16"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -157,6 +158,7 @@ void pbLaunchWaitBinary(const char *binary, const char *param1, const char *para
 void pbLaunchWaitBinary(const char *binary, const char *param);
 void pbLaunchWaitBinary(const char *binary);
 
+void enterStandByMode();
 void toggleInvertDisplay();
 void toggleStatusLine();
 void launchBrowser(lString16 url);

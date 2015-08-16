@@ -395,6 +395,7 @@ static const struct {
     { "@KA_clca", PB_CMD_CLEAR_CACHE, 0},
     { "@KA_sbmk", PB_CMD_SET_BOOKMARK, 0},
     { "@KA_sbmk", PB_CMD_UNSET_BOOKMARK, 0},
+    { "@KA_stby", PB_CMD_ENTER_STANDBY, 0},
     #ifdef POCKETBOOK_PRO
     { "@KA_tmgr", PB_CMD_TASK_MANAGER, 0},
     { "@KA_lock", PB_CMD_LOCK_DEVICE, 0},
@@ -2226,6 +2227,11 @@ public:
         case PB_CMD_UNSET_BOOKMARK:
             CRLog::trace("PB_CMD_UNSET_BOOKMARK");
             main_win->getDocView()->removeCurrentPageShortcutBookmark();
+            return true;
+
+        case PB_CMD_ENTER_STANDBY:
+            CRLog::trace("PB_CMD_ENTER_STANDBY");
+            enterStandByMode();
             return true;
 
         case PB_CMD_CLEAR_CACHE:
