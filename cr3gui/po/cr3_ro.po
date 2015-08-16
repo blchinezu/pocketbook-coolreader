@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-16 17:57+0300\n"
-"PO-Revision-Date: 2015-08-16 11:37+0000\n"
+"PO-Revision-Date: 2015-08-16 15:14+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ro/)\n"
@@ -949,87 +949,87 @@ msgstr "Mod turbo activat"
 
 #: ../src/settings.cpp:1285
 msgid "1 minute"
-msgstr ""
+msgstr "1 minut"
 
 #: ../src/settings.cpp:1286
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minute"
 
 #: ../src/settings.cpp:1287
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minute"
 
 #: ../src/settings.cpp:1288
 msgid "4 minutes"
-msgstr ""
+msgstr "4 minute"
 
 #: ../src/settings.cpp:1289
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minute"
 
 #: ../src/settings.cpp:1290
 msgid "6 minutes"
-msgstr ""
+msgstr "6 minute"
 
 #: ../src/settings.cpp:1291
 msgid "7 minutes"
-msgstr ""
+msgstr "7 minute"
 
 #: ../src/settings.cpp:1292
 msgid "8 minutes"
-msgstr ""
+msgstr "8 minute"
 
 #: ../src/settings.cpp:1293
 msgid "9 minutes"
-msgstr ""
+msgstr "9 minute"
 
 #: ../src/settings.cpp:1294
 msgid "10 minutes"
-msgstr ""
+msgstr "10 minute"
 
 #: ../src/settings.cpp:1295
 msgid "15 minutes"
-msgstr ""
+msgstr "15 minute"
 
 #: ../src/settings.cpp:1296
 msgid "20 minutes"
-msgstr ""
+msgstr "20 minute"
 
 #: ../src/settings.cpp:1297
 msgid "25 minutes"
-msgstr ""
+msgstr "25 minute"
 
 #: ../src/settings.cpp:1298
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minute"
 
 #: ../src/settings.cpp:1299
 msgid "35 minutes"
-msgstr ""
+msgstr "35 minute"
 
 #: ../src/settings.cpp:1300
 msgid "40 minutes"
-msgstr ""
+msgstr "40 minute"
 
 #: ../src/settings.cpp:1301
 msgid "45 minutes"
-msgstr ""
+msgstr "45 minute"
 
 #: ../src/settings.cpp:1302
 msgid "50 minutes"
-msgstr ""
+msgstr "50 minute"
 
 #: ../src/settings.cpp:1303
 msgid "55 minutes"
-msgstr ""
+msgstr "55 minute"
 
 #: ../src/settings.cpp:1304
 msgid "1 hour"
-msgstr ""
+msgstr "1 oră"
 
 #: ../src/settings.cpp:1305
 msgid "2 hours"
-msgstr ""
+msgstr "2 ore"
 
 #: ../src/settings.cpp:1312
 msgid "180+slow next page"
@@ -1353,9 +1353,8 @@ msgid "Display update mode"
 msgstr "Mod actualizare display"
 
 #: ../src/settings.cpp:1705
-#, fuzzy
 msgid "Standby"
-msgstr "Setări stil"
+msgstr "Standby"
 
 #: ../src/settings.cpp:1712
 msgid "Turbo update mode"
