@@ -67,6 +67,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Toggle Front Light (FW5 only)
  - Set bookmark (for current page)
  - Delete bookmark (for current page)
+ - Enter standby mode
 
 **Theme**
 
