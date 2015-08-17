@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-16 17:57+0300\n"
-"PO-Revision-Date: 2015-07-22 01:55+0000\n"
+"PO-Revision-Date: 2015-08-17 02:16+0000\n"
 "Last-Translator: keinejiang <keinejiang@gmail.com>\n"
-"Language-Team: Chinese (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/zh/)\n"
+"Language-Team: Chinese (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/zh/)\n"
 "Language: zh\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -949,87 +949,87 @@ msgstr "加速模式已启用"
 
 #: ../src/settings.cpp:1285
 msgid "1 minute"
-msgstr ""
+msgstr "1分钟"
 
 #: ../src/settings.cpp:1286
 msgid "2 minutes"
-msgstr ""
+msgstr "2分钟"
 
 #: ../src/settings.cpp:1287
 msgid "3 minutes"
-msgstr ""
+msgstr "3分钟"
 
 #: ../src/settings.cpp:1288
 msgid "4 minutes"
-msgstr ""
+msgstr "4分钟"
 
 #: ../src/settings.cpp:1289
 msgid "5 minutes"
-msgstr ""
+msgstr "5分钟"
 
 #: ../src/settings.cpp:1290
 msgid "6 minutes"
-msgstr ""
+msgstr "6分钟"
 
 #: ../src/settings.cpp:1291
 msgid "7 minutes"
-msgstr ""
+msgstr "7分钟"
 
 #: ../src/settings.cpp:1292
 msgid "8 minutes"
-msgstr ""
+msgstr "8分钟"
 
 #: ../src/settings.cpp:1293
 msgid "9 minutes"
-msgstr ""
+msgstr "9分钟"
 
 #: ../src/settings.cpp:1294
 msgid "10 minutes"
-msgstr ""
+msgstr "10分钟"
 
 #: ../src/settings.cpp:1295
 msgid "15 minutes"
-msgstr ""
+msgstr "15分钟"
 
 #: ../src/settings.cpp:1296
 msgid "20 minutes"
-msgstr ""
+msgstr "20分钟"
 
 #: ../src/settings.cpp:1297
 msgid "25 minutes"
-msgstr ""
+msgstr "25分钟"
 
 #: ../src/settings.cpp:1298
 msgid "30 minutes"
-msgstr ""
+msgstr "30分钟"
 
 #: ../src/settings.cpp:1299
 msgid "35 minutes"
-msgstr ""
+msgstr "35分钟"
 
 #: ../src/settings.cpp:1300
 msgid "40 minutes"
-msgstr ""
+msgstr "40分钟"
 
 #: ../src/settings.cpp:1301
 msgid "45 minutes"
-msgstr ""
+msgstr "45分钟"
 
 #: ../src/settings.cpp:1302
 msgid "50 minutes"
-msgstr ""
+msgstr "50分钟"
 
 #: ../src/settings.cpp:1303
 msgid "55 minutes"
-msgstr ""
+msgstr "55分钟"
 
 #: ../src/settings.cpp:1304
 msgid "1 hour"
-msgstr ""
+msgstr "1小时"
 
 #: ../src/settings.cpp:1305
 msgid "2 hours"
-msgstr ""
+msgstr "2小时"
 
 #: ../src/settings.cpp:1312
 msgid "180+slow next page"
@@ -1353,9 +1353,8 @@ msgid "Display update mode"
 msgstr "显示刷新模式"
 
 #: ../src/settings.cpp:1705
-#, fuzzy
 msgid "Standby"
-msgstr "风格设置"
+msgstr "待机模式"
 
 #: ../src/settings.cpp:1712
 msgid "Turbo update mode"
@@ -1721,7 +1720,7 @@ msgstr "切换状态栏"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "进入待机模式"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
@@ -1884,11 +1883,3 @@ msgstr "升级到V"
 #: ../src/cr3pocketbook.cpp:4926
 msgid "Untitled"
 msgstr "无标题"
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "设置书签"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "下一页"
