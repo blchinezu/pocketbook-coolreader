@@ -94,6 +94,8 @@ enum MainMenuItems_t {
     mm_Skin,
     mm_TapZoneSize,
     mm_Standby,
+    mm_CtrlPageTurnSwipes,
+    mm_CtrlFrontLightSwipes,
     mm_Last
 };
 

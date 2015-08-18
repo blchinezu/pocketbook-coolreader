@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-16 17:57+0300\n"
+"POT-Creation-Date: 2015-08-18 17:10+0300\n"
 "PO-Revision-Date: 2015-07-29 07:48+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
@@ -80,7 +80,7 @@ msgstr "Ostatnio otwierane książki"
 msgid "Dictionary"
 msgstr "Słownik"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1450
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1458
 msgid "Cite"
 msgstr "Cytat"
 
@@ -683,7 +683,7 @@ msgstr "Wyrównanie tekstu"
 msgid "First line indent"
 msgstr "Wcięcie pierwszej linii"
 
-#: ../src/settings.cpp:1009 ../src/settings.cpp:1613
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1621
 msgid "Font face"
 msgstr "Krój czcionki"
 
@@ -691,7 +691,7 @@ msgstr "Krój czcionki"
 msgid "Font size"
 msgstr "Rozmiar czcionki"
 
-#: ../src/settings.cpp:1025 ../src/settings.cpp:1507 ../src/settings.cpp:1622
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1515 ../src/settings.cpp:1630
 msgid "Font weight"
 msgstr "Waga czcionki"
 
@@ -699,7 +699,7 @@ msgstr "Waga czcionki"
 msgid "Font style"
 msgstr "Styl czcionki"
 
-#: ../src/settings.cpp:1029 ../src/settings.cpp:1536
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1544
 msgid "Interline space"
 msgstr "Interlinia"
 
@@ -748,7 +748,7 @@ msgid "On for big fonts only"
 msgstr "Tylko dla dużych czcionek"
 
 #: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
-#: ../src/settings.cpp:1284
+#: ../src/settings.cpp:1284 ../src/settings.cpp:1310
 msgid "Off"
 msgstr "Wyłączone"
 
@@ -1032,401 +1032,419 @@ msgstr ""
 msgid "2 hours"
 msgstr ""
 
+#: ../src/settings.cpp:1311
+msgid "Fixed"
+msgstr ""
+
 #: ../src/settings.cpp:1312
+msgid "Dynamic"
+msgstr ""
+
+#: ../src/settings.cpp:1320
 msgid "180+slow next page"
 msgstr "180+powoli następna strona"
 
-#: ../src/settings.cpp:1313
+#: ../src/settings.cpp:1321
 msgid "180+slow prev/next page"
 msgstr "180+powoli poprzednia/następna strona"
 
-#: ../src/settings.cpp:1314
+#: ../src/settings.cpp:1322
 msgid "180+FAST next page"
 msgstr "180+SZYBKO następna strona"
 
-#: ../src/settings.cpp:1315
+#: ../src/settings.cpp:1323
 msgid "180+FAST prev/next page"
 msgstr "180+SZYBKO poprzednia/następna strona"
 
-#: ../src/settings.cpp:1316
+#: ../src/settings.cpp:1324
 msgid "180+FAST next/prev page"
 msgstr "180+SZYBKO następna/poprzednia strona"
 
-#: ../src/settings.cpp:1334
+#: ../src/settings.cpp:1342
 msgid "2 BPP"
 msgstr "2 BPP"
 
-#: ../src/settings.cpp:1335
+#: ../src/settings.cpp:1343
 msgid "3 BPP"
 msgstr "3 BPP"
 
-#: ../src/settings.cpp:1336
+#: ../src/settings.cpp:1344
 msgid "4 BPP"
 msgstr "4 BPP"
 
-#: ../src/settings.cpp:1337
+#: ../src/settings.cpp:1345
 msgid "8 BPP"
 msgstr "8 BPP"
 
-#: ../src/settings.cpp:1343
+#: ../src/settings.cpp:1351
 msgid "Disabled (1:1)"
 msgstr "Wyłączone (1:1)"
 
-#: ../src/settings.cpp:1344
+#: ../src/settings.cpp:1352
 msgid "Integer scale"
 msgstr "Skalowanie całkowite"
 
-#: ../src/settings.cpp:1345
+#: ../src/settings.cpp:1353
 msgid "Arbitrary scale"
 msgstr "Skalowanie swobodne"
 
-#: ../src/settings.cpp:1350
+#: ../src/settings.cpp:1358
 msgid "Auto"
 msgstr "Automatycznie"
 
-#: ../src/settings.cpp:1351
+#: ../src/settings.cpp:1359
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1352
+#: ../src/settings.cpp:1360
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1353
+#: ../src/settings.cpp:1361
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1437
+#: ../src/settings.cpp:1445
 msgid "No hinting"
 msgstr "Bez hintingu"
 
-#: ../src/settings.cpp:1438
+#: ../src/settings.cpp:1446
 msgid "Use bytecode"
 msgstr "Użycie kodu bajtowego"
 
-#: ../src/settings.cpp:1439
+#: ../src/settings.cpp:1447
 msgid "Autohinting"
 msgstr "Hinting automatyczny"
 
-#: ../src/settings.cpp:1440
+#: ../src/settings.cpp:1448
 msgid "Light"
 msgstr "Lekki"
 
-#: ../src/settings.cpp:1445
+#: ../src/settings.cpp:1453
 msgid "Default paragraph formatting"
 msgstr "Domyślne formatowanie akapitu"
 
-#: ../src/settings.cpp:1446
+#: ../src/settings.cpp:1454
 msgctxt "CSS"
 msgid "Title"
 msgstr "Tytuł"
 
-#: ../src/settings.cpp:1447
+#: ../src/settings.cpp:1455
 msgid "Subtitle"
 msgstr "Podtytuł"
 
-#: ../src/settings.cpp:1448
+#: ../src/settings.cpp:1456
 msgid "Preformatted text / code"
 msgstr "Wstępnie sformatowany tekst / kod"
 
-#: ../src/settings.cpp:1449
+#: ../src/settings.cpp:1457
 msgid "Link"
 msgstr "Łącze"
 
-#: ../src/settings.cpp:1451
+#: ../src/settings.cpp:1459
 msgid "Epigraph"
 msgstr "Motto"
 
-#: ../src/settings.cpp:1452
+#: ../src/settings.cpp:1460
 msgid "Poem"
 msgstr "Wiersz"
 
-#: ../src/settings.cpp:1453
+#: ../src/settings.cpp:1461
 msgid "Text / Cite / Epigraph author"
 msgstr "Autor tekstu / cytatu / motta"
 
-#: ../src/settings.cpp:1454
+#: ../src/settings.cpp:1462
 msgid "Footnote"
 msgstr "Przypis"
 
-#: ../src/settings.cpp:1455
+#: ../src/settings.cpp:1463
 msgid "Footnote link"
 msgstr "Łącze do przypisu"
 
-#: ../src/settings.cpp:1456
+#: ../src/settings.cpp:1464
 msgid "Footnote title"
 msgstr "Tytuł przypisu"
 
-#: ../src/settings.cpp:1457
+#: ../src/settings.cpp:1465
 msgid "Annotation"
 msgstr "Komentarz"
 
-#: ../src/settings.cpp:1497
+#: ../src/settings.cpp:1505
 msgid "Default font face"
 msgstr "Domyślna czcionka"
 
-#: ../src/settings.cpp:1502
+#: ../src/settings.cpp:1510
 msgid "Font settings"
 msgstr "Ustawienia czcionki"
 
-#: ../src/settings.cpp:1509
+#: ../src/settings.cpp:1517
 msgid "Font antialiasing"
 msgstr "Wygładzanie czcionki"
 
-#: ../src/settings.cpp:1512
+#: ../src/settings.cpp:1520
 msgid "Font hinting"
 msgstr "Hinting czcionki"
 
-#: ../src/settings.cpp:1514
+#: ../src/settings.cpp:1522
 msgid "Font kerning"
 msgstr "Kerning czcionki"
 
-#: ../src/settings.cpp:1516
+#: ../src/settings.cpp:1524
 msgid "Font embolding"
 msgstr "Pogrubianie czcionki"
 
-#: ../src/settings.cpp:1518
+#: ../src/settings.cpp:1526
 msgid "Tracking"
 msgstr "Odstępy między literami"
 
-#: ../src/settings.cpp:1520
+#: ../src/settings.cpp:1528
 msgid "Font Gamma"
 msgstr "Gamma czcionek"
 
-#: ../src/settings.cpp:1522
+#: ../src/settings.cpp:1530
 msgid "Document embedded fonts"
 msgstr "Wbudowane czcionki dokumentu"
 
-#: ../src/settings.cpp:1525
+#: ../src/settings.cpp:1533
 msgid "Fallback font face"
 msgstr "Czcionka awaryjna"
 
-#: ../src/settings.cpp:1531
+#: ../src/settings.cpp:1539
 msgid "Formatting settings"
 msgstr "Ustawienia formatowania"
 
-#: ../src/settings.cpp:1543
+#: ../src/settings.cpp:1551
 msgid "[No Hyphenation]"
 msgstr "[bez dzielenia wyrazów]"
 
-#: ../src/settings.cpp:1544
+#: ../src/settings.cpp:1552
 msgid "[Algorythmic Hyphenation]"
 msgstr "[dzielenie algorytem]"
 
-#: ../src/settings.cpp:1546
+#: ../src/settings.cpp:1554
 msgid "Hyphenation"
 msgstr "Dzielenie wyrazów"
 
-#: ../src/settings.cpp:1560
+#: ../src/settings.cpp:1568
 msgid "Preformatted text"
 msgstr "Tekst przeformatowany"
 
-#: ../src/settings.cpp:1563
+#: ../src/settings.cpp:1571
 msgid "Space condensing percent"
 msgstr "Minimalny odstęp między wyrazami"
 
-#: ../src/settings.cpp:1566
+#: ../src/settings.cpp:1574
 msgid "Space expanding percent"
 msgstr "Maksymalny odstęp między wyrazami"
 
-#: ../src/settings.cpp:1569
+#: ../src/settings.cpp:1577
 msgid "Floating punctuation"
 msgstr "Pływająca interpunkcja"
 
-#: ../src/settings.cpp:1575
+#: ../src/settings.cpp:1583
 msgid "Image scaling"
 msgstr "Skalowanie obrazów"
 
-#: ../src/settings.cpp:1580
+#: ../src/settings.cpp:1588
 msgid "Block image scaling mode"
 msgstr "Skalowanie bloków obrazu"
 
-#: ../src/settings.cpp:1583
+#: ../src/settings.cpp:1591
 msgid "Block image max zoom"
 msgstr "Maksymalne powiększenie obrazów w bloku"
 
-#: ../src/settings.cpp:1586
+#: ../src/settings.cpp:1594
 msgid "Inline image scaling mode"
 msgstr "Skalowanie obrazów w linii tekstu"
 
-#: ../src/settings.cpp:1589
+#: ../src/settings.cpp:1597
 msgid "Inline image max zoom"
 msgstr "Maksymalne powiększenie obrazów w linii"
 
-#: ../src/settings.cpp:1598
+#: ../src/settings.cpp:1606
 msgid "Page settings"
 msgstr "Ustawienia strony"
 
-#: ../src/settings.cpp:1603
+#: ../src/settings.cpp:1611
 msgid "Status line"
 msgstr "Linia stanu"
 
-#: ../src/settings.cpp:1608
+#: ../src/settings.cpp:1616
 msgid "Status line settings"
 msgstr "Ustawienia linii stanu"
 
-#: ../src/settings.cpp:1625
+#: ../src/settings.cpp:1633
 msgid "Time format"
 msgstr "Format czasu"
 
-#: ../src/settings.cpp:1627
+#: ../src/settings.cpp:1635
 msgid "Show time"
 msgstr "Pokaż zegarek"
 
-#: ../src/settings.cpp:1629
+#: ../src/settings.cpp:1637
 msgid "Show title"
 msgstr "Pokaż tytuł"
 
-#: ../src/settings.cpp:1631
+#: ../src/settings.cpp:1639
 msgid "Show battery"
 msgstr "Pokaż stan baterii"
 
-#: ../src/settings.cpp:1633
+#: ../src/settings.cpp:1641
 msgid "Show battery percent"
 msgstr "Stan baterii w procentach"
 
-#: ../src/settings.cpp:1636
+#: ../src/settings.cpp:1644
 msgid "Show position percent"
 msgstr "Procent przeczytania książki"
 
-#: ../src/settings.cpp:1638
+#: ../src/settings.cpp:1646
 msgid "Show page count"
 msgstr "Ilość stron książki"
 
-#: ../src/settings.cpp:1640
+#: ../src/settings.cpp:1648
 msgid "Show page count till chapter end"
 msgstr "Ilość stron do końca rozdziału"
 
-#: ../src/settings.cpp:1643
+#: ../src/settings.cpp:1651
 msgid "Show page number"
 msgstr "pokaż numer strony"
 
-#: ../src/settings.cpp:1645
+#: ../src/settings.cpp:1653
 msgid "Show chapter marks"
 msgstr "Pokaż znaczniki rozdziałów"
 
-#: ../src/settings.cpp:1654
+#: ../src/settings.cpp:1662
 msgid "Page margins"
 msgstr "Marginesy"
 
-#: ../src/settings.cpp:1659
+#: ../src/settings.cpp:1667
 msgid "Top margin"
 msgstr "Górny margines"
 
-#: ../src/settings.cpp:1661
+#: ../src/settings.cpp:1669
 msgid "Bottom margin"
 msgstr "Dolny margines"
 
-#: ../src/settings.cpp:1663
+#: ../src/settings.cpp:1671
 msgid "Left margin"
 msgstr "Lewy margines"
 
-#: ../src/settings.cpp:1665
+#: ../src/settings.cpp:1673
 msgid "Right margin"
 msgstr "Prawy margines"
 
-#: ../src/settings.cpp:1670
+#: ../src/settings.cpp:1678
 msgid "Footnotes at page bottom"
 msgstr "Przypisy na dole strony"
 
-#: ../src/settings.cpp:1676
+#: ../src/settings.cpp:1684
 msgid "Display settings"
 msgstr "Ustawienia ekranu"
 
-#: ../src/settings.cpp:1685
+#: ../src/settings.cpp:1693
 msgid "Landscape pages"
 msgstr "Strony w trybie poziomym"
 
-#: ../src/settings.cpp:1687
+#: ../src/settings.cpp:1695
 msgid "Inverse display"
 msgstr "Kolory wyświetlacza"
 
-#: ../src/settings.cpp:1690
+#: ../src/settings.cpp:1698
 msgid "Show bookmark icons"
 msgstr "Pokazuj ikony zakładek"
 
-#: ../src/settings.cpp:1693
+#: ../src/settings.cpp:1701
 msgid "Highlight bookmarks"
 msgstr "Wyróżnij zakładki"
 
-#: ../src/settings.cpp:1697
+#: ../src/settings.cpp:1705
 msgid "Display update mode"
 msgstr "Tryb odświeżania ekranu"
 
-#: ../src/settings.cpp:1705
+#: ../src/settings.cpp:1713
 #, fuzzy
 msgid "Standby"
 msgstr "Ustawienia stylów"
 
-#: ../src/settings.cpp:1712
+#: ../src/settings.cpp:1720
 msgid "Turbo update mode"
 msgstr "Tryb turbo"
 
-#: ../src/settings.cpp:1717
+#: ../src/settings.cpp:1725
 msgid "Gray buffer depth(need restart)"
 msgstr "Głębokość bufora szarości (konieczny restart)"
 
-#: ../src/settings.cpp:1724
+#: ../src/settings.cpp:1732
 msgid "Skin"
 msgstr "Skórka"
 
-#: ../src/settings.cpp:1740
+#: ../src/settings.cpp:1748
 msgid "Control settings"
 msgstr "Ustawienia sterowania"
 
-#: ../src/settings.cpp:1747
+#: ../src/settings.cpp:1755
 msgid "Rotate"
 msgstr "Obrót"
 
-#: ../src/settings.cpp:1750
+#: ../src/settings.cpp:1758
 msgid "Page turn angle"
 msgstr "Kąt obrotu strony"
 
-#: ../src/settings.cpp:1766
+#: ../src/settings.cpp:1774
 msgid "Tap action"
 msgstr "Ustawienia dotyku"
 
-#: ../src/settings.cpp:1768
+#: ../src/settings.cpp:1776
 msgid "Long tap action"
 msgstr "Ustawienia długiego dotyku"
 
-#: ../src/settings.cpp:1772
+#: ../src/settings.cpp:1780
 msgid "Height of the upper tap zone"
 msgstr "Wysokość górnej strefy dotyku"
 
-#: ../src/settings.cpp:1775
+#: ../src/settings.cpp:1783
 msgid "Height of the middle tap zone"
 msgstr "Wysokość środkowej strefy dotyku"
 
-#: ../src/settings.cpp:1778
+#: ../src/settings.cpp:1786
 msgid "Width of the left tap zone"
 msgstr "Szerokość lewej strefy dotyku"
 
-#: ../src/settings.cpp:1781
+#: ../src/settings.cpp:1789
 msgid "Width of the middle tap zone"
 msgstr "Szerokość środkowej strefy dotyku"
 
-#: ../src/settings.cpp:1800
+#: ../src/settings.cpp:1793
+#, fuzzy
+msgid "Page Turn Swipes"
+msgstr "Kąt obrotu strony"
+
+#: ../src/settings.cpp:1796
+#, fuzzy
+msgid "Front Light Swipes"
+msgstr "Podświetlenie ekranu"
+
+#: ../src/settings.cpp:1814
 msgid "Style settings"
 msgstr "Ustawienia stylów"
 
-#: ../src/settings.cpp:1805
+#: ../src/settings.cpp:1819
 msgid "Document embedded styles"
 msgstr "Wbudowane style dokumentu"
 
-#: ../src/settings.cpp:1824 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1838 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Wyczyść pamięć podręczną"
 
-#: ../src/settings.cpp:1832 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1846 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "Aktualizacja OTA"
 
-#: ../src/settings.cpp:1839 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1853 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA Update Dev"
 
-#: ../src/settings.cpp:1862
+#: ../src/settings.cpp:1876
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1862,27 +1880,27 @@ msgstr "Aktualizacja zakończona niepowodzeniem!"
 msgid "Contents"
 msgstr "Zawartość"
 
-#: ../src/cr3pocketbook.cpp:2255
+#: ../src/cr3pocketbook.cpp:2281
 msgid "Cache cleared."
 msgstr "Pamięć podręczna wyczyszczona."
 
-#: ../src/cr3pocketbook.cpp:2260
+#: ../src/cr3pocketbook.cpp:2286
 msgid "Unable to list the directory contents!"
 msgstr "Nie można wyświetlić zawartość katalogu!"
 
-#: ../src/cr3pocketbook.cpp:2266
+#: ../src/cr3pocketbook.cpp:2292
 msgid "Unable to clear cache!"
 msgstr "Nie można wyczyścić pamięci podręcznej!"
 
-#: ../src/cr3pocketbook.cpp:3764
+#: ../src/cr3pocketbook.cpp:3790
 msgid "Press $1 to translate"
 msgstr "Naciśnij $1 aby przetłumaczyć"
 
-#: ../src/cr3pocketbook.cpp:4816
+#: ../src/cr3pocketbook.cpp:4845
 msgid "Updated to v"
 msgstr "Zaktualizowane do v"
 
-#: ../src/cr3pocketbook.cpp:4926
+#: ../src/cr3pocketbook.cpp:4955
 msgid "Untitled"
 msgstr "Bez tytułu"
 

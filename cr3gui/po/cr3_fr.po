@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-16 17:57+0300\n"
+"POT-Creation-Date: 2015-08-18 17:10+0300\n"
 "PO-Revision-Date: 2015-08-17 19:16+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/coolreader-pocketbook/"
@@ -80,7 +80,7 @@ msgstr "Ouvrir un livre récent"
 msgid "Dictionary"
 msgstr "Dictionnaire"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1450
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1458
 msgid "Cite"
 msgstr "Citer"
 
@@ -683,7 +683,7 @@ msgstr "Alignement du texte"
 msgid "First line indent"
 msgstr "Retrait de première ligne"
 
-#: ../src/settings.cpp:1009 ../src/settings.cpp:1613
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1621
 msgid "Font face"
 msgstr "Police avant"
 
@@ -691,7 +691,7 @@ msgstr "Police avant"
 msgid "Font size"
 msgstr "Taille de la police"
 
-#: ../src/settings.cpp:1025 ../src/settings.cpp:1507 ../src/settings.cpp:1622
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1515 ../src/settings.cpp:1630
 msgid "Font weight"
 msgstr "Épaisseur de la police "
 
@@ -699,7 +699,7 @@ msgstr "Épaisseur de la police "
 msgid "Font style"
 msgstr "Style de la police"
 
-#: ../src/settings.cpp:1029 ../src/settings.cpp:1536
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1544
 msgid "Interline space"
 msgstr "Espace d'interligne"
 
@@ -748,7 +748,7 @@ msgid "On for big fonts only"
 msgstr "Appliquer pour les grosses polices seulement"
 
 #: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
-#: ../src/settings.cpp:1284
+#: ../src/settings.cpp:1284 ../src/settings.cpp:1310
 msgid "Off"
 msgstr "Désactivé"
 
@@ -1032,400 +1032,418 @@ msgstr "1 heure"
 msgid "2 hours"
 msgstr "2 heures"
 
+#: ../src/settings.cpp:1311
+msgid "Fixed"
+msgstr ""
+
 #: ../src/settings.cpp:1312
+msgid "Dynamic"
+msgstr ""
+
+#: ../src/settings.cpp:1320
 msgid "180+slow next page"
 msgstr "180+ page suivante LENTE"
 
-#: ../src/settings.cpp:1313
+#: ../src/settings.cpp:1321
 msgid "180+slow prev/next page"
 msgstr "180+page précédente/page suivante LENTE"
 
-#: ../src/settings.cpp:1314
+#: ../src/settings.cpp:1322
 msgid "180+FAST next page"
 msgstr "180+prochaine page RAPIDE"
 
-#: ../src/settings.cpp:1315
+#: ../src/settings.cpp:1323
 msgid "180+FAST prev/next page"
 msgstr "180+page précédente/page suivante  RAPIDE"
 
-#: ../src/settings.cpp:1316
+#: ../src/settings.cpp:1324
 msgid "180+FAST next/prev page"
 msgstr "180+page suivante/page précédente  RAPIDE"
 
-#: ../src/settings.cpp:1334
+#: ../src/settings.cpp:1342
 msgid "2 BPP"
 msgstr "2 BPP"
 
-#: ../src/settings.cpp:1335
+#: ../src/settings.cpp:1343
 msgid "3 BPP"
 msgstr "3 BPP"
 
-#: ../src/settings.cpp:1336
+#: ../src/settings.cpp:1344
 msgid "4 BPP"
 msgstr "4 BPP"
 
-#: ../src/settings.cpp:1337
+#: ../src/settings.cpp:1345
 msgid "8 BPP"
 msgstr "8 BPP"
 
-#: ../src/settings.cpp:1343
+#: ../src/settings.cpp:1351
 msgid "Disabled (1:1)"
 msgstr "Désactivé (1:1)"
 
-#: ../src/settings.cpp:1344
+#: ../src/settings.cpp:1352
 msgid "Integer scale"
 msgstr "Echelle entière"
 
-#: ../src/settings.cpp:1345
+#: ../src/settings.cpp:1353
 msgid "Arbitrary scale"
 msgstr "Echelle arbitraire"
 
-#: ../src/settings.cpp:1350
+#: ../src/settings.cpp:1358
 msgid "Auto"
 msgstr "Auto"
 
-#: ../src/settings.cpp:1351
+#: ../src/settings.cpp:1359
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1352
+#: ../src/settings.cpp:1360
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1353
+#: ../src/settings.cpp:1361
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1437
+#: ../src/settings.cpp:1445
 msgid "No hinting"
 msgstr "Aucun repère"
 
-#: ../src/settings.cpp:1438
+#: ../src/settings.cpp:1446
 msgid "Use bytecode"
 msgstr "Utiliser code portable"
 
-#: ../src/settings.cpp:1439
+#: ../src/settings.cpp:1447
 msgid "Autohinting"
 msgstr "Optimisation automatique"
 
-#: ../src/settings.cpp:1440
+#: ../src/settings.cpp:1448
 msgid "Light"
 msgstr "Éclairage"
 
-#: ../src/settings.cpp:1445
+#: ../src/settings.cpp:1453
 msgid "Default paragraph formatting"
 msgstr "Formatage par défaut du paragraphe"
 
-#: ../src/settings.cpp:1446
+#: ../src/settings.cpp:1454
 msgctxt "CSS"
 msgid "Title"
 msgstr "Titre"
 
-#: ../src/settings.cpp:1447
+#: ../src/settings.cpp:1455
 msgid "Subtitle"
 msgstr "Sous-titre"
 
-#: ../src/settings.cpp:1448
+#: ../src/settings.cpp:1456
 msgid "Preformatted text / code"
 msgstr "Texte / code préformaté"
 
-#: ../src/settings.cpp:1449
+#: ../src/settings.cpp:1457
 msgid "Link"
 msgstr "Lien"
 
-#: ../src/settings.cpp:1451
+#: ../src/settings.cpp:1459
 msgid "Epigraph"
 msgstr "Épigraphe"
 
-#: ../src/settings.cpp:1452
+#: ../src/settings.cpp:1460
 msgid "Poem"
 msgstr "Poème"
 
-#: ../src/settings.cpp:1453
+#: ../src/settings.cpp:1461
 msgid "Text / Cite / Epigraph author"
 msgstr "Texte / Citation / Auteur épigraphe"
 
-#: ../src/settings.cpp:1454
+#: ../src/settings.cpp:1462
 msgid "Footnote"
 msgstr "Note de bas de page"
 
-#: ../src/settings.cpp:1455
+#: ../src/settings.cpp:1463
 msgid "Footnote link"
 msgstr "Lien vers la note de bas de page"
 
-#: ../src/settings.cpp:1456
+#: ../src/settings.cpp:1464
 msgid "Footnote title"
 msgstr "Titre de la note de bas de page"
 
-#: ../src/settings.cpp:1457
+#: ../src/settings.cpp:1465
 msgid "Annotation"
 msgstr "Annotation"
 
-#: ../src/settings.cpp:1497
+#: ../src/settings.cpp:1505
 msgid "Default font face"
 msgstr "Police par défaut"
 
-#: ../src/settings.cpp:1502
+#: ../src/settings.cpp:1510
 msgid "Font settings"
 msgstr "Réglage de la police"
 
-#: ../src/settings.cpp:1509
+#: ../src/settings.cpp:1517
 msgid "Font antialiasing"
 msgstr "Police antialiasing"
 
-#: ../src/settings.cpp:1512
+#: ../src/settings.cpp:1520
 msgid "Font hinting"
 msgstr "Optimisation du rendu de la police"
 
-#: ../src/settings.cpp:1514
+#: ../src/settings.cpp:1522
 msgid "Font kerning"
 msgstr "Crénage de la police"
 
-#: ../src/settings.cpp:1516
+#: ../src/settings.cpp:1524
 msgid "Font embolding"
 msgstr "Épaississement police "
 
-#: ../src/settings.cpp:1518
+#: ../src/settings.cpp:1526
 msgid "Tracking"
 msgstr "Traçage"
 
-#: ../src/settings.cpp:1520
+#: ../src/settings.cpp:1528
 msgid "Font Gamma"
 msgstr "Gamma de la police"
 
-#: ../src/settings.cpp:1522
+#: ../src/settings.cpp:1530
 msgid "Document embedded fonts"
 msgstr "Polices contenues dans le document"
 
-#: ../src/settings.cpp:1525
+#: ../src/settings.cpp:1533
 msgid "Fallback font face"
 msgstr "Repli de la police"
 
-#: ../src/settings.cpp:1531
+#: ../src/settings.cpp:1539
 msgid "Formatting settings"
 msgstr "Paramètres de formatage"
 
-#: ../src/settings.cpp:1543
+#: ../src/settings.cpp:1551
 msgid "[No Hyphenation]"
 msgstr "[Pas d'hyphenation]"
 
-#: ../src/settings.cpp:1544
+#: ../src/settings.cpp:1552
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Hyphenation algorythmique]"
 
-#: ../src/settings.cpp:1546
+#: ../src/settings.cpp:1554
 msgid "Hyphenation"
 msgstr "Hyphenation"
 
-#: ../src/settings.cpp:1560
+#: ../src/settings.cpp:1568
 msgid "Preformatted text"
 msgstr "Texte préformaté"
 
-#: ../src/settings.cpp:1563
+#: ../src/settings.cpp:1571
 msgid "Space condensing percent"
 msgstr "Pourcentage de l'espace condensé"
 
-#: ../src/settings.cpp:1566
+#: ../src/settings.cpp:1574
 msgid "Space expanding percent"
 msgstr "Pourcentage de l'espace d'expansion"
 
-#: ../src/settings.cpp:1569
+#: ../src/settings.cpp:1577
 msgid "Floating punctuation"
 msgstr "Ponctuation flottante"
 
-#: ../src/settings.cpp:1575
+#: ../src/settings.cpp:1583
 msgid "Image scaling"
 msgstr "Mise à l'échelle de l'image"
 
-#: ../src/settings.cpp:1580
+#: ../src/settings.cpp:1588
 msgid "Block image scaling mode"
 msgstr "Bloquer le mode de mise à l'échelle de l'image "
 
-#: ../src/settings.cpp:1583
+#: ../src/settings.cpp:1591
 msgid "Block image max zoom"
 msgstr "Bloquer l'image au zoom maxi"
 
-#: ../src/settings.cpp:1586
+#: ../src/settings.cpp:1594
 msgid "Inline image scaling mode"
 msgstr "Mode de redimensionnement de l'image en ligne"
 
-#: ../src/settings.cpp:1589
+#: ../src/settings.cpp:1597
 msgid "Inline image max zoom"
 msgstr "Zoom maxi image en ligne"
 
-#: ../src/settings.cpp:1598
+#: ../src/settings.cpp:1606
 msgid "Page settings"
 msgstr "Paramètres de page"
 
-#: ../src/settings.cpp:1603
+#: ../src/settings.cpp:1611
 msgid "Status line"
 msgstr "Ligne de status"
 
-#: ../src/settings.cpp:1608
+#: ../src/settings.cpp:1616
 msgid "Status line settings"
 msgstr "Paramètres de la ligne de status"
 
-#: ../src/settings.cpp:1625
+#: ../src/settings.cpp:1633
 msgid "Time format"
 msgstr "Format heure"
 
-#: ../src/settings.cpp:1627
+#: ../src/settings.cpp:1635
 msgid "Show time"
 msgstr "Affichage de l'heure"
 
-#: ../src/settings.cpp:1629
+#: ../src/settings.cpp:1637
 msgid "Show title"
 msgstr "Afficher le titre"
 
-#: ../src/settings.cpp:1631
+#: ../src/settings.cpp:1639
 msgid "Show battery"
 msgstr "Afficher la batterie"
 
-#: ../src/settings.cpp:1633
+#: ../src/settings.cpp:1641
 msgid "Show battery percent"
 msgstr "Afficher la charge de la batterie"
 
-#: ../src/settings.cpp:1636
+#: ../src/settings.cpp:1644
 msgid "Show position percent"
 msgstr "Afficher le pourcentage de lecture"
 
-#: ../src/settings.cpp:1638
+#: ../src/settings.cpp:1646
 msgid "Show page count"
 msgstr "Afficher le decompte des pages"
 
-#: ../src/settings.cpp:1640
+#: ../src/settings.cpp:1648
 msgid "Show page count till chapter end"
 msgstr "Afficher les pages restantes avant la fin du chapitre"
 
-#: ../src/settings.cpp:1643
+#: ../src/settings.cpp:1651
 msgid "Show page number"
 msgstr "Afficher le nombre de page"
 
-#: ../src/settings.cpp:1645
+#: ../src/settings.cpp:1653
 msgid "Show chapter marks"
 msgstr "Afficher les repères des chapitres"
 
-#: ../src/settings.cpp:1654
+#: ../src/settings.cpp:1662
 msgid "Page margins"
 msgstr "Marges de page"
 
-#: ../src/settings.cpp:1659
+#: ../src/settings.cpp:1667
 msgid "Top margin"
 msgstr "Marge supérieure"
 
-#: ../src/settings.cpp:1661
+#: ../src/settings.cpp:1669
 msgid "Bottom margin"
 msgstr "Marge inférieure"
 
-#: ../src/settings.cpp:1663
+#: ../src/settings.cpp:1671
 msgid "Left margin"
 msgstr "Marge gauche"
 
-#: ../src/settings.cpp:1665
+#: ../src/settings.cpp:1673
 msgid "Right margin"
 msgstr "Marge droite"
 
-#: ../src/settings.cpp:1670
+#: ../src/settings.cpp:1678
 msgid "Footnotes at page bottom"
 msgstr "Notes en bas de page"
 
-#: ../src/settings.cpp:1676
+#: ../src/settings.cpp:1684
 msgid "Display settings"
 msgstr "Paramètres d'affichage"
 
-#: ../src/settings.cpp:1685
+#: ../src/settings.cpp:1693
 msgid "Landscape pages"
 msgstr "Page en mode paysage"
 
-#: ../src/settings.cpp:1687
+#: ../src/settings.cpp:1695
 msgid "Inverse display"
 msgstr "Inverser affichage"
 
-#: ../src/settings.cpp:1690
+#: ../src/settings.cpp:1698
 msgid "Show bookmark icons"
 msgstr "Afficher les icones de marque-page"
 
-#: ../src/settings.cpp:1693
+#: ../src/settings.cpp:1701
 msgid "Highlight bookmarks"
 msgstr "Surligner les marque-pages"
 
-#: ../src/settings.cpp:1697
+#: ../src/settings.cpp:1705
 msgid "Display update mode"
 msgstr "Mode de mise à jour de l'affichage"
 
-#: ../src/settings.cpp:1705
+#: ../src/settings.cpp:1713
 msgid "Standby"
 msgstr "Veille"
 
-#: ../src/settings.cpp:1712
+#: ../src/settings.cpp:1720
 msgid "Turbo update mode"
 msgstr "Mode de mise à jour turbo"
 
-#: ../src/settings.cpp:1717
+#: ../src/settings.cpp:1725
 msgid "Gray buffer depth(need restart)"
 msgstr "Profondeur de gris du tampon"
 
-#: ../src/settings.cpp:1724
+#: ../src/settings.cpp:1732
 msgid "Skin"
 msgstr "Habillage"
 
-#: ../src/settings.cpp:1740
+#: ../src/settings.cpp:1748
 msgid "Control settings"
 msgstr "Paramètres de contrôle"
 
-#: ../src/settings.cpp:1747
+#: ../src/settings.cpp:1755
 msgid "Rotate"
 msgstr "Tourner"
 
-#: ../src/settings.cpp:1750
+#: ../src/settings.cpp:1758
 msgid "Page turn angle"
 msgstr "Angle de rotation de la page"
 
-#: ../src/settings.cpp:1766
+#: ../src/settings.cpp:1774
 msgid "Tap action"
 msgstr "Effet de l'appui"
 
-#: ../src/settings.cpp:1768
+#: ../src/settings.cpp:1776
 msgid "Long tap action"
 msgstr "Effet de l'appui long"
 
-#: ../src/settings.cpp:1772
+#: ../src/settings.cpp:1780
 msgid "Height of the upper tap zone"
 msgstr "Hauteur de la zone d'appui haute"
 
-#: ../src/settings.cpp:1775
+#: ../src/settings.cpp:1783
 msgid "Height of the middle tap zone"
 msgstr "Hauteur de la zone d'appui milieu"
 
-#: ../src/settings.cpp:1778
+#: ../src/settings.cpp:1786
 msgid "Width of the left tap zone"
 msgstr "Largeur de la zone d'appui gauche"
 
-#: ../src/settings.cpp:1781
+#: ../src/settings.cpp:1789
 msgid "Width of the middle tap zone"
 msgstr "Largeur de la zone d'appui milieu"
 
-#: ../src/settings.cpp:1800
+#: ../src/settings.cpp:1793
+#, fuzzy
+msgid "Page Turn Swipes"
+msgstr "Angle de rotation de la page"
+
+#: ../src/settings.cpp:1796
+#, fuzzy
+msgid "Front Light Swipes"
+msgstr "Éclairage frontal"
+
+#: ../src/settings.cpp:1814
 msgid "Style settings"
 msgstr "Paramètres de style"
 
-#: ../src/settings.cpp:1805
+#: ../src/settings.cpp:1819
 msgid "Document embedded styles"
 msgstr "Styles incorporés dans le document"
 
-#: ../src/settings.cpp:1824 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1838 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Vider le cache"
 
-#: ../src/settings.cpp:1832 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1846 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "Mise à jour OTA"
 
-#: ../src/settings.cpp:1839 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1853 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "Mise à jour OTA Développement"
 
-#: ../src/settings.cpp:1862
+#: ../src/settings.cpp:1876
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1862,26 +1880,26 @@ msgstr "Mise à jour interrompu !"
 msgid "Contents"
 msgstr "Contenu"
 
-#: ../src/cr3pocketbook.cpp:2255
+#: ../src/cr3pocketbook.cpp:2281
 msgid "Cache cleared."
 msgstr "Cache vidé."
 
-#: ../src/cr3pocketbook.cpp:2260
+#: ../src/cr3pocketbook.cpp:2286
 msgid "Unable to list the directory contents!"
 msgstr "Impossible de lister le contenu du répertoire !"
 
-#: ../src/cr3pocketbook.cpp:2266
+#: ../src/cr3pocketbook.cpp:2292
 msgid "Unable to clear cache!"
 msgstr "Impossible de vider le cache !"
 
-#: ../src/cr3pocketbook.cpp:3764
+#: ../src/cr3pocketbook.cpp:3790
 msgid "Press $1 to translate"
 msgstr "Appuyer sur $1 pour traduire"
 
-#: ../src/cr3pocketbook.cpp:4816
+#: ../src/cr3pocketbook.cpp:4845
 msgid "Updated to v"
 msgstr "Mis à jour vers v"
 
-#: ../src/cr3pocketbook.cpp:4926
+#: ../src/cr3pocketbook.cpp:4955
 msgid "Untitled"
 msgstr "Sans titre"

@@ -1305,6 +1305,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {_("2 hours"), "120"},
         {NULL, NULL},
     };
+    #ifdef POCKETBOOK_PRO_FW5
+    item_def_t front_light_swipes[] = {
+        {_("Off"), "0"},
+        {_("Fixed"), "1"},
+        {_("Dynamic"), "2"},
+        {NULL, NULL},
+    };
+    #endif
 #ifdef CR_POCKETBOOK
     item_def_t rotate_mode_options[] = {
         {"360°", "0"},
@@ -1782,6 +1790,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                "cr3_option_tap_zone_mid_width", valueFont, PROP_TAP_ZONE_WIDTH_2,
                                tap_zone_sizes);
 
+        createSettingsMenuItem(controlSettingsMenu, mm_CtrlPageTurnSwipes, _("Page Turn Swipes"),
+                               "cr3_option_ctrl_page_turn_swipes", valueFont, PROP_CTRL_PAGE_TURN_SWIPES, on_off_option);
+        #ifdef POCKETBOOK_PRO_FW5
+        createSettingsMenuItem(controlSettingsMenu, mm_CtrlFrontLightSwipes, _("Front Light Swipes"),
+                               "cr3_option_ctrl_front_light_swipes", valueFont, PROP_CTRL_FRONT_LIGHT_SWIPES, front_light_swipes);
+        #endif
     }
     if ( !controlSettingsMenu->getItems().empty()) {
         controlSettingsMenu->reconfigure( 0 );

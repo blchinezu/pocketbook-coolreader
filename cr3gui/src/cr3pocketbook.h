@@ -179,6 +179,7 @@ bool systemPanelShown();
 #define FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT 0.6 /* 60% */
 void toggleFrontLight();
 void setFrontLightValue(int value);
+int getFrontLightValue();
 #endif
 
 #endif
