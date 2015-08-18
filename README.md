@@ -36,6 +36,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - More hyphenations
  - Control front light by vertically swiping in FW5
  - Turn pages by horizontally swiping
+ - Chinese is correctly shown in menus
 
 **Settings**
 
