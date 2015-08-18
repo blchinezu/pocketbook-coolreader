@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-16 17:57+0300\n"
-"PO-Revision-Date: 2015-07-24 20:49+0000\n"
+"PO-Revision-Date: 2015-08-17 19:16+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
-"Language-Team: French (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/fr/)\n"
+"Language-Team: French (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/fr/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -950,87 +950,87 @@ msgstr "Mode turbo activé"
 
 #: ../src/settings.cpp:1285
 msgid "1 minute"
-msgstr ""
+msgstr "1 minute"
 
 #: ../src/settings.cpp:1286
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minutes"
 
 #: ../src/settings.cpp:1287
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minutes"
 
 #: ../src/settings.cpp:1288
 msgid "4 minutes"
-msgstr ""
+msgstr "4 minutes"
 
 #: ../src/settings.cpp:1289
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minutes"
 
 #: ../src/settings.cpp:1290
 msgid "6 minutes"
-msgstr ""
+msgstr "6 minutes"
 
 #: ../src/settings.cpp:1291
 msgid "7 minutes"
-msgstr ""
+msgstr "7 minutes"
 
 #: ../src/settings.cpp:1292
 msgid "8 minutes"
-msgstr ""
+msgstr "8 minutes"
 
 #: ../src/settings.cpp:1293
 msgid "9 minutes"
-msgstr ""
+msgstr "9 minutes"
 
 #: ../src/settings.cpp:1294
 msgid "10 minutes"
-msgstr ""
+msgstr "10 minutes"
 
 #: ../src/settings.cpp:1295
 msgid "15 minutes"
-msgstr ""
+msgstr "15 minutes"
 
 #: ../src/settings.cpp:1296
 msgid "20 minutes"
-msgstr ""
+msgstr "20 minutes"
 
 #: ../src/settings.cpp:1297
 msgid "25 minutes"
-msgstr ""
+msgstr "25 minutes"
 
 #: ../src/settings.cpp:1298
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minutes"
 
 #: ../src/settings.cpp:1299
 msgid "35 minutes"
-msgstr ""
+msgstr "35 minutes"
 
 #: ../src/settings.cpp:1300
 msgid "40 minutes"
-msgstr ""
+msgstr "40 minutes"
 
 #: ../src/settings.cpp:1301
 msgid "45 minutes"
-msgstr ""
+msgstr "45 minutes"
 
 #: ../src/settings.cpp:1302
 msgid "50 minutes"
-msgstr ""
+msgstr "50 minutes"
 
 #: ../src/settings.cpp:1303
 msgid "55 minutes"
-msgstr ""
+msgstr "55 minutes"
 
 #: ../src/settings.cpp:1304
 msgid "1 hour"
-msgstr ""
+msgstr "1 heure"
 
 #: ../src/settings.cpp:1305
 msgid "2 hours"
-msgstr ""
+msgstr "2 heures"
 
 #: ../src/settings.cpp:1312
 msgid "180+slow next page"
@@ -1354,9 +1354,8 @@ msgid "Display update mode"
 msgstr "Mode de mise à jour de l'affichage"
 
 #: ../src/settings.cpp:1705
-#, fuzzy
 msgid "Standby"
-msgstr "Paramètres de style"
+msgstr "Veille"
 
 #: ../src/settings.cpp:1712
 msgid "Turbo update mode"
@@ -1723,7 +1722,7 @@ msgstr "Affichage barre de statut"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Entrer en mode veille"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
@@ -1886,11 +1885,3 @@ msgstr "Mis à jour vers v"
 #: ../src/cr3pocketbook.cpp:4926
 msgid "Untitled"
 msgstr "Sans titre"
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "Définir marque-page"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Page suivante"

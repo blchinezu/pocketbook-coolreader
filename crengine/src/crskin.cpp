@@ -19,6 +19,7 @@
 // uncomment to trace skin XML access errors / not found elements
 //#define TRACE_SKIN_ERRORS
 
+extern lString16 currentLang;
 
 class RecursionLimit
 {
@@ -870,6 +871,9 @@ CRSkinnedItem::CRSkinnedItem()
 
 void CRSkinnedItem::setFontFace( lString16 face )
 {
+    if( currentLang == "zh" ) {
+        face = lString16("AR PL New Sung");
+    }
     if ( _fontFace != face ) {
         _fontFace = face;
         _font.Clear();

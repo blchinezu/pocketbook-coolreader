@@ -52,6 +52,7 @@ ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
 lString16 currentCacheDir;
 lString16 openedCacheFile;
+lString16 currentLang;
 lvPoint touchDown(0,0);
 
 static const char *def_menutext[9] = {
@@ -250,6 +251,7 @@ CRPocketBookGlobals::CRPocketBookGlobals(char *fileName)
     CRLog::trace("language=%s", _lang.c_str());
     if (_lang == "ua")
         _lang = "uk";
+    currentLang = lString16(_lang.c_str());
     _keepOrientation = ReadInt(gc, const_cast<char *>("keeporient"), 0);
     _pbDictionary = ReadString(gc, const_cast<char *>("dictionary"), const_cast<char *>(""));
     CloseConfig(gc);
