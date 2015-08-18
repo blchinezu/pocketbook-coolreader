@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-18 17:10+0300\n"
-"PO-Revision-Date: 2015-08-17 07:53+0000\n"
+"PO-Revision-Date: 2015-08-18 19:22+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ru/)\n"
@@ -1036,11 +1036,11 @@ msgstr "два часа"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "Фиксированная шкала"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "Плавный регулятор"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1416,14 +1416,12 @@ msgid "Width of the middle tap zone"
 msgstr "Ширина центральной тап-зоны"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Наклон для перелистывания"
+msgstr "Свайпы разворота страницы"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Управление подсветкой"
+msgstr "Свайпы подсветки"
 
 #: ../src/settings.cpp:1814
 msgid "Style settings"
