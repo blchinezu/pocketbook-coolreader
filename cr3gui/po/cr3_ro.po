@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-18 17:10+0300\n"
-"PO-Revision-Date: 2015-08-16 15:14+0000\n"
+"PO-Revision-Date: 2015-08-18 15:03+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ro/)\n"
@@ -1033,11 +1033,11 @@ msgstr "2 ore"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "Fix"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "Dinamic"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1413,14 +1413,12 @@ msgid "Width of the middle tap zone"
 msgstr "Lăţimea zonei din centru"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Unghi întoarcere pagină"
+msgstr "Întoarcere pagină cu swipe"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Lumină"
+msgstr "Reglare luminozitate cu swipe"
 
 #: ../src/settings.cpp:1814
 msgid "Style settings"
