@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-18 17:10+0300\n"
-"PO-Revision-Date: 2015-08-17 02:16+0000\n"
+"PO-Revision-Date: 2015-08-19 07:35+0000\n"
 "Last-Translator: keinejiang <keinejiang@gmail.com>\n"
 "Language-Team: Chinese (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/zh/)\n"
@@ -1033,11 +1033,11 @@ msgstr "2小时"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "静态前光（根据手指位置决定前光亮度）"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "动态前光（根据滑行距离增减前光亮度）"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1413,14 +1413,12 @@ msgid "Width of the middle tap zone"
 msgstr "中部触摸区域宽度"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "页旋转角度"
+msgstr "翻页手势"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "前光"
+msgstr "前光手势"
 
 #: ../src/settings.cpp:1814
 msgid "Style settings"
