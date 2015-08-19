@@ -1961,7 +1961,8 @@ protected:
             }
 
             // If page turn swipe
-            if( !longTap && abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH ) {
+            if( !longTap && abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH &&
+                CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_PAGE_TURN_SWIPES, 1) == 1 ) {
 
                 if( touchDown.x-pt.x > 0 )
                     SendEvent(main_handler, EVT_NEXTPAGE, 0, 0);
@@ -2010,24 +2011,46 @@ protected:
 
             // VERTICAL
             if( abs(touchDown.x-pt.x) < abs(touchDown.y-pt.y) ) {
-                setFrontLightValue(
-                    /* bottom to top */
-                    100 -
-                    /* value (%) */
-                    (
-                        100 *
+                int front_light_swipes_mode = CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_FRONT_LIGHT_SWIPES, 2);
+
+                if( front_light_swipes_mode == 1 ) {
+                    setFrontLightValue(
+                        /* bottom to top */
+                        100 -
+                        /* value (%) */
                         (
-                            /* touch point (PX) */
-                            pt.y -
-                            /* offset (PX) used to center the region */
-                            ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                            100 *
+                            (
+                                /* touch point (PX) */
+                                pt.y -
+                                /* offset (PX) used to center the region */
+                                ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                            )
+                            /
+                            /* usable screen (PX) */
+                            ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
                         )
-                        /
-                        /* usable screen (PX) */
-                        ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
-                    )
-                    );
-                ignoreNextTouchRelease = true;
+                        );
+                    ignoreNextTouchRelease = true;
+                }
+                else if( front_light_swipes_mode == 2 ) {
+                    setFrontLightValue(
+                        getFrontLightValue() -
+                        /* value (%) */
+                        (
+                            100 *
+                            (
+                                /* step height (PX) */
+                                pt.y - touchDown.y
+                            )
+                            /
+                            /* usable screen (PX) */
+                            ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
+                        )
+                        );
+                    touchDown.y = pt.y;
+                    ignoreNextTouchRelease = true;
+                }
                 return true;
             }
 
@@ -4628,6 +4651,9 @@ void restoreFrontLightIfNeeded() {
         SwitchFrontlightState();
         restoringFrontLightRequired = false;
     }
+}
+int getFrontLightValue() {
+    return min(max(GetFrontlightState(), 0), 100);
 }
 void setFrontLightValue(int value) {
     

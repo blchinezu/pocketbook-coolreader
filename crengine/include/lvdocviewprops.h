@@ -93,4 +93,7 @@
 #define PROP_TAP_ZONE_HEIGHT_1 "app.tapzone.height.1"
 #define PROP_TAP_ZONE_HEIGHT_2 "app.tapzone.height.2"
 
+#define PROP_CTRL_PAGE_TURN_SWIPES "window.swipes.pageturn"
+#define PROP_CTRL_FRONT_LIGHT_SWIPES "window.swipes.frontlight"
+
 #endif // LVDOCVIEWPROPS_H

@@ -46,6 +46,8 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Font settings > Tracking [xl743]
  - Style settings > * > Letter spacing [xl743]
  - Page settings > Status line settings > Time format
+ - Control settings > Page Turn Swipes
+ - Control settings > Front Light Swipes
  - Clear cache
  - OTA Update (through Github)
 
