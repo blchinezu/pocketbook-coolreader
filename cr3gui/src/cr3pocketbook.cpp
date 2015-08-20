@@ -1990,16 +1990,9 @@ protected:
         // RELEASE / LONG TAP
         else if (CRTOUCH_UP == evType || CRTOUCH_DOWN_LONG == evType) {
 
-            // If it should be ignored (triggered front light swipe)
-            if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
-                ignoreNextTouchRelease = false;
-                touchPointing = 0;
-                return true;
-            }
-
             // End of pinch
             #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
-            if( touchPointing == 2 && fingersDistance.start != fingersDistance.current ) {
+            if( touchPointing == 2 ) {
 
                 drawTemporaryZoom();
                 // free(screenshot);
@@ -2011,7 +2004,6 @@ protected:
 
                 if( newFontSize != currentFontSize ) {
                     main_win->getDocView()->setFontSize(newFontSize);
-                    // CRPocketBookDocView::instance->getProps()->setInt( PROP_FONT_SIZE, main_win->getDocView()->getFontSize() );
                     main_win->saveSettings(lString16::empty_str);
                 }
                 else {
@@ -2023,6 +2015,12 @@ protected:
             #endif
 
             touchPointing = 0;
+            
+            // If it should be ignored (triggered front light swipe)
+            if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
+                ignoreNextTouchRelease = false;
+                return true;
+            }
 
             // If page turn swipe
             if( CRTOUCH_DOWN_LONG != evType && abs(finger1.start.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH &&
