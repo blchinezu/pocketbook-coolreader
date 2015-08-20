@@ -1988,8 +1988,15 @@ protected:
         // RELEASE / LONG TAP
         else if (CRTOUCH_UP == evType || CRTOUCH_DOWN_LONG == evType) {
 
+            // If it should be ignored (triggered front light swipe)
+            if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
+                ignoreNextTouchRelease = false;
+                touchPointing = 0;
+                return true;
+            }
+
             // End of pinch
-            if( touchPointing == 2 ) {
+            if( touchPointing == 2 && fingersDistance.start != fingersDistance.current ) {
 
                 drawTemporaryZoom();
                 // free(screenshot);
@@ -2010,13 +2017,8 @@ protected:
                 
                 return true;
             }
-            touchPointing = 0;
 
-            // If it should be ignored (triggered front light swipe)
-            if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
-                ignoreNextTouchRelease = false;
-                return true;
-            }
+            touchPointing = 0;
 
             // If page turn swipe
             if( CRTOUCH_DOWN_LONG != evType && abs(finger1.start.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH &&
@@ -2031,36 +2033,38 @@ protected:
 
             // If tap/long tap
             int tapZone = getTapZone(pt.x, pt.y, getProps());
-            int command = 0, param = 0;
-            getCommandForTapZone(tapZone, getProps(), CRTOUCH_DOWN_LONG == evType, command, param);
-            if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
-                ldomXPointer p = _docview->getNodeByPoint( pt );
-                if ( !p.isNull() ) {
-                    m_link = p.getHRef();
+            if( tapZone == getTapZone(finger1.start.x, finger1.start.y, getProps()) ) {
+                int command = 0, param = 0;
+                getCommandForTapZone(tapZone, getProps(), CRTOUCH_DOWN_LONG == evType, command, param);
+                if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
+                    ldomXPointer p = _docview->getNodeByPoint( pt );
+                    if ( !p.isNull() ) {
+                        m_link = p.getHRef();
 
-                    if ( !m_link.empty() ) {
-                        if (command != 0 && command != MCMD_GO_LINK) {
-                            if (NULL == link_contextMenu[0].text)
-                                link_contextMenu[0].text = const_cast<char *>(getCommandName(MCMD_GO_LINK, 0));
-                            link_contextMenu[1].index = command;
-                            link_altParm = param;
-                            link_contextMenu[1].text = const_cast<char *>(getCommandName(command, param));
-                            OpenMenu(link_contextMenu, MCMD_GO_LINK, pt.x, pt.y, handle_LinksContextMenu );
+                        if ( !m_link.empty() ) {
+                            if (command != 0 && command != MCMD_GO_LINK) {
+                                if (NULL == link_contextMenu[0].text)
+                                    link_contextMenu[0].text = const_cast<char *>(getCommandName(MCMD_GO_LINK, 0));
+                                link_contextMenu[1].index = command;
+                                link_altParm = param;
+                                link_contextMenu[1].text = const_cast<char *>(getCommandName(command, param));
+                                OpenMenu(link_contextMenu, MCMD_GO_LINK, pt.x, pt.y, handle_LinksContextMenu );
+                                return true;
+                            } else {
+                                _docview->goLink( m_link );
+                                return showLinksDialog(true);
+                            }
+                        } else if (command == MCMD_DICT) {
+                            lvPoint wordPoint = p.toPoint();
+                            showDictDialog(wordPoint);
                             return true;
-                        } else {
-                            _docview->goLink( m_link );
-                            return showLinksDialog(true);
                         }
-                    } else if (command == MCMD_DICT) {
-                        lvPoint wordPoint = p.toPoint();
-                        showDictDialog(wordPoint);
-                        return true;
                     }
                 }
-            }
-            if (command != 0) {
-                _wm->postCommand(command, param);
-                return true;
+                if (command != 0) {
+                    _wm->postCommand(command, param);
+                    return true;
+                }
             }
         }
 
@@ -2072,45 +2076,37 @@ protected:
             }
 
             iv_mtinfo *mti;
-            iv_mtinfo_54 *mti54;    /* iv_mtinfo changed starting with firmware 5.4 */
-            bool mtinfo_new = (fw_major > 5) || (fw_major == 5 && fw_minor >= 4);
+            iv_mtinfo_54 *mti54; // iv_mtinfo changed starting with firmware 5.4
 
             if (gti && (mti = (*gti)())) {
+
                 mti54 = (iv_mtinfo_54*)mti;
+                bool mtinfo_new = (fw_major > 5) || (fw_major == 5 && fw_minor >= 4);
+                int X1 = (mtinfo_new) ? mti54[0].x : mti[0].x;
+                int Y1 = (mtinfo_new) ? mti54[0].y : mti[0].y;
+                int X2 = (mtinfo_new) ? mti54[1].x : mti[1].x;
+                int Y2 = (mtinfo_new) ? mti54[1].y : mti[1].y;
+                float distance = sqrt((X2-X1)*(X2-X1)+(Y2-Y1)*(Y2-Y1));
+
                 if (touchPointing == 1) {
-                    /* On the Inkpad, the original pointer down location (X00, Y00)
-                     * may end up associated with the mti[1] struct, so we reset it
-                     * here, and stop trusting par1 and par2 for MTSYNC events. */
-                    finger1.current.x = finger1.start.x = (mtinfo_new) ? mti54[0].x : mti[0].x;
-                    finger1.current.y = finger1.start.y = (mtinfo_new) ? mti54[0].y : mti[0].y;
-                    finger2.current.x = finger2.start.x = (mtinfo_new) ? mti54[1].x : mti[1].x;
-                    finger2.current.y = finger2.start.y = (mtinfo_new) ? mti54[1].y : mti[1].y;
+                    if( (X1 != 0 || Y1 != 0) && (X2 != 0 || Y2 != 0) ) {
 
-                    if( (finger1.start.x != 0 || finger1.start.y != 0) &&
-                        (finger2.start.x != 0 || finger2.start.y != 0) ) {
                         touchPointing = 2;
-                        // screenshot = BitmapFromScreen(0, 0, ScreenWidth(), ScreenHeight());
+                        finger1.current.x = finger1.start.x = X1;
+                        finger1.current.y = finger1.start.y = Y1;
+                        finger2.current.x = finger2.start.x = X2;
+                        finger2.current.y = finger2.start.y = Y2;
+                        fingersDistance.start = distance;
 
-                        fingersDistance.start = sqrt(
-                            (finger2.start.x - finger1.start.x) * (finger2.start.x - finger1.start.x) +
-                            (finger2.start.y - finger1.start.y) * (finger2.start.y - finger1.start.y)
-                            );
+                        // screenshot = BitmapFromScreen(0, 0, ScreenWidth(), ScreenHeight());
                     }
                 } else {
-                    /* Inkpad MTSYNC events are buggy, and sometimes show the same
-                     * coordinates for the two points, so we screen those out. */
-                    int X0 = (mtinfo_new) ? mti54[0].x : mti[0].x;
-                    int Y0 = (mtinfo_new) ? mti54[0].y : mti[0].y;
-                    int X1 = (mtinfo_new) ? mti54[1].x : mti[1].x;
-                    int Y1 = (mtinfo_new) ? mti54[1].y : mti[1].y;
-                    float distance = sqrt((X1-X0)*(X1-X0)+(Y1-Y0)*(Y1-Y0));
+                    if( !(X2+Y2 == 0 || X1+Y1 == 0 || (X1==X2 && Y1==Y2) || distance < 5) ) {
 
-                    if( !(X1+Y1 == 0 || X0+Y0 == 0 || (X0==X1 && Y0==Y1) || distance < 5) ) {
-
-                        finger1.current.x = X0;
-                        finger1.current.y = Y0;
-                        finger2.current.x = X1;
-                        finger2.current.y = Y1;
+                        finger1.current.x = X1;
+                        finger1.current.y = Y1;
+                        finger2.current.x = X2;
+                        finger2.current.y = Y2;
                         fingersDistance.current = distance;
 
                         drawTemporaryZoom();
