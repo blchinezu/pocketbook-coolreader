@@ -1,6 +1,8 @@
 /*
  *  CR3 for PocketBook, port by pkb
  */
+#include <ctime>
+#include <cmath>
 #include <crengine.h>
 #include <crgui.h>
 #include "viewdlg.h"
@@ -40,6 +42,30 @@
 
 #define PB_LINE_HEIGHT 30
 
+iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
+
+typedef struct iv_mtinfo_54_s {
+    int active;
+    int x;
+    int y;
+    int pressure;
+    int devtype;
+    int rsv_2;
+    long long timems;
+} iv_mtinfo_54;
+
+typedef struct finger_s {
+    lvPoint start;
+    lvPoint current;
+} finger_t;
+finger_t finger1, finger2;
+
+typedef struct fingersDistance_s {
+    float start;
+    float current;
+} fingersDistance_t;
+fingersDistance_t fingersDistance;
+
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
 bool useDeveloperFeatures;
@@ -47,13 +73,17 @@ bool isStandByMode = false;
 bool ignoreNextTouchRelease = false;
 bool isTouchMenuVisible = false;
 int TM_lastDragPage = 0;
+// ibitmap *screenshot = NULL;
 ibitmap *standByImage = NULL;
 ibitmap *standByLockImage = NULL;
 lString16 pbSkinFileName;
 lString16 currentCacheDir;
 lString16 openedCacheFile;
 lString16 currentLang;
-lvPoint touchDown(0,0);
+int fw_major;
+int fw_minor;
+int touchPointing;
+std::clock_t last_drawTemporaryZoom;
 
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
@@ -968,8 +998,8 @@ public:
         if( evType == CRTOUCH_DOWN ) {
             CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_DOWN");
 
-            touchDown.x = x;
-            touchDown.y = y;
+            finger1.start.x = x;
+            finger1.start.y = y;
 
             // BOTTOM Page Bar
             if( y >= bottomY + (int)(bottomH/2) && y < bottomY+bottomH ) {
@@ -998,7 +1028,7 @@ public:
             CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_DOWN_LONG");
 
             // TOP
-            if( max(touchDown.y, y) <= icon_height ) {
+            if( max(finger1.start.y, y) <= icon_height ) {
                 CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): TOP");
 
                 // Match tapped icon
@@ -1028,7 +1058,7 @@ public:
             CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): CRTOUCH_UP");
 
             // TOP
-            if( max(touchDown.y, y) <= icon_height ) {
+            if( max(finger1.start.y, y) <= icon_height ) {
                 CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): TOP");
 
                 // Match tapped icon
@@ -1944,27 +1974,55 @@ protected:
             setDirty();
         return res;
     }
+
     virtual bool onClientTouch(lvPoint &pt, CRGUITouchEventType evType)
     {
+        // TOUCH DOWN
         if( evType == CRTOUCH_DOWN ) {
-            touchDown.x = pt.x;
-            touchDown.y = pt.y;
+            finger1.start.x = pt.x;
+            finger1.start.y = pt.y;
+
+            touchPointing = 1;
         }
 
-        bool longTap = (CRTOUCH_DOWN_LONG == evType);
-        if (CRTOUCH_UP == evType ||  longTap) {
+        // RELEASE / LONG TAP
+        else if (CRTOUCH_UP == evType || CRTOUCH_DOWN_LONG == evType) {
+
+            // End of pinch
+            if( touchPointing == 2 ) {
+
+                drawTemporaryZoom();
+                // free(screenshot);
+                touchPointing = 0;
+
+                int zoom = int((fingersDistance.current - fingersDistance.start)/40);
+                int currentFontSize = main_win->getDocView()->getFontSize();
+                int newFontSize = min(max(currentFontSize + zoom, 16), 80);
+
+                if( newFontSize != currentFontSize ) {
+                    main_win->getDocView()->setFontSize(newFontSize);
+                    // CRPocketBookDocView::instance->getProps()->setInt( PROP_FONT_SIZE, main_win->getDocView()->getFontSize() );
+                    main_win->saveSettings(lString16::empty_str);
+                }
+                else {
+                    CRPocketBookWindowManager::instance->update(true);
+                }
+                
+                return true;
+            }
+            touchPointing = 0;
 
             // If it should be ignored (triggered front light swipe)
-            if( ignoreNextTouchRelease && !longTap ) {
+            if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
                 ignoreNextTouchRelease = false;
                 return true;
             }
 
             // If page turn swipe
-            if( !longTap && abs(touchDown.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH &&
+            if( CRTOUCH_DOWN_LONG != evType && abs(finger1.start.x-pt.x) >= ScreenWidth() * MIN_PAGE_TURN_SWIPE_WIDTH &&
                 CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_PAGE_TURN_SWIPES, 1) == 1 ) {
 
-                if( touchDown.x-pt.x > 0 )
+                if( finger1.start.x-pt.x > 0 )
                     SendEvent(main_handler, EVT_NEXTPAGE, 0, 0);
                 else
                     SendEvent(main_handler, EVT_PREVPAGE, 0, 0);
@@ -1974,8 +2032,8 @@ protected:
             // If tap/long tap
             int tapZone = getTapZone(pt.x, pt.y, getProps());
             int command = 0, param = 0;
-            getCommandForTapZone(tapZone, getProps(), longTap, command, param);
-            if (longTap || command == MCMD_GO_LINK) {
+            getCommandForTapZone(tapZone, getProps(), CRTOUCH_DOWN_LONG == evType, command, param);
+            if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
                 ldomXPointer p = _docview->getNodeByPoint( pt );
                 if ( !p.isNull() ) {
                     m_link = p.getHRef();
@@ -2006,11 +2064,64 @@ protected:
             }
         }
 
+        // MULTI
+        else if (CRTOUCH_MULTI_TOUCH == evType && touchPointing && max(pt.x,pt.y) > 2) {
+
+            iv_mtinfo *mti;
+            iv_mtinfo_54 *mti54;    /* iv_mtinfo changed starting with firmware 5.4 */
+            bool mtinfo_new = (fw_major > 5) || (fw_major == 5 && fw_minor >= 4);
+
+            if (gti && (mti = (*gti)())) {
+                mti54 = (iv_mtinfo_54*)mti;
+                if (touchPointing == 1) {
+                    /* On the Inkpad, the original pointer down location (X00, Y00)
+                     * may end up associated with the mti[1] struct, so we reset it
+                     * here, and stop trusting par1 and par2 for MTSYNC events. */
+                    finger1.current.x = finger1.start.x = (mtinfo_new) ? mti54[0].x : mti[0].x;
+                    finger1.current.y = finger1.start.y = (mtinfo_new) ? mti54[0].y : mti[0].y;
+                    finger2.current.x = finger2.start.x = (mtinfo_new) ? mti54[1].x : mti[1].x;
+                    finger2.current.y = finger2.start.y = (mtinfo_new) ? mti54[1].y : mti[1].y;
+
+                    if( (finger1.start.x != 0 || finger1.start.y != 0) &&
+                        (finger2.start.x != 0 || finger2.start.y != 0) ) {
+                        touchPointing = 2;
+                        // screenshot = BitmapFromScreen(0, 0, ScreenWidth(), ScreenHeight());
+
+                        fingersDistance.start = sqrt(
+                            (finger2.start.x - finger1.start.x) * (finger2.start.x - finger1.start.x) +
+                            (finger2.start.y - finger1.start.y) * (finger2.start.y - finger1.start.y)
+                            );
+                    }
+                } else {
+                    /* Inkpad MTSYNC events are buggy, and sometimes show the same
+                     * coordinates for the two points, so we screen those out. */
+                    int X0 = (mtinfo_new) ? mti54[0].x : mti[0].x;
+                    int Y0 = (mtinfo_new) ? mti54[0].y : mti[0].y;
+                    int X1 = (mtinfo_new) ? mti54[1].x : mti[1].x;
+                    int Y1 = (mtinfo_new) ? mti54[1].y : mti[1].y;
+                    float distance = sqrt((X1-X0)*(X1-X0)+(Y1-Y0)*(Y1-Y0));
+
+                    if( !(X1+Y1 == 0 || X0+Y0 == 0 || (X0==X1 && Y0==Y1) || distance < 5) ) {
+
+                        finger1.current.x = X0;
+                        finger1.current.y = Y0;
+                        finger2.current.x = X1;
+                        finger2.current.y = Y1;
+                        fingersDistance.current = distance;
+
+                        drawTemporaryZoom();
+                    }
+                }
+            }
+            return true;
+        }
+
+        // DRAG
         #ifdef POCKETBOOK_PRO_FW5
-        else if( evType == CRTOUCH_MOVE ) {
+        else if( evType == CRTOUCH_MOVE && touchPointing == 1 ) {
 
             // VERTICAL
-            if( abs(touchDown.x-pt.x) < abs(touchDown.y-pt.y) ) {
+            if( abs(finger1.start.x-pt.x) < abs(finger1.start.y-pt.y) ) {
                 int front_light_swipes_mode = CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_FRONT_LIGHT_SWIPES, 2);
 
                 if( front_light_swipes_mode == 1 ) {
@@ -2041,14 +2152,14 @@ protected:
                             100 *
                             (
                                 /* step height (PX) */
-                                pt.y - touchDown.y
+                                pt.y - finger1.start.y
                             )
                             /
                             /* usable screen (PX) */
                             ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
                         )
                         );
-                    touchDown.y = pt.y;
+                    finger1.start.y = pt.y;
                     ignoreNextTouchRelease = true;
                 }
                 return true;
@@ -4566,6 +4677,8 @@ const char * getEventName(int evt)
         return "EVT_NEXTPAGE";
     case EVT_OPENDIC:
         return "EVT_OPENDIC";
+    case EVT_MTSYNC:
+        return "EVT_MTSYNC";
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
         return "EVT_BACKGROUND";
@@ -4614,6 +4727,8 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
         return CRTOUCH_DOWN_LONG;
     case EVT_POINTERUP:
         return CRTOUCH_UP;
+    case EVT_MTSYNC:
+        return CRTOUCH_MULTI_TOUCH;
     }
     return CRTOUCH_MOVE;
 }
@@ -5085,6 +5200,7 @@ int main_handler(int type, int par1, int par2)
     case EVT_POINTERDRAG:
 #endif
     case EVT_POINTERLONG:
+    case EVT_MTSYNC:
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
         restartStandByTimer();
@@ -5108,6 +5224,117 @@ const char* TR(const char *label)
     return tr;
 }
 
+void drawTemporaryZoom() {
+
+    // Hide system panel
+    hideSystemPanel(true);
+
+    int zoom = min(max(main_win->getDocView()->getFontSize() + int((fingersDistance.current - fingersDistance.start)/40), 16), 80);
+
+    FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
+    FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
+    DrawString(ScreenWidth()/2-30, 10, UnicodeToUtf8(lString16::itoa(zoom)).c_str());
+    PartialUpdateBW(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51);
+
+    // return;
+
+    // std::clock_t now = std::clock();
+    // if( 1000.0 * (now - last_drawTemporaryZoom) / CLOCKS_PER_SEC < 160 ) {
+    //     return;
+    // }
+    // last_drawTemporaryZoom = now;
+
+    // // Hide system panel
+    // hideSystemPanel(true);
+
+    // // Fingers dragged distance
+    // float distance = fingersDistance.current - fingersDistance.start;
+    // float absDistance = distance<0 ? 0-distance : distance;
+
+    // // Pixels zoom
+    // int zoomX, zoomY, zoomXoffset, zoomYoffset;
+    // if( ScreenWidth() < ScreenHeight() ) {
+    //     zoomY = absDistance;
+    //     zoomX = int(ScreenWidth() * absDistance / ScreenHeight());
+    // }
+    // else {
+    //     zoomY = int(ScreenHeight() * absDistance / ScreenWidth());
+    //     zoomX = absDistance;
+    // }
+    // zoomXoffset = int(zoomX/2);
+    // zoomYoffset = int(zoomY/2);
+
+    // FillArea(0, 0, ScreenWidth()/2, ScreenHeight()/2, 0x00FFFFFF);
+    
+    // int y = 10;
+    
+    // DrawString(10, y, UnicodeToUtf8(L"finger1.start.x = " + lString16::itoa(int(finger1.start.x))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger1.start.y = " + lString16::itoa(int(finger1.start.y))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger2.start.x = " + lString16::itoa(int(finger2.start.x))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger2.start.y = " + lString16::itoa(int(finger2.start.y))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger1.current.x = " + lString16::itoa(int(finger1.current.x))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger1.current.y = " + lString16::itoa(int(finger1.current.y))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger2.current.x = " + lString16::itoa(int(finger2.current.x))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"finger2.current.y = " + lString16::itoa(int(finger2.current.y))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"distance = " + lString16::itoa(int(distance))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"absDistance = " + lString16::itoa(int(absDistance))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"zoomX = " + lString16::itoa(int(zoomX))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"zoomY = " + lString16::itoa(int(zoomY))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"zoomXoffset = " + lString16::itoa(int(zoomXoffset))).c_str()); y += 30;
+    // DrawString(10, y, UnicodeToUtf8(L"zoomYoffset = " + lString16::itoa(int(zoomYoffset))).c_str()); y += 30;
+
+    // // Update screen
+    // PartialUpdateBW(0, 0, ScreenWidth(), ScreenHeight());
+
+    // return;
+
+    // // Clear screen
+    // FillArea(0, 0, ScreenWidth(), ScreenHeight(), 0x00FFFFFF);
+
+    // // Zoom in
+    // if( distance > 0 ) {
+
+    //     // Create stretched image
+    //     ibitmap * stretchedImage = BitmapStretchCopy(
+    //         // Source image
+    //         screenshot,
+    //         // Image part
+    //         zoomXoffset, zoomYoffset, ScreenWidth()-zoomX, ScreenHeight()-zoomY,
+    //         // Stretched size
+    //         ScreenWidth(), ScreenHeight()
+    //         );
+
+    //     // Draw image
+    //     DrawBitmap(0, 0, stretchedImage);
+
+    //     // Free memory
+    //     free(stretchedImage);
+    // }
+
+    // // Zoom out
+    // else {
+
+    //     // Create stretched image
+    //     ibitmap * stretchedImage = BitmapStretchCopy(
+    //         // Source image
+    //         screenshot,
+    //         // Image part
+    //         0, 0, ScreenWidth(), ScreenHeight(),
+    //         // Stretched size
+    //         ScreenWidth()-zoomX, ScreenHeight()-zoomY
+    //         );
+
+    //     // Draw image
+    //     DrawBitmap(zoomXoffset, zoomYoffset, stretchedImage);
+
+    //     // Free memory
+    //     free(stretchedImage);
+    // }
+
+    // // Update screen
+    // PartialUpdateBW(0, 0, ScreenWidth(), ScreenHeight());
+}
+
 void exitApp() {
     exiting = false;
     if( CRPocketBookDocView::instance ) {
@@ -5119,12 +5346,28 @@ void exitApp() {
     }
 }
 
+void get_gti_pointer() {
+    /* This gets the pointer to the GetTouchInfo() function if it is available. */
+    void *handle;
+
+    if ((handle = dlopen("libinkview.so", RTLD_LAZY))) {
+        *(void **) (&gti) = dlsym(handle, "GetTouchInfo");
+        dlclose(handle);
+    } else
+        gti = NULL;
+}
+
 extern ifont* header_font;
 int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
     useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
+    last_drawTemporaryZoom = std::clock();
+    int foo;
+    sscanf(GetSoftwareVersion(), "%*[^0-9]%u.%u.%u.%*u", &foo, &fw_major, &fw_minor);
+    get_gti_pointer();
+
     OpenScreen();
     if (argc < 2 || strlen(argv[1]) == 0 ) {
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), const_cast<char*>("No book to open!"), 2000);
