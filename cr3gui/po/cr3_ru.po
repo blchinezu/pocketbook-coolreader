@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-18 17:10+0300\n"
+"POT-Creation-Date: 2015-08-20 13:28+0300\n"
 "PO-Revision-Date: 2015-08-18 19:22+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
@@ -1423,27 +1423,31 @@ msgstr "Свайпы разворота страницы"
 msgid "Front Light Swipes"
 msgstr "Свайпы подсветки"
 
-#: ../src/settings.cpp:1814
+#: ../src/settings.cpp:1799
+msgid "Pinch zoom"
+msgstr ""
+
+#: ../src/settings.cpp:1816
 msgid "Style settings"
 msgstr "Настройки стилей"
 
-#: ../src/settings.cpp:1819
+#: ../src/settings.cpp:1821
 msgid "Document embedded styles"
 msgstr "Использовать стили документа"
 
-#: ../src/settings.cpp:1838 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1840 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Очистить кэш"
 
-#: ../src/settings.cpp:1846 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1848 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "OTA-обновление программы"
 
-#: ../src/settings.cpp:1853 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1855 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA-обновление (до новейшей версии в разработке)"
 
-#: ../src/settings.cpp:1876
+#: ../src/settings.cpp:1878
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1879,26 +1883,26 @@ msgstr "Ошибка обновления!"
 msgid "Contents"
 msgstr "Содержание"
 
-#: ../src/cr3pocketbook.cpp:2281
+#: ../src/cr3pocketbook.cpp:2397
 msgid "Cache cleared."
 msgstr "Кэш очищен."
 
-#: ../src/cr3pocketbook.cpp:2286
+#: ../src/cr3pocketbook.cpp:2402
 msgid "Unable to list the directory contents!"
 msgstr "Невозможно отобразить содержание! (?)"
 
-#: ../src/cr3pocketbook.cpp:2292
+#: ../src/cr3pocketbook.cpp:2408
 msgid "Unable to clear cache!"
 msgstr "Не удалось очистить кэш!"
 
-#: ../src/cr3pocketbook.cpp:3790
+#: ../src/cr3pocketbook.cpp:3906
 msgid "Press $1 to translate"
 msgstr "Нажмите $1 чтобы перевести"
 
-#: ../src/cr3pocketbook.cpp:4845
+#: ../src/cr3pocketbook.cpp:4965
 msgid "Updated to v"
 msgstr "Обновлено до версии "
 
-#: ../src/cr3pocketbook.cpp:4955
+#: ../src/cr3pocketbook.cpp:5075
 msgid "Untitled"
 msgstr "Без названия"
