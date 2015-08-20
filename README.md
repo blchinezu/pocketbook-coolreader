@@ -36,6 +36,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - More hyphenations
  - Control front light by vertically swiping in FW5
  - Turn pages by horizontally swiping
+ - Pinch screen to change font size
  - Chinese is correctly shown in menus
 
 **Settings**
@@ -49,6 +50,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Page settings > Status line settings > Time format
  - Control settings > Page Turn Swipes
  - Control settings > Front Light Swipes
+ - Control settings > Pinch zoom
  - Clear cache
  - OTA Update (through Github)
 
