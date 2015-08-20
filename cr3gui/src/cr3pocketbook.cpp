@@ -42,6 +42,7 @@
 
 #define PB_LINE_HEIGHT 30
 
+#ifdef POCKETBOOK_PRO
 iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
 
 typedef struct iv_mtinfo_54_s {
@@ -53,6 +54,7 @@ typedef struct iv_mtinfo_54_s {
     int rsv_2;
     long long timems;
 } iv_mtinfo_54;
+#endif
 
 typedef struct finger_s {
     lvPoint start;
@@ -1996,6 +1998,7 @@ protected:
             }
 
             // End of pinch
+            #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
             if( touchPointing == 2 && fingersDistance.start != fingersDistance.current ) {
 
                 drawTemporaryZoom();
@@ -2017,6 +2020,7 @@ protected:
                 
                 return true;
             }
+            #endif
 
             touchPointing = 0;
 
@@ -2069,6 +2073,7 @@ protected:
         }
 
         // MULTI
+        #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
         else if (CRTOUCH_MULTI_TOUCH == evType && touchPointing && max(pt.x,pt.y) > 2) {
 
             if( CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_PINCH_ZOOM, 1) == 0 ) {
@@ -2115,6 +2120,7 @@ protected:
             }
             return true;
         }
+        #endif
 
         // DRAG
         #ifdef POCKETBOOK_PRO_FW5
@@ -4677,8 +4683,10 @@ const char * getEventName(int evt)
         return "EVT_NEXTPAGE";
     case EVT_OPENDIC:
         return "EVT_OPENDIC";
+#if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     case EVT_MTSYNC:
         return "EVT_MTSYNC";
+#endif
 #ifdef POCKETBOOK_PRO
     case EVT_BACKGROUND:
         return "EVT_BACKGROUND";
@@ -4727,8 +4735,10 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
         return CRTOUCH_DOWN_LONG;
     case EVT_POINTERUP:
         return CRTOUCH_UP;
+    #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     case EVT_MTSYNC:
         return CRTOUCH_MULTI_TOUCH;
+    #endif
     }
     return CRTOUCH_MOVE;
 }
@@ -5200,7 +5210,9 @@ int main_handler(int type, int par1, int par2)
     case EVT_POINTERDRAG:
 #endif
     case EVT_POINTERLONG:
+#if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     case EVT_MTSYNC:
+#endif
         CRPocketBookWindowManager::instance->onTouch(par1, par2, getTouchEventType(type));
         process_events = true;
         restartStandByTimer();
@@ -5224,6 +5236,7 @@ const char* TR(const char *label)
     return tr;
 }
 
+#if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void drawTemporaryZoom() {
 
     // Hide system panel
@@ -5334,6 +5347,7 @@ void drawTemporaryZoom() {
     // // Update screen
     // PartialUpdateBW(0, 0, ScreenWidth(), ScreenHeight());
 }
+#endif
 
 void exitApp() {
     exiting = false;
@@ -5346,6 +5360,7 @@ void exitApp() {
     }
 }
 
+#if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {
     /* This gets the pointer to the GetTouchInfo() function if it is available. */
     void *handle;
@@ -5356,6 +5371,7 @@ void get_gti_pointer() {
     } else
         gti = NULL;
 }
+#endif
 
 extern ifont* header_font;
 int main(int argc, char **argv)
@@ -5366,7 +5382,9 @@ int main(int argc, char **argv)
     last_drawTemporaryZoom = std::clock();
     int foo;
     sscanf(GetSoftwareVersion(), "%*[^0-9]%u.%u.%u.%*u", &foo, &fw_major, &fw_minor);
+    #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     get_gti_pointer();
+    #endif
 
     OpenScreen();
     if (argc < 2 || strlen(argv[1]) == 0 ) {
