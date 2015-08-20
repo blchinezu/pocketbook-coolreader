@@ -5800,6 +5800,7 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     props->limitValueList(PROP_CTRL_PAGE_TURN_SWIPES, bool_options_def_true, 2);
     static int def_front_light_swipes[] = { 2, 0, 1 };
     props->limitValueList(PROP_CTRL_FRONT_LIGHT_SWIPES, def_front_light_swipes, 3);
+    props->limitValueList(PROP_CTRL_PINCH_ZOOM, bool_options_def_true, 2);
 	props->limitValueList(PROP_BOOKMARK_ICONS, bool_options_def_false, 2);
 	props->limitValueList(PROP_FONT_KERNING_ENABLED, bool_options_def_false, 2);
     //props->limitValueList(PROP_FLOATING_PUNCTUATION, bool_options_def_true, 2);

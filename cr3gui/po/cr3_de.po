@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-18 17:10+0300\n"
-"PO-Revision-Date: 2015-08-16 15:14+0000\n"
+"POT-Creation-Date: 2015-08-20 13:28+0300\n"
+"PO-Revision-Date: 2015-08-19 20:03+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/de/)\n"
@@ -1032,11 +1032,11 @@ msgstr "2 Stunden"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "Fest"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisch"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1412,36 +1412,38 @@ msgid "Width of the middle tap zone"
 msgstr "Breite der mittleren Tap-Zone"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Winkel der Seitendrehung"
+msgstr "Bättern Wischen"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Beleuchtung"
+msgstr "Beleuchtung Wischen"
 
-#: ../src/settings.cpp:1814
+#: ../src/settings.cpp:1799
+msgid "Pinch zoom"
+msgstr ""
+
+#: ../src/settings.cpp:1816
 msgid "Style settings"
 msgstr "Stileinstellungen"
 
-#: ../src/settings.cpp:1819
+#: ../src/settings.cpp:1821
 msgid "Document embedded styles"
 msgstr "Ins Dokument eingebettete Schrift"
 
-#: ../src/settings.cpp:1838 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1840 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Cache leeren"
 
-#: ../src/settings.cpp:1846 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1848 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "OTA Update"
 
-#: ../src/settings.cpp:1853 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1855 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA Update Entwickler"
 
-#: ../src/settings.cpp:1876
+#: ../src/settings.cpp:1878
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1877,26 +1879,26 @@ msgstr "Akualisierung fehlgeschlagen!"
 msgid "Contents"
 msgstr "Inhalte"
 
-#: ../src/cr3pocketbook.cpp:2281
+#: ../src/cr3pocketbook.cpp:2397
 msgid "Cache cleared."
 msgstr "Cache geleert."
 
-#: ../src/cr3pocketbook.cpp:2286
+#: ../src/cr3pocketbook.cpp:2402
 msgid "Unable to list the directory contents!"
 msgstr "Kann den Verzeichnisinhalt nicht auflisten"
 
-#: ../src/cr3pocketbook.cpp:2292
+#: ../src/cr3pocketbook.cpp:2408
 msgid "Unable to clear cache!"
 msgstr "Kann Cache nicht leeren!"
 
-#: ../src/cr3pocketbook.cpp:3790
+#: ../src/cr3pocketbook.cpp:3906
 msgid "Press $1 to translate"
 msgstr "Drücke $1 zum Übersetzen"
 
-#: ../src/cr3pocketbook.cpp:4845
+#: ../src/cr3pocketbook.cpp:4965
 msgid "Updated to v"
 msgstr "Aktualisiert auf v"
 
-#: ../src/cr3pocketbook.cpp:4955
+#: ../src/cr3pocketbook.cpp:5075
 msgid "Untitled"
 msgstr "Ohne Titel"

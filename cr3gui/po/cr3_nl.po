@@ -7,11 +7,11 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-18 17:10+0300\n"
-"PO-Revision-Date: 2015-07-21 17:38+0000\n"
+"POT-Creation-Date: 2015-08-20 13:28+0300\n"
+"PO-Revision-Date: 2015-08-20 08:28+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
-"Language-Team: Dutch (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/nl/)\n"
+"Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/nl/)\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -948,95 +948,95 @@ msgstr "Turbomodus ingeschakeld"
 
 #: ../src/settings.cpp:1285
 msgid "1 minute"
-msgstr ""
+msgstr "1 minuut"
 
 #: ../src/settings.cpp:1286
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minuten"
 
 #: ../src/settings.cpp:1287
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minuten"
 
 #: ../src/settings.cpp:1288
 msgid "4 minutes"
-msgstr ""
+msgstr "4 minuten"
 
 #: ../src/settings.cpp:1289
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minuten"
 
 #: ../src/settings.cpp:1290
 msgid "6 minutes"
-msgstr ""
+msgstr "6 minuten"
 
 #: ../src/settings.cpp:1291
 msgid "7 minutes"
-msgstr ""
+msgstr "7 minuten"
 
 #: ../src/settings.cpp:1292
 msgid "8 minutes"
-msgstr ""
+msgstr "8 minuten"
 
 #: ../src/settings.cpp:1293
 msgid "9 minutes"
-msgstr ""
+msgstr "9 minuten"
 
 #: ../src/settings.cpp:1294
 msgid "10 minutes"
-msgstr ""
+msgstr "10 minuten"
 
 #: ../src/settings.cpp:1295
 msgid "15 minutes"
-msgstr ""
+msgstr "15 minuten"
 
 #: ../src/settings.cpp:1296
 msgid "20 minutes"
-msgstr ""
+msgstr "20 minuten"
 
 #: ../src/settings.cpp:1297
 msgid "25 minutes"
-msgstr ""
+msgstr "25 minuten"
 
 #: ../src/settings.cpp:1298
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minuten"
 
 #: ../src/settings.cpp:1299
 msgid "35 minutes"
-msgstr ""
+msgstr "35 minuten"
 
 #: ../src/settings.cpp:1300
 msgid "40 minutes"
-msgstr ""
+msgstr "40 minuten"
 
 #: ../src/settings.cpp:1301
 msgid "45 minutes"
-msgstr ""
+msgstr "45 minuten"
 
 #: ../src/settings.cpp:1302
 msgid "50 minutes"
-msgstr ""
+msgstr "50 minuten"
 
 #: ../src/settings.cpp:1303
 msgid "55 minutes"
-msgstr ""
+msgstr "55 minuten"
 
 #: ../src/settings.cpp:1304
 msgid "1 hour"
-msgstr ""
+msgstr "1 uur"
 
 #: ../src/settings.cpp:1305
 msgid "2 hours"
-msgstr ""
+msgstr "2 uur"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "Vast"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamisch"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1360,9 +1360,8 @@ msgid "Display update mode"
 msgstr "Methode van beeldverversing"
 
 #: ../src/settings.cpp:1713
-#, fuzzy
 msgid "Standby"
-msgstr "Stijlinstellingen"
+msgstr "Standby"
 
 #: ../src/settings.cpp:1720
 msgid "Turbo update mode"
@@ -1413,36 +1412,38 @@ msgid "Width of the middle tap zone"
 msgstr "Breedte van de middelste tikzone"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Draaihoek voor bladeren"
+msgstr "Vegen om te bladeren"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Voorverlichting"
+msgstr "Vegen voor voorverlichting"
 
-#: ../src/settings.cpp:1814
+#: ../src/settings.cpp:1799
+msgid "Pinch zoom"
+msgstr ""
+
+#: ../src/settings.cpp:1816
 msgid "Style settings"
 msgstr "Stijlinstellingen"
 
-#: ../src/settings.cpp:1819
+#: ../src/settings.cpp:1821
 msgid "Document embedded styles"
 msgstr "In document opgenomen stijlen"
 
-#: ../src/settings.cpp:1838 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1840 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Cache wissen"
 
-#: ../src/settings.cpp:1846 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1848 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "OTA Update"
 
-#: ../src/settings.cpp:1853 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1855 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA Update Dev"
 
-#: ../src/settings.cpp:1876
+#: ../src/settings.cpp:1878
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1739,7 +1740,7 @@ msgstr "Toon/verberg statusbalk"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Naar standby-modus gaan"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
@@ -1879,34 +1880,26 @@ msgstr "Update is mislukt!"
 msgid "Contents"
 msgstr "Inhoud"
 
-#: ../src/cr3pocketbook.cpp:2281
+#: ../src/cr3pocketbook.cpp:2397
 msgid "Cache cleared."
 msgstr "Cache is gewist."
 
-#: ../src/cr3pocketbook.cpp:2286
+#: ../src/cr3pocketbook.cpp:2402
 msgid "Unable to list the directory contents!"
 msgstr "Kan de inhoud van de directory niet weergeven!"
 
-#: ../src/cr3pocketbook.cpp:2292
+#: ../src/cr3pocketbook.cpp:2408
 msgid "Unable to clear cache!"
 msgstr "Kan de cache niet wissen!"
 
-#: ../src/cr3pocketbook.cpp:3790
+#: ../src/cr3pocketbook.cpp:3906
 msgid "Press $1 to translate"
 msgstr "Druk op $1 om te vertalen"
 
-#: ../src/cr3pocketbook.cpp:4845
+#: ../src/cr3pocketbook.cpp:4965
 msgid "Updated to v"
 msgstr "Bijgewerkt naar v"
 
-#: ../src/cr3pocketbook.cpp:4955
+#: ../src/cr3pocketbook.cpp:5075
 msgid "Untitled"
 msgstr "Zonder titel"
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "Stel bladwijzer in"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Volgende pagina"

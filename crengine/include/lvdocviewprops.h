@@ -95,5 +95,6 @@
 
 #define PROP_CTRL_PAGE_TURN_SWIPES "window.swipes.pageturn"
 #define PROP_CTRL_FRONT_LIGHT_SWIPES "window.swipes.frontlight"
+#define PROP_CTRL_PINCH_ZOOM "window.pinch.zoom"
 
 #endif // LVDOCVIEWPROPS_H

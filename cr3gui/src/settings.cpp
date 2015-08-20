@@ -1796,6 +1796,10 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         createSettingsMenuItem(controlSettingsMenu, mm_CtrlFrontLightSwipes, _("Front Light Swipes"),
                                "cr3_option_ctrl_front_light_swipes", valueFont, PROP_CTRL_FRONT_LIGHT_SWIPES, front_light_swipes);
         #endif
+        #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+        createSettingsMenuItem(controlSettingsMenu, mm_CtrlPinchZoom, _("Pinch zoom"),
+                               "cr3_option_ctrl_pinch_zoom", valueFont, PROP_CTRL_PINCH_ZOOM, on_off_option);
+        #endif
     }
     if ( !controlSettingsMenu->getItems().empty()) {
         controlSettingsMenu->reconfigure( 0 );
