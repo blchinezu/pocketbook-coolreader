@@ -40,6 +40,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 **Settings**
 
+ - Default font size (all sizes from 16px to 80px)
  - Formatting settings > Space expanding percent [xl743]
  - Display settings > Standby
  - Font settings > Font embolding [xl743]
