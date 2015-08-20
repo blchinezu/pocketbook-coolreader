@@ -2067,6 +2067,10 @@ protected:
         // MULTI
         else if (CRTOUCH_MULTI_TOUCH == evType && touchPointing && max(pt.x,pt.y) > 2) {
 
+            if( CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_PINCH_ZOOM, 1) == 0 ) {
+                return true;
+            }
+
             iv_mtinfo *mti;
             iv_mtinfo_54 *mti54;    /* iv_mtinfo changed starting with firmware 5.4 */
             bool mtinfo_new = (fw_major > 5) || (fw_major == 5 && fw_minor >= 4);

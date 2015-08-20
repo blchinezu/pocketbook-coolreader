@@ -96,6 +96,7 @@ enum MainMenuItems_t {
     mm_Standby,
     mm_CtrlPageTurnSwipes,
     mm_CtrlFrontLightSwipes,
+    mm_CtrlPinchZoom,
     mm_Last
 };
 
