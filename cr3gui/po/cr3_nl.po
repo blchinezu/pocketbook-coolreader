@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
-"PO-Revision-Date: 2015-08-20 08:28+0000\n"
+"PO-Revision-Date: 2015-08-20 12:39+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/nl/)\n"
@@ -1421,7 +1421,7 @@ msgstr "Vegen voor voorverlichting"
 
 #: ../src/settings.cpp:1799
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Knijpen om in te zoomen"
 
 #: ../src/settings.cpp:1816
 msgid "Style settings"
