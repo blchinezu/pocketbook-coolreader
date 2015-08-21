@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
-"PO-Revision-Date: 2015-08-18 19:22+0000\n"
+"PO-Revision-Date: 2015-08-20 11:46+0000\n"
 "Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ru/)\n"
@@ -1417,15 +1417,15 @@ msgstr "Ширина центральной тап-зоны"
 
 #: ../src/settings.cpp:1793
 msgid "Page Turn Swipes"
-msgstr "Свайпы разворота страницы"
+msgstr "Перелистывание страниц свайпом"
 
 #: ../src/settings.cpp:1796
 msgid "Front Light Swipes"
-msgstr "Свайпы подсветки"
+msgstr "Регулировка подсветки свайпом"
 
 #: ../src/settings.cpp:1799
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Масштабирование щипком"
 
 #: ../src/settings.cpp:1816
 msgid "Style settings"
