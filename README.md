@@ -38,6 +38,8 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Turn pages by horizontally swiping
  - Pinch screen to change font size
  - Chinese is correctly shown in menus
+ - More page margin values
+ - More font size values
 
 **Settings**
 
