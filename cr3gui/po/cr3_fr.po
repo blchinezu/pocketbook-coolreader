@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
-"PO-Revision-Date: 2015-08-19 18:48+0000\n"
+"PO-Revision-Date: 2015-08-23 07:46+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/fr/)\n"
@@ -1371,7 +1371,7 @@ msgstr "Mode de mise à jour turbo"
 
 #: ../src/settings.cpp:1725
 msgid "Gray buffer depth(need restart)"
-msgstr "Profondeur de gris du tampon"
+msgstr "Profondeur du gris (nécessite un redémarrage)"
 
 #: ../src/settings.cpp:1732
 msgid "Skin"
@@ -1423,7 +1423,7 @@ msgstr "Réglage de l'éclairage par balayage"
 
 #: ../src/settings.cpp:1799
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Pincer pour zoomer"
 
 #: ../src/settings.cpp:1816
 msgid "Style settings"
