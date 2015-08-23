@@ -1363,6 +1363,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {NULL, NULL}
     };
     item_def_t gray_buffer_bpp[] = {
+        {_("Auto"), "0"},
         {_("2 BPP"), "2"},
         {_("3 BPP"), "3"},
         {_("4 BPP"), "4"},

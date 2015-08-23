@@ -4490,7 +4490,7 @@ int InitDoc(const char *exename, char *fileName)
         };
         lString16 ini;
         CRPropRef props = LVCreatePropsContainer();
-        int bpp = 2;
+        int bpp = 0;
 
         int fb2Pos = filename16.pos(lString16(L".fb2"));
         if (fb2Pos < 0)
@@ -4511,11 +4511,19 @@ int InitDoc(const char *exename, char *fileName)
                 }
             }
         }
-        bpp = GetHardwareDepth();
-        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16) {
-            bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
-            if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16)
+        int bppOption = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 0);
+        if( bppOption == 0 || (bppOption != 2 && bppOption != 3 && bppOption != 4 && bppOption != 8) ) {
+            bpp = GetHardwareDepth();
+        }
+        if (bpp != 2 && bpp != 3 && bpp != 4 && bpp != 8) {
+            bpp = bppOption;
+            if (bpp != 2 && bpp != 3 && bpp != 4 && bpp != 8) {
+                #ifdef POCKETBOOK_PRO
+                bpp = 4;
+                #else
                 bpp = 2;
+                #endif
+            }
         }
         CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
