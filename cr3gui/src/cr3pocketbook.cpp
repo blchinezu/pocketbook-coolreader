@@ -1298,6 +1298,7 @@ public:
         }
 
         // Draw current position text
+        SetFont(GetFont(), 0x00000000);
         lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
@@ -2004,6 +2005,7 @@ protected:
 
                 if( newFontSize != currentFontSize ) {
                     main_win->getDocView()->setFontSize(newFontSize);
+
                     main_win->saveSettings(lString16::empty_str);
                 }
                 else {
@@ -5252,6 +5254,8 @@ void drawTemporaryZoom() {
 
     FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
     FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
+
+    SetFont(GetFont(), 0x00000000);
     DrawString(ScreenWidth()/2-30, 10, UnicodeToUtf8(lString16::itoa(zoom)).c_str());
     PartialUpdateBW(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51);
 
