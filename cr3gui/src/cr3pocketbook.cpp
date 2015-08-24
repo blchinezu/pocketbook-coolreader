@@ -45,6 +45,8 @@
 #ifdef POCKETBOOK_PRO
 iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
 
+extern ifont* header_font;
+
 typedef struct iv_mtinfo_54_s {
     int active;
     int x;
@@ -1298,7 +1300,7 @@ public:
         }
 
         // Draw current position text
-        SetFont(GetFont(), 0x00000000);
+        SetFont(header_font, 0x00000000);
         lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
@@ -5255,7 +5257,7 @@ void drawTemporaryZoom() {
     FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
     FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
 
-    SetFont(GetFont(), 0x00000000);
+    SetFont(header_font, 0x00000000);
     DrawString(ScreenWidth()/2-30, 10, UnicodeToUtf8(lString16::itoa(zoom)).c_str());
     PartialUpdateBW(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51);
 
@@ -5383,7 +5385,6 @@ void get_gti_pointer() {
 }
 #endif
 
-extern ifont* header_font;
 int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
