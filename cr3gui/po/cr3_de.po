@@ -2,14 +2,15 @@
 # This file is put in the public domain.
 #
 # Translators:
+# Eleni Stefanidou <eleni205@gmail.com>, 2015
 # Zorro66, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
-"PO-Revision-Date: 2015-08-19 20:03+0000\n"
-"Last-Translator: Zorro66\n"
+"PO-Revision-Date: 2015-08-22 20:09+0000\n"
+"Last-Translator: Eleni Stefanidou <eleni205@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/de/)\n"
 "Language: de\n"
@@ -52,7 +53,7 @@ msgstr "1..8"
 
 #: ../src/mainwnd.cpp:806
 msgid "No manual currently available for this language, sorry!"
-msgstr "Zu Zeit ist für diese Sprache keine Anleitung verfügbar."
+msgstr "Zur Zeit ist für diese Sprache keine Anleitung verfügbar."
 
 #: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
 msgid "Help"
@@ -864,7 +865,7 @@ msgstr "20%"
 
 #: ../src/settings.cpp:1256
 msgid "Always use fast updates"
-msgstr "Immer schnelle Aktualsisierung"
+msgstr "Immer schnelle Aktualisierung"
 
 #: ../src/settings.cpp:1257
 msgid "Don't use fast updates"
@@ -1201,7 +1202,7 @@ msgstr "Schrift Gamma"
 
 #: ../src/settings.cpp:1530
 msgid "Document embedded fonts"
-msgstr "Ins Dokument eingebttete Schrift"
+msgstr "Ins Dokument eingebettete Schrift"
 
 #: ../src/settings.cpp:1533
 msgid "Fallback font face"
@@ -1217,7 +1218,7 @@ msgstr "[Silbentrennung aus]"
 
 #: ../src/settings.cpp:1552
 msgid "[Algorythmic Hyphenation]"
-msgstr "[Algorythmische Silbentrennung]"
+msgstr "[Algorithmische Silbentrennung]"
 
 #: ../src/settings.cpp:1554
 msgid "Hyphenation"
@@ -1253,11 +1254,11 @@ msgstr "Maximale Vergrößerung für Blockbild "
 
 #: ../src/settings.cpp:1594
 msgid "Inline image scaling mode"
-msgstr "Skalierungsmodus für eingebunde Bilder"
+msgstr "Skalierungsmodus für eingebundene Bilder"
 
 #: ../src/settings.cpp:1597
 msgid "Inline image max zoom"
-msgstr "Maximale Vergrößerung für eingebunde Bilder"
+msgstr "Maximale Vergrößerung für eingebundene Bilder"
 
 #: ../src/settings.cpp:1606
 msgid "Page settings"
@@ -1337,7 +1338,7 @@ msgstr "Fußnoten am Seitenende"
 
 #: ../src/settings.cpp:1684
 msgid "Display settings"
-msgstr "Bildschirm Einstellungen"
+msgstr "Bildschirmeinstellungen"
 
 #: ../src/settings.cpp:1693
 msgid "Landscape pages"
@@ -1413,7 +1414,7 @@ msgstr "Breite der mittleren Tap-Zone"
 
 #: ../src/settings.cpp:1793
 msgid "Page Turn Swipes"
-msgstr "Bättern Wischen"
+msgstr "Blättern Wischen"
 
 #: ../src/settings.cpp:1796
 msgid "Front Light Swipes"
@@ -1421,7 +1422,7 @@ msgstr "Beleuchtung Wischen"
 
 #: ../src/settings.cpp:1799
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Pinch Zoom"
 
 #: ../src/settings.cpp:1816
 msgid "Style settings"
@@ -1453,7 +1454,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
-msgstr "Kein Wörterbuch gefiunden"
+msgstr "Kein Wörterbuch gefunden"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
@@ -1555,11 +1556,11 @@ msgstr "Seitenweise vorwärts"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
-msgstr "Forward in move history"
+msgstr "Vorwärts im Seitenverlauf"
 
 #: ../src/viewdlg.cpp:531
 msgid "Back in move history"
-msgstr "Back in move history"
+msgstr "Zurück im Seitenverlauf"
 
 #: ../src/viewdlg.cpp:532
 msgid "Next link"
@@ -1591,7 +1592,7 @@ msgstr "Heraus zoomen"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
-msgstr "Textdicke umschalten"
+msgstr "Textbreite umschalten"
 
 #: ../src/viewdlg.cpp:541
 msgid "Toggle text format"
@@ -1643,7 +1644,7 @@ msgstr "Zurück scrollen"
 
 #: ../src/viewdlg.cpp:555
 msgid "Close book"
-msgstr "Buch schlließen"
+msgstr "Buch schließen"
 
 #: ../src/viewdlg.cpp:556
 msgid "Main menu"
@@ -1683,11 +1684,11 @@ msgstr "Gehe zu Lesezeichen..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
-msgstr "Liste der kürzlich geöffneten Bücher"
+msgstr "Liste der zuletzt geöffneten Bücher"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
-msgstr "URL der Dokmentenquelle"
+msgstr "Öffne zuletzt geöffnetes Buch nach Nummer"
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
@@ -1731,7 +1732,7 @@ msgstr "Display invertieren"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr "Vollständige Bildschirmaktualsierung"
+msgstr "Vollständige Bildschirmaktualisierung"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
@@ -1848,7 +1849,7 @@ msgstr "Lade herunter..."
 
 #: ../src/ota_update.cpp:235
 msgid "Couldn't remove existing package!"
-msgstr "Kann vorhandenes Packet nicht entfernen!"
+msgstr "Kann vorhandenes Paket nicht entfernen!"
 
 #: ../src/ota_update.cpp:272
 msgid "Couldn't connect to the network!"

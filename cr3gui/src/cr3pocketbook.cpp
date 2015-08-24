@@ -1298,6 +1298,7 @@ public:
         }
 
         // Draw current position text
+        SetFont(GetFont(), 0x00000000);
         lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
@@ -2004,6 +2005,7 @@ protected:
 
                 if( newFontSize != currentFontSize ) {
                     main_win->getDocView()->setFontSize(newFontSize);
+
                     main_win->saveSettings(lString16::empty_str);
                 }
                 else {
@@ -4490,7 +4492,7 @@ int InitDoc(const char *exename, char *fileName)
         };
         lString16 ini;
         CRPropRef props = LVCreatePropsContainer();
-        int bpp = 2;
+        int bpp = 0;
 
         int fb2Pos = filename16.pos(lString16(L".fb2"));
         if (fb2Pos < 0)
@@ -4511,11 +4513,19 @@ int InitDoc(const char *exename, char *fileName)
                 }
             }
         }
-        bpp = GetHardwareDepth();
-        if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16) {
-            bpp = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 4);
-            if (bpp != 1 && bpp != 2 && bpp != 4 && bpp != 8 && bpp != 16)
+        int bppOption = props->getIntDef(PROP_POCKETBOOK_GRAYBUFFER_BPP, 0);
+        if( bppOption == 0 || (bppOption != 2 && bppOption != 3 && bppOption != 4 && bppOption != 8) ) {
+            bpp = GetHardwareDepth();
+        }
+        if (bpp != 2 && bpp != 3 && bpp != 4 && bpp != 8) {
+            bpp = bppOption;
+            if (bpp != 2 && bpp != 3 && bpp != 4 && bpp != 8) {
+                #ifdef POCKETBOOK_PRO
+                bpp = 4;
+                #else
                 bpp = 2;
+                #endif
+            }
         }
         CRLog::debug("settings at %s", UnicodeToUtf8(ini).c_str() );
         CRLog::trace("creating window manager...");
@@ -5244,6 +5254,8 @@ void drawTemporaryZoom() {
 
     FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
     FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
+
+    SetFont(GetFont(), 0x00000000);
     DrawString(ScreenWidth()/2-30, 10, UnicodeToUtf8(lString16::itoa(zoom)).c_str());
     PartialUpdateBW(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51);
 
