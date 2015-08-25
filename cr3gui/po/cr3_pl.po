@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # Rafał <galon3@wp.pl>, 2015
 # Tomasz Długosz <tomek3d@gmail.com>, 2009
@@ -11,12 +11,14 @@ msgstr ""
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
 "PO-Revision-Date: 2015-08-24 10:59+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
-"Language-Team: Polish (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/pl/)\n"
+"Language-Team: Polish (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/pl/)\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: pl\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
+"|| n%100>=20) ? 1 : 2);\n"
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
@@ -102,7 +104,9 @@ msgstr "Układ klawiatury"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - wybierz polecenie\n$2, $3 - zamknij"
+msgstr ""
+"$1 - wybierz polecenie\n"
+"$2, $3 - zamknij"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -333,7 +337,9 @@ msgstr "Usuń rekord"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - otwórz książkę\n$2, $3 - zamknij"
+msgstr ""
+"$1 - otwórz książkę\n"
+"$2, $3 - zamknij"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -359,13 +365,17 @@ msgstr "Idź do zakładki"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr "Krótkie wciśnięcie $1 - idź do zakładki,\n$2 - przejdź do trybu dodawania zakładek"
+msgstr ""
+"Krótkie wciśnięcie $1 - idź do zakładki,\n"
+"$2 - przejdź do trybu dodawania zakładek"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Krótkie wciśnięcie $1 - idź do zakładki,\nprzytrzymanie - dodanie zakładki"
+msgstr ""
+"Krótkie wciśnięcie $1 - idź do zakładki,\n"
+"przytrzymanie - dodanie zakładki"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -375,13 +385,17 @@ msgstr "Dodaj zakładkę"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - dodaj zakładkę,\n$2 - przejdź do trybu wybierania zakładek"
+msgstr ""
+"$1 - dodaj zakładkę,\n"
+"$2 - przejdź do trybu wybierania zakładek"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr "Krótkie wciśnięcie $1 - ustaw zakładkę,\nprzytrzymanie - idź do zakładki"
+msgstr ""
+"Krótkie wciśnięcie $1 - ustaw zakładkę,\n"
+"przytrzymanie - idź do zakładki"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1435,7 +1449,9 @@ msgstr "OTA Update Dev"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Wciśnij $1 by zmienić opcje\n$2 by zaakceptować, $3 by anulować"
+msgstr ""
+"Wciśnij $1 by zmienić opcje\n"
+"$2 by zaakceptować, $3 by anulować"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1451,9 +1467,11 @@ msgstr "Wspierane są słowniki w standardowym uniksowym formacie .dict"
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
-msgstr "Dla każdego słownika należy wgrać dwa pliki: plik z danymi (rozszerzenie .dict lub .dict.dz) i plik z indeksem o rozszerzeniu .index"
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Dla każdego słownika należy wgrać dwa pliki: plik z danymi (rozszerzenie ."
+"dict lub .dict.dz) i plik z indeksem o rozszerzeniu .index"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1809,7 +1827,9 @@ msgstr "Przypisana funkcja"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr "Pobieranie zakończone!\nCoolReader zostanie uruchomiony ponownie."
+msgstr ""
+"Pobieranie zakończone!\n"
+"CoolReader zostanie uruchomiony ponownie."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1849,7 +1869,9 @@ msgstr "Masz najnowszą wersję."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "Brak aktualizacji dla twojego urządzenia\nModel urządzenia:"
+msgstr ""
+"Brak aktualizacji dla twojego urządzenia\n"
+"Model urządzenia:"
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
