@@ -9,10 +9,10 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-08-20 13:28+0300\n"
-"PO-Revision-Date: 2015-07-29 07:48+0000\n"
+"PO-Revision-Date: 2015-08-24 10:59+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
-"Language-Team: Polish (http://www.transifex.com/projects/p/coolreader-"
-"pocketbook/language/pl/)\n"
+"Language-Team: Polish (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/pl/)\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -950,95 +950,95 @@ msgstr "Tryb turbo włączony"
 
 #: ../src/settings.cpp:1285
 msgid "1 minute"
-msgstr ""
+msgstr "1 minuta"
 
 #: ../src/settings.cpp:1286
 msgid "2 minutes"
-msgstr ""
+msgstr "2 minuty"
 
 #: ../src/settings.cpp:1287
 msgid "3 minutes"
-msgstr ""
+msgstr "3 minuty"
 
 #: ../src/settings.cpp:1288
 msgid "4 minutes"
-msgstr ""
+msgstr "4 minuty"
 
 #: ../src/settings.cpp:1289
 msgid "5 minutes"
-msgstr ""
+msgstr "5 minut"
 
 #: ../src/settings.cpp:1290
 msgid "6 minutes"
-msgstr ""
+msgstr "6 minut"
 
 #: ../src/settings.cpp:1291
 msgid "7 minutes"
-msgstr ""
+msgstr "7 minut"
 
 #: ../src/settings.cpp:1292
 msgid "8 minutes"
-msgstr ""
+msgstr "8 minut"
 
 #: ../src/settings.cpp:1293
 msgid "9 minutes"
-msgstr ""
+msgstr "9 minut"
 
 #: ../src/settings.cpp:1294
 msgid "10 minutes"
-msgstr ""
+msgstr "10 minut"
 
 #: ../src/settings.cpp:1295
 msgid "15 minutes"
-msgstr ""
+msgstr "15 minut"
 
 #: ../src/settings.cpp:1296
 msgid "20 minutes"
-msgstr ""
+msgstr "20 minut"
 
 #: ../src/settings.cpp:1297
 msgid "25 minutes"
-msgstr ""
+msgstr "25 minut"
 
 #: ../src/settings.cpp:1298
 msgid "30 minutes"
-msgstr ""
+msgstr "30 minut"
 
 #: ../src/settings.cpp:1299
 msgid "35 minutes"
-msgstr ""
+msgstr "35 minut"
 
 #: ../src/settings.cpp:1300
 msgid "40 minutes"
-msgstr ""
+msgstr "40 minut"
 
 #: ../src/settings.cpp:1301
 msgid "45 minutes"
-msgstr ""
+msgstr "45 minut"
 
 #: ../src/settings.cpp:1302
 msgid "50 minutes"
-msgstr ""
+msgstr "50 minut"
 
 #: ../src/settings.cpp:1303
 msgid "55 minutes"
-msgstr ""
+msgstr "55 minut"
 
 #: ../src/settings.cpp:1304
 msgid "1 hour"
-msgstr ""
+msgstr "1 godzina"
 
 #: ../src/settings.cpp:1305
 msgid "2 hours"
-msgstr ""
+msgstr "2 godziny"
 
 #: ../src/settings.cpp:1311
 msgid "Fixed"
-msgstr ""
+msgstr "Stałe"
 
 #: ../src/settings.cpp:1312
 msgid "Dynamic"
-msgstr ""
+msgstr "Dynamiczne"
 
 #: ../src/settings.cpp:1320
 msgid "180+slow next page"
@@ -1362,9 +1362,8 @@ msgid "Display update mode"
 msgstr "Tryb odświeżania ekranu"
 
 #: ../src/settings.cpp:1713
-#, fuzzy
 msgid "Standby"
-msgstr "Ustawienia stylów"
+msgstr "Uśpienie"
 
 #: ../src/settings.cpp:1720
 msgid "Turbo update mode"
@@ -1415,18 +1414,16 @@ msgid "Width of the middle tap zone"
 msgstr "Szerokość środkowej strefy dotyku"
 
 #: ../src/settings.cpp:1793
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Kąt obrotu strony"
+msgstr "Zmiana strony przesunięciem"
 
 #: ../src/settings.cpp:1796
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Podświetlenie ekranu"
+msgstr "Regulacja podświetlenia przesunięciem"
 
 #: ../src/settings.cpp:1799
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Skalowanie \"szczypnięciem\""
 
 #: ../src/settings.cpp:1816
 msgid "Style settings"
@@ -1744,7 +1741,7 @@ msgstr "Przełącz belkę statusu"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Wejdź w tryb uśpienia"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
@@ -1907,11 +1904,3 @@ msgstr "Zaktualizowane do v"
 #: ../src/cr3pocketbook.cpp:5075
 msgid "Untitled"
 msgstr "Bez tytułu"
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "Dodaj zakładkę"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Następna strona"
