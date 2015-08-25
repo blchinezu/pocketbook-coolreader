@@ -42,11 +42,11 @@
 
 #define PB_LINE_HEIGHT 30
 
-#ifdef POCKETBOOK_PRO
-iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
-
 extern ifont* header_font;
 ifont * pbCrFont;
+
+#ifdef POCKETBOOK_PRO
+iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
 
 typedef struct iv_mtinfo_54_s {
     int active;
