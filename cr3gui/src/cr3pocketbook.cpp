@@ -46,6 +46,7 @@
 iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
 
 extern ifont* header_font;
+ifont * pbCrFont;
 
 typedef struct iv_mtinfo_54_s {
     int active;
@@ -1300,7 +1301,7 @@ public:
         }
 
         // Draw current position text
-        SetFont(header_font, 0x00000000);
+        SetFont(pbCrFont, 0x00000000);
         lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
@@ -4965,6 +4966,9 @@ int main_handler(int type, int par1, int par2)
     }
     switch (type) {
     case EVT_SHOW:
+
+        pbCrFont = OpenFont(DEFAULTFONT, 24, 0);
+
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
 
@@ -5257,7 +5261,7 @@ void drawTemporaryZoom() {
     FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
     FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
 
-    SetFont(header_font, 0x00000000);
+    SetFont(pbCrFont, 0x00000000);
     DrawString(ScreenWidth()/2-30, 10, UnicodeToUtf8(lString16::itoa(zoom)).c_str());
     PartialUpdateBW(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51);
 
