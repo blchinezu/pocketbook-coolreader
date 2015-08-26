@@ -4591,7 +4591,19 @@ int InitDoc(const char *exename, char *fileName)
             }
             if (!skinSet) {
                 CRLog::info("Try to load default skin");
-                skinSet = wm->setSkin(lString16("default"));
+
+                lString16 defaultSkin;
+
+                #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+                    if( max(ScreenWidth(),ScreenHeight()) > 800 )
+                        defaultSkin = L"pb626fw5";
+                    else
+                        defaultSkin = L"pb62x";
+                #else
+                    defaultSkin = L"default";
+                #endif
+
+                skinSet = wm->setSkin(defaultSkin);
             }
         }
         if (!skinSet && !wm->loadSkin(lString16(CONFIGPATH"/cr3/skin"))) {
