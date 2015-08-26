@@ -2004,7 +2004,7 @@ protected:
 
                 int zoom = int((fingersDistance.current - fingersDistance.start)/40);
                 int currentFontSize = main_win->getDocView()->getFontSize();
-                int newFontSize = min(max(currentFontSize + zoom, 16), 80);
+                int newFontSize = min(max(currentFontSize + zoom, 16), 150);
 
                 if( newFontSize != currentFontSize ) {
                     main_win->getDocView()->setFontSize(newFontSize);
@@ -5256,7 +5256,7 @@ void drawTemporaryZoom() {
     // Hide system panel
     hideSystemPanel(true);
 
-    int zoom = min(max(main_win->getDocView()->getFontSize() + int((fingersDistance.current - fingersDistance.start)/40), 16), 80);
+    int zoom = min(max(main_win->getDocView()->getFontSize() + int((fingersDistance.current - fingersDistance.start)/40), 16), 150);
 
     FillArea(ScreenWidth()/2/2-1, 0, ScreenWidth()/2+2, 51, 0x00000000);
     FillArea(ScreenWidth()/2/2, 0, ScreenWidth()/2, 50, 0x00FFFFFF);
