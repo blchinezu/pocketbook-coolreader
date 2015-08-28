@@ -3498,14 +3498,33 @@ void CRPbDictionaryView::translate(const lString16 &w)
 
     CRLog::trace("CRPbDictionaryView::translate() start, _dictIndex = %d", _dictIndex);
     if (_dictIndex >= 0) {
-        s16.lowercase();
         lString8 what = UnicodeToUtf8( s16 );
         char *word = NULL, *translation = NULL;
 
-        CRLog::trace("CRPbDictionaryView::translate() LookupWord");
-        _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
-        //_translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
-        CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        CRLog::trace("CRPbDictionaryView::translate() LookupWordExact");
+        _translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
+        CRLog::trace("LookupWordExact(%s) returned %d", what.c_str(), _translateResult);
+
+        if( _translateResult == 0 ) {
+            word = NULL;
+            translation = NULL;
+
+            CRLog::trace("CRPbDictionaryView::translate() LookupWord");
+            _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
+            CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        }
+
+        if( _translateResult == 0 ) {
+            s16.lowercase();
+            what = UnicodeToUtf8( s16 );
+            word = NULL;
+            translation = NULL;
+
+            CRLog::trace("CRPbDictionaryView::translate() LookupWord - lowercase");
+            _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
+            CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        }
+
         if (_translateResult != 0) {
             if (_translateResult == 1) {
                 _selectedIndex = PB_DICT_ARTICLE_LIST;
