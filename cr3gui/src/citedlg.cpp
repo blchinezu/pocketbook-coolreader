@@ -256,6 +256,7 @@ public:
             int index = toolbar->findButton(DCMD_BUTTON_PRESSED, 0);
             if (index > 0)
                 toolbar->selectButton(index);
+            toolbar->selectNextButton();
 
             toolbar->getRect(toolbarRect);
             _rect.top = _rect.bottom - toolbarRect.height();
