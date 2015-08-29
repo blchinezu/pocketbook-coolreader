@@ -1650,6 +1650,10 @@ public:
     {
       CRLog::trace("CRPbDictionaryDialog::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
 
+        if( CRTOUCH_MULTI_TOUCH == evType ) {
+            return false;
+        }
+
         lvPoint pt (x, y);
 
         if (_dictView->getRect().isPointInside(pt)) 
@@ -5070,7 +5074,7 @@ int main_handler(int type, int par1, int par2)
             // }
 
             // Try getting cover with the system function
-            *cover = GetBookCover(
+            cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
                 ScreenHeight()
