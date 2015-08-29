@@ -5030,8 +5030,47 @@ int main_handler(int type, int par1, int par2)
 
             // startStatusUpdateThread(5000);
 
+            ibitmap *cover = NULL;
+
+            // Get with crengine
+            // if( ScreenWidth() < ScreenHeight() ) {
+
+            //     LVImageSourceRef cvrTmp = main_win->getDocView()->getCoverPageImage();
+            //     if( !cvrTmp.isNull() ) {
+            //         FillArea(0, 0, ScreenWidth(), ScreenHeight(), 0x00FFFFFF);
+            //         if( cvrTmp->GetHeight() > cvrTmp->GetWidth() ) {
+            //             int newWidth = ScreenWidth() * cvrTmp->GetHeight() / ScreenHeight();
+            //             // if( ScreenWidth() - newWidth <= ScreenWidth() * 0.05 ) {
+            //             //     newWidth = ScreenWidth();
+            //             // }
+            //             cvrTmp = LVCreateStretchFilledTransform(
+            //                             cvrTmp,
+            //                             newWidth,
+            //                             ScreenHeight(),
+            //                             IMG_TRANSFORM_STRETCH,
+            //                             IMG_TRANSFORM_STRETCH
+            //                             );
+            //         }
+            //         else {
+            //             int newHeight = ScreenHeight() * cvrTmp->GetWidth() / ScreenWidth();
+            //             // if( ScreenHeight() - newHeight <= ScreenHeight() * 0.05 ) {
+            //             //     newHeight = ScreenHeight();
+            //             // }
+            //             cvrTmp = LVCreateStretchFilledTransform(
+            //                             cvrTmp,
+            //                             ScreenWidth(),
+            //                             newHeight,
+            //                             IMG_TRANSFORM_STRETCH,
+            //                             IMG_TRANSFORM_STRETCH
+            //                             );
+            //         }
+            //         cover = BitmapFromScreen(0, 0, ScreenWidth(), ScreenHeight());
+            //     }
+            //     cover = LVImageSourceRef_to_ibitmab( cvrTmp );
+            // }
+
             // Try getting cover with the system function
-            ibitmap *cover = GetBookCover(
+            *cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
                 ScreenHeight()
