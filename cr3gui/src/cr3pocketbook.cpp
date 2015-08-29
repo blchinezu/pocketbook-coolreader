@@ -1650,6 +1650,10 @@ public:
     {
       CRLog::trace("CRPbDictionaryDialog::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
 
+        if( CRTOUCH_MULTI_TOUCH == evType ) {
+            return false;
+        }
+
         lvPoint pt (x, y);
 
         if (_dictView->getRect().isPointInside(pt)) 
@@ -3498,14 +3502,33 @@ void CRPbDictionaryView::translate(const lString16 &w)
 
     CRLog::trace("CRPbDictionaryView::translate() start, _dictIndex = %d", _dictIndex);
     if (_dictIndex >= 0) {
-        s16.lowercase();
         lString8 what = UnicodeToUtf8( s16 );
         char *word = NULL, *translation = NULL;
 
-        CRLog::trace("CRPbDictionaryView::translate() LookupWord");
-        _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
-        //_translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
-        CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        CRLog::trace("CRPbDictionaryView::translate() LookupWordExact");
+        _translateResult = LookupWordExact((char *)what.c_str(), &word, &translation);
+        CRLog::trace("LookupWordExact(%s) returned %d", what.c_str(), _translateResult);
+
+        if( _translateResult == 0 ) {
+            word = NULL;
+            translation = NULL;
+
+            CRLog::trace("CRPbDictionaryView::translate() LookupWord");
+            _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
+            CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        }
+
+        if( _translateResult == 0 ) {
+            s16.lowercase();
+            what = UnicodeToUtf8( s16 );
+            word = NULL;
+            translation = NULL;
+
+            CRLog::trace("CRPbDictionaryView::translate() LookupWord - lowercase");
+            _translateResult = LookupWord((char *)what.c_str(), &word, &translation);
+            CRLog::trace("LookupWord(%s) returned %d", what.c_str(), _translateResult);
+        }
+
         if (_translateResult != 0) {
             if (_translateResult == 1) {
                 _selectedIndex = PB_DICT_ARTICLE_LIST;
@@ -4591,7 +4614,19 @@ int InitDoc(const char *exename, char *fileName)
             }
             if (!skinSet) {
                 CRLog::info("Try to load default skin");
-                skinSet = wm->setSkin(lString16("default"));
+
+                lString16 defaultSkin;
+
+                #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
+                    if( max(ScreenWidth(),ScreenHeight()) > 800 )
+                        defaultSkin = L"pb626fw5";
+                    else
+                        defaultSkin = L"pb62x";
+                #else
+                    defaultSkin = L"default";
+                #endif
+
+                skinSet = wm->setSkin(defaultSkin);
             }
         }
         if (!skinSet && !wm->loadSkin(lString16(CONFIGPATH"/cr3/skin"))) {
@@ -4999,8 +5034,47 @@ int main_handler(int type, int par1, int par2)
 
             // startStatusUpdateThread(5000);
 
+            ibitmap *cover = NULL;
+
+            // Get with crengine
+            // if( ScreenWidth() < ScreenHeight() ) {
+
+            //     LVImageSourceRef cvrTmp = main_win->getDocView()->getCoverPageImage();
+            //     if( !cvrTmp.isNull() ) {
+            //         FillArea(0, 0, ScreenWidth(), ScreenHeight(), 0x00FFFFFF);
+            //         if( cvrTmp->GetHeight() > cvrTmp->GetWidth() ) {
+            //             int newWidth = ScreenWidth() * cvrTmp->GetHeight() / ScreenHeight();
+            //             // if( ScreenWidth() - newWidth <= ScreenWidth() * 0.05 ) {
+            //             //     newWidth = ScreenWidth();
+            //             // }
+            //             cvrTmp = LVCreateStretchFilledTransform(
+            //                             cvrTmp,
+            //                             newWidth,
+            //                             ScreenHeight(),
+            //                             IMG_TRANSFORM_STRETCH,
+            //                             IMG_TRANSFORM_STRETCH
+            //                             );
+            //         }
+            //         else {
+            //             int newHeight = ScreenHeight() * cvrTmp->GetWidth() / ScreenWidth();
+            //             // if( ScreenHeight() - newHeight <= ScreenHeight() * 0.05 ) {
+            //             //     newHeight = ScreenHeight();
+            //             // }
+            //             cvrTmp = LVCreateStretchFilledTransform(
+            //                             cvrTmp,
+            //                             ScreenWidth(),
+            //                             newHeight,
+            //                             IMG_TRANSFORM_STRETCH,
+            //                             IMG_TRANSFORM_STRETCH
+            //                             );
+            //         }
+            //         cover = BitmapFromScreen(0, 0, ScreenWidth(), ScreenHeight());
+            //     }
+            //     cover = LVImageSourceRef_to_ibitmab( cvrTmp );
+            // }
+
             // Try getting cover with the system function
-            ibitmap *cover = GetBookCover(
+            cover = GetBookCover(
                 UnicodeToLocal(pbGlobals->getFileName()).c_str(),
                 ScreenWidth(),
                 ScreenHeight()
