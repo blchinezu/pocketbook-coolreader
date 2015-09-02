@@ -842,6 +842,10 @@ class CRGUIScreenBase : public CRGUIScreen
             if ( _fullUpdateInterval>0 )
                 _fullUpdateCounter = _fullUpdateInterval;
         }
+        virtual int getFullUpdateInterval()
+        {
+            return _fullUpdateInterval;
+        }
         virtual bool checkFullUpdateCounter()
         {
             if ( _fullUpdateInterval<=0 )
@@ -854,6 +858,10 @@ class CRGUIScreenBase : public CRGUIScreen
                 return true; // full update
             }
             return false; // partial update
+        }
+        virtual void resetFullUpdateCounter()
+        {
+            _fullUpdateCounter = _fullUpdateInterval;
         }
 
         /// creates compatible canvas of specified size

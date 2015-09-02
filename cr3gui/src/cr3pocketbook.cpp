@@ -90,6 +90,8 @@ int fw_minor;
 int touchPointing;
 std::clock_t last_drawTemporaryZoom;
 
+void setCustomSystemTheme();
+
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
     "@Bookmarks", "@Menu", "@Rotate",
@@ -2416,6 +2418,7 @@ public:
             }
             return true;
         case PB_CMD_FULL_UPDATE:
+            CRPocketBookScreen::instance->resetFullUpdateCounter();
             FullUpdate();
             return true;
         case PB_CMD_INVERT_DISPLAY:
@@ -4943,7 +4946,12 @@ void exitStandByMode() {
     #ifdef POCKETBOOK_PRO_FW5
     restoreFrontLightIfNeeded();
     #endif
+    
+    int updateInterval = CRPocketBookScreen::instance->getFullUpdateInterval();
+    CRPocketBookScreen::instance->setFullUpdateInterval(1);
     CRPocketBookWindowManager::instance->update(true);
+    CRPocketBookScreen::instance->setFullUpdateInterval(updateInterval);
+    
     isStandByMode = false;
     restartStandByTimer();
 }
@@ -5010,6 +5018,10 @@ int main_handler(int type, int par1, int par2)
         // CRLog::trace("COVER_OFF_SAVE");
         // CRLog::trace(USERLOGOPATH"/bookcover");
         if (need_save_cover) {
+
+            #ifdef POCKETBOOK_PRO_FW5
+            setCustomSystemTheme();
+            #endif
 
             // Check if it's a fresh cr3 update
             if( access( PB_FRESH_UPDATE_MARKER, F_OK ) != -1 ) {
@@ -5450,6 +5462,82 @@ void exitApp() {
     }
 }
 
+#ifdef POCKETBOOK_PRO_FW5
+
+void setCustomSystemTheme() {
+
+    printf("setCustomSystemTheme()\n");
+    if( max(ScreenWidth(), ScreenHeight()) < 1000 )
+        return;
+
+    printf("setCustomSystemTheme(): GetGlobalConfig\n");
+    iconfig *gcfg = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
+
+    printf("setCustomSystemTheme(): ReadString\n");
+    const char *currentTheme = ReadString(gcfg, "theme", "Line");
+
+    printf("setCustomSystemTheme(): if\n");
+    if( strcmp(currentTheme, "Line") == 0 ) {
+        bool ok = true;
+        printf("setCustomSystemTheme(): if: access\n");
+        if( !(access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1) ) {
+            printf("setCustomSystemTheme(): if: access: copy\n");
+            copy_file(
+                USERDATA"/share/cr3/systemtheme/LineCustom.pbt",
+                USERTHEMESPATH"/LineCustom.pbt"
+                );
+            printf("setCustomSystemTheme(): if: access: ok?\n");
+            ok = access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1;
+        }
+        printf("setCustomSystemTheme(): if: ok\n");
+        if( ok ) {
+            printf("setCustomSystemTheme(): if: ok: WriteString\n");
+            WriteString(gcfg, "theme", "LineCustom");
+            printf("setCustomSystemTheme(): if: ok: SaveConfig\n");
+            SaveConfig(gcfg);
+            printf("setCustomSystemTheme(): if: ok: CloseConfig\n");
+            CloseConfig(gcfg);
+            printf("setCustomSystemTheme(): if: ok: NotifyConfigChanged\n");
+            NotifyConfigChanged();
+            
+            // CRLog::trace("OTA_DL_dialog_handler(%d)", button);
+
+                
+            printf("setCustomSystemTheme(): if: ok: message\n");
+            Message(ICON_INFORMATION, const_cast<char*>("CR3"), const_cast<char*>("Changed system theme. CR3 will restart"), 2000);
+
+            // Mark the required restart
+            printf("setCustomSystemTheme(): if: ok: mark restart\n");
+            FILE *marker;
+            char buffer[2] = "x";
+            marker = fopen(OTA_RESTART_MARK, "wb");
+            fwrite(buffer, 1, 1, marker);
+            fclose(marker);
+
+            // Show hour glass
+            printf("setCustomSystemTheme(): if: ok: hourglass\n");
+            #ifdef POCKETBOOK_PRO_FW5
+            ShowPureHourglassForce();
+            #elif !defined(POCKETBOOK_PRO_PRO2)
+            ShowHourglassForce();
+            #endif
+            printf("setCustomSystemTheme(): if: ok: PartialUpdate\n");
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+
+            // Exit
+            printf("setCustomSystemTheme(): if: ok: exitApp\n");
+            exitApp();
+        }
+    }
+    else {
+        printf("setCustomSystemTheme(): else: CloseConfigNoSave\n");
+        CloseConfigNoSave(gcfg);
+    }
+    printf("setCustomSystemTheme(): done\n");
+}
+
+#endif
+
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {
     /* This gets the pointer to the GetTouchInfo() function if it is available. */
@@ -5471,6 +5559,7 @@ int main(int argc, char **argv)
     last_drawTemporaryZoom = std::clock();
     int foo;
     sscanf(GetSoftwareVersion(), "%*[^0-9]%u.%u.%u.%*u", &foo, &fw_major, &fw_minor);
+
     #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     get_gti_pointer();
     #endif
