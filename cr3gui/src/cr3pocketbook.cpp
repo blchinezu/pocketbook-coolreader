@@ -4946,12 +4946,12 @@ void exitStandByMode() {
     #ifdef POCKETBOOK_PRO_FW5
     restoreFrontLightIfNeeded();
     #endif
-    
+
     int updateInterval = CRPocketBookScreen::instance->getFullUpdateInterval();
     CRPocketBookScreen::instance->setFullUpdateInterval(1);
     CRPocketBookWindowManager::instance->update(true);
     CRPocketBookScreen::instance->setFullUpdateInterval(updateInterval);
-    
+
     isStandByMode = false;
     restartStandByTimer();
 }
@@ -5466,48 +5466,45 @@ void exitApp() {
 
 void setCustomSystemTheme() {
 
-    printf("setCustomSystemTheme()\n");
+    CRLog::trace("setCustomSystemTheme()");
     if( max(ScreenWidth(), ScreenHeight()) < 1000 )
         return;
 
-    printf("setCustomSystemTheme(): GetGlobalConfig\n");
+    CRLog::trace("setCustomSystemTheme(): GetGlobalConfig");
     iconfig *gcfg = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
 
-    printf("setCustomSystemTheme(): ReadString\n");
+    CRLog::trace("setCustomSystemTheme(): ReadString");
     const char *currentTheme = ReadString(gcfg, "theme", "Line");
 
-    printf("setCustomSystemTheme(): if\n");
+    CRLog::trace("setCustomSystemTheme(): if");
     if( strcmp(currentTheme, "Line") == 0 ) {
         bool ok = true;
-        printf("setCustomSystemTheme(): if: access\n");
+        CRLog::trace("setCustomSystemTheme(): if: access");
         if( !(access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1) ) {
-            printf("setCustomSystemTheme(): if: access: copy\n");
+            CRLog::trace("setCustomSystemTheme(): if: access: copy");
             copy_file(
                 USERDATA"/share/cr3/systemtheme/LineCustom.pbt",
                 USERTHEMESPATH"/LineCustom.pbt"
                 );
-            printf("setCustomSystemTheme(): if: access: ok?\n");
+            CRLog::trace("setCustomSystemTheme(): if: access: ok?");
             ok = access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1;
         }
-        printf("setCustomSystemTheme(): if: ok\n");
+        CRLog::trace("setCustomSystemTheme(): if: ok");
         if( ok ) {
-            printf("setCustomSystemTheme(): if: ok: WriteString\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: WriteString");
             WriteString(gcfg, "theme", "LineCustom");
-            printf("setCustomSystemTheme(): if: ok: SaveConfig\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: SaveConfig");
             SaveConfig(gcfg);
-            printf("setCustomSystemTheme(): if: ok: CloseConfig\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: CloseConfig");
             CloseConfig(gcfg);
-            printf("setCustomSystemTheme(): if: ok: NotifyConfigChanged\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: NotifyConfigChanged");
             NotifyConfigChanged();
             
-            // CRLog::trace("OTA_DL_dialog_handler(%d)", button);
-
-                
-            printf("setCustomSystemTheme(): if: ok: message\n");
-            Message(ICON_INFORMATION, const_cast<char*>("CR3"), const_cast<char*>("Changed system theme. CR3 will restart"), 2000);
+            CRLog::trace("setCustomSystemTheme(): if: ok: message");
+            Message(ICON_INFORMATION, const_cast<char*>("CR3"), _("System theme changed. CR3 will now restart."), 2000);
 
             // Mark the required restart
-            printf("setCustomSystemTheme(): if: ok: mark restart\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: mark restart");
             FILE *marker;
             char buffer[2] = "x";
             marker = fopen(OTA_RESTART_MARK, "wb");
@@ -5515,25 +5512,25 @@ void setCustomSystemTheme() {
             fclose(marker);
 
             // Show hour glass
-            printf("setCustomSystemTheme(): if: ok: hourglass\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: hourglass");
             #ifdef POCKETBOOK_PRO_FW5
             ShowPureHourglassForce();
             #elif !defined(POCKETBOOK_PRO_PRO2)
             ShowHourglassForce();
             #endif
-            printf("setCustomSystemTheme(): if: ok: PartialUpdate\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: PartialUpdate");
             PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
 
             // Exit
-            printf("setCustomSystemTheme(): if: ok: exitApp\n");
+            CRLog::trace("setCustomSystemTheme(): if: ok: exitApp");
             exitApp();
         }
     }
     else {
-        printf("setCustomSystemTheme(): else: CloseConfigNoSave\n");
+        CRLog::trace("setCustomSystemTheme(): else: CloseConfigNoSave");
         CloseConfigNoSave(gcfg);
     }
-    printf("setCustomSystemTheme(): done\n");
+    CRLog::trace("setCustomSystemTheme(): done");
 }
 
 #endif
