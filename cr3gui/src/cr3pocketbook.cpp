@@ -2049,9 +2049,15 @@ protected:
             if( tapZone == getTapZone(finger1.start.x, finger1.start.y, getProps()) ) {
                 int command = 0, param = 0;
                 getCommandForTapZone(tapZone, getProps(), CRTOUCH_DOWN_LONG == evType, command, param);
-                if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
-                    ldomXPointer p = _docview->getNodeByPoint( pt );
-                    if ( !p.isNull() ) {
+
+                ldomXPointer p = _docview->getNodeByPoint( pt );
+                if ( !p.isNull() ) {
+                    if (command == MCMD_DICT) {
+                        lvPoint wordPoint = p.toPoint();
+                        showDictDialog(wordPoint);
+                        return true;
+                    }
+                    if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
                         m_link = p.getHRef();
 
                         if ( !m_link.empty() ) {
@@ -2067,10 +2073,6 @@ protected:
                                 _docview->goLink( m_link );
                                 return showLinksDialog(true);
                             }
-                        } else if (command == MCMD_DICT) {
-                            lvPoint wordPoint = p.toPoint();
-                            showDictDialog(wordPoint);
-                            return true;
                         }
                     }
                 }
