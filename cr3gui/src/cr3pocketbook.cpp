@@ -5482,7 +5482,9 @@ void setCustomSystemTheme() {
     if( strcmp(currentTheme, "Line") == 0 ) {
         bool ok = true;
         CRLog::trace("setCustomSystemTheme(): if: access");
-        if( !(access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1) ) {
+        if( !(access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1) &&
+            access( USERDATA"/share/cr3/systemtheme/LineCustom.pbt", F_OK ) != -1 )
+        {
             CRLog::trace("setCustomSystemTheme(): if: access: copy");
             copy_file(
                 USERDATA"/share/cr3/systemtheme/LineCustom.pbt",
