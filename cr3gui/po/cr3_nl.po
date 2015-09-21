@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2015-08-20 13:28+0300\n"
+"POT-Creation-Date: 2015-09-06 08:42+0300\n"
 "PO-Revision-Date: 2015-08-20 12:39+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
@@ -78,7 +78,7 @@ msgstr "Open recent boek"
 msgid "Dictionary"
 msgstr "Woordenboek"
 
-#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1458
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1483
 msgid "Cite"
 msgstr "Citeren"
 
@@ -407,11 +407,11 @@ msgstr "Ga naar citaat"
 msgid "Delete citation"
 msgstr "Verwijder citaat"
 
-#: ../src/bmkdlg.cpp:331
+#: ../src/bmkdlg.cpp:332
 msgid "Citations"
 msgstr "Citaten"
 
-#: ../src/bmkdlg.cpp:447 ../src/viewdlg.cpp:574
+#: ../src/bmkdlg.cpp:448 ../src/viewdlg.cpp:574
 msgid "Cite selection dialog"
 msgstr "Dialoogvenster citaat selecteren"
 
@@ -681,7 +681,7 @@ msgstr "Uitlijning"
 msgid "First line indent"
 msgstr "Inspringing eerste regel"
 
-#: ../src/settings.cpp:1009 ../src/settings.cpp:1621
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1646
 msgid "Font face"
 msgstr "Lettertype"
 
@@ -689,7 +689,7 @@ msgstr "Lettertype"
 msgid "Font size"
 msgstr "Tekengrootte"
 
-#: ../src/settings.cpp:1025 ../src/settings.cpp:1515 ../src/settings.cpp:1630
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1540 ../src/settings.cpp:1655
 msgid "Font weight"
 msgstr "Tekengewicht"
 
@@ -697,7 +697,7 @@ msgstr "Tekengewicht"
 msgid "Font style"
 msgstr "Tekenstijl"
 
-#: ../src/settings.cpp:1029 ../src/settings.cpp:1544
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1569
 msgid "Interline space"
 msgstr "Regelafstand"
 
@@ -746,7 +746,7 @@ msgid "On for big fonts only"
 msgstr "Aan voor grote lettertypen"
 
 #: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
-#: ../src/settings.cpp:1284 ../src/settings.cpp:1310
+#: ../src/settings.cpp:1308 ../src/settings.cpp:1334
 msgid "Off"
 msgstr "Uit"
 
@@ -862,588 +862,588 @@ msgstr "180%"
 msgid "200%"
 msgstr "200%"
 
-#: ../src/settings.cpp:1256
+#: ../src/settings.cpp:1280
 msgid "Always use fast updates"
 msgstr "Altijd snel verversen"
 
-#: ../src/settings.cpp:1257
+#: ../src/settings.cpp:1281
 msgid "Don't use fast updates"
 msgstr "Nooit snel verversen"
 
-#: ../src/settings.cpp:1258
+#: ../src/settings.cpp:1282
 msgid "Full updates every 2 pages"
 msgstr "Volledig verversen per 2 pagina's"
 
-#: ../src/settings.cpp:1259
+#: ../src/settings.cpp:1283
 msgid "Full updates every 3 pages"
 msgstr "Volledig verversen per 3 pagina's"
 
-#: ../src/settings.cpp:1260
+#: ../src/settings.cpp:1284
 msgid "Full updates every 4 pages"
 msgstr "Volledig verversen per 4 pagina's"
 
-#: ../src/settings.cpp:1261
+#: ../src/settings.cpp:1285
 msgid "Full updates every 5 pages"
 msgstr "Volledig verversen per 5 pagina's"
 
-#: ../src/settings.cpp:1262
+#: ../src/settings.cpp:1286
 msgid "Full updates every 6 pages"
 msgstr "Volledig verversen per 6 pagina's"
 
-#: ../src/settings.cpp:1263
+#: ../src/settings.cpp:1287
 msgid "Full updates every 7 pages"
 msgstr "Volledig verversen per 7 pagina's"
 
-#: ../src/settings.cpp:1264
+#: ../src/settings.cpp:1288
 msgid "Full updates every 8 pages"
 msgstr "Volledig verversen per 8 pagina's"
 
-#: ../src/settings.cpp:1265
+#: ../src/settings.cpp:1289
 msgid "Full updates every 9 pages"
 msgstr "Volledig verversen per 9 pagina's"
 
-#: ../src/settings.cpp:1266
+#: ../src/settings.cpp:1290
 msgid "Full updates every 10 pages"
 msgstr "Volledig verversen per 10 pagina's"
 
-#: ../src/settings.cpp:1267
+#: ../src/settings.cpp:1291
 msgid "Full updates every 14 pages"
 msgstr "Volledig verversen per 14 pagina's"
 
-#: ../src/settings.cpp:1268
+#: ../src/settings.cpp:1292
 msgid "Full updates every 20 pages"
 msgstr "Volledig verversen per 20 pagina's"
 
-#: ../src/settings.cpp:1269
+#: ../src/settings.cpp:1293
 msgid "Full updates every 25 pages"
 msgstr "Volledig verversen per 25 pagina's"
 
-#: ../src/settings.cpp:1270
+#: ../src/settings.cpp:1294
 msgid "Full updates every 30 pages"
 msgstr "Volledig verversen per 30 pagina's"
 
-#: ../src/settings.cpp:1271
+#: ../src/settings.cpp:1295
 msgid "Full updates every 35 pages"
 msgstr "Volledig verversen per 35 pagina's"
 
-#: ../src/settings.cpp:1272
+#: ../src/settings.cpp:1296
 msgid "Full updates every 40 pages"
 msgstr "Volledig verversen per 40 pagina's"
 
-#: ../src/settings.cpp:1273
+#: ../src/settings.cpp:1297
 msgid "Full updates every 45 pages"
 msgstr "Volledig verversen per 45 pagina's"
 
-#: ../src/settings.cpp:1274
+#: ../src/settings.cpp:1298
 msgid "Full updates every 50 pages"
 msgstr "Volledig verversen per 50 pagina's"
 
-#: ../src/settings.cpp:1279
+#: ../src/settings.cpp:1303
 msgid "Turbo mode disabled"
 msgstr "Turbomodus uitgeschakeld"
 
-#: ../src/settings.cpp:1280
+#: ../src/settings.cpp:1304
 msgid "Turbo mode enabled"
 msgstr "Turbomodus ingeschakeld"
 
-#: ../src/settings.cpp:1285
+#: ../src/settings.cpp:1309
 msgid "1 minute"
 msgstr "1 minuut"
 
-#: ../src/settings.cpp:1286
+#: ../src/settings.cpp:1310
 msgid "2 minutes"
 msgstr "2 minuten"
 
-#: ../src/settings.cpp:1287
+#: ../src/settings.cpp:1311
 msgid "3 minutes"
 msgstr "3 minuten"
 
-#: ../src/settings.cpp:1288
+#: ../src/settings.cpp:1312
 msgid "4 minutes"
 msgstr "4 minuten"
 
-#: ../src/settings.cpp:1289
+#: ../src/settings.cpp:1313
 msgid "5 minutes"
 msgstr "5 minuten"
 
-#: ../src/settings.cpp:1290
+#: ../src/settings.cpp:1314
 msgid "6 minutes"
 msgstr "6 minuten"
 
-#: ../src/settings.cpp:1291
+#: ../src/settings.cpp:1315
 msgid "7 minutes"
 msgstr "7 minuten"
 
-#: ../src/settings.cpp:1292
+#: ../src/settings.cpp:1316
 msgid "8 minutes"
 msgstr "8 minuten"
 
-#: ../src/settings.cpp:1293
+#: ../src/settings.cpp:1317
 msgid "9 minutes"
 msgstr "9 minuten"
 
-#: ../src/settings.cpp:1294
+#: ../src/settings.cpp:1318
 msgid "10 minutes"
 msgstr "10 minuten"
 
-#: ../src/settings.cpp:1295
+#: ../src/settings.cpp:1319
 msgid "15 minutes"
 msgstr "15 minuten"
 
-#: ../src/settings.cpp:1296
+#: ../src/settings.cpp:1320
 msgid "20 minutes"
 msgstr "20 minuten"
 
-#: ../src/settings.cpp:1297
+#: ../src/settings.cpp:1321
 msgid "25 minutes"
 msgstr "25 minuten"
 
-#: ../src/settings.cpp:1298
+#: ../src/settings.cpp:1322
 msgid "30 minutes"
 msgstr "30 minuten"
 
-#: ../src/settings.cpp:1299
+#: ../src/settings.cpp:1323
 msgid "35 minutes"
 msgstr "35 minuten"
 
-#: ../src/settings.cpp:1300
+#: ../src/settings.cpp:1324
 msgid "40 minutes"
 msgstr "40 minuten"
 
-#: ../src/settings.cpp:1301
+#: ../src/settings.cpp:1325
 msgid "45 minutes"
 msgstr "45 minuten"
 
-#: ../src/settings.cpp:1302
+#: ../src/settings.cpp:1326
 msgid "50 minutes"
 msgstr "50 minuten"
 
-#: ../src/settings.cpp:1303
+#: ../src/settings.cpp:1327
 msgid "55 minutes"
 msgstr "55 minuten"
 
-#: ../src/settings.cpp:1304
+#: ../src/settings.cpp:1328
 msgid "1 hour"
 msgstr "1 uur"
 
-#: ../src/settings.cpp:1305
+#: ../src/settings.cpp:1329
 msgid "2 hours"
 msgstr "2 uur"
 
-#: ../src/settings.cpp:1311
+#: ../src/settings.cpp:1335
 msgid "Fixed"
 msgstr "Vast"
 
-#: ../src/settings.cpp:1312
+#: ../src/settings.cpp:1336
 msgid "Dynamic"
 msgstr "Dynamisch"
 
-#: ../src/settings.cpp:1320
+#: ../src/settings.cpp:1344
 msgid "180+slow next page"
 msgstr "180+langzaam volgende pagina"
 
-#: ../src/settings.cpp:1321
+#: ../src/settings.cpp:1345
 msgid "180+slow prev/next page"
 msgstr "180+langzaam vorige/volgende pagina"
 
-#: ../src/settings.cpp:1322
+#: ../src/settings.cpp:1346
 msgid "180+FAST next page"
 msgstr "180+SNEL volgende pagina"
 
-#: ../src/settings.cpp:1323
+#: ../src/settings.cpp:1347
 msgid "180+FAST prev/next page"
 msgstr "180+SNEL vorige/volgende pagina"
 
-#: ../src/settings.cpp:1324
+#: ../src/settings.cpp:1348
 msgid "180+FAST next/prev page"
 msgstr "180+SNEL volgende/vorige pagina"
 
-#: ../src/settings.cpp:1342
-msgid "2 BPP"
-msgstr "2 BPP"
-
-#: ../src/settings.cpp:1343
-msgid "3 BPP"
-msgstr "3 BPP"
-
-#: ../src/settings.cpp:1344
-msgid "4 BPP"
-msgstr "4 BPP"
-
-#: ../src/settings.cpp:1345
-msgid "8 BPP"
-msgstr "8 BPP"
-
-#: ../src/settings.cpp:1351
-msgid "Disabled (1:1)"
-msgstr "Uitgeschakeld (1:1)"
-
-#: ../src/settings.cpp:1352
-msgid "Integer scale"
-msgstr "Integerschaal"
-
-#: ../src/settings.cpp:1353
-msgid "Arbitrary scale"
-msgstr "Arbitraire schaal"
-
-#: ../src/settings.cpp:1358
+#: ../src/settings.cpp:1366 ../src/settings.cpp:1383
 msgid "Auto"
 msgstr "Auto"
 
-#: ../src/settings.cpp:1359
+#: ../src/settings.cpp:1367
+msgid "2 BPP"
+msgstr "2 BPP"
+
+#: ../src/settings.cpp:1368
+msgid "3 BPP"
+msgstr "3 BPP"
+
+#: ../src/settings.cpp:1369
+msgid "4 BPP"
+msgstr "4 BPP"
+
+#: ../src/settings.cpp:1370
+msgid "8 BPP"
+msgstr "8 BPP"
+
+#: ../src/settings.cpp:1376
+msgid "Disabled (1:1)"
+msgstr "Uitgeschakeld (1:1)"
+
+#: ../src/settings.cpp:1377
+msgid "Integer scale"
+msgstr "Integerschaal"
+
+#: ../src/settings.cpp:1378
+msgid "Arbitrary scale"
+msgstr "Arbitraire schaal"
+
+#: ../src/settings.cpp:1384
 msgid "*1"
 msgstr "*1"
 
-#: ../src/settings.cpp:1360
+#: ../src/settings.cpp:1385
 msgid "*2"
 msgstr "*2"
 
-#: ../src/settings.cpp:1361
+#: ../src/settings.cpp:1386
 msgid "*3"
 msgstr "*3"
 
-#: ../src/settings.cpp:1445
+#: ../src/settings.cpp:1470
 msgid "No hinting"
 msgstr "Niet hinten"
 
-#: ../src/settings.cpp:1446
+#: ../src/settings.cpp:1471
 msgid "Use bytecode"
 msgstr "Gebruik bytecode"
 
-#: ../src/settings.cpp:1447
+#: ../src/settings.cpp:1472
 msgid "Autohinting"
 msgstr "Automatisch hinten"
 
-#: ../src/settings.cpp:1448
+#: ../src/settings.cpp:1473
 msgid "Light"
 msgstr "Licht"
 
-#: ../src/settings.cpp:1453
+#: ../src/settings.cpp:1478
 msgid "Default paragraph formatting"
 msgstr "Standaard alinea-opmaak"
 
-#: ../src/settings.cpp:1454
+#: ../src/settings.cpp:1479
 msgctxt "CSS"
 msgid "Title"
 msgstr "Titel"
 
-#: ../src/settings.cpp:1455
+#: ../src/settings.cpp:1480
 msgid "Subtitle"
 msgstr "Ondertitel"
 
-#: ../src/settings.cpp:1456
+#: ../src/settings.cpp:1481
 msgid "Preformatted text / code"
 msgstr "Voorgeformatteerde tekst / code "
 
-#: ../src/settings.cpp:1457
+#: ../src/settings.cpp:1482
 msgid "Link"
 msgstr "Verwijzing"
 
-#: ../src/settings.cpp:1459
+#: ../src/settings.cpp:1484
 msgid "Epigraph"
 msgstr "Epigraaf"
 
-#: ../src/settings.cpp:1460
+#: ../src/settings.cpp:1485
 msgid "Poem"
 msgstr "Gedicht"
 
-#: ../src/settings.cpp:1461
+#: ../src/settings.cpp:1486
 msgid "Text / Cite / Epigraph author"
 msgstr "Auteur van tekst / citaat / epigraaf"
 
-#: ../src/settings.cpp:1462
+#: ../src/settings.cpp:1487
 msgid "Footnote"
 msgstr "Voetnoot"
 
-#: ../src/settings.cpp:1463
+#: ../src/settings.cpp:1488
 msgid "Footnote link"
 msgstr "Voetnootverwijzing"
 
-#: ../src/settings.cpp:1464
+#: ../src/settings.cpp:1489
 msgid "Footnote title"
 msgstr "Voetnoottitel"
 
-#: ../src/settings.cpp:1465
+#: ../src/settings.cpp:1490
 msgid "Annotation"
 msgstr "Annotatie"
 
-#: ../src/settings.cpp:1505
+#: ../src/settings.cpp:1530
 msgid "Default font face"
 msgstr "Standaard lettertype"
 
-#: ../src/settings.cpp:1510
+#: ../src/settings.cpp:1535
 msgid "Font settings"
 msgstr "Lettertype-instellingen"
 
-#: ../src/settings.cpp:1517
+#: ../src/settings.cpp:1542
 msgid "Font antialiasing"
 msgstr "Anti-aliasing"
 
-#: ../src/settings.cpp:1520
+#: ../src/settings.cpp:1545
 msgid "Font hinting"
 msgstr "Hinten"
 
-#: ../src/settings.cpp:1522
+#: ../src/settings.cpp:1547
 msgid "Font kerning"
 msgstr "Overhang"
 
-#: ../src/settings.cpp:1524
+#: ../src/settings.cpp:1549
 msgid "Font embolding"
 msgstr "Vetter maken"
 
-#: ../src/settings.cpp:1526
+#: ../src/settings.cpp:1551
 msgid "Tracking"
 msgstr "Letterafstand"
 
-#: ../src/settings.cpp:1528
+#: ../src/settings.cpp:1553
 msgid "Font Gamma"
 msgstr "Gamma"
 
-#: ../src/settings.cpp:1530
+#: ../src/settings.cpp:1555
 msgid "Document embedded fonts"
 msgstr "In document opgenomen lettertypen"
 
-#: ../src/settings.cpp:1533
+#: ../src/settings.cpp:1558
 msgid "Fallback font face"
 msgstr "Alternatief letertype"
 
-#: ../src/settings.cpp:1539
+#: ../src/settings.cpp:1564
 msgid "Formatting settings"
 msgstr "Opmaakinstellingen"
 
-#: ../src/settings.cpp:1551
+#: ../src/settings.cpp:1576
 msgid "[No Hyphenation]"
 msgstr "[Geen woordafbreking]"
 
-#: ../src/settings.cpp:1552
+#: ../src/settings.cpp:1577
 msgid "[Algorythmic Hyphenation]"
 msgstr "[Afbreking met behulp van algoritme]"
 
-#: ../src/settings.cpp:1554
+#: ../src/settings.cpp:1579
 msgid "Hyphenation"
 msgstr "Woordafbreking"
 
-#: ../src/settings.cpp:1568
+#: ../src/settings.cpp:1593
 msgid "Preformatted text"
 msgstr "Opgemaakte tekst"
 
-#: ../src/settings.cpp:1571
+#: ../src/settings.cpp:1596
 msgid "Space condensing percent"
 msgstr "Spaties verkleinen"
 
-#: ../src/settings.cpp:1574
+#: ../src/settings.cpp:1599
 msgid "Space expanding percent"
 msgstr "Spaties vergroten tot maximaal"
 
-#: ../src/settings.cpp:1577
+#: ../src/settings.cpp:1602
 msgid "Floating punctuation"
 msgstr "Drijvende interpunctie"
 
-#: ../src/settings.cpp:1583
+#: ../src/settings.cpp:1608
 msgid "Image scaling"
 msgstr "Grootte van afbeeldingen aanpassen"
 
-#: ../src/settings.cpp:1588
+#: ../src/settings.cpp:1613
 msgid "Block image scaling mode"
 msgstr "Methode voor block images"
 
-#: ../src/settings.cpp:1591
+#: ../src/settings.cpp:1616
 msgid "Block image max zoom"
 msgstr "Max zoom voor block images"
 
-#: ../src/settings.cpp:1594
+#: ../src/settings.cpp:1619
 msgid "Inline image scaling mode"
 msgstr "Methode voor inline images"
 
-#: ../src/settings.cpp:1597
+#: ../src/settings.cpp:1622
 msgid "Inline image max zoom"
 msgstr "Max zoom voor inline images"
 
-#: ../src/settings.cpp:1606
+#: ../src/settings.cpp:1631
 msgid "Page settings"
 msgstr "Pagina-instellingen"
 
-#: ../src/settings.cpp:1611
+#: ../src/settings.cpp:1636
 msgid "Status line"
 msgstr "Statusregel"
 
-#: ../src/settings.cpp:1616
+#: ../src/settings.cpp:1641
 msgid "Status line settings"
 msgstr "Instellingen voor statusregel"
 
-#: ../src/settings.cpp:1633
+#: ../src/settings.cpp:1658
 msgid "Time format"
 msgstr "Tijdnotatie"
 
-#: ../src/settings.cpp:1635
+#: ../src/settings.cpp:1660
 msgid "Show time"
 msgstr "Tijd weergeven"
 
-#: ../src/settings.cpp:1637
+#: ../src/settings.cpp:1662
 msgid "Show title"
 msgstr "Titel weergeven"
 
-#: ../src/settings.cpp:1639
+#: ../src/settings.cpp:1664
 msgid "Show battery"
 msgstr "Batterijstatus weergeven"
 
-#: ../src/settings.cpp:1641
+#: ../src/settings.cpp:1666
 msgid "Show battery percent"
 msgstr "Batterijpercentage weergeven"
 
-#: ../src/settings.cpp:1644
+#: ../src/settings.cpp:1669
 msgid "Show position percent"
 msgstr "Percentage voor positie weergeven"
 
-#: ../src/settings.cpp:1646
+#: ../src/settings.cpp:1671
 msgid "Show page count"
 msgstr "Aantal pagina's weergeven"
 
-#: ../src/settings.cpp:1648
+#: ../src/settings.cpp:1673
 msgid "Show page count till chapter end"
 msgstr "Aantal pagina's tot einde van hoofdstuk weergeven"
 
-#: ../src/settings.cpp:1651
+#: ../src/settings.cpp:1676
 msgid "Show page number"
 msgstr "Paginanummer weergeven"
 
-#: ../src/settings.cpp:1653
+#: ../src/settings.cpp:1678
 msgid "Show chapter marks"
 msgstr "Hoofdstukmarkeringen weergeven"
 
-#: ../src/settings.cpp:1662
+#: ../src/settings.cpp:1687
 msgid "Page margins"
 msgstr "Marges"
 
-#: ../src/settings.cpp:1667
+#: ../src/settings.cpp:1692
 msgid "Top margin"
 msgstr "Bovenmarge"
 
-#: ../src/settings.cpp:1669
+#: ../src/settings.cpp:1694
 msgid "Bottom margin"
 msgstr "Ondermarge"
 
-#: ../src/settings.cpp:1671
+#: ../src/settings.cpp:1696
 msgid "Left margin"
 msgstr "Linkermarge"
 
-#: ../src/settings.cpp:1673
+#: ../src/settings.cpp:1698
 msgid "Right margin"
 msgstr "Rechtermarge"
 
-#: ../src/settings.cpp:1678
+#: ../src/settings.cpp:1703
 msgid "Footnotes at page bottom"
 msgstr "Voetnoten onder aan pagina"
 
-#: ../src/settings.cpp:1684
+#: ../src/settings.cpp:1709
 msgid "Display settings"
 msgstr "Beeldinstellingen"
 
-#: ../src/settings.cpp:1693
+#: ../src/settings.cpp:1718
 msgid "Landscape pages"
 msgstr "Aantal kolommen in liggende stand"
 
-#: ../src/settings.cpp:1695
+#: ../src/settings.cpp:1720
 msgid "Inverse display"
 msgstr "Negatief beeld"
 
-#: ../src/settings.cpp:1698
+#: ../src/settings.cpp:1723
 msgid "Show bookmark icons"
 msgstr "Bladwijzersymbolen weergeven"
 
-#: ../src/settings.cpp:1701
+#: ../src/settings.cpp:1726
 msgid "Highlight bookmarks"
 msgstr "Weergave van bladwijzers"
 
-#: ../src/settings.cpp:1705
+#: ../src/settings.cpp:1730
 msgid "Display update mode"
 msgstr "Methode van beeldverversing"
 
-#: ../src/settings.cpp:1713
+#: ../src/settings.cpp:1738
 msgid "Standby"
 msgstr "Standby"
 
-#: ../src/settings.cpp:1720
+#: ../src/settings.cpp:1745
 msgid "Turbo update mode"
 msgstr "Turbomodus voor verversing"
 
-#: ../src/settings.cpp:1725
+#: ../src/settings.cpp:1750
 msgid "Gray buffer depth(need restart)"
 msgstr "Grijsbufferdiepte (vereist herstart)"
 
-#: ../src/settings.cpp:1732
+#: ../src/settings.cpp:1757
 msgid "Skin"
 msgstr "Skin"
 
-#: ../src/settings.cpp:1748
+#: ../src/settings.cpp:1773
 msgid "Control settings"
 msgstr "Bedieningsinstellingen"
 
-#: ../src/settings.cpp:1755
+#: ../src/settings.cpp:1780
 msgid "Rotate"
 msgstr "Draaien"
 
-#: ../src/settings.cpp:1758
+#: ../src/settings.cpp:1783
 msgid "Page turn angle"
 msgstr "Draaihoek voor bladeren"
 
-#: ../src/settings.cpp:1774
+#: ../src/settings.cpp:1799
 msgid "Tap action"
 msgstr "Acties bij tikken"
 
-#: ../src/settings.cpp:1776
+#: ../src/settings.cpp:1801
 msgid "Long tap action"
 msgstr "Acties bij aanraken en vasthouden"
 
-#: ../src/settings.cpp:1780
+#: ../src/settings.cpp:1805
 msgid "Height of the upper tap zone"
 msgstr "Hoogte van de bovenste tikzone"
 
-#: ../src/settings.cpp:1783
+#: ../src/settings.cpp:1808
 msgid "Height of the middle tap zone"
 msgstr "Hoogte van de middelste tikzone"
 
-#: ../src/settings.cpp:1786
+#: ../src/settings.cpp:1811
 msgid "Width of the left tap zone"
 msgstr "Breedte van de linkertikzone"
 
-#: ../src/settings.cpp:1789
+#: ../src/settings.cpp:1814
 msgid "Width of the middle tap zone"
 msgstr "Breedte van de middelste tikzone"
 
-#: ../src/settings.cpp:1793
+#: ../src/settings.cpp:1818
 msgid "Page Turn Swipes"
 msgstr "Vegen om te bladeren"
 
-#: ../src/settings.cpp:1796
+#: ../src/settings.cpp:1821
 msgid "Front Light Swipes"
 msgstr "Vegen voor voorverlichting"
 
-#: ../src/settings.cpp:1799
+#: ../src/settings.cpp:1825
 msgid "Pinch zoom"
 msgstr "Knijpen om in te zoomen"
 
-#: ../src/settings.cpp:1816
+#: ../src/settings.cpp:1843
 msgid "Style settings"
 msgstr "Stijlinstellingen"
 
-#: ../src/settings.cpp:1821
+#: ../src/settings.cpp:1848
 msgid "Document embedded styles"
 msgstr "In document opgenomen stijlen"
 
-#: ../src/settings.cpp:1840 ../src/viewdlg.cpp:601
+#: ../src/settings.cpp:1867 ../src/viewdlg.cpp:601
 msgid "Clear cache"
 msgstr "Cache wissen"
 
-#: ../src/settings.cpp:1848 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+#: ../src/settings.cpp:1875 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
 msgstr "OTA Update"
 
-#: ../src/settings.cpp:1855 ../src/viewdlg.cpp:600
+#: ../src/settings.cpp:1882 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
 msgstr "OTA Update Dev"
 
-#: ../src/settings.cpp:1878
+#: ../src/settings.cpp:1905
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
@@ -1880,26 +1880,30 @@ msgstr "Update is mislukt!"
 msgid "Contents"
 msgstr "Inhoud"
 
-#: ../src/cr3pocketbook.cpp:2397
+#: ../src/cr3pocketbook.cpp:2408
 msgid "Cache cleared."
 msgstr "Cache is gewist."
 
-#: ../src/cr3pocketbook.cpp:2402
+#: ../src/cr3pocketbook.cpp:2413
 msgid "Unable to list the directory contents!"
 msgstr "Kan de inhoud van de directory niet weergeven!"
 
-#: ../src/cr3pocketbook.cpp:2408
+#: ../src/cr3pocketbook.cpp:2419
 msgid "Unable to clear cache!"
 msgstr "Kan de cache niet wissen!"
 
-#: ../src/cr3pocketbook.cpp:3906
+#: ../src/cr3pocketbook.cpp:3937
 msgid "Press $1 to translate"
 msgstr "Druk op $1 om te vertalen"
 
-#: ../src/cr3pocketbook.cpp:4965
+#: ../src/cr3pocketbook.cpp:5032
 msgid "Updated to v"
 msgstr "Bijgewerkt naar v"
 
-#: ../src/cr3pocketbook.cpp:5075
+#: ../src/cr3pocketbook.cpp:5181
 msgid "Untitled"
 msgstr "Zonder titel"
+
+#: ../src/cr3pocketbook.cpp:5506
+msgid "System theme changed. CR3 will now restart."
+msgstr ""
