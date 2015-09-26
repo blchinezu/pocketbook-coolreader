@@ -262,6 +262,8 @@ else()
       ${ZLIB_LIBRARIES}
       ${ANTIWORD_LIBRARIES}
       curl
+      inkview
+      dl
     )
   else()
     SET(STD_LIBS

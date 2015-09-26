@@ -77,6 +77,7 @@ function doUpdate {
 
 		echo " - skins > package"
 		rm -rf $package/system/share/cr3/skins/*
+		mkdir -p $package/system/share/cr3/skins
 		# if [ "$1" = "360" ]; then
 			cp -f $sdk/pb$1/cr3gui/default.cr3skin $package/system/share/cr3/skins/
 		# fi
