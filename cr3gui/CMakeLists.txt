@@ -278,6 +278,8 @@ elseif (${GUI} STREQUAL CRGUI_PB)
       FILES_MATCHING PATTERN "*.pdb" )
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pattern" )
+    INSTALL( DIRECTORY data/chn/ DESTINATION system/share/cr3/chn
+      FILES_MATCHING PATTERN "*.dic" )
 #    INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/skins/default/ DESTINATION system/share/cr3/skin )
     INSTALL( FILES ${cr3_skin_default} DESTINATION system/share/cr3/skins )
     INSTALL( FILES ${cr3_skin_pb62x} DESTINATION system/share/cr3/skins )
