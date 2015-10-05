@@ -7229,7 +7229,7 @@ public:
     /// called for each found text fragment in range
     virtual void onText( ldomXRange * nodeRange )
     {
-        ldomNode * node = nodeRange->getStart().getNode();
+	ldomNode * node = nodeRange->getStart().getNode();
         lString16 text = node->getText();
         int len = text.length();
         int end = nodeRange->getEnd().getOffset();
