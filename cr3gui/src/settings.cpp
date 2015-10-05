@@ -1759,9 +1759,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                turbo_update_options);
     }
 #ifdef CR_POCKETBOOK
-    createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth(need restart)"),
+    createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth (needs restart)"),
                            "cr3_option_display_buffer_depth", valueFont, PROP_POCKETBOOK_GRAYBUFFER_BPP,
                            gray_buffer_bpp);
+#endif
+#ifdef POCKETBOOK_PRO_FW5
+    createSettingsMenuItem(displaySettingsMenu, mm_customSystemTheme, _("Custom system theme (needs restart)"),
+                           "cr3_option_custom_system_theme", valueFont, PROP_CUSTOM_SYSTEM_THEME,
+                           on_off_option);
 #endif
     CRSkinList &skins = wm->getSkinList();
     if (skins.length() > 1) {

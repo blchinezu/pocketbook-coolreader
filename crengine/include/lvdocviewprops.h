@@ -97,4 +97,6 @@
 #define PROP_CTRL_FRONT_LIGHT_SWIPES "window.swipes.frontlight"
 #define PROP_CTRL_PINCH_ZOOM "window.pinch.zoom"
 
+#define PROP_CUSTOM_SYSTEM_THEME "pocketbook.system.custom_theme"
+
 #endif // LVDOCVIEWPROPS_H
