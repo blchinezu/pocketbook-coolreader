@@ -1,34 +1,121 @@
-/***************************************************************************/
-/*                                                                         */
-/*  fterrdef.h                                                             */
-/*                                                                         */
-/*    FreeType error codes (specification).                                */
-/*                                                                         */
-/*  Copyright 2002-2015 by                                                 */
-/*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
-/*                                                                         */
-/*  This file is part of the FreeType project, and may only be used,       */
-/*  modified, and distributed under the terms of the FreeType project      */
-/*  license, LICENSE.TXT.  By continuing to use, modify, or distribute     */
-/*  this file you indicate that you have read the license and              */
-/*  understand and accept it fully.                                        */
-/*                                                                         */
-/***************************************************************************/
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>FreeType-2.6.1 API Reference</title>
+<style type="text/css">
+  a:link { color: #0000EF; }
+  a:visited { color: #51188E; }
+  a:hover { color: #FF0000; }
+
+  body { font-family: Verdana, Geneva, Arial, Helvetica, serif;
+         color: #000000;
+         background: #FFFFFF;
+         width: 87%;
+         margin: auto; }
+
+  div.section { width: 75%;
+                margin: auto; }
+  div.section hr { margin: 4ex 0 1ex 0; }
+  div.section h4 { background-color: #EEEEFF;
+                   font-size: medium;
+                   font-style: oblique;
+                   font-weight: bold;
+                   margin: 3ex 0 1.5ex 9%;
+                   padding: 0.3ex 0 0.3ex 1%; }
+  div.section p { margin: 1.5ex 0 1.5ex 10%; }
+  div.section pre { margin: 3ex 0 3ex 9%;
+                    background-color: #D6E8FF;
+                    padding: 2ex 0 2ex 1%; }
+  div.section table.fields { width: 90%;
+                             margin: 1.5ex 0 1.5ex 10%; }
+  div.section table.toc { width: 95%;
+                          margin: 1.5ex 0 1.5ex 5%; }
+  div.timestamp { text-align: center;
+                  font-size: 69%;
+                  margin: 1.5ex 0 1.5ex 0; }
+
+  h1 { text-align: center; }
+  h3 { font-size: medium;
+       margin: 4ex 0 1.5ex 0; }
+
+  p { text-align: justify; }
+
+  pre.colored { color: blue; }
+
+  span.keyword { font-family: monospace;
+                 text-align: left;
+                 white-space: pre;
+                 color: darkblue; }
+
+  table.fields td.val { font-weight: bold;
+                        text-align: right;
+                        width: 30%;
+                        vertical-align: baseline;
+                        padding: 1ex 1em 1ex 0; }
+  table.fields td.desc { vertical-align: baseline;
+                         padding: 1ex 0 1ex 1em; }
+  table.fields td.desc p:first-child { margin: 0; }
+  table.fields td.desc p { margin: 1.5ex 0 0 0; }
+  table.index { margin: 6ex auto 6ex auto;
+                border: 0;
+                border-collapse: separate;
+                border-spacing: 1em 0.3ex; }
+  table.index tr { padding: 0; }
+  table.index td { padding: 0; }
+  table.index-toc-link { width: 100%;
+                         border: 0;
+                         border-spacing: 0;
+                         margin: 1ex 0 1ex 0; }
+  table.index-toc-link td.left { padding: 0 0.5em 0 0.5em;
+                                 font-size: 83%;
+                                 text-align: left; }
+  table.index-toc-link td.middle { padding: 0 0.5em 0 0.5em;
+                                   font-size: 83%;
+                                   text-align: center; }
+  table.index-toc-link td.right { padding: 0 0.5em 0 0.5em;
+                                  font-size: 83%;
+                                  text-align: right; }
+  table.synopsis { margin: 6ex auto 6ex auto;
+                   border: 0;
+                   border-collapse: separate;
+                   border-spacing: 2em 0.6ex; }
+  table.synopsis tr { padding: 0; }
+  table.synopsis td { padding: 0; }
+  table.toc td.link { width: 30%;
+                      text-align: right;
+                      vertical-align: baseline;
+                      padding: 1ex 1em 1ex 0; }
+  table.toc td.desc { vertical-align: baseline;
+                      padding: 1ex 0 1ex 1em;
+                      text-align: left; }
+  table.toc td.desc p:first-child { margin: 0;
+                                    text-align: left; }
+  table.toc td.desc p { margin: 1.5ex 0 0 0;
+                        text-align: left; }
+
+</style>
+</head>
+<body>
+
+<table class="index-toc-link"><tr><td class="left">[<a href="ft2-index.html">Index</a>]</td><td class="right">[<a href="ft2-toc.html">TOC</a>]</td></tr></table>
+<h1>FreeType-2.6.1 API Reference</h1>
+
+<h1>Error Code Values</h1>
+<h2>Synopsis</h2>
+<table class="synopsis">
+<tr><td><a href="#FT_Err_XXX">FT_Err_XXX</a></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</table>
 
 
-  /*******************************************************************/
-  /*******************************************************************/
-  /*****                                                         *****/
-  /*****                LIST OF ERROR CODES/MESSAGES             *****/
-  /*****                                                         *****/
-  /*******************************************************************/
-  /*******************************************************************/
+<p>The list below is taken verbatim from the file &lsquo;fterrdef.h&rsquo; (loaded automatically by including &lsquo;FT_FREETYPE_H&rsquo;). The first argument of the &lsquo;FT_ERROR_DEF_&rsquo; macro is the error label; by default, the prefix &lsquo;FT_Err_&rsquo; gets added so that you get error names like &lsquo;FT_Err_Cannot_Open_Resource&rsquo;. The second argument is the error code, and the last argument an error string, which is not used by FreeType.</p>
+<p>Within your application you should <b>only</b> use error names and <b>never</b> its numeric values! The latter might (and actually do) change in forthcoming FreeType versions.</p>
+<p>Macro &lsquo;FT_NOERRORDEF_&rsquo; defines &lsquo;FT_Err_Ok&rsquo;, which is always zero. See the &lsquo;Error Enumerations&rsquo; subsection how to automatically generate a list of error strings.</p>
 
-
-  /* You need to define both FT_ERRORDEF_ and FT_NOERRORDEF_ before */
-  /* including this file.                                           */
-
-
+<div class="section">
+<h3 id="FT_Err_XXX">FT_Err_XXX</h3>
+<pre>
   /* generic errors */
 
   FT_NOERRORDEF_( Ok,                                        0x00,
@@ -173,7 +260,7 @@
   FT_ERRORDEF_( Invalid_CodeRange,                           0x8A,
                 "invalid code range" )
   FT_ERRORDEF_( Execution_Too_Long,                          0x8B,
-                "execution context too long" )
+                "execution context too <span class="keyword">long</span>" )
   FT_ERRORDEF_( Too_Many_Function_Defs,                      0x8C,
                 "too many function definitions" )
   FT_ERRORDEF_( Too_Many_Instruction_Defs,                   0x8D,
@@ -244,6 +331,9 @@
                 "Font header corrupted or missing fields" )
   FT_ERRORDEF_( Corrupted_Font_Glyphs,                       0xBA,
                 "Font glyphs corrupted or missing fields" )
+</pre>
+<hr>
+<table class="index-toc-link"><tr><td class="left">[<a href="ft2-index.html">Index</a>]</td><td class="middle">[<a href="#">Top</a>]</td><td class="right">[<a href="ft2-toc.html">TOC</a>]</td></tr></table></div>
 
-
-/* END */
+</body>
+</html>

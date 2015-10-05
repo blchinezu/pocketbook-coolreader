@@ -6999,6 +6999,7 @@ void ldomXRange::forEach( ldomNodeCallback * callback )
     }
 }
 
+
 // MMSEG C++ 11
 // Copyright (C) 2014 Jack Deng <jackdeng@gmail.com>
 // MIT LICENSE
@@ -7035,18 +7036,18 @@ public:
   }
 
     inline static lString16 from_utf8(const std::string& in) {
-	return Utf8ToUnicode(in.c_str(), in.length());
+    return Utf8ToUnicode(in.c_str(), in.length());
   }
 
 private:
   struct Trie {
     struct Node {
       std::map<Char, Node*> trans_;
-	bool val_;
-	Node(){val_=false;}
+    bool val_;
+    Node(){val_=false;}
 
       ~Node() {
-	  for (std::map<Char,Node*>::iterator it(trans_.begin()), end(trans_.end()); it != end; ++it) delete it->second;
+      for (std::map<Char,Node*>::iterator it(trans_.begin()), end(trans_.end()); it != end; ++it) delete it->second;
         trans_.clear();
       }
     };
@@ -7057,9 +7058,9 @@ private:
       Node *current = &root_;
       Char ch;
       for (size_t i = 0; (ch = word[i]); ++i) {
-	  std::map<Char,Node*>::iterator it = current->trans_.find(ch);
+      std::map<Char,Node*>::iterator it = current->trans_.find(ch);
         if (it == current->trans_.end()) {
-	    std::pair<std::map<Char,Node*>::iterator,bool> ret = current->trans_.insert(std::make_pair(ch, new Node()));
+        std::pair<std::map<Char,Node*>::iterator,bool> ret = current->trans_.insert(std::make_pair(ch, new Node()));
           current = ret.first->second;
         }
         else {
@@ -7094,14 +7095,14 @@ private:
     static size_t length(const StringP& w) { return std::distance(w.first, w.second); }
 
     static size_t length_accumulator(size_t n, const StringP& w) {
-	return n + length(w);
+    return n + length(w);
     }
 
     struct var_accumulator {
-	float mean_;
-	inline float operator()(size_t n, const StringP& w) {
-	    return  n + (length(w) - mean_) * (length(w) - mean_);
-	}
+    float mean_;
+    inline float operator()(size_t n, const StringP& w) {
+        return  n + (length(w) - mean_) * (length(w) - mean_);
+    }
     };
 
   struct Chunk {
@@ -7127,12 +7128,12 @@ private:
 
     inline void get_chunks_it(std::vector<Chunk>& ret, StringIt start, StringIt end, int n, std::vector<StringP> segs) {
       if (n == 0 || start == end) {
-	  ret.push_back(Chunk(segs, char_freqs_));
+      ret.push_back(Chunk(segs, char_freqs_));
       }
       else {
         std::vector<StringP> m = dict_.match_all(start, end);
         for (size_t i = 0, e = m.size(); i < e; ++i) {
-	    std::vector<StringP> nsegs = segs;
+        std::vector<StringP> nsegs = segs;
           size_t len = length(m[i]);
           nsegs.push_back(m[i]);
           get_chunks_it(ret, start + len, end, n - 1, nsegs);
@@ -7151,19 +7152,19 @@ private:
     static inline bool best_chunk_finder(const Chunk& x, const Chunk& y) {
       if (x.length_ < y.length_) { return true; }
       else if (x.length_ == y.length_) {
-	if (x.mean_ < y.mean_) { return true; }
-	else if (x.mean_ == y.mean_) {
-	  if (x.var_ < y.var_) { return true; }
-	  else if (x.var_ == y.var_) {
-	    if (x.degree_ < y.degree_) { return true; }
-	  }
-	}
+    if (x.mean_ < y.mean_) { return true; }
+    else if (x.mean_ == y.mean_) {
+      if (x.var_ < y.var_) { return true; }
+      else if (x.var_ == y.var_) {
+        if (x.degree_ < y.degree_) { return true; }
+      }
+    }
       }
       return false;
     }
     bool init;
     void load() {
-	init=true;
+    init=true;
     std::ifstream din("/mnt/ext1/system/share/cr3/chn/words.dic");
     if (din.is_open()) {
     while (din.good()) {
@@ -7193,12 +7194,12 @@ private:
   }
 public:
     std::vector<size_t> segment(StringIt start, StringIt end, int depth = 3) {
-	if(!init){load();
-	    CRLog::info("Loaded Dict: %u, Freq: %u", dict_.size(), char_freqs_.size());}
+    if(!init){load();
+        CRLog::info("Loaded Dict: %u, Freq: %u", dict_.size(), char_freqs_.size());}
     std::vector<size_t> ret;
     while (start != end) {
-	std::vector<Chunk> chunks = get_chunks(start, end, depth);
-	std::vector<Chunk>::iterator best = std::max_element(chunks.begin(), chunks.end(), best_chunk_finder);
+    std::vector<Chunk> chunks = get_chunks(start, end, depth);
+    std::vector<Chunk>::iterator best = std::max_element(chunks.begin(), chunks.end(), best_chunk_finder);
 
       StringP& word = best->words_.front();
       size_t len = length(word);
@@ -7218,7 +7219,7 @@ class ldomWordsCollector : public ldomNodeCallback {
 	ldomWordsCollector & operator = (ldomWordsCollector&) {
 		// no assignment
         return *this;
-	}
+    }
     static MMSeg mmseg;
 public:
     ldomWordsCollector( LVArray<ldomWord> & list )
@@ -7240,19 +7241,19 @@ public:
             if (alpha && beginOfWord<0 ) {
                 beginOfWord = i;
             }
-	    else if (text[i] >= 0x3400 && text[i] <= 0x9FFF) {
-	      lChar16 * beg = &text[i];
-	      lChar16 * end = &text[i];
-	      while (*end && *end >= 0x3400 && *end <= 0x9FFF) ++end;
-	      std::vector<size_t> w = mmseg.segment(beg, end);
-	      beginOfWord = i;
-	      for (size_t j = 0, e = w.size(); j < e; ++j) {
-		_list.add( ldomWord( node, beginOfWord, beginOfWord + w[j] ) );
-		beginOfWord += w[j];
-	      }
-	      i = beginOfWord - 1;
-	      beginOfWord = -1;
-	    }
+            else if (text[i] >= 0x3400 && text[i] <= 0x9FFF) {
+                lChar16 * beg = &text[i];
+                lChar16 * end = &text[i];
+                while (*end && *end >= 0x3400 && *end <= 0x9FFF) ++end;
+                std::vector<size_t> w = mmseg.segment(beg, end);
+                beginOfWord = i;
+                for (size_t j = 0, e = w.size(); j < e; ++j) {
+                    _list.add( ldomWord( node, beginOfWord, beginOfWord + w[j] ) );
+                    beginOfWord += w[j];
+                }
+                i = beginOfWord - 1;
+                beginOfWord = -1;
+            }
             else if ( !alpha && beginOfWord>=0) {
                 _list.add( ldomWord( node, beginOfWord, i ) );
                 beginOfWord = -1;

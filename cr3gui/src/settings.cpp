@@ -1213,7 +1213,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     };
 
     item_def_t page_margins[] = {
-    #if BIG_PAGE_MARGINS==1
+    /*#if BIG_PAGE_MARGINS==1
         //static int def_margin[] = { 8, 0, 5, 10, 20, 30, 50, 60 };
         {"0", "0"},
         {"1", "1"},
@@ -1239,7 +1239,7 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {"130", "130"},
         {"200", "200"},
         {"300", "300"},
-    #else
+    #else*/
         {"0", "0"},
         {"1", "1"},
         {"2", "2"},
@@ -1272,7 +1272,19 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
         {"80", "80"},
         {"90", "90"},
         {"100", "100"},
-    #endif
+        {"110", "110"},
+        {"120", "120"},
+        {"130", "130"},
+        {"140", "140"},
+        {"150", "150"},
+        {"160", "160"},
+        {"170", "170"},
+        {"180", "180"},
+        {"190", "190"},
+        {"200", "200"},
+        {"250", "250"},
+        {"300", "300"},
+    // #endif
         {NULL, NULL},
     };
 #if ENABLE_UPDATE_MODE_SETTING==1
@@ -1747,9 +1759,14 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                                turbo_update_options);
     }
 #ifdef CR_POCKETBOOK
-    createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth(need restart)"),
+    createSettingsMenuItem(displaySettingsMenu, mm_grayBufferMode, _("Gray buffer depth (needs restart)"),
                            "cr3_option_display_buffer_depth", valueFont, PROP_POCKETBOOK_GRAYBUFFER_BPP,
                            gray_buffer_bpp);
+#endif
+#ifdef POCKETBOOK_PRO_FW5
+    createSettingsMenuItem(displaySettingsMenu, mm_customSystemTheme, _("Custom system theme (needs restart)"),
+                           "cr3_option_custom_system_theme", valueFont, PROP_CUSTOM_SYSTEM_THEME,
+                           on_off_option);
 #endif
     CRSkinList &skins = wm->getSkinList();
     if (skins.length() > 1) {

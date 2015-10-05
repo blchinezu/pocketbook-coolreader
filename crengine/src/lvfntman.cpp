@@ -58,8 +58,8 @@
 #include <freetype2/config/ftheader.h>
 #include "freetype2/ftoutln.h"
 #else
-#include <config/ftheader.h>
-#include <ftoutln.h>
+#include <freetype/config/ftheader.h>
+#include <freetype/ftoutln.h>
 #endif
 //#include <ft2build.h>
 #include FT_FREETYPE_H

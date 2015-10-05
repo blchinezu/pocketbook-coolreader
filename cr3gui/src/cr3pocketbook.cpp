@@ -90,6 +90,9 @@ int fw_minor;
 int touchPointing;
 std::clock_t last_drawTemporaryZoom;
 
+void setCustomSystemTheme();
+void removeCustomSystemTheme();
+
 static const char *def_menutext[9] = {
     "@Goto_page", "@Exit", "@Search",
     "@Bookmarks", "@Menu", "@Rotate",
@@ -2047,9 +2050,15 @@ protected:
             if( tapZone == getTapZone(finger1.start.x, finger1.start.y, getProps()) ) {
                 int command = 0, param = 0;
                 getCommandForTapZone(tapZone, getProps(), CRTOUCH_DOWN_LONG == evType, command, param);
-                if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
-                    ldomXPointer p = _docview->getNodeByPoint( pt );
-                    if ( !p.isNull() ) {
+
+                ldomXPointer p = _docview->getNodeByPoint( pt );
+                if ( !p.isNull() ) {
+                    if (command == MCMD_DICT) {
+                        lvPoint wordPoint = p.toPoint();
+                        showDictDialog(wordPoint);
+                        return true;
+                    }
+                    if (CRTOUCH_DOWN_LONG == evType || command == MCMD_GO_LINK) {
                         m_link = p.getHRef();
 
                         if ( !m_link.empty() ) {
@@ -2065,10 +2074,6 @@ protected:
                                 _docview->goLink( m_link );
                                 return showLinksDialog(true);
                             }
-                        } else if (command == MCMD_DICT) {
-                            lvPoint wordPoint = p.toPoint();
-                            showDictDialog(wordPoint);
-                            return true;
                         }
                     }
                 }
@@ -2416,6 +2421,7 @@ public:
             }
             return true;
         case PB_CMD_FULL_UPDATE:
+            CRPocketBookScreen::instance->resetFullUpdateCounter();
             FullUpdate();
             return true;
         case PB_CMD_INVERT_DISPLAY:
@@ -4943,7 +4949,12 @@ void exitStandByMode() {
     #ifdef POCKETBOOK_PRO_FW5
     restoreFrontLightIfNeeded();
     #endif
+
+    int updateInterval = CRPocketBookScreen::instance->getFullUpdateInterval();
+    CRPocketBookScreen::instance->setFullUpdateInterval(1);
     CRPocketBookWindowManager::instance->update(true);
+    CRPocketBookScreen::instance->setFullUpdateInterval(updateInterval);
+
     isStandByMode = false;
     restartStandByTimer();
 }
@@ -5021,6 +5032,9 @@ int main_handler(int type, int par1, int par2)
                         lString8( CR_PB_BUILD_DATE )
                     ).c_str(), 4000);
                 iv_unlink(PB_FRESH_UPDATE_MARKER);
+                #ifdef POCKETBOOK_PRO_FW5
+                removeCustomSystemTheme();
+                #endif
             }
             
             #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
@@ -5030,6 +5044,15 @@ int main_handler(int type, int par1, int par2)
                 FullUpdate();
             }
 
+            #endif
+
+            // Set/Remove custom system theme
+            #ifdef POCKETBOOK_PRO_FW5
+            CRPropRef props = CRPocketBookDocView::instance->getProps();
+            if( props->getIntDef(PROP_CUSTOM_SYSTEM_THEME, 0) == 0 )
+                removeCustomSystemTheme();
+            else
+                setCustomSystemTheme();
             #endif
 
             // startStatusUpdateThread(5000);
@@ -5450,6 +5473,143 @@ void exitApp() {
     }
 }
 
+#ifdef POCKETBOOK_PRO_FW5
+
+void setCustomSystemTheme() {
+
+    CRLog::trace("setCustomSystemTheme()");
+    if( max(ScreenWidth(), ScreenHeight()) < 1000 )
+        return;
+
+    CRLog::trace("setCustomSystemTheme(): GetGlobalConfig");
+    iconfig *gcfg = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
+
+    CRLog::trace("setCustomSystemTheme(): ReadString");
+    const char *currentTheme = ReadString(gcfg, "theme", "Line");
+
+    CRLog::trace("setCustomSystemTheme(): if");
+    if( strcmp(currentTheme, "Line") == 0 ) {
+        bool ok = true;
+        CRLog::trace("setCustomSystemTheme(): if: access");
+        if( !(access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1) &&
+            access( USERDATA"/share/cr3/systemtheme/LineCustom.pbt", F_OK ) != -1 )
+        {
+            CRLog::trace("setCustomSystemTheme(): if: access: copy");
+            copy_file(
+                USERDATA"/share/cr3/systemtheme/LineCustom.pbt",
+                USERTHEMESPATH"/LineCustom.pbt"
+                );
+            CRLog::trace("setCustomSystemTheme(): if: access: ok?");
+            ok = access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1;
+        }
+        CRLog::trace("setCustomSystemTheme(): if: ok");
+        if( ok ) {
+            CRLog::trace("setCustomSystemTheme(): if: ok: WriteString");
+            WriteString(gcfg, "theme", "LineCustom");
+            CRLog::trace("setCustomSystemTheme(): if: ok: SaveConfig");
+            SaveConfig(gcfg);
+            CRLog::trace("setCustomSystemTheme(): if: ok: CloseConfig");
+            CloseConfig(gcfg);
+            CRLog::trace("setCustomSystemTheme(): if: ok: NotifyConfigChanged");
+            NotifyConfigChanged();
+            
+            CRLog::trace("setCustomSystemTheme(): if: ok: message");
+            Message(ICON_INFORMATION, const_cast<char*>("CR3"), _("Custom system theme applied. CR3 will now restart."), 3000);
+
+            // Mark the required restart
+            CRLog::trace("setCustomSystemTheme(): if: ok: mark restart");
+            FILE *marker;
+            char buffer[2] = "x";
+            marker = fopen(OTA_RESTART_MARK, "wb");
+            fwrite(buffer, 1, 1, marker);
+            fclose(marker);
+
+            // Show hour glass
+            CRLog::trace("setCustomSystemTheme(): if: ok: hourglass");
+            #ifdef POCKETBOOK_PRO_FW5
+            ShowPureHourglassForce();
+            #elif !defined(POCKETBOOK_PRO_PRO2)
+            ShowHourglassForce();
+            #endif
+            CRLog::trace("setCustomSystemTheme(): if: ok: PartialUpdate");
+            PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+
+            // Exit
+            CRLog::trace("setCustomSystemTheme(): if: ok: exitApp");
+            exitApp();
+        }
+    }
+    else {
+        CRLog::trace("setCustomSystemTheme(): else: CloseConfigNoSave");
+        CloseConfigNoSave(gcfg);
+    }
+    CRLog::trace("setCustomSystemTheme(): done");
+}
+
+void removeCustomSystemTheme() {
+
+    CRLog::trace("removeCustomSystemTheme()");
+    if( max(ScreenWidth(), ScreenHeight()) < 1000 )
+        return;
+
+    CRLog::trace("removeCustomSystemTheme(): GetGlobalConfig");
+    iconfig *gcfg = OpenConfig(const_cast<char *>(GLOBALCONFIGFILE), NULL);
+
+    CRLog::trace("removeCustomSystemTheme(): ReadString");
+    const char *currentTheme = ReadString(gcfg, "theme", "Line");
+
+    CRLog::trace("removeCustomSystemTheme(): if");
+    if( strcmp(currentTheme, "Line") != 0 ) {
+
+        CRLog::trace("removeCustomSystemTheme(): if: access");
+        if( access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1 ) {
+            CRLog::trace("removeCustomSystemTheme(): if: access: unlink");
+            iv_unlink(USERTHEMESPATH"/LineCustom.pbt");
+        }
+
+        CRLog::trace("removeCustomSystemTheme(): if: ok: WriteString");
+        WriteString(gcfg, "theme", "Line");
+        CRLog::trace("removeCustomSystemTheme(): if: ok: SaveConfig");
+        SaveConfig(gcfg);
+        CRLog::trace("removeCustomSystemTheme(): if: ok: CloseConfig");
+        CloseConfig(gcfg);
+        CRLog::trace("removeCustomSystemTheme(): if: ok: NotifyConfigChanged");
+        NotifyConfigChanged();
+        
+        CRLog::trace("removeCustomSystemTheme(): if: ok: message");
+        Message(ICON_INFORMATION, const_cast<char*>("CR3"), _("Restored default system theme. CR3 will now restart."), 3000);
+
+        // Mark the required restart
+        CRLog::trace("removeCustomSystemTheme(): if: ok: mark restart");
+        FILE *marker;
+        char buffer[2] = "x";
+        marker = fopen(OTA_RESTART_MARK, "wb");
+        fwrite(buffer, 1, 1, marker);
+        fclose(marker);
+
+        // Show hour glass
+        CRLog::trace("removeCustomSystemTheme(): if: ok: hourglass");
+        #ifdef POCKETBOOK_PRO_FW5
+        ShowPureHourglassForce();
+        #elif !defined(POCKETBOOK_PRO_PRO2)
+        ShowHourglassForce();
+        #endif
+        CRLog::trace("removeCustomSystemTheme(): if: ok: PartialUpdate");
+        PartialUpdate(0, 0, ScreenWidth(), ScreenHeight());
+
+        // Exit
+        CRLog::trace("removeCustomSystemTheme(): if: ok: exitApp");
+        exitApp();
+    }
+    else {
+        CRLog::trace("removeCustomSystemTheme(): else: CloseConfigNoSave");
+        CloseConfigNoSave(gcfg);
+    }
+    CRLog::trace("removeCustomSystemTheme(): done");
+}
+
+#endif
+
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {
     /* This gets the pointer to the GetTouchInfo() function if it is available. */
@@ -5471,6 +5631,7 @@ int main(int argc, char **argv)
     last_drawTemporaryZoom = std::clock();
     int foo;
     sscanf(GetSoftwareVersion(), "%*[^0-9]%u.%u.%u.%*u", &foo, &fw_major, &fw_minor);
+
     #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
     get_gti_pointer();
     #endif
