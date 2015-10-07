@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-22 20:09+0000\n"
+"PO-Revision-Date: 2015-10-05 14:58+0000\n"
 "Last-Translator: Eleni Stefanidou <eleni205@gmail.com>\n"
 "Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/de/)\n"
@@ -270,7 +270,7 @@ msgstr "Veröffentlichungsinfo"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
-msgstr "Kundeninfo"
+msgstr "Spezifische Info"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
@@ -1369,13 +1369,12 @@ msgid "Turbo update mode"
 msgstr "Turbo-Auffrischungsmodus"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
-msgstr "Gray buffer depth  (Neustart erforderlich)"
+msgstr "Gray buffer depth (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Selbsterstelltes System-Theme (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1911,8 +1910,8 @@ msgstr "Ohne Titel"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Selbsterstelltes System-Theme ausgewählt. CR3 startet jetzt neu."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Standard-Theme wiederhergestellt. CR3 startet jetzt neu."

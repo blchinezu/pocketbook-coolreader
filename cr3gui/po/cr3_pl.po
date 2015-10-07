@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-24 10:59+0000\n"
+"PO-Revision-Date: 2015-10-05 12:07+0000\n"
 "Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/pl/)\n"
@@ -1370,13 +1370,12 @@ msgid "Turbo update mode"
 msgstr "Tryb turbo"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
 msgstr "Głębokość bufora szarości (konieczny restart)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Motyw systemu użytkownika (konieczny restart)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1913,7 +1912,8 @@ msgstr "Bez tytułu"
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
 msgstr ""
+"Motyw systemu użytkownika zastosowany. CR3 zostanie teraz zrestartowany."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Przywrócony domyślny motyw systemu. CR3 zostanie teraz zrestartowany."

@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-09-10 21:44+0000\n"
-"Last-Translator: Elidevin <unexpected@ya.ru>\n"
+"PO-Revision-Date: 2015-10-05 12:58+0000\n"
+"Last-Translator: Lazar Kaznelson <kaznelson@front.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ru/)\n"
 "Language: ru\n"
@@ -1374,13 +1374,12 @@ msgid "Turbo update mode"
 msgstr "Турборежим"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
-msgstr "Глубина фреймбуфера (нужен перезапуск)"
+msgstr "Глубина буфера серого цвета (нужен перезапуск)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Своя системная тема (нужен перезапуск)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1916,8 +1915,8 @@ msgstr "Безымянный"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Установлена пользовательская системная тема. CR3 будет перезапущен."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Восстановлена системная тема по умолчанию. CR3 будет перезапущен."
