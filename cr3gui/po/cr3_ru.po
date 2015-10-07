@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # BruceLee, 2015
 # BruceLee, 2015
@@ -14,12 +14,15 @@ msgstr ""
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
 "PO-Revision-Date: 2015-10-05 12:58+0000\n"
 "Last-Translator: Lazar Kaznelson <kaznelson@front.ru>\n"
-"Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/ru/)\n"
+"Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/ru/)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: ru\n"
-"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
@@ -105,7 +108,9 @@ msgstr "Назначение клавиш"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - выбрать команду\n$2, $3 - отмена"
+msgstr ""
+"$1 - выбрать команду\n"
+"$2, $3 - отмена"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -336,7 +341,9 @@ msgstr "Удалить запись"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - открыть книгу\n$2, $3 - отмена"
+msgstr ""
+"$1 - открыть книгу\n"
+"$2, $3 - отмена"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -362,13 +369,17 @@ msgstr "Перейти на закладку"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr "Короткое нажатие $1 - перейти на закладку,\n$2 - переключиться в режим установки"
+msgstr ""
+"Короткое нажатие $1 - перейти на закладку,\n"
+"$2 - переключиться в режим установки"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Короткое нажатие $1 - перейти на закладку,\nдолгое нажатие - установить закладку"
+msgstr ""
+"Короткое нажатие $1 - перейти на закладку,\n"
+"долгое нажатие - установить закладку"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -378,13 +389,17 @@ msgstr "Установить закладку"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - установить закладку,\n$2 - переключиться в режим перехода"
+msgstr ""
+"$1 - установить закладку,\n"
+"$2 - переключиться в режим перехода"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr "Короткое нажатие $1 - установить закладку,\nдолгое нажатие - перейти на закладку"
+msgstr ""
+"Короткое нажатие $1 - установить закладку,\n"
+"долгое нажатие - перейти на закладку"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1442,7 +1457,9 @@ msgstr "Обновление программы по сети до тестов�
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Нажать $1 для изменения параметра,\n$2 для применения, $3 для отмены"
+msgstr ""
+"Нажать $1 для изменения параметра,\n"
+"$2 для применения, $3 для отмены"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1458,9 +1475,11 @@ msgstr "Поддерживаются словари в формате .dict (к�
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
-msgstr "Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса слов (.index)."
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Каждый словарь состоит из файла данных (.dict или .dict.dz), и файла-индекса "
+"слов (.index)."
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1816,7 +1835,9 @@ msgstr "Действие"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr "Загрузка завершена!\nОжидайте перезапуск программы."
+msgstr ""
+"Загрузка завершена!\n"
+"Ожидайте перезапуск программы."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1856,7 +1877,9 @@ msgstr "У вас установлена последняя версия."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "Для вашего устройства нет обновлений.\nМодель устройства: "
+msgstr ""
+"Для вашего устройства нет обновлений.\n"
+"Модель устройства: "
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
