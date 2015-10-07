@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-#
+# 
 # Translators:
 # Eleni Stefanidou <eleni205@gmail.com>, 2015
 # Zorro66, 2015
@@ -9,14 +9,13 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-22 20:09+0000\n"
+"PO-Revision-Date: 2015-10-05 14:58+0000\n"
 "Last-Translator: Eleni Stefanidou <eleni205@gmail.com>\n"
-"Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
-"coolreader-pocketbook/language/de/)\n"
-"Language: de\n"
+"Language-Team: German (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/de/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/citedlg.cpp:194
@@ -103,9 +102,7 @@ msgstr "Tastatur-Layout"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - Befehl wählen\n"
-"$2, $3 - Schließen"
+msgstr "$1 - Befehl wählen\n$2, $3 - Schließen"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -270,7 +267,7 @@ msgstr "Veröffentlichungsinfo"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
-msgstr "Kundeninfo"
+msgstr "Spezifische Info"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
@@ -336,9 +333,7 @@ msgstr "Aufzeichnung löschen"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - Buch öffnen\n"
-"$2, $3 - Schließen"
+msgstr "$1 - Buch öffnen\n$2, $3 - Schließen"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -364,17 +359,13 @@ msgstr "Gehe zu Lesezeichen"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr ""
-"Kurz drücken $1 - gehe zu Lesezeichen\n"
-"$2 - zum SET Modus wechseln"
+msgstr "Kurz drücken $1 - gehe zu Lesezeichen\n$2 - zum SET Modus wechseln"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr ""
-"Kurz drücken $1 - gehe zu Lesezeichen\n"
-"lang drücken - Lesezeichen setzen"
+msgstr "Kurz drücken $1 - gehe zu Lesezeichen\nlang drücken - Lesezeichen setzen"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -384,17 +375,13 @@ msgstr "Lesezeichen anlegen"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr ""
-"$1 - Lesezeichen setzen,\n"
-"$2 - zum GO-Modus wechseln"
+msgstr "$1 - Lesezeichen setzen,\n$2 - zum GO-Modus wechseln"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr ""
-"Kurz drücken $1 - Lesezeichen setzen\n"
-"lang drücken - gehe zu Lesezeichen"
+msgstr "Kurz drücken $1 - Lesezeichen setzen\nlang drücken - gehe zu Lesezeichen"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1369,13 +1356,12 @@ msgid "Turbo update mode"
 msgstr "Turbo-Auffrischungsmodus"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
-msgstr "Gray buffer depth  (Neustart erforderlich)"
+msgstr "Gray buffer depth (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Selbsterstelltes System-Theme (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1453,9 +1439,7 @@ msgstr "OTA Update Entwickler"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr ""
-"Drücke $1 um Option zu ändern\n"
-"$2 zum Anwenden $3 zum Verwerfen"
+msgstr "Drücke $1 um Option zu ändern\n$2 zum Anwenden $3 zum Verwerfen"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1471,11 +1455,9 @@ msgstr "Wörterbücher im Standard-Unix .dict-Format werden unterstützt"
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict "
-"or .dict.dz extension, and index file with .index extension"
-msgstr ""
-"Für jedes  Wörterbuch sollten folgende Dateien vorhanden sein: Daten-Datei "
-"(im .dict oder dict.dz - Format) und eine Index-Datei (im .index - Format)"
+"For each dictionary, pair of files should be provided: data file (with .dict"
+" or .dict.dz extension, and index file with .index extension"
+msgstr "Für jedes  Wörterbuch sollten folgende Dateien vorhanden sein: Daten-Datei (im .dict oder dict.dz - Format) und eine Index-Datei (im .index - Format)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1831,9 +1813,7 @@ msgstr "Zugeordnete Aufgabe"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr ""
-"Download erfolgreich!\n"
-"CoolReader startet selbstständig neu."
+msgstr "Download erfolgreich!\nCoolReader startet selbstständig neu."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1873,9 +1853,7 @@ msgstr "Sie haben die aktuelle Version."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr ""
-"Für Ihr Gerät ist kein Update verfügbar!\n"
-"Geräte-Modell: "
+msgstr "Für Ihr Gerät ist kein Update verfügbar!\nGeräte-Modell: "
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
@@ -1911,8 +1889,8 @@ msgstr "Ohne Titel"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Selbsterstelltes System-Theme ausgewählt. CR3 startet jetzt neu."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Standard-Theme wiederhergestellt. CR3 startet jetzt neu."

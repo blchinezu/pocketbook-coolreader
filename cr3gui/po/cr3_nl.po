@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-#
+# 
 # Translators:
 # Frits van der Blij <f.blij@hccnet.nl>, 2015
 msgid ""
@@ -8,14 +8,13 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-20 12:39+0000\n"
+"PO-Revision-Date: 2015-10-05 10:32+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
-"Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
-"coolreader-pocketbook/language/nl/)\n"
-"Language: nl\n"
+"Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/nl/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/citedlg.cpp:194
@@ -102,9 +101,7 @@ msgstr "Toetsenbordlayout"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - opdracht kiezen\n"
-"$2, $3 - sluiten"
+msgstr "$1 - opdracht kiezen\n$2, $3 - sluiten"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -335,9 +332,7 @@ msgstr "Verwijder record"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - boek openen\n"
-"$2, $3 - sluiten"
+msgstr "$1 - boek openen\n$2, $3 - sluiten"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -363,17 +358,13 @@ msgstr "Ga naar bladwijzer"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr ""
-"Kort indrukken $1 - ga naar bladwijzer,\n"
-"$2 - ga naar instellingsmodus"
+msgstr "Kort indrukken $1 - ga naar bladwijzer,\n$2 - ga naar instellingsmodus"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr ""
-"Kort indrukken $1 - ga naar bladwijzer,\n"
-"lang indrukken - stel bladwijzer in"
+msgstr "Kort indrukken $1 - ga naar bladwijzer,\nlang indrukken - stel bladwijzer in"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -383,17 +374,13 @@ msgstr "Stel bladwijzer in"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr ""
-"$1 - stel bladwijzer in,\n"
-"$2 - ga naar uitvoeringsmodus"
+msgstr "$1 - stel bladwijzer in,\n$2 - ga naar uitvoeringsmodus"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr ""
-"Kort indrukken $1 - stel bladwijzer in,\n"
-"lang indrukken - ga naar bladwijzer"
+msgstr "Kort indrukken $1 - stel bladwijzer in,\nlang indrukken - ga naar bladwijzer"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1368,13 +1355,12 @@ msgid "Turbo update mode"
 msgstr "Turbomodus voor verversing"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
 msgstr "Grijsbufferdiepte (vereist herstart)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Aangepast systeemthema (vereist herstart)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1452,9 +1438,7 @@ msgstr "OTA Update Dev"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr ""
-"Kies $1 om optie te wijzigen\n"
-"$2 om toe te passen, $3 om te annuleren"
+msgstr "Kies $1 om optie te wijzigen\n$2 om toe te passen, $3 om te annuleren"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1470,12 +1454,9 @@ msgstr "Woordenboeken in het standaard unix .dict formaat worden ondersteund."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict "
-"or .dict.dz extension, and index file with .index extension"
-msgstr ""
-"Voor elk woordenboek moeten twee bestanden beschikbaar zijn: een "
-"gegevensbestand (met de extensie .dict of .dict.dz), en een indexbestand "
-"(met de extensie .index)."
+"For each dictionary, pair of files should be provided: data file (with .dict"
+" or .dict.dz extension, and index file with .index extension"
+msgstr "Voor elk woordenboek moeten twee bestanden beschikbaar zijn: een gegevensbestand (met de extensie .dict of .dict.dz), en een indexbestand (met de extensie .index)."
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1831,9 +1812,7 @@ msgstr "Toegewezen functie"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr ""
-"Download geslaagd!\n"
-"CoolReader start automatisch opnieuw."
+msgstr "Download geslaagd!\nCoolReader start automatisch opnieuw."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1873,9 +1852,7 @@ msgstr "U hebt de meest recente versie."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr ""
-"Er is geen update beschikbaar voor uw apparaat!\n"
-"Model: "
+msgstr "Er is geen update beschikbaar voor uw apparaat!\nModel: "
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
@@ -1911,8 +1888,8 @@ msgstr "Zonder titel"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Aangepast systeemthema ingesteld. CR3 wordt nu opnieuw gestart."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Standaard systeemthema hersteld. CR3 wordt nu opnieuw gestart."

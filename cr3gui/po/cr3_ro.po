@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-#
+# 
 # Translators:
 # BruceLee, 2015
 msgid ""
@@ -8,16 +8,14 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-20 11:05+0000\n"
+"PO-Revision-Date: 2015-10-05 10:14+0000\n"
 "Last-Translator: BruceLee\n"
-"Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/"
-"coolreader-pocketbook/language/ro/)\n"
-"Language: ro\n"
+"Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/ro/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?"
-"2:1));\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1?0:(((n%100>19)||((n%100==0)&&(n!=0)))?2:1));\n"
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
@@ -103,9 +101,7 @@ msgstr "Tastatură"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - alege comandă\n"
-"$2, $3 - închide"
+msgstr "$1 - alege comandă\n$2, $3 - închide"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -336,9 +332,7 @@ msgstr "Şterge înregistrare"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr ""
-"$1 - deschide carte\n"
-"$2, $3 - închide"
+msgstr "$1 - deschide carte\n$2, $3 - închide"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -364,17 +358,13 @@ msgstr "Mergi la semn de carte"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr ""
-"Apăsare scurtă $1 - mergi la semn de carte,\n"
-"$2 - activează modul SETARE"
+msgstr "Apăsare scurtă $1 - mergi la semn de carte,\n$2 - activează modul SETARE"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr ""
-"Apăsare scurtă $1 - mergi la semn de carte,\n"
-"apăsare lungă - setează semn de carte"
+msgstr "Apăsare scurtă $1 - mergi la semn de carte,\napăsare lungă - setează semn de carte"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -384,17 +374,13 @@ msgstr "Setează semn de carte"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr ""
-"$1 - setează semn de carte,\n"
-"$2 - activează modul LANSARE"
+msgstr "$1 - setează semn de carte,\n$2 - activează modul LANSARE"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr ""
-"Apăsare scurtă $1 - setează semn de carte,\n"
-"apăsare lungă - mergi la semn de carte"
+msgstr "Apăsare scurtă $1 - setează semn de carte,\napăsare lungă - mergi la semn de carte"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1369,13 +1355,12 @@ msgid "Turbo update mode"
 msgstr "Mod actualizare turbo"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
 msgstr "Adâncime buffer gri (necesită restart)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Temă custom (necesită restart)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1453,9 +1438,7 @@ msgstr "OTA Update Dev"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr ""
-"Apasă $1 pentru a schimba opţiunea\n"
-"$2 pentru a aplica, $3 pentru a anula"
+msgstr "Apasă $1 pentru a schimba opţiunea\n$2 pentru a aplica, $3 pentru a anula"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1471,11 +1454,9 @@ msgstr "Dicţionarele în formatul standard unix .dict sunt suportate."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict "
-"or .dict.dz extension, and index file with .index extension"
-msgstr ""
-"Pentru fiecare dicţionar, o pereche de file trebuie sa fie furnizate: fişier "
-"cu date (.dict sau .dict.dz) şi fişier index (.index)"
+"For each dictionary, pair of files should be provided: data file (with .dict"
+" or .dict.dz extension, and index file with .index extension"
+msgstr "Pentru fiecare dicţionar, o pereche de file trebuie sa fie furnizate: fişier cu date (.dict sau .dict.dz) şi fişier index (.index)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1831,9 +1812,7 @@ msgstr "Funcţie atribuită"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr ""
-"Descărcare reuşită!\n"
-"CoolReader se va restarta."
+msgstr "Descărcare reuşită!\nCoolReader se va restarta."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1873,9 +1852,7 @@ msgstr "Ai ultima versiune."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr ""
-"Nu s-a găsit update pentru dispozitivul tău!\n"
-"Model dispozitiv:"
+msgstr "Nu s-a găsit update pentru dispozitivul tău!\nModel dispozitiv:"
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
@@ -1911,8 +1888,8 @@ msgstr "Fără titlu"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Temă custom aplicată. CR3 se va restarta."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Temă implicită aplicată. CR3 se va restarta."
