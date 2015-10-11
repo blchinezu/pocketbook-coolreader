@@ -3120,7 +3120,20 @@ void CRPbDictionaryView::searchDictionary()
 }
 
 void CRPbDictionaryView::launchDictBrowser(const char *urlBase) {
-    launchBrowser(urlBase+_word);
+    lString16 lang = main_win->getBookLanguage();
+    CRLog::trace("launchDictBrowser(): main_win->getBookLanguage() = %s", UnicodeToUtf8(lang).c_str());
+    if( lang.empty() ) {
+        lang = currentLang;
+        CRLog::trace("launchDictBrowser(): currentLang = %s", UnicodeToUtf8(lang).c_str());
+    }
+    if( lang.empty() ) {
+        lang = lString16("en");
+        CRLog::trace("launchDictBrowser(): default to en");
+    }
+
+    lString16 url = lString16(urlBase);
+    url.replace(lString16("[LANG]"), lang);
+    launchBrowser( url + _word );
 }
 
 void CRPbDictionaryView::closeDictionary()

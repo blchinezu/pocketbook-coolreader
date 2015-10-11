@@ -1027,6 +1027,10 @@ static void addInfoSection( lString8 & buf, lString8 data, const char * caption 
         buf << "<tr><td colspan=\"2\" style=\"font-weight: bold; text-align: center\">" << caption << "</td></tr>" << data;
 }
 
+lString16 V3DocViewWin::getBookLanguage() {
+    return _docview->getDocProps()->getStringDef(DOC_PROP_LANGUAGE);
+}
+
 void V3DocViewWin::showAboutDialog()
 {
 	_docview->savePosition();

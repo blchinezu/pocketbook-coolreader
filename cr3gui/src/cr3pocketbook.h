@@ -79,7 +79,7 @@ enum CRPbCommands {
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
 #define CR_PB_VERSION "0.0.6-17-44.2"
-#define CR_PB_BUILD_DATE "2015-10-08"
+#define CR_PB_BUILD_DATE "2015-10-11"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -128,8 +128,8 @@ enum CRPbCommands {
 #endif
 #define PB_BROWSER_BINARY SYSTEMDATA"/bin/browser.app"
 #define PB_BROWSER_EXEC SYSTEMDATA"/bin/openbook"
-#define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?q="
-#define PB_BROWSER_QUERY_WIKIPEDIA "https://en.wikipedia.org/?search="
+#define PB_BROWSER_QUERY_GOOGLE "https://www.google.com/search?hl=[LANG]&q="
+#define PB_BROWSER_QUERY_WIKIPEDIA "https://[LANG].wikipedia.org/?search="
 
 
 #define PB_NETWORK_TEST_URL "https://www.google.com"

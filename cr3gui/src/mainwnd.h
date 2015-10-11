@@ -119,6 +119,7 @@ protected:
     lString16 _fileName;
 public:
     lString16 getBookmarkDir() { return _bookmarkDir; }
+    lString16 getBookLanguage();
     void setBookmarkDir( lString16 dir ) { _bookmarkDir = dir; }
     virtual void flush(); // override
     bool loadDocument( lString16 filename );
