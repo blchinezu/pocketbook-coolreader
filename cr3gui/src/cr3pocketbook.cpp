@@ -15,6 +15,7 @@
 #include <cr3version.h>
 #include "cr3pocketbook.h"
 #include <inkview.h>
+#include <regex.h>
 #ifdef POCKETBOOK_PRO
     #include <inkplatform.h>
     #ifdef POCKETBOOK_PRO_FW5
@@ -659,12 +660,12 @@ void executeCommand(int commandId, int commandParam)
     CRPocketBookWindowManager::instance->processPostedEvents();
 }
 
-void quickMenuHandler(int choice) 
+void quickMenuHandler(int choice)
 {
     executeCommand(PB_QUICK_MENU_SELECT, choice);
 }
 
-void rotateHandler(int angle) 
+void rotateHandler(int angle)
 {
     executeCommand(PB_CMD_ROTATE_ANGLE_SET, angle);
 }
@@ -679,7 +680,7 @@ void searchHandler(char *s)
         executeCommand(MCMD_SEARCH_FINDFIRST, 1);
     else
         executeCommand(GCMD_PASS_TO_PARENT, 0);
-} 
+}
 
 void goToPageKeyboardHandler(char *s)
 {
@@ -691,9 +692,9 @@ void goToPageKeyboardHandler(char *s)
     else {
         executeCommand(GCMD_PASS_TO_PARENT, 0);
     }
-} 
+}
 
-void tocHandler(long long position) 
+void tocHandler(long long position)
 {
     executeCommand(MCMD_GO_PAGE_APPLY, position);
 }
@@ -882,7 +883,7 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
 class CRPocketBookInkViewWindow : public CRGUIWindowBase
 {
 protected:
-    virtual void draw() 
+    virtual void draw()
     {
         /*
          *	iv_handler handler = GetEventHandler();
@@ -982,7 +983,7 @@ public:
         : CRPocketBookInkViewWindow( wm ), _menuBitmap(menu_bitmap), _strings(strings) {
             instance = this;
         }
-        
+
     virtual void showWindow() {
         CRLog::trace("CRPocketBookQuickMenuWindow::showWindow()");
 
@@ -1145,7 +1146,7 @@ public:
         LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
 
         if( !img.isNull() ) {
-            
+
             // Convert
             ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
@@ -1229,7 +1230,7 @@ public:
             LVImageSourceRef img = CRPocketBookWindowManager::instance->getSkin()->getImage(path);
 
             if( !img.isNull() ) {
-                
+
                 // Convert
                 ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
@@ -1342,7 +1343,7 @@ public:
         ibitmap * bkg = BitmapFromScreen(0, PanelHeight(), ScreenWidth(), ScreenHeight()-PanelHeight());
         DrawBitmap(0, 0, bkg);
         free(bkg);
-        
+
         // Draw side lines
         CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Draw side lines");
         FillArea(0, 0, 1, ScreenHeight()-PanelHeight(), 0x00000000);
@@ -1490,6 +1491,8 @@ public:
     //  return CRViewDialog::onTouchEvent( x, y, evType );
     //}
 
+    lString16 detectDictionaryRedirectFor(const char* translation);
+
     void doActivate();
     void doDeactivate();
     int getCurItem() { return _selectedIndex; }
@@ -1548,11 +1551,11 @@ public:
     int getSelectedItem() { return _selectedItem; }
     const char * getCurItemWord();
     int getPageInItemCount()
-    {  
+    {
         CRMenuSkinRef skin = getSkin();
         if ( !skin.isNull() )
            return skin->getMinItemCount();
-           
+
         return 0;
     }
     virtual void draw() { CRMenu::draw(); _dirty = false; }
@@ -1571,7 +1574,7 @@ public:
     }
 };
 
-static void translate_timer() 
+static void translate_timer()
 {
     CRLog::trace("translate_timer()");
     pbGlobals->translateTimerExpired();
@@ -1659,9 +1662,9 @@ public:
 
         lvPoint pt (x, y);
 
-        if (_dictView->getRect().isPointInside(pt)) 
+        if (_dictView->getRect().isPointInside(pt))
         {
-            if (!_dictViewActive) 
+            if (!_dictViewActive)
             {
                 activateDictView(true);
                 _dictView->doActivate();
@@ -1669,15 +1672,15 @@ public:
             CRLog::trace(" CRPbDictionaryDialog::onTouchEvent(...) _dictView->onTouchEvent()" );
 
             return _dictView->onTouchEvent(x, y, evType);
-        } 
-        else 
-        if (CRTOUCH_DOWN == evType && _dictViewActive) 
+        }
+        else
+        if (CRTOUCH_DOWN == evType && _dictViewActive)
         {
             _dictView->doDeactivate();
         }
 
         ldomXPointer p = _docview->getNodeByPoint( pt );
-        if ( !p.isNull() ) 
+        if ( !p.isNull() )
         {
             pt = p.toPoint();
             _wordSelector->selectWord(pt.x, pt.y);
@@ -2021,13 +2024,13 @@ protected:
                 else {
                     CRPocketBookWindowManager::instance->update(true);
                 }
-                
+
                 return true;
             }
             #endif
 
             touchPointing = 0;
-            
+
             // If it should be ignored (triggered front light swipe)
             if( ignoreNextTouchRelease && CRTOUCH_DOWN_LONG != evType ) {
                 ignoreNextTouchRelease = false;
@@ -2853,7 +2856,7 @@ static void paused_rotate_timer()
     CRPocketBookDocView::instance->onPausedRotation();
 }
 
-CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDialog *parent) 
+CRPbDictionaryView::CRPbDictionaryView(CRGUIWindowManager * wm, CRPbDictionaryDialog *parent)
     : CRViewDialog(wm, lString16::empty_str, lString8::empty_str, lvRect(), false, true), _parent(parent),
     _dictsTable(16), _active(false), _dictsLoaded(false), _itemsCount(7), _translateResult(0),
     _newWord(NULL), _newTranslation(NULL)
@@ -2918,7 +2921,7 @@ void CRPbDictionaryView::loadDictionaries()
     _dictsLoaded = true;
 }
 
-CRPbDictionaryView::~CRPbDictionaryView() 
+CRPbDictionaryView::~CRPbDictionaryView()
 {
     if (_dictIndex >= 0)
         CloseDictionary();
@@ -2975,7 +2978,7 @@ void CRPbDictionaryView::drawTitleBar()
        // CRLog::trace("CRPbDictionaryView::drawTitleBar() _icon ( %d, %d, %d, %d )", titleRc.left + hh/2-w/2, titleRc.top + hh/2 - h/2, w, h );
     }
     int tbWidth = 0;
-    if (!_toolBarImg.isNull()) 
+    if (!_toolBarImg.isNull())
     {
         tbWidth = _toolBarImg->GetWidth();
         int h = _toolBarImg->GetHeight();
@@ -2985,8 +2988,8 @@ void CRPbDictionaryView::drawTitleBar()
     }
     lvRect textRect = titleRc;
     textRect.left += imgWidth;
-    titleSkin->drawText( buf, textRect, _caption );	
-    if (_active) 
+    titleSkin->drawText( buf, textRect, _caption );
+    if (_active)
     {
         lvRect selRc;
 
@@ -3113,10 +3116,10 @@ void CRPbDictionaryView::setCurItem(int index)
 void CRPbDictionaryView::searchDictionary()
 {
     _searchPattern.clear();
-    
+
     strcpy(key_buffer, UnicodeToUtf8(lString16(_word)).c_str());
     // OpenKeyboard(const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
-    OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler); 
+    OpenCustomKeyboard(DICKEYBOARD, const_cast<char *>("@Search"), key_buffer, KEY_BUFFER_LEN, 0, searchHandler);
 }
 
 void CRPbDictionaryView::launchDictBrowser(const char *urlBase) {
@@ -3221,7 +3224,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
 {
  // CRLog::trace("CRPbDictionaryView::onTouchEvent( %d, %d, %d )", x, y, int( evType ) );
 
-  if (_active) 
+  if (_active)
   {
    // CRLog::trace("CRPbDictionaryView::onTouchEvent _active %d ( %d, %d, %d )",  _active, x, y, int( evType ) );
     switch ( evType )
@@ -3270,7 +3273,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
             CRLog::trace("onTouchEvent() PB_DICT_SELECT %d", _selectedIndex );
             return true;
           }
-          
+
           tmpRc= titleRc;
           tmpRc.left += tmpRc.right - ( tbWidth + titleSkin->getBorderWidths().right );
           CRLog::trace("CRDV::onTouchEvent() toolBar tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
@@ -3376,7 +3379,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
 
           case PB_DICT_ARTICLE_LIST:
             tmpRc= clientRc;
-            tmpRc.left += clientRc.width() * 2/3; 
+            tmpRc.left += clientRc.width() * 2/3;
             if ( tmpRc.isPointInside( pn ) )//PgUp, PgDn
             {
             CRLog::trace("CRDV::onTouchEvent() PB_DICT_ARTICLE_LIST tmpRc ( %d, %d, %d, %d )", tmpRc.left, tmpRc.top, tmpRc.right, tmpRc.bottom );
@@ -3393,7 +3396,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
             else//select item
             {
                 tmpRc= clientRc;
-                tmpRc.right  -= clientRc.width() * 1/3; 
+                tmpRc.right  -= clientRc.width() * 1/3;
                 tmpRc.bottom -= clientRc.height()/2;
 
                 int strcount= clientRc.height()/pnItm.y;
@@ -3437,7 +3440,7 @@ bool CRPbDictionaryView::onTouchEvent( int x, int y, CRGUITouchEventType evType 
       }
 
     break;
-    
+
     default:
     break;
 
@@ -3508,6 +3511,39 @@ lString8 CRPbDictionaryView::createArticle(const char *word, const char *transla
     return article;
 }
 
+#define CR_PB_DICT_REDIRECT_PREFIXES "to|of|see|from"
+lString16 CRPbDictionaryView::detectDictionaryRedirectFor(const char* translation) {
+
+    if( CRPocketBookDocView::instance->getProps()->getStringDef(PROP_POCKETBOOK_DICT) != lString16("Webster's 1913 Dictionary") ) {
+        return lString16("");
+    }
+
+    regex_t pregx;
+    regmatch_t pmatch[10];
+    int rule, i;
+    char tmpvalue[256];
+
+    static const char *regex_rules[2] = {
+        "^[\n\t ]+?\\([^\\)]+?\\)[\t ]+("CR_PB_DICT_REDIRECT_PREFIXES")[\t ]+([a-z]+)[\\. \t\n]+?$",
+        "^[\n\t ]+?\\([^\\)]+?\\)[\t ]+([a-z\\.]+[ ])?("CR_PB_DICT_REDIRECT_PREFIXES")[\t ]+([a-z]+)[\\. \n\t]+?$"
+        };
+
+    for( rule = 0; rule < 2; rule++ ) {
+        if( regcomp(&pregx, regex_rules[rule], REG_ICASE|REG_EXTENDED) == 0 ) {
+            if( regexec(&pregx, translation, 5, pmatch,0) == 0 ) {
+                for( i = 0 ; i < 5 && pmatch[i].rm_so!=-1 ; i++ );
+                if( i > 0 && pmatch[--i].rm_so!=-1 ) {
+                    memset(tmpvalue, 0, 256);
+                    strncpy(tmpvalue, &translation[pmatch[i].rm_so], pmatch[i].rm_eo-pmatch[i].rm_so);
+                    return lString16(tmpvalue);
+                }
+            }
+        }
+    }
+
+    return lString16("");
+}
+
 void CRPbDictionaryView::translate(const lString16 &w)
 {
     lString8 body;
@@ -3549,6 +3585,21 @@ void CRPbDictionaryView::translate(const lString16 &w)
         }
 
         if (_translateResult != 0) {
+
+            // Check if it's a translation redirection
+            lString16 redirect = detectDictionaryRedirectFor(translation);
+            if( !redirect.empty() ) {
+                lString16 tmp = redirect;
+                tmp.lowercase();
+                s16.lowercase();
+
+                // Avoid infinite loops
+                if( tmp != s16 ) {
+                    translate(redirect);
+                    return;
+                }
+            }
+
             if (_translateResult == 1) {
                 _selectedIndex = PB_DICT_ARTICLE_LIST;
                 _dictMenu->newPage(word, translation);
@@ -4234,7 +4285,7 @@ void toggleInvertDisplay() {
     main_win->getDocView()->setBackgroundColor(text);
     main_win->getDocView()->setTextColor(back);
     main_win->getDocView()->setStatusColor(back);
-    
+
     CRPocketBookWindowManager::instance->update(true);
 }
 
@@ -4315,7 +4366,7 @@ int getPB_screenType()
 {
     return HWC_DISPLAY;
 }
-        
+
 bool isGSensorSupported()
 {
     return HWC_HAS_GSENSOR;
@@ -4705,7 +4756,7 @@ int InitDoc(const char *exename, char *fileName)
     return 1;
 }
 
-const char * getEventName(int evt) 
+const char * getEventName(int evt)
 {
     static char buffer[64];
 
@@ -4759,7 +4810,7 @@ const char * getEventName(int evt)
         return "EVT_FOREGROUND";
     case EVT_ACTIVATE:
         return "EVT_ACTIVATE";
-#endif 
+#endif
     default:
         sprintf(buffer, "%d", evt);
         return buffer;
@@ -4846,7 +4897,7 @@ int getFrontLightValue() {
     return min(max(GetFrontlightState(), 0), 100);
 }
 void setFrontLightValue(int value) {
-    
+
     // Turn off front light
     if( value <= 0 ) {
         if( GetFrontlightState() > 0 )
@@ -4896,7 +4947,7 @@ bool pbNetwork(const char *action) {
         CRLog::error("pbNetwork(): Network isn't supported! You shouldn't be able to get here.");
         Message(ICON_WARNING,  const_cast<char*>("CoolReader"), "Couldn't find the network binary  @ "PB_NETWORK_BIN, 2000);
     }
-    
+
     bool connected = pbNetworkConnected();
     if( connected )
         CRLog::trace("pbNetwork(): Conected");
@@ -4906,7 +4957,7 @@ bool pbNetwork(const char *action) {
     return connected;
 }
 
-#endif 
+#endif
 
 void stopStandByTimer();
 void restartStandByTimer();
@@ -5049,7 +5100,7 @@ int main_handler(int type, int par1, int par2)
                 removeCustomSystemTheme();
                 #endif
             }
-            
+
             #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 
             // Else full screen update
@@ -5264,7 +5315,7 @@ int main_handler(int type, int par1, int par2)
     	SetWeakTimer("SaveStateTimer", SetSaveStateTimer, 500);
         stopStandByTimer();
         break;
-#endif 
+#endif
     case EVT_EXIT:
         exiting = true;
         stopStandByTimer();
@@ -5353,7 +5404,7 @@ int main_handler(int type, int par1, int par2)
     return ret;
 }
 
-const char* TR(const char *label) 
+const char* TR(const char *label)
 {
     const char* tr = GetLangText(const_cast<char*> (label));
     CRLog::trace("Translation for %s is %s", label, tr);
@@ -5404,9 +5455,9 @@ void drawTemporaryZoom() {
     // zoomYoffset = int(zoomY/2);
 
     // FillArea(0, 0, ScreenWidth()/2, ScreenHeight()/2, 0x00FFFFFF);
-    
+
     // int y = 10;
-    
+
     // DrawString(10, y, UnicodeToUtf8(L"finger1.start.x = " + lString16::itoa(int(finger1.start.x))).c_str()); y += 30;
     // DrawString(10, y, UnicodeToUtf8(L"finger1.start.y = " + lString16::itoa(int(finger1.start.y))).c_str()); y += 30;
     // DrawString(10, y, UnicodeToUtf8(L"finger2.start.x = " + lString16::itoa(int(finger2.start.x))).c_str()); y += 30;
@@ -5525,7 +5576,7 @@ void setCustomSystemTheme() {
             CloseConfig(gcfg);
             CRLog::trace("setCustomSystemTheme(): if: ok: NotifyConfigChanged");
             NotifyConfigChanged();
-            
+
             CRLog::trace("setCustomSystemTheme(): if: ok: message");
             Message(ICON_INFORMATION, const_cast<char*>("CR3"), _("Custom system theme applied. CR3 will now restart."), 3000);
 
@@ -5588,7 +5639,7 @@ void removeCustomSystemTheme() {
         CloseConfig(gcfg);
         CRLog::trace("removeCustomSystemTheme(): if: ok: NotifyConfigChanged");
         NotifyConfigChanged();
-        
+
         CRLog::trace("removeCustomSystemTheme(): if: ok: message");
         Message(ICON_INFORMATION, const_cast<char*>("CR3"), _("Restored default system theme. CR3 will now restart."), 3000);
 
