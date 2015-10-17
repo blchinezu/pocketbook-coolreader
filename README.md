@@ -1,5 +1,5 @@
 # CoolReader 3 - free e-book reader
-(c) Vadim Lopatin, 1998-2009  
+(c) Vadim Lopatin, 1998-2009
 All source codes (except thirdparty directory) are provided under the terms of GNU GPL license, version 2
 
 --------------------------------------------------------------------------------
@@ -23,16 +23,16 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 **General**
 
- - FW5 compatible [pal]
+ - FW5 compatible [[pal](http://www.the-ebook.org/forum/profile.php?mode=viewprofile&u=45840&sid=43f0dd795517591f5bae7add0e609962)]
  - Google & Wikipedia buttons in the dictionary window
- - Set book cover as power off logo [pal]
+ - Set book cover as power off logo [[pal](http://www.the-ebook.org/forum/profile.php?mode=viewprofile&u=45840&sid=43f0dd795517591f5bae7add0e609962)]
  - Get hardware depth from device
  - Full screen update on book load
- - Fixed font selection bug in settings [pkb]
+ - Fixed font selection bug in settings [[pkb](https://github.com/pkb)]
  - Cite toolbar is working with touch devices
- - Updated freetype to v2.6
+ - Updated freetype
  - Updated translations
- - Stand By Mode
+ - StandBy Mode
  - More hyphenations
  - Control front light by vertically swiping in FW5
  - Turn pages by horizontally swiping
@@ -40,15 +40,17 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Chinese is correctly shown in menus
  - More page margin values
  - More font size values
+ - Set default skin according to firmware and screen resolution (for fresh installs)
 
 **Settings**
 
- - Default font size (all sizes from 16px to 80px)
- - Formatting settings > Space expanding percent [xl743]
+ - Default font size (up to 150px)
+ - Formatting settings > Space expanding percent [[xl743](https://github.com/xl743)]
  - Display settings > Standby
- - Font settings > Font embolding [xl743]
- - Font settings > Tracking [xl743]
- - Style settings > * > Letter spacing [xl743]
+ - Display settings > Custom system theme
+ - Font settings > Font embolding [[xl743](https://github.com/xl743)]
+ - Font settings > Tracking [[xl743](https://github.com/xl743)]
+ - Style settings > * > Letter spacing [[xl743](https://github.com/xl743)]
  - Page settings > Status line settings > Time format
  - Control settings > Page Turn Swipes
  - Control settings > Front Light Swipes
@@ -58,9 +60,12 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 **Dictionary**
 
- - Show when long-tapping a word [pkb]
+ - Show when long-tapping a word [[pkb](https://github.com/pkb)]
  - Window doesn't jump around
- - Set current word as default in the search keyboard 
+ - Set current word as default in the search keyboard
+ - Treat some dictionary "redirects" for Webster's 1913 Dictionary
+ - Working with Chinese [[ailin-nemui](https://github.com/ailin-nemui)]
+ - Try matching case sensitive before case insensitive
 
 **Tap actions**
 
@@ -97,7 +102,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 --------------------------------------------------------------------------------
 
-### External dependencies: 
+### External dependencies:
 
     common: zlib, libpng, libjpeg, freetype, libcurl
     cr3gui/xcb: libxcb, fontconfig
@@ -113,18 +118,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 ### SDK
 
-[SDK for PRO devices with firmware 5](https://github.com/pocketbook-free/SDK_481)
-
-[SDK for 360 and PRO devices](https://sourceforge.net/projects/pocketbook-free/files/PocketBook_Pro_SDK_Linux_1.1/)
-
-    For 360 use the PBSDK dir from the archive
-    For pro2 and pro4 use the FRSCSDK dir from the archive
-
-    libinkview.so is in FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/
-      For pro2 you have to rename it to libinkview.1.1a.so
-        (a symlink is created by make.sh when needed)
-      For pro4 you have to add libinkview.pb626.fw4.4.so from a FW4 device to the lib dir
-        (also a symlink is created by make.sh when needed)
+[PocketBook SDK collection](https://github.com/blchinezu/pocketbook-sdk)
 
 --------------------------------------------------------------------------------
 
@@ -135,7 +129,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
     ~/PBDEV/SDK_481/
     ~/PBDEV/sources/cr3-fork/
     ~/PBDEV/system/
-    
+
     With this structure you should be able to build the source without any changes.
 
 --------------------------------------------------------------------------------
