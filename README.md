@@ -110,27 +110,19 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 --------------------------------------------------------------------------------
 
-### Build:
+### Setting up the build environment:
 
-    bash make.sh [360|pro2|pro4|pro5]
-
---------------------------------------------------------------------------------
-
-### SDK
-
-[PocketBook SDK collection](https://github.com/blchinezu/pocketbook-sdk)
+    git clone https://github.com/blchinezu/pocketbook-sdk ~/PBDEV
+    mkdir ~/PBDEV/sources
+    git clone https://github.com/blchinezu/pocketbook-coolreader.git ~/PBDEV/sources/cr3-fork
 
 --------------------------------------------------------------------------------
 
-### My development dir looks like this:
+### Building:
 
-    ~/PBDEV/FRSCSDK/
-    ~/PBDEV/PBSDK/
-    ~/PBDEV/SDK_481/
-    ~/PBDEV/sources/cr3-fork/
-    ~/PBDEV/system/
-
-    With this structure you should be able to build the source without any changes.
+    cd ~/PBDEV/sources/cr3-fork
+    bash make.sh        (this builds for all firmwares)
+    bash make.sh pro5   (this builds for FW5 only)
 
 --------------------------------------------------------------------------------
 
