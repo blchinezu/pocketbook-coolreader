@@ -112,17 +112,33 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 ### Setting up the build environment:
 
+    # update repositories
+    sudo apt-get update
+
+    # install required binaries
+    sudo apt-get install cmake zip
+
+    # download sdk
     git clone https://github.com/blchinezu/pocketbook-sdk ~/PBDEV
-    mkdir ~/PBDEV/sources
+
+    # create required dirs
+    mkdir -p ~/PBDEV/sources ~/PBDEV/releases/coolreader3/dev
+
+    # download CR3 source
     git clone https://github.com/blchinezu/pocketbook-coolreader.git ~/PBDEV/sources/cr3-fork
 
 --------------------------------------------------------------------------------
 
 ### Building:
 
+    # go to the CR3 source
     cd ~/PBDEV/sources/cr3-fork
-    bash make.sh        (this builds for all firmwares)
-    bash make.sh pro5   (this builds for FW5 only)
+
+    # build for all firmwares
+    bash make.sh
+
+    # or build for a single firmware
+    bash make.sh pro5
 
 --------------------------------------------------------------------------------
 
