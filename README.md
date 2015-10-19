@@ -140,6 +140,8 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
     # or build for a single firmware
     bash make.sh pro5
 
+    # you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+
 --------------------------------------------------------------------------------
 
 ### Screenshots:
