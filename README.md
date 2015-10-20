@@ -72,7 +72,17 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Toggle system panel
  - Open system panel (FW5 only)
  - Launch front light (FW4 only, FW5 uses system panel)
- - Toggle invert display
+ - Toggle inver[QUOTE=druss67;3190689]Hello Brucelee,
+
+Nice ! I am going to check right now.
+
+Before downloading the SDK you must install Git, with this command :
+
+[CODE]sudo apt-get install git[/CODE]
+
+and after you will be able to GIT what you want :)[/QUOTE]
+
+Doooh.. o natural to have git that it didn't cross my mind to add it t display
  - Toggle status bar
  - Tasks list
  - Lock device
@@ -116,7 +126,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
     sudo apt-get update
 
     # install required binaries
-    sudo apt-get install cmake zip
+    sudo apt-get install cmake git zip
 
     # download sdk
     git clone https://github.com/blchinezu/pocketbook-sdk ~/PBDEV
