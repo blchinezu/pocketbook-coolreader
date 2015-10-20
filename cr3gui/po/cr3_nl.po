@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-10-05 10:32+0000\n"
+"PO-Revision-Date: 2015-10-19 22:18+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/nl/)\n"
@@ -1720,7 +1720,7 @@ msgstr "Toon handleiding"
 
 #: ../src/viewdlg.cpp:580
 msgid "Show key mapping"
-msgstr "Toon toetsenbordindeling"
+msgstr "Toon toetstoewijzingen"
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
@@ -1820,7 +1820,7 @@ msgstr "Liggend"
 
 #: ../src/viewdlg.cpp:660
 msgid "Key"
-msgstr "Sleutel"
+msgstr "Toets"
 
 #: ../src/viewdlg.cpp:660
 msgid "Assigned function"
