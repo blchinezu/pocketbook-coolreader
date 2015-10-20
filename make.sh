@@ -7,7 +7,7 @@ if [ "$DATE" != "`date +"%Y-%m-%d"`" ]; then
 fi
 
 if [ "$1" = "" -o "$1" = "360" ]; then
-    
+
     if [ -f pb360/cr3gui/cr3-pb.app ]; then
         echo 'Remove previous build'
         rm -f pb360/cr3gui/cr3-pb.app
