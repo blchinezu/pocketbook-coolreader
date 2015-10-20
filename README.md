@@ -19,6 +19,13 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 --------------------------------------------------------------------------------
 
+### Download
+
+ - [Latest release](https://github.com/blchinezu/pocketbook-coolreader/releases)
+ - [OTA Source](https://github.com/blchinezu/pocketbook-coolreader/tree/master/builds)
+
+--------------------------------------------------------------------------------
+
 ### Features summary (compared to [pkb](https://sourceforge.net/p/crengine/crengine/ci/pocketbook-port/tree/)'s version)
 
 **General**
