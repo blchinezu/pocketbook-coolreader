@@ -72,17 +72,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
  - Toggle system panel
  - Open system panel (FW5 only)
  - Launch front light (FW4 only, FW5 uses system panel)
- - Toggle inver[QUOTE=druss67;3190689]Hello Brucelee,
-
-Nice ! I am going to check right now.
-
-Before downloading the SDK you must install Git, with this command :
-
-[CODE]sudo apt-get install git[/CODE]
-
-and after you will be able to GIT what you want :)[/QUOTE]
-
-Doooh.. o natural to have git that it didn't cross my mind to add it t display
+ - Toggle invert display
  - Toggle status bar
  - Tasks list
  - Lock device
