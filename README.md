@@ -136,10 +136,37 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 --------------------------------------------------------------------------------
 
-### Building:
+### Building stable version:
 
     # go to the CR3 source
     cd ~/PBDEV/sources/cr3-fork
+
+    # make sure you're working with "master" branch
+    git checkout master
+
+    # update source code
+    git pull
+
+    # build for all firmwares
+    bash make.sh
+
+    # or build for a single firmware
+    bash make.sh pro5
+
+    # you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+
+--------------------------------------------------------------------------------
+
+### Building dev version:
+
+    # go to the CR3 source
+    cd ~/PBDEV/sources/cr3-fork
+
+    # switch to "dev" branch
+    git checkout dev
+
+    # update source code
+    git pull
 
     # build for all firmwares
     bash make.sh

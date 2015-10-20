@@ -32,24 +32,24 @@ function doUpdate {
 		echo "Update dev package $1"
 
 		if [ ! -f $sdk/pb$1/cr3gui/cr3-pb.app ]; then
-			echo 
+			echo
 			echo "   ERR: Binary not found!"
-			echo 
+			echo
 			exit
 		fi
 		if [ "`ls $sdk/pb$1/cr3gui/*.cr3skin`" = "" ]; then
-			echo 
+			echo
 			echo "   ERR: Skins not found!"
-			echo 
+			echo
 			exit
 		fi
 		if [ "`ls $sdk/pb$1/i18n`" = "" ]; then
-			echo 
+			echo
 			echo "   ERR: Translations not found!"
-			echo 
+			echo
 			exit
 		fi
-		
+
 		echo " - translations > common"
 		rm -rf $package/system/share/cr3/i18n/*
 		ls $sdk/pb$1/i18n | xargs -I lang cp -f "$sdk/pb$1/i18n/lang/LC_MESSAGES/cr3.mo" "$sdk/data/common/system/share/cr3/i18n/lang.mo"
@@ -142,7 +142,7 @@ function doUpdate {
 			fi
 		fi
 
-		if [ "$2" = "" -a "$1" = "pro5" -a -f "$releases/dev/cr3-v$VERSION-$1.zip" ]; then
+		if [ "`whoami`" = "brucelee" -a "$2" = "" -a "$1" = "pro5" -a -f "$releases/dev/cr3-v$VERSION-$1.zip" ]; then
 			echo
 			echo "Update git dev branch?"
 			select yn in "Yes" "No"; do
@@ -179,7 +179,7 @@ elif [ "$1" = "publish" ]; then
 
 	# Check firmware specific
 	for FIRMWARE in '360' 'pro2' 'pro4' 'pro5'; do
-		
+
 		# Check if it's already published
 		echo " - Check if published:    $FIRMWARE"
 		if [ -f $releases/cr3-v$VERSION-$FIRMWARE.zip ]; then
@@ -221,7 +221,7 @@ elif [ "$1" = "publish" ]; then
 			doUpdate "$FIRMWARE" "$DEVICE"
 		done
 	done
-	
+
 	# Wait for dropbox to catch on
 	echo
 	echo " - Wait for dropbox to catch on..."
