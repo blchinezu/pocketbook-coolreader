@@ -1,0 +1,1920 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+#
+# Translators:
+# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
+# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
+# László Andrássy <andrassy.laszlo@gmail.com>, 2015
+msgid ""
+msgstr ""
+"Project-Id-Version: coolreader-pocketbook\n"
+"Report-Msgid-Bugs-To: foo@bar.com\n"
+"POT-Creation-Date: 2015-10-05 05:51+0300\n"
+"PO-Revision-Date: 2015-11-10 11:36+0000\n"
+"Last-Translator: László Andrássy <andrassy.laszlo@gmail.com>\n"
+"Language-Team: Hungarian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/hu/)\n"
+"Language: hu\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/citedlg.cpp:194
+msgid "Select next/prev paragraph"
+msgstr "Következő/előző bekezdés kijelölése"
+
+#: ../src/citedlg.cpp:197
+msgid "Select one more paragraph"
+msgstr "Jelölj ki még egy bekezdést"
+
+#: ../src/citedlg.cpp:200
+msgid "Deselect paragraph"
+msgstr "Bekezdés kijelölésének megszüntetése"
+
+#: ../src/citedlg.cpp:203
+msgid "Select one more phrase"
+msgstr "Jelölj ki még egy kifejezést"
+
+#: ../src/citedlg.cpp:206
+msgid "Deselect phrase"
+msgstr "Kifejezés kijelölésének megszüntetése"
+
+#: ../src/citedlg.cpp:220
+msgid "Select text"
+msgstr "Szöveg kijelölése"
+
+#: ../src/fsmenu.cpp:41
+msgid "1..9"
+msgstr "1..9"
+
+#: ../src/fsmenu.cpp:43
+msgid "1..8"
+msgstr "1..8"
+
+#: ../src/mainwnd.cpp:806
+msgid "No manual currently available for this language, sorry!"
+msgstr "Sajnos ezen a nyelven jelenleg nem érhető el útmutató!"
+
+#: ../src/mainwnd.cpp:817 ../src/mainwnd.cpp:927
+msgid "Help"
+msgstr "Súgó"
+
+#: ../src/mainwnd.cpp:844
+msgid "Main Menu"
+msgstr "Főmenü"
+
+#: ../src/mainwnd.cpp:878 ../src/viewdlg.cpp:573
+msgid "About"
+msgstr "Névjegy"
+
+#: ../src/mainwnd.cpp:888 ../src/viewdlg.cpp:537
+msgid "Go to page"
+msgstr "Ugrás oldalra"
+
+#: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
+msgid "Open recent book"
+msgstr "Legutóbbi könyv megnyitása"
+
+#: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
+msgid "Dictionary"
+msgstr "Szótár"
+
+#: ../src/mainwnd.cpp:910 ../src/settings.cpp:1495
+msgid "Cite"
+msgstr "Idézet"
+
+#: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
+msgid "Bookmarks"
+msgstr "Könyvjelzők"
+
+#: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
+msgid "Search"
+msgstr "Keresés"
+
+#: ../src/mainwnd.cpp:922 ../src/settings.cpp:1063
+msgid "Settings"
+msgstr "Beállítások"
+
+#: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:672
+msgid "Keyboard layout"
+msgstr "Billentyűzetkiosztás"
+
+#: ../src/mainwnd.cpp:938
+msgid ""
+"$1 - choose command\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - parancs kiválasztása\n"
+"$2, $3 - bezárás"
+
+#: ../src/mainwnd.cpp:1046
+msgid "Current page"
+msgstr "Jelenlegi oldal"
+
+#: ../src/mainwnd.cpp:1047
+msgid "Total pages"
+msgstr "Oldalszám"
+
+#: ../src/mainwnd.cpp:1048
+msgid "Battery state"
+msgstr "Akkumulátor állapota"
+
+#: ../src/mainwnd.cpp:1048
+msgid "charging..."
+msgstr "töltés..."
+
+#: ../src/mainwnd.cpp:1049
+msgid "Current Time"
+msgstr "Jelenlegi idő"
+
+#: ../src/mainwnd.cpp:1054
+msgid "Current chapter"
+msgstr "Jelenlegi fejezet"
+
+#: ../src/mainwnd.cpp:1057
+msgid "Status"
+msgstr "Állapot"
+
+#: ../src/mainwnd.cpp:1060
+msgid "Archive name"
+msgstr "Archívum neve"
+
+#: ../src/mainwnd.cpp:1061
+msgid "Archive path"
+msgstr "Archívum útvonala"
+
+#: ../src/mainwnd.cpp:1062
+msgid "Archive size"
+msgstr "Archívum mérete"
+
+#: ../src/mainwnd.cpp:1063
+msgid "File name"
+msgstr "Fájlnév"
+
+#: ../src/mainwnd.cpp:1064
+msgid "File path"
+msgstr "Fájlútvonal"
+
+#: ../src/mainwnd.cpp:1065
+msgid "File size"
+msgstr "Fájlméret"
+
+#: ../src/mainwnd.cpp:1066
+msgid "File format"
+msgstr "Fájlformátum"
+
+#: ../src/mainwnd.cpp:1067
+msgid "File info"
+msgstr "Fájlinformáció"
+
+#: ../src/mainwnd.cpp:1070
+msgctxt "Book"
+msgid "Title"
+msgstr "Cím"
+
+#: ../src/mainwnd.cpp:1071
+msgid "Author(s)"
+msgstr "Szerző(k)"
+
+#: ../src/mainwnd.cpp:1072
+msgid "Series name"
+msgstr "Sorozat címe"
+
+#: ../src/mainwnd.cpp:1073
+msgid "Series number"
+msgstr "Sorozat száma"
+
+#: ../src/mainwnd.cpp:1074
+msgid "Date"
+msgstr "Dátum"
+
+#: ../src/mainwnd.cpp:1075
+msgid "Genres"
+msgstr "Műfajok"
+
+#: ../src/mainwnd.cpp:1076
+msgid "Language"
+msgstr "Nyelv"
+
+#: ../src/mainwnd.cpp:1077
+msgid "Translator"
+msgstr "Fordító"
+
+#: ../src/mainwnd.cpp:1078
+msgid "Source language"
+msgstr "Forrásnyelv"
+
+#: ../src/mainwnd.cpp:1079
+msgid "Book info"
+msgstr "Könyvinformáció"
+
+#: ../src/mainwnd.cpp:1082
+msgid "Document author"
+msgstr "Dokumentum szerzője"
+
+#: ../src/mainwnd.cpp:1083
+msgid "Document date"
+msgstr "Dokumentum dátuma"
+
+#: ../src/mainwnd.cpp:1084
+msgid "Document source URL"
+msgstr "Dokumentum forrás URL-je"
+
+#: ../src/mainwnd.cpp:1085
+msgid "OCR by"
+msgstr "OCR általa:"
+
+#: ../src/mainwnd.cpp:1086
+msgid "Document version"
+msgstr "Dokumentum verziója"
+
+#: ../src/mainwnd.cpp:1087
+msgid "Change history"
+msgstr "Módosítási előzmények"
+
+#: ../src/mainwnd.cpp:1088
+msgid "ID"
+msgstr "Azonosító"
+
+#: ../src/mainwnd.cpp:1089
+msgid "Program used"
+msgstr "Felhasznált program"
+
+#: ../src/mainwnd.cpp:1090
+msgid "Document info"
+msgstr "Dokumentum információ"
+
+#: ../src/mainwnd.cpp:1093
+msgid "Publication name"
+msgstr "Publikáció címe"
+
+#: ../src/mainwnd.cpp:1094
+msgid "Publisher"
+msgstr "Kiadó"
+
+#: ../src/mainwnd.cpp:1095
+msgid "Publisher city"
+msgstr "Kiadás helye"
+
+#: ../src/mainwnd.cpp:1096
+msgid "Publication year"
+msgstr "Kiadás éve"
+
+#: ../src/mainwnd.cpp:1097
+msgid "ISBN"
+msgstr "ISBN"
+
+#: ../src/mainwnd.cpp:1098
+msgid "Publication info"
+msgstr "Kiadás információ"
+
+#: ../src/mainwnd.cpp:1100
+msgid "Custom info"
+msgstr "Egyedi információ"
+
+#: ../src/mainwnd.cpp:1104
+msgid "CoolReader for PocketBook"
+msgstr "CoolReader PocketBook készülékekre"
+
+#: ../src/mainwnd.cpp:1105
+msgid "Build date"
+msgstr "Fordítás dátuma"
+
+#: ../src/mainwnd.cpp:1106
+msgid "Build type"
+msgstr "Fordítás típusa"
+
+#: ../src/mainwnd.cpp:1107
+msgid "About program"
+msgstr "A program névjegye"
+
+#: ../src/mainwnd.cpp:1110
+msgid "Hardware type"
+msgstr "Hardver típusa"
+
+#: ../src/mainwnd.cpp:1111
+msgid "Firmware version"
+msgstr "Firmware verzió"
+
+#: ../src/mainwnd.cpp:1112
+msgid "Keyboard type"
+msgstr "Billentyűzet típusa"
+
+#: ../src/mainwnd.cpp:1113
+msgid "Screen type"
+msgstr "Kijelző típusa"
+
+#: ../src/mainwnd.cpp:1114
+msgid "Config file"
+msgstr "Konfig fájl"
+
+#: ../src/mainwnd.cpp:1115
+msgid "Keymap file"
+msgstr "Billentyűzetkiosztás fájl"
+
+#: ../src/mainwnd.cpp:1116
+msgid "Skin file"
+msgstr "Kinézet fájl"
+
+#: ../src/mainwnd.cpp:1117
+msgid "Debug information"
+msgstr "Hibakeresési információ"
+
+#: ../src/mainwnd.cpp:1268
+msgid "Loading: please wait..."
+msgstr "Betöltés: kérem, várjon..."
+
+#: ../src/recentdlg.cpp:97
+msgid "Open book"
+msgstr "Könyv megnyitása"
+
+#: ../src/recentdlg.cpp:98
+msgid "Delete record"
+msgstr "Rekord törlése"
+
+#: ../src/recentdlg.cpp:133
+msgid ""
+"$1 - open book\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - könyv megnyitása\n"
+"$2, $3 - bezárás"
+
+#: ../src/tocdlg.cpp:150
+msgid "Current page: $1 of $2\n"
+msgstr "Jelenlegi oldal: $1 / $2\n"
+
+#: ../src/tocdlg.cpp:153
+msgid "Enter page number:"
+msgstr "Oldalszám megadása:"
+
+#: ../src/bmkdlg.cpp:19
+msgid "Empty slot"
+msgstr "Üres"
+
+#: ../src/bmkdlg.cpp:45
+msgid "Page $1 ($2%)"
+msgstr "$1. oldal ($2%)"
+
+#: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
+msgid "Go to bookmark"
+msgstr "Ugrás könyvjelzőre"
+
+#: ../src/bmkdlg.cpp:72
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"$2 - switch to SET mode"
+msgstr ""
+"Rövid nyomás $1 - ugrás a könyvjelzőre,\n"
+"$2 - váltás BEÁLLÍTÁS módba"
+
+#: ../src/bmkdlg.cpp:73
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"long press - set bookmark"
+msgstr ""
+"Rövid nyomás $1 - ugrás a könyvjelzőre,\n"
+"hosszú nyomás - könyvjelző beállítása"
+
+#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
+msgid "Set bookmark"
+msgstr "Könyvjelző beállítása"
+
+#: ../src/bmkdlg.cpp:80
+msgid ""
+"$1 - set bookmark,\n"
+"$2 - switch to GO mode"
+msgstr ""
+"$1 - könyvjelző beállítása,\n"
+"$2 - váltás UGRÁS módra"
+
+#: ../src/bmkdlg.cpp:81
+msgid ""
+"Short press $1 - set bookmark,\n"
+"long press - go to bookmark"
+msgstr ""
+"Rövid nyomás $1 - könyvjelző beállítása,\n"
+"hosszú nyomás - ugrás a könyvjelzőre"
+
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
+msgid "Delete bookmark"
+msgstr "Könyvjelző törlése"
+
+#: ../src/bmkdlg.cpp:316
+msgid "Go to citation"
+msgstr "Ugrás idézethez"
+
+#: ../src/bmkdlg.cpp:317
+msgid "Delete citation"
+msgstr "Idézet törlése"
+
+#: ../src/bmkdlg.cpp:332
+msgid "Citations"
+msgstr "Idézetek"
+
+#: ../src/bmkdlg.cpp:448 ../src/viewdlg.cpp:574
+msgid "Cite selection dialog"
+msgstr "Idézet kiválasztása"
+
+#: ../src/dictdlg.cpp:80
+msgid "From dictionary "
+msgstr "Szótárból"
+
+#: ../src/dictdlg.cpp:89
+msgid "[cannot read article]"
+msgstr "[a cikk nem olvasható]"
+
+#: ../src/settings.cpp:204
+msgid "choose command"
+msgstr "parancs kiválasztása"
+
+#: ../src/settings.cpp:222
+msgid "Controls"
+msgstr "Irányítás"
+
+#: ../src/settings.cpp:388
+msgid "(No action)"
+msgstr "(Semmi)"
+
+#: ../src/settings.cpp:541
+msgid "[Command is not assigned]"
+msgstr "[Nincs hozzárendelt parancs]"
+
+#: ../src/settings.cpp:562
+msgid "0` (Portrait)"
+msgstr "0° (portré)"
+
+#: ../src/settings.cpp:563
+msgid "90 `"
+msgstr "90°"
+
+#: ../src/settings.cpp:564
+msgid "180 `"
+msgstr "180°"
+
+#: ../src/settings.cpp:565
+msgid "270 `"
+msgstr "270°"
+
+#: ../src/settings.cpp:576
+msgid "Page orientation"
+msgstr "Oldal tájolása"
+
+#: ../src/settings.cpp:597
+msgid "Default font size"
+msgstr "Alapértelmezett betűméret"
+
+#: ../src/settings.cpp:652
+msgid "The quick brown fox jumps over lazy dog"
+msgstr "Árvíztűrő tükörfúrógép"
+
+#: ../src/settings.cpp:832
+msgid "Justify"
+msgstr "Sorkizárt"
+
+#: ../src/settings.cpp:833
+msgctxt "CSS"
+msgid "Left"
+msgstr "Balra igazítás"
+
+#: ../src/settings.cpp:834
+msgid "Center"
+msgstr "Középre igazítás"
+
+#: ../src/settings.cpp:835
+msgctxt "CSS"
+msgid "Right"
+msgstr "Jobbra igazítás"
+
+#: ../src/settings.cpp:841
+msgid "No indent"
+msgstr "Nincs behúzás"
+
+#: ../src/settings.cpp:842
+msgid "Small indent"
+msgstr "Kis behúzás"
+
+#: ../src/settings.cpp:843
+msgid "Big indent"
+msgstr "Nagy behúzás"
+
+#: ../src/settings.cpp:844
+msgid "Small outdent"
+msgstr "Kis kihúzás"
+
+#: ../src/settings.cpp:845
+msgid "Big outdent"
+msgstr "Nagy kihúzás"
+
+#: ../src/settings.cpp:851
+msgid "[Default sans-serif font]"
+msgstr "[Alapértelmezett talpatlan betűtípus]"
+
+#: ../src/settings.cpp:852
+msgid "[Default serif font]"
+msgstr "[Alapértelmezett talpas betűtípus]"
+
+#: ../src/settings.cpp:853
+msgid "[Default monospace font]"
+msgstr "[Alapértelmezett monospace betűtípus]"
+
+#: ../src/settings.cpp:859
+msgid "Bigger (105%)"
+msgstr "Nagyobb (105%)"
+
+#: ../src/settings.cpp:860
+msgid "Bigger (110%)"
+msgstr "Nagyobb (110%)"
+
+#: ../src/settings.cpp:861
+msgid "Bigger (115%)"
+msgstr "Nagyobb (115%)"
+
+#: ../src/settings.cpp:862
+msgid "Bigger (120%)"
+msgstr "Nagyobb (120%)"
+
+#: ../src/settings.cpp:863
+msgid "Bigger (150%)"
+msgstr "Nagyobb (150%)"
+
+#: ../src/settings.cpp:864
+msgid "Smaller (95%)"
+msgstr "Kisebb (95%)"
+
+#: ../src/settings.cpp:865
+msgid "Smaller (90%)"
+msgstr "Kisebb (90%)"
+
+#: ../src/settings.cpp:866
+msgid "Smaller (85%)"
+msgstr "Kisebb (85%)"
+
+#: ../src/settings.cpp:867
+msgid "Smaller (80%)"
+msgstr "Kisebb (80%)"
+
+#: ../src/settings.cpp:868
+msgid "Smaller (70%)"
+msgstr "Kisebb (70%)"
+
+#: ../src/settings.cpp:869
+msgid "Smaller (60%)"
+msgstr "Kisebb (60%)"
+
+#: ../src/settings.cpp:875 ../src/settings.cpp:884 ../src/settings.cpp:1167
+#: ../src/settings.cpp:1173
+msgid "Normal"
+msgstr "Normál"
+
+#: ../src/settings.cpp:876 ../src/settings.cpp:1174
+msgid "Bold"
+msgstr "Félkövér"
+
+#: ../src/settings.cpp:877
+msgid "Bolder"
+msgstr "Félkövérebb"
+
+#: ../src/settings.cpp:878
+msgid "Lighter"
+msgstr "Vékonyabb"
+
+#: ../src/settings.cpp:885
+msgid "Italic"
+msgstr "Dőlt"
+
+#: ../src/settings.cpp:920 ../src/settings.cpp:1094
+msgid "None"
+msgstr "Egyik sem"
+
+#: ../src/settings.cpp:921 ../src/settings.cpp:1096
+msgid "Underline"
+msgstr "Aláhúzás"
+
+#: ../src/settings.cpp:922
+msgid "Line through"
+msgstr "Áthúzás"
+
+#: ../src/settings.cpp:923
+msgid "Overline"
+msgstr "Felülvonás"
+
+#: ../src/settings.cpp:929
+msgid "Baseline"
+msgstr "Alapvonal"
+
+#: ../src/settings.cpp:930
+msgid "Subscript"
+msgstr "Alsó index"
+
+#: ../src/settings.cpp:931
+msgid "Superscript"
+msgstr "Felső index"
+
+#: ../src/settings.cpp:937 ../src/settings.cpp:945
+msgid "Black"
+msgstr "Fekete"
+
+#: ../src/settings.cpp:938 ../src/settings.cpp:946
+msgid "Gray"
+msgstr "Szürke"
+
+#: ../src/settings.cpp:939 ../src/settings.cpp:947
+msgid "White"
+msgstr "Fehér"
+
+#: ../src/settings.cpp:954 ../src/settings.cpp:965
+msgid "0.2 of line height"
+msgstr "Sormagasság 0,2-szerese"
+
+#: ../src/settings.cpp:955 ../src/settings.cpp:966
+msgid "0.3 of line height"
+msgstr "Sormagasság 0,3-szorosa"
+
+#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
+#: ../src/settings.cpp:992
+msgid "0.5 of line height"
+msgstr "Sormagasság 0,5-szöröse"
+
+#: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
+#: ../src/settings.cpp:993
+msgid "1 line height"
+msgstr "Sormagasság 1-szerese"
+
+#: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
+#: ../src/settings.cpp:995
+msgid "2 of line height"
+msgstr "Sormagasság 2-szerese"
+
+#: ../src/settings.cpp:978 ../src/settings.cpp:994
+msgid "1.5 of line height"
+msgstr "Sormagasság 1,5-szöröse"
+
+#: ../src/settings.cpp:980 ../src/settings.cpp:996
+msgid "4 of line height"
+msgstr "Sormagasság 4-szerese"
+
+#: ../src/settings.cpp:981 ../src/settings.cpp:997
+msgid "5% of line width"
+msgstr "Sorszélesség 5%-a"
+
+#: ../src/settings.cpp:982 ../src/settings.cpp:998
+msgid "10% of line width"
+msgstr "Sorszélesség 10%-a"
+
+#: ../src/settings.cpp:983 ../src/settings.cpp:999
+msgid "15% of line width"
+msgstr "Sorszélesség 15%-a"
+
+#: ../src/settings.cpp:984 ../src/settings.cpp:1000
+msgid "20% of line width"
+msgstr "Sorszélesség 20%-a"
+
+#: ../src/settings.cpp:985 ../src/settings.cpp:1001
+msgid "30% of line width"
+msgstr "Sorszélesség 30%-a"
+
+#: ../src/settings.cpp:1004
+msgid "Text alignment"
+msgstr "Szöveg igazítása"
+
+#: ../src/settings.cpp:1006
+msgid "First line indent"
+msgstr "Első sor behúzása"
+
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1658
+msgid "Font face"
+msgstr "Betűtípus"
+
+#: ../src/settings.cpp:1023
+msgid "Font size"
+msgstr "Betűméret"
+
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1552 ../src/settings.cpp:1667
+msgid "Font weight"
+msgstr "Betűsúly"
+
+#: ../src/settings.cpp:1027
+msgid "Font style"
+msgstr "Betűstílus"
+
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1581
+msgid "Interline space"
+msgstr "Sorköz"
+
+#: ../src/settings.cpp:1031
+msgid "Letter spacing"
+msgstr "Betűköz"
+
+#: ../src/settings.cpp:1033
+msgid "Text decoration"
+msgstr "Szöveg megjelenése"
+
+#: ../src/settings.cpp:1035
+msgid "Text vertical alignment"
+msgstr "Szöveg függőleges igazítása"
+
+#: ../src/settings.cpp:1037
+msgid "Text color"
+msgstr "Szöveg színe"
+
+#: ../src/settings.cpp:1039
+msgid "Background color"
+msgstr "Háttér színe"
+
+#: ../src/settings.cpp:1041
+msgid "Margin before"
+msgstr "Margó előtte"
+
+#: ../src/settings.cpp:1043
+msgid "Margin after"
+msgstr "Margó utána"
+
+#: ../src/settings.cpp:1045
+msgid "Margin left"
+msgstr "Margó bal oldalt"
+
+#: ../src/settings.cpp:1047
+msgid "Margin right"
+msgstr "Margó jobb oldalt"
+
+#: ../src/settings.cpp:1075
+msgid "On for all fonts"
+msgstr "Mindig bekapcsolva"
+
+#: ../src/settings.cpp:1076
+msgid "On for big fonts only"
+msgstr "Csak nagy betűtípusok esetén"
+
+#: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
+#: ../src/settings.cpp:1320 ../src/settings.cpp:1346
+msgid "Off"
+msgstr "Kikapcsolva"
+
+#: ../src/settings.cpp:1082
+msgid "On"
+msgstr "Bekapcsolva"
+
+#: ../src/settings.cpp:1088
+msgid "AM/PM"
+msgstr "DE/DU"
+
+#: ../src/settings.cpp:1089
+msgid "24h"
+msgstr "24 órás"
+
+#: ../src/settings.cpp:1095
+msgid "Solid"
+msgstr "Vastag"
+
+#: ../src/settings.cpp:1168
+msgid "Inverse"
+msgstr "Inverz"
+
+#: ../src/settings.cpp:1179
+msgid "One"
+msgstr "Egy"
+
+#: ../src/settings.cpp:1180
+msgid "Two"
+msgstr "Kettő"
+
+#: ../src/settings.cpp:1185
+msgid "Top"
+msgstr "Legfelső"
+
+#: ../src/settings.cpp:1192
+msgid "70%"
+msgstr "70%"
+
+#: ../src/settings.cpp:1193
+msgid "75%"
+msgstr "75%"
+
+#: ../src/settings.cpp:1194
+msgid "80%"
+msgstr "80%"
+
+#: ../src/settings.cpp:1195
+msgid "85%"
+msgstr "85%"
+
+#: ../src/settings.cpp:1196
+msgid "90%"
+msgstr "90%"
+
+#: ../src/settings.cpp:1197
+msgid "95%"
+msgstr "95%"
+
+#: ../src/settings.cpp:1198
+msgid "100%"
+msgstr "100%"
+
+#: ../src/settings.cpp:1199
+msgid "105%"
+msgstr "105%"
+
+#: ../src/settings.cpp:1200
+msgid "110%"
+msgstr "110%"
+
+#: ../src/settings.cpp:1201
+msgid "115%"
+msgstr "115%"
+
+#: ../src/settings.cpp:1202
+msgid "120%"
+msgstr "120%"
+
+#: ../src/settings.cpp:1203
+msgid "125%"
+msgstr "125%"
+
+#: ../src/settings.cpp:1204
+msgid "130%"
+msgstr "130%"
+
+#: ../src/settings.cpp:1205
+msgid "135%"
+msgstr "135%"
+
+#: ../src/settings.cpp:1206
+msgid "140%"
+msgstr "140%"
+
+#: ../src/settings.cpp:1207
+msgid "145%"
+msgstr "145%"
+
+#: ../src/settings.cpp:1208
+msgid "150%"
+msgstr "150%"
+
+#: ../src/settings.cpp:1209
+msgid "160%"
+msgstr "160%"
+
+#: ../src/settings.cpp:1210
+msgid "180%"
+msgstr "180%"
+
+#: ../src/settings.cpp:1211
+msgid "200%"
+msgstr "200%"
+
+#: ../src/settings.cpp:1292
+msgid "Always use fast updates"
+msgstr "Ne legyen teljes oldalfrissítés"
+
+#: ../src/settings.cpp:1293
+msgid "Don't use fast updates"
+msgstr "Mindig legyen teljes oldalfrissítés"
+
+#: ../src/settings.cpp:1294
+msgid "Full updates every 2 pages"
+msgstr "Teljes oldalfrissítés 2 oldalanként"
+
+#: ../src/settings.cpp:1295
+msgid "Full updates every 3 pages"
+msgstr "Teljes oldalfrissítés 3 oldalanként"
+
+#: ../src/settings.cpp:1296
+msgid "Full updates every 4 pages"
+msgstr "Teljes oldalfrissítés 4 oldalanként"
+
+#: ../src/settings.cpp:1297
+msgid "Full updates every 5 pages"
+msgstr "Teljes oldalfrissítés 5 oldalanként"
+
+#: ../src/settings.cpp:1298
+msgid "Full updates every 6 pages"
+msgstr "Teljes oldalfrissítés 6 oldalanként"
+
+#: ../src/settings.cpp:1299
+msgid "Full updates every 7 pages"
+msgstr "Teljes oldalfrissítés 7 oldalanként"
+
+#: ../src/settings.cpp:1300
+msgid "Full updates every 8 pages"
+msgstr "Teljes oldalfrissítés 8 oldalanként"
+
+#: ../src/settings.cpp:1301
+msgid "Full updates every 9 pages"
+msgstr "Teljes oldalfrissítés 9 oldalanként"
+
+#: ../src/settings.cpp:1302
+msgid "Full updates every 10 pages"
+msgstr "Teljes oldalfrissítés 10 oldalanként"
+
+#: ../src/settings.cpp:1303
+msgid "Full updates every 14 pages"
+msgstr "Teljes oldalfrissítés 14 oldalanként"
+
+#: ../src/settings.cpp:1304
+msgid "Full updates every 20 pages"
+msgstr "Teljes oldalfrissítés 20 oldalanként"
+
+#: ../src/settings.cpp:1305
+msgid "Full updates every 25 pages"
+msgstr "Teljes oldalfrissítés 25 oldalanként"
+
+#: ../src/settings.cpp:1306
+msgid "Full updates every 30 pages"
+msgstr "Teljes oldalfrissítés 30 oldalanként"
+
+#: ../src/settings.cpp:1307
+msgid "Full updates every 35 pages"
+msgstr "Teljes oldalfrissítés 35 oldalanként"
+
+#: ../src/settings.cpp:1308
+msgid "Full updates every 40 pages"
+msgstr "Teljes oldalfrissítés 40 oldalanként"
+
+#: ../src/settings.cpp:1309
+msgid "Full updates every 45 pages"
+msgstr "Teljes oldalfrissítés 45 oldalanként"
+
+#: ../src/settings.cpp:1310
+msgid "Full updates every 50 pages"
+msgstr "Teljes oldalfrissítés 50 oldalanként"
+
+#: ../src/settings.cpp:1315
+msgid "Turbo mode disabled"
+msgstr "Turbó mód kikapcsolva"
+
+#: ../src/settings.cpp:1316
+msgid "Turbo mode enabled"
+msgstr "Turbó mód bekapcsolva"
+
+#: ../src/settings.cpp:1321
+msgid "1 minute"
+msgstr "1 perc"
+
+#: ../src/settings.cpp:1322
+msgid "2 minutes"
+msgstr "2 perc"
+
+#: ../src/settings.cpp:1323
+msgid "3 minutes"
+msgstr "3 perc"
+
+#: ../src/settings.cpp:1324
+msgid "4 minutes"
+msgstr "4 perc"
+
+#: ../src/settings.cpp:1325
+msgid "5 minutes"
+msgstr "5 perc"
+
+#: ../src/settings.cpp:1326
+msgid "6 minutes"
+msgstr "6 perc"
+
+#: ../src/settings.cpp:1327
+msgid "7 minutes"
+msgstr "7 perc"
+
+#: ../src/settings.cpp:1328
+msgid "8 minutes"
+msgstr "8 perc"
+
+#: ../src/settings.cpp:1329
+msgid "9 minutes"
+msgstr "9 perc"
+
+#: ../src/settings.cpp:1330
+msgid "10 minutes"
+msgstr "10 perc"
+
+#: ../src/settings.cpp:1331
+msgid "15 minutes"
+msgstr "15 perc"
+
+#: ../src/settings.cpp:1332
+msgid "20 minutes"
+msgstr "20 perc"
+
+#: ../src/settings.cpp:1333
+msgid "25 minutes"
+msgstr "25 perc"
+
+#: ../src/settings.cpp:1334
+msgid "30 minutes"
+msgstr "30 perc"
+
+#: ../src/settings.cpp:1335
+msgid "35 minutes"
+msgstr "35 perc"
+
+#: ../src/settings.cpp:1336
+msgid "40 minutes"
+msgstr "40 perc"
+
+#: ../src/settings.cpp:1337
+msgid "45 minutes"
+msgstr "45 perc"
+
+#: ../src/settings.cpp:1338
+msgid "50 minutes"
+msgstr "50 perc"
+
+#: ../src/settings.cpp:1339
+msgid "55 minutes"
+msgstr "55 perc"
+
+#: ../src/settings.cpp:1340
+msgid "1 hour"
+msgstr "1 óra"
+
+#: ../src/settings.cpp:1341
+msgid "2 hours"
+msgstr "2 óra"
+
+#: ../src/settings.cpp:1347
+msgid "Fixed"
+msgstr "Rögzített"
+
+#: ../src/settings.cpp:1348
+msgid "Dynamic"
+msgstr "Dinamikus"
+
+#: ../src/settings.cpp:1356
+msgid "180+slow next page"
+msgstr "180+lassú következő oldal"
+
+#: ../src/settings.cpp:1357
+msgid "180+slow prev/next page"
+msgstr "180+lassú előző/következő oldal"
+
+#: ../src/settings.cpp:1358
+msgid "180+FAST next page"
+msgstr "180+GYORS következő oldal"
+
+#: ../src/settings.cpp:1359
+msgid "180+FAST prev/next page"
+msgstr "180+GYORS előző/következő oldal"
+
+#: ../src/settings.cpp:1360
+msgid "180+FAST next/prev page"
+msgstr "180+GYORS előző/következő oldal"
+
+#: ../src/settings.cpp:1378 ../src/settings.cpp:1395
+msgid "Auto"
+msgstr "Automatikus"
+
+#: ../src/settings.cpp:1379
+msgid "2 BPP"
+msgstr "2 BPP"
+
+#: ../src/settings.cpp:1380
+msgid "3 BPP"
+msgstr "3 BPP"
+
+#: ../src/settings.cpp:1381
+msgid "4 BPP"
+msgstr "4 BPP"
+
+#: ../src/settings.cpp:1382
+msgid "8 BPP"
+msgstr "8 BPP"
+
+#: ../src/settings.cpp:1388
+msgid "Disabled (1:1)"
+msgstr "Letiltva (1:1)"
+
+#: ../src/settings.cpp:1389
+msgid "Integer scale"
+msgstr "Egész szám skála"
+
+#: ../src/settings.cpp:1390
+msgid "Arbitrary scale"
+msgstr "Tetszőleges méretű"
+
+#: ../src/settings.cpp:1396
+msgid "*1"
+msgstr "*1"
+
+#: ../src/settings.cpp:1397
+msgid "*2"
+msgstr "*2"
+
+#: ../src/settings.cpp:1398
+msgid "*3"
+msgstr "*3"
+
+#: ../src/settings.cpp:1482
+msgid "No hinting"
+msgstr "Nincs hinting"
+
+#: ../src/settings.cpp:1483
+msgid "Use bytecode"
+msgstr "Bájtkód használata"
+
+#: ../src/settings.cpp:1484
+msgid "Autohinting"
+msgstr "Autohinting"
+
+#: ../src/settings.cpp:1485
+msgid "Light"
+msgstr "Vékony"
+
+#: ../src/settings.cpp:1490
+msgid "Default paragraph formatting"
+msgstr "Alapértelmezett bekezdés formázás"
+
+#: ../src/settings.cpp:1491
+msgctxt "CSS"
+msgid "Title"
+msgstr "Cím"
+
+#: ../src/settings.cpp:1492
+msgid "Subtitle"
+msgstr "Alcím"
+
+#: ../src/settings.cpp:1493
+msgid "Preformatted text / code"
+msgstr "Előreformázott szöveg / kód"
+
+#: ../src/settings.cpp:1494
+msgid "Link"
+msgstr "Hivatkozás"
+
+#: ../src/settings.cpp:1496
+msgid "Epigraph"
+msgstr "Jelmondat"
+
+#: ../src/settings.cpp:1497
+msgid "Poem"
+msgstr "Vers"
+
+#: ../src/settings.cpp:1498
+msgid "Text / Cite / Epigraph author"
+msgstr "Szöveg / Idézet / Jelmondat szerző"
+
+#: ../src/settings.cpp:1499
+msgid "Footnote"
+msgstr "Lábjegyzet"
+
+#: ../src/settings.cpp:1500
+msgid "Footnote link"
+msgstr "Lábjegyzet hivatkozás"
+
+#: ../src/settings.cpp:1501
+msgid "Footnote title"
+msgstr "Lábjegyzet cím"
+
+#: ../src/settings.cpp:1502
+msgid "Annotation"
+msgstr "Szövegmagyarázat"
+
+#: ../src/settings.cpp:1542
+msgid "Default font face"
+msgstr "Alapértelmezett betűtípus"
+
+#: ../src/settings.cpp:1547
+msgid "Font settings"
+msgstr "Betűtípus beállítása"
+
+#: ../src/settings.cpp:1554
+msgid "Font antialiasing"
+msgstr "Betűtípus élsimítása"
+
+#: ../src/settings.cpp:1557
+msgid "Font hinting"
+msgstr "Betűtípus hinting"
+
+#: ../src/settings.cpp:1559
+msgid "Font kerning"
+msgstr "Betűtípus alávágás"
+
+#: ../src/settings.cpp:1561
+msgid "Font embolding"
+msgstr "Betűtípus vastagítása"
+
+#: ../src/settings.cpp:1563
+msgid "Tracking"
+msgstr "Követés"
+
+#: ../src/settings.cpp:1565
+msgid "Font Gamma"
+msgstr "Betűtípus gamma"
+
+#: ../src/settings.cpp:1567
+msgid "Document embedded fonts"
+msgstr "Dokumentumba ágyazott betűtípusok"
+
+#: ../src/settings.cpp:1570
+msgid "Fallback font face"
+msgstr "Tartalék betűtípus"
+
+#: ../src/settings.cpp:1576
+msgid "Formatting settings"
+msgstr "Formázás beállítása"
+
+#: ../src/settings.cpp:1588
+msgid "[No Hyphenation]"
+msgstr "[Nincs elválasztás]"
+
+#: ../src/settings.cpp:1589
+msgid "[Algorythmic Hyphenation]"
+msgstr "[Algoritmikus elválasztás]"
+
+#: ../src/settings.cpp:1591
+msgid "Hyphenation"
+msgstr "Elválasztás"
+
+#: ../src/settings.cpp:1605
+msgid "Preformatted text"
+msgstr "Előreformázott szöveg"
+
+#: ../src/settings.cpp:1608
+msgid "Space condensing percent"
+msgstr "Térköz sűrítési arány"
+
+#: ../src/settings.cpp:1611
+msgid "Space expanding percent"
+msgstr "Térköz ritkítási arány"
+
+#: ../src/settings.cpp:1614
+msgid "Floating punctuation"
+msgstr "Lebegő írásjelek"
+
+#: ../src/settings.cpp:1620
+msgid "Image scaling"
+msgstr "Képméretezés"
+
+#: ../src/settings.cpp:1625
+msgid "Block image scaling mode"
+msgstr "Képblokk méretezési mód"
+
+#: ../src/settings.cpp:1628
+msgid "Block image max zoom"
+msgstr "Képblokk max nagyítás"
+
+#: ../src/settings.cpp:1631
+msgid "Inline image scaling mode"
+msgstr "Beágyazott kép méretezési mód"
+
+#: ../src/settings.cpp:1634
+msgid "Inline image max zoom"
+msgstr "Beágyazott kép max nagyítás"
+
+#: ../src/settings.cpp:1643
+msgid "Page settings"
+msgstr "Oldal beállítása"
+
+#: ../src/settings.cpp:1648
+msgid "Status line"
+msgstr "Állapotsáv"
+
+#: ../src/settings.cpp:1653
+msgid "Status line settings"
+msgstr "Állapotsáv beállítása"
+
+#: ../src/settings.cpp:1670
+msgid "Time format"
+msgstr "Időformátum"
+
+#: ../src/settings.cpp:1672
+msgid "Show time"
+msgstr "Idő megjelenítése"
+
+#: ../src/settings.cpp:1674
+msgid "Show title"
+msgstr "Cím megjelenítése"
+
+#: ../src/settings.cpp:1676
+msgid "Show battery"
+msgstr "Akkumulátorjelző megjelenítése"
+
+#: ../src/settings.cpp:1678
+msgid "Show battery percent"
+msgstr "Akkumulátorszázalék megjelenítése"
+
+#: ../src/settings.cpp:1681
+msgid "Show position percent"
+msgstr "Pozíció megjelenítése százalékban"
+
+#: ../src/settings.cpp:1683
+msgid "Show page count"
+msgstr "Oldalszám megjelenítése"
+
+#: ../src/settings.cpp:1685
+msgid "Show page count till chapter end"
+msgstr "Oldalszám megjelenítése a fejezet végéig"
+
+#: ../src/settings.cpp:1688
+msgid "Show page number"
+msgstr "Oldalszám megjelenítése"
+
+#: ../src/settings.cpp:1690
+msgid "Show chapter marks"
+msgstr "Fejezetjelzők megjelenítése"
+
+#: ../src/settings.cpp:1699
+msgid "Page margins"
+msgstr "Oldalmargók"
+
+#: ../src/settings.cpp:1704
+msgid "Top margin"
+msgstr "Felső margó"
+
+#: ../src/settings.cpp:1706
+msgid "Bottom margin"
+msgstr "Alsó margó"
+
+#: ../src/settings.cpp:1708
+msgid "Left margin"
+msgstr "Bal margó"
+
+#: ../src/settings.cpp:1710
+msgid "Right margin"
+msgstr "Jobb margó"
+
+#: ../src/settings.cpp:1715
+msgid "Footnotes at page bottom"
+msgstr "Lábjegyzetek az oldal alján"
+
+#: ../src/settings.cpp:1721
+msgid "Display settings"
+msgstr "Megjelenítés beállítása"
+
+#: ../src/settings.cpp:1730
+msgid "Landscape pages"
+msgstr "Fekvő oldalak"
+
+#: ../src/settings.cpp:1732
+msgid "Inverse display"
+msgstr "Ellentétes kontraszt"
+
+#: ../src/settings.cpp:1735
+msgid "Show bookmark icons"
+msgstr "Könyvjelző ikon megjelenítése"
+
+#: ../src/settings.cpp:1738
+msgid "Highlight bookmarks"
+msgstr "Könyvjelzők kiemelése"
+
+#: ../src/settings.cpp:1742
+msgid "Display update mode"
+msgstr "Kijelzőfrissítési mód"
+
+#: ../src/settings.cpp:1750
+msgid "Standby"
+msgstr "Készenlét"
+
+#: ../src/settings.cpp:1757
+msgid "Turbo update mode"
+msgstr "Gyors frissítési mód"
+
+#: ../src/settings.cpp:1762
+msgid "Gray buffer depth (needs restart)"
+msgstr "Szürke puffermérete (újraindítás szükséges)"
+
+#: ../src/settings.cpp:1767
+msgid "Custom system theme (needs restart)"
+msgstr "Egyéni rendszertéma (újraindítás szükséges)"
+
+#: ../src/settings.cpp:1774
+msgid "Skin"
+msgstr "Téma"
+
+#: ../src/settings.cpp:1790
+msgid "Control settings"
+msgstr "Irányítás beállítása"
+
+#: ../src/settings.cpp:1797
+msgid "Rotate"
+msgstr "Forgatás"
+
+#: ../src/settings.cpp:1800
+msgid "Page turn angle"
+msgstr "Lapozás szöge"
+
+#: ../src/settings.cpp:1816
+msgid "Tap action"
+msgstr "Érintési művelet"
+
+#: ../src/settings.cpp:1818
+msgid "Long tap action"
+msgstr "Hosszú érintés művelet"
+
+#: ../src/settings.cpp:1822
+msgid "Height of the upper tap zone"
+msgstr "Felső érintési terület magassága"
+
+#: ../src/settings.cpp:1825
+msgid "Height of the middle tap zone"
+msgstr "Középső érintési terület magassága"
+
+#: ../src/settings.cpp:1828
+msgid "Width of the left tap zone"
+msgstr "Bal oldali érintési terület szélessége"
+
+#: ../src/settings.cpp:1831
+msgid "Width of the middle tap zone"
+msgstr "Jobb oldali érintési terület szélessége"
+
+#: ../src/settings.cpp:1835
+msgid "Page Turn Swipes"
+msgstr "Lapozás csúsztatással"
+
+#: ../src/settings.cpp:1838
+msgid "Front Light Swipes"
+msgstr "Háttérvilágítás beállítása"
+
+#: ../src/settings.cpp:1842
+msgid "Pinch zoom"
+msgstr "Kétujjas nagyítás"
+
+#: ../src/settings.cpp:1860
+msgid "Style settings"
+msgstr "Stílus beállítása"
+
+#: ../src/settings.cpp:1865
+msgid "Document embedded styles"
+msgstr "Dokumentumba ágyazott stílusok"
+
+#: ../src/settings.cpp:1884 ../src/viewdlg.cpp:601
+msgid "Clear cache"
+msgstr "Gyorsítótár ürítése"
+
+#: ../src/settings.cpp:1892 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+msgid "OTA Update"
+msgstr "OTA frissítés"
+
+#: ../src/settings.cpp:1899 ../src/viewdlg.cpp:600
+msgid "OTA Update Dev"
+msgstr "OTA frissítés fejlesztőknek"
+
+#: ../src/settings.cpp:1922
+msgid ""
+"Press $1 to change option\n"
+"$2 to apply, $3 to cancel"
+msgstr ""
+"$1 beállítás módosítása\n"
+"$2 elfogadás, $3 mégse"
+
+#: ../src/viewdlg.cpp:159
+msgid "No dictionaries found"
+msgstr "Nem található szótár"
+
+#: ../src/viewdlg.cpp:160
+msgid "Place dictionaries to directory 'dict' of SD card."
+msgstr "Helyezz szótárakat a SD kártya 'dict' mappájába!"
+
+#: ../src/viewdlg.cpp:161
+msgid "Dictionaries in standard unix .dict format are supported."
+msgstr "A szabványos .dict kiterjesztésű szótárak támogatottak."
+
+#: ../src/viewdlg.cpp:162
+msgid ""
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Minden szótár esetében két fájlra van szükség: az adatfájlra (aminek a "
+"kiterjesztése .dict vagy .dict.dz) és az indexfájlra (aminek a "
+"kiterjesztése .index)"
+
+#: ../src/viewdlg.cpp:176
+msgid "Table of contents"
+msgstr "Tartalomjegyzék"
+
+#: ../src/viewdlg.cpp:181
+msgid "Enter page number"
+msgstr "Add meg az oldalszámot"
+
+#: ../src/viewdlg.cpp:194
+msgid "Enter position percent"
+msgstr "Add meg a százalékot"
+
+#: ../src/viewdlg.cpp:355
+msgid "Find in dictionary"
+msgstr "Keresés szótárban"
+
+#: ../src/viewdlg.cpp:485
+msgid "M"
+msgstr "M"
+
+#: ../src/viewdlg.cpp:487
+msgid "Ok"
+msgstr "Ok"
+
+#: ../src/viewdlg.cpp:489
+msgid "Up"
+msgstr "Fel"
+
+#: ../src/viewdlg.cpp:491
+msgid "Down"
+msgstr "Le"
+
+#: ../src/viewdlg.cpp:493
+msgid "C"
+msgstr "C"
+
+#: ../src/viewdlg.cpp:495
+msgctxt "Key"
+msgid "Left"
+msgstr "Balra igazítás"
+
+#: ../src/viewdlg.cpp:497
+msgctxt "Key"
+msgid "Right"
+msgstr "Jobbra igazítás"
+
+#: ../src/viewdlg.cpp:499
+msgid "Side Up"
+msgstr "Felső oldal"
+
+#: ../src/viewdlg.cpp:501
+msgid "Side Down"
+msgstr "Alsó oldal"
+
+#: ../src/viewdlg.cpp:503
+msgid "Side Press"
+msgstr "Oldal érintése"
+
+#: ../src/viewdlg.cpp:505
+msgid "Menu"
+msgstr "Menü"
+
+#: ../src/viewdlg.cpp:507
+msgid "Zoom"
+msgstr "Zoom"
+
+#: ../src/viewdlg.cpp:518
+msgid "Long"
+msgstr "Hosszú"
+
+#: ../src/viewdlg.cpp:525
+msgid "To first page"
+msgstr "Első oldalra"
+
+#: ../src/viewdlg.cpp:527
+msgid "Back by page"
+msgstr "Vissza oldalanként"
+
+#: ../src/viewdlg.cpp:529
+msgid "Forward by page"
+msgstr "Előre oldalanként"
+
+#: ../src/viewdlg.cpp:530
+msgid "Forward in move history"
+msgstr "Előre a lépéselőzményekben"
+
+#: ../src/viewdlg.cpp:531
+msgid "Back in move history"
+msgstr "Vissza a lépéselőzményekben"
+
+#: ../src/viewdlg.cpp:532
+msgid "Next link"
+msgstr "Következő hivatkozás"
+
+#: ../src/viewdlg.cpp:533
+msgid "Previous link"
+msgstr "Előző hivatkozás"
+
+#: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
+msgid "Go to link"
+msgstr "Ugrás hivatkozásra"
+
+#: ../src/viewdlg.cpp:535
+msgid "To last page"
+msgstr "Utolsó oldalra"
+
+#: ../src/viewdlg.cpp:536
+msgid "Go to position"
+msgstr "Ugrás pozícióra"
+
+#: ../src/viewdlg.cpp:538
+msgid "Zoom in"
+msgstr "Nagyítás"
+
+#: ../src/viewdlg.cpp:539
+msgid "Zoom out"
+msgstr "Kicsinyítés"
+
+#: ../src/viewdlg.cpp:540
+msgid "Toggle bold text"
+msgstr "Félkövér szöveg"
+
+#: ../src/viewdlg.cpp:541
+msgid "Toggle text format"
+msgstr "Szövegformátum váltása"
+
+#: ../src/viewdlg.cpp:542
+msgid "Save bookmark by number"
+msgstr "Könyvjelző mentése szám alapján"
+
+#: ../src/viewdlg.cpp:543
+msgid "Go to bookmark by number"
+msgstr "Ugrás könyvjelzőre szám alapján"
+
+#: ../src/viewdlg.cpp:544
+msgid "Move by chapter"
+msgstr "Mozgás fejezetenként"
+
+#: ../src/viewdlg.cpp:545
+msgid "First link"
+msgstr "Első hivatkozás"
+
+#: ../src/viewdlg.cpp:546
+msgid "Rotate by"
+msgstr "Forgatás"
+
+#: ../src/viewdlg.cpp:547
+msgid "Set rotate angle"
+msgstr "Forgatás szögének beállítása"
+
+#: ../src/viewdlg.cpp:548
+msgid "Save history and bookmarks"
+msgstr "Előzmények és könyvjelzők mentése"
+
+#: ../src/viewdlg.cpp:549
+msgid "Save document to cache"
+msgstr "Dokumentum mentése gyorsítótárba"
+
+#: ../src/viewdlg.cpp:550
+msgid "Close dialog"
+msgstr "Bezárás"
+
+#: ../src/viewdlg.cpp:553
+msgid "Scroll forward"
+msgstr "Görgetés előre"
+
+#: ../src/viewdlg.cpp:554
+msgid "Scroll back"
+msgstr "Görgetés vissza"
+
+#: ../src/viewdlg.cpp:555
+msgid "Close book"
+msgstr "Könyv bezárása"
+
+#: ../src/viewdlg.cpp:556
+msgid "Main menu"
+msgstr "Főmenü"
+
+#: ../src/viewdlg.cpp:557
+msgid "Go to page dialog"
+msgstr "Ugrás"
+
+#: ../src/viewdlg.cpp:558
+msgid "Settings menu"
+msgstr "Beállítások menü"
+
+#: ../src/viewdlg.cpp:559
+msgid "Font size settings"
+msgstr "Betűméret beállítása"
+
+#: ../src/viewdlg.cpp:560
+msgid "Page orientation settings"
+msgstr "Oldaltájolás beállítása"
+
+#: ../src/viewdlg.cpp:565
+msgid "Find in Dictionary (T5)"
+msgstr "Keresés a szótárban (F5)"
+
+#: ../src/viewdlg.cpp:567
+msgid "Bookmark list"
+msgstr "Könyvjelzőlista"
+
+#: ../src/viewdlg.cpp:568
+msgid "Citations list"
+msgstr "Idézetek listája"
+
+#: ../src/viewdlg.cpp:569
+msgid "Go to bookmark..."
+msgstr "Ugrás könyvjelzőre..."
+
+#: ../src/viewdlg.cpp:570
+msgid "Recent books list"
+msgstr "Legutóbbi könyvek listája"
+
+#: ../src/viewdlg.cpp:571
+msgid "Open recent book by number"
+msgstr "Legutóbbi könyv megnyitása szám alapján"
+
+#: ../src/viewdlg.cpp:572
+msgid "Switch to recent book"
+msgstr "Váltás a legutóbbi könyvre"
+
+#: ../src/viewdlg.cpp:575
+msgid "Search dialog"
+msgstr "Keresés"
+
+#: ../src/viewdlg.cpp:576
+msgid "Find in Dictionary (virtual keyboard)"
+msgstr "Keresés a szótárban (virtuális billentyűzet)"
+
+#: ../src/viewdlg.cpp:577
+msgid "Next keyboard layout"
+msgstr "Következő billentyűzetkiosztás"
+
+#: ../src/viewdlg.cpp:578
+msgid "Previous keyboard layout"
+msgstr "Előző billentyűzetkiosztás"
+
+#: ../src/viewdlg.cpp:579
+msgid "Show manual"
+msgstr "Útmutató megjelenítése"
+
+#: ../src/viewdlg.cpp:580
+msgid "Show key mapping"
+msgstr " Billentyű-hozzárendelés megjelenítése"
+
+#: ../src/viewdlg.cpp:581
+msgid "Go to percent..."
+msgstr "Ugrás százalékra..."
+
+#: ../src/viewdlg.cpp:586
+msgid "Front light"
+msgstr "Háttérvilágítás"
+
+#: ../src/viewdlg.cpp:587
+msgid "Invert display"
+msgstr "Kijelző invertálása"
+
+#: ../src/viewdlg.cpp:588
+msgid "Full screen update"
+msgstr "Teljes képernyős frissítés"
+
+#: ../src/viewdlg.cpp:589
+msgid "Toggle status bar"
+msgstr "Állapotsáv"
+
+#: ../src/viewdlg.cpp:592
+msgid "Enter standby mode"
+msgstr "Készenléti módra váltás"
+
+#: ../src/viewdlg.cpp:594
+msgid "Tasks list"
+msgstr "Feladatlista"
+
+#: ../src/viewdlg.cpp:596
+msgid "Toggle system panel"
+msgstr "Rendszerpanel"
+
+#: ../src/viewdlg.cpp:598
+msgid "Lock device"
+msgstr "Eszköz zárolása"
+
+#: ../src/viewdlg.cpp:603
+msgid "Open system panel"
+msgstr "Rendszerpanel megnyitása"
+
+#: ../src/viewdlg.cpp:604
+msgid "Toggle front light"
+msgstr "Háttérvilágítás váltása"
+
+#: ../src/viewdlg.cpp:607
+msgid "PocketBook Main menu"
+msgstr "PocketBook főmenü"
+
+#: ../src/viewdlg.cpp:609
+msgid "Unknown command"
+msgstr "Ismeretlen parancs"
+
+#: ../src/viewdlg.cpp:616
+msgid "Previous Page"
+msgstr "Előző oldal"
+
+#: ../src/viewdlg.cpp:618
+msgid "Next Page"
+msgstr "Következő oldal"
+
+#: ../src/viewdlg.cpp:620
+msgid "Back by 10 Pages"
+msgstr "Vissza 10 oldallal"
+
+#: ../src/viewdlg.cpp:622
+msgid "Forward by 10 Pages"
+msgstr "Előre 10 oldallal"
+
+#: ../src/viewdlg.cpp:624
+msgid "Next Chapter"
+msgstr "Következő fejezet"
+
+#: ../src/viewdlg.cpp:626
+msgid "Previous Chapter"
+msgstr "Előző fejezet"
+
+#: ../src/viewdlg.cpp:628
+msgid "Add Bookmark"
+msgstr "Könyvjelző hozzáadása"
+
+#: ../src/viewdlg.cpp:630
+msgid "Rotate Clockwise"
+msgstr "Forgatás jobbra"
+
+#: ../src/viewdlg.cpp:632
+msgid "Rotate Anti-Clockwise"
+msgstr "Forgatás balra"
+
+#: ../src/viewdlg.cpp:634
+msgid "Portrait View"
+msgstr "Álló nézet"
+
+#: ../src/viewdlg.cpp:636
+msgid "Landscape View"
+msgstr "Fekvő nézet"
+
+#: ../src/viewdlg.cpp:660
+msgid "Key"
+msgstr "Kulcs"
+
+#: ../src/viewdlg.cpp:660
+msgid "Assigned function"
+msgstr "Hozzárendelt funkció"
+
+#: ../src/ota_update.cpp:151
+msgid ""
+"Download successful!\n"
+"CoolReader will restart itself."
+msgstr ""
+"Sikeres letöltés!\n"
+"A CoolReader hamarosan újraindítja magát."
+
+#: ../src/ota_update.cpp:152
+msgid "OK"
+msgstr "OK"
+
+#: ../src/ota_update.cpp:161
+msgid "Downloading... (2nd Method)"
+msgstr "Letöltés... (2. módszer)"
+
+#: ../src/ota_update.cpp:172
+msgid "Couldn't download the update package!"
+msgstr "A frissítési csomag letöltése nem sikerült!"
+
+#: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
+#: ../src/ota_update.cpp:328
+msgid "Downloading..."
+msgstr "Letöltés..."
+
+#: ../src/ota_update.cpp:235
+msgid "Couldn't remove existing package!"
+msgstr "Nem sikerült a létező csomag eltávolítása!"
+
+#: ../src/ota_update.cpp:272
+msgid "Couldn't connect to the network!"
+msgstr "Nem sikerült kapcsolódni a hálózathoz!"
+
+#: ../src/ota_update.cpp:278 ../src/ota_update.cpp:294
+#: ../src/ota_update.cpp:307
+msgid "Searching..."
+msgstr "Keresés..."
+
+#: ../src/ota_update.cpp:285
+msgid "You have the latest version."
+msgstr "Már a legújabb verzióval rendelkezel."
+
+#: ../src/ota_update.cpp:317
+msgid ""
+"Update is not available for your device!\n"
+"Device model: "
+msgstr ""
+"Nem érhető el frissítés a készülékedhez!\n"
+"A készülék típusa:"
+
+#: ../src/ota_update.cpp:339
+msgid "Failed updating!"
+msgstr "Sikertelen frissítés!"
+
+#: ../src/pb_toc.cpp:21
+msgid "Contents"
+msgstr "Tartalom"
+
+#: ../src/cr3pocketbook.cpp:2409
+msgid "Cache cleared."
+msgstr "Gyorsítótár törölve."
+
+#: ../src/cr3pocketbook.cpp:2414
+msgid "Unable to list the directory contents!"
+msgstr "A könyvtár tartalmának listázása nem sikerült!"
+
+#: ../src/cr3pocketbook.cpp:2420
+msgid "Unable to clear cache!"
+msgstr "A gyorsítótár törlése nem sikerült!"
+
+#: ../src/cr3pocketbook.cpp:3938
+msgid "Press $1 to translate"
+msgstr "Nyomj $1 a fordításhoz"
+
+#: ../src/cr3pocketbook.cpp:5029
+msgid "Updated to v"
+msgstr "Frissítve erre: v"
+
+#: ../src/cr3pocketbook.cpp:5190
+msgid "Untitled"
+msgstr "Névtelen"
+
+#: ../src/cr3pocketbook.cpp:5517
+msgid "Custom system theme applied. CR3 will now restart."
+msgstr "Az egyedi rendszertéma alkalmazásra került. A CR3 most újraindul."
+
+#: ../src/cr3pocketbook.cpp:5580
+msgid "Restored default system theme. CR3 will now restart."
+msgstr ""
+"Az alapértelmezett rendszertéma visszaállításra került. A CR3 most újraindul."
