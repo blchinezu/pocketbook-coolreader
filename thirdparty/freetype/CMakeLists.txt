@@ -58,6 +58,16 @@
 #
 # . `CMakeLists.txt' is provided as-is since it is normally not used by the
 #   developer team.
+#
+# . If you want to disable the automatic generation of the distribution
+#   targets, add the `-D FREETYPE_NO_DIST=true' command line argument.
+#
+# . Set the `WITH_ZLIB', `WITH_BZip2', `WITH_PNG', and `WITH_HarfBuzz'
+#   CMake variables to `ON' or `OFF' to force or skip using a dependency.
+#   Leave a variable undefined (which is the default) to use the dependency
+#   only if it is available.  Example:
+#
+#     cmake ... -DWITH_ZLIB=ON -DWITH_HarfBuzz=OFF ...
 
 
 cmake_minimum_required(VERSION 2.6)
@@ -100,13 +110,13 @@ else ()
   endif ()
 endif ()
 
-if (WIN32 AND BUILD_SHARED_LIBS)
-  message(FATAL_ERROR "Shared libraries not supported on Windows.")
-endif ()
-
 
 project(freetype)
 
+
+if (WIN32 AND NOT MINGW AND BUILD_SHARED_LIBS)
+  message(FATAL_ERROR "Building shared libraries on Windows needs MinGW")
+endif ()
 
 # Disallow in-source builds
 if ("${PROJECT_BINARY_DIR}" STREQUAL "${PROJECT_SOURCE_DIR}")
@@ -124,7 +134,7 @@ endif ()
 
 
 # Add local cmake modules
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/builds)
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/builds/cmake)
 
 
 if (BUILD_FRAMEWORK)
@@ -139,7 +149,7 @@ endif ()
 
 set(VERSION_MAJOR "2")
 set(VERSION_MINOR "6")
-set(VERSION_PATCH "1")
+set(VERSION_PATCH "2")
 
 set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 set(SHARED_LIBRARY_VERSION ${VERSION_MAJOR}.${VERSION_MINOR})
@@ -150,10 +160,21 @@ add_definitions(-DFT2_BUILD_LIBRARY)
 
 
 # Find dependencies
-find_package(ZLIB)
-find_package(BZip2)
-find_package(PNG)
-find_package(HarfBuzz)
+foreach (d ZLIB BZip2 PNG HarfBuzz)
+  string(TOUPPER "${d}" D)
+
+  if (DEFINED WITH_${d} OR DEFINED WITH_${D})
+    if (WITH_${d} OR WITH_${D})
+      find_package(${d} QUIET REQUIRED)
+    endif ()
+  else ()
+    find_package(${d} QUIET)
+  endif ()
+
+  if (${d}_FOUND OR ${D}_FOUND)
+    message(STATUS "Building with ${d}")
+  endif()
+endforeach ()
 
 
 message(STATUS
@@ -299,6 +320,7 @@ if (BUILD_FRAMEWORK)
   )
 endif ()
 
+set(CMAKE_DEBUG_POSTFIX d)
 
 add_library(freetype
   ${PUBLIC_HEADERS}
@@ -329,28 +351,32 @@ if (BUILD_FRAMEWORK)
   )
 endif ()
 
-
-if (MSVC)
-  set_target_properties(freetype PROPERTIES
-    COMPILE_FLAGS /Fd"$(IntDir)$(TargetName).pdb")
+if (NOT CMAKE_VERSION VERSION_LESS 2.8.11)
+  target_include_directories(freetype
+    PUBLIC $<INSTALL_INTERFACE:include/freetype2>)
 endif ()
 
+if (CMAKE_VERSION VERSION_LESS 2.8.12)
+  set(MAYBE_PRIVATE "")
+else ()
+  set(MAYBE_PRIVATE "PRIVATE")
+endif ()
 
 if (ZLIB_FOUND)
-  target_link_libraries(freetype ${ZLIB_LIBRARIES})
+  target_link_libraries(freetype ${MAYBE_PRIVATE} ${ZLIB_LIBRARIES})
   include_directories(${ZLIB_INCLUDE_DIRS})
 endif ()
 if (BZIP2_FOUND)
-  target_link_libraries(freetype ${BZIP2_LIBRARIES})
+  target_link_libraries(freetype ${MAYBE_PRIVATE} ${BZIP2_LIBRARIES})
   include_directories(${BZIP2_INCLUDE_DIR}) # not BZIP2_INCLUDE_DIRS
 endif ()
 if (PNG_FOUND)
   add_definitions(${PNG_DEFINITIONS})
-  target_link_libraries(freetype ${PNG_LIBRARIES})
+  target_link_libraries(freetype ${MAYBE_PRIVATE} ${PNG_LIBRARIES})
   include_directories(${PNG_INCLUDE_DIRS})
 endif ()
 if (HARFBUZZ_FOUND)
-  target_link_libraries(freetype ${HARFBUZZ_LIBRARIES})
+  target_link_libraries(freetype ${MAYBE_PRIVATE} ${HARFBUZZ_LIBRARIES})
   include_directories(${HARFBUZZ_INCLUDE_DIRS})
 endif ()
 
@@ -369,10 +395,15 @@ install(FILES
   DESTINATION include/freetype2/freetype/config
 )
 install(TARGETS freetype
+  EXPORT freetype-targets
   RUNTIME DESTINATION bin
   LIBRARY DESTINATION lib
   ARCHIVE DESTINATION lib
   FRAMEWORK DESTINATION Library/Frameworks
+)
+install(EXPORT freetype-targets
+  DESTINATION lib/cmake/freetype
+  FILE freetype-config.cmake
 )
 
 
@@ -397,8 +428,9 @@ set(CPACK_GENERATOR TGZ)
 include(CPack)
 
 
-# add make dist target
-add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
-
+# Add `make dist' target if FREETYPE_DIST is set (which is the default)
+if (NOT DEFINED FREETYPE_NO_DIST)
+  add_custom_target(dist COMMAND ${CMAKE_MAKE_PROGRAM} package_source)
+endif ()
 
 # eof

@@ -2,15 +2,15 @@
 # This file is put in the public domain.
 #
 # Translators:
-# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
-# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
+# gyeben <gyonkibendeguz@gmail.com>, 2015
+# gyeben <gyonkibendeguz@gmail.com>, 2015
 # László Andrássy <andrassy.laszlo@gmail.com>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-11-10 11:36+0000\n"
+"PO-Revision-Date: 2015-11-11 08:17+0000\n"
 "Last-Translator: László Andrássy <andrassy.laszlo@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/hu/)\n"
@@ -1231,11 +1231,11 @@ msgstr "Előreformázott szöveg"
 
 #: ../src/settings.cpp:1608
 msgid "Space condensing percent"
-msgstr "Térköz sűrítési arány"
+msgstr "Szóközméret-csökkentés százaléka"
 
 #: ../src/settings.cpp:1611
 msgid "Space expanding percent"
-msgstr "Térköz ritkítási arány"
+msgstr "Szóközméret-növelés százaléka"
 
 #: ../src/settings.cpp:1614
 msgid "Floating punctuation"
@@ -1598,7 +1598,7 @@ msgstr "Kicsinyítés"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
-msgstr "Félkövér szöveg"
+msgstr "Félkövér szöveg be/ki"
 
 #: ../src/viewdlg.cpp:541
 msgid "Toggle text format"
@@ -1734,7 +1734,7 @@ msgstr "Háttérvilágítás"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr "Kijelző invertálása"
+msgstr "Inverz megjelenítés"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
@@ -1742,7 +1742,7 @@ msgstr "Teljes képernyős frissítés"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
-msgstr "Állapotsáv"
+msgstr "Állapotsáv be/ki"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
@@ -1754,7 +1754,7 @@ msgstr "Feladatlista"
 
 #: ../src/viewdlg.cpp:596
 msgid "Toggle system panel"
-msgstr "Rendszerpanel"
+msgstr "Rendszerpanel be/ki"
 
 #: ../src/viewdlg.cpp:598
 msgid "Lock device"
@@ -1766,7 +1766,7 @@ msgstr "Rendszerpanel megnyitása"
 
 #: ../src/viewdlg.cpp:604
 msgid "Toggle front light"
-msgstr "Háttérvilágítás váltása"
+msgstr "Háttérvilágítás  be/ki"
 
 #: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"

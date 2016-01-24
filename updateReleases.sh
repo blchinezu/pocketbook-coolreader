@@ -222,20 +222,20 @@ elif [ "$1" = "publish" ]; then
 		done
 	done
 
-	# Wait for dropbox to catch on
-	echo
-	echo " - Wait for dropbox to catch on..."
-	sleep 2s
-	while [ "`dropbox status|grep "Up to date"`" = "" ]; do
-		sleep 1s
-	done
+	# # Wait for dropbox to catch on
+	# echo
+	# echo " - Wait for dropbox to catch on..."
+	# sleep 2s
+	# while [ "`dropbox status|grep "Up to date"`" = "" ]; do
+	# 	sleep 1s
+	# done
 
-	# RELOAD DROPBOX
-	sleep 1s
-	echo " - Restart dropbox"
-	dropbox stop
-	sleep 1s
-	dropbox start
+	# # RELOAD DROPBOX
+	# sleep 1s
+	# echo " - Restart dropbox"
+	# dropbox stop
+	# sleep 1s
+	# dropbox start
 
 	# COMMIT GIT
 	cd "$sdk"
