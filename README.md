@@ -132,6 +132,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
     mkdir -p ~/PBDEV/sources ~/PBDEV/releases/coolreader3/dev
 
     # download CR3 source
+    # (if you symlink this dir cmake will crash!)
     git clone https://github.com/blchinezu/pocketbook-coolreader.git ~/PBDEV/sources/cr3-fork
 
 --------------------------------------------------------------------------------
