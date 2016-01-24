@@ -2,8 +2,8 @@
 # This file is put in the public domain.
 #
 # Translators:
-# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
-# Bendegúz Gyönki <gyonkibendeguz@gmail.com>, 2015
+# gyeben <gyonkibendeguz@gmail.com>, 2015
+# gyeben <gyonkibendeguz@gmail.com>, 2015
 # László Andrássy <andrassy.laszlo@gmail.com>, 2015
 msgid ""
 msgstr ""

@@ -1,32 +1,36 @@
-# Translation for CoolReader3
+# SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# LVE <vadim.lopatin@coolreader.org>, 2009.
-# Zlatko Petkov <zlpetkov@gmail.com>, 2011.
 #
+# Translators:
+# LVE <vadim.lopatin@coolreader.org>, 2009
+# Zlatko Petkov <zlpetkov@gmail.com>, 2011
+# Иван Пенев <aeternus.arcis@gmail.com>, 2015-2016
 msgid ""
 msgstr ""
-"Project-Id-Version: cr3 3.0.17\n"
+"Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2011-05-08 16:04+0700\n"
-"Last-Translator: Zlatko Petkov <zlpetkov@gmail.com>\n"
-"Language-Team: Bulgarian\n"
-"Language: \n"
+"PO-Revision-Date: 2016-01-12 08:56+0000\n"
+"Last-Translator: Иван Пенев <aeternus.arcis@gmail.com>\n"
+"Language-Team: Bulgarian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/bg/)\n"
+"Language: bg\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
-msgstr "Избор на предходен/следващ параграф"
+msgstr "Избор на предходен/следващ абзац"
 
 #: ../src/citedlg.cpp:197
 msgid "Select one more paragraph"
-msgstr "Избор на още един параграф"
+msgstr "Избор на още един абзац"
 
 #: ../src/citedlg.cpp:200
 msgid "Deselect paragraph"
-msgstr "Демаркиране на параграф"
+msgstr "Демаркиране на абзаца"
 
 #: ../src/citedlg.cpp:203
 msgid "Select one more phrase"
@@ -70,7 +74,7 @@ msgstr "Преход към страница"
 
 #: ../src/mainwnd.cpp:899 ../src/recentdlg.cpp:115
 msgid "Open recent book"
-msgstr "Последно четени книги"
+msgstr "Отваряне на последно четена книга"
 
 #: ../src/mainwnd.cpp:905 ../src/viewdlg.cpp:164
 msgid "Dictionary"
@@ -82,7 +86,7 @@ msgstr "Цитати"
 
 #: ../src/mainwnd.cpp:914 ../src/bmkdlg.cpp:182
 msgid "Bookmarks"
-msgstr "Отбелязки"
+msgstr "Отметки"
 
 #: ../src/mainwnd.cpp:918 ../src/viewdlg.cpp:221
 msgid "Search"
@@ -94,7 +98,7 @@ msgstr "Настройки"
 
 #: ../src/mainwnd.cpp:931 ../src/viewdlg.cpp:672
 msgid "Keyboard layout"
-msgstr "Функции на клавишите"
+msgstr "Клавиатурна подредба"
 
 #: ../src/mainwnd.cpp:938
 msgid ""
@@ -130,7 +134,7 @@ msgstr "Текуща глава"
 
 #: ../src/mainwnd.cpp:1057
 msgid "Status"
-msgstr "Статус"
+msgstr "Състояние"
 
 #: ../src/mainwnd.cpp:1060
 msgid "Archive name"
@@ -165,7 +169,6 @@ msgid "File info"
 msgstr "Информация за файла"
 
 #: ../src/mainwnd.cpp:1070
-#, fuzzy
 msgctxt "Book"
 msgid "Title"
 msgstr "Заглавие"
@@ -192,7 +195,7 @@ msgstr "Жанрове"
 
 #: ../src/mainwnd.cpp:1076
 msgid "Language"
-msgstr ""
+msgstr "Език"
 
 #: ../src/mainwnd.cpp:1077
 msgid "Translator"
@@ -200,11 +203,11 @@ msgstr "Преводач"
 
 #: ../src/mainwnd.cpp:1078
 msgid "Source language"
-msgstr ""
+msgstr "Първичен език"
 
 #: ../src/mainwnd.cpp:1079
 msgid "Book info"
-msgstr "Допълнителна информация"
+msgstr "Информация за книгата"
 
 #: ../src/mainwnd.cpp:1082
 msgid "Document author"
@@ -216,7 +219,7 @@ msgstr "Дата на документа"
 
 #: ../src/mainwnd.cpp:1084
 msgid "Document source URL"
-msgstr "Източник"
+msgstr "Адрес на източника"
 
 #: ../src/mainwnd.cpp:1085
 msgid "OCR by"
@@ -228,15 +231,15 @@ msgstr "Версия"
 
 #: ../src/mainwnd.cpp:1087
 msgid "Change history"
-msgstr "Напред в историята на преместване"
+msgstr "История на промените"
 
 #: ../src/mainwnd.cpp:1088
 msgid "ID"
-msgstr ""
+msgstr "Номер"
 
 #: ../src/mainwnd.cpp:1089
 msgid "Program used"
-msgstr ""
+msgstr "Използвана програма"
 
 #: ../src/mainwnd.cpp:1090
 msgid "Document info"
@@ -260,11 +263,11 @@ msgstr "Година"
 
 #: ../src/mainwnd.cpp:1097
 msgid "ISBN"
-msgstr "ISBN"
+msgstr "МСНК"
 
 #: ../src/mainwnd.cpp:1098
 msgid "Publication info"
-msgstr "Публикация"
+msgstr "Информация"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
@@ -272,16 +275,15 @@ msgstr "Допълнителна информация"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
-msgstr "CoolReader за PocketBook"
+msgstr "CoolReader за Покетбук"
 
 #: ../src/mainwnd.cpp:1105
 msgid "Build date"
 msgstr "Дата на създаване"
 
 #: ../src/mainwnd.cpp:1106
-#, fuzzy
 msgid "Build type"
-msgstr "Дата на създаване"
+msgstr "Тип на строежа"
 
 #: ../src/mainwnd.cpp:1107
 msgid "About program"
@@ -289,21 +291,19 @@ msgstr "За програмата"
 
 #: ../src/mainwnd.cpp:1110
 msgid "Hardware type"
-msgstr ""
+msgstr "Тип на хардуера"
 
 #: ../src/mainwnd.cpp:1111
-#, fuzzy
 msgid "Firmware version"
-msgstr "Версия"
+msgstr "Версия на прошивка"
 
 #: ../src/mainwnd.cpp:1112
-#, fuzzy
 msgid "Keyboard type"
-msgstr "Функции на клавишите"
+msgstr "Тип на клавиатурата"
 
 #: ../src/mainwnd.cpp:1113
 msgid "Screen type"
-msgstr ""
+msgstr "Тип на екрана"
 
 #: ../src/mainwnd.cpp:1114
 msgid "Config file"
@@ -319,7 +319,7 @@ msgstr ""
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
-msgstr ""
+msgstr "Информация за грешки"
 
 #: ../src/mainwnd.cpp:1268
 msgid "Loading: please wait..."
@@ -327,7 +327,7 @@ msgstr "Зареждане: моля, почакайте..."
 
 #: ../src/recentdlg.cpp:97
 msgid "Open book"
-msgstr "Отворете книгата"
+msgstr "Отваряне на книгата"
 
 #: ../src/recentdlg.cpp:98
 msgid "Delete record"
@@ -359,35 +359,35 @@ msgstr "Страница $1 ($2%)"
 
 #: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
 msgid "Go to bookmark"
-msgstr "Преход към отбелязка по номер"
+msgstr "Отиване до отметка"
 
 #: ../src/bmkdlg.cpp:72
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
 msgstr ""
-"Късо натискане $1 - преход към отбелязка,\n"
-"$2 - задаване на отбелязки"
+"Кратко натискане на $1 - преход към отметка,\n"
+"$2 - режим на задаване на отметки"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
 msgstr ""
-"Късо натискане $1 - преход към отбелязка,\n"
-"Дълго натискане - поставяне на отбелязка"
+"Кратко натискане на $1 - преход към отметка,\n"
+"Дълго натискане - поставяне на отметка"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
-msgstr "Поставяне на отбелязка"
+msgstr "Поставяне на отметка"
 
 #: ../src/bmkdlg.cpp:80
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
 msgstr ""
-"$1 - поставяне на отбелязка,\n"
-"$2 - режим на преход към отбелязки"
+"$1 - поставяне на отметка,\n"
+"$2 - режим на преход към отметки"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
@@ -399,7 +399,7 @@ msgstr ""
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
-msgstr "Изтрване на отбелязка"
+msgstr "Изтриване на отметка"
 
 #: ../src/bmkdlg.cpp:316
 msgid "Go to citation"
@@ -435,7 +435,7 @@ msgstr "Функции на клавишите"
 
 #: ../src/settings.cpp:388
 msgid "(No action)"
-msgstr ""
+msgstr "(Без действие)"
 
 #: ../src/settings.cpp:541
 msgid "[Command is not assigned]"
@@ -471,287 +471,273 @@ msgstr "За миг бях в чужд, скърцащ плюшен фотьой
 
 #: ../src/settings.cpp:832
 msgid "Justify"
-msgstr ""
+msgstr "Двустранно"
 
 #: ../src/settings.cpp:833
-#, fuzzy
 msgctxt "CSS"
 msgid "Left"
-msgstr "Наляво"
+msgstr "Отляво"
 
 #: ../src/settings.cpp:834
 msgid "Center"
-msgstr ""
+msgstr "Центрирано"
 
 #: ../src/settings.cpp:835
-#, fuzzy
 msgctxt "CSS"
 msgid "Right"
-msgstr "Надясно"
+msgstr "Отдясно"
 
 #: ../src/settings.cpp:841
 msgid "No indent"
-msgstr ""
+msgstr "Без отстъп"
 
 #: ../src/settings.cpp:842
 msgid "Small indent"
-msgstr ""
+msgstr "Малък отстъп"
 
 #: ../src/settings.cpp:843
 msgid "Big indent"
-msgstr ""
+msgstr "Голям отстъп"
 
 #: ../src/settings.cpp:844
 msgid "Small outdent"
-msgstr ""
+msgstr "Малък външен отстъп"
 
 #: ../src/settings.cpp:845
 msgid "Big outdent"
-msgstr ""
+msgstr "Голям външен отстъп"
 
 #: ../src/settings.cpp:851
 msgid "[Default sans-serif font]"
-msgstr ""
+msgstr "[Шрифт без извивки по подразбиране]"
 
 #: ../src/settings.cpp:852
-#, fuzzy
 msgid "[Default serif font]"
-msgstr "Размер на шрифта"
+msgstr "[Шрифт с извивки по подразбиране]"
 
 #: ../src/settings.cpp:853
-#, fuzzy
 msgid "[Default monospace font]"
-msgstr "Шрифт"
+msgstr "[Равноширок шрифт по подразбиране]"
 
 #: ../src/settings.cpp:859
 msgid "Bigger (105%)"
-msgstr ""
+msgstr "По-голям (105%)"
 
 #: ../src/settings.cpp:860
 msgid "Bigger (110%)"
-msgstr ""
+msgstr "По-голям (110%)"
 
 #: ../src/settings.cpp:861
 msgid "Bigger (115%)"
-msgstr ""
+msgstr "По-голям (115%)"
 
 #: ../src/settings.cpp:862
 msgid "Bigger (120%)"
-msgstr ""
+msgstr "По-голям (120%)"
 
 #: ../src/settings.cpp:863
 msgid "Bigger (150%)"
-msgstr ""
+msgstr "По-голям (150%)"
 
 #: ../src/settings.cpp:864
 msgid "Smaller (95%)"
-msgstr ""
+msgstr "По-малък (95%)"
 
 #: ../src/settings.cpp:865
 msgid "Smaller (90%)"
-msgstr ""
+msgstr "По-малък (90%)"
 
 #: ../src/settings.cpp:866
 msgid "Smaller (85%)"
-msgstr ""
+msgstr "По-малък (85%)"
 
 #: ../src/settings.cpp:867
 msgid "Smaller (80%)"
-msgstr ""
+msgstr "По-малък (80%)"
 
 #: ../src/settings.cpp:868
 msgid "Smaller (70%)"
-msgstr ""
+msgstr "По-малък (70%)"
 
 #: ../src/settings.cpp:869
 msgid "Smaller (60%)"
-msgstr ""
+msgstr "По-малък (60%)"
 
 #: ../src/settings.cpp:875 ../src/settings.cpp:884 ../src/settings.cpp:1167
 #: ../src/settings.cpp:1173
 msgid "Normal"
-msgstr "Нормално"
+msgstr "Нормален"
 
 #: ../src/settings.cpp:876 ../src/settings.cpp:1174
 msgid "Bold"
 msgstr "Удебелен"
 
 #: ../src/settings.cpp:877
-#, fuzzy
 msgid "Bolder"
-msgstr "Удебелен"
+msgstr "По-удебелен"
 
 #: ../src/settings.cpp:878
-#, fuzzy
 msgid "Lighter"
-msgstr "Надясно"
+msgstr "Изтънен"
 
 #: ../src/settings.cpp:885
 msgid "Italic"
-msgstr ""
+msgstr "Наклонен"
 
 #: ../src/settings.cpp:920 ../src/settings.cpp:1094
 msgid "None"
-msgstr ""
+msgstr "Без"
 
 #: ../src/settings.cpp:921 ../src/settings.cpp:1096
 msgid "Underline"
-msgstr ""
+msgstr "Подчертан"
 
 #: ../src/settings.cpp:922
 msgid "Line through"
-msgstr ""
+msgstr "Зачертан"
 
 #: ../src/settings.cpp:923
 msgid "Overline"
 msgstr ""
 
 #: ../src/settings.cpp:929
-#, fuzzy
 msgid "Baseline"
-msgstr "Колонтитул"
+msgstr ""
 
 #: ../src/settings.cpp:930
 msgid "Subscript"
-msgstr ""
+msgstr "Долен индекс"
 
 #: ../src/settings.cpp:931
 msgid "Superscript"
-msgstr ""
+msgstr "Горен индекс"
 
 #: ../src/settings.cpp:937 ../src/settings.cpp:945
 msgid "Black"
-msgstr ""
+msgstr "Черно"
 
 #: ../src/settings.cpp:938 ../src/settings.cpp:946
 msgid "Gray"
-msgstr ""
+msgstr "Сиво"
 
 #: ../src/settings.cpp:939 ../src/settings.cpp:947
 msgid "White"
-msgstr ""
+msgstr "Бяло"
 
 #: ../src/settings.cpp:954 ../src/settings.cpp:965
 msgid "0.2 of line height"
-msgstr ""
+msgstr "0.2 от височината на реда"
 
 #: ../src/settings.cpp:955 ../src/settings.cpp:966
 msgid "0.3 of line height"
-msgstr ""
+msgstr "0.3 от височината на реда"
 
 #: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
 #: ../src/settings.cpp:992
 msgid "0.5 of line height"
-msgstr ""
+msgstr "0.5 от височината на реда"
 
 #: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
 #: ../src/settings.cpp:993
 msgid "1 line height"
-msgstr ""
+msgstr "1 височина на реда"
 
 #: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
 #: ../src/settings.cpp:995
 msgid "2 of line height"
-msgstr ""
+msgstr "2 височини на реда"
 
 #: ../src/settings.cpp:978 ../src/settings.cpp:994
 msgid "1.5 of line height"
-msgstr ""
+msgstr "1.5 от височината на реда"
 
 #: ../src/settings.cpp:980 ../src/settings.cpp:996
 msgid "4 of line height"
-msgstr ""
+msgstr "4 височини на реда"
 
 #: ../src/settings.cpp:981 ../src/settings.cpp:997
 msgid "5% of line width"
-msgstr ""
+msgstr "5% ширината на реда"
 
 #: ../src/settings.cpp:982 ../src/settings.cpp:998
 msgid "10% of line width"
-msgstr ""
+msgstr "10% ширината на реда"
 
 #: ../src/settings.cpp:983 ../src/settings.cpp:999
 msgid "15% of line width"
-msgstr ""
+msgstr "15% ширината на реда"
 
 #: ../src/settings.cpp:984 ../src/settings.cpp:1000
 msgid "20% of line width"
-msgstr ""
+msgstr "20% ширината на реда"
 
 #: ../src/settings.cpp:985 ../src/settings.cpp:1001
 msgid "30% of line width"
-msgstr ""
+msgstr "30% ширината на реда"
 
 #: ../src/settings.cpp:1004
-#, fuzzy
 msgid "Text alignment"
-msgstr "Следваща препратка"
+msgstr "Подравняване на текста"
 
 #: ../src/settings.cpp:1006
-#, fuzzy
 msgid "First line indent"
-msgstr "Първа препратка"
+msgstr "Отстъп на първия ред"
 
 #: ../src/settings.cpp:1009 ../src/settings.cpp:1658
-#, fuzzy
 msgid "Font face"
-msgstr "Fallback шрифт"
+msgstr "Шрифт"
 
 #: ../src/settings.cpp:1023
-#, fuzzy
 msgid "Font size"
 msgstr "Размер на шрифта"
 
 #: ../src/settings.cpp:1025 ../src/settings.cpp:1552 ../src/settings.cpp:1667
 msgid "Font weight"
-msgstr "Удебеляване"
+msgstr "Дебелина на шрифта"
 
 #: ../src/settings.cpp:1027
-#, fuzzy
 msgid "Font style"
-msgstr "Размер на шрифта"
+msgstr "Стил на шрифта"
 
 #: ../src/settings.cpp:1029 ../src/settings.cpp:1581
 msgid "Interline space"
-msgstr "Междуредов интервал"
+msgstr "Междуредово разстояние"
 
 #: ../src/settings.cpp:1031
 msgid "Letter spacing"
-msgstr ""
+msgstr "Междубуквено разстояние"
 
 #: ../src/settings.cpp:1033
-#, fuzzy
 msgid "Text decoration"
-msgstr "Изтриване на цитат"
+msgstr "Украшение на текста"
 
 #: ../src/settings.cpp:1035
-#, fuzzy
 msgid "Text vertical alignment"
-msgstr "Следваща препратка"
+msgstr "Вертикално подравняване на текста"
 
 #: ../src/settings.cpp:1037
 msgid "Text color"
-msgstr ""
+msgstr "Цвят на текста"
 
 #: ../src/settings.cpp:1039
 msgid "Background color"
-msgstr ""
+msgstr "Цвят на фона"
 
 #: ../src/settings.cpp:1041
 msgid "Margin before"
-msgstr ""
+msgstr "Поле преди"
 
 #: ../src/settings.cpp:1043
 msgid "Margin after"
-msgstr ""
+msgstr "Поле след"
 
 #: ../src/settings.cpp:1045
 msgid "Margin left"
-msgstr ""
+msgstr "Поле отляво"
 
 #: ../src/settings.cpp:1047
 msgid "Margin right"
-msgstr ""
+msgstr "Поле отдясно"
 
 #: ../src/settings.cpp:1075
 msgid "On for all fonts"
@@ -772,11 +758,11 @@ msgstr "Да"
 
 #: ../src/settings.cpp:1088
 msgid "AM/PM"
-msgstr ""
+msgstr "Преди обед / След обед"
 
 #: ../src/settings.cpp:1089
 msgid "24h"
-msgstr ""
+msgstr "24 часа"
 
 #: ../src/settings.cpp:1095
 msgid "Solid"
@@ -784,7 +770,7 @@ msgstr ""
 
 #: ../src/settings.cpp:1168
 msgid "Inverse"
-msgstr "Инверсно"
+msgstr "Противоположно"
 
 #: ../src/settings.cpp:1179
 msgid "One"
@@ -843,7 +829,6 @@ msgid "120%"
 msgstr "120%"
 
 #: ../src/settings.cpp:1203
-#, fuzzy
 msgid "125%"
 msgstr "125%"
 
@@ -852,7 +837,6 @@ msgid "130%"
 msgstr "130%"
 
 #: ../src/settings.cpp:1205
-#, fuzzy
 msgid "135%"
 msgstr "135%"
 
@@ -861,7 +845,6 @@ msgid "140%"
 msgstr "140%"
 
 #: ../src/settings.cpp:1207
-#, fuzzy
 msgid "145%"
 msgstr "145%"
 
@@ -910,18 +893,16 @@ msgid "Full updates every 6 pages"
 msgstr "Пълно опресняване на всеки 6 страници"
 
 #: ../src/settings.cpp:1299
-#, fuzzy
 msgid "Full updates every 7 pages"
-msgstr "Пълно опресняване на всеки 2 страници"
+msgstr "Пълно опресняване на всеки 7 страници"
 
 #: ../src/settings.cpp:1300
 msgid "Full updates every 8 pages"
 msgstr "Пълно опресняване на всеки 8 страници"
 
 #: ../src/settings.cpp:1301
-#, fuzzy
 msgid "Full updates every 9 pages"
-msgstr "Пълно опресняване на всеки 2 страници"
+msgstr "Пълно опресняване на всеки 9 страници"
 
 #: ../src/settings.cpp:1302
 msgid "Full updates every 10 pages"
@@ -932,39 +913,32 @@ msgid "Full updates every 14 pages"
 msgstr "Пълно опресняване на всеки 14 страници"
 
 #: ../src/settings.cpp:1304
-#, fuzzy
 msgid "Full updates every 20 pages"
-msgstr "Пълно опресняване на всеки 2 страници"
+msgstr "Пълно опресняване на всеки 20 страници"
 
 #: ../src/settings.cpp:1305
-#, fuzzy
 msgid "Full updates every 25 pages"
-msgstr "Пълно опресняване на всеки 2 страници"
+msgstr "Пълно опресняване на всеки 25 страници"
 
 #: ../src/settings.cpp:1306
-#, fuzzy
 msgid "Full updates every 30 pages"
-msgstr "Пълно опресняване на всеки 3 страници"
+msgstr "Пълно опресняване на всеки 30 страници"
 
 #: ../src/settings.cpp:1307
-#, fuzzy
 msgid "Full updates every 35 pages"
-msgstr "Пълно опресняване на всеки 3 страници"
+msgstr "Пълно опресняване на всеки 35 страници"
 
 #: ../src/settings.cpp:1308
-#, fuzzy
 msgid "Full updates every 40 pages"
-msgstr "Пълно опресняване на всеки 4 страници"
+msgstr "Пълно опресняване на всеки 40 страници"
 
 #: ../src/settings.cpp:1309
-#, fuzzy
 msgid "Full updates every 45 pages"
-msgstr "Пълно опресняване на всеки 4 страници"
+msgstr "Пълно опресняване на всеки 45 страници"
 
 #: ../src/settings.cpp:1310
-#, fuzzy
 msgid "Full updates every 50 pages"
-msgstr "Пълно опресняване на всеки 5 страници"
+msgstr "Пълно опресняване на всеки 50 страници"
 
 #: ../src/settings.cpp:1315
 msgid "Turbo mode disabled"
@@ -976,95 +950,95 @@ msgstr "Турбо-режимът е включен"
 
 #: ../src/settings.cpp:1321
 msgid "1 minute"
-msgstr ""
+msgstr "1 минута"
 
 #: ../src/settings.cpp:1322
 msgid "2 minutes"
-msgstr ""
+msgstr "2 минути"
 
 #: ../src/settings.cpp:1323
 msgid "3 minutes"
-msgstr ""
+msgstr "3 минути"
 
 #: ../src/settings.cpp:1324
 msgid "4 minutes"
-msgstr ""
+msgstr "4 минути"
 
 #: ../src/settings.cpp:1325
 msgid "5 minutes"
-msgstr ""
+msgstr "5 минути"
 
 #: ../src/settings.cpp:1326
 msgid "6 minutes"
-msgstr ""
+msgstr "6 минути"
 
 #: ../src/settings.cpp:1327
 msgid "7 minutes"
-msgstr ""
+msgstr "7 минути"
 
 #: ../src/settings.cpp:1328
 msgid "8 minutes"
-msgstr ""
+msgstr "8 минути"
 
 #: ../src/settings.cpp:1329
 msgid "9 minutes"
-msgstr ""
+msgstr "9 минути"
 
 #: ../src/settings.cpp:1330
 msgid "10 minutes"
-msgstr ""
+msgstr "10 минути"
 
 #: ../src/settings.cpp:1331
 msgid "15 minutes"
-msgstr ""
+msgstr "15 минути"
 
 #: ../src/settings.cpp:1332
 msgid "20 minutes"
-msgstr ""
+msgstr "20 минути"
 
 #: ../src/settings.cpp:1333
 msgid "25 minutes"
-msgstr ""
+msgstr "25 минути"
 
 #: ../src/settings.cpp:1334
 msgid "30 minutes"
-msgstr ""
+msgstr "30 минути"
 
 #: ../src/settings.cpp:1335
 msgid "35 minutes"
-msgstr ""
+msgstr "35 минути"
 
 #: ../src/settings.cpp:1336
 msgid "40 minutes"
-msgstr ""
+msgstr "40 минути"
 
 #: ../src/settings.cpp:1337
 msgid "45 minutes"
-msgstr ""
+msgstr "45 минути"
 
 #: ../src/settings.cpp:1338
 msgid "50 minutes"
-msgstr ""
+msgstr "50 минути"
 
 #: ../src/settings.cpp:1339
 msgid "55 minutes"
-msgstr ""
+msgstr "55 минути"
 
 #: ../src/settings.cpp:1340
 msgid "1 hour"
-msgstr ""
+msgstr "1 час"
 
 #: ../src/settings.cpp:1341
 msgid "2 hours"
-msgstr ""
+msgstr "2 часа"
 
 #: ../src/settings.cpp:1347
 msgid "Fixed"
-msgstr ""
+msgstr "Застопорено"
 
 #: ../src/settings.cpp:1348
 msgid "Dynamic"
-msgstr ""
+msgstr "Динамично"
 
 #: ../src/settings.cpp:1356
 msgid "180+slow next page"
@@ -1087,9 +1061,8 @@ msgid "180+FAST next/prev page"
 msgstr "180+бързо следв/прех. страница"
 
 #: ../src/settings.cpp:1378 ../src/settings.cpp:1395
-#, fuzzy
 msgid "Auto"
-msgstr "Авто"
+msgstr "Автоматично"
 
 #: ../src/settings.cpp:1379
 msgid "2 BPP"
@@ -1109,7 +1082,7 @@ msgstr ""
 
 #: ../src/settings.cpp:1388
 msgid "Disabled (1:1)"
-msgstr "Отменено(1:1)"
+msgstr "Изключено (1:1)"
 
 #: ../src/settings.cpp:1389
 msgid "Integer scale"
@@ -1132,9 +1105,8 @@ msgid "*3"
 msgstr "*3"
 
 #: ../src/settings.cpp:1482
-#, fuzzy
 msgid "No hinting"
-msgstr "[Без пренасяне]"
+msgstr "Без подсказки"
 
 #: ../src/settings.cpp:1483
 msgid "Use bytecode"
@@ -1142,45 +1114,40 @@ msgstr "Изполвай bytecode"
 
 #: ../src/settings.cpp:1484
 msgid "Autohinting"
-msgstr "Автохинтинг"
+msgstr "Автоматични подсказки"
 
 #: ../src/settings.cpp:1485
-#, fuzzy
 msgid "Light"
-msgstr "Надясно"
+msgstr "Леко"
 
 #: ../src/settings.cpp:1490
-#, fuzzy
 msgid "Default paragraph formatting"
-msgstr "Демаркиране на параграф"
+msgstr "Форматиране на абзаците по подразбиране"
 
 #: ../src/settings.cpp:1491
-#, fuzzy
 msgctxt "CSS"
 msgid "Title"
 msgstr "Заглавие"
 
 #: ../src/settings.cpp:1492
-#, fuzzy
 msgid "Subtitle"
-msgstr "Показване на часовника"
+msgstr "Подзаглавие"
 
 #: ../src/settings.cpp:1493
-#, fuzzy
 msgid "Preformatted text / code"
-msgstr "Преформатиран текст"
+msgstr "Предформатиран текст"
 
 #: ../src/settings.cpp:1494
 msgid "Link"
-msgstr ""
+msgstr "Връзка"
 
 #: ../src/settings.cpp:1496
 msgid "Epigraph"
-msgstr ""
+msgstr "Епиграф"
 
 #: ../src/settings.cpp:1497
 msgid "Poem"
-msgstr ""
+msgstr "Поема"
 
 #: ../src/settings.cpp:1498
 msgid "Text / Cite / Epigraph author"
@@ -1188,30 +1155,27 @@ msgstr ""
 
 #: ../src/settings.cpp:1499
 msgid "Footnote"
-msgstr ""
+msgstr "Бележка под линия"
 
 #: ../src/settings.cpp:1500
-#, fuzzy
 msgid "Footnote link"
-msgstr "Преход по препратка"
+msgstr "Връзка на бележка под линия"
 
 #: ../src/settings.cpp:1501
 msgid "Footnote title"
-msgstr ""
+msgstr "Заглавие на бележка под линия"
 
 #: ../src/settings.cpp:1502
-#, fuzzy
 msgid "Annotation"
-msgstr "Цитат"
+msgstr "Пояснение"
 
 #: ../src/settings.cpp:1542
 msgid "Default font face"
-msgstr "Шрифт"
+msgstr "Шрифт по подразбиране"
 
 #: ../src/settings.cpp:1547
-#, fuzzy
 msgid "Font settings"
-msgstr "Размер на шрифта"
+msgstr "Настройки на шрифта"
 
 #: ../src/settings.cpp:1554
 msgid "Font antialiasing"
@@ -1219,17 +1183,15 @@ msgstr "Заглаждане"
 
 #: ../src/settings.cpp:1557
 msgid "Font hinting"
-msgstr "Кърнинг"
+msgstr "Подсказки на шрифта"
 
 #: ../src/settings.cpp:1559
-#, fuzzy
 msgid "Font kerning"
-msgstr "Кърнинг"
+msgstr "Междубуквено разстояние"
 
 #: ../src/settings.cpp:1561
-#, fuzzy
 msgid "Font embolding"
-msgstr "Кърнинг"
+msgstr "Допълнително удебеляване"
 
 #: ../src/settings.cpp:1563
 msgid "Tracking"
@@ -1237,20 +1199,19 @@ msgstr ""
 
 #: ../src/settings.cpp:1565
 msgid "Font Gamma"
-msgstr "Гама корекция"
+msgstr "Гама на шрифта"
 
 #: ../src/settings.cpp:1567
 msgid "Document embedded fonts"
-msgstr "Вградени стилове"
+msgstr "Вградени шрифтове"
 
 #: ../src/settings.cpp:1570
 msgid "Fallback font face"
-msgstr "Fallback шрифт"
+msgstr "Резервен шрифт"
 
 #: ../src/settings.cpp:1576
-#, fuzzy
 msgid "Formatting settings"
-msgstr "Размер на шрифта"
+msgstr "Настройки на форматирането"
 
 #: ../src/settings.cpp:1588
 msgid "[No Hyphenation]"
@@ -1266,17 +1227,15 @@ msgstr "Пренасяне"
 
 #: ../src/settings.cpp:1605
 msgid "Preformatted text"
-msgstr "Преформатиран текст"
+msgstr "Предформатиран текст"
 
 #: ../src/settings.cpp:1608
-#, fuzzy
 msgid "Space condensing percent"
-msgstr "Въведете позиция в проценти"
+msgstr ""
 
 #: ../src/settings.cpp:1611
-#, fuzzy
 msgid "Space expanding percent"
-msgstr "Въведете позиция в проценти"
+msgstr ""
 
 #: ../src/settings.cpp:1614
 msgid "Floating punctuation"
@@ -1288,82 +1247,71 @@ msgstr "Мащабиране на картинки"
 
 #: ../src/settings.cpp:1625
 msgid "Block image scaling mode"
-msgstr "Забрана мащабиране на картинки"
+msgstr "Режим на мащабиране на картинки в блок"
 
 #: ../src/settings.cpp:1628
 msgid "Block image max zoom"
-msgstr "Макс. уголемяване на картинки"
+msgstr "Макс. уголемяване на картинки в блок"
 
 #: ../src/settings.cpp:1631
 msgid "Inline image scaling mode"
-msgstr "Режим на inline мащабиране на картинки"
+msgstr "Режим на мащабиране на картинки в ред"
 
 #: ../src/settings.cpp:1634
 msgid "Inline image max zoom"
-msgstr "Макс. inline мащабиране"
+msgstr "Макс. уголемяване на картинки в ред"
 
 #: ../src/settings.cpp:1643
-#, fuzzy
 msgid "Page settings"
-msgstr "Ориентация на страниците"
+msgstr "Настройки на страницата"
 
 #: ../src/settings.cpp:1648
 msgid "Status line"
 msgstr "Колонтитул"
 
 #: ../src/settings.cpp:1653
-#, fuzzy
 msgid "Status line settings"
-msgstr "Колонтитул"
+msgstr "Настройки на колонтитула"
 
 #: ../src/settings.cpp:1670
-#, fuzzy
 msgid "Time format"
-msgstr "Тип на файла"
+msgstr "Формат на времето"
 
 #: ../src/settings.cpp:1672
 msgid "Show time"
 msgstr "Показване на часовника"
 
 #: ../src/settings.cpp:1674
-#, fuzzy
 msgid "Show title"
-msgstr "Показване на часовника"
+msgstr "Показване на заглавието"
 
 #: ../src/settings.cpp:1676
-#, fuzzy
 msgid "Show battery"
-msgstr "Показване на часовника"
+msgstr "Показване на батерията"
 
 #: ../src/settings.cpp:1678
-#, fuzzy
 msgid "Show battery percent"
-msgstr "Заряд на батерията"
+msgstr "Показване на процента на батерията"
 
 #: ../src/settings.cpp:1681
-#, fuzzy
 msgid "Show position percent"
-msgstr "Въведете позиция в проценти"
+msgstr "Показване на процента на местоположението"
 
 #: ../src/settings.cpp:1683
-#, fuzzy
 msgid "Show page count"
-msgstr "Въведете номер на страница"
+msgstr "Показване на броя на страниците"
 
 #: ../src/settings.cpp:1685
-#, fuzzy
 msgid "Show page count till chapter end"
-msgstr "Въведете номер на страница"
+msgstr "Показване на броя на страниците до края на главата"
 
 #: ../src/settings.cpp:1688
-#, fuzzy
 msgid "Show page number"
-msgstr "Въведете номер на страница"
+msgstr "Показване на номера на страницата"
 
 #: ../src/settings.cpp:1690
-#, fuzzy
 msgid "Show chapter marks"
-msgstr "Показване на часовника"
+msgstr "Показване на показатели на главите"
 
 #: ../src/settings.cpp:1699
 msgid "Page margins"
@@ -1391,7 +1339,7 @@ msgstr "Бележки под линия"
 
 #: ../src/settings.cpp:1721
 msgid "Display settings"
-msgstr ""
+msgstr "Настройки на показване"
 
 #: ../src/settings.cpp:1730
 msgid "Landscape pages"
@@ -1399,24 +1347,23 @@ msgstr "Колони в режим пейзаж"
 
 #: ../src/settings.cpp:1732
 msgid "Inverse display"
-msgstr "Инвертирано изображение"
+msgstr "Обърнато показване"
 
 #: ../src/settings.cpp:1735
 msgid "Show bookmark icons"
-msgstr "Отбелязки в колонтитула"
+msgstr "Показване на иконки на отметките"
 
 #: ../src/settings.cpp:1738
 msgid "Highlight bookmarks"
-msgstr "Подчетаване на отбелязка"
+msgstr "Подчертаване на отметки"
 
 #: ../src/settings.cpp:1742
 msgid "Display update mode"
 msgstr "Режим на опресняване на екрана"
 
 #: ../src/settings.cpp:1750
-#, fuzzy
 msgid "Standby"
-msgstr "Настройки"
+msgstr "В готовност"
 
 #: ../src/settings.cpp:1757
 msgid "Turbo update mode"
@@ -1428,16 +1375,15 @@ msgstr ""
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Потребителска тема на системата (нужно е рестартиране)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
-msgstr ""
+msgstr "Кожа"
 
 #: ../src/settings.cpp:1790
-#, fuzzy
 msgid "Control settings"
-msgstr "Размер на шрифта"
+msgstr "Настройки на управление"
 
 #: ../src/settings.cpp:1797
 msgid "Rotate"
@@ -1449,47 +1395,43 @@ msgstr "Ъгъл на завъртане"
 
 #: ../src/settings.cpp:1816
 msgid "Tap action"
-msgstr ""
+msgstr "Действие при потупване"
 
 #: ../src/settings.cpp:1818
-#, fuzzy
 msgid "Long tap action"
-msgstr "Преход към цитати"
+msgstr "Действие при дълго потупване"
 
 #: ../src/settings.cpp:1822
 msgid "Height of the upper tap zone"
-msgstr ""
+msgstr "Височина на горната зона за потупване"
 
 #: ../src/settings.cpp:1825
 msgid "Height of the middle tap zone"
-msgstr ""
+msgstr "Височина на средната зона за потупване"
 
 #: ../src/settings.cpp:1828
 msgid "Width of the left tap zone"
-msgstr ""
+msgstr "Ширина на лявата зона за потупване"
 
 #: ../src/settings.cpp:1831
 msgid "Width of the middle tap zone"
-msgstr ""
+msgstr "Ширина на средната зона за потупване"
 
 #: ../src/settings.cpp:1835
-#, fuzzy
 msgid "Page Turn Swipes"
-msgstr "Ъгъл на завъртане"
+msgstr "Замахвания при прелистване"
 
 #: ../src/settings.cpp:1838
-#, fuzzy
 msgid "Front Light Swipes"
-msgstr "Удебеляване"
+msgstr "Замахвания за подсветката"
 
 #: ../src/settings.cpp:1842
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Мащабиране"
 
 #: ../src/settings.cpp:1860
-#, fuzzy
 msgid "Style settings"
-msgstr "Настройки"
+msgstr "Настройки на стила"
 
 #: ../src/settings.cpp:1865
 msgid "Document embedded styles"
@@ -1497,22 +1439,22 @@ msgstr "Вградени стилове"
 
 #: ../src/settings.cpp:1884 ../src/viewdlg.cpp:601
 msgid "Clear cache"
-msgstr ""
+msgstr "Изчистване на кеша"
 
 #: ../src/settings.cpp:1892 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
-msgstr ""
+msgstr "Обновяване по въздуха"
 
 #: ../src/settings.cpp:1899 ../src/viewdlg.cpp:600
 msgid "OTA Update Dev"
-msgstr ""
+msgstr "Обновяване по въздуха (в разработка)"
 
 #: ../src/settings.cpp:1922
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
 msgstr ""
-"Натиснете $1 за промяна на параметъра\n"
+"Натиснете $1 за промяна\n"
 "$2 за прилагане, $3 за отказ"
 
 #: ../src/viewdlg.cpp:159
@@ -1521,19 +1463,19 @@ msgstr "Няма открити речници!"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
-msgstr "Поставете речниците в папка 'dict' на SD картата"
+msgstr "Поставете речниците в папка 'dict' на картата с памет"
 
 #: ../src/viewdlg.cpp:161
 msgid "Dictionaries in standard unix .dict format are supported."
-msgstr "Поддържат се речници в стандартен unix-ов .dict формат"
+msgstr "Поддържат се речници в стандартен .dict формат"
 
 #: ../src/viewdlg.cpp:162
 msgid ""
 "For each dictionary, pair of files should be provided: data file (with .dict "
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
-"Всеки речник се състои от файл с данни (.dict или .dict.dz) и с индекси (."
-"index)"
+"За всеки речник трябва да се предоставят два файла: данни (.dict или .dict."
+"dz) и с индекси (.index)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1545,7 +1487,7 @@ msgstr "Въведете номер на страница"
 
 #: ../src/viewdlg.cpp:194
 msgid "Enter position percent"
-msgstr "Въведете позиция в проценти"
+msgstr "Въведете процент на местоположението"
 
 #: ../src/viewdlg.cpp:355
 msgid "Find in dictionary"
@@ -1557,7 +1499,7 @@ msgstr "M"
 
 #: ../src/viewdlg.cpp:487
 msgid "Ok"
-msgstr "OK"
+msgstr "Добре"
 
 #: ../src/viewdlg.cpp:489
 msgid "Up"
@@ -1572,16 +1514,14 @@ msgid "C"
 msgstr "C"
 
 #: ../src/viewdlg.cpp:495
-#, fuzzy
 msgctxt "Key"
 msgid "Left"
-msgstr "Наляво"
+msgstr "Отляво"
 
 #: ../src/viewdlg.cpp:497
-#, fuzzy
 msgctxt "Key"
 msgid "Right"
-msgstr "Надясно"
+msgstr "Отдясно"
 
 #: ../src/viewdlg.cpp:499
 msgid "Side Up"
@@ -1665,11 +1605,11 @@ msgstr "Превключва автоформатирането на текст�
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr "Запис на отбелязка по номер"
+msgstr "Запазване на отметка по номер"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
-msgstr "Преход към отбелязка по номер"
+msgstr "Отиване до отметка по номер"
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
@@ -1689,7 +1629,7 @@ msgstr "Задава ъгъл на завъртане"
 
 #: ../src/viewdlg.cpp:548
 msgid "Save history and bookmarks"
-msgstr "Запис на отбелязките"
+msgstr "Запазване на историята и отметките"
 
 #: ../src/viewdlg.cpp:549
 msgid "Save document to cache"
@@ -1737,7 +1677,7 @@ msgstr "Търсене в речника (T5)"
 
 #: ../src/viewdlg.cpp:567
 msgid "Bookmark list"
-msgstr "Отбелязки"
+msgstr "Списък с отметки"
 
 #: ../src/viewdlg.cpp:568
 msgid "Citations list"
@@ -1745,7 +1685,7 @@ msgstr "Цитати"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
-msgstr "Преход към отбелязка"
+msgstr "Отиване до отметка..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
@@ -1788,53 +1728,48 @@ msgid "Go to percent..."
 msgstr "Преход към позиция (процент)"
 
 #: ../src/viewdlg.cpp:586
-#, fuzzy
 msgid "Front light"
-msgstr "Удебеляване"
+msgstr "Подсветка"
 
 #: ../src/viewdlg.cpp:587
-#, fuzzy
 msgid "Invert display"
-msgstr "Инвертирано изображение"
+msgstr "Обръщане на екрана"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Цялостно опресняване"
 
 #: ../src/viewdlg.cpp:589
-#, fuzzy
 msgid "Toggle status bar"
-msgstr "Превключва автоформатирането на текста"
+msgstr "Превключване на лентата на състоянието"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Влизане в режим на изчакване"
 
 #: ../src/viewdlg.cpp:594
-#, fuzzy
 msgid "Tasks list"
-msgstr "Отбелязки"
+msgstr "Списък със задачи"
 
 #: ../src/viewdlg.cpp:596
 msgid "Toggle system panel"
-msgstr ""
+msgstr "Превключване на системния панел"
 
 #: ../src/viewdlg.cpp:598
 msgid "Lock device"
-msgstr ""
+msgstr "Заключване на устройството"
 
 #: ../src/viewdlg.cpp:603
 msgid "Open system panel"
-msgstr ""
+msgstr "Отваряне на системния панел"
 
 #: ../src/viewdlg.cpp:604
-#, fuzzy
 msgid "Toggle front light"
-msgstr "Удебеляване"
+msgstr "Превключване на подсветката"
 
 #: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"
-msgstr "PocketBook главно меню"
+msgstr "Главно меню на Покетбук"
 
 #: ../src/viewdlg.cpp:609
 msgid "Unknown command"
@@ -1866,7 +1801,7 @@ msgstr "Предишна глава"
 
 #: ../src/viewdlg.cpp:628
 msgid "Add Bookmark"
-msgstr "Добави отбелязка"
+msgstr "Добавяне на отметка"
 
 #: ../src/viewdlg.cpp:630
 msgid "Rotate Clockwise"
@@ -1886,80 +1821,81 @@ msgstr "Пейзаж"
 
 #: ../src/viewdlg.cpp:660
 msgid "Key"
-msgstr "Бутон"
+msgstr "Клавиш"
 
 #: ../src/viewdlg.cpp:660
 msgid "Assigned function"
-msgstr "Асоциирана команда"
+msgstr "Зададена функция"
 
 #: ../src/ota_update.cpp:151
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
+"Успешно изтегляне!\n"
+"Програмата ще се рестартира."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
-msgstr ""
+msgstr "Добре"
 
 #: ../src/ota_update.cpp:161
 msgid "Downloading... (2nd Method)"
-msgstr ""
+msgstr "Изтегляне... (втори метод)"
 
 #: ../src/ota_update.cpp:172
 msgid "Couldn't download the update package!"
-msgstr ""
+msgstr "Неуспешно изтегляне на пакета за обновяване!"
 
 #: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
 #: ../src/ota_update.cpp:328
 msgid "Downloading..."
-msgstr ""
+msgstr "Изтегляне..."
 
 #: ../src/ota_update.cpp:235
 msgid "Couldn't remove existing package!"
-msgstr ""
+msgstr "Неуспешно премахване на съществуващия пакет!"
 
 #: ../src/ota_update.cpp:272
 msgid "Couldn't connect to the network!"
-msgstr ""
+msgstr "Неуспешно свързване към мрежата!"
 
 #: ../src/ota_update.cpp:278 ../src/ota_update.cpp:294
 #: ../src/ota_update.cpp:307
-#, fuzzy
 msgid "Searching..."
 msgstr "Търсене..."
 
 #: ../src/ota_update.cpp:285
 msgid "You have the latest version."
-msgstr ""
+msgstr "Имате най-новата версия."
 
 #: ../src/ota_update.cpp:317
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
 msgstr ""
+"Обновлението не е налично за устройството ви!\n"
+"Модел на устройството: "
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
-msgstr ""
+msgstr "Неуспешно обновяване!"
 
 #: ../src/pb_toc.cpp:21
-#, fuzzy
 msgid "Contents"
-msgstr "Функции на клавишите"
+msgstr "Съдържание"
 
 #: ../src/cr3pocketbook.cpp:2409
 msgid "Cache cleared."
-msgstr ""
+msgstr "Кешът е изчистен."
 
 #: ../src/cr3pocketbook.cpp:2414
-#, fuzzy
 msgid "Unable to list the directory contents!"
-msgstr "Съдържание"
+msgstr "Неуспешно показване на съдържанието!"
 
 #: ../src/cr3pocketbook.cpp:2420
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Неуспешно изчистване на кеша!"
 
 #: ../src/cr3pocketbook.cpp:3938
 msgid "Press $1 to translate"
@@ -1970,52 +1906,13 @@ msgid "Updated to v"
 msgstr ""
 
 #: ../src/cr3pocketbook.cpp:5190
-#, fuzzy
 msgid "Untitled"
-msgstr "Показване на часовника"
+msgstr "Неозаглавено"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Потребителската тема е приложена. Програмата ще се рестартира."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
-
-#, fuzzy
-#~ msgid "Remove bookmark"
-#~ msgstr "Поставяне на отбелязка"
-
-#, fuzzy
-#~ msgid "Page"
-#~ msgstr "Следваща страница"
-
-#~ msgid "Disable"
-#~ msgstr "Отмяна"
-
-#~ msgid "About..."
-#~ msgstr "Информация"
-
-#~ msgid "Remove phrase from selection"
-#~ msgstr "Премахване на фраза от цитат"
-
-#~ msgid "Remove citation"
-#~ msgstr "Изтриване на цитат"
-
-#~ msgid "Cites"
-#~ msgstr "Цитати"
-
-#~ msgid "Go to cite"
-#~ msgstr "Преход към цитат"
-
-#~ msgid "Enter page number to go: "
-#~ msgstr " Въведете номер на страница:"
-
-#~ msgid "Open recent book..."
-#~ msgstr "Последно четени..."
-
-#~ msgid "Dictionary..."
-#~ msgstr "Речник..."
-
-#~ msgid "Settings..."
-#~ msgstr "Настройки..."
+msgstr "Първоначалната тема е възстановена. Програмата ще се рестартира."
