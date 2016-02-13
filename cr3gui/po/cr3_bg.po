@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2016-01-12 08:56+0000\n"
+"PO-Revision-Date: 2016-02-09 14:03+0000\n"
 "Last-Translator: Иван Пенев <aeternus.arcis@gmail.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/bg/)\n"
@@ -307,7 +307,7 @@ msgstr "Тип на екрана"
 
 #: ../src/mainwnd.cpp:1114
 msgid "Config file"
-msgstr ""
+msgstr "Файл за конфигурация"
 
 #: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
@@ -315,7 +315,7 @@ msgstr ""
 
 #: ../src/mainwnd.cpp:1116
 msgid "Skin file"
-msgstr ""
+msgstr "Файл за облик"
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
