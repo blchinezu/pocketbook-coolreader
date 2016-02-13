@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # Alp Toros Korkmaz <alptoros111@gmail.com>, 2015-2016
 msgid ""
@@ -10,11 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
 "PO-Revision-Date: 2016-01-29 19:48+0000\n"
 "Last-Translator: Alp Toros Korkmaz <alptoros111@gmail.com>\n"
-"Language-Team: Turkish (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/tr/)\n"
+"Language-Team: Turkish (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/tr/)\n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #: ../src/citedlg.cpp:194
@@ -101,7 +102,9 @@ msgstr "Klavye düzeni"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - komut seç\n$2, $3 - kapat"
+msgstr ""
+"$1 - komut seç\n"
+"$2, $3 - kapat"
 
 #: ../src/mainwnd.cpp:1046
 msgid "Current page"
@@ -332,7 +335,9 @@ msgstr "Kaydı sil"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - kitabı aç\n$2, $3 - kapat"
+msgstr ""
+"$1 - kitabı aç\n"
+"$2, $3 - kapat"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -358,13 +363,17 @@ msgstr "Yer imine git"
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "$2 - switch to SET mode"
-msgstr "Yer imine gitmek için $1 - kısa bas,\n$2 - SET moduna geç"
+msgstr ""
+"Yer imine gitmek için $1 - kısa bas,\n"
+"$2 - SET moduna geç"
 
 #: ../src/bmkdlg.cpp:73
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Yer imine git $1 - kısa bas,\nYer imi ayarla - uzun bas"
+msgstr ""
+"Yer imine git $1 - kısa bas,\n"
+"Yer imi ayarla - uzun bas"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -374,7 +383,9 @@ msgstr "Yer imi ayarla"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - yer imi ayarla,\n$2 - GO moduna geç"
+msgstr ""
+"$1 - yer imi ayarla,\n"
+"$2 - GO moduna geç"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
@@ -1438,7 +1449,9 @@ msgstr "OTA geliştirici güncelleme"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Seçeneği değiştirmek için $1'e bas\nOnay için $2 , iptal için $3"
+msgstr ""
+"Seçeneği değiştirmek için $1'e bas\n"
+"Onay için $2 , iptal için $3"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1454,8 +1467,8 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
 msgstr ""
 
 #: ../src/viewdlg.cpp:176
@@ -1852,7 +1865,9 @@ msgstr "Son versiyona sahipsiniz."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "Cihazınız için güncelleme bulunmamakadır\nCihaz modeli:"
+msgstr ""
+"Cihazınız için güncelleme bulunmamakadır\n"
+"Cihaz modeli:"
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"
