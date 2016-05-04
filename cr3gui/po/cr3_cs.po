@@ -4,6 +4,7 @@
 # Translators:
 # evzen schulz <eugen@post.cz>, 2015
 # LVE <vadim.lopatin@coolreader.org>, 2009
+# Martin Strobl <martin.strobl@i.cz>, 2016
 # fri, 2012
 # Vaclav Dohnal <vdohnal@post.cz>, 2015
 msgid ""
@@ -11,8 +12,8 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2015-08-20 12:25+0000\n"
-"Last-Translator: Vaclav Dohnal <vdohnal@post.cz>\n"
+"PO-Revision-Date: 2016-04-18 11:52+0000\n"
+"Last-Translator: Martin Strobl <martin.strobl@i.cz>\n"
 "Language-Team: Czech (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/cs/)\n"
 "Language: cs\n"
@@ -1371,13 +1372,12 @@ msgid "Turbo update mode"
 msgstr "Režim obnovení Turbo"
 
 #: ../src/settings.cpp:1762
-#, fuzzy
 msgid "Gray buffer depth (needs restart)"
-msgstr "Stupně šedivé (vyžaduje restart)"
+msgstr "Hloubka bufferu šedé (vyžaduje restart)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Uživatelský motiv vzhledu (vyžaduje restart)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
@@ -1425,7 +1425,7 @@ msgstr "Otáčení stran tažením"
 
 #: ../src/settings.cpp:1838
 msgid "Front Light Swipes"
-msgstr "Nastavení osvětlení tažením"
+msgstr "Nastavení podsvícení tažením"
 
 #: ../src/settings.cpp:1842
 msgid "Pinch zoom"
@@ -1731,7 +1731,7 @@ msgstr "Jít na procento..."
 
 #: ../src/viewdlg.cpp:586
 msgid "Front light"
-msgstr "Přední světlo"
+msgstr "Podsvícení"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
@@ -1767,7 +1767,7 @@ msgstr "Otevřít systémový panel"
 
 #: ../src/viewdlg.cpp:604
 msgid "Toggle front light"
-msgstr "Přepnout přední světlo"
+msgstr "Přepnout podsvícení"
 
 #: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"
@@ -1913,8 +1913,8 @@ msgstr "Neoznačený"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Byl nastaven uživatelský motiv vzhledu. CR3 se nyní restartuje."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Byl obnoven výchozí motiv vzhledu. CR3 se nyní restartuje."
