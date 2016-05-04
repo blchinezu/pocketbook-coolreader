@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CR3Skin>
-  <toolbar id="cite-toolbar-touch" size="100%,100" halign="center" valign="bottom">
+  <toolbar id="cite-toolbar-touch" size="100%,64" halign="center" valign="bottom">
     <size minvalue="0,0" maxvalue="0,0"/>
     <border widths="0,0,0,0"/>
     <button normal="cite_save.png" selected="cite_save_select.png"/>

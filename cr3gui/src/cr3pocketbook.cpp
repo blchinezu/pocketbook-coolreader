@@ -5623,7 +5623,7 @@ void removeCustomSystemTheme() {
     const char *currentTheme = ReadString(gcfg, "theme", "Line");
 
     CRLog::trace("removeCustomSystemTheme(): if");
-    if( strcmp(currentTheme, "Line") != 0 ) {
+    if( strcmp(currentTheme, "LineCustom") == 0 ) {
 
         CRLog::trace("removeCustomSystemTheme(): if: access");
         if( access( USERTHEMESPATH"/LineCustom.pbt", F_OK ) != -1 ) {
