@@ -4243,7 +4243,14 @@ static void loadPocketBookKeyMaps(CRGUIWindowManager & winman)
     int commandId, commandParam;
 
     char *keypress[32], *keypresslong[32];
+    #ifdef POCKETBOOK_PRO_FW5
+    /**
+     * (const char**) is added so that the code will build with the 5.12 inkview.sh
+     */
+    GetKeyMapping((const char**)keypress, (const char**)keypresslong);
+    #else
     GetKeyMapping(keypress, keypresslong);
+    #endif
 
     for (int i = 0; i < 32; i++) {
         if (keypress[i]) {
