@@ -26,6 +26,19 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 --------------------------------------------------------------------------------
 
+### Install
+
+Grab the zip corresponding to your firmware from the link above. (Check the firmware from your device menu)
+
+    360  -> PB360
+    pro2 -> FW2.*
+    pro4 -> FW4.*
+    pro5 -> FW5.*
+
+After downloading the zip file, extract it and copy the system dir to your device (overwrite the existing one)
+
+--------------------------------------------------------------------------------
+
 ### Features summary (compared to [pkb](https://sourceforge.net/p/crengine/crengine/ci/pocketbook-port/tree/)'s version)
 
 **General**
