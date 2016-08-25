@@ -21,8 +21,6 @@
 # As a convenience, try to find everything as soon as we set any one of
 # the cache variables.
 
-# test
-
 macro(GETTEXT_FIND_POTENTIAL_DIRS)
 
   set(potential_bin_dirs)
