@@ -1873,31 +1873,8 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
     drawbuf->SetTextColor(getTextColor());
 }
 
-int LVDocView::getPhi(int pageIndex) {
-
-    int phi = m_pageHeaderInfo;
-
-    if (getVisiblePageCount() == 2) {
-        if (pageIndex & 1) {
-            // right
-            phi &= ~PGHDR_AUTHOR;
-        } else {
-            // left
-            phi &= ~PGHDR_TITLE;
-            phi &= ~PGHDR_PERCENT;
-            phi &= ~PGHDR_PAGE_NUMBER;
-            phi &= ~PGHDR_PAGE_COUNT;
-            phi &= ~PGHDR_BATTERY;
-            phi &= ~PGHDR_CLOCK;
-        }
-    }
-
-    return phi;
-}
-
 lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
 
-    int phi = getPhi(pageIndex);
     int percent = getPosPercent();
 
     LVArray<int> dummy;
@@ -1907,44 +1884,33 @@ lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
     // Get page info
     lString16 pageinfo;
     if (pageCount > 0) {
-        if (phi & PGHDR_PAGE_NUMBER)
-            pageinfo += fmt::decimal(pageIndex + 1);
-        if (phi & PGHDR_PAGE_COUNT) {
-            if ( !pageinfo.empty() )
-                pageinfo += " / ";
-            if (phi & PGHDR_CHAPTER_PAGE_REM) {
-                //serg
-                //pages till chapter end
-                int pageToBorder = 0;
-                int lenght_index = sbounds.length();
-                if ( pageCount ) {
-                    for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
-                        int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+        pageinfo += fmt::decimal(pageIndex + 1);
+        if ( !pageinfo.empty() )
+            pageinfo += " / ";
 
-                        if ( pTB >= pageIndex ) {
-                            pageToBorder = pTB - pageIndex;
-                            // last chapter
-                            if ( sbound_index != lenght_index - 1 )
-                                pageToBorder++;
-                            break;
-                        }
-                    }
+        //serg
+        //pages till chapter end
+        int pageToBorder = 0;
+        int lenght_index = sbounds.length();
+        if ( pageCount ) {
+            for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
+                int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+
+                if ( pTB >= pageIndex ) {
+                    pageToBorder = pTB - pageIndex;
+                    // last chapter
+                    if ( sbound_index != lenght_index - 1 )
+                        pageToBorder++;
+                    break;
                 }
-                pageinfo += fmt::decimal( pageToBorder );
-                pageinfo += " / ";
             }
-            pageinfo += fmt::decimal(pageCount);
         }
-        if (phi & PGHDR_PERCENT) {
-            if ( !pageinfo.empty() )
-                pageinfo += "  ";
-            pageinfo += fmt::decimal(percent/100);
-            pageinfo += ",";
-            int pp = percent%100;
-            if ( pp<10 )
-                pageinfo << "0";
-            pageinfo << fmt::decimal(pp) << "%";
+        if( pageToBorder + pageIndex + 1 != pageCount ) {
+            pageinfo += fmt::decimal( pageToBorder );
+            pageinfo += " / ";
         }
+
+        pageinfo += fmt::decimal(pageCount);
     }
 
     return pageinfo;
@@ -1952,19 +1918,13 @@ lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
 
 lString16 LVDocView::getPageHeaderTitle(int pageIndex) {
 
-    int phi = getPhi(pageIndex);
-
-    // Title & Authors
     lString16 authors;
-    if (phi & PGHDR_AUTHOR)
-        authors = getAuthors();
     lString16 title;
-    if (phi & PGHDR_TITLE) {
-        title = getTitle();
-        if (title.empty() && authors.empty())
-            title = m_doc_props->getStringDef(DOC_PROP_FILE_NAME);
-    }
-    if (phi & PGHDR_AUTHOR && !authors.empty()) {
+    title = getTitle();
+    authors = getAuthors();
+    if (title.empty() && authors.empty())
+        title = m_doc_props->getStringDef(DOC_PROP_FILE_NAME);
+    if (!authors.empty()) {
         if (!title.empty())
             authors += L'.';
     }
