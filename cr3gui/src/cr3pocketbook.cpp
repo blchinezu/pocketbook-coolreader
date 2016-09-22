@@ -1304,9 +1304,13 @@ public:
             #endif
         }
 
+
+        // lString16 bookTitle = main_win->getDocView()->getPageHeaderTitle();
+
         // Draw current position text
         SetFont(pbCrFont, 0x00000000);
-        lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
+        // lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
+        lString16 progress = main_win->getDocView()->getPageHeaderPages(curPage-1, pageCount);
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
             textW = (int)(ScreenWidth()*0.2);

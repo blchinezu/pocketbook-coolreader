@@ -1625,12 +1625,12 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
     lvRect navBar;
     getNavigationBarRectangle(pageIndex, navBar);
     int gpos = info.bottom;
-    //	if (drawbuf->GetBitsPerPixel() <= 2) {
-    //		// gray
-    //		cl3 = 1;
-    //		cl4 = cl1;
-    //		//pal[0] = cl1;
-    //	}
+    //  if (drawbuf->GetBitsPerPixel() <= 2) {
+    //      // gray
+    //      cl3 = 1;
+    //      cl4 = cl1;
+    //      //pal[0] = cl1;
+    //  }
     if ( leftPage )
         drawbuf->FillRect(info.left, gpos - 2, info.right, gpos - 2 + 1, cl1);
     //drawbuf->FillRect(info.left+percent_pos, gpos-gh, info.right, gpos-gh+1, cl1 ); //cl3
@@ -1689,8 +1689,8 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
             }
         }
         if ( cl!=-1 && sz>0 ) {
-            //	drawbuf->FillRect( x,     gpos - 2 - sz/2,
-            //	                   x + 1, gpos - 2 + sz/2 + 1, cl );
+            //  drawbuf->FillRect( x,     gpos - 2 - sz/2,
+            //                     x + 1, gpos - 2 + sz/2 + 1, cl );
             if ( boundCategory ) {//stretch stroke
                 boundCategoryOld = 2;
                 drawbuf->FillRect( x,     gpos - 0 - sz/1,
@@ -1716,21 +1716,21 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
         text = m_pageHeaderOverride;
     } else {
 
-        //		if (!leftPage) {
-        //			drawbuf->FillRect(info.left, gpos - 3, info.left + percent_pos,
-        //					gpos - 3 + 1, cl1);
-        //			drawbuf->FillRect(info.left, gpos - 1, info.left + percent_pos,
-        //					gpos - 1 + 1, cl1);
-        //		}
+        //      if (!leftPage) {
+        //          drawbuf->FillRect(info.left, gpos - 3, info.left + percent_pos,
+        //                  gpos - 3 + 1, cl1);
+        //          drawbuf->FillRect(info.left, gpos - 1, info.left + percent_pos,
+        //                  gpos - 1 + 1, cl1);
+        //      }
 
         // disable section marks for left page, and for too many marks
-        //		if (!leftPage && (phi & PGHDR_CHAPTER_MARKS) && sbounds.length()<info.width()/5 ) {
-        //			for (int i = 0; i < sbounds.length(); i++) {
-        //				int x = info.left + sbounds[i] * (info.width() - 1) / 10000;
-        //				lUInt32 c = x < info.left + percent_pos ? cl2 : cl1;
-        //				drawbuf->FillRect(x, gpos - 4, x + 1, gpos - 0 + 2, c);
-        //			}
-        //		}
+        //      if (!leftPage && (phi & PGHDR_CHAPTER_MARKS) && sbounds.length()<info.width()/5 ) {
+        //          for (int i = 0; i < sbounds.length(); i++) {
+        //              int x = info.left + sbounds[i] * (info.width() - 1) / 10000;
+        //              lUInt32 c = x < info.left + percent_pos ? cl2 : cl1;
+        //              drawbuf->FillRect(x, gpos - 4, x + 1, gpos - 0 + 2, c);
+        //          }
+        //      }
 
         if (getVisiblePageCount() == 1 || !(pageIndex & 1)) {
             int dwIcons = 0;
@@ -1871,6 +1871,105 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
     drawbuf->SetClipRect(&oldcr);
     //--------------
     drawbuf->SetTextColor(getTextColor());
+}
+
+int LVDocView::getPhi(int pageIndex) {
+
+    int phi = m_pageHeaderInfo;
+
+    if (getVisiblePageCount() == 2) {
+        if (pageIndex & 1) {
+            // right
+            phi &= ~PGHDR_AUTHOR;
+        } else {
+            // left
+            phi &= ~PGHDR_TITLE;
+            phi &= ~PGHDR_PERCENT;
+            phi &= ~PGHDR_PAGE_NUMBER;
+            phi &= ~PGHDR_PAGE_COUNT;
+            phi &= ~PGHDR_BATTERY;
+            phi &= ~PGHDR_CLOCK;
+        }
+    }
+
+    return phi;
+}
+
+lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
+
+    int phi = getPhi(pageIndex);
+    int percent = getPosPercent();
+
+    LVArray<int> dummy;
+    LVArray<int> & sbounds = dummy;
+    sbounds = getSectionBounds();
+
+    // Get page info
+    lString16 pageinfo;
+    if (pageCount > 0) {
+        if (phi & PGHDR_PAGE_NUMBER)
+            pageinfo += fmt::decimal(pageIndex + 1);
+        if (phi & PGHDR_PAGE_COUNT) {
+            if ( !pageinfo.empty() )
+                pageinfo += " / ";
+            if (phi & PGHDR_CHAPTER_PAGE_REM) {
+                //serg
+                //pages till chapter end
+                int pageToBorder = 0;
+                int lenght_index = sbounds.length();
+                if ( pageCount ) {
+                    for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
+                        int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+
+                        if ( pTB >= pageIndex ) {
+                            pageToBorder = pTB - pageIndex;
+                            // last chapter
+                            if ( sbound_index != lenght_index - 1 )
+                                pageToBorder++;
+                            break;
+                        }
+                    }
+                }
+                pageinfo += fmt::decimal( pageToBorder );
+                pageinfo += " / ";
+            }
+            pageinfo += fmt::decimal(pageCount);
+        }
+        if (phi & PGHDR_PERCENT) {
+            if ( !pageinfo.empty() )
+                pageinfo += "  ";
+            pageinfo += fmt::decimal(percent/100);
+            pageinfo += ",";
+            int pp = percent%100;
+            if ( pp<10 )
+                pageinfo << "0";
+            pageinfo << fmt::decimal(pp) << "%";
+        }
+    }
+
+    return pageinfo;
+}
+
+lString16 LVDocView::getPageHeaderTitle(int pageIndex) {
+
+    int phi = getPhi(pageIndex);
+
+    // Title & Authors
+    lString16 authors;
+    if (phi & PGHDR_AUTHOR)
+        authors = getAuthors();
+    lString16 title;
+    if (phi & PGHDR_TITLE) {
+        title = getTitle();
+        if (title.empty() && authors.empty())
+            title = m_doc_props->getStringDef(DOC_PROP_FILE_NAME);
+    }
+    if (phi & PGHDR_AUTHOR && !authors.empty()) {
+        if (!title.empty())
+            authors += L'.';
+    }
+
+    return authors + " - " + title;
 }
 
 void LVDocView::drawPageTo(LVDrawBuf * drawbuf, LVRendPageInfo & page,
