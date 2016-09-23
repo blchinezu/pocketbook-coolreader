@@ -1304,9 +1304,18 @@ public:
             #endif
         }
 
+
+        // lString16 bookTitle = main_win->getDocView()->getPageHeaderTitle();
+
         // Draw current position text
         SetFont(pbCrFont, 0x00000000);
-        lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
+        // lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
+
+        lString16 progress = main_win->getDocView()->getPageHeaderPages(
+            curPage-1,
+            pageCount,
+            showPagesTilChapterEnd()
+            );
         textW = StringWidth( UnicodeToUtf8(progress).c_str() );
         if( textW < 1 )
             textW = (int)(ScreenWidth()*0.2);
@@ -5680,6 +5689,10 @@ void removeCustomSystemTheme() {
 }
 
 #endif
+
+bool showPagesTilChapterEnd() {
+    return CRPocketBookDocView::instance->getProps()->getBoolDef(PROP_SHOW_CHAPTER_PAGES_REMAIN, false);
+}
 
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {

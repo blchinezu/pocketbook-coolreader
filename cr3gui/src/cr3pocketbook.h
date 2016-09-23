@@ -78,8 +78,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-49"
-#define CR_PB_BUILD_DATE "2016-07-18"
+#define CR_PB_VERSION "0.0.6-17-50"
+#define CR_PB_BUILD_DATE "2016-09-23"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -164,6 +164,7 @@ void toggleStatusLine();
 void launchBrowser(lString16 url);
 void drawTemporaryZoom();
 void exitApp();
+bool showPagesTilChapterEnd();
 
 lString16 getPbModelNumber();
 
