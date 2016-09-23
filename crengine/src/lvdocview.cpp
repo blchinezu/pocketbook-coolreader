@@ -1873,13 +1873,11 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
     drawbuf->SetTextColor(getTextColor());
 }
 
-lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
+lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount, bool pagesTilChapterEnd) {
 
     int percent = getPosPercent();
 
     LVArray<int> dummy;
-    LVArray<int> & sbounds = dummy;
-    sbounds = getSectionBounds();
 
     // Get page info
     lString16 pageinfo;
@@ -1888,26 +1886,28 @@ lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount) {
         if ( !pageinfo.empty() )
             pageinfo += " / ";
 
-        //serg
-        //pages till chapter end
-        int pageToBorder = 0;
-        int lenght_index = sbounds.length();
-        if ( pageCount ) {
-            for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
-                int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
+        if( pagesTilChapterEnd ) {
+            LVArray<int> & sbounds = dummy;
+            sbounds = getSectionBounds();
+            int pageToBorder = 0;
+            int lenght_index = sbounds.length();
+            if ( pageCount ) {
+                for ( int sbound_index = 0; sbound_index < lenght_index; sbound_index++ ) {
+                    int pTB = (int) ( ( (lInt64) sbounds[sbound_index] * pageCount ) / 10000 );
 
-                if ( pTB >= pageIndex ) {
-                    pageToBorder = pTB - pageIndex;
-                    // last chapter
-                    if ( sbound_index != lenght_index - 1 )
-                        pageToBorder++;
-                    break;
+                    if ( pTB >= pageIndex ) {
+                        pageToBorder = pTB - pageIndex;
+                        // last chapter
+                        if ( sbound_index != lenght_index - 1 )
+                            pageToBorder++;
+                        break;
+                    }
                 }
             }
-        }
-        if( pageToBorder + pageIndex + 1 != pageCount ) {
-            pageinfo += fmt::decimal( pageToBorder );
-            pageinfo += " / ";
+            if( pageToBorder + pageIndex + 1 != pageCount ) {
+                pageinfo += fmt::decimal( pageToBorder );
+                pageinfo += " / ";
+            }
         }
 
         pageinfo += fmt::decimal(pageCount);

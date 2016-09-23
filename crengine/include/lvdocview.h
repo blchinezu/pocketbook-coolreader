@@ -694,7 +694,7 @@ public:
     /// draw battery state to buffer
     virtual void drawBatteryState( LVDrawBuf * drawBuf, const lvRect & rc, bool isVertical );
 
-    virtual lString16 getPageHeaderPages(int pageIndex, int pageCount);
+    virtual lString16 getPageHeaderPages(int pageIndex, int pageCount, bool pagesTilChapterEnd);
     virtual lString16 getPageHeaderTitle(int pageIndex);
 
     /// returns background color
