@@ -1875,8 +1875,6 @@ void LVDocView::drawPageHeader(LVDrawBuf * drawbuf, const lvRect & headerRc,
 
 lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount, bool pagesTilChapterEnd) {
 
-    int percent = getPosPercent();
-
     LVArray<int> dummy;
 
     // Get page info
@@ -1918,18 +1916,22 @@ lString16 LVDocView::getPageHeaderPages(int pageIndex, int pageCount, bool pages
 
 lString16 LVDocView::getPageHeaderTitle(int pageIndex) {
 
-    lString16 authors;
-    lString16 title;
-    title = getTitle();
-    authors = getAuthors();
-    if (title.empty() && authors.empty())
-        title = m_doc_props->getStringDef(DOC_PROP_FILE_NAME);
-    if (!authors.empty()) {
-        if (!title.empty())
-            authors += L'.';
-    }
+    lString16 authors = getAuthors();
+    lString16 title = getTitle();
 
-    return authors + " - " + title;
+    if( !authors.empty() && !title.empty() )
+        return authors + " - " + title;
+
+    if( title.empty() && authors.empty() )
+        return m_doc_props->getStringDef(DOC_PROP_FILE_NAME);
+
+    if( !title.empty() )
+        return title;
+
+    if( !authors.empty() )
+        return authors;
+
+    return lString16("");
 }
 
 void LVDocView::drawPageTo(LVDrawBuf * drawbuf, LVRendPageInfo & page,
@@ -4949,34 +4951,65 @@ bool LVDocView::moveByPage(int delta) {
 
 /// -1 moveto previous chapter, 0 to current chaoter first pae, 1 to next chapter
 bool LVDocView::moveByChapter(int delta) {
+    /// returns pointer to TOC root node
+    LVPtrVector < LVTocItem, false > items;
+    if (!getFlatToc(items))
+        return false;
+    int cp = getCurPage();
+    int prevPage = -1;
+    int nextPage = -1;
+    int vcp = getVisiblePageCount();
+    if (vcp < 1 || vcp > 2)
+        vcp = 1;
+    for (int i = 0; i < items.length(); i++) {
+        LVTocItem * item = items[i];
+        int p = item->getPage();
+        if (p < cp && (prevPage == -1 || prevPage < p))
+            prevPage = p;
+        if (p >= cp + vcp && (nextPage == -1 || nextPage > p))
+            nextPage = p;
+    }
+    if (prevPage < 0)
+        prevPage = 0;
+    if (nextPage < 0)
+        nextPage = getPageCount() - 1;
+    int page = delta < 0 ? prevPage : nextPage;
+    if (getCurPage() != page) {
+        savePosToNavigationHistory();
+        goToPage(page);
+    }
+    return true;
+}
+
+/// get current chapter name or blank
+lString16 LVDocView::getCurrentChapterName() {
+    lString16 chapterName = lString16("");
 	/// returns pointer to TOC root node
 	LVPtrVector < LVTocItem, false > items;
 	if (!getFlatToc(items))
-		return false;
-	int cp = getCurPage();
-	int prevPage = -1;
-	int nextPage = -1;
+		return chapterName;
+
+    // show book authors - name if there are less than 3 chapters
+    int cp = getCurPage()+1;
+    if( items.length() < 3 ) {
+        return getPageHeaderTitle(cp);
+    }
+
+    // get current chapter name
+    int page = -1;
     int vcp = getVisiblePageCount();
     if (vcp < 1 || vcp > 2)
         vcp = 1;
 	for (int i = 0; i < items.length(); i++) {
 		LVTocItem * item = items[i];
 		int p = item->getPage();
-		if (p < cp && (prevPage == -1 || prevPage < p))
-			prevPage = p;
-        if (p >= cp + vcp && (nextPage == -1 || nextPage > p))
-			nextPage = p;
+        if (p < cp && (page == -1 || page < p)) {
+			page = p;
+            chapterName = item->getName();
+        }
 	}
-	if (prevPage < 0)
-		prevPage = 0;
-	if (nextPage < 0)
-		nextPage = getPageCount() - 1;
-	int page = delta < 0 ? prevPage : nextPage;
-	if (getCurPage() != page) {
-		savePosToNavigationHistory();
-        goToPage(page);
-	}
-	return true;
+
+	return chapterName;
 }
 
 /// saves new bookmark

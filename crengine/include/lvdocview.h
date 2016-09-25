@@ -465,6 +465,8 @@ public:
     CRFileHistRecord * getCurrentFileHistRecord();
 	/// -1 moveto previous chapter, 0 to current chaoter first pae, 1 to next chapter
 	bool moveByChapter( int delta );
+    /// get current chapter name or blank
+    lString16 getCurrentChapterName();
 	/// -1 moveto previous page, 1 to next page
 	bool moveByPage( int delta );
 	/// saves new bookmark

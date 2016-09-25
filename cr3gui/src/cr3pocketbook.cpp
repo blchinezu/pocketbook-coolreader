@@ -1304,12 +1304,8 @@ public:
             #endif
         }
 
-
-        // lString16 bookTitle = main_win->getDocView()->getPageHeaderTitle();
-
         // Draw current position text
         SetFont(pbCrFont, 0x00000000);
-        // lString16 progress = lString16::itoa(curPage) + lString16(" / ") + lString16::itoa(pageCount);
 
         lString16 progress = main_win->getDocView()->getPageHeaderPages(
             curPage-1,
@@ -1322,6 +1318,34 @@ public:
         textX = (int)((ScreenWidth()-textW)/2);
         DrawString( textX, textY, UnicodeToUtf8(progress).c_str() );
 
+        // Draw chapter name
+        lString16 chapterName = main_win->getDocView()->getCurrentChapterName();
+        textW = StringWidth( UnicodeToUtf8(chapterName).c_str() );
+
+        // Make sure the string isn't going over the screen width
+        int initialLength = chapterName.length();
+        while( textW > ScreenWidth()-30 ) {
+            chapterName.limit(chapterName.length()-1);
+            textW = StringWidth( UnicodeToUtf8(chapterName).c_str() );
+        }
+        if( initialLength != chapterName.length() ) {
+            chapterName.limit(chapterName.length()-4);
+            chapterName.append("...");
+            textW = StringWidth( UnicodeToUtf8(chapterName).c_str() );
+        }
+
+        // Draw chapter name / authors - title
+        if( textW > 0 ) {
+            textX = (int)((ScreenWidth()-textW)/2);
+            FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
+            FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
+            FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
+            FillArea(textX-14+textW+28, bottomY-39, 1, 39, 0x00000000);
+            // FillArea(textX-14+textW+28+1, bottomY, textW+28, 1, 0x00FFFFFF);
+            DrawString( textX, bottomY-33, UnicodeToUtf8(chapterName).c_str() );
+        }
+
+        // Update screen
         if( updateScreen ) {
             if( dragging ) {
                 CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdateBW(0, %d, %d, %d);",
@@ -1334,6 +1358,7 @@ public:
                 PartialUpdate(0, bottomY, ScreenWidth(), PanelHeight()+bottomH);
             }
         }
+
     }
 
     virtual void OpenTouchMenu() {
