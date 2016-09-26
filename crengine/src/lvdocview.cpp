@@ -4983,6 +4983,9 @@ bool LVDocView::moveByChapter(int delta) {
 
 /// get current chapter name or blank
 lString16 LVDocView::getCurrentChapterName() {
+    return getCurrentChapterName(-2);
+}
+lString16 LVDocView::getCurrentChapterName(int currentPage) {
     lString16 chapterName = lString16("");
 	/// returns pointer to TOC root node
 	LVPtrVector < LVTocItem, false > items;
@@ -4990,7 +4993,7 @@ lString16 LVDocView::getCurrentChapterName() {
 		return chapterName;
 
     // show book authors - name if there are less than 3 chapters
-    int cp = getCurPage()+1;
+    int cp = (currentPage==-2?getCurPage():currentPage)+1;
     if( items.length() < 3 ) {
         return getPageHeaderTitle(cp);
     }
