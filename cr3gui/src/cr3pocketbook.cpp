@@ -1319,7 +1319,7 @@ public:
         DrawString( textX, textY, UnicodeToUtf8(progress).c_str() );
 
         // Draw chapter name
-        lString16 chapterName = main_win->getDocView()->getCurrentChapterName();
+        lString16 chapterName = main_win->getDocView()->getCurrentChapterName(curPage-1);
         textW = StringWidth( UnicodeToUtf8(chapterName).c_str() );
 
         // Make sure the string isn't going over the screen width
@@ -1337,20 +1337,32 @@ public:
         // Draw chapter name / authors - title
         if( textW > 0 ) {
             textX = (int)((ScreenWidth()-textW)/2);
-            FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
-            FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
-            FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
-            FillArea(textX-14+textW+28, bottomY-39, 1, 39, 0x00000000);
-            // FillArea(textX-14+textW+28+1, bottomY, textW+28, 1, 0x00FFFFFF);
+            if( dragging ) {
+                FillArea(0, bottomY-40, ScreenWidth(), 40, 0x00FFFFFF);
+                FillArea(0, bottomY-39, ScreenWidth(), 1, 0x00000000);
+            }
+            else {
+                FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
+                FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
+                FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
+                FillArea(textX-14+textW+28, bottomY-39, 1, 39, 0x00000000);
+            }
             DrawString( textX, bottomY-33, UnicodeToUtf8(chapterName).c_str() );
         }
 
         // Update screen
         if( updateScreen ) {
             if( dragging ) {
+                int upY = bottomY;
+                int upH = bottomH;
+                if( textW > 0 ) {
+                    upY -= 40;
+                    upH += 40;
+                }
                 CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdateBW(0, %d, %d, %d);",
                     bottomY, ScreenWidth(), bottomH);
-                PartialUpdateBW(0, bottomY, ScreenWidth(), bottomH);
+                PartialUpdateBW(0, upY, ScreenWidth(), upH);
+
             }
             else {
                 CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdate(0, %d, %d, %d);",
