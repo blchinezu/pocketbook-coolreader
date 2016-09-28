@@ -1262,21 +1262,14 @@ public:
         int curPage;
         bool dragging = false;
 
+        pageCount = main_win->getDocView()->getPageCount();
+
         // Draw bottom background
         FillArea(0, bottomY-1, ScreenWidth(), bottomH+1, 0x00FFFFFF);
         FillArea(0, bottomY, ScreenWidth(), 1, 0x00000000);
 
         // Draw bar
         FillArea(barX1, barY, barW, 1, 0x00000000);
-        #ifdef POCKETBOOK_PRO_FW5
-        DrawCircle(barX1-3, barY, 3, 0x00000000);
-        DrawCircle(barX2+3, barY, 3, 0x00000000);
-        #else
-        FillArea(barX1-3, barY-3, 6, 6, 0x00000000);
-        FillArea(barX2+3, barY-3, 6, 6, 0x00000000);
-        #endif
-
-        pageCount = main_win->getDocView()->getPageCount();
 
         // Draw by X axis
         if( px > -1 ) {
@@ -1291,6 +1284,34 @@ public:
             drawPosition = pageCount == 0 ? 0 : (curPage * barW / pageCount);
         }
 
+        // Draw chapter marks
+        if( showChapterMarks() ) {
+            LVArray<int> dummy;
+            LVArray<int> & sbounds = dummy;
+            sbounds = main_win->getDocView()->getSectionBounds();
+            if( sbounds.length()<barW/5 ) {
+
+                int sbound_index = 0;
+                int markH = 9;
+                int markW = 1;
+
+                for ( int x = barX1; x<=barX2; x++ ) {
+                    int currentMarkW = x <= drawPosition ? markW*2 : markW;
+                    while ( sbound_index<sbounds.length() ) {
+                        int sx = barX1 + sbounds[sbound_index] * barW / 10000;
+                        if ( sx<x ) {
+                            sbound_index++;
+                            continue;
+                        }
+                        if ( sx==x ) {
+                            FillArea(x, barY - (markH-1) / 2, currentMarkW, markH, 0x00000000);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+
         // Mark page
         TM_lastDragPage = curPage;
 
@@ -1298,9 +1319,9 @@ public:
         FillArea(barX1, barY-1, drawPosition, 3, 0x00000000);
         if( !dragging ) {
             #ifdef POCKETBOOK_PRO_FW5
-            DrawCircle(barX1+drawPosition, barY, 18, 0x00000000);
+            DrawCircle(barX1+drawPosition, barY, 14, 0x00000000);
             #else
-            FillArea(barX1+drawPosition-18, barY-18, 36, 36, 0x00000000);
+            FillArea(barX1+drawPosition-14, barY-14, 14*2, 14*2, 0x00000000);
             #endif
         }
 
@@ -1345,7 +1366,7 @@ public:
                 FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
                 FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
                 FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
-                FillArea(textX-14+textW+28, bottomY-39, 1, 39, 0x00000000);
+                FillArea(textX-15+textW+28, bottomY-39, 1, 39, 0x00000000);
             }
             DrawString( textX, bottomY-33, UnicodeToUtf8(chapterName).c_str() );
         }
@@ -5729,6 +5750,9 @@ void removeCustomSystemTheme() {
 
 bool showPagesTilChapterEnd() {
     return CRPocketBookDocView::instance->getProps()->getBoolDef(PROP_SHOW_CHAPTER_PAGES_REMAIN, false);
+}
+bool showChapterMarks() {
+    return CRPocketBookDocView::instance->getProps()->getBoolDef(PROP_STATUS_CHAPTER_MARKS, true);
 }
 
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
