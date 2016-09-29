@@ -4936,8 +4936,9 @@ CRGUITouchEventType getTouchEventType(int inkview_evt)
 lString16 getPbModelNumber() {
     CRLog::trace("getPbModelNumber()");
     lString16 model = lString16(GetDeviceModel());
-    model.replace(lString16("PocketBook"), lString16(""));
     model.replace(lString16(" "), lString16(""));
+    model.replace(lString16("PocketBook"), lString16(""));
+    model.replace(lString16("PB"), lString16(""));
     CRLog::trace("getPbModelNumber(): %s", UnicodeToUtf8(model).c_str());
     return model;
 }
