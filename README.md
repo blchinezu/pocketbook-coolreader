@@ -64,7 +64,7 @@ After downloading the zip file, extract it and copy the system dir to your devic
 
 **Settings**
 
- - Default font size (up to 150px)
+ - Default font size (up to 300px)
  - Formatting settings > Space expanding percent [[xl743](https://github.com/xl743)]
  - Display settings > Standby
  - Display settings > Custom system theme
@@ -72,6 +72,7 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Font settings > Tracking [[xl743](https://github.com/xl743)]
  - Style settings > * > Letter spacing [[xl743](https://github.com/xl743)]
  - Page settings > Status line settings > Time format
+ - Page settings > Status line settings > Default font size (up to 300px)
  - Control settings > Page Turn Swipes
  - Control settings > Front Light Swipes
  - Control settings > Pinch zoom
