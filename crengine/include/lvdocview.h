@@ -231,7 +231,7 @@ enum {
 /// page header font sizes
 enum {
     MIN_STATUS_FONT_SIZE = 8,
-    MAX_STATUS_FONT_SIZE = 32,
+    MAX_STATUS_FONT_SIZE = 100,
     DEF_STATUS_FONT_SIZE = 22
 };
 
