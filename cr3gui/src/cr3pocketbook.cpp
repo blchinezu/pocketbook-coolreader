@@ -5175,8 +5175,6 @@ int main_handler(int type, int par1, int par2)
     switch (type) {
     case EVT_SHOW:
 
-        pbCrFont = OpenFont(DEFAULTFONT, round(PanelHeight()*0.32), 0);
-
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
 
@@ -5491,7 +5489,11 @@ int main_handler(int type, int par1, int par2)
         restartStandByTimer();
         break;
     case EVT_INIT:
-        SetPanelType(0);
+        if( GetPanelType() == PANEL_DISABLED ) {
+            SetPanelType(PANEL_ENABLED);
+        }
+        pbCrFont = OpenFont(DEFAULTFONT, round(PanelHeight()*0.32), 0);
+        SetPanelType(PANEL_DISABLED);
         need_save_cover = true;
         break;
     default:
