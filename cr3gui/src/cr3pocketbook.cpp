@@ -5489,11 +5489,9 @@ int main_handler(int type, int par1, int par2)
         restartStandByTimer();
         break;
     case EVT_INIT:
-        if( GetPanelType() == PANEL_DISABLED ) {
-            SetPanelType(PANEL_ENABLED);
-        }
+        SetPanelType(1);
         pbCrFont = OpenFont(DEFAULTFONT, round(PanelHeight()*0.32), 0);
-        SetPanelType(PANEL_DISABLED);
+        SetPanelType(0);
         need_save_cover = true;
         break;
     default:
