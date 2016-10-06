@@ -273,6 +273,10 @@ elseif (${GUI} STREQUAL CRGUI_PB)
     ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_pb626fw5} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_pb626fw5} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/pb626fw5/* )
     ADD_CUSTOM_TARGET( skin_pb626fw5 ALL DEPENDS ${cr3_skin_pb626fw5} )
 
+    SET( cr3_skin_pb631fw5 ${CMAKE_CURRENT_BINARY_DIR}/pb631fw5.cr3skin )
+    ADD_CUSTOM_COMMAND(OUTPUT ${cr3_skin_pb631fw5} COMMAND ${ZIP_EXECUTABLE} -j ${cr3_skin_pb631fw5} ${CMAKE_CURRENT_SOURCE_DIR}/data/devices/${DEVICE_NAME}/skins/pb631fw5/* )
+    ADD_CUSTOM_TARGET( skin_pb631fw5 ALL DEPENDS ${cr3_skin_pb631fw5} )
+
     INSTALL( FILES ${CR3_STYLES} DESTINATION system/share/cr3)
     INSTALL( DIRECTORY data/hyph/ DESTINATION system/share/cr3/hyph
       FILES_MATCHING PATTERN "*.pdb" )
@@ -284,6 +288,7 @@ elseif (${GUI} STREQUAL CRGUI_PB)
     INSTALL( FILES ${cr3_skin_default} DESTINATION system/share/cr3/skins )
     INSTALL( FILES ${cr3_skin_pb62x} DESTINATION system/share/cr3/skins )
     INSTALL( FILES ${cr3_skin_pb626fw5} DESTINATION system/share/cr3/skins )
+    INSTALL( FILES ${cr3_skin_pb631fw5} DESTINATION system/share/cr3/skins )
     INSTALL( DIRECTORY data/devices/${DEVICE_NAME}/keymaps/ DESTINATION system/share/cr3/keymaps )
     INSTALL( DIRECTORY data/manual/ DESTINATION system/share/cr3/manual )
 

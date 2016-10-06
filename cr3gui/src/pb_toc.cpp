@@ -24,7 +24,9 @@ CRTocMenu::CRTocMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id, CRGUI
 {
     CRLog::trace("showTocTouchMenu(): Construct");
 
-    if( pbSkinFileName == lString16("pb626fw5.cr3skin") )
+    if( pbSkinFileName == lString16("pb626fw5.cr3skin") ||
+        pbSkinFileName == lString16("pb631fw5.cr3skin")
+        )
         forcePartialBwUpdates = true;
 
     setSkinName(lString16("#settings"));

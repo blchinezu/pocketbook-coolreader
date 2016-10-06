@@ -55,10 +55,11 @@ if [ "$1" = "" -o "$1" = "pro2" ]; then
         exit
     fi
 
-    rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
-    ln -s \
-        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so \
-        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
+    curDir="`pwd`"
+    cd ../../FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib
+    rm -f libinkview.so
+    ln -s libinkview.1.1a.so libinkview.so
+    cd "$curDir"
 
     if [ -f pbpro2/cr3gui/cr3-pb.app ]; then
         echo 'Remove previous build'
@@ -110,10 +111,11 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
         exit
     fi
 
-    rm -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
-    ln -s \
-        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.pb626.fw4.4.so \
-        $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.so
+    curDir="`pwd`"
+    cd ../../FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib
+    rm -f libinkview.so
+    ln -s libinkview.pb626.fw4.4.so libinkview.so
+    cd "$curDir"
 
     if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
         echo 'Remove previous build'
