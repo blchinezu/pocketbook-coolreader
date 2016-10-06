@@ -2,14 +2,16 @@
 # This file is put in the public domain.
 #
 # Translators:
-# Alp Toros Korkmaz <alptoros111@gmail.com>, 2015-2016
+# TorpedoXL <alptoros111@gmail.com>, 2015-2016
+# tncytrk, 2016
+# tncytrk, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2016-01-29 19:48+0000\n"
-"Last-Translator: Alp Toros Korkmaz <alptoros111@gmail.com>\n"
+"PO-Revision-Date: 2016-10-05 08:29+0000\n"
+"Last-Translator: tncytrk\n"
 "Language-Team: Turkish (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/tr/)\n"
 "Language: tr\n"
@@ -20,7 +22,7 @@ msgstr ""
 
 #: ../src/citedlg.cpp:194
 msgid "Select next/prev paragraph"
-msgstr "Önceki/Sonraki paragrafı seç."
+msgstr "Sonraki/Önceki paragrafı seç."
 
 #: ../src/citedlg.cpp:197
 msgid "Select one more paragraph"
@@ -269,7 +271,7 @@ msgstr "Yayın bilgisi"
 
 #: ../src/mainwnd.cpp:1100
 msgid "Custom info"
-msgstr ""
+msgstr "Özel bilgi"
 
 #: ../src/mainwnd.cpp:1104
 msgid "CoolReader for PocketBook"
@@ -309,11 +311,11 @@ msgstr "Ayar dosyası"
 
 #: ../src/mainwnd.cpp:1115
 msgid "Keymap file"
-msgstr ""
+msgstr "Keymap dosyası"
 
 #: ../src/mainwnd.cpp:1116
 msgid "Skin file"
-msgstr "Görünüş dosyası"
+msgstr "Tema dosyası"
 
 #: ../src/mainwnd.cpp:1117
 msgid "Debug information"
@@ -392,6 +394,8 @@ msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
 msgstr ""
+"$1 butonuna kısa basış - yer imi ayarlar,\n"
+"uzun basış, yer imine götürür"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -399,47 +403,47 @@ msgstr "Yer imini sil"
 
 #: ../src/bmkdlg.cpp:316
 msgid "Go to citation"
-msgstr ""
+msgstr "Alıntıya git"
 
 #: ../src/bmkdlg.cpp:317
 msgid "Delete citation"
-msgstr ""
+msgstr "Alıntıyı sil"
 
 #: ../src/bmkdlg.cpp:332
 msgid "Citations"
-msgstr ""
+msgstr "Alıntılar"
 
 #: ../src/bmkdlg.cpp:448 ../src/viewdlg.cpp:574
 msgid "Cite selection dialog"
-msgstr ""
+msgstr "Alıntı seçim penceresi"
 
 #: ../src/dictdlg.cpp:80
 msgid "From dictionary "
-msgstr ""
+msgstr "Sözlükten"
 
 #: ../src/dictdlg.cpp:89
 msgid "[cannot read article]"
-msgstr ""
+msgstr "[nesne okunamadı]"
 
 #: ../src/settings.cpp:204
 msgid "choose command"
-msgstr ""
+msgstr "komut seç"
 
 #: ../src/settings.cpp:222
 msgid "Controls"
-msgstr ""
+msgstr "Kontroller"
 
 #: ../src/settings.cpp:388
 msgid "(No action)"
-msgstr ""
+msgstr "(Eylem yok)"
 
 #: ../src/settings.cpp:541
 msgid "[Command is not assigned]"
-msgstr ""
+msgstr "[Komut atanmamış]"
 
 #: ../src/settings.cpp:562
 msgid "0` (Portrait)"
-msgstr ""
+msgstr "0` (Portre)"
 
 #: ../src/settings.cpp:563
 msgid "90 `"
@@ -459,15 +463,15 @@ msgstr "Sayfa yönü"
 
 #: ../src/settings.cpp:597
 msgid "Default font size"
-msgstr "Varsayılan font boyutu"
+msgstr "Varsayılan yazıtipi boyutu"
 
 #: ../src/settings.cpp:652
 msgid "The quick brown fox jumps over lazy dog"
-msgstr ""
+msgstr "Pijamalı hasta yağız şoföre çabucak güvendi"
 
 #: ../src/settings.cpp:832
 msgid "Justify"
-msgstr ""
+msgstr "İki yana yaslı"
 
 #: ../src/settings.cpp:833
 msgctxt "CSS"
@@ -485,23 +489,23 @@ msgstr "Sağ"
 
 #: ../src/settings.cpp:841
 msgid "No indent"
-msgstr ""
+msgstr "Girinti yok"
 
 #: ../src/settings.cpp:842
 msgid "Small indent"
-msgstr ""
+msgstr "Ufak girinti"
 
 #: ../src/settings.cpp:843
 msgid "Big indent"
-msgstr ""
+msgstr "Fazla girinti"
 
 #: ../src/settings.cpp:844
 msgid "Small outdent"
-msgstr ""
+msgstr "Ufak çıkıntı"
 
 #: ../src/settings.cpp:845
 msgid "Big outdent"
-msgstr ""
+msgstr "Fazla çıkıntı"
 
 #: ../src/settings.cpp:851
 msgid "[Default sans-serif font]"
@@ -582,31 +586,31 @@ msgstr "İtalik"
 
 #: ../src/settings.cpp:920 ../src/settings.cpp:1094
 msgid "None"
-msgstr "Hiçbiri"
+msgstr "Yok"
 
 #: ../src/settings.cpp:921 ../src/settings.cpp:1096
 msgid "Underline"
-msgstr "Altçizgi"
+msgstr "Altı çizili"
 
 #: ../src/settings.cpp:922
 msgid "Line through"
-msgstr ""
+msgstr "Üstü çizili"
 
 #: ../src/settings.cpp:923
 msgid "Overline"
-msgstr "Ortaçizgi"
+msgstr "Tepesi çizili"
 
 #: ../src/settings.cpp:929
 msgid "Baseline"
-msgstr ""
+msgstr "Taban çizgisi"
 
 #: ../src/settings.cpp:930
 msgid "Subscript"
-msgstr ""
+msgstr "Alt simge"
 
 #: ../src/settings.cpp:931
 msgid "Superscript"
-msgstr ""
+msgstr "Üst simge"
 
 #: ../src/settings.cpp:937 ../src/settings.cpp:945
 msgid "Black"
@@ -622,126 +626,126 @@ msgstr "Beyaz"
 
 #: ../src/settings.cpp:954 ../src/settings.cpp:965
 msgid "0.2 of line height"
-msgstr ""
+msgstr "0.2 satır aralığı"
 
 #: ../src/settings.cpp:955 ../src/settings.cpp:966
 msgid "0.3 of line height"
-msgstr ""
+msgstr "0.3 satır aralığı"
 
 #: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
 #: ../src/settings.cpp:992
 msgid "0.5 of line height"
-msgstr ""
+msgstr "0.5 satır aralığı"
 
 #: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
 #: ../src/settings.cpp:993
 msgid "1 line height"
-msgstr ""
+msgstr "1 satır aralığı"
 
 #: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
 #: ../src/settings.cpp:995
 msgid "2 of line height"
-msgstr ""
+msgstr "2 satır aralığı"
 
 #: ../src/settings.cpp:978 ../src/settings.cpp:994
 msgid "1.5 of line height"
-msgstr ""
+msgstr "1.5 satır aralığı"
 
 #: ../src/settings.cpp:980 ../src/settings.cpp:996
 msgid "4 of line height"
-msgstr ""
+msgstr "4 satır aralığı"
 
 #: ../src/settings.cpp:981 ../src/settings.cpp:997
 msgid "5% of line width"
-msgstr ""
+msgstr "Satır uzunluğunun %5'i"
 
 #: ../src/settings.cpp:982 ../src/settings.cpp:998
 msgid "10% of line width"
-msgstr ""
+msgstr "Satır uzunluğunun %10'u"
 
 #: ../src/settings.cpp:983 ../src/settings.cpp:999
 msgid "15% of line width"
-msgstr ""
+msgstr "Satır uzunluğunun %15'i"
 
 #: ../src/settings.cpp:984 ../src/settings.cpp:1000
 msgid "20% of line width"
-msgstr ""
+msgstr "Satır uzunluğunun %20'si"
 
 #: ../src/settings.cpp:985 ../src/settings.cpp:1001
 msgid "30% of line width"
-msgstr ""
+msgstr "Satır uzunluğunun %30'u"
 
 #: ../src/settings.cpp:1004
 msgid "Text alignment"
-msgstr ""
+msgstr "Metin hizalaması"
 
 #: ../src/settings.cpp:1006
 msgid "First line indent"
-msgstr ""
+msgstr "İlk satır girintisi"
 
 #: ../src/settings.cpp:1009 ../src/settings.cpp:1658
 msgid "Font face"
-msgstr ""
+msgstr "Yazitipi"
 
 #: ../src/settings.cpp:1023
 msgid "Font size"
-msgstr "Font boyutu"
+msgstr "Yazitipi boyutu"
 
 #: ../src/settings.cpp:1025 ../src/settings.cpp:1552 ../src/settings.cpp:1667
 msgid "Font weight"
-msgstr ""
+msgstr "Yazıtipi kalınlığı"
 
 #: ../src/settings.cpp:1027
 msgid "Font style"
-msgstr "Font stili"
+msgstr "Yazıtipi stili"
 
 #: ../src/settings.cpp:1029 ../src/settings.cpp:1581
 msgid "Interline space"
-msgstr ""
+msgstr "Satır aralığı"
 
 #: ../src/settings.cpp:1031
 msgid "Letter spacing"
-msgstr ""
+msgstr "Harf aralığı"
 
 #: ../src/settings.cpp:1033
 msgid "Text decoration"
-msgstr ""
+msgstr "Metin stili"
 
 #: ../src/settings.cpp:1035
 msgid "Text vertical alignment"
-msgstr ""
+msgstr "Dikey metin hizalaması"
 
 #: ../src/settings.cpp:1037
 msgid "Text color"
-msgstr ""
+msgstr "Metin rengi"
 
 #: ../src/settings.cpp:1039
 msgid "Background color"
-msgstr ""
+msgstr "Arkaplan rengi"
 
 #: ../src/settings.cpp:1041
 msgid "Margin before"
-msgstr ""
+msgstr "Üst boşluk"
 
 #: ../src/settings.cpp:1043
 msgid "Margin after"
-msgstr ""
+msgstr "Alt boşluk"
 
 #: ../src/settings.cpp:1045
 msgid "Margin left"
-msgstr ""
+msgstr "Sol boşluk"
 
 #: ../src/settings.cpp:1047
 msgid "Margin right"
-msgstr ""
+msgstr "Sağ boşluk"
 
 #: ../src/settings.cpp:1075
 msgid "On for all fonts"
-msgstr ""
+msgstr "Tüm yazıtipleri için aktif"
 
 #: ../src/settings.cpp:1076
 msgid "On for big fonts only"
-msgstr ""
+msgstr "Sadece büyük boyutlu metinlerde aktif"
 
 #: ../src/settings.cpp:1077 ../src/settings.cpp:1083 ../src/settings.cpp:1187
 #: ../src/settings.cpp:1320 ../src/settings.cpp:1346
@@ -954,7 +958,7 @@ msgstr "2 dakika"
 
 #: ../src/settings.cpp:1323
 msgid "3 minutes"
-msgstr "3 minutes"
+msgstr "3 dakika"
 
 #: ../src/settings.cpp:1324
 msgid "4 minutes"
@@ -1038,23 +1042,23 @@ msgstr "Dinamik"
 
 #: ../src/settings.cpp:1356
 msgid "180+slow next page"
-msgstr ""
+msgstr "180+slow sonraki sayfa"
 
 #: ../src/settings.cpp:1357
 msgid "180+slow prev/next page"
-msgstr ""
+msgstr "180+slow önceki/sonraki sayfa"
 
 #: ../src/settings.cpp:1358
 msgid "180+FAST next page"
-msgstr ""
+msgstr "180+FAST sonraki sayfa"
 
 #: ../src/settings.cpp:1359
 msgid "180+FAST prev/next page"
-msgstr ""
+msgstr "180+FAST önceki/sonraki sayfa"
 
 #: ../src/settings.cpp:1360
 msgid "180+FAST next/prev page"
-msgstr ""
+msgstr "180+FAST sonraki/önceki sayfa"
 
 #: ../src/settings.cpp:1378 ../src/settings.cpp:1395
 msgid "Auto"
@@ -1082,11 +1086,11 @@ msgstr "Devre dışı (1:1)"
 
 #: ../src/settings.cpp:1389
 msgid "Integer scale"
-msgstr ""
+msgstr "Bütün ölçek"
 
 #: ../src/settings.cpp:1390
 msgid "Arbitrary scale"
-msgstr ""
+msgstr "Gelişigüzel ölçek"
 
 #: ../src/settings.cpp:1396
 msgid "*1"
@@ -1118,7 +1122,7 @@ msgstr ""
 
 #: ../src/settings.cpp:1490
 msgid "Default paragraph formatting"
-msgstr ""
+msgstr "Paragraf"
 
 #: ../src/settings.cpp:1491
 msgctxt "CSS"
@@ -1131,15 +1135,15 @@ msgstr "Altyazı"
 
 #: ../src/settings.cpp:1493
 msgid "Preformatted text / code"
-msgstr ""
+msgstr "Ön biçimlenmiş metin / kod"
 
 #: ../src/settings.cpp:1494
 msgid "Link"
-msgstr ""
+msgstr "Bağlantı"
 
 #: ../src/settings.cpp:1496
 msgid "Epigraph"
-msgstr ""
+msgstr "Özdeyiş"
 
 #: ../src/settings.cpp:1497
 msgid "Poem"
@@ -1147,35 +1151,35 @@ msgstr "Şiir"
 
 #: ../src/settings.cpp:1498
 msgid "Text / Cite / Epigraph author"
-msgstr ""
+msgstr "Metin / Alıntı / Özdeyiş sahibi"
 
 #: ../src/settings.cpp:1499
 msgid "Footnote"
-msgstr ""
+msgstr "Dipnot"
 
 #: ../src/settings.cpp:1500
 msgid "Footnote link"
-msgstr ""
+msgstr "Dipnot bağlantısı"
 
 #: ../src/settings.cpp:1501
 msgid "Footnote title"
-msgstr ""
+msgstr "Dipnot başlığı"
 
 #: ../src/settings.cpp:1502
 msgid "Annotation"
-msgstr ""
+msgstr "Bilgi notu"
 
 #: ../src/settings.cpp:1542
 msgid "Default font face"
-msgstr ""
+msgstr "Varsayılan yazitipi"
 
 #: ../src/settings.cpp:1547
 msgid "Font settings"
-msgstr ""
+msgstr "Yazitipi ayarları"
 
 #: ../src/settings.cpp:1554
 msgid "Font antialiasing"
-msgstr ""
+msgstr "Kenar yumuşatma"
 
 #: ../src/settings.cpp:1557
 msgid "Font hinting"
@@ -1183,91 +1187,91 @@ msgstr ""
 
 #: ../src/settings.cpp:1559
 msgid "Font kerning"
-msgstr ""
+msgstr "Yazı tipi aralığı"
 
 #: ../src/settings.cpp:1561
 msgid "Font embolding"
-msgstr ""
+msgstr "Yazitipi belirginleştirme"
 
 #: ../src/settings.cpp:1563
 msgid "Tracking"
-msgstr ""
+msgstr "Harfler arası boşluk"
 
 #: ../src/settings.cpp:1565
 msgid "Font Gamma"
-msgstr ""
+msgstr "Yazı tipi kontrast derecesi"
 
 #: ../src/settings.cpp:1567
 msgid "Document embedded fonts"
-msgstr ""
+msgstr "Dokümanın gömülü yazitipi"
 
 #: ../src/settings.cpp:1570
 msgid "Fallback font face"
-msgstr ""
+msgstr "Yedek yazı tipi"
 
 #: ../src/settings.cpp:1576
 msgid "Formatting settings"
-msgstr ""
+msgstr "Biçimlendirme ayarları"
 
 #: ../src/settings.cpp:1588
 msgid "[No Hyphenation]"
-msgstr ""
+msgstr "[Tire ile ayırma yok]"
 
 #: ../src/settings.cpp:1589
 msgid "[Algorythmic Hyphenation]"
-msgstr ""
+msgstr "[Algoritmik tire ile ayırma]"
 
 #: ../src/settings.cpp:1591
 msgid "Hyphenation"
-msgstr ""
+msgstr "Kelimeyi tire tire ayırma"
 
 #: ../src/settings.cpp:1605
 msgid "Preformatted text"
-msgstr ""
+msgstr "Önbiçimlenmiş metin"
 
 #: ../src/settings.cpp:1608
 msgid "Space condensing percent"
-msgstr ""
+msgstr "Boşluk daralma yüzdesi"
 
 #: ../src/settings.cpp:1611
 msgid "Space expanding percent"
-msgstr ""
+msgstr "Boşluk genişleme yüzdesi"
 
 #: ../src/settings.cpp:1614
 msgid "Floating punctuation"
-msgstr ""
+msgstr "Değişken noktalama"
 
 #: ../src/settings.cpp:1620
 msgid "Image scaling"
-msgstr ""
+msgstr "Resim ölçeklenedirme"
 
 #: ../src/settings.cpp:1625
 msgid "Block image scaling mode"
-msgstr ""
+msgstr "Resmi blok olarak ölçekleme modu"
 
 #: ../src/settings.cpp:1628
 msgid "Block image max zoom"
-msgstr ""
+msgstr "Blok resim azami yakınlaştırma"
 
 #: ../src/settings.cpp:1631
 msgid "Inline image scaling mode"
-msgstr ""
+msgstr "Satır içi resim ölçekleme modu"
 
 #: ../src/settings.cpp:1634
 msgid "Inline image max zoom"
-msgstr ""
+msgstr "Satır içi resmi azami yakınlaştırma"
 
 #: ../src/settings.cpp:1643
 msgid "Page settings"
-msgstr ""
+msgstr "Sayfa ayarları"
 
 #: ../src/settings.cpp:1648
 msgid "Status line"
-msgstr ""
+msgstr "Durum çubuğu"
 
 #: ../src/settings.cpp:1653
 msgid "Status line settings"
-msgstr ""
+msgstr "Durum çubuğu ayarları"
 
 #: ../src/settings.cpp:1670
 msgid "Time format"
@@ -1307,7 +1311,7 @@ msgstr "Sayfa numarasını göster"
 
 #: ../src/settings.cpp:1690
 msgid "Show chapter marks"
-msgstr ""
+msgstr "Bölüm işaretlerini göster"
 
 #: ../src/settings.cpp:1699
 msgid "Page margins"
@@ -1331,7 +1335,7 @@ msgstr "Sağ kenar"
 
 #: ../src/settings.cpp:1715
 msgid "Footnotes at page bottom"
-msgstr ""
+msgstr "Dipnotlar sayfanın altında"
 
 #: ../src/settings.cpp:1721
 msgid "Display settings"
@@ -1339,7 +1343,7 @@ msgstr "Görüntü ayarları"
 
 #: ../src/settings.cpp:1730
 msgid "Landscape pages"
-msgstr ""
+msgstr "Yatay sayfalar"
 
 #: ../src/settings.cpp:1732
 msgid "Inverse display"
@@ -1351,15 +1355,15 @@ msgstr "Yer imi ikonlarını göster"
 
 #: ../src/settings.cpp:1738
 msgid "Highlight bookmarks"
-msgstr ""
+msgstr "Yer imlerini vurgula"
 
 #: ../src/settings.cpp:1742
 msgid "Display update mode"
-msgstr ""
+msgstr "Görüntü yenileme modu"
 
 #: ../src/settings.cpp:1750
 msgid "Standby"
-msgstr ""
+msgstr "Bekleme modu"
 
 #: ../src/settings.cpp:1757
 msgid "Turbo update mode"
@@ -1367,15 +1371,15 @@ msgstr "Turbo yenileme modu"
 
 #: ../src/settings.cpp:1762
 msgid "Gray buffer depth (needs restart)"
-msgstr ""
+msgstr "Gri tampon derinliği (yeniden başlatma gerektirir)"
 
 #: ../src/settings.cpp:1767
 msgid "Custom system theme (needs restart)"
-msgstr ""
+msgstr "Özel sistem teması (yeniden başlatma gerektirir)"
 
 #: ../src/settings.cpp:1774
 msgid "Skin"
-msgstr ""
+msgstr "Tema"
 
 #: ../src/settings.cpp:1790
 msgid "Control settings"
@@ -1391,39 +1395,39 @@ msgstr "Sayfa çevirme açısı"
 
 #: ../src/settings.cpp:1816
 msgid "Tap action"
-msgstr ""
+msgstr "Dokunma eylemi"
 
 #: ../src/settings.cpp:1818
 msgid "Long tap action"
-msgstr ""
+msgstr "Uzun dokunma eylemi"
 
 #: ../src/settings.cpp:1822
 msgid "Height of the upper tap zone"
-msgstr ""
+msgstr "Üst dokunma alanının yüksekliği"
 
 #: ../src/settings.cpp:1825
 msgid "Height of the middle tap zone"
-msgstr ""
+msgstr "Orta dokunma alanının yüksekliği"
 
 #: ../src/settings.cpp:1828
 msgid "Width of the left tap zone"
-msgstr ""
+msgstr "Sol dokunma alanının genişliği"
 
 #: ../src/settings.cpp:1831
 msgid "Width of the middle tap zone"
-msgstr ""
+msgstr "Orta dokunma alanının genişliği"
 
 #: ../src/settings.cpp:1835
 msgid "Page Turn Swipes"
-msgstr ""
+msgstr "Kaydırarak sayfa değiştir"
 
 #: ../src/settings.cpp:1838
 msgid "Front Light Swipes"
-msgstr ""
+msgstr "Kaydırarak ışığı ayarla"
 
 #: ../src/settings.cpp:1842
 msgid "Pinch zoom"
-msgstr ""
+msgstr "Sıkıştırarak yakınlaştırma"
 
 #: ../src/settings.cpp:1860
 msgid "Style settings"
@@ -1431,11 +1435,11 @@ msgstr "Stil ayarları"
 
 #: ../src/settings.cpp:1865
 msgid "Document embedded styles"
-msgstr ""
+msgstr "Dokümanın gömülü stilleri"
 
 #: ../src/settings.cpp:1884 ../src/viewdlg.cpp:601
 msgid "Clear cache"
-msgstr "Kaşe belleği temizle"
+msgstr "Önbelleği temizle"
 
 #: ../src/settings.cpp:1892 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
 msgid "OTA Update"
@@ -1459,37 +1463,39 @@ msgstr "Sözlük bulunamadı"
 
 #: ../src/viewdlg.cpp:160
 msgid "Place dictionaries to directory 'dict' of SD card."
-msgstr ""
+msgstr "Hafıza kartındaki 'dict' klasörüne sözlükleri aktarınız"
 
 #: ../src/viewdlg.cpp:161
 msgid "Dictionaries in standard unix .dict format are supported."
-msgstr ""
+msgstr "Standart unix .dict formatındaki sözlükler desteklenir."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
 "For each dictionary, pair of files should be provided: data file (with .dict "
 "or .dict.dz extension, and index file with .index extension"
 msgstr ""
+"Her bir dosya için dosya çiftleri verilmiş olmalıdır: veri dosyası (.dict ya "
+"da .dict.dz uzantılı) ve indeks dosyası (.index uzantılı)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
-msgstr ""
+msgstr "İçindekiler"
 
 #: ../src/viewdlg.cpp:181
 msgid "Enter page number"
-msgstr ""
+msgstr "Sayfa numarası giriniz"
 
 #: ../src/viewdlg.cpp:194
 msgid "Enter position percent"
-msgstr ""
+msgstr "Pozisyon yüzdesini giriniz"
 
 #: ../src/viewdlg.cpp:355
 msgid "Find in dictionary"
-msgstr ""
+msgstr "Sözlükte bul"
 
 #: ../src/viewdlg.cpp:485
 msgid "M"
-msgstr ""
+msgstr "M"
 
 #: ../src/viewdlg.cpp:487
 msgid "Ok"
@@ -1519,11 +1525,11 @@ msgstr "Sağ"
 
 #: ../src/viewdlg.cpp:499
 msgid "Side Up"
-msgstr ""
+msgstr "Aşağıdan yukarı"
 
 #: ../src/viewdlg.cpp:501
 msgid "Side Down"
-msgstr ""
+msgstr "Yukarıdan aşağı"
 
 #: ../src/viewdlg.cpp:503
 msgid "Side Press"
@@ -1535,7 +1541,7 @@ msgstr "Menü"
 
 #: ../src/viewdlg.cpp:507
 msgid "Zoom"
-msgstr "Zum"
+msgstr "Yakınlaştırma"
 
 #: ../src/viewdlg.cpp:518
 msgid "Long"
@@ -1547,11 +1553,11 @@ msgstr "İlk sayfa"
 
 #: ../src/viewdlg.cpp:527
 msgid "Back by page"
-msgstr ""
+msgstr "Bir sayfa geri"
 
 #: ../src/viewdlg.cpp:529
 msgid "Forward by page"
-msgstr ""
+msgstr "Bir sayfa ileri"
 
 #: ../src/viewdlg.cpp:530
 msgid "Forward in move history"
@@ -1563,23 +1569,23 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:532
 msgid "Next link"
-msgstr ""
+msgstr "Sonraki bağlantı"
 
 #: ../src/viewdlg.cpp:533
 msgid "Previous link"
-msgstr ""
+msgstr "Önceki bağlantı"
 
 #: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
 msgid "Go to link"
-msgstr ""
+msgstr "Bağlantıya git"
 
 #: ../src/viewdlg.cpp:535
 msgid "To last page"
-msgstr ""
+msgstr "En son sayfaya"
 
 #: ../src/viewdlg.cpp:536
 msgid "Go to position"
-msgstr ""
+msgstr "Pozisyona git"
 
 #: ../src/viewdlg.cpp:538
 msgid "Zoom in"
@@ -1591,11 +1597,11 @@ msgstr "Uzaklaştır"
 
 #: ../src/viewdlg.cpp:540
 msgid "Toggle bold text"
-msgstr ""
+msgstr "Metin kalınlaştırma aktif/pasif"
 
 #: ../src/viewdlg.cpp:541
 msgid "Toggle text format"
-msgstr ""
+msgstr "Metin biçimi aktif/pasif"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
@@ -1611,7 +1617,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:545
 msgid "First link"
-msgstr ""
+msgstr "İlk bağlantı"
 
 #: ../src/viewdlg.cpp:546
 msgid "Rotate by"
@@ -1619,15 +1625,15 @@ msgstr "Döndür"
 
 #: ../src/viewdlg.cpp:547
 msgid "Set rotate angle"
-msgstr ""
+msgstr "Döndürme açısı ayarla"
 
 #: ../src/viewdlg.cpp:548
 msgid "Save history and bookmarks"
-msgstr ""
+msgstr "Geçmişi ve yer imlerini kaydet"
 
 #: ../src/viewdlg.cpp:549
 msgid "Save document to cache"
-msgstr ""
+msgstr "Dokümanı önbelleğe kaydet"
 
 #: ../src/viewdlg.cpp:550
 msgid "Close dialog"
@@ -1643,7 +1649,7 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:555
 msgid "Close book"
-msgstr ""
+msgstr "Kitabı kapat"
 
 #: ../src/viewdlg.cpp:556
 msgid "Main menu"
@@ -1651,7 +1657,7 @@ msgstr "Ana Menü"
 
 #: ../src/viewdlg.cpp:557
 msgid "Go to page dialog"
-msgstr ""
+msgstr "Sayfa penceresine git"
 
 #: ../src/viewdlg.cpp:558
 msgid "Settings menu"
@@ -1663,7 +1669,7 @@ msgstr "Font boyutu ayarları"
 
 #: ../src/viewdlg.cpp:560
 msgid "Page orientation settings"
-msgstr ""
+msgstr "Sayfa yönlendirme ayarları"
 
 #: ../src/viewdlg.cpp:565
 msgid "Find in Dictionary (T5)"
@@ -1675,7 +1681,7 @@ msgstr "Yer imi listesi"
 
 #: ../src/viewdlg.cpp:568
 msgid "Citations list"
-msgstr ""
+msgstr "Alıntı listesi"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
@@ -1683,7 +1689,7 @@ msgstr "Yer imine git..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
-msgstr ""
+msgstr "Son açılan kitaplar listesi"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
@@ -1691,27 +1697,27 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
-msgstr ""
+msgstr "Son açılan kitaba geç"
 
 #: ../src/viewdlg.cpp:575
 msgid "Search dialog"
-msgstr ""
+msgstr "Arama penceresi"
 
 #: ../src/viewdlg.cpp:576
 msgid "Find in Dictionary (virtual keyboard)"
-msgstr ""
+msgstr "Sözlükte bul (sanal klavye)"
 
 #: ../src/viewdlg.cpp:577
 msgid "Next keyboard layout"
-msgstr ""
+msgstr "Sonraki klavye düzeni"
 
 #: ../src/viewdlg.cpp:578
 msgid "Previous keyboard layout"
-msgstr ""
+msgstr "Önceki klavye düzeni"
 
 #: ../src/viewdlg.cpp:579
 msgid "Show manual"
-msgstr ""
+msgstr "Kullanım kılavuzunu göster"
 
 #: ../src/viewdlg.cpp:580
 msgid "Show key mapping"
@@ -1719,35 +1725,35 @@ msgstr ""
 
 #: ../src/viewdlg.cpp:581
 msgid "Go to percent..."
-msgstr ""
+msgstr "Yüzdeye git..."
 
 #: ../src/viewdlg.cpp:586
 msgid "Front light"
-msgstr ""
+msgstr "Aydınlatma ışığı"
 
 #: ../src/viewdlg.cpp:587
 msgid "Invert display"
-msgstr ""
+msgstr "Ters görüntü"
 
 #: ../src/viewdlg.cpp:588
 msgid "Full screen update"
-msgstr ""
+msgstr "Tam ekran güncelleme"
 
 #: ../src/viewdlg.cpp:589
 msgid "Toggle status bar"
-msgstr ""
+msgstr "Durum çubuğunu aç/kapat"
 
 #: ../src/viewdlg.cpp:592
 msgid "Enter standby mode"
-msgstr ""
+msgstr "Bekleme moduna al"
 
 #: ../src/viewdlg.cpp:594
 msgid "Tasks list"
-msgstr ""
+msgstr "Görev listesi"
 
 #: ../src/viewdlg.cpp:596
 msgid "Toggle system panel"
-msgstr ""
+msgstr "Sistem panelini aç/kapat"
 
 #: ../src/viewdlg.cpp:598
 msgid "Lock device"
@@ -1759,15 +1765,15 @@ msgstr "Sistem panelini aç"
 
 #: ../src/viewdlg.cpp:604
 msgid "Toggle front light"
-msgstr ""
+msgstr "Aydınlatma ışığını aç/kapat"
 
 #: ../src/viewdlg.cpp:607
 msgid "PocketBook Main menu"
-msgstr ""
+msgstr "Pocketbook ana menü"
 
 #: ../src/viewdlg.cpp:609
 msgid "Unknown command"
-msgstr ""
+msgstr "Bilinmeyen komut"
 
 #: ../src/viewdlg.cpp:616
 msgid "Previous Page"
@@ -1807,11 +1813,11 @@ msgstr "Saat yönünün tersine döndür"
 
 #: ../src/viewdlg.cpp:634
 msgid "Portrait View"
-msgstr ""
+msgstr "Portre Görünümü"
 
 #: ../src/viewdlg.cpp:636
 msgid "Landscape View"
-msgstr ""
+msgstr "Yatay Görünüm"
 
 #: ../src/viewdlg.cpp:660
 msgid "Key"
@@ -1819,13 +1825,15 @@ msgstr "Anahtar"
 
 #: ../src/viewdlg.cpp:660
 msgid "Assigned function"
-msgstr ""
+msgstr "Atanmış fonksiyon"
 
 #: ../src/ota_update.cpp:151
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
 msgstr ""
+"İndirme başarılı!\n"
+"CoolReader kendini yeniden başlatacak."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1879,15 +1887,15 @@ msgstr "İçerikler"
 
 #: ../src/cr3pocketbook.cpp:2409
 msgid "Cache cleared."
-msgstr ""
+msgstr "Önbellek temizlendi."
 
 #: ../src/cr3pocketbook.cpp:2414
 msgid "Unable to list the directory contents!"
-msgstr ""
+msgstr "Dosya içeriği listelenemiyor!"
 
 #: ../src/cr3pocketbook.cpp:2420
 msgid "Unable to clear cache!"
-msgstr ""
+msgstr "Önbellek temizlenemiyor!"
 
 #: ../src/cr3pocketbook.cpp:3938
 msgid "Press $1 to translate"
@@ -1903,8 +1911,8 @@ msgstr "Başlıksız"
 
 #: ../src/cr3pocketbook.cpp:5517
 msgid "Custom system theme applied. CR3 will now restart."
-msgstr ""
+msgstr "Özel sistem teması uygulandı. CR3 şimdi yeniden başlayacak."
 
 #: ../src/cr3pocketbook.cpp:5580
 msgid "Restored default system theme. CR3 will now restart."
-msgstr ""
+msgstr "Varsayılan sistem temasına geri dönüldü. CR3 şimdi yeniden başlayacak."
