@@ -176,7 +176,6 @@
     <border widths="4,0,4,0"/>
     <client>
       <background color="#FFFFFF" />
-      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="false" italic="false" valign="center" halign="left"/>
     </client>
     <value>
       <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="false" italic="false" valign="center" halign="left"/>
