@@ -1238,8 +1238,12 @@ public:
                 // Convert
                 ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
+                // Offset
+                int offsetX = icon_width > bmp->width ? round((icon_width-bmp->width)/2) : 0;
+                int offsetY = icon_height > bmp->height ? round((icon_height-bmp->height)/2) : 0;
+
                 // Draw
-                DrawBitmap(position, 0, bmp);
+                DrawBitmap(position+offsetX, offsetY, bmp);
 
                 // Free memory
                 free(bmp);
