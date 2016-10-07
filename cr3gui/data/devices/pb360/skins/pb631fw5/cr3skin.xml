@@ -135,7 +135,7 @@
 
   <window id="dict" size="100%, 44%">
     <title>
-      <size minvalue="0,60" maxvalue="100%,60"/>
+      <size minvalue="0,100" maxvalue="100%,100"/>
       <text color="#000000" face="Liberation Sans, DejaVu Sans" size="40" bold="true" italic="false" valign="center" halign="left"/>
       <background color="#FFFFFF"/>
       <background color="#000000" pos="0, 0" size="100%,1"/>
@@ -162,8 +162,8 @@
   <window id="dict-rotated" base="#dict"/>
   <menu id="dict-list" min-item-count="10" max-item-count="10" show-shortcuts="false" fullscreen="false" >
     <title>
-      <size minvalue="0,60" maxvalue="100%,60"/>
-      <text color="#000000" face="Liberation Sans, DejaVu Sans Condensed" size="28" bold="true" italic="false" valign="center" halign="left"/>
+      <size minvalue="0,100" maxvalue="100%,100"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans Condensed" size="39" bold="true" italic="false" valign="center" halign="left"/>
       <background color="#FFFFFF"/>
       <background color="#000000" pos="0, 0" size="100%,1"/>
       <background color="#000000" pos="0,-1" size="100%,1"/>
@@ -171,22 +171,23 @@
       <background color="#000000" pos="-1,0" size="1,100%"/>
       <border widths="4,4,4,4"/>
     </title>
-    <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="true" italic="false" valign="center" halign="left"/>
+    <text color="#000000" face="Liberation Sans, DejaVu Sans" size="39" bold="true" italic="false" valign="center" halign="left"/>
     <background color="#FFFFFF"/>
     <border widths="4,0,4,0"/>
     <client>
       <background color="#FFFFFF" />
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="false" italic="false" valign="center" halign="left"/>
     </client>
     <value>
-      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="false" italic="false" valign="center" halign="left"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="false" italic="false" valign="center" halign="left"/>
     </value>
     <item>
       <border widths="0,0,0,0"/>
-      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="true" italic="false" valign="center" halign="left"/>
     </item>
     <selitem>
       <border widths="0,0,0,0"/>
-      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="left"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="35" bold="true" italic="false" valign="center" halign="left"/>
     </selitem>
     <status>
       <border widths="0,0,0,0"/>
