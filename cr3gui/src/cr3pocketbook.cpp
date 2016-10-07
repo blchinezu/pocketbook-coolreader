@@ -46,6 +46,7 @@
 
 extern ifont* header_font;
 ifont * pbCrFont;
+int pbCrFontSize = 10;
 
 #ifdef POCKETBOOK_PRO
 iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
@@ -3629,6 +3630,8 @@ lString16 CRPbDictionaryView::detectDictionaryRedirectFor(const char* translatio
 
 void CRPbDictionaryView::translate(const lString16 &w)
 {
+    getDocView()->setFontSize( pbCrFontSize );
+
     lString8 body;
 
     lString16 s16 = w;
@@ -5494,7 +5497,8 @@ int main_handler(int type, int par1, int par2)
         break;
     case EVT_INIT:
         SetPanelType(1);
-        pbCrFont = OpenFont(DEFAULTFONT, round(PanelHeight()*0.32), 0);
+        pbCrFontSize = round(PanelHeight()*0.32);
+        pbCrFont = OpenFont(DEFAULTFONT, pbCrFontSize, 0);
         SetPanelType(0);
         need_save_cover = true;
         break;
