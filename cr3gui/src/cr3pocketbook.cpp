@@ -1370,19 +1370,22 @@ public:
         }
 
         // Draw chapter name / authors - title
+        int chapterH = 0;
         if( textW > 0 ) {
+            int plusH = round(textH/2);
+            chapterH = textH + plusH;
             textX = (int)((ScreenWidth()-textW)/2);
             if( dragging ) {
-                FillArea(0, bottomY-40, ScreenWidth(), 40, 0x00FFFFFF);
-                FillArea(0, bottomY-39, ScreenWidth(), 1, 0x00000000);
+                FillArea(0, bottomY-chapterH, ScreenWidth(), chapterH, 0x00FFFFFF);
+                FillArea(0, bottomY-chapterH+1, ScreenWidth(), 1, 0x00000000);
             }
             else {
-                FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
-                FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
-                FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
-                FillArea(textX-15+textW+28, bottomY-39, 1, 39, 0x00000000);
+                FillArea(textX-textH, bottomY-chapterH, textW+(2*textH), chapterH, 0x00FFFFFF);
+                FillArea(textX-textH+1, bottomY-chapterH+1, textW+(2*textH)-2, 1, 0x00000000);
+                FillArea(textX-textH+1, bottomY-chapterH+1, 1, chapterH-1, 0x00000000);
+                FillArea(textX-textH+textW+(2*textH)-2, bottomY-chapterH+1, 1, chapterH-1, 0x00000000);
             }
-            DrawString( textX, bottomY-33, UnicodeToUtf8(chapterName).c_str() );
+            DrawString( textX, bottomY-textH-round(plusH/1.6), UnicodeToUtf8(chapterName).c_str() );
         }
 
         // Update screen
@@ -1391,8 +1394,8 @@ public:
                 int upY = bottomY;
                 int upH = bottomH;
                 if( textW > 0 ) {
-                    upY -= 40;
-                    upH += 40;
+                    upY -= chapterH;
+                    upH += chapterH;
                 }
                 CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdateBW(0, %d, %d, %d);",
                     bottomY, ScreenWidth(), bottomH);
@@ -1442,7 +1445,7 @@ public:
         barX1 = (int)(ScreenWidth()*0.05);
         barX2 = barX1 + barW;
         barY = bottomY + bottomH - (int)(bottomH/4);
-        textH = round(PanelHeight()*0.23);
+        textH = pbCrFontSize;
         textY = bottomY+round((PanelHeight()-textH)/2);
 
         // Draw
