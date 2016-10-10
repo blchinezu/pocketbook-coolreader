@@ -46,6 +46,7 @@
 
 extern ifont* header_font;
 ifont * pbCrFont;
+ifont * pbCrFontAA;
 int pbCrFontSize = 10;
 
 #ifdef POCKETBOOK_PRO
@@ -76,6 +77,7 @@ fingersDistance_t fingersDistance;
 
 bool forcePartialBwUpdates;
 bool forcePartialUpdates;
+bool forceFullUpdates;
 bool useDeveloperFeatures;
 bool isStandByMode = false;
 bool ignoreNextTouchRelease = false;
@@ -362,9 +364,9 @@ private:
 public:
     static CRPocketBookScreen * instance;
 protected:
-    virtual void draw(int x, int y, int w, int h);
     virtual void update( const lvRect & rc2, bool full );
 public:
+    virtual void draw(int x, int y, int w, int h);
     virtual ~CRPocketBookScreen()
     {
         instance = NULL;
@@ -864,9 +866,10 @@ void CRPocketBookScreen::update( const lvRect & rc2, bool full )
     else if (!_forceSoft)
         full = false;
 
-    if ( full ) {
+    if ( full || forceFullUpdates ) {
         draw(0, 0, _front->GetWidth(), _front->GetHeight());
         FullUpdate();
+        resetFullUpdateCounter();
     } else {
         draw(0, rc.top, _front->GetWidth(), rc.height());
         if (!isDocWnd && rc.height() < 300) {
@@ -1065,7 +1068,7 @@ public:
             }
 
             // If tapped the reading area
-            SelfClose();
+            SelfCloseFullUpdate();
             return true;
         }
 
@@ -1105,7 +1108,7 @@ public:
 
                 if( TM_lastDragPage != main_win->getDocView()->getCurPage() ) {
                     CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): go to page %d", TM_lastDragPage);
-                    SelfClose();
+                    SelfCloseNoUpdate();
                     pageSelector(TM_lastDragPage);
                     return true;
                 }
@@ -1120,7 +1123,7 @@ public:
                     CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): progress text");
                     lString16 pageTmp = lString16::itoa(TM_lastDragPage);
                     strcpy( key_buffer, UnicodeToUtf8(pageTmp).c_str() );
-                    SelfClose();
+                    SelfCloseNoUpdate();
                     CRLog::trace("CRPocketBookQuickMenuWindow::onTouch(): OpenKeyboard(..., KBD_NUMERIC)");
                     OpenKeyboard(const_cast<char *>("@Page"), key_buffer, KEY_BUFFER_LEN, KBD_NUMERIC, goToPageKeyboardHandler);
                     return true;
@@ -1129,7 +1132,7 @@ public:
             }
 
             // If tapped the reading area
-            SelfClose();
+            SelfCloseFullUpdate();
             return true;
         }
 
@@ -1158,7 +1161,11 @@ public:
             ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
             // Draw
-            DrawBitmap(position, 0, bmp);
+            StretchBitmap(position, 0, icon_width, icon_height, bmp, 0);
+
+            // Shitty bug fix (some black line shows up at the right of the icons)
+            int shittyWidth = round(icon_width*0.04);
+            FillArea(position+icon_width-shittyWidth, 0, shittyWidth, icon_height, 0x00FFFFFF);
 
             // Free memory
             free(bmp);
@@ -1171,7 +1178,7 @@ public:
         }
 
         // Close current window
-        SelfClose();
+        SelfCloseNoUpdate();
 
         // Execute proper command
         if( strcmp(touchMenuIcons[iconKey], "home") == 0 ) {
@@ -1241,12 +1248,12 @@ public:
                 // Convert
                 ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
-                // Offset
-                int offsetX = icon_width > bmp->width ? round((icon_width-bmp->width)/2) : 0;
-                int offsetY = icon_height > bmp->height ? round((icon_height-bmp->height)/2) : 0;
-
                 // Draw
-                DrawBitmap(position+offsetX, offsetY, bmp);
+                StretchBitmap(position, 0, icon_width, icon_height, bmp, 0);
+
+                // Shitty bug fix (some black line shows up at the right of the icons)
+                int shittyWidth = round(icon_width*0.04);
+                FillArea(position+icon_width-shittyWidth, 0, shittyWidth, icon_height, 0x00FFFFFF);
 
                 // Free memory
                 free(bmp);
@@ -1342,7 +1349,12 @@ public:
         }
 
         // Draw current position text
-        SetFont(pbCrFont, 0x00000000);
+        if( dragging || forcePartialBwUpdates || !fontAntiAliasingActivated() ) {
+            SetFont(pbCrFont, 0x00000000);
+        }
+        else {
+            SetFont(pbCrFontAA, 0x00000000);
+        }
 
         lString16 progress = main_win->getDocView()->getPageHeaderPages(
             curPage-1,
@@ -1419,6 +1431,10 @@ public:
         isTouchMenuVisible = true;
         TM_lastDragPage = -1;
 
+        if( fontAntiAliasingActivated() ) {
+            DimArea(0, 0, ScreenWidth(), ScreenHeight(), 0x00FFFFFF);
+        }
+
         // Activate system panel
         CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Activate system panel");
         showSystemPanel(false);
@@ -1472,14 +1488,29 @@ public:
             max(ScreenWidth(), ScreenHeight()) > 800; /*resolution greater than 600x800*/
     }
 
+    virtual void SelfCloseFullUpdate() {
+        if( fontAntiAliasingActivated() ) {
+            forceFullUpdates = true;
+        }
+        SelfClose();
+        if( fontAntiAliasingActivated() ) {
+            forceFullUpdates = false;
+        }
+    }
+
     virtual void SelfClose() {
+        SelfCloseNoUpdate();
+        CRPocketBookWindowManager::instance->update(true);
+        // PartialUpdate(0,0,ScreenWidth(),ScreenHeight());
+    }
+
+    virtual void SelfCloseNoUpdate() {
         CRLog::trace("CRPocketBookQuickMenuWindow::SelfClose()");
         isTouchMenuVisible = false;
         _wm->closeWindow( this );
         hideSystemPanel(false);
         ClearScreen();
-        CRPocketBookWindowManager::instance->update(true);
-        PartialUpdate(0,0,ScreenWidth(),ScreenHeight());
+        CRPocketBookScreen::instance->draw(0, 0, ScreenWidth(), ScreenHeight());
     }
 
     #endif
@@ -5505,6 +5536,7 @@ int main_handler(int type, int par1, int par2)
     case EVT_INIT:
         SetPanelType(1);
         pbCrFontSize = round(PanelHeight()*0.32);
+        pbCrFontAA = OpenFont(DEFAULTFONT, pbCrFontSize, 1);
         pbCrFont = OpenFont(DEFAULTFONT, pbCrFontSize, 0);
         SetPanelType(0);
         need_save_cover = true;
@@ -5646,6 +5678,8 @@ void exitApp() {
     }
     else {
         free(standByImage);
+        CloseFont(pbCrFontAA);
+        CloseFont(pbCrFont);
         CloseApp();
     }
 }
@@ -5793,6 +5827,9 @@ bool showPagesTilChapterEnd() {
 bool showChapterMarks() {
     return CRPocketBookDocView::instance->getProps()->getBoolDef(PROP_STATUS_CHAPTER_MARKS, true);
 }
+bool fontAntiAliasingActivated() {
+    return CRPocketBookDocView::instance->getProps()->getIntDef(PROP_FONT_ANTIALIASING, 2) != 0;
+}
 
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {
@@ -5811,6 +5848,7 @@ int main(int argc, char **argv)
 {
     forcePartialBwUpdates = false;
     forcePartialUpdates = false;
+    forceFullUpdates = false;
     useDeveloperFeatures = access( PB_DEV_MARKER, F_OK ) != -1;
     last_drawTemporaryZoom = std::clock();
     int foo;

@@ -1,4 +1,6 @@
 
+#ifdef POCKETBOOK_PRO
+
 #include "readingStats.h"
 
 time_t ReadingStats::getTime() {
@@ -55,3 +57,5 @@ void ReadingStats::breakUserInteraction() {
 void ReadingStats::save() {
 
 }
+
+#endif
