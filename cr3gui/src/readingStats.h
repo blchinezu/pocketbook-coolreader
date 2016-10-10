@@ -1,4 +1,6 @@
 
+#ifdef POCKETBOOK_PRO
+
 #ifndef __READING_STATS_H_INCLUDED__
 #define __READING_STATS_H_INCLUDED__
 
@@ -30,5 +32,7 @@ public:
     void breakUserInteraction();
     void save();
 };
+
+#endif
 
 #endif
