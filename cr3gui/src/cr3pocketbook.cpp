@@ -24,6 +24,7 @@
     #include "web.h"
     #include "ota_update.h"
     #include "pb_toc.h"
+    #include "readingStats.h"
 #endif
 
 #ifdef PB_DB_STATE_SUPPORTED
@@ -45,6 +46,7 @@
 
 extern ifont* header_font;
 ifont * pbCrFont;
+int pbCrFontSize = 10;
 
 #ifdef POCKETBOOK_PRO
 iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
@@ -90,6 +92,10 @@ int fw_major;
 int fw_minor;
 int touchPointing;
 std::clock_t last_drawTemporaryZoom;
+
+#ifdef POCKETBOOK_PRO
+ReadingStats *readingStats = NULL;
+#endif
 
 void setCustomSystemTheme();
 void removeCustomSystemTheme();
@@ -970,6 +976,7 @@ private:
     int barX2;
     int barY;
     int textW;
+    int textH;
     int textX;
     int textY;
 
@@ -1234,8 +1241,12 @@ public:
                 // Convert
                 ibitmap* bmp = LVImageSourceRef_to_ibitmab(img);
 
+                // Offset
+                int offsetX = icon_width > bmp->width ? round((icon_width-bmp->width)/2) : 0;
+                int offsetY = icon_height > bmp->height ? round((icon_height-bmp->height)/2) : 0;
+
                 // Draw
-                DrawBitmap(position, 0, bmp);
+                DrawBitmap(position+offsetX, offsetY, bmp);
 
                 // Free memory
                 free(bmp);
@@ -1292,8 +1303,12 @@ public:
             if( sbounds.length()<barW/5 ) {
 
                 int sbound_index = 0;
-                int markH = 9;
+                int markH = round(PanelHeight()*0.12);
                 int markW = 1;
+
+                if( markH % 2 == 0 ) {
+                    markH--;
+                }
 
                 for ( int x = barX1; x<=barX2; x++ ) {
                     int currentMarkW = x <= drawPosition ? markW*2 : markW;
@@ -1318,10 +1333,11 @@ public:
         // Draw current position bar
         FillArea(barX1, barY-1, drawPosition, 3, 0x00000000);
         if( !dragging ) {
+            int dotRadius = round(PanelHeight()*0.19);
             #ifdef POCKETBOOK_PRO_FW5
-            DrawCircle(barX1+drawPosition, barY, 14, 0x00000000);
+            DrawCircle(barX1+drawPosition, barY, dotRadius, 0x00000000);
             #else
-            FillArea(barX1+drawPosition-14, barY-14, 14*2, 14*2, 0x00000000);
+            FillArea(barX1+drawPosition-dotRadius, barY-dotRadius, dotRadius*2, dotRadius*2, 0x00000000);
             #endif
         }
 
@@ -1356,19 +1372,22 @@ public:
         }
 
         // Draw chapter name / authors - title
+        int chapterH = 0;
         if( textW > 0 ) {
+            int plusH = round(textH/2);
+            chapterH = textH + plusH;
             textX = (int)((ScreenWidth()-textW)/2);
             if( dragging ) {
-                FillArea(0, bottomY-40, ScreenWidth(), 40, 0x00FFFFFF);
-                FillArea(0, bottomY-39, ScreenWidth(), 1, 0x00000000);
+                FillArea(0, bottomY-chapterH, ScreenWidth(), chapterH, 0x00FFFFFF);
+                FillArea(0, bottomY-chapterH+1, ScreenWidth(), 1, 0x00000000);
             }
             else {
-                FillArea(textX-15, bottomY-40, textW+30, 40, 0x00FFFFFF);
-                FillArea(textX-14, bottomY-39, textW+28, 1, 0x00000000);
-                FillArea(textX-14, bottomY-39, 1, 39, 0x00000000);
-                FillArea(textX-15+textW+28, bottomY-39, 1, 39, 0x00000000);
+                FillArea(textX-textH, bottomY-chapterH, textW+(2*textH), chapterH, 0x00FFFFFF);
+                FillArea(textX-textH+1, bottomY-chapterH+1, textW+(2*textH)-2, 1, 0x00000000);
+                FillArea(textX-textH+1, bottomY-chapterH+1, 1, chapterH-1, 0x00000000);
+                FillArea(textX-textH+textW+(2*textH)-2, bottomY-chapterH+1, 1, chapterH-1, 0x00000000);
             }
-            DrawString( textX, bottomY-33, UnicodeToUtf8(chapterName).c_str() );
+            DrawString( textX, bottomY-textH-round(plusH/1.6), UnicodeToUtf8(chapterName).c_str() );
         }
 
         // Update screen
@@ -1377,8 +1396,8 @@ public:
                 int upY = bottomY;
                 int upH = bottomH;
                 if( textW > 0 ) {
-                    upY -= 40;
-                    upH += 40;
+                    upY -= chapterH;
+                    upH += chapterH;
                 }
                 CRLog::trace("CRPocketBookQuickMenuWindow::DrawBottom(): PartialUpdateBW(0, %d, %d, %d);",
                     bottomY, ScreenWidth(), bottomH);
@@ -1400,7 +1419,6 @@ public:
         isTouchMenuVisible = true;
         TM_lastDragPage = -1;
 
-
         // Activate system panel
         CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Activate system panel");
         showSystemPanel(false);
@@ -1418,8 +1436,8 @@ public:
 
         // Set class vars
         CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Set class vars");
-        icon_width = 75;
-        icon_height = 75;
+        icon_width = PanelHeight();
+        icon_height = PanelHeight();
         icon_space = (ScreenWidth() - icon_width * TM_NB_ICONS) / (TM_NB_ICONS + 1);
 
         bottomH = icon_height*2+1;
@@ -1429,7 +1447,8 @@ public:
         barX1 = (int)(ScreenWidth()*0.05);
         barX2 = barX1 + barW;
         barY = bottomY + bottomH - (int)(bottomH/4);
-        textY = bottomY+33;
+        textH = pbCrFontSize;
+        textY = bottomY+round((PanelHeight()-textH)/2);
 
         // Draw
         CRLog::trace("CRPocketBookQuickMenuWindow::OpenTouchMenu(): Draw");
@@ -1445,7 +1464,10 @@ public:
     virtual bool TouchMenuCanBeUsed() {
         CRLog::trace("CRPocketBookQuickMenuWindow::TouchMenuCanBeUsed()");
         return
-            pbSkinFileName == lString16("pb626fw5.cr3skin") &&
+            (
+                pbSkinFileName == lString16("pb626fw5.cr3skin") ||
+                pbSkinFileName == lString16("pb631fw5.cr3skin")
+                ) &&
             CRPocketBookScreen::instance->isTouchSupported() && /*touch device*/
             max(ScreenWidth(), ScreenHeight()) > 800; /*resolution greater than 600x800*/
     }
@@ -3613,6 +3635,8 @@ lString16 CRPbDictionaryView::detectDictionaryRedirectFor(const char* translatio
 
 void CRPbDictionaryView::translate(const lString16 &w)
 {
+    getDocView()->setFontSize( pbCrFontSize );
+
     lString8 body;
 
     lString16 s16 = w;
@@ -4762,7 +4786,10 @@ int InitDoc(const char *exename, char *fileName)
                 lString16 defaultSkin;
 
                 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
-                    if( max(ScreenWidth(),ScreenHeight()) > 800 )
+                    int maxPx = max(ScreenWidth(),ScreenHeight());
+                    if( maxPx > 1024 )
+                        defaultSkin = L"pb631fw5";
+                    else if( maxPx > 800 )
                         defaultSkin = L"pb626fw5";
                     else
                         defaultSkin = L"pb62x";
@@ -4784,11 +4811,13 @@ int InitDoc(const char *exename, char *fileName)
             }
         }
 
+        CRLog::trace("init cache...");
         ldomDocCache::init(lString16(STATEPATH"/cr3/.cache"), PB_CR3_CACHE_SIZE);
         if (!ldomDocCache::enabled())
             ldomDocCache::init(lString16(USERDATA2"/share/cr3/.cache"), PB_CR3_CACHE_SIZE);
         if (!ldomDocCache::enabled())
             ldomDocCache::init(lString16(USERDATA"/share/cr3/.cache"), PB_CR3_CACHE_SIZE);
+
         CRLog::trace("creating main window...");
         main_win = new CRPocketBookDocView(wm, lString16(USERDATA"/share/cr3"));
         CRLog::trace("setting colors...");
@@ -4826,6 +4855,14 @@ int InitDoc(const char *exename, char *fileName)
             delete wm;
             return 0;
         }
+
+        CRLog::trace("init stats...");
+        #ifdef POCKETBOOK_PRO
+        if (ldomDocCache::enabled()) {
+            readingStats = new ReadingStats(currentCacheDir+lString16("_stats"), openedCacheFile);
+        }
+        #endif
+
     }
     return 1;
 }
@@ -5152,8 +5189,6 @@ int main_handler(int type, int par1, int par2)
     switch (type) {
     case EVT_SHOW:
 
-        pbCrFont = OpenFont(DEFAULTFONT, 24, 0);
-
         CRPocketBookWindowManager::instance->update(true);
         pbGlobals->BookReady();
 
@@ -5468,6 +5503,9 @@ int main_handler(int type, int par1, int par2)
         restartStandByTimer();
         break;
     case EVT_INIT:
+        SetPanelType(1);
+        pbCrFontSize = round(PanelHeight()*0.32);
+        pbCrFont = OpenFont(DEFAULTFONT, pbCrFontSize, 0);
         SetPanelType(0);
         need_save_cover = true;
         break;

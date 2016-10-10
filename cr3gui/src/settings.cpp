@@ -1064,7 +1064,12 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
   props( newProps ),
   _menuAccelerators( menuAccelerators ), _menuItemId(mm_Last)
 {
-    if( pbSkinFileName == lString16("pb626fw5.cr3skin") && props->getIntDef(PROP_FONT_ANTIALIASING, 2) == 0 )
+    if( (
+        pbSkinFileName == lString16("pb626fw5.cr3skin") ||
+        pbSkinFileName == lString16("pb631fw5.cr3skin")
+        ) &&
+        props->getIntDef(PROP_FONT_ANTIALIASING, 2) == 0
+        )
         forcePartialBwUpdates = true;
 
     setSkinName(lString16("#settings"));

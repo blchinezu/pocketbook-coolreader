@@ -87,6 +87,9 @@ function doUpdate {
 		if [ "$1" = "pro4" -o "$1" = "pro5" ]; then
 			cp -f $sdk/pb$1/cr3gui/pb626fw5.cr3skin $package/system/share/cr3/skins/
 		fi
+		if [ "$1" = "pro5" ]; then
+			cp -f $sdk/pb$1/cr3gui/pb631fw5.cr3skin $package/system/share/cr3/skins/
+		fi
 
 		echo " - package.version > package"
 		if [ "$2" = "" ]; then
@@ -129,13 +132,13 @@ function doUpdate {
 
 		if [ "$2" = "" -a "$1" = "pro5" ]; then
 			old="`cat $sdk/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
-			new="`cat $sdk/pbpro5/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
+			new="`cat $sdk/pb$1/cr3gui/po/cr3.pot | grep -v '#:' | grep -v '#, c-format' | grep -v 'POT-Creation-Date' | sort | uniq`"
 			diff="`diff  <(echo "$old" ) <(echo "$new")`"
 
 			if [ "$diff" != "" ]; then
 				echo " - update i18n template"
 				rm -f "$sdk/cr3gui/po/cr3.pot"
-				cat "$sdk/pbpro5/cr3gui/po/cr3.pot" | grep -v '#, c-format' > "$sdk/cr3gui/po/cr3.pot"
+				cat "$sdk/pb$1/cr3gui/po/cr3.pot" | grep -v '#, c-format' > "$sdk/cr3gui/po/cr3.pot"
 				cd "$sdk/cr3gui/po"
 				bash update-po
 				cd "$sdk"
