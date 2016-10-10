@@ -14,7 +14,6 @@
 #include "selnavig.h"
 #include <cr3version.h>
 #include "cr3pocketbook.h"
-#include "readingStats.h"
 #include <inkview.h>
 #include <regex.h>
 #ifdef POCKETBOOK_PRO
@@ -25,6 +24,7 @@
     #include "web.h"
     #include "ota_update.h"
     #include "pb_toc.h"
+    #include "readingStats.h"
 #endif
 
 #ifdef PB_DB_STATE_SUPPORTED
@@ -93,7 +93,9 @@ int fw_minor;
 int touchPointing;
 std::clock_t last_drawTemporaryZoom;
 
+#ifdef POCKETBOOK_PRO
 ReadingStats *readingStats = NULL;
+#endif
 
 void setCustomSystemTheme();
 void removeCustomSystemTheme();
@@ -4855,9 +4857,11 @@ int InitDoc(const char *exename, char *fileName)
         }
 
         CRLog::trace("init stats...");
+        #ifdef POCKETBOOK_PRO
         if (ldomDocCache::enabled()) {
             readingStats = new ReadingStats(currentCacheDir+lString16("_stats"), openedCacheFile);
         }
+        #endif
 
     }
     return 1;
