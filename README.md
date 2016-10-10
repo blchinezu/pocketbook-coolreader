@@ -109,6 +109,8 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Changed the grey things to black
  - New FW5 skin (for 758x1024 screens)
  - Redesigned menu for touch devices with resolution greater than 600x800 using theme pb626fw5
+ - New touch menu automatically adapts to different resolutions
+ - Dictionary font automatically adapts to different resolutions
  - Long tap the bookmark icon in the new menu to toggle current page bookmark
 
 --------------------------------------------------------------------------------
