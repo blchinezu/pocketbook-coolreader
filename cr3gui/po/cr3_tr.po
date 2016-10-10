@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2015-10-05 05:51+0300\n"
-"PO-Revision-Date: 2016-10-05 08:29+0000\n"
+"PO-Revision-Date: 2016-10-07 23:46+0000\n"
 "Last-Translator: tncytrk\n"
 "Language-Team: Turkish (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/tr/)\n"
@@ -1106,19 +1106,19 @@ msgstr "*3"
 
 #: ../src/settings.cpp:1482
 msgid "No hinting"
-msgstr ""
+msgstr "İyileştirme yok"
 
 #: ../src/settings.cpp:1483
 msgid "Use bytecode"
-msgstr ""
+msgstr "Bytecode kullan"
 
 #: ../src/settings.cpp:1484
 msgid "Autohinting"
-msgstr ""
+msgstr "Otomatik iyileştirme"
 
 #: ../src/settings.cpp:1485
 msgid "Light"
-msgstr ""
+msgstr "Hafif"
 
 #: ../src/settings.cpp:1490
 msgid "Default paragraph formatting"
@@ -1183,7 +1183,7 @@ msgstr "Kenar yumuşatma"
 
 #: ../src/settings.cpp:1557
 msgid "Font hinting"
-msgstr ""
+msgstr "Yazı tipi iyileştirme"
 
 #: ../src/settings.cpp:1559
 msgid "Font kerning"
@@ -1223,7 +1223,7 @@ msgstr "[Algoritmik tire ile ayırma]"
 
 #: ../src/settings.cpp:1591
 msgid "Hyphenation"
-msgstr "Kelimeyi tire tire ayırma"
+msgstr "Kelimeyi tire ile ayırma"
 
 #: ../src/settings.cpp:1605
 msgid "Preformatted text"
@@ -1243,7 +1243,7 @@ msgstr "Değişken noktalama"
 
 #: ../src/settings.cpp:1620
 msgid "Image scaling"
-msgstr "Resim ölçeklenedirme"
+msgstr "Resim ölçeklendirme"
 
 #: ../src/settings.cpp:1625
 msgid "Block image scaling mode"
@@ -1303,7 +1303,7 @@ msgstr "Sayfa sayısını göster"
 
 #: ../src/settings.cpp:1685
 msgid "Show page count till chapter end"
-msgstr "Bölüm bitene kadar sayfa sayısını göster"
+msgstr "Bölümün bitmesine kalan sayfa sayısını göster"
 
 #: ../src/settings.cpp:1688
 msgid "Show page number"
@@ -1605,11 +1605,11 @@ msgstr "Metin biçimi aktif/pasif"
 
 #: ../src/viewdlg.cpp:542
 msgid "Save bookmark by number"
-msgstr ""
+msgstr "Yer imini numaralandırarak kaydet"
 
 #: ../src/viewdlg.cpp:543
 msgid "Go to bookmark by number"
-msgstr ""
+msgstr "Numarasına göre yer imine git"
 
 #: ../src/viewdlg.cpp:544
 msgid "Move by chapter"
@@ -1641,11 +1641,11 @@ msgstr "Diyaloğu kapat"
 
 #: ../src/viewdlg.cpp:553
 msgid "Scroll forward"
-msgstr ""
+msgstr "İleri kaydır"
 
 #: ../src/viewdlg.cpp:554
 msgid "Scroll back"
-msgstr ""
+msgstr "Geri kaydır"
 
 #: ../src/viewdlg.cpp:555
 msgid "Close book"
@@ -1693,7 +1693,7 @@ msgstr "Son açılan kitaplar listesi"
 
 #: ../src/viewdlg.cpp:571
 msgid "Open recent book by number"
-msgstr ""
+msgstr "Numarasına göre son kitabı aç"
 
 #: ../src/viewdlg.cpp:572
 msgid "Switch to recent book"
