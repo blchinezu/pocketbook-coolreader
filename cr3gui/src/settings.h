@@ -99,8 +99,8 @@ enum MainMenuItems_t {
     mm_CtrlPinchZoom,
 #ifdef POCKETBOOK_PRO_FW5
     mm_customSystemTheme,
-    mm_TouchTOC,
 #endif
+    mm_TouchTOC,
     mm_Last
 };
 
