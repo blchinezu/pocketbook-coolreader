@@ -725,13 +725,17 @@ void V3DocViewWin::showSettingsMenu()
 }
 
 #ifdef POCKETBOOK_PRO
-void V3DocViewWin::showTocTouchMenu(tocentry *tocItems, int length)
+void V3DocViewWin::showTocTouchMenu(tocentry *tocItems, int length, int currentPage)
 {
     _props = _docview->propsGetCurrent() | _props;
     _newProps = LVClonePropsContainer( _props );
     lvRect rc = _wm->getScreen()->getRect();
     CRMenu * mainMenu = new CRTocMenu( _wm, _newProps, MCMD_TOC_TOUCH,
-                                      getMenuAccelerators(), rc, tocItems, length );
+                                      getMenuAccelerators(), rc, tocItems,
+                                      length, currentPage );
+    // CRTOCDialog * mainMenu = new CRTOCDialog( _wm,
+            // lString16( _("Table of contents") ),
+            // MCMD_GO_PAGE_APPLY,  _docview->getPageCount(), _docview );
     _wm->activateWindow( mainMenu );
 }
 #endif

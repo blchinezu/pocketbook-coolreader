@@ -1174,11 +1174,11 @@ class CRMenu : public CRGUIWindowBase, public CRMenuItem {
         virtual void draw();
         virtual void Draw( LVDrawBuf & buf, lvRect & rc, CRRectSkinRef skin, CRRectSkinRef valueSkin, bool selected );
         //virtual void Draw( LVDrawBuf & buf, int x, int y );
-        virtual void highlightCommandItem( int cmd );
         virtual bool onItemSelect(int command, int params = 0 );
         int getLastOnPage();
         void doCloseMenu(int command, bool highlight = false, int param = 0);
     public:
+        virtual void highlightCommandItem( int cmd );
         /// returns index of selected item, -1 if no item selected
         virtual int getSelectedItemIndex();
         virtual int getDefaultSelectionIndex() {

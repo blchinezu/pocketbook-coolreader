@@ -4,12 +4,11 @@
 
 #include <crgui.h>
 #include <cri18n.h>
+#include <math.h>
 #include "viewdlg.h"
 #include "mainwnd.h"
 #include "cr3pocketbook.h"
-//#include "fsmenu.h"
 #include "pb_toc.h"
-
 
 bool CRTocMenu::onCommand( int command, int params )
 {
@@ -17,19 +16,20 @@ bool CRTocMenu::onCommand( int command, int params )
     return CRMenu::onCommand( command, params );
 }
 
-CRTocMenu::CRTocMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id, CRGUIAcceleratorTableRef menuAccelerators, lvRect &rc, tocentry *tocItems, int length )
+CRTocMenu::CRTocMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id,
+    CRGUIAcceleratorTableRef menuAccelerators, lvRect &rc, tocentry *tocItems,
+    int length, int currentPage )
 : CRFullScreenMenu( wm, id, lString16(_("Contents")), 8, rc ),
   props( newProps ),
-  _menuAccelerators( menuAccelerators ), _menuItemId(mm_Last)
+  _menuAccelerators( menuAccelerators ), _menuItemId(mm_TouchTOC)
 {
     CRLog::trace("showTocTouchMenu(): Construct");
 
-    if( pbSkinFileName == lString16("pb626fw5.cr3skin") ||
-        pbSkinFileName == lString16("pb631fw5.cr3skin")
-        )
+    if( !fontAntiAliasingActivated() ) {
         forcePartialBwUpdates = true;
+    }
 
-    setSkinName(lString16("#settings"));
+    setSkinName(L"#touch-toc");
 
     _fullscreen = true;
 
@@ -44,42 +44,48 @@ CRTocMenu::CRTocMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id, CRGUI
     CRMenu * mainMenu = this;
     mainMenu->setAccelerators( _menuAccelerators );
 
+    _selectedItem = 0;
+
     if ( length ) {
+
+        for (int i = 0; i < length; i++) {
+            if( currentPage >= tocItems[i].position ) {
+                _selectedItem = i;
+            }
+        }
+
         for (int i = 0; i < length; i++) {
 
-            // _toc[j].level = item->getLevel();
-            // _toc[j].position = item->getPage() + 1;
-            // _toc[j].page = _toc[j].position;
-            // _toc[j].text = strdup(UnicodeToUtf8(item->getName()).c_str());
+            lString16 text(tocItems[i].text);
 
-            char *text = tocItems[i].text;
+            // Prepend page number
+            // text = L"[" + lString16::itoa(tocItems[i].position) + L"] " + text;
 
-            // Generate pre text
-            // lString16 pre;
-            // for( int l = 0; l < tocItems[i].level; l++ )
-            //     pre = pre + "- ";
+            // Mark current chapter
+            if( _selectedItem == i ) {
+                text = L">  " + text;
+            }
 
-            // Prepend text
-            // if( !pre.empty() ) {
-            //     free(text);
-            //     text = UnicodeToUtf8( pre + lString16(text) ).c_str();
-            // }
+            // Indent level
+            for( int level = tocItems[i].level; level > 1; level-- ) {
+                text = L"     " + text;
+            }
 
-            // Add item
-            mainMenu->addItem( new CRMenuItem(
-                mainMenu, 
+            mainMenu->addItem(new CRMenuItem(
+                mainMenu,
                 PB_TOC_SAFE_CMD_RANGE + tocItems[i].page,
-                text,
+                UnicodeToUtf8(text).c_str(),
                 LVImageSourceRef(),
-                LVFontRef()
-                ) );
+                LVFontRef()/*,
+                lString16::itoa(tocItems[i].position).c_str()*/
+                ));
         }
     }
 
-    // Empty contents
+    // Empty contents - shouldn't reach this
     else {
         mainMenu->addItem( new CRMenuItem(
-            mainMenu, 
+            mainMenu,
             PB_TOC_SAFE_CMD_RANGE + 1,
             "Empty TOC",
             LVImageSourceRef(),
@@ -88,8 +94,11 @@ CRTocMenu::CRTocMenu( CRGUIWindowManager * wm, CRPropRef newProps, int id, CRGUI
     }
 
     reconfigure(0);
-    
-    if( forcePartialBwUpdates )
+
+    setCurPage( (int)floor(_selectedItem/_pageItems) );
+
+    if( forcePartialBwUpdates ) {
         SetWeakTimer("FullUpdate", FullUpdate, 150);
+    }
 
 }

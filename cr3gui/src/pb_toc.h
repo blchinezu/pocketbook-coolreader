@@ -21,9 +21,14 @@ class CRTocMenu : public CRFullScreenMenu
     protected:
         CRPropRef props;
         CRGUIAcceleratorTableRef _menuAccelerators;
+
     public:
-        CRTocMenu( CRGUIWindowManager * wm, CRPropRef props, int id, CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc, tocentry *tocItems, int length );
+        CRTocMenu( CRGUIWindowManager * wm, CRPropRef props, int id,
+            CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc,
+            tocentry *tocItems, int length, int currentPage );
+
         virtual bool onCommand( int command, int params );
+
         virtual ~CRTocMenu()
         {
             forcePartialBwUpdates = false;
@@ -31,8 +36,10 @@ class CRTocMenu : public CRFullScreenMenu
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Toc menu destroy");
         }
+
     private:
         int _menuItemId;
+
 };
 
 #endif //CR3_PB_TOC_H_INCLUDED

@@ -293,7 +293,7 @@
   </window>
   <window id="tapSettings-rotated" base="#tapSettings"/>
 
-  <menu id="main" min-item-count="11" max-item-count="11" show-shortcuts="false" fullscreen="true" >
+  <menu id="main" min-item-count="12" max-item-count="12" show-shortcuts="false" fullscreen="true" >
     <text color="#FFFFFF" face="Liberation Sans, DejaVu Sans" size="25" bold="true" italic="false" valign="center" halign="center"/>
     <background color="#AAAAAA"/>
     <border widths="0,0,0,0"/>
@@ -422,5 +422,16 @@
       <text color="#000000" face="Liberation Sans, DejaVu Sans" size="30" bold="false" italic="false" valign="top" halign="left"/>
     </item>
   </menu>
-  <menu id="settings-rotated" base="#settings" min-item-count="8" max-item-count="8"/>
+  <menu id="settings-rotated" base="#settings" min-item-count="9" max-item-count="9"/>
+
+  <menu id="touch-toc" base="#settings" min-item-count="16" max-item-count="16" fullscreen="true" >
+    <item id="touch-toc-item">
+      <size minvalue="36,36" maxvalue="50%,100%"/>
+      <text color="#000000" face="Liberation Sans, DejaVu Sans" size="28" bold="false" italic="false" valign="center" halign="left"/>
+      <border widths="20,0,20,0"/>
+    </item>
+    <selitem base="#touch-toc-item"/>
+  </menu>
+  <menu id="touch-toc-rotated" base="#touch-toc" min-item-count="10" max-item-count="10" fullscreen="true" >
+
 </CR3Skin>
