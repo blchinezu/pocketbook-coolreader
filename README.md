@@ -47,15 +47,16 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Google & Wikipedia buttons in the dictionary window
  - Set book cover as power off logo [[pal](http://www.the-ebook.org/forum/profile.php?mode=viewprofile&u=45840&sid=43f0dd795517591f5bae7add0e609962)]
  - Get hardware depth from device
+ - Control front light by vertically swiping in FW5
+ - Turn pages by horizontally swiping
+ - Rewritten TOC window
+ - StandBy Mode
+ - Updated translations
  - Full screen update on book load
  - Fixed font selection bug in settings [[pkb](https://github.com/pkb)]
  - Cite toolbar is working with touch devices
  - Updated freetype
- - Updated translations
- - StandBy Mode
  - More hyphenations
- - Control front light by vertically swiping in FW5
- - Turn pages by horizontally swiping
  - Pinch screen to change font size
  - Chinese is correctly shown in menus
  - More page margin values
@@ -203,3 +204,5 @@ After downloading the zip file, extract it and copy the system dir to your devic
 ![3.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/3.jpg)
 ![4.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/4.jpg)
 ![5.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/5.jpg)
+![6.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/6.jpg)
+![7.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/7.jpg)
