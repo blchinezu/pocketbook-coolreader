@@ -9,7 +9,9 @@
 #include "mainwnd.h"
 #include "settings.h"
 
+#define MAX_TOC_SUBMENUS 10
 #define PB_TOC_SAFE_CMD_RANGE 90000
+#define PB_TOC_SAFE_CMD_SUBMENU_RANGE 80000
 
 class V3DocViewWin;
 
@@ -21,9 +23,14 @@ class CRTocMenu : public CRFullScreenMenu
     protected:
         CRPropRef props;
         CRGUIAcceleratorTableRef _menuAccelerators;
+
     public:
-        CRTocMenu( CRGUIWindowManager * wm, CRPropRef props, int id, CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc, tocentry *tocItems, int length );
+        CRTocMenu( CRGUIWindowManager * wm, CRPropRef props, int id,
+            CRGUIAcceleratorTableRef menuAccelerators, lvRect & rc,
+            tocentry *tocItems, int length, int currentPage );
+
         virtual bool onCommand( int command, int params );
+
         virtual ~CRTocMenu()
         {
             forcePartialBwUpdates = false;
@@ -31,8 +38,11 @@ class CRTocMenu : public CRFullScreenMenu
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Toc menu destroy");
         }
+
+
     private:
         int _menuItemId;
+
 };
 
 #endif //CR3_PB_TOC_H_INCLUDED

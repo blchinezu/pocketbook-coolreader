@@ -172,7 +172,7 @@ public:
     void showSettingsMenu();
 
 #ifdef POCKETBOOK_PRO
-    void showTocTouchMenu(tocentry *toc, int length);
+    void showTocTouchMenu(tocentry *toc, int length, int currentPage);
 #endif
 
 #if CR_INTERNAL_PAGE_ORIENTATION==1 || defined(CR_POCKETBOOK)
