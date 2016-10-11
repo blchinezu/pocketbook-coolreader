@@ -9,9 +9,7 @@
 #include "mainwnd.h"
 #include "settings.h"
 
-#define MAX_TOC_SUBMENUS 10
 #define PB_TOC_SAFE_CMD_RANGE 90000
-#define PB_TOC_SAFE_CMD_SUBMENU_RANGE 80000
 
 class V3DocViewWin;
 
@@ -38,7 +36,6 @@ class CRTocMenu : public CRFullScreenMenu
             fontMan->gc();
             CRLog::trace("Done fontMan->gc() on Toc menu destroy");
         }
-
 
     private:
         int _menuItemId;

@@ -2682,8 +2682,14 @@ public:
 
         #ifdef POCKETBOOK_PRO
 
-        // If device supports touch and resolution is greater than 800x600
-        if( QueryTouchpanel() != 0 && max(ScreenWidth(), ScreenHeight()) > 800 ) {
+        // If device supports touch, resolution is greater than 800x600 and a FW5 skin is used
+        if( QueryTouchpanel() != 0 &&
+            max(ScreenWidth(), ScreenHeight()) > 800 &&
+            (
+                pbSkinFileName == lString16("pb626fw5.cr3skin") ||
+                pbSkinFileName == lString16("pb631fw5.cr3skin")
+                )
+            ) {
             showTocTouchMenu(_toc, _tocLength, _docview->getCurPage() + 1);
             return;
         }

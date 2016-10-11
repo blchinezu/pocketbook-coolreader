@@ -733,6 +733,9 @@ void V3DocViewWin::showTocTouchMenu(tocentry *tocItems, int length, int currentP
     CRMenu * mainMenu = new CRTocMenu( _wm, _newProps, MCMD_TOC_TOUCH,
                                       getMenuAccelerators(), rc, tocItems,
                                       length, currentPage );
+    // CRTOCDialog * mainMenu = new CRTOCDialog( _wm,
+            // lString16( _("Table of contents") ),
+            // MCMD_GO_PAGE_APPLY,  _docview->getPageCount(), _docview );
     _wm->activateWindow( mainMenu );
 }
 #endif
