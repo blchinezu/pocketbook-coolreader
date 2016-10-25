@@ -1,5 +1,14 @@
 #!/bin/sh
 
+# CD to the current script path
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+PBDEV_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )/../../"
+
 # Set current build date
 DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}' | sed -e s/\\\"//g`"
 if [ "$DATE" != "`date +"%Y-%m-%d"`" ]; then
@@ -31,7 +40,7 @@ if [ "$1" = "" -o "$1" = "360" ]; then
     cd ..
     if [ -f pb360/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        ../../PBSDK/bin/arm-linux-strip pb360/cr3gui/cr3-pb.app
+        "$PBDEV_DIR/PBSDK/bin/arm-linux-strip pb360/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -44,7 +53,7 @@ fi
 
 if [ "$1" = "" -o "$1" = "pro2" ]; then
 
-    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+    if [ ! -f "$PBDEV_DIR/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so" ]; then
         echo
         echo 'Invalid SDK structure!'
         echo
@@ -56,7 +65,7 @@ if [ "$1" = "" -o "$1" = "pro2" ]; then
     fi
 
     curDir="`pwd`"
-    cd ../../FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib
+    cd "$PBDEV_DIR/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib"
     rm -f libinkview.so
     ln -s libinkview.1.1a.so libinkview.so
     cd "$curDir"
@@ -87,7 +96,7 @@ if [ "$1" = "" -o "$1" = "pro2" ]; then
     cd ..
     if [ -f pbpro2/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
+        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -100,7 +109,7 @@ fi
 
 if [ "$1" = "" -o "$1" = "pro4" ]; then
 
-    if [ ! -f $HOME/PBDEV/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so ]; then
+    if [ ! -f "$PBDEV_DIR/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib/libinkview.1.1a.so" ]; then
         echo
         echo 'Invalid SDK structure!'
         echo
@@ -112,7 +121,7 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
     fi
 
     curDir="`pwd`"
-    cd ../../FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib
+    cd "$PBDEV_DIR/FRSCSDK/arm-none-linux-gnueabi/sysroot/usr/lib"
     rm -f libinkview.so
     ln -s libinkview.pb626.fw4.4.so libinkview.so
     cd "$curDir"
@@ -142,7 +151,7 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
     cd ..
     if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        ../../FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app
+        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -181,7 +190,7 @@ if [ "$1" = "" -o "$1" = "pro5" ]; then
     cd ..
     if [ -f pbpro5/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        ../../SDK_481/bin/arm-obreey-linux-gnueabi-strip pbpro5/cr3gui/cr3-pb.app
+        "$PBDEV_DIR/SDK_481/bin/arm-obreey-linux-gnueabi-strip pbpro5/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
