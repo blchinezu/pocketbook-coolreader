@@ -1,8 +1,17 @@
 #!/bin/sh
 
-sdk="$HOME/PBDEV/sources/cr3-fork"
+# CD to the current script path
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE"
+done
+PBDEV_DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )/../../"
+
+sdk="$PBDEV_DIR/sources/cr3-fork"
 package="/tmp/cr3-package-$1"
-releases="$HOME/PBDEV/releases/coolreader3"
+releases="$PBDEV_DIR/releases/coolreader3"
 
 cd "$sdk"
 
@@ -11,9 +20,9 @@ DATE="`cat cr3gui/src/cr3pocketbook.h | grep CR_PB_BUILD_DATE | awk '{print $3}'
 
 function doUpdate {
 
-	sdk="$HOME/PBDEV/sources/cr3-fork"
+	sdk="$PBDEV_DIR/sources/cr3-fork"
 	package="/tmp/cr3-package-$1"
-	releases="$HOME/PBDEV/releases/coolreader3"
+	releases="$PBDEV_DIR/releases/coolreader3"
 
 	cd "$sdk"
 
@@ -23,7 +32,7 @@ function doUpdate {
 	echo
 	echo "Version: $VERSION / $DATE / $1 / $2"
 
-	if [ -f $sdk/pb$1/cr3gui/cr3-pb.app ]; then
+	if [ -f "$sdk/pb$1/cr3gui/cr3-pb.app" ]; then
 
 		rm -rf "$package"
 		mkdir -p "$package"
@@ -31,7 +40,7 @@ function doUpdate {
 		echo
 		echo "Update dev package $1"
 
-		if [ ! -f $sdk/pb$1/cr3gui/cr3-pb.app ]; then
+		if [ ! -f "$sdk/pb$1/cr3gui/cr3-pb.app" ]; then
 			echo
 			echo "   ERR: Binary not found!"
 			echo
@@ -51,44 +60,44 @@ function doUpdate {
 		fi
 
 		echo " - translations > common"
-		rm -rf $package/system/share/cr3/i18n/*
-		ls $sdk/pb$1/i18n | xargs -I lang cp -f "$sdk/pb$1/i18n/lang/LC_MESSAGES/cr3.mo" "$sdk/data/common/system/share/cr3/i18n/lang.mo"
+		rm -rf "$package/system/share/cr3/i18n/"*
+		ls "$sdk/pb$1/i18n" | xargs -I lang cp -f "$sdk/pb$1/i18n/lang/LC_MESSAGES/cr3.mo" "$sdk/data/common/system/share/cr3/i18n/lang.mo"
 
 		echo
 		echo " - common > package"
-		cp -rf $sdk/data/common/* $package/
+		cp -rf "$sdk/data/common/"* "$package/"
 
 		if [ -d "$sdk/data/firmware-specific/$1" ]; then
 			echo
 			echo " - FIRMWARE $1 specific > package"
-			cp -rf $sdk/data/firmware-specific/$1/* $package/
+			cp -rf "$sdk/data/firmware-specific/$1/"* "$package/"
 		fi
 
 		if [ "$2" != "" -a "$2" != "publish" -a -d "$sdk/data/device-specific/$2" ]; then
 			echo
 			echo " - DEVICE $2 specific > package"
-			cp -rf $sdk/data/device-specific/$2/* $package/
+			cp -rf "$sdk/data/device-specific/$2/"* "$package/"
 		fi
 
 		echo " - binary > package"
-		rm -rf $package/system/share/cr3/bin/*
-		mkdir -p $package/system/share/cr3/bin
-		cp -f $sdk/pb$1/cr3gui/cr3-pb.app $package/system/share/cr3/bin/
+		rm -rf "$package/system/share/cr3/bin/"*
+		mkdir -p "$package/system/share/cr3/bin"
+		cp -f "$sdk/pb$1/cr3gui/cr3-pb.app" "$package/system/share/cr3/bin/"
 
 		echo " - skins > package"
-		rm -rf $package/system/share/cr3/skins/*
-		mkdir -p $package/system/share/cr3/skins
+		rm -rf "$package/system/share/cr3/skins/"*
+		mkdir -p "$package/system/share/cr3/skins"
 		# if [ "$1" = "360" ]; then
-			cp -f $sdk/pb$1/cr3gui/default.cr3skin $package/system/share/cr3/skins/
+			cp -f "$sdk/pb$1/cr3gui/default.cr3skin" "$package/system/share/cr3/skins/"
 		# fi
 		if [ "$1" = "pro2" -o "$1" = "pro4" -o "$1" = "pro5" ]; then
-			cp -f $sdk/pb$1/cr3gui/pb62x.cr3skin $package/system/share/cr3/skins/
+			cp -f "$sdk/pb$1/cr3gui/pb62x.cr3skin" "$package/system/share/cr3/skins/"
 		fi
 		if [ "$1" = "pro4" -o "$1" = "pro5" ]; then
-			cp -f $sdk/pb$1/cr3gui/pb626fw5.cr3skin $package/system/share/cr3/skins/
+			cp -f "$sdk/pb$1/cr3gui/pb626fw5.cr3skin" "$package/system/share/cr3/skins/"
 		fi
 		if [ "$1" = "pro5" ]; then
-			cp -f $sdk/pb$1/cr3gui/pb631fw5.cr3skin $package/system/share/cr3/skins/
+			cp -f "$sdk/pb$1/cr3gui/pb631fw5.cr3skin" "$package/system/share/cr3/skins/"
 		fi
 
 		echo " - package.version > package"
@@ -124,7 +133,7 @@ function doUpdate {
 
 		if [ "$2" != "" -a "$2" != "publish" ]; then
 			echo " - dev > builds (git)"
-			rm -rf $sdk/builds/$2/$1/*
+			rm -rf "$sdk/builds/$2/$1/"*
 			mkdir -p "$sdk/builds/$2/$1"
 			printf "yes" > "$sdk/builds/$2/$1/exists"
 			cp -f "$zip" "$sdk/builds/$2/$1/latest.zip"
@@ -185,14 +194,14 @@ elif [ "$1" = "publish" ]; then
 
 		# Check if it's already published
 		echo " - Check if published:    $FIRMWARE"
-		if [ -f $releases/cr3-v$VERSION-$FIRMWARE.zip ]; then
+		if [ -f "$releases/cr3-v$VERSION-$FIRMWARE.zip" ]; then
 			echo "   ERR: Version already published!"
 			exit
 		fi
 
 		# Check if there's no binary
 		echo " - Check firmware binary: $FIRMWARE"
-		if [ ! -f $sdk/pb$FIRMWARE/cr3gui/cr3-pb.app ]; then
+		if [ ! -f "$sdk/pb$FIRMWARE/cr3gui/cr3-pb.app" ]; then
 			echo "   ERR: No binary found!"
 			exit
 		fi
@@ -201,7 +210,7 @@ elif [ "$1" = "publish" ]; then
 
 	# Move old builds
 	echo " - Move old builds"
-	mv $releases/*.zip $releases/old/
+	mv "$releases/"*.zip "$releases/old/"
 
 	# Publish firmware specific (dropbox)
 	for TYPE in '360' 'pro2' 'pro4' 'pro5'; do
