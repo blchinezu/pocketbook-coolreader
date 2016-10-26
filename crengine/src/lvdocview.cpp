@@ -542,7 +542,8 @@ void LVDocView::Clear() {
 		_posIsSet = false;
 		m_cursorPos.clear();
 		m_filename.clear();
-		m_section_bounds_valid = false;
+        m_section_bounds_valid = false;
+		m_section_bounds_page_valid = false;
 	}
 	clearImageCache();
 	_navigationHistory.clear();
@@ -554,6 +555,7 @@ void LVDocView::clearImageCache() {
 	m_imageCache.clear();
 #endif
     m_section_bounds_valid = false;
+    m_section_bounds_page_valid = false;
 	if (m_callback != NULL)
 		m_callback->OnImageCacheClear();
 }
@@ -1479,6 +1481,57 @@ LVArray<int> & LVDocView::getSectionBounds() {
     m_section_bounds.add(10000);
     m_section_bounds_valid = true;
     return m_section_bounds;
+}
+
+void LVDocView::addBoundsPage( ldomNode * lsection, int fh, lUInt16 section_id )
+{
+    int cnt = lsection->getChildCount();
+
+    for ( int i= 0; i < cnt; i++ ) {
+        ldomNode * l1section = lsection->getChildElementNode( i, section_id );
+        if ( !l1section )
+            continue;
+        lvRect rc;
+        l1section->getAbsRect(rc);
+        int p;
+        if ( getViewMode() == DVM_SCROLL )
+            p = (int) ( rc.top );
+        else
+            p = (int) ( m_pages.FindNearestPage(rc.top, 0) );
+        m_section_bounds_page.add(p);
+        addBoundsPage( l1section, fh, section_id );
+    }
+}
+
+/// returns section bounds, in 1/100 of percent
+LVArray<int> & LVDocView::getSectionBoundsPages() {
+    if (m_section_bounds_page_valid)
+        return m_section_bounds_page;
+    m_section_bounds_page.clear();
+    m_section_bounds_page.add(0);
+    // Get sections from FB2 books
+    ldomNode * body = m_doc->nodeFromXPath(cs16("/FictionBook/body[1]"));
+    lUInt16 section_id = m_doc->getElementNameIndex(L"section");
+    if (body == NULL) {
+        // Get sections from EPUB books
+        body = m_doc->nodeFromXPath(cs16("/body[1]"));
+        section_id = m_doc->getElementNameIndex(L"DocFragment");
+    }
+    int fh = GetFullHeight();
+    if (body && fh > 0) {
+        if ( getViewMode() == DVM_PAGES ) {
+            fh = m_pages.length();
+            int pc = getVisiblePageCount();
+            if ( ( pc==2 && (fh&1) ) )
+                fh++;
+            if ( fh > 1 )
+                addBoundsPage( body, fh, section_id );
+        } else
+            addBoundsPage( body, fh, section_id );
+    }
+    m_section_bounds_page.add(10000);
+    m_section_bounds_page_valid = true;
+    return m_section_bounds_page;
 }
 
 int LVDocView::getPosEndPagePercent() {
@@ -4259,8 +4312,10 @@ void LVDocView::createEmptyDocument() {
 	m_markRanges.clear();
         m_bmkRanges.clear();
 	_posBookmark.clear();
-	m_section_bounds.clear();
-	m_section_bounds_valid = false;
+    m_section_bounds.clear();
+    m_section_bounds_valid = false;
+	m_section_bounds_page.clear();
+	m_section_bounds_page_valid = false;
 	_posIsSet = false;
 	m_swapDone = false;
 

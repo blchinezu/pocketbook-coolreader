@@ -2684,29 +2684,31 @@ public:
             }
             LVArray<int> dummy;
             LVArray<int> & sbounds = dummy;
-            sbounds = main_win->getDocView()->getSectionBounds();
+            sbounds = main_win->getDocView()->getSectionBoundsPages();
+
             if( sbounds.length() > 1 ) {
 
-                _tocLength = sbounds.length();
+                _tocLength = sbounds.length()-2;
                 tocSize = _tocLength * sizeof(tocentry);
                 _toc = (tocentry *) malloc(tocSize);
 
-                for( int sbound_index = 0; sbound_index < _tocLength; sbound_index++ ) {
+                for( int sbound_index = 1; sbound_index <= _tocLength; sbound_index++ ) {
                     _toc[sbound_index].level = 1;
                     _toc[sbound_index].position = sbounds[sbound_index];
                     _toc[sbound_index].page = sbounds[sbound_index];
                     _toc[sbound_index].text = strdup(UnicodeToUtf8(
                         L"Section " +
                         lString16::itoa(sbound_index) +
-                        L" = " +
-                        lString16::itoa(sbounds[sbound_index])
+                        L" [page: " +
+                        lString16::itoa(sbounds[sbound_index])+
+                        L"]"
                         ).c_str());
                 }
             }
-            // Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), UnicodeToUtf8(
-            //     L"_tocLength = " +
-            //     lString16::itoa(_tocLength)
-            //     ).c_str(), 1000);
+            Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), UnicodeToUtf8(
+                L"_tocLength = " +
+                lString16::itoa(_tocLength)
+                ).c_str(), 1000);
         }
 
         if ( _tocLength < 2 ) {
