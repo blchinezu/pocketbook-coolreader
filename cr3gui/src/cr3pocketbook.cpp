@@ -2650,8 +2650,10 @@ public:
         _docview->getFlatToc(tocItems);
         _tocLength = tocItems.length();
 
+        int tocSize;
+
         if (_tocLength) {
-            int tocSize = (_tocLength + 1) * sizeof(tocentry);
+            tocSize = (_tocLength + 1) * sizeof(tocentry);
             _toc = (tocentry *) malloc(tocSize);
             int j = 0;
             for (int i = 0; i < tocItems.length(); i++) {
@@ -2674,6 +2676,39 @@ public:
                 _toc = NULL;
             }
         }
+
+        // If there are no TOC entries try setting the section bounds as TOC
+        if( _tocLength < 2 ) {
+            if( _toc != NULL ) {
+                freeContents();
+            }
+            LVArray<int> dummy;
+            LVArray<int> & sbounds = dummy;
+            sbounds = main_win->getDocView()->getSectionBounds();
+            if( sbounds.length() > 1 ) {
+
+                _tocLength = sbounds.length();
+                tocSize = _tocLength * sizeof(tocentry);
+                _toc = (tocentry *) malloc(tocSize);
+
+                for( int sbound_index = 0; sbound_index < _tocLength; sbound_index++ ) {
+                    _toc[sbound_index].level = 1;
+                    _toc[sbound_index].position = sbounds[sbound_index];
+                    _toc[sbound_index].page = sbounds[sbound_index];
+                    _toc[sbound_index].text = strdup(UnicodeToUtf8(
+                        L"Section " +
+                        lString16::itoa(sbound_index) +
+                        L" = " +
+                        lString16::itoa(sbounds[sbound_index])
+                        ).c_str());
+                }
+            }
+            // Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), UnicodeToUtf8(
+            //     L"_tocLength = " +
+            //     lString16::itoa(_tocLength)
+            //     ).c_str(), 1000);
+        }
+
         if ( _tocLength < 2 ) {
             Message(ICON_INFORMATION, const_cast<char*>("CoolReader"),
                     const_cast<char*>("@No_contents"), 2000);
