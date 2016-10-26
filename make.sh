@@ -40,7 +40,7 @@ if [ "$1" = "" -o "$1" = "360" ]; then
     cd ..
     if [ -f pb360/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        "$PBDEV_DIR/PBSDK/bin/arm-linux-strip pb360/cr3gui/cr3-pb.app"
+        "$PBDEV_DIR/PBSDK/bin/arm-linux-strip" "pb360/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -96,7 +96,7 @@ if [ "$1" = "" -o "$1" = "pro2" ]; then
     cd ..
     if [ -f pbpro2/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app"
+        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip" "pbpro4/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -151,7 +151,7 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
     cd ..
     if [ -f pbpro4/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip pbpro4/cr3gui/cr3-pb.app"
+        "$PBDEV_DIR/FRSCSDK/bin/arm-none-linux-gnueabi-strip" "pbpro4/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
@@ -190,7 +190,7 @@ if [ "$1" = "" -o "$1" = "pro5" ]; then
     cd ..
     if [ -f pbpro5/cr3gui/cr3-pb.app ]; then
         echo 'Strip binary'
-        "$PBDEV_DIR/SDK_481/bin/arm-obreey-linux-gnueabi-strip pbpro5/cr3gui/cr3-pb.app"
+        "$PBDEV_DIR/SDK_481/bin/arm-obreey-linux-gnueabi-strip" "pbpro5/cr3gui/cr3-pb.app"
     else
         echo 'Failed compiling binary!'
         exit
