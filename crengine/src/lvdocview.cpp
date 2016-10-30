@@ -542,7 +542,8 @@ void LVDocView::Clear() {
 		_posIsSet = false;
 		m_cursorPos.clear();
 		m_filename.clear();
-		m_section_bounds_valid = false;
+        m_section_bounds_valid = false;
+		m_section_bounds_page_valid = false;
 	}
 	clearImageCache();
 	_navigationHistory.clear();
@@ -554,6 +555,7 @@ void LVDocView::clearImageCache() {
 	m_imageCache.clear();
 #endif
     m_section_bounds_valid = false;
+    m_section_bounds_page_valid = false;
 	if (m_callback != NULL)
 		m_callback->OnImageCacheClear();
 }
@@ -1479,6 +1481,56 @@ LVArray<int> & LVDocView::getSectionBounds() {
     m_section_bounds.add(10000);
     m_section_bounds_valid = true;
     return m_section_bounds;
+}
+
+void LVDocView::addBoundsPage( ldomNode * lsection, int fh, lUInt16 section_id )
+{
+    int cnt = lsection->getChildCount();
+
+    for ( int i= 0; i < cnt; i++ ) {
+        ldomNode * l1section = lsection->getChildElementNode( i, section_id );
+        if ( !l1section )
+            continue;
+        lvRect rc;
+        l1section->getAbsRect(rc);
+        int p;
+        if ( getViewMode() == DVM_SCROLL )
+            p = (int) ( (lInt64) rc.top );
+        else
+            p = (int) ( (lInt64) m_pages.FindNearestPage(rc.top, 0) );
+        m_section_bounds_page.add(p);
+        addBoundsPage( l1section, fh, section_id );
+    }
+}
+
+/// returns section bounds, in pages
+LVArray<int> & LVDocView::getSectionBoundsPages() {
+    if (m_section_bounds_page_valid)
+        return m_section_bounds_page;
+    m_section_bounds_page.clear();
+    m_section_bounds_page.add(0);
+    // Get sections from FB2 books
+    ldomNode * body = m_doc->nodeFromXPath(cs16("/FictionBook/body[1]"));
+    lUInt16 section_id = m_doc->getElementNameIndex(L"section");
+    if (body == NULL) {
+        // Get sections from EPUB books
+        body = m_doc->nodeFromXPath(cs16("/body[1]"));
+        section_id = m_doc->getElementNameIndex(L"DocFragment");
+    }
+    int fh = GetFullHeight();
+    if (body && fh > 0) {
+        if ( getViewMode() == DVM_PAGES ) {
+            fh = m_pages.length();
+            int pc = getVisiblePageCount();
+            if ( ( pc==2 && (fh&1) ) )
+                fh++;
+            if ( fh > 1 )
+                addBoundsPage( body, fh, section_id );
+        } else
+            addBoundsPage( body, fh, section_id );
+    }
+    m_section_bounds_page_valid = true;
+    return m_section_bounds_page;
 }
 
 int LVDocView::getPosEndPagePercent() {
@@ -4259,8 +4311,10 @@ void LVDocView::createEmptyDocument() {
 	m_markRanges.clear();
         m_bmkRanges.clear();
 	_posBookmark.clear();
-	m_section_bounds.clear();
-	m_section_bounds_valid = false;
+    m_section_bounds.clear();
+    m_section_bounds_valid = false;
+	m_section_bounds_page.clear();
+	m_section_bounds_page_valid = false;
 	_posIsSet = false;
 	m_swapDone = false;
 
@@ -4989,29 +5043,79 @@ lString16 LVDocView::getCurrentChapterName(int currentPage) {
     lString16 chapterName = lString16("");
 	/// returns pointer to TOC root node
 	LVPtrVector < LVTocItem, false > items;
-	if (!getFlatToc(items))
-		return chapterName;
 
-    // show book authors - name if there are less than 3 chapters
+    // current page
     int cp = (currentPage==-2?getCurPage():currentPage)+1;
-    if( items.length() < 3 ) {
-        return getPageHeaderTitle(cp);
+    int page;
+
+    // try getting real TOC chapter
+    if( getFlatToc(items) && items.length() >= 3 ) {
+        page = -1;
+        int vcp = getVisiblePageCount();
+        if (vcp < 1 || vcp > 2)
+            vcp = 1;
+        for (int i = 0; i < items.length(); i++) {
+            LVTocItem * item = items[i];
+            int p = item->getPage();
+            if (p < cp && (page == -1 || page < p)) {
+                page = p;
+                chapterName = item->getName();
+            }
+        }
+        return chapterName;
     }
 
-    // get current chapter name
-    int page = -1;
-    int vcp = getVisiblePageCount();
-    if (vcp < 1 || vcp > 2)
-        vcp = 1;
-	for (int i = 0; i < items.length(); i++) {
-		LVTocItem * item = items[i];
-		int p = item->getPage();
-        if (p < cp && (page == -1 || page < p)) {
-			page = p;
-            chapterName = item->getName();
-        }
-	}
+    // show book authors - name if there are less than 3 chapters
+    chapterName = getPageHeaderTitle(cp);
 
+    // try getting sections
+    LVArray<int> dummy;
+    LVArray<int> & sbounds = dummy;
+    sbounds = getSectionBoundsPages();
+    if( sbounds.length() > 1 ) {
+
+        int prevPage = 0;
+        int index = 0;
+        page = 1;
+
+        lString16 plus = L"";
+
+        // Start
+        if( cp >= 1 ) {
+            plus = L" - Start";
+        }
+        prevPage = page;
+
+        // Content
+        for( int sbound_index = 0; sbound_index < sbounds.length(); sbound_index++ ) {
+
+            page = sbounds[sbound_index]+1;
+            if( page == prevPage ) {
+                continue;
+            }
+
+            index++;
+            if( cp >= page ) {
+                plus = L" - Section " + lString16::itoa(index);
+            }
+            else {
+                break;
+            }
+            prevPage = page;
+        }
+
+        // End
+        if( cp == getPageCount() ) {
+            plus = L" - End";
+        }
+
+        // Return if got value
+        if( !plus.empty() ) {
+            return chapterName + plus;
+        }
+    }
+
+    // return authors + title
 	return chapterName;
 }
 

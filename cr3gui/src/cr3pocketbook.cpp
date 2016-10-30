@@ -2650,8 +2650,10 @@ public:
         _docview->getFlatToc(tocItems);
         _tocLength = tocItems.length();
 
+        int tocSize;
+
         if (_tocLength) {
-            int tocSize = (_tocLength + 1) * sizeof(tocentry);
+            tocSize = (_tocLength + 1) * sizeof(tocentry);
             _toc = (tocentry *) malloc(tocSize);
             int j = 0;
             for (int i = 0; i < tocItems.length(); i++) {
@@ -2674,6 +2676,62 @@ public:
                 _toc = NULL;
             }
         }
+
+        // If there are no TOC entries try setting the section bounds as TOC
+        if( _tocLength < 2 ) {
+            if( _toc != NULL ) {
+                freeContents();
+            }
+            LVArray<int> dummy;
+            LVArray<int> & sbounds = dummy;
+            sbounds = main_win->getDocView()->getSectionBoundsPages();
+
+            if( sbounds.length() > 1 ) {
+
+                _tocLength = sbounds.length()+2;
+                tocSize = _tocLength * sizeof(tocentry);
+                _toc = (tocentry *) malloc(tocSize);
+
+                int prevPage = 0;
+                int index = 0;
+                int page = 1;
+
+                // Start
+                _toc[index].level = 1;
+                _toc[index].position = page;
+                _toc[index].page = page;
+                _toc[index].text = strdup(UnicodeToUtf8(L"Start").c_str());
+                prevPage = page;
+
+                // Content
+                for( int sbound_index = 0; sbound_index < sbounds.length(); sbound_index++ ) {
+
+                    page = sbounds[sbound_index]+1;
+                    if( page == prevPage ) {
+                        continue;
+                    }
+
+                    index++;
+                    _toc[index].level = 1;
+                    _toc[index].position = page;
+                    _toc[index].page = page;
+                    _toc[index].text = strdup(UnicodeToUtf8(L"Section " + lString16::itoa(index)).c_str());
+                    prevPage = page;
+                }
+
+                // End
+                index++;
+                page = main_win->getDocView()->getPageCount();
+                _toc[index].level = 1;
+                _toc[index].position = page;
+                _toc[index].page = page;
+                _toc[index].text = strdup(UnicodeToUtf8(L"End").c_str());
+
+                // Set real TOC real length
+                _tocLength = index+1;
+            }
+        }
+
         if ( _tocLength < 2 ) {
             Message(ICON_INFORMATION, const_cast<char*>("CoolReader"),
                     const_cast<char*>("@No_contents"), 2000);

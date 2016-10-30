@@ -335,6 +335,9 @@ private:
     LVArray<int> m_section_bounds;
     bool m_section_bounds_valid;
 
+    LVArray<int> m_section_bounds_page;
+    bool m_section_bounds_page_valid;
+
     LVMutex _mutex;
 #if CR_ENABLE_PAGE_IMAGE_CACHE==1
     LVDocViewImageCache m_imageCache;
@@ -385,6 +388,7 @@ private:
     void updateDocStyleSheet();
     //serg
     void addBounds( ldomNode * lsection, int fh, lUInt16 section_id );
+    void addBoundsPage( ldomNode * lsection, int fh, lUInt16 section_id );
 
 protected:
 
@@ -649,6 +653,7 @@ public:
     bool isDocumentOpened();
     /// returns section bounds, in 1/100 of percent
     LVArray<int> & getSectionBounds( );
+    LVArray<int> & getSectionBoundsPages( );
     /// sets battery state
     virtual bool setBatteryState( int newState );
     /// returns battery state
