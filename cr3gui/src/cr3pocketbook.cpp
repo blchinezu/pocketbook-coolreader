@@ -2688,27 +2688,48 @@ public:
 
             if( sbounds.length() > 1 ) {
 
-                _tocLength = sbounds.length()-2;
+                _tocLength = sbounds.length()+2;
                 tocSize = _tocLength * sizeof(tocentry);
                 _toc = (tocentry *) malloc(tocSize);
 
-                for( int sbound_index = 1; sbound_index <= _tocLength; sbound_index++ ) {
-                    _toc[sbound_index].level = 1;
-                    _toc[sbound_index].position = sbounds[sbound_index];
-                    _toc[sbound_index].page = sbounds[sbound_index];
-                    _toc[sbound_index].text = strdup(UnicodeToUtf8(
-                        L"Section " +
-                        lString16::itoa(sbound_index) +
-                        L" [page: " +
-                        lString16::itoa(sbounds[sbound_index])+
-                        L"]"
-                        ).c_str());
+                int prevPage = 0;
+                int index = 0;
+                int page = 1;
+
+                // Start
+                _toc[index].level = 1;
+                _toc[index].position = page;
+                _toc[index].page = page;
+                _toc[index].text = strdup(UnicodeToUtf8(L"Start").c_str());
+                prevPage = page;
+
+                // Content
+                for( int sbound_index = 0; sbound_index < sbounds.length(); sbound_index++ ) {
+
+                    page = sbounds[sbound_index]+1;
+                    if( page == prevPage ) {
+                        continue;
+                    }
+
+                    index++;
+                    _toc[index].level = 1;
+                    _toc[index].position = page;
+                    _toc[index].page = page;
+                    _toc[index].text = strdup(UnicodeToUtf8(L"Section " + lString16::itoa(index)).c_str());
+                    prevPage = page;
                 }
+
+                // End
+                index++;
+                page = main_win->getDocView()->getPageCount();
+                _toc[index].level = 1;
+                _toc[index].position = page;
+                _toc[index].page = page;
+                _toc[index].text = strdup(UnicodeToUtf8(L"End").c_str());
+
+                // Set real TOC real length
+                _tocLength = index+1;
             }
-            Message(ICON_INFORMATION, const_cast<char*>("CoolReader"), UnicodeToUtf8(
-                L"_tocLength = " +
-                lString16::itoa(_tocLength)
-                ).c_str(), 1000);
         }
 
         if ( _tocLength < 2 ) {
