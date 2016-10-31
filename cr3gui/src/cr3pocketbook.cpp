@@ -2741,13 +2741,7 @@ public:
         #ifdef POCKETBOOK_PRO
 
         // If device supports touch, resolution is greater than 800x600 and a FW5 skin is used
-        if( QueryTouchpanel() != 0 &&
-            max(ScreenWidth(), ScreenHeight()) > 800 &&
-            (
-                pbSkinFileName == lString16("pb626fw5.cr3skin") ||
-                pbSkinFileName == lString16("pb631fw5.cr3skin")
-                )
-            ) {
+        if( canUseNewTouchToc() && main_win->getProps()->getIntDef(PROP_USE_NEW_TOUCH_TOC, 1) == 1 ) {
             showTocTouchMenu(_toc, _tocLength, _docview->getCurPage() + 1);
             return;
         }
@@ -5893,6 +5887,18 @@ bool showChapterMarks() {
 bool fontAntiAliasingActivated() {
     return CRPocketBookDocView::instance->getProps()->getIntDef(PROP_FONT_ANTIALIASING, 2) != 0;
 }
+
+#ifdef POCKETBOOK_PRO
+bool canUseNewTouchToc() {
+    return
+        QueryTouchpanel() != 0 &&
+        max(ScreenWidth(), ScreenHeight()) > 800 &&
+        (
+            pbSkinFileName == lString16("pb626fw5.cr3skin") ||
+            pbSkinFileName == lString16("pb631fw5.cr3skin")
+            );
+}
+#endif
 
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
 void get_gti_pointer() {

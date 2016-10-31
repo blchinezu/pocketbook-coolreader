@@ -6002,7 +6002,8 @@ void LVDocView::propsUpdateDefaults(CRPropRef props) {
     props->limitValueList(PROP_CTRL_PINCH_ZOOM, bool_options_def_true, 2);
 	props->limitValueList(PROP_BOOKMARK_ICONS, bool_options_def_false, 2);
 	props->limitValueList(PROP_FONT_KERNING_ENABLED, bool_options_def_false, 2);
-	props->limitValueList(PROP_CUSTOM_SYSTEM_THEME, bool_options_def_false, 2);
+    props->limitValueList(PROP_CUSTOM_SYSTEM_THEME, bool_options_def_false, 2);
+    props->limitValueList(PROP_USE_NEW_TOUCH_TOC, bool_options_def_true, 2);
     //props->limitValueList(PROP_FLOATING_PUNCTUATION, bool_options_def_true, 2);
     static int def_bookmark_highlight_modes[] = { 0, 1, 2 };
     props->setIntDef(PROP_HIGHLIGHT_COMMENT_BOOKMARKS, highlight_mode_underline);
