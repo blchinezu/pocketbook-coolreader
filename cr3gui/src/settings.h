@@ -100,6 +100,9 @@ enum MainMenuItems_t {
 #ifdef POCKETBOOK_PRO_FW5
     mm_customSystemTheme,
 #endif
+#ifdef POCKETBOOK_PRO
+    mm_useNewTouchTOC,
+#endif
     mm_TouchTOC,
     mm_Last
 };

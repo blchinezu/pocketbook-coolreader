@@ -98,5 +98,6 @@
 #define PROP_CTRL_PINCH_ZOOM "window.pinch.zoom"
 
 #define PROP_CUSTOM_SYSTEM_THEME "pocketbook.system.custom_theme"
+#define PROP_USE_NEW_TOUCH_TOC "pocketbook.toc.use_new_touch_toc"
 
 #endif // LVDOCVIEWPROPS_H

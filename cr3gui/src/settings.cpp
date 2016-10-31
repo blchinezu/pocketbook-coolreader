@@ -1773,6 +1773,13 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
                            "cr3_option_custom_system_theme", valueFont, PROP_CUSTOM_SYSTEM_THEME,
                            on_off_option);
 #endif
+#ifdef POCKETBOOK_PRO
+    if( canUseNewTouchToc() ) {
+        createSettingsMenuItem(displaySettingsMenu, mm_useNewTouchTOC, _("Use new TOC menu"),
+                               "cr3_option_use_new_touch_toc", valueFont, PROP_USE_NEW_TOUCH_TOC,
+                               on_off_option);
+    }
+#endif
     CRSkinList &skins = wm->getSkinList();
     if (skins.length() > 1) {
         CRSkinSelectMenu * skinsMenu = new CRSkinSelectMenu(_wm, displaySettingsMenu, mm_Skin,

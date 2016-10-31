@@ -78,8 +78,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-59"
-#define CR_PB_BUILD_DATE "2016-10-30"
+#define CR_PB_VERSION "0.0.6-17-60"
+#define CR_PB_BUILD_DATE "2016-10-31"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -178,6 +178,7 @@ void toggleSystemPanel(bool screenUpdate);
 void showSystemPanel(bool screenUpdate);
 void hideSystemPanel(bool screenUpdate);
 bool systemPanelShown();
+bool canUseNewTouchToc();
 
 #ifdef POCKETBOOK_PRO_FW5
 #define FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT 0.6 /* 60% */
