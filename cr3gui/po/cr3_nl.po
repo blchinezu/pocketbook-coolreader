@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2016-10-31 11:34+0200\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
 "PO-Revision-Date: 2015-10-19 22:18+0000\n"
 "Last-Translator: Frits van der Blij <f.blij@hccnet.nl>\n"
 "Language-Team: Dutch (http://www.transifex.com/coolreader-pocketbook/"
@@ -1899,6 +1899,18 @@ msgstr "Kan de inhoud van de directory niet weergeven!"
 #: ../src/cr3pocketbook.cpp:2543
 msgid "Unable to clear cache!"
 msgstr "Kan de cache niet wissen!"
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
+msgstr ""
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"

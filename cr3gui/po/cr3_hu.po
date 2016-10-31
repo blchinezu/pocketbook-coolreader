@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2016-10-31 11:34+0200\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
 "PO-Revision-Date: 2015-11-11 08:17+0000\n"
 "Last-Translator: László Andrássy <andrassy.laszlo@gmail.com>\n"
 "Language-Team: Hungarian (http://www.transifex.com/coolreader-pocketbook/"
@@ -1901,6 +1901,18 @@ msgstr "A könyvtár tartalmának listázása nem sikerült!"
 #: ../src/cr3pocketbook.cpp:2543
 msgid "Unable to clear cache!"
 msgstr "A gyorsítótár törlése nem sikerült!"
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
+msgstr ""
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"

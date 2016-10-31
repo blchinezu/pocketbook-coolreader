@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2016-10-31 11:34+0200\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
 "PO-Revision-Date: 2016-02-09 14:03+0000\n"
 "Last-Translator: Иван Пенев <aeternus.arcis@gmail.com>\n"
 "Language-Team: Bulgarian (http://www.transifex.com/coolreader-pocketbook/"
@@ -1900,6 +1900,18 @@ msgstr "Неуспешно показване на съдържанието!"
 #: ../src/cr3pocketbook.cpp:2543
 msgid "Unable to clear cache!"
 msgstr "Неуспешно изчистване на кеша!"
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
+msgstr ""
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"
