@@ -69,6 +69,7 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Formatting settings > Space expanding percent [[xl743](https://github.com/xl743)]
  - Display settings > Standby
  - Display settings > Custom system theme
+ - Display settings > Use new TOC menu
  - Font settings > Font embolding [[xl743](https://github.com/xl743)]
  - Font settings > Tracking [[xl743](https://github.com/xl743)]
  - Style settings > * > Letter spacing [[xl743](https://github.com/xl743)]
