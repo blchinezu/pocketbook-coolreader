@@ -115,6 +115,21 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Dictionary font automatically adapts to different resolutions
  - Long tap the bookmark icon in the new menu to toggle current page bookmark
 
+**Localization**
+
+ - Bulgarian
+ - Chinese
+ - Czech
+ - Dutch
+ - French
+ - German
+ - Hungarian
+ - Italian
+ - Polish
+ - Romanian
+ - Russian
+ - Turkish
+
 --------------------------------------------------------------------------------
 
 ### Directories:
