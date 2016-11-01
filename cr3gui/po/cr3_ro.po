@@ -2,13 +2,13 @@
 # This file is put in the public domain.
 #
 # Translators:
-# BruceLee, 2015
+# BruceLee, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2016-10-31 11:34+0200\n"
-"PO-Revision-Date: 2015-10-05 10:14+0000\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
+"PO-Revision-Date: 2016-10-31 10:13+0000\n"
 "Last-Translator: BruceLee\n"
 "Language-Team: Romanian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ro/)\n"
@@ -1378,7 +1378,7 @@ msgstr "Temă custom (necesită restart)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "Folosește noul meniu pentru cuprins"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1899,6 +1899,18 @@ msgstr "Nu s-a putut lista conţinutul folder-ului!"
 #: ../src/cr3pocketbook.cpp:2543
 msgid "Unable to clear cache!"
 msgstr "Nu s-au putut şterge fişierele!"
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr "Început"
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr "Secțiunea"
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
+msgstr "Sfârșit"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"

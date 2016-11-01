@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: cr3 3.0.17\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
-"POT-Creation-Date: 2016-10-31 11:34+0200\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
 "PO-Revision-Date: 2011-06-17 02:51+0200\n"
 "Last-Translator: Vitalii Stopchans'kyi <stopchanПЕСgmail.com>\n"
 "Language-Team: Ukrainian\n"
@@ -1957,6 +1957,18 @@ msgstr "Зміст"
 
 #: ../src/cr3pocketbook.cpp:2543
 msgid "Unable to clear cache!"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
 msgstr ""
 
 #: ../src/cr3pocketbook.cpp:4181

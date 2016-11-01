@@ -2700,7 +2700,7 @@ public:
                 _toc[index].level = 1;
                 _toc[index].position = page;
                 _toc[index].page = page;
-                _toc[index].text = strdup(UnicodeToUtf8(L"Start").c_str());
+                _toc[index].text = strdup(UnicodeToUtf8(lString16(_("Start"))).c_str());
                 prevPage = page;
 
                 // Content
@@ -2715,7 +2715,7 @@ public:
                     _toc[index].level = 1;
                     _toc[index].position = page;
                     _toc[index].page = page;
-                    _toc[index].text = strdup(UnicodeToUtf8(L"Section " + lString16::itoa(index)).c_str());
+                    _toc[index].text = strdup(UnicodeToUtf8(lString16(_("Section")) +L" " + lString16::itoa(index)).c_str());
                     prevPage = page;
                 }
 
@@ -2725,7 +2725,7 @@ public:
                 _toc[index].level = 1;
                 _toc[index].position = page;
                 _toc[index].page = page;
-                _toc[index].text = strdup(UnicodeToUtf8(L"End").c_str());
+                _toc[index].text = strdup(UnicodeToUtf8(lString16(_("End"))).c_str());
 
                 // Set real TOC real length
                 _tocLength = index+1;
