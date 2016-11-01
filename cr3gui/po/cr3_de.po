@@ -3,14 +3,14 @@
 #
 # Translators:
 # Eleni Stefanidou <eleni205@gmail.com>, 2015
-# Zorro66, 2015
+# Zorro66, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2015-10-05 14:58+0000\n"
-"Last-Translator: Eleni Stefanidou <eleni205@gmail.com>\n"
+"PO-Revision-Date: 2016-10-31 17:53+0000\n"
+"Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/de/)\n"
 "Language: de\n"
@@ -1378,7 +1378,7 @@ msgstr "Selbsterstelltes System-Theme (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "\"Neues Inhaltsverzeichnis\" verwenden"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1902,15 +1902,15 @@ msgstr "Kann Cache nicht leeren!"
 
 #: ../src/cr3pocketbook.cpp:2703
 msgid "Start"
-msgstr ""
+msgstr "Start"
 
 #: ../src/cr3pocketbook.cpp:2718
 msgid "Section"
-msgstr ""
+msgstr "Abschnitt"
 
 #: ../src/cr3pocketbook.cpp:2728
 msgid "End"
-msgstr ""
+msgstr "Ende"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"

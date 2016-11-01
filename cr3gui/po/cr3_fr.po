@@ -3,13 +3,13 @@
 #
 # Translators:
 # BruceLee, 2015
-# Druss Lahache <drusslahache@orange.fr>, 2015
+# Druss Lahache <drusslahache@orange.fr>, 2015-2016
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2015-10-05 16:23+0000\n"
+"PO-Revision-Date: 2016-10-31 20:17+0000\n"
 "Last-Translator: Druss Lahache <drusslahache@orange.fr>\n"
 "Language-Team: French (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/fr/)\n"
@@ -1379,7 +1379,7 @@ msgstr "Thème système customisé (nécessite un redémarrage) "
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "Utiliser le sommaire généré automatiquement"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1904,15 +1904,15 @@ msgstr "Impossible de vider le cache !"
 
 #: ../src/cr3pocketbook.cpp:2703
 msgid "Start"
-msgstr ""
+msgstr "Début"
 
 #: ../src/cr3pocketbook.cpp:2718
 msgid "Section"
-msgstr ""
+msgstr "Section"
 
 #: ../src/cr3pocketbook.cpp:2728
 msgid "End"
-msgstr ""
+msgstr "Fin"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"
