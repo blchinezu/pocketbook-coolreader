@@ -1302,6 +1302,33 @@ public:
             drawPosition = pageCount == 0 ? 0 : (curPage * barW / pageCount);
         }
 
+        // Draw current position bar
+        FillArea(barX1, barY-1, drawPosition, 3, 0x00000000);
+        int dotRadius = round(PanelHeight()*0.19);
+        if( !dragging ) {
+            #ifdef POCKETBOOK_PRO_FW5
+            DrawCircle(barX1+drawPosition, barY, dotRadius, 0x00000000);
+            #else
+            FillArea(barX1+drawPosition-dotRadius, barY-dotRadius, dotRadius*2, dotRadius*2, 0x00000000);
+            #endif
+
+            // Negative thick bar until current position
+            if( drawPosition < dotRadius ) {
+                FillArea(barX1, barY-1, drawPosition, 3, 0x00FFFFFF);
+            }
+            else {
+                FillArea(barX1+drawPosition-dotRadius, barY-1, dotRadius, 3, 0x00FFFFFF);
+            }
+
+            // Negative thin bar from current position
+            if( barX1+drawPosition+dotRadius > barX2 ) {
+                FillArea(barX1+drawPosition, barY, barX2-barX1-drawPosition, 1, 0x00FFFFFF);
+            }
+            else {
+                FillArea(barX1+drawPosition, barY, dotRadius, 1, 0x00FFFFFF);
+            }
+        }
+
         // Draw chapter marks
         if( showChapterMarks() ) {
             LVArray<int> dummy;
@@ -1318,7 +1345,7 @@ public:
                 }
 
                 for ( int x = barX1; x<=barX2; x++ ) {
-                    int currentMarkW = x <= drawPosition ? markW*2 : markW;
+                    int currentMarkW = x <= barX1+drawPosition ? markW*2 : markW;
                     while ( sbound_index<sbounds.length() ) {
                         int sx = barX1 + sbounds[sbound_index] * barW / 10000;
                         if ( sx<x ) {
@@ -1326,7 +1353,12 @@ public:
                             continue;
                         }
                         if ( sx==x ) {
-                            FillArea(x, barY - (markH-1) / 2, currentMarkW, markH, 0x00000000);
+                            if( x >= barX1+drawPosition-dotRadius && x <= barX1+drawPosition+dotRadius && !dragging ) {
+                                FillArea(x, barY - (markH-1) / 2, currentMarkW, markH, 0x00FFFFFF);
+                            }
+                            else {
+                                FillArea(x, barY - (markH-1) / 2, currentMarkW, markH, 0x00000000);
+                            }
                         }
                         break;
                     }
@@ -1336,17 +1368,6 @@ public:
 
         // Mark page
         TM_lastDragPage = curPage;
-
-        // Draw current position bar
-        FillArea(barX1, barY-1, drawPosition, 3, 0x00000000);
-        if( !dragging ) {
-            int dotRadius = round(PanelHeight()*0.19);
-            #ifdef POCKETBOOK_PRO_FW5
-            DrawCircle(barX1+drawPosition, barY, dotRadius, 0x00000000);
-            #else
-            FillArea(barX1+drawPosition-dotRadius, barY-dotRadius, dotRadius*2, dotRadius*2, 0x00000000);
-            #endif
-        }
 
         // Draw current position text
         if( dragging || forcePartialBwUpdates || !fontAntiAliasingActivated() ) {
