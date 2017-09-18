@@ -121,6 +121,8 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Chinese
  - Czech
  - Dutch
+ - English
+ - Estonian
  - French
  - German
  - Hungarian
@@ -128,7 +130,9 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Polish
  - Romanian
  - Russian
+ - Spanish
  - Turkish
+ - Ukrainian
 
 --------------------------------------------------------------------------------
 
