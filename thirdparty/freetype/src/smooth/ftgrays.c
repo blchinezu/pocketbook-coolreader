@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    A new `perfect' anti-aliasing renderer (body).                       */
 /*                                                                         */
-/*  Copyright 2000-2016 by                                                 */
+/*  Copyright 2000-2017 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -141,6 +141,16 @@
 #define FT_INT_MAX    INT_MAX
 #define FT_ULONG_MAX  ULONG_MAX
 
+#define ADD_LONG( a, b )                                    \
+          (long)( (unsigned long)(a) + (unsigned long)(b) )
+#define SUB_LONG( a, b )                                    \
+          (long)( (unsigned long)(a) - (unsigned long)(b) )
+#define MUL_LONG( a, b )                                    \
+          (long)( (unsigned long)(a) * (unsigned long)(b) )
+#define NEG_LONG( a )                                       \
+          (long)( -(unsigned long)(a) )
+
+
 #define ft_memset   memset
 
 #define ft_setjmp   setjmp
@@ -264,6 +274,7 @@ typedef ptrdiff_t  FT_PtrDist;
 #include "ftgrays.h"
 #include FT_INTERNAL_OBJECTS_H
 #include FT_INTERNAL_DEBUG_H
+#include FT_INTERNAL_CALC_H
 #include FT_OUTLINE_H
 
 #include "ftsmerrs.h"
@@ -284,6 +295,10 @@ typedef ptrdiff_t  FT_PtrDist;
 
 #ifndef FT_MEM_ZERO
 #define FT_MEM_ZERO( dest, count )  FT_MEM_SET( dest, 0, count )
+#endif
+
+#ifndef FT_ZERO
+#define FT_ZERO( p )  FT_MEM_ZERO( p, sizeof ( *(p) ) )
 #endif
 
   /* as usual, for the speed hungry :-) */
@@ -337,7 +352,8 @@ typedef ptrdiff_t  FT_PtrDist;
 
   /* Compute `dividend / divisor' and return both its quotient and     */
   /* remainder, cast to a specific type.  This macro also ensures that */
-  /* the remainder is always positive.                                 */
+  /* the remainder is always positive.  We use the remainder to keep   */
+  /* track of accumulating errors and compensate for them.             */
 #define FT_DIV_MOD( type, dividend, divisor, quotient, remainder ) \
   FT_BEGIN_STMNT                                                   \
     (quotient)  = (type)( (dividend) / (divisor) );                \
@@ -371,8 +387,9 @@ typedef ptrdiff_t  FT_PtrDist;
 
   /* These macros speed up repetitive divisions by replacing them */
   /* with multiplications and right shifts.                       */
-#define FT_UDIVPREP( b )                                       \
-  long  b ## _r = (long)( FT_ULONG_MAX >> PIXEL_BITS ) / ( b )
+#define FT_UDIVPREP( c, b )                                        \
+  long  b ## _r = c ? (long)( FT_ULONG_MAX >> PIXEL_BITS ) / ( b ) \
+                    : 0
 #define FT_UDIV( a, b )                                        \
   ( ( (unsigned long)( a ) * (unsigned long)( b ## _r ) ) >>   \
     ( sizeof( long ) * FT_CHAR_BIT - PIXEL_BITS ) )
@@ -438,6 +455,7 @@ typedef ptrdiff_t  FT_PtrDist;
     TCoord  cover;
     int     invalid;
 
+    PCell*      ycells;
     PCell       cells;
     FT_PtrDist  max_cells;
     FT_PtrDist  num_cells;
@@ -449,8 +467,6 @@ typedef ptrdiff_t  FT_PtrDist;
 
     FT_Raster_Span_Func  render_span;
     void*                render_span_data;
-
-    PCell*     ycells;
 
   } gray_TWorker, *gray_PWorker;
 
@@ -504,25 +520,22 @@ typedef ptrdiff_t  FT_PtrDist;
   /*                                                                       */
   /* Record the current cell in the table.                                 */
   /*                                                                       */
-  static PCell
-  gray_find_cell( RAS_ARG )
+  static void
+  gray_record_cell( RAS_ARG )
   {
     PCell  *pcell, cell;
     TCoord  x = ras.ex;
 
 
-    if ( x > ras.max_ex )
-      x = ras.max_ex;
-
     pcell = &ras.ycells[ras.ey - ras.min_ey];
     for (;;)
     {
       cell = *pcell;
-      if ( cell == NULL || cell->x > x )
+      if ( !cell || cell->x > x )
         break;
 
       if ( cell->x == x )
-        goto Exit;
+        goto Found;
 
       pcell = &cell->next;
     }
@@ -530,30 +543,21 @@ typedef ptrdiff_t  FT_PtrDist;
     if ( ras.num_cells >= ras.max_cells )
       ft_longjmp( ras.jump_buffer, 1 );
 
+    /* insert new cell */
     cell        = ras.cells + ras.num_cells++;
     cell->x     = x;
-    cell->area  = 0;
-    cell->cover = 0;
+    cell->area  = ras.area;
+    cell->cover = ras.cover;
 
     cell->next  = *pcell;
     *pcell      = cell;
 
-  Exit:
-    return cell;
-  }
+    return;
 
-
-  static void
-  gray_record_cell( RAS_ARG )
-  {
-    if ( ras.area | ras.cover )
-    {
-      PCell  cell = gray_find_cell( RAS_VAR );
-
-
-      cell->area  += ras.area;
-      cell->cover += ras.cover;
-    }
+  Found:
+    /* update old cell */
+    cell->area  += ras.area;
+    cell->cover += ras.cover;
   }
 
 
@@ -575,26 +579,17 @@ typedef ptrdiff_t  FT_PtrDist;
     /* Note that if a cell is to the left of the clipping region, it is    */
     /* actually set to the (min_ex-1) horizontal position.                 */
 
-    /* All cells that are on the left of the clipping region go to the */
-    /* min_ex - 1 horizontal position.                                 */
-    if ( ex > ras.max_ex )
-      ex = ras.max_ex;
-
     if ( ex < ras.min_ex )
       ex = ras.min_ex - 1;
 
-    /* are we moving to a different cell ? */
-    if ( ex != ras.ex || ey != ras.ey )
-    {
-      /* record the current one if it is valid */
-      if ( !ras.invalid )
-        gray_record_cell( RAS_VAR );
+    /* record the current one if it is valid */
+    if ( !ras.invalid )
+      gray_record_cell( RAS_VAR );
 
-      ras.area  = 0;
-      ras.cover = 0;
-      ras.ex    = ex;
-      ras.ey    = ey;
-    }
+    ras.area  = 0;
+    ras.cover = 0;
+    ras.ex    = ex;
+    ras.ey    = ey;
 
     ras.invalid = ( ey >= ras.max_ey || ey < ras.min_ey ||
                     ex >= ras.max_ex );
@@ -614,7 +609,7 @@ typedef ptrdiff_t  FT_PtrDist;
                                  TPos    x2,
                                  TCoord  y2 )
   {
-    TCoord  ex1, ex2, fx1, fx2, first, delta, mod;
+    TCoord  ex1, ex2, fx1, fx2, first, dy, delta, mod;
     TPos    p, dx;
     int     incr;
 
@@ -631,31 +626,27 @@ typedef ptrdiff_t  FT_PtrDist;
 
     fx1   = (TCoord)( x1 - SUBPIXELS( ex1 ) );
     fx2   = (TCoord)( x2 - SUBPIXELS( ex2 ) );
-    delta = y2 - y1;
 
     /* everything is located in a single cell.  That is easy! */
     /*                                                        */
     if ( ex1 == ex2 )
-    {
-      ras.area  += (TArea)(( fx1 + fx2 ) * delta);
-      ras.cover += delta;
-      return;
-    }
+      goto End;
 
     /* ok, we'll have to render a run of adjacent cells on the same */
     /* scanline...                                                  */
     /*                                                              */
     dx = x2 - x1;
+    dy = y2 - y1;
 
     if ( dx > 0 )
     {
-      p     = ( ONE_PIXEL - fx1 ) * delta;
+      p     = ( ONE_PIXEL - fx1 ) * dy;
       first = ONE_PIXEL;
       incr  = 1;
     }
     else
     {
-      p     = fx1 * delta;
+      p     = fx1 * dy;
       first = 0;
       incr  = -1;
       dx    = -dx;
@@ -663,34 +654,31 @@ typedef ptrdiff_t  FT_PtrDist;
 
     FT_DIV_MOD( TCoord, p, dx, delta, mod );
 
-    ras.area  += (TArea)(( fx1 + first ) * delta);
+    ras.area  += (TArea)( ( fx1 + first ) * delta );
     ras.cover += delta;
-
-    ex1 += incr;
+    y1        += delta;
+    ex1       += incr;
     gray_set_cell( RAS_VAR_ ex1, ey );
-    y1  += delta;
 
     if ( ex1 != ex2 )
     {
       TCoord  lift, rem;
 
 
-      p = ONE_PIXEL * ( y2 - y1 + delta );
+      p = ONE_PIXEL * dy;
       FT_DIV_MOD( TCoord, p, dx, lift, rem );
-
-      mod -= (int)dx;
 
       do
       {
         delta = lift;
         mod  += rem;
-        if ( mod >= 0 )
+        if ( mod >= (TCoord)dx )
         {
           mod -= (TCoord)dx;
           delta++;
         }
 
-        ras.area  += (TArea)(ONE_PIXEL * delta);
+        ras.area  += (TArea)( ONE_PIXEL * delta );
         ras.cover += delta;
         y1        += delta;
         ex1       += incr;
@@ -698,9 +686,13 @@ typedef ptrdiff_t  FT_PtrDist;
       } while ( ex1 != ex2 );
     }
 
-    delta      = y2 - y1;
-    ras.area  += (TArea)(( fx2 + ONE_PIXEL - first ) * delta);
-    ras.cover += delta;
+    fx1 = ONE_PIXEL - first;
+
+  End:
+    dy = y2 - y1;
+
+    ras.area  += (TArea)( ( fx1 + fx2 ) * dy );
+    ras.cover += dy;
   }
 
 
@@ -812,13 +804,12 @@ typedef ptrdiff_t  FT_PtrDist;
 
       p    = ONE_PIXEL * dx;
       FT_DIV_MOD( TCoord, p, dy, lift, rem );
-      mod -= (TCoord)dy;
 
       do
       {
         delta = lift;
         mod  += rem;
-        if ( mod >= 0 )
+        if ( mod >= (TCoord)dy )
         {
           mod -= (TCoord)dy;
           delta++;
@@ -908,8 +899,8 @@ typedef ptrdiff_t  FT_PtrDist;
     else                                  /* any other line */
     {
       TPos  prod = dx * fy1 - dy * fx1;
-      FT_UDIVPREP( dx );
-      FT_UDIVPREP( dy );
+      FT_UDIVPREP( ex1 != ex2, dx );
+      FT_UDIVPREP( ey1 != ey2, dy );
 
 
       /* The fundamental value `prod' determines which side and the  */
@@ -1155,7 +1146,7 @@ typedef ptrdiff_t  FT_PtrDist;
       /* s is L * the perpendicular distance from P1 to the line P0-P3. */
       dx1 = arc[1].x - arc[0].x;
       dy1 = arc[1].y - arc[0].y;
-      s = FT_ABS( dy * dx1 - dx * dy1 );
+      s = FT_ABS( SUB_LONG( MUL_LONG( dy, dx1 ), MUL_LONG( dx, dy1 ) ) );
 
       if ( s > s_limit )
         goto Split;
@@ -1163,7 +1154,7 @@ typedef ptrdiff_t  FT_PtrDist;
       /* s is L * the perpendicular distance from P2 to the line P0-P3. */
       dx2 = arc[2].x - arc[0].x;
       dy2 = arc[2].y - arc[0].y;
-      s = FT_ABS( dy * dx2 - dx * dy2 );
+      s = FT_ABS( SUB_LONG( MUL_LONG( dy, dx2 ), MUL_LONG( dx, dy2 ) ) );
 
       if ( s > s_limit )
         goto Split;
@@ -1242,31 +1233,21 @@ typedef ptrdiff_t  FT_PtrDist;
   static void
   gray_hline( RAS_ARG_ TCoord  x,
                        TCoord  y,
-                       TArea   area,
+                       TArea   coverage,
                        TCoord  acount )
   {
-    int      coverage;
-    FT_Span  span;
-
-
-    /* compute the coverage line's coverage, depending on the    */
-    /* outline fill rule                                         */
-    /*                                                           */
-    /* the coverage percentage is area/(PIXEL_BITS*PIXEL_BITS*2) */
-    /*                                                           */
-    coverage = (int)( area >> ( PIXEL_BITS * 2 + 1 - 8 ) );
-                                                    /* use range 0..256 */
+    /* scale the coverage from 0..(ONE_PIXEL*ONE_PIXEL*2) to 0..256  */
+    coverage >>= PIXEL_BITS * 2 + 1 - 8;
     if ( coverage < 0 )
-      coverage = -coverage;
+      coverage = -coverage - 1;
 
+    /* compute the line's coverage depending on the outline fill rule */
     if ( ras.outline.flags & FT_OUTLINE_EVEN_ODD_FILL )
     {
       coverage &= 511;
 
-      if ( coverage > 256 )
-        coverage = 512 - coverage;
-      else if ( coverage == 256 )
-        coverage = 255;
+      if ( coverage >= 256 )
+        coverage = 511 - coverage;
     }
     else
     {
@@ -1277,6 +1258,9 @@ typedef ptrdiff_t  FT_PtrDist;
 
     if ( ras.render_span )  /* for FT_RASTER_FLAG_DIRECT only */
     {
+      FT_Span  span;
+
+
       span.x        = (short)x;
       span.len      = (unsigned short)acount;
       span.coverage = (unsigned char)coverage;
@@ -1316,29 +1300,23 @@ typedef ptrdiff_t  FT_PtrDist;
     int  y;
 
 
-    if ( ras.num_cells == 0 )
-      return;
-
     FT_TRACE7(( "gray_sweep: start\n" ));
 
     for ( y = ras.min_ey; y < ras.max_ey; y++ )
     {
       PCell   cell  = ras.ycells[y - ras.min_ey];
-      TCoord  cover = 0;
       TCoord  x     = ras.min_ex;
+      TArea   cover = 0;
+      TArea   area;
 
 
       for ( ; cell != NULL; cell = cell->next )
       {
-        TArea  area;
-
-
         if ( cover != 0 && cell->x > x )
-          gray_hline( RAS_VAR_ x, y, (TArea)cover * ( ONE_PIXEL * 2 ),
-                      cell->x - x );
+          gray_hline( RAS_VAR_ x, y, cover, cell->x - x );
 
-        cover += cell->cover;
-        area   = (TArea)cover * ( ONE_PIXEL * 2 ) - cell->area;
+        cover += (TArea)cell->cover * ( ONE_PIXEL * 2 );
+        area   = cover - cell->area;
 
         if ( area != 0 && cell->x >= ras.min_ex )
           gray_hline( RAS_VAR_ cell->x, y, area, 1 );
@@ -1347,8 +1325,7 @@ typedef ptrdiff_t  FT_PtrDist;
       }
 
       if ( cover != 0 )
-        gray_hline( RAS_VAR_ x, y, (TArea)cover * ( ONE_PIXEL * 2 ),
-                    ras.max_ex - x );
+        gray_hline( RAS_VAR_ x, y, cover, ras.max_ex - x );
     }
 
     FT_TRACE7(( "gray_sweep: end\n" ));
@@ -1630,7 +1607,7 @@ typedef ptrdiff_t  FT_PtrDist;
     return 0;
 
   Exit:
-    FT_TRACE5(( "FT_Outline_Decompose: Error %d\n", error ));
+    FT_TRACE5(( "FT_Outline_Decompose: Error 0x%x\n", error ));
     return error;
 
   Invalid_Outline:
@@ -1718,12 +1695,14 @@ typedef ptrdiff_t  FT_PtrDist;
   FT_DEFINE_OUTLINE_FUNCS(
     func_interface,
 
-    (FT_Outline_MoveTo_Func) gray_move_to,
-    (FT_Outline_LineTo_Func) gray_line_to,
-    (FT_Outline_ConicTo_Func)gray_conic_to,
-    (FT_Outline_CubicTo_Func)gray_cubic_to,
-    0,
-    0 )
+    (FT_Outline_MoveTo_Func) gray_move_to,   /* move_to  */
+    (FT_Outline_LineTo_Func) gray_line_to,   /* line_to  */
+    (FT_Outline_ConicTo_Func)gray_conic_to,  /* conic_to */
+    (FT_Outline_CubicTo_Func)gray_cubic_to,  /* cubic_to */
+
+    0,                                       /* shift    */
+    0                                        /* delta    */
+  )
 
 
   static int
@@ -1806,21 +1785,18 @@ typedef ptrdiff_t  FT_PtrDist;
           cell_start = ( ycount * sizeof ( PCell ) + sizeof ( TCell ) - 1 ) /
                        sizeof ( TCell );
 
-          if ( FT_MAX_GRAY_POOL - cell_start < 2 )
-            goto ReduceBands;
-
           ras.cells     = buffer + cell_start;
           ras.max_cells = (FT_PtrDist)( FT_MAX_GRAY_POOL - cell_start );
+          ras.num_cells = 0;
 
           ras.ycells = (PCell*)buffer;
           while ( ycount )
             ras.ycells[--ycount] = NULL;
         }
 
-        ras.num_cells = 0;
         ras.invalid   = 1;
         ras.min_ey    = band[1];
-        ras.max_ey    = ras.ey = band[0];
+        ras.max_ey    = band[0];
 
         error = gray_convert_glyph_inner( RAS_VAR );
 
@@ -1833,7 +1809,6 @@ typedef ptrdiff_t  FT_PtrDist;
         else if ( error != ErrRaster_Memory_Overflow )
           return 1;
 
-      ReduceBands:
         /* render pool overflow; we will reduce the render band by half */
         width >>= 1;
 
@@ -1859,8 +1834,8 @@ typedef ptrdiff_t  FT_PtrDist;
   gray_raster_render( FT_Raster                raster,
                       const FT_Raster_Params*  params )
   {
-    const FT_Outline*  outline     = (const FT_Outline*)params->source;
-    const FT_Bitmap*   target_map  = params->target;
+    const FT_Outline*  outline    = (const FT_Outline*)params->source;
+    const FT_Bitmap*   target_map = params->target;
     FT_BBox            cbox, clip;
 
 #ifndef FT_STATIC_RASTER
@@ -1984,7 +1959,7 @@ typedef ptrdiff_t  FT_PtrDist;
 
 
     *araster = (FT_Raster)&the_raster;
-    FT_MEM_ZERO( &the_raster, sizeof ( the_raster ) );
+    FT_ZERO( &the_raster );
 
     return 0;
   }
@@ -2060,11 +2035,12 @@ typedef ptrdiff_t  FT_PtrDist;
 
     FT_GLYPH_FORMAT_OUTLINE,
 
-    (FT_Raster_New_Func)     gray_raster_new,
-    (FT_Raster_Reset_Func)   gray_raster_reset,
-    (FT_Raster_Set_Mode_Func)gray_raster_set_mode,
-    (FT_Raster_Render_Func)  gray_raster_render,
-    (FT_Raster_Done_Func)    gray_raster_done )
+    (FT_Raster_New_Func)     gray_raster_new,       /* raster_new      */
+    (FT_Raster_Reset_Func)   gray_raster_reset,     /* raster_reset    */
+    (FT_Raster_Set_Mode_Func)gray_raster_set_mode,  /* raster_set_mode */
+    (FT_Raster_Render_Func)  gray_raster_render,    /* raster_render   */
+    (FT_Raster_Done_Func)    gray_raster_done       /* raster_done     */
+  )
 
 
 /* END */
