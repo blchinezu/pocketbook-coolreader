@@ -1,0 +1,1930 @@
+# SOME DESCRIPTIVE TITLE.
+# This file is put in the public domain.
+#
+# Translators:
+# Reimo Vellemaa <reimovellemaa@hotmail.com>, 2017
+msgid ""
+msgstr ""
+"Project-Id-Version: coolreader-pocketbook\n"
+"Report-Msgid-Bugs-To: foo@bar.com\n"
+"POT-Creation-Date: 2016-10-31 12:09+0200\n"
+"PO-Revision-Date: 2017-08-25 16:33+0000\n"
+"Last-Translator: Reimo Vellemaa <reimovellemaa@hotmail.com>\n"
+"Language-Team: Estonian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/et/)\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../src/citedlg.cpp:194
+msgid "Select next/prev paragraph"
+msgstr "Vali järgmine/eelmine paragrahv"
+
+#: ../src/citedlg.cpp:197
+msgid "Select one more paragraph"
+msgstr "Vali veel üks paragrahv"
+
+#: ../src/citedlg.cpp:200
+msgid "Deselect paragraph"
+msgstr "Tühista paragrahvi valik"
+
+#: ../src/citedlg.cpp:203
+msgid "Select one more phrase"
+msgstr "Vali veel üks fraas"
+
+#: ../src/citedlg.cpp:206
+msgid "Deselect phrase"
+msgstr "Tühista fraasi valik"
+
+#: ../src/citedlg.cpp:220
+msgid "Select text"
+msgstr "Vali tekst"
+
+#: ../src/fsmenu.cpp:41
+msgid "1..9"
+msgstr "1..9"
+
+#: ../src/fsmenu.cpp:43
+msgid "1..8"
+msgstr "1..8"
+
+#: ../src/mainwnd.cpp:810
+msgid "No manual currently available for this language, sorry!"
+msgstr "Hetkel selle keele jaoks manuaal puudub, vabandame!"
+
+#: ../src/mainwnd.cpp:821 ../src/mainwnd.cpp:931
+msgid "Help"
+msgstr "Abi"
+
+#: ../src/mainwnd.cpp:848
+msgid "Main Menu"
+msgstr "Peamenüü"
+
+#: ../src/mainwnd.cpp:882 ../src/viewdlg.cpp:573
+msgid "About"
+msgstr "Info"
+
+#: ../src/mainwnd.cpp:892 ../src/viewdlg.cpp:537
+msgid "Go to page"
+msgstr "Mine lehele"
+
+#: ../src/mainwnd.cpp:903 ../src/recentdlg.cpp:115
+msgid "Open recent book"
+msgstr "Ava hiljutine raamat"
+
+#: ../src/mainwnd.cpp:909 ../src/viewdlg.cpp:164
+msgid "Dictionary"
+msgstr "Sõnastik"
+
+#: ../src/mainwnd.cpp:914 ../src/settings.cpp:1500
+msgid "Cite"
+msgstr "Tsiteeri"
+
+#: ../src/mainwnd.cpp:918 ../src/bmkdlg.cpp:182
+msgid "Bookmarks"
+msgstr "Järjehoidjad"
+
+#: ../src/mainwnd.cpp:922 ../src/viewdlg.cpp:221
+msgid "Search"
+msgstr "Otsing"
+
+#: ../src/mainwnd.cpp:926 ../src/settings.cpp:1063
+msgid "Settings"
+msgstr "Seaded"
+
+#: ../src/mainwnd.cpp:935 ../src/viewdlg.cpp:672
+msgid "Keyboard layout"
+msgstr "Klaviatuuripaigutus"
+
+#: ../src/mainwnd.cpp:942
+msgid ""
+"$1 - choose command\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - vali käsklus\n"
+"$2, $3 - sulge"
+
+#: ../src/mainwnd.cpp:1054
+msgid "Current page"
+msgstr "Praegune lehekülg"
+
+#: ../src/mainwnd.cpp:1055
+msgid "Total pages"
+msgstr "Lehekülgi kokku"
+
+#: ../src/mainwnd.cpp:1056
+msgid "Battery state"
+msgstr "Akuseisund"
+
+#: ../src/mainwnd.cpp:1056
+msgid "charging..."
+msgstr "laeb..."
+
+#: ../src/mainwnd.cpp:1057
+msgid "Current Time"
+msgstr "Praegune aeg"
+
+#: ../src/mainwnd.cpp:1062
+msgid "Current chapter"
+msgstr "Praegune peatükk"
+
+#: ../src/mainwnd.cpp:1065
+msgid "Status"
+msgstr "Staatus"
+
+#: ../src/mainwnd.cpp:1068
+msgid "Archive name"
+msgstr "Arhiivi nimi"
+
+#: ../src/mainwnd.cpp:1069
+msgid "Archive path"
+msgstr "Arhiivi asukoht"
+
+#: ../src/mainwnd.cpp:1070
+msgid "Archive size"
+msgstr "Arhiivi suurus"
+
+#: ../src/mainwnd.cpp:1071
+msgid "File name"
+msgstr "Faili nimi"
+
+#: ../src/mainwnd.cpp:1072
+msgid "File path"
+msgstr "Faili asukoht"
+
+#: ../src/mainwnd.cpp:1073
+msgid "File size"
+msgstr "Faili suurus"
+
+#: ../src/mainwnd.cpp:1074
+msgid "File format"
+msgstr "Faili formaat"
+
+#: ../src/mainwnd.cpp:1075
+msgid "File info"
+msgstr "Faili info"
+
+#: ../src/mainwnd.cpp:1078
+msgctxt "Book"
+msgid "Title"
+msgstr "Pealkiri"
+
+#: ../src/mainwnd.cpp:1079
+msgid "Author(s)"
+msgstr "Autor(id)"
+
+#: ../src/mainwnd.cpp:1080
+msgid "Series name"
+msgstr "Seeria nimi"
+
+#: ../src/mainwnd.cpp:1081
+msgid "Series number"
+msgstr "Seeria number"
+
+#: ../src/mainwnd.cpp:1082
+msgid "Date"
+msgstr "Kuupäev"
+
+#: ../src/mainwnd.cpp:1083
+msgid "Genres"
+msgstr "Žanrid"
+
+#: ../src/mainwnd.cpp:1084
+msgid "Language"
+msgstr "Keel"
+
+#: ../src/mainwnd.cpp:1085
+msgid "Translator"
+msgstr "Tõlkija"
+
+#: ../src/mainwnd.cpp:1086
+msgid "Source language"
+msgstr "Algne keel"
+
+#: ../src/mainwnd.cpp:1087
+msgid "Book info"
+msgstr "Teave raamatu kohta"
+
+#: ../src/mainwnd.cpp:1090
+msgid "Document author"
+msgstr "Dokumendi autor"
+
+#: ../src/mainwnd.cpp:1091
+msgid "Document date"
+msgstr "Dokumendi kuupäev"
+
+#: ../src/mainwnd.cpp:1092
+msgid "Document source URL"
+msgstr "Dokumendi asukoha URL"
+
+#: ../src/mainwnd.cpp:1093
+msgid "OCR by"
+msgstr "OCR autor"
+
+#: ../src/mainwnd.cpp:1094
+msgid "Document version"
+msgstr "Dokumendiversioon"
+
+#: ../src/mainwnd.cpp:1095
+msgid "Change history"
+msgstr "Muudatuste ajalugu"
+
+#: ../src/mainwnd.cpp:1096
+msgid "ID"
+msgstr "ID"
+
+#: ../src/mainwnd.cpp:1097
+msgid "Program used"
+msgstr "Kasutatud programm"
+
+#: ../src/mainwnd.cpp:1098
+msgid "Document info"
+msgstr "Teave dokumendi kohta"
+
+#: ../src/mainwnd.cpp:1101
+msgid "Publication name"
+msgstr "Väljaandja nimi"
+
+#: ../src/mainwnd.cpp:1102
+msgid "Publisher"
+msgstr "Väljaandja"
+
+#: ../src/mainwnd.cpp:1103
+msgid "Publisher city"
+msgstr "Väljaandja linn"
+
+#: ../src/mainwnd.cpp:1104
+msgid "Publication year"
+msgstr "Väljaande aasta"
+
+#: ../src/mainwnd.cpp:1105
+msgid "ISBN"
+msgstr "ISBN"
+
+#: ../src/mainwnd.cpp:1106
+msgid "Publication info"
+msgstr "Väljaandeinfo"
+
+#: ../src/mainwnd.cpp:1108
+msgid "Custom info"
+msgstr "Kohandatud teave"
+
+#: ../src/mainwnd.cpp:1112
+msgid "CoolReader for PocketBook"
+msgstr "CoolReader PocketBooki jaoks"
+
+#: ../src/mainwnd.cpp:1113
+msgid "Build date"
+msgstr "Loomiskuupäev"
+
+#: ../src/mainwnd.cpp:1114
+msgid "Build type"
+msgstr "Loomistüüp"
+
+#: ../src/mainwnd.cpp:1115
+msgid "About program"
+msgstr "Rakendusest"
+
+#: ../src/mainwnd.cpp:1118
+msgid "Hardware type"
+msgstr "Riistvaratüüp"
+
+#: ../src/mainwnd.cpp:1119
+msgid "Firmware version"
+msgstr "Püsivara versioon"
+
+#: ../src/mainwnd.cpp:1120
+msgid "Keyboard type"
+msgstr "Klaviatuuritüüp"
+
+#: ../src/mainwnd.cpp:1121
+msgid "Screen type"
+msgstr "Ekraanitüüp"
+
+#: ../src/mainwnd.cpp:1122
+msgid "Config file"
+msgstr "Konfigureerimisfail"
+
+#: ../src/mainwnd.cpp:1123
+msgid "Keymap file"
+msgstr "Klahvivastavusfail"
+
+#: ../src/mainwnd.cpp:1124
+msgid "Skin file"
+msgstr "Välimusfail"
+
+#: ../src/mainwnd.cpp:1125
+msgid "Debug information"
+msgstr "Silumisinfo"
+
+#: ../src/mainwnd.cpp:1276
+msgid "Loading: please wait..."
+msgstr "Laeb: palun oota..."
+
+#: ../src/recentdlg.cpp:97
+msgid "Open book"
+msgstr "Ava raamat"
+
+#: ../src/recentdlg.cpp:98
+msgid "Delete record"
+msgstr "Kustuta salvestis"
+
+#: ../src/recentdlg.cpp:133
+msgid ""
+"$1 - open book\n"
+"$2, $3 - close"
+msgstr ""
+"$1 - ava raamat\n"
+"$2, $3 - sulge"
+
+#: ../src/tocdlg.cpp:150
+msgid "Current page: $1 of $2\n"
+msgstr "Praegune lehelülg: $1/$2\n"
+
+#: ../src/tocdlg.cpp:153
+msgid "Enter page number:"
+msgstr "Sisesta leheküljenumber:"
+
+#: ../src/bmkdlg.cpp:19
+msgid "Empty slot"
+msgstr "Tühi pesa"
+
+#: ../src/bmkdlg.cpp:45
+msgid "Page $1 ($2%)"
+msgstr "Lehekülg $1 ($2%)"
+
+#: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
+msgid "Go to bookmark"
+msgstr "Mine järjehoidjani"
+
+#: ../src/bmkdlg.cpp:72
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"$2 - switch to SET mode"
+msgstr ""
+
+#: ../src/bmkdlg.cpp:73
+msgid ""
+"Short press $1 - go to bookmark,\n"
+"long press - set bookmark"
+msgstr ""
+"Lühike vajutus $1 - mine järjehoidjani,\n"
+"pikk vajutus - lisa järjehoidja"
+
+#: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
+msgid "Set bookmark"
+msgstr "Lisa järjehoidja"
+
+#: ../src/bmkdlg.cpp:80
+msgid ""
+"$1 - set bookmark,\n"
+"$2 - switch to GO mode"
+msgstr ""
+"$1 - lisa järjehoidja,\n"
+"$2 - mine GO režiimi"
+
+#: ../src/bmkdlg.cpp:81
+msgid ""
+"Short press $1 - set bookmark,\n"
+"long press - go to bookmark"
+msgstr ""
+"$1 lühike vajutus - lisa järjehoidja,\n"
+"pikk vajutus - mine järjehoidja juurde"
+
+#: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
+msgid "Delete bookmark"
+msgstr "Kustuta järjehoidja"
+
+#: ../src/bmkdlg.cpp:316
+msgid "Go to citation"
+msgstr "Mine tsitaadi juurde"
+
+#: ../src/bmkdlg.cpp:317
+msgid "Delete citation"
+msgstr "Kustuta tsitaat"
+
+#: ../src/bmkdlg.cpp:332
+msgid "Citations"
+msgstr "Tsitaadid"
+
+#: ../src/bmkdlg.cpp:448 ../src/viewdlg.cpp:574
+msgid "Cite selection dialog"
+msgstr "Tsitaadivalimisaken"
+
+#: ../src/dictdlg.cpp:80
+msgid "From dictionary "
+msgstr "Sõnastikust"
+
+#: ../src/dictdlg.cpp:89
+msgid "[cannot read article]"
+msgstr "[ei saa artiklit lugeda]"
+
+#: ../src/settings.cpp:204
+msgid "choose command"
+msgstr "vali käsk"
+
+#: ../src/settings.cpp:222
+msgid "Controls"
+msgstr "Juhtimisseaded"
+
+#: ../src/settings.cpp:388
+msgid "(No action)"
+msgstr "(Puudub)"
+
+#: ../src/settings.cpp:541
+msgid "[Command is not assigned]"
+msgstr "[Käsklus määramata]"
+
+#: ../src/settings.cpp:562
+msgid "0` (Portrait)"
+msgstr "0 (Portreevaade)"
+
+#: ../src/settings.cpp:563
+msgid "90 `"
+msgstr "90"
+
+#: ../src/settings.cpp:564
+msgid "180 `"
+msgstr "180"
+
+#: ../src/settings.cpp:565
+msgid "270 `"
+msgstr "270"
+
+#: ../src/settings.cpp:576
+msgid "Page orientation"
+msgstr "Leheorientatsioon"
+
+#: ../src/settings.cpp:597
+msgid "Default font size"
+msgstr "Vaikimisi tekstisuurus"
+
+#: ../src/settings.cpp:652
+msgid "The quick brown fox jumps over lazy dog"
+msgstr "Põdur Zagrebi tšellomängija-följetonist Ciqo külmetas kehvas garaažis"
+
+#: ../src/settings.cpp:832
+msgid "Justify"
+msgstr "Joondus"
+
+#: ../src/settings.cpp:833
+msgctxt "CSS"
+msgid "Left"
+msgstr "Vasakule"
+
+#: ../src/settings.cpp:834
+msgid "Center"
+msgstr "Keskele"
+
+#: ../src/settings.cpp:835
+msgctxt "CSS"
+msgid "Right"
+msgstr "Paremale"
+
+#: ../src/settings.cpp:841
+msgid "No indent"
+msgstr "Taane puudub"
+
+#: ../src/settings.cpp:842
+msgid "Small indent"
+msgstr "Väike taane"
+
+#: ../src/settings.cpp:843
+msgid "Big indent"
+msgstr "Suur taane"
+
+#: ../src/settings.cpp:844
+msgid "Small outdent"
+msgstr "Väike vasaktaane"
+
+#: ../src/settings.cpp:845
+msgid "Big outdent"
+msgstr "Suur vasaktaane"
+
+#: ../src/settings.cpp:851
+msgid "[Default sans-serif font]"
+msgstr "[Vaikimisi sans-serifi font]"
+
+#: ../src/settings.cpp:852
+msgid "[Default serif font]"
+msgstr "[Vaikimisi serifi font]"
+
+#: ../src/settings.cpp:853
+msgid "[Default monospace font]"
+msgstr "[Vaikimisi monospace'i font]"
+
+#: ../src/settings.cpp:859
+msgid "Bigger (105%)"
+msgstr "Suurem (105%)"
+
+#: ../src/settings.cpp:860
+msgid "Bigger (110%)"
+msgstr "Suurem (110%)"
+
+#: ../src/settings.cpp:861
+msgid "Bigger (115%)"
+msgstr "Suurem (115%)"
+
+#: ../src/settings.cpp:862
+msgid "Bigger (120%)"
+msgstr "Suurem (120%)"
+
+#: ../src/settings.cpp:863
+msgid "Bigger (150%)"
+msgstr "Suurem (150%)"
+
+#: ../src/settings.cpp:864
+msgid "Smaller (95%)"
+msgstr "Väiksem (95%)"
+
+#: ../src/settings.cpp:865
+msgid "Smaller (90%)"
+msgstr "Väiksem (90%)"
+
+#: ../src/settings.cpp:866
+msgid "Smaller (85%)"
+msgstr "Väiksem (85%)"
+
+#: ../src/settings.cpp:867
+msgid "Smaller (80%)"
+msgstr "Väiksem (80%)"
+
+#: ../src/settings.cpp:868
+msgid "Smaller (70%)"
+msgstr "Väiksem (70%)"
+
+#: ../src/settings.cpp:869
+msgid "Smaller (60%)"
+msgstr "Väiksem (60%)"
+
+#: ../src/settings.cpp:875 ../src/settings.cpp:884 ../src/settings.cpp:1172
+#: ../src/settings.cpp:1178
+msgid "Normal"
+msgstr "Tavaline"
+
+#: ../src/settings.cpp:876 ../src/settings.cpp:1179
+msgid "Bold"
+msgstr "Paks"
+
+#: ../src/settings.cpp:877
+msgid "Bolder"
+msgstr "Paksem"
+
+#: ../src/settings.cpp:878
+msgid "Lighter"
+msgstr "Peenem"
+
+#: ../src/settings.cpp:885
+msgid "Italic"
+msgstr "Kursiiv"
+
+#: ../src/settings.cpp:920 ../src/settings.cpp:1099
+msgid "None"
+msgstr "Puudub"
+
+#: ../src/settings.cpp:921 ../src/settings.cpp:1101
+msgid "Underline"
+msgstr "Allkriips"
+
+#: ../src/settings.cpp:922
+msgid "Line through"
+msgstr "Läbikriipsutus"
+
+#: ../src/settings.cpp:923
+msgid "Overline"
+msgstr "Ülekriips"
+
+#: ../src/settings.cpp:929
+msgid "Baseline"
+msgstr "Lähtejoon"
+
+#: ../src/settings.cpp:930
+msgid "Subscript"
+msgstr "Allkiri"
+
+#: ../src/settings.cpp:931
+msgid "Superscript"
+msgstr "Ülakiri"
+
+#: ../src/settings.cpp:937 ../src/settings.cpp:945
+msgid "Black"
+msgstr "Must"
+
+#: ../src/settings.cpp:938 ../src/settings.cpp:946
+msgid "Gray"
+msgstr "Hall"
+
+#: ../src/settings.cpp:939 ../src/settings.cpp:947
+msgid "White"
+msgstr "Valge"
+
+#: ../src/settings.cpp:954 ../src/settings.cpp:965
+msgid "0.2 of line height"
+msgstr "0.2 reakõrgusest"
+
+#: ../src/settings.cpp:955 ../src/settings.cpp:966
+msgid "0.3 of line height"
+msgstr "0.3 reakõrgusest"
+
+#: ../src/settings.cpp:956 ../src/settings.cpp:967 ../src/settings.cpp:976
+#: ../src/settings.cpp:992
+msgid "0.5 of line height"
+msgstr "0.5 reakõrgusest"
+
+#: ../src/settings.cpp:957 ../src/settings.cpp:968 ../src/settings.cpp:977
+#: ../src/settings.cpp:993
+msgid "1 line height"
+msgstr "1 reakõrgusest"
+
+#: ../src/settings.cpp:958 ../src/settings.cpp:969 ../src/settings.cpp:979
+#: ../src/settings.cpp:995
+msgid "2 of line height"
+msgstr "2 reakõrgusest"
+
+#: ../src/settings.cpp:978 ../src/settings.cpp:994
+msgid "1.5 of line height"
+msgstr "1.5 reakõrgusest"
+
+#: ../src/settings.cpp:980 ../src/settings.cpp:996
+msgid "4 of line height"
+msgstr "4 reakõrgusest"
+
+#: ../src/settings.cpp:981 ../src/settings.cpp:997
+msgid "5% of line width"
+msgstr "5% realaiusest"
+
+#: ../src/settings.cpp:982 ../src/settings.cpp:998
+msgid "10% of line width"
+msgstr "10% realaiusest"
+
+#: ../src/settings.cpp:983 ../src/settings.cpp:999
+msgid "15% of line width"
+msgstr "15% realaiusest"
+
+#: ../src/settings.cpp:984 ../src/settings.cpp:1000
+msgid "20% of line width"
+msgstr "20% realaiusest"
+
+#: ../src/settings.cpp:985 ../src/settings.cpp:1001
+msgid "30% of line width"
+msgstr "30% realaiusest"
+
+#: ../src/settings.cpp:1004
+msgid "Text alignment"
+msgstr "Tekstipaigutus"
+
+#: ../src/settings.cpp:1006
+msgid "First line indent"
+msgstr "Esimese rea taandus"
+
+#: ../src/settings.cpp:1009 ../src/settings.cpp:1663
+msgid "Font face"
+msgstr "Fondi välimus"
+
+#: ../src/settings.cpp:1023
+msgid "Font size"
+msgstr "Fondisuurus"
+
+#: ../src/settings.cpp:1025 ../src/settings.cpp:1557 ../src/settings.cpp:1672
+msgid "Font weight"
+msgstr "Fondipaksus"
+
+#: ../src/settings.cpp:1027
+msgid "Font style"
+msgstr "Fondistiil"
+
+#: ../src/settings.cpp:1029 ../src/settings.cpp:1586
+msgid "Interline space"
+msgstr "Reavahe"
+
+#: ../src/settings.cpp:1031
+msgid "Letter spacing"
+msgstr "Tähevahe"
+
+#: ../src/settings.cpp:1033
+msgid "Text decoration"
+msgstr "Tekstikaunistus"
+
+#: ../src/settings.cpp:1035
+msgid "Text vertical alignment"
+msgstr "Teksti vertikaalpaigutus"
+
+#: ../src/settings.cpp:1037
+msgid "Text color"
+msgstr "Tekstivärv"
+
+#: ../src/settings.cpp:1039
+msgid "Background color"
+msgstr "Taustavärv"
+
+#: ../src/settings.cpp:1041
+msgid "Margin before"
+msgstr "Veeris enne"
+
+#: ../src/settings.cpp:1043
+msgid "Margin after"
+msgstr "Veeris pärast"
+
+#: ../src/settings.cpp:1045
+msgid "Margin left"
+msgstr "Veeris vasakul"
+
+#: ../src/settings.cpp:1047
+msgid "Margin right"
+msgstr "Veeris paremal"
+
+#: ../src/settings.cpp:1080
+msgid "On for all fonts"
+msgstr "Sees kõikide fontide jaoks"
+
+#: ../src/settings.cpp:1081
+msgid "On for big fonts only"
+msgstr "Sees ainult suurte fontide jaoks"
+
+#: ../src/settings.cpp:1082 ../src/settings.cpp:1088 ../src/settings.cpp:1192
+#: ../src/settings.cpp:1325 ../src/settings.cpp:1351
+msgid "Off"
+msgstr "Väljas"
+
+#: ../src/settings.cpp:1087
+msgid "On"
+msgstr "Sees"
+
+#: ../src/settings.cpp:1093
+msgid "AM/PM"
+msgstr "AM/PM"
+
+#: ../src/settings.cpp:1094
+msgid "24h"
+msgstr "24h"
+
+#: ../src/settings.cpp:1100
+msgid "Solid"
+msgstr "Ühtlane"
+
+#: ../src/settings.cpp:1173
+msgid "Inverse"
+msgstr "Inverteeritud"
+
+#: ../src/settings.cpp:1184
+msgid "One"
+msgstr "Üks"
+
+#: ../src/settings.cpp:1185
+msgid "Two"
+msgstr "Kaks"
+
+#: ../src/settings.cpp:1190
+msgid "Top"
+msgstr "Ülemine serv"
+
+#: ../src/settings.cpp:1197
+msgid "70%"
+msgstr "70%"
+
+#: ../src/settings.cpp:1198
+msgid "75%"
+msgstr "75%"
+
+#: ../src/settings.cpp:1199
+msgid "80%"
+msgstr "80%"
+
+#: ../src/settings.cpp:1200
+msgid "85%"
+msgstr "85%"
+
+#: ../src/settings.cpp:1201
+msgid "90%"
+msgstr "90%"
+
+#: ../src/settings.cpp:1202
+msgid "95%"
+msgstr "95%"
+
+#: ../src/settings.cpp:1203
+msgid "100%"
+msgstr "100%"
+
+#: ../src/settings.cpp:1204
+msgid "105%"
+msgstr "105%"
+
+#: ../src/settings.cpp:1205
+msgid "110%"
+msgstr "110%"
+
+#: ../src/settings.cpp:1206
+msgid "115%"
+msgstr "115%"
+
+#: ../src/settings.cpp:1207
+msgid "120%"
+msgstr "120%"
+
+#: ../src/settings.cpp:1208
+msgid "125%"
+msgstr "125%"
+
+#: ../src/settings.cpp:1209
+msgid "130%"
+msgstr "130%"
+
+#: ../src/settings.cpp:1210
+msgid "135%"
+msgstr "135%"
+
+#: ../src/settings.cpp:1211
+msgid "140%"
+msgstr "140%"
+
+#: ../src/settings.cpp:1212
+msgid "145%"
+msgstr "145%"
+
+#: ../src/settings.cpp:1213
+msgid "150%"
+msgstr "150%"
+
+#: ../src/settings.cpp:1214
+msgid "160%"
+msgstr "160%"
+
+#: ../src/settings.cpp:1215
+msgid "180%"
+msgstr "180%"
+
+#: ../src/settings.cpp:1216
+msgid "200%"
+msgstr "200%"
+
+#: ../src/settings.cpp:1297
+msgid "Always use fast updates"
+msgstr "Kasuta alati kiiruuendusi"
+
+#: ../src/settings.cpp:1298
+msgid "Don't use fast updates"
+msgstr "Ära kasuta kiiruuendusi"
+
+#: ../src/settings.cpp:1299
+msgid "Full updates every 2 pages"
+msgstr "Täielik uuendamine iga 2 lehekülje järel"
+
+#: ../src/settings.cpp:1300
+msgid "Full updates every 3 pages"
+msgstr "Täielik uuendamine iga 3 lehekülje järel"
+
+#: ../src/settings.cpp:1301
+msgid "Full updates every 4 pages"
+msgstr "Täielik uuendamine iga 4 lehekülje järel"
+
+#: ../src/settings.cpp:1302
+msgid "Full updates every 5 pages"
+msgstr "Täielik uuendamine iga 5 lehekülje järel"
+
+#: ../src/settings.cpp:1303
+msgid "Full updates every 6 pages"
+msgstr "Täielik uuendamine iga 6 lehekülje järel"
+
+#: ../src/settings.cpp:1304
+msgid "Full updates every 7 pages"
+msgstr "Täielik uuendamine iga 7 lehekülje järel"
+
+#: ../src/settings.cpp:1305
+msgid "Full updates every 8 pages"
+msgstr "Täielik uuendamine iga 8 lehekülje järel"
+
+#: ../src/settings.cpp:1306
+msgid "Full updates every 9 pages"
+msgstr "Täielik uuendamine iga 9 lehekülje järel"
+
+#: ../src/settings.cpp:1307
+msgid "Full updates every 10 pages"
+msgstr "Täielik uuendamine iga 10 lehekülje järel"
+
+#: ../src/settings.cpp:1308
+msgid "Full updates every 14 pages"
+msgstr "Täielik uuendamine iga 14 lehekülje järel"
+
+#: ../src/settings.cpp:1309
+msgid "Full updates every 20 pages"
+msgstr "Täielik uuendamine iga 20 lehekülje järel"
+
+#: ../src/settings.cpp:1310
+msgid "Full updates every 25 pages"
+msgstr "Täielik uuendamine iga 25 lehekülje järel"
+
+#: ../src/settings.cpp:1311
+msgid "Full updates every 30 pages"
+msgstr "Täielik uuendamine iga 30 lehekülje järel"
+
+#: ../src/settings.cpp:1312
+msgid "Full updates every 35 pages"
+msgstr "Täielik uuendamine iga 35 lehekülje järel"
+
+#: ../src/settings.cpp:1313
+msgid "Full updates every 40 pages"
+msgstr "Täielik uuendamine iga 40 lehekülje järel"
+
+#: ../src/settings.cpp:1314
+msgid "Full updates every 45 pages"
+msgstr "Täielik uuendamine iga 45 lehekülje järel"
+
+#: ../src/settings.cpp:1315
+msgid "Full updates every 50 pages"
+msgstr "Täielik uuendamine iga 50 lehekülje järel"
+
+#: ../src/settings.cpp:1320
+msgid "Turbo mode disabled"
+msgstr "Turborežiim välja lülitatud"
+
+#: ../src/settings.cpp:1321
+msgid "Turbo mode enabled"
+msgstr "Turborežiim sisse lüllitatud"
+
+#: ../src/settings.cpp:1326
+msgid "1 minute"
+msgstr "1 minut"
+
+#: ../src/settings.cpp:1327
+msgid "2 minutes"
+msgstr "2 minutit"
+
+#: ../src/settings.cpp:1328
+msgid "3 minutes"
+msgstr "3 minutit"
+
+#: ../src/settings.cpp:1329
+msgid "4 minutes"
+msgstr "4 minutit"
+
+#: ../src/settings.cpp:1330
+msgid "5 minutes"
+msgstr "5 minutit"
+
+#: ../src/settings.cpp:1331
+msgid "6 minutes"
+msgstr "6 minutit"
+
+#: ../src/settings.cpp:1332
+msgid "7 minutes"
+msgstr "7 minutit"
+
+#: ../src/settings.cpp:1333
+msgid "8 minutes"
+msgstr "8 minutit"
+
+#: ../src/settings.cpp:1334
+msgid "9 minutes"
+msgstr "9 minutit"
+
+#: ../src/settings.cpp:1335
+msgid "10 minutes"
+msgstr "10 minutit"
+
+#: ../src/settings.cpp:1336
+msgid "15 minutes"
+msgstr "15 minutit"
+
+#: ../src/settings.cpp:1337
+msgid "20 minutes"
+msgstr "20 minutit"
+
+#: ../src/settings.cpp:1338
+msgid "25 minutes"
+msgstr "25 minutit"
+
+#: ../src/settings.cpp:1339
+msgid "30 minutes"
+msgstr "30 minutit"
+
+#: ../src/settings.cpp:1340
+msgid "35 minutes"
+msgstr "35 minutit"
+
+#: ../src/settings.cpp:1341
+msgid "40 minutes"
+msgstr "40 minutit"
+
+#: ../src/settings.cpp:1342
+msgid "45 minutes"
+msgstr "45 minutit"
+
+#: ../src/settings.cpp:1343
+msgid "50 minutes"
+msgstr "50 minutit"
+
+#: ../src/settings.cpp:1344
+msgid "55 minutes"
+msgstr "55 minutit"
+
+#: ../src/settings.cpp:1345
+msgid "1 hour"
+msgstr "1 tund"
+
+#: ../src/settings.cpp:1346
+msgid "2 hours"
+msgstr "2 tundi"
+
+#: ../src/settings.cpp:1352
+msgid "Fixed"
+msgstr "Fikseeritud"
+
+#: ../src/settings.cpp:1353
+msgid "Dynamic"
+msgstr "Dünaamiline"
+
+#: ../src/settings.cpp:1361
+msgid "180+slow next page"
+msgstr "180+aeglane järgmine lehekülg"
+
+#: ../src/settings.cpp:1362
+msgid "180+slow prev/next page"
+msgstr "180+aeglane eelmine/järgmine lehekülg"
+
+#: ../src/settings.cpp:1363
+msgid "180+FAST next page"
+msgstr "180+KIIRE järgmine lehekülg"
+
+#: ../src/settings.cpp:1364
+msgid "180+FAST prev/next page"
+msgstr "180+KIIRE eelmine/järgmine lehekülg"
+
+#: ../src/settings.cpp:1365
+msgid "180+FAST next/prev page"
+msgstr "180+KIIRE järgmine/eelmine lehekülg"
+
+#: ../src/settings.cpp:1383 ../src/settings.cpp:1400
+msgid "Auto"
+msgstr "Automaatne"
+
+#: ../src/settings.cpp:1384
+msgid "2 BPP"
+msgstr "2 BPP"
+
+#: ../src/settings.cpp:1385
+msgid "3 BPP"
+msgstr "3 BPP"
+
+#: ../src/settings.cpp:1386
+msgid "4 BPP"
+msgstr "4 BPP"
+
+#: ../src/settings.cpp:1387
+msgid "8 BPP"
+msgstr "8 BPP"
+
+#: ../src/settings.cpp:1393
+msgid "Disabled (1:1)"
+msgstr "Välja lülitatud (1:1)"
+
+#: ../src/settings.cpp:1394
+msgid "Integer scale"
+msgstr "Integeri skaala"
+
+#: ../src/settings.cpp:1395
+msgid "Arbitrary scale"
+msgstr ""
+
+#: ../src/settings.cpp:1401
+msgid "*1"
+msgstr "*1"
+
+#: ../src/settings.cpp:1402
+msgid "*2"
+msgstr "*2"
+
+#: ../src/settings.cpp:1403
+msgid "*3"
+msgstr "*3"
+
+#: ../src/settings.cpp:1487
+msgid "No hinting"
+msgstr "Hintimine puudub"
+
+#: ../src/settings.cpp:1488
+msgid "Use bytecode"
+msgstr "Kasuta baitkoodi"
+
+#: ../src/settings.cpp:1489
+msgid "Autohinting"
+msgstr "Autohintimine"
+
+#: ../src/settings.cpp:1490
+msgid "Light"
+msgstr "Valgustus"
+
+#: ../src/settings.cpp:1495
+msgid "Default paragraph formatting"
+msgstr "Vaikimisi paragrahvivormindus"
+
+#: ../src/settings.cpp:1496
+msgctxt "CSS"
+msgid "Title"
+msgstr "Pealkiri"
+
+#: ../src/settings.cpp:1497
+msgid "Subtitle"
+msgstr "Subtiiter"
+
+#: ../src/settings.cpp:1498
+msgid "Preformatted text / code"
+msgstr "Eelvormindatud tekst / kood"
+
+#: ../src/settings.cpp:1499
+msgid "Link"
+msgstr "Link"
+
+#: ../src/settings.cpp:1501
+msgid "Epigraph"
+msgstr "Epigraaf"
+
+#: ../src/settings.cpp:1502
+msgid "Poem"
+msgstr "Luuletus"
+
+#: ../src/settings.cpp:1503
+msgid "Text / Cite / Epigraph author"
+msgstr "Teksti- / Tsitaadi- /Epigraafiautor"
+
+#: ../src/settings.cpp:1504
+msgid "Footnote"
+msgstr "Joonealune märkus"
+
+#: ../src/settings.cpp:1505
+msgid "Footnote link"
+msgstr "Joonealuse märkuse link"
+
+#: ../src/settings.cpp:1506
+msgid "Footnote title"
+msgstr "Joonealuse märkuse pealkiri"
+
+#: ../src/settings.cpp:1507
+msgid "Annotation"
+msgstr "Annotatsioon"
+
+#: ../src/settings.cpp:1547
+msgid "Default font face"
+msgstr "Vaikimisi fondi välimus"
+
+#: ../src/settings.cpp:1552
+msgid "Font settings"
+msgstr "Tekstiseaded"
+
+#: ../src/settings.cpp:1559
+msgid "Font antialiasing"
+msgstr "Fondi sakilisuse vähendamine"
+
+#: ../src/settings.cpp:1562
+msgid "Font hinting"
+msgstr "Fondi hintimine"
+
+#: ../src/settings.cpp:1564
+msgid "Font kerning"
+msgstr "Tähevahe fondil"
+
+#: ../src/settings.cpp:1566
+msgid "Font embolding"
+msgstr "Fondimähkimine"
+
+#: ../src/settings.cpp:1568
+msgid "Tracking"
+msgstr "Jälgimine"
+
+#: ../src/settings.cpp:1570
+msgid "Font Gamma"
+msgstr "Fondigamma"
+
+#: ../src/settings.cpp:1572
+msgid "Document embedded fonts"
+msgstr ""
+
+#: ../src/settings.cpp:1575
+msgid "Fallback font face"
+msgstr ""
+
+#: ../src/settings.cpp:1581
+msgid "Formatting settings"
+msgstr "Vormindusseaded"
+
+#: ../src/settings.cpp:1593
+msgid "[No Hyphenation]"
+msgstr ""
+
+#: ../src/settings.cpp:1594
+msgid "[Algorythmic Hyphenation]"
+msgstr "[Algoritmiline poolitamine]"
+
+#: ../src/settings.cpp:1596
+msgid "Hyphenation"
+msgstr "Poolitamine"
+
+#: ../src/settings.cpp:1610
+msgid "Preformatted text"
+msgstr "Eelvormindatud tekst"
+
+#: ../src/settings.cpp:1613
+msgid "Space condensing percent"
+msgstr "Ruumivähendusprotsent"
+
+#: ../src/settings.cpp:1616
+msgid "Space expanding percent"
+msgstr "Ruumisuurendusprotsent"
+
+#: ../src/settings.cpp:1619
+msgid "Floating punctuation"
+msgstr ""
+
+#: ../src/settings.cpp:1625
+msgid "Image scaling"
+msgstr "Pildiskaleerimine"
+
+#: ../src/settings.cpp:1630
+msgid "Block image scaling mode"
+msgstr ""
+
+#: ../src/settings.cpp:1633
+msgid "Block image max zoom"
+msgstr ""
+
+#: ../src/settings.cpp:1636
+msgid "Inline image scaling mode"
+msgstr ""
+
+#: ../src/settings.cpp:1639
+msgid "Inline image max zoom"
+msgstr ""
+
+#: ../src/settings.cpp:1648
+msgid "Page settings"
+msgstr "Leheküljeseaded"
+
+#: ../src/settings.cpp:1653
+msgid "Status line"
+msgstr "Olekujoon"
+
+#: ../src/settings.cpp:1658
+msgid "Status line settings"
+msgstr "Olekujooneseaded"
+
+#: ../src/settings.cpp:1675
+msgid "Time format"
+msgstr "Ajaformaat"
+
+#: ../src/settings.cpp:1677
+msgid "Show time"
+msgstr "Näita aega"
+
+#: ../src/settings.cpp:1679
+msgid "Show title"
+msgstr "Näita pealkirja"
+
+#: ../src/settings.cpp:1681
+msgid "Show battery"
+msgstr "Näita akut"
+
+#: ../src/settings.cpp:1683
+msgid "Show battery percent"
+msgstr "Näita akuprotsenti"
+
+#: ../src/settings.cpp:1686
+msgid "Show position percent"
+msgstr "Näita asukohaprotsenti"
+
+#: ../src/settings.cpp:1688
+msgid "Show page count"
+msgstr "Näita leheküljearvu"
+
+#: ../src/settings.cpp:1690
+msgid "Show page count till chapter end"
+msgstr "Näita lehekülgedearvu peatüki lõpuni"
+
+#: ../src/settings.cpp:1693
+msgid "Show page number"
+msgstr "Näita leheküljenumbrit"
+
+#: ../src/settings.cpp:1695
+msgid "Show chapter marks"
+msgstr ""
+
+#: ../src/settings.cpp:1704
+msgid "Page margins"
+msgstr "Lehekülje veerised"
+
+#: ../src/settings.cpp:1709
+msgid "Top margin"
+msgstr "Ülemine veeris"
+
+#: ../src/settings.cpp:1711
+msgid "Bottom margin"
+msgstr "Alumine veeris"
+
+#: ../src/settings.cpp:1713
+msgid "Left margin"
+msgstr "Vasakveeris"
+
+#: ../src/settings.cpp:1715
+msgid "Right margin"
+msgstr "Paremveeris"
+
+#: ../src/settings.cpp:1720
+msgid "Footnotes at page bottom"
+msgstr "Joonealune märkus all servas"
+
+#: ../src/settings.cpp:1726
+msgid "Display settings"
+msgstr "Ekraaniseaded"
+
+#: ../src/settings.cpp:1735
+msgid "Landscape pages"
+msgstr "Maastikuvaatega leheküljed"
+
+#: ../src/settings.cpp:1737
+msgid "Inverse display"
+msgstr "Pööra ekraanivärvid"
+
+#: ../src/settings.cpp:1740
+msgid "Show bookmark icons"
+msgstr "Näita järjehoidjaikoone"
+
+#: ../src/settings.cpp:1743
+msgid "Highlight bookmarks"
+msgstr "Tõsta järjehoidjad esile"
+
+#: ../src/settings.cpp:1747
+msgid "Display update mode"
+msgstr "Ekraani uuendusrežiim"
+
+#: ../src/settings.cpp:1755
+msgid "Standby"
+msgstr "Ooterežiim"
+
+#: ../src/settings.cpp:1762
+msgid "Turbo update mode"
+msgstr "Turbouuendusrežiim"
+
+#: ../src/settings.cpp:1767
+msgid "Gray buffer depth (needs restart)"
+msgstr "Halli värvi puhvrisügavus (vajab restarti)"
+
+#: ../src/settings.cpp:1772
+msgid "Custom system theme (needs restart)"
+msgstr "Kohandatud süsteemiteema (vajab restarti)"
+
+#: ../src/settings.cpp:1778
+msgid "Use new TOC menu"
+msgstr "Kasuta uut TOC menüüd"
+
+#: ../src/settings.cpp:1786
+msgid "Skin"
+msgstr "Välimus"
+
+#: ../src/settings.cpp:1802
+msgid "Control settings"
+msgstr "Juhtimisseadmete seaded"
+
+#: ../src/settings.cpp:1809
+msgid "Rotate"
+msgstr "Pööra"
+
+#: ../src/settings.cpp:1812
+msgid "Page turn angle"
+msgstr "Lehepööramisnurk"
+
+#: ../src/settings.cpp:1828
+msgid "Tap action"
+msgstr "Puudutuse tagajärg"
+
+#: ../src/settings.cpp:1830
+msgid "Long tap action"
+msgstr "Pika puudutuse tagajärg"
+
+#: ../src/settings.cpp:1834
+msgid "Height of the upper tap zone"
+msgstr "Ülemise puutepiirkonna kõrgus"
+
+#: ../src/settings.cpp:1837
+msgid "Height of the middle tap zone"
+msgstr "Keskmise puutepiirkonna kõrgus"
+
+#: ../src/settings.cpp:1840
+msgid "Width of the left tap zone"
+msgstr "Vasaku puutepiirkonna laius"
+
+#: ../src/settings.cpp:1843
+msgid "Width of the middle tap zone"
+msgstr "Keskmise puutepiirkonna laius "
+
+#: ../src/settings.cpp:1847
+msgid "Page Turn Swipes"
+msgstr "Lehekülje vahetamise liigutused"
+
+#: ../src/settings.cpp:1850
+msgid "Front Light Swipes"
+msgstr "Eesvalgustuse muutmise liigutused"
+
+#: ../src/settings.cpp:1854
+msgid "Pinch zoom"
+msgstr "Näpistusliigutustega suurendamine"
+
+#: ../src/settings.cpp:1872
+msgid "Style settings"
+msgstr "Stiiliseaded"
+
+#: ../src/settings.cpp:1877
+msgid "Document embedded styles"
+msgstr "Dokumendi sisseehitatud stiilid"
+
+#: ../src/settings.cpp:1896 ../src/viewdlg.cpp:601
+msgid "Clear cache"
+msgstr "Tühjenda vahemälu"
+
+#: ../src/settings.cpp:1904 ../src/viewdlg.cpp:599 ../src/ota_update.cpp:277
+msgid "OTA Update"
+msgstr "OTA Uuendus"
+
+#: ../src/settings.cpp:1911 ../src/viewdlg.cpp:600
+msgid "OTA Update Dev"
+msgstr "OTA Uuenduse arendaja"
+
+#: ../src/settings.cpp:1934
+msgid ""
+"Press $1 to change option\n"
+"$2 to apply, $3 to cancel"
+msgstr ""
+"Vajuta $1, et muuta valikut\n"
+"$2, et jõustada või $3, et tühistada muudatused"
+
+#: ../src/viewdlg.cpp:159
+msgid "No dictionaries found"
+msgstr "Ei leia sõnastikke"
+
+#: ../src/viewdlg.cpp:160
+msgid "Place dictionaries to directory 'dict' of SD card."
+msgstr "Aseta sõnastikud SD kaardil 'dict' kausta"
+
+#: ../src/viewdlg.cpp:161
+msgid "Dictionaries in standard unix .dict format are supported."
+msgstr "Toetatud on standard unix .dict formaadis olevad sõnastikud."
+
+#: ../src/viewdlg.cpp:162
+msgid ""
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Iga sõnastiku jaoks on vaja failipaari: andmefail (.dict või .dict.dz "
+"laiendusega) ja indeksfail (.index laiendusega)"
+
+#: ../src/viewdlg.cpp:176
+msgid "Table of contents"
+msgstr "Sisukord"
+
+#: ../src/viewdlg.cpp:181
+msgid "Enter page number"
+msgstr "Sisesta leheküljenumber"
+
+#: ../src/viewdlg.cpp:194
+msgid "Enter position percent"
+msgstr "Sisesta asukohaprotsent"
+
+#: ../src/viewdlg.cpp:355
+msgid "Find in dictionary"
+msgstr "Leia sõnaraamatust"
+
+#: ../src/viewdlg.cpp:485
+msgid "M"
+msgstr "M"
+
+#: ../src/viewdlg.cpp:487
+msgid "Ok"
+msgstr "OK"
+
+#: ../src/viewdlg.cpp:489
+msgid "Up"
+msgstr "Üles"
+
+#: ../src/viewdlg.cpp:491
+msgid "Down"
+msgstr "Alla"
+
+#: ../src/viewdlg.cpp:493
+msgid "C"
+msgstr "C"
+
+#: ../src/viewdlg.cpp:495
+msgctxt "Key"
+msgid "Left"
+msgstr "Vasakule"
+
+#: ../src/viewdlg.cpp:497
+msgctxt "Key"
+msgid "Right"
+msgstr "Paremale"
+
+#: ../src/viewdlg.cpp:499
+msgid "Side Up"
+msgstr ""
+
+#: ../src/viewdlg.cpp:501
+msgid "Side Down"
+msgstr ""
+
+#: ../src/viewdlg.cpp:503
+msgid "Side Press"
+msgstr ""
+
+#: ../src/viewdlg.cpp:505
+msgid "Menu"
+msgstr "Menüü"
+
+#: ../src/viewdlg.cpp:507
+msgid "Zoom"
+msgstr "Suurenda"
+
+#: ../src/viewdlg.cpp:518
+msgid "Long"
+msgstr "Pikk"
+
+#: ../src/viewdlg.cpp:525
+msgid "To first page"
+msgstr "Esimesele lehele"
+
+#: ../src/viewdlg.cpp:527
+msgid "Back by page"
+msgstr ""
+
+#: ../src/viewdlg.cpp:529
+msgid "Forward by page"
+msgstr ""
+
+#: ../src/viewdlg.cpp:530
+msgid "Forward in move history"
+msgstr "Edasi liikumisajaloos"
+
+#: ../src/viewdlg.cpp:531
+msgid "Back in move history"
+msgstr "Tagasi liikumisajaloos"
+
+#: ../src/viewdlg.cpp:532
+msgid "Next link"
+msgstr "Järgmine link"
+
+#: ../src/viewdlg.cpp:533
+msgid "Previous link"
+msgstr "Eelmine link"
+
+#: ../src/viewdlg.cpp:534 ../src/viewdlg.cpp:561
+msgid "Go to link"
+msgstr "Mine lingile"
+
+#: ../src/viewdlg.cpp:535
+msgid "To last page"
+msgstr "Viimasele lehele"
+
+#: ../src/viewdlg.cpp:536
+msgid "Go to position"
+msgstr "Mine asukohta"
+
+#: ../src/viewdlg.cpp:538
+msgid "Zoom in"
+msgstr "Suurenda"
+
+#: ../src/viewdlg.cpp:539
+msgid "Zoom out"
+msgstr "Vähenda"
+
+#: ../src/viewdlg.cpp:540
+msgid "Toggle bold text"
+msgstr "Lülita paks tekst sisse"
+
+#: ../src/viewdlg.cpp:541
+msgid "Toggle text format"
+msgstr "Lülita tekstivormindamine sisse"
+
+#: ../src/viewdlg.cpp:542
+msgid "Save bookmark by number"
+msgstr "Salvesta järjehoidja numbri järgi"
+
+#: ../src/viewdlg.cpp:543
+msgid "Go to bookmark by number"
+msgstr "Mine järjehoidja juurde numbri järgi"
+
+#: ../src/viewdlg.cpp:544
+msgid "Move by chapter"
+msgstr "Liigu peatüki kaupa"
+
+#: ../src/viewdlg.cpp:545
+msgid "First link"
+msgstr "Esimene link"
+
+#: ../src/viewdlg.cpp:546
+msgid "Rotate by"
+msgstr "Pööra"
+
+#: ../src/viewdlg.cpp:547
+msgid "Set rotate angle"
+msgstr "Määra pööramisnurk"
+
+#: ../src/viewdlg.cpp:548
+msgid "Save history and bookmarks"
+msgstr "Salvesta ajalugu ja järjehoidjad"
+
+#: ../src/viewdlg.cpp:549
+msgid "Save document to cache"
+msgstr "Salvesta dokument vahemällu"
+
+#: ../src/viewdlg.cpp:550
+msgid "Close dialog"
+msgstr "Sulge aken"
+
+#: ../src/viewdlg.cpp:553
+msgid "Scroll forward"
+msgstr "Keri edasi"
+
+#: ../src/viewdlg.cpp:554
+msgid "Scroll back"
+msgstr "Keri tagasi"
+
+#: ../src/viewdlg.cpp:555
+msgid "Close book"
+msgstr "Sulge raamat"
+
+#: ../src/viewdlg.cpp:556
+msgid "Main menu"
+msgstr "Peamenüü"
+
+#: ../src/viewdlg.cpp:557
+msgid "Go to page dialog"
+msgstr "Mine lehekülje aknasse"
+
+#: ../src/viewdlg.cpp:558
+msgid "Settings menu"
+msgstr "Seadetemenüü"
+
+#: ../src/viewdlg.cpp:559
+msgid "Font size settings"
+msgstr "Fondisuuruse seaded"
+
+#: ../src/viewdlg.cpp:560
+msgid "Page orientation settings"
+msgstr "Lehekülje orientatsiooniseaded"
+
+#: ../src/viewdlg.cpp:565
+msgid "Find in Dictionary (T5)"
+msgstr "Leia sõnastikust (T5)"
+
+#: ../src/viewdlg.cpp:567
+msgid "Bookmark list"
+msgstr "Järjehoidjate nimekiri"
+
+#: ../src/viewdlg.cpp:568
+msgid "Citations list"
+msgstr "Tsitaadinimekiri"
+
+#: ../src/viewdlg.cpp:569
+msgid "Go to bookmark..."
+msgstr "Ava järjehoidja..."
+
+#: ../src/viewdlg.cpp:570
+msgid "Recent books list"
+msgstr "Hiljutiste raamatute nimekiri"
+
+#: ../src/viewdlg.cpp:571
+msgid "Open recent book by number"
+msgstr "Ava hiljutine raamat numbri järgi"
+
+#: ../src/viewdlg.cpp:572
+msgid "Switch to recent book"
+msgstr "Lülitu ringi hiljutise raamatu peale"
+
+#: ../src/viewdlg.cpp:575
+msgid "Search dialog"
+msgstr "Otsinguaken"
+
+#: ../src/viewdlg.cpp:576
+msgid "Find in Dictionary (virtual keyboard)"
+msgstr "Otsi sõnastikust (virtuaalklaviatuur)"
+
+#: ../src/viewdlg.cpp:577
+msgid "Next keyboard layout"
+msgstr "Järgmine klaviatuuripaigutus"
+
+#: ../src/viewdlg.cpp:578
+msgid "Previous keyboard layout"
+msgstr "Eelmine klaviatuuripaigutus"
+
+#: ../src/viewdlg.cpp:579
+msgid "Show manual"
+msgstr "Näita manuaali"
+
+#: ../src/viewdlg.cpp:580
+msgid "Show key mapping"
+msgstr "Näita klahvivastavust"
+
+#: ../src/viewdlg.cpp:581
+msgid "Go to percent..."
+msgstr ""
+
+#: ../src/viewdlg.cpp:586
+msgid "Front light"
+msgstr "Eesvalgustus"
+
+#: ../src/viewdlg.cpp:587
+msgid "Invert display"
+msgstr "Pööra ekraanivärvid"
+
+#: ../src/viewdlg.cpp:588
+msgid "Full screen update"
+msgstr "Täisekraaniuuendus"
+
+#: ../src/viewdlg.cpp:589
+msgid "Toggle status bar"
+msgstr ""
+
+#: ../src/viewdlg.cpp:592
+msgid "Enter standby mode"
+msgstr "Sisene ooterežiimi"
+
+#: ../src/viewdlg.cpp:594
+msgid "Tasks list"
+msgstr "Ülesannetenimekiri"
+
+#: ../src/viewdlg.cpp:596
+msgid "Toggle system panel"
+msgstr "Lülita süsteemipaneel sisse"
+
+#: ../src/viewdlg.cpp:598
+msgid "Lock device"
+msgstr "Lukusta seade"
+
+#: ../src/viewdlg.cpp:603
+msgid "Open system panel"
+msgstr "Ava süsteemipaneel"
+
+#: ../src/viewdlg.cpp:604
+msgid "Toggle front light"
+msgstr "Lülita eesvalgustus sisse"
+
+#: ../src/viewdlg.cpp:607
+msgid "PocketBook Main menu"
+msgstr "PocketBooki Peamenüü"
+
+#: ../src/viewdlg.cpp:609
+msgid "Unknown command"
+msgstr "Teadmata käsklus"
+
+#: ../src/viewdlg.cpp:616
+msgid "Previous Page"
+msgstr "Eelmine lehekülg"
+
+#: ../src/viewdlg.cpp:618
+msgid "Next Page"
+msgstr "Järgmine lehekülg"
+
+#: ../src/viewdlg.cpp:620
+msgid "Back by 10 Pages"
+msgstr "10 lehekülge tagasi"
+
+#: ../src/viewdlg.cpp:622
+msgid "Forward by 10 Pages"
+msgstr "10 lehekülge edasi"
+
+#: ../src/viewdlg.cpp:624
+msgid "Next Chapter"
+msgstr "Järgmine peatükk"
+
+#: ../src/viewdlg.cpp:626
+msgid "Previous Chapter"
+msgstr "Eelmine peatükk"
+
+#: ../src/viewdlg.cpp:628
+msgid "Add Bookmark"
+msgstr "Lisa järjehoidja"
+
+#: ../src/viewdlg.cpp:630
+msgid "Rotate Clockwise"
+msgstr "Pööra päripäeva"
+
+#: ../src/viewdlg.cpp:632
+msgid "Rotate Anti-Clockwise"
+msgstr "Pööra vastupäeva"
+
+#: ../src/viewdlg.cpp:634
+msgid "Portrait View"
+msgstr "Portreevaade"
+
+#: ../src/viewdlg.cpp:636
+msgid "Landscape View"
+msgstr "Maastikuvaade"
+
+#: ../src/viewdlg.cpp:660
+msgid "Key"
+msgstr "Klahv"
+
+#: ../src/viewdlg.cpp:660
+msgid "Assigned function"
+msgstr "Määratud tegevus"
+
+#: ../src/ota_update.cpp:151
+msgid ""
+"Download successful!\n"
+"CoolReader will restart itself."
+msgstr ""
+"Allalaadimine oli edukas!\n"
+"CoolReader taaskäivitab ennast."
+
+#: ../src/ota_update.cpp:152
+msgid "OK"
+msgstr "OK"
+
+#: ../src/ota_update.cpp:161
+msgid "Downloading... (2nd Method)"
+msgstr "Allalaadimine... (2. meetod)"
+
+#: ../src/ota_update.cpp:172
+msgid "Couldn't download the update package!"
+msgstr "Ei saanud uuenduspaketti alla laadida!"
+
+#: ../src/ota_update.cpp:192 ../src/ota_update.cpp:300
+#: ../src/ota_update.cpp:328
+msgid "Downloading..."
+msgstr "Allalaadimine..."
+
+#: ../src/ota_update.cpp:235
+msgid "Couldn't remove existing package!"
+msgstr "Ei saanud eelnevat paketti eemaldada!"
+
+#: ../src/ota_update.cpp:272
+msgid "Couldn't connect to the network!"
+msgstr "Ei saanud internetiühendust luua!"
+
+#: ../src/ota_update.cpp:278 ../src/ota_update.cpp:294
+#: ../src/ota_update.cpp:307
+msgid "Searching..."
+msgstr "Otsimine..."
+
+#: ../src/ota_update.cpp:285
+msgid "You have the latest version."
+msgstr "Sul on uusim versioon."
+
+#: ../src/ota_update.cpp:317
+msgid ""
+"Update is not available for your device!\n"
+"Device model: "
+msgstr ""
+"Sinu seadmele puuduvad uuendused!\n"
+"Seadme mudel:"
+
+#: ../src/ota_update.cpp:339
+msgid "Failed updating!"
+msgstr "Uuendamine ebaõnnestus!"
+
+#: ../src/pb_toc.cpp:22
+msgid "Contents"
+msgstr "Sisu"
+
+#: ../src/cr3pocketbook.cpp:2532
+msgid "Cache cleared."
+msgstr "Vahemälu tühjendatud."
+
+#: ../src/cr3pocketbook.cpp:2537
+msgid "Unable to list the directory contents!"
+msgstr ""
+
+#: ../src/cr3pocketbook.cpp:2543
+msgid "Unable to clear cache!"
+msgstr "Ei saa vahemälu tühjendada!"
+
+#: ../src/cr3pocketbook.cpp:2703
+msgid "Start"
+msgstr "Alusta"
+
+#: ../src/cr3pocketbook.cpp:2718
+msgid "Section"
+msgstr "Sektsioon"
+
+#: ../src/cr3pocketbook.cpp:2728
+msgid "End"
+msgstr "Lõpp"
+
+#: ../src/cr3pocketbook.cpp:4181
+msgid "Press $1 to translate"
+msgstr "Tõlkimiseks vajuta $1"
+
+#: ../src/cr3pocketbook.cpp:5291
+msgid "Updated to v"
+msgstr "Uuendatud versioonini v"
+
+#: ../src/cr3pocketbook.cpp:5452
+msgid "Untitled"
+msgstr "Pealkirjata"
+
+#: ../src/cr3pocketbook.cpp:5785
+msgid "Custom system theme applied. CR3 will now restart."
+msgstr "Kohandatud süsteemiteema jõustatud. CR3 teeb nüüd restardi."
+
+#: ../src/cr3pocketbook.cpp:5848
+msgid "Restored default system theme. CR3 will now restart."
+msgstr "Vaikimisi süsteemiteema taastatud. CR3 teeb nüüd restardi."

@@ -5,6 +5,7 @@ msgmerge --update cr3_ca.po cr3.pot
 msgmerge --update cr3_cs.po cr3.pot
 msgmerge --update cr3_de.po cr3.pot
 msgmerge --update cr3_es.po cr3.pot
+msgmerge --update cr3_et.po cr3.pot
 msgmerge --update cr3_fr.po cr3.pot
 msgmerge --update cr3_he.po cr3.pot
 msgmerge --update cr3_hu.po cr3.pot
@@ -12,6 +13,7 @@ msgmerge --update cr3_it.po cr3.pot
 msgmerge --update cr3_lt.po cr3.pot
 msgmerge --update cr3_nl.po cr3.pot
 msgmerge --update cr3_pl.po cr3.pot
+msgmerge --update cr3_pt.po cr3.pot
 msgmerge --update cr3_ro.po cr3.pot
 msgmerge --update cr3_ru.po cr3.pot
 msgmerge --update cr3_tr.po cr3.pot

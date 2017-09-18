@@ -4,7 +4,7 @@
 # Translators:
 # BruceLee, 2015
 # BruceLee, 2015
-# Elidevin <unexpected@ya.ru>, 2015
+# Elidevin <unexpected@ya.ru>, 2015-2016
 # Elidevin <unexpected@ya.ru>, 2015
 # Lazar Kaznelson <kaznelson@front.ru>, 2015
 msgid ""
@@ -12,8 +12,8 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2015-10-05 12:58+0000\n"
-"Last-Translator: Lazar Kaznelson <kaznelson@front.ru>\n"
+"PO-Revision-Date: 2016-11-08 20:46+0000\n"
+"Last-Translator: Elidevin <unexpected@ya.ru>\n"
 "Language-Team: Russian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/ru/)\n"
 "Language: ru\n"
@@ -1383,7 +1383,7 @@ msgstr "Своя системная тема (нужен перезапуск)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "Использовать новый навигатор по главам"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1907,15 +1907,15 @@ msgstr "Не удалось очистить кэш!"
 
 #: ../src/cr3pocketbook.cpp:2703
 msgid "Start"
-msgstr ""
+msgstr "Начало"
 
 #: ../src/cr3pocketbook.cpp:2718
 msgid "Section"
-msgstr ""
+msgstr "Раздел"
 
 #: ../src/cr3pocketbook.cpp:2728
 msgid "End"
-msgstr ""
+msgstr "Окончание"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"

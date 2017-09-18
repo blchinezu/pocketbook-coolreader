@@ -4,7 +4,7 @@
 /*                                                                         */
 /*    Auto-fitter hinting routines (body).                                 */
 /*                                                                         */
-/*  Copyright 2003-2016 by                                                 */
+/*  Copyright 2003-2017 by                                                 */
 /*  David Turner, Robert Wilhelm, and Werner Lemberg.                      */
 /*                                                                         */
 /*  This file is part of the FreeType project, and may only be used,       */
@@ -45,7 +45,7 @@
 
     if ( axis->num_segments < AF_SEGMENTS_EMBEDDED )
     {
-      if ( axis->segments == NULL )
+      if ( !axis->segments )
       {
         axis->segments     = axis->embedded.segments;
         axis->max_segments = AF_SEGMENTS_EMBEDDED;
@@ -110,7 +110,7 @@
 
     if ( axis->num_edges < AF_EDGES_EMBEDDED )
     {
-      if ( axis->edges == NULL )
+      if ( !axis->edges )
       {
         axis->edges     = axis->embedded.edges;
         axis->max_edges = AF_EDGES_EMBEDDED;
@@ -507,15 +507,15 @@
       return FT_THROW( Invalid_Argument );
 
     seg      = &axis->segments[idx];
-    *offset  = ( dim == AF_DIMENSION_HORZ ) ? seg->first->ox
-                                            : seg->first->oy;
+    *offset  = ( dim == AF_DIMENSION_HORZ ) ? seg->first->fx
+                                            : seg->first->fy;
     if ( seg->edge )
       *is_blue = (FT_Bool)( seg->edge->blue_edge != 0 );
     else
       *is_blue = FALSE;
 
     if ( *is_blue )
-      *blue_offset = seg->edge->blue_edge->cur;
+      *blue_offset = seg->edge->blue_edge->org;
     else
       *blue_offset = 0;
 
@@ -743,7 +743,7 @@
 
     if ( new_max <= AF_CONTOURS_EMBEDDED )
     {
-      if ( hints->contours == NULL )
+      if ( !hints->contours )
       {
         hints->contours     = hints->embedded.contours;
         hints->max_contours = AF_CONTOURS_EMBEDDED;
@@ -772,7 +772,7 @@
 
     if ( new_max <= AF_POINTS_EMBEDDED )
     {
-      if ( hints->points == NULL )
+      if ( !hints->points )
       {
         hints->points     = hints->embedded.points;
         hints->max_points = AF_POINTS_EMBEDDED;
@@ -1182,7 +1182,7 @@
         AF_Point  point, first, last;
 
 
-        if ( edge == NULL )
+        if ( !edge )
           continue;
 
         first = seg->first;
@@ -1208,7 +1208,7 @@
         AF_Point  point, first, last;
 
 
-        if ( edge == NULL )
+        if ( !edge )
           continue;
 
         first = seg->first;
