@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2016-10-31 17:53+0000\n"
+"PO-Revision-Date: 2017-08-03 13:45+0000\n"
 "Last-Translator: Zorro66\n"
 "Language-Team: German (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/de/)\n"
@@ -1150,7 +1150,7 @@ msgstr "Gedicht"
 
 #: ../src/settings.cpp:1503
 msgid "Text / Cite / Epigraph author"
-msgstr "Text/Zitat/Inschrift-Autor"
+msgstr "Text/Zitat/Inschrift Autor"
 
 #: ../src/settings.cpp:1504
 msgid "Footnote"
@@ -1374,7 +1374,7 @@ msgstr "Gray buffer depth (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1772
 msgid "Custom system theme (needs restart)"
-msgstr "Selbsterstelltes System-Theme (Neustart erforderlich)"
+msgstr "Custom-System-Theme (Neustart erforderlich)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"

@@ -1,6 +1,6 @@
 # SOME DESCRIPTIVE TITLE.
 # This file is put in the public domain.
-# 
+#
 # Translators:
 # Reimo Vellemaa <reimovellemaa@hotmail.com>, 2017
 msgid ""
@@ -10,11 +10,12 @@ msgstr ""
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
 "PO-Revision-Date: 2017-08-25 16:33+0000\n"
 "Last-Translator: Reimo Vellemaa <reimovellemaa@hotmail.com>\n"
-"Language-Team: Estonian (http://www.transifex.com/coolreader-pocketbook/coolreader-pocketbook/language/et/)\n"
+"Language-Team: Estonian (http://www.transifex.com/coolreader-pocketbook/"
+"coolreader-pocketbook/language/et/)\n"
+"Language: et\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: et\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/citedlg.cpp:194
@@ -101,7 +102,9 @@ msgstr "Klaviatuuripaigutus"
 msgid ""
 "$1 - choose command\n"
 "$2, $3 - close"
-msgstr "$1 - vali käsklus\n$2, $3 - sulge"
+msgstr ""
+"$1 - vali käsklus\n"
+"$2, $3 - sulge"
 
 #: ../src/mainwnd.cpp:1054
 msgid "Current page"
@@ -332,7 +335,9 @@ msgstr "Kustuta salvestis"
 msgid ""
 "$1 - open book\n"
 "$2, $3 - close"
-msgstr "$1 - ava raamat\n$2, $3 - sulge"
+msgstr ""
+"$1 - ava raamat\n"
+"$2, $3 - sulge"
 
 #: ../src/tocdlg.cpp:150
 msgid "Current page: $1 of $2\n"
@@ -364,7 +369,9 @@ msgstr ""
 msgid ""
 "Short press $1 - go to bookmark,\n"
 "long press - set bookmark"
-msgstr "Lühike vajutus $1 - mine järjehoidjani,\npikk vajutus - lisa järjehoidja"
+msgstr ""
+"Lühike vajutus $1 - mine järjehoidjani,\n"
+"pikk vajutus - lisa järjehoidja"
 
 #: ../src/bmkdlg.cpp:76 ../src/bmkdlg.cpp:160 ../src/viewdlg.cpp:590
 msgid "Set bookmark"
@@ -374,13 +381,17 @@ msgstr "Lisa järjehoidja"
 msgid ""
 "$1 - set bookmark,\n"
 "$2 - switch to GO mode"
-msgstr "$1 - lisa järjehoidja,\n$2 - mine GO režiimi"
+msgstr ""
+"$1 - lisa järjehoidja,\n"
+"$2 - mine GO režiimi"
 
 #: ../src/bmkdlg.cpp:81
 msgid ""
 "Short press $1 - set bookmark,\n"
 "long press - go to bookmark"
-msgstr "$1 lühike vajutus - lisa järjehoidja,\npikk vajutus - mine järjehoidja juurde"
+msgstr ""
+"$1 lühike vajutus - lisa järjehoidja,\n"
+"pikk vajutus - mine järjehoidja juurde"
 
 #: ../src/bmkdlg.cpp:162 ../src/viewdlg.cpp:591
 msgid "Delete bookmark"
@@ -1442,7 +1453,9 @@ msgstr "OTA Uuenduse arendaja"
 msgid ""
 "Press $1 to change option\n"
 "$2 to apply, $3 to cancel"
-msgstr "Vajuta $1, et muuta valikut\n$2, et jõustada või $3, et tühistada muudatused"
+msgstr ""
+"Vajuta $1, et muuta valikut\n"
+"$2, et jõustada või $3, et tühistada muudatused"
 
 #: ../src/viewdlg.cpp:159
 msgid "No dictionaries found"
@@ -1458,9 +1471,11 @@ msgstr "Toetatud on standard unix .dict formaadis olevad sõnastikud."
 
 #: ../src/viewdlg.cpp:162
 msgid ""
-"For each dictionary, pair of files should be provided: data file (with .dict"
-" or .dict.dz extension, and index file with .index extension"
-msgstr "Iga sõnastiku jaoks on vaja failipaari: andmefail (.dict või .dict.dz laiendusega) ja indeksfail (.index laiendusega)"
+"For each dictionary, pair of files should be provided: data file (with .dict "
+"or .dict.dz extension, and index file with .index extension"
+msgstr ""
+"Iga sõnastiku jaoks on vaja failipaari: andmefail (.dict või .dict.dz "
+"laiendusega) ja indeksfail (.index laiendusega)"
 
 #: ../src/viewdlg.cpp:176
 msgid "Table of contents"
@@ -1816,7 +1831,9 @@ msgstr "Määratud tegevus"
 msgid ""
 "Download successful!\n"
 "CoolReader will restart itself."
-msgstr "Allalaadimine oli edukas!\nCoolReader taaskäivitab ennast."
+msgstr ""
+"Allalaadimine oli edukas!\n"
+"CoolReader taaskäivitab ennast."
 
 #: ../src/ota_update.cpp:152
 msgid "OK"
@@ -1856,7 +1873,9 @@ msgstr "Sul on uusim versioon."
 msgid ""
 "Update is not available for your device!\n"
 "Device model: "
-msgstr "Sinu seadmele puuduvad uuendused!\nSeadme mudel:"
+msgstr ""
+"Sinu seadmele puuduvad uuendused!\n"
+"Seadme mudel:"
 
 #: ../src/ota_update.cpp:339
 msgid "Failed updating!"

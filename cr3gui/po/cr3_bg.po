@@ -4,14 +4,15 @@
 # Translators:
 # LVE <vadim.lopatin@coolreader.org>, 2009
 # Zlatko Petkov <zlpetkov@gmail.com>, 2011
-# Иван Пенев <aeternus.arcis@gmail.com>, 2015-2016
+# Иван Пенев (Адмирал АнимЕ), 2015-2016
+# Любомир Василев, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2016-02-09 14:03+0000\n"
-"Last-Translator: Иван Пенев <aeternus.arcis@gmail.com>\n"
+"PO-Revision-Date: 2017-08-03 13:45+0000\n"
+"Last-Translator: Любомир Василев\n"
 "Language-Team: Bulgarian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/bg/)\n"
 "Language: bg\n"
@@ -311,7 +312,7 @@ msgstr "Файл за конфигурация"
 
 #: ../src/mainwnd.cpp:1123
 msgid "Keymap file"
-msgstr ""
+msgstr "Файл за клавиатурата"
 
 #: ../src/mainwnd.cpp:1124
 msgid "Skin file"
@@ -598,11 +599,11 @@ msgstr "Зачертан"
 
 #: ../src/settings.cpp:923
 msgid "Overline"
-msgstr ""
+msgstr "Надчертан"
 
 #: ../src/settings.cpp:929
 msgid "Baseline"
-msgstr ""
+msgstr "Нормален"
 
 #: ../src/settings.cpp:930
 msgid "Subscript"
@@ -766,7 +767,7 @@ msgstr "24 часа"
 
 #: ../src/settings.cpp:1100
 msgid "Solid"
-msgstr ""
+msgstr "Плътен цвят"
 
 #: ../src/settings.cpp:1173
 msgid "Inverse"
@@ -1066,19 +1067,19 @@ msgstr "Автоматично"
 
 #: ../src/settings.cpp:1384
 msgid "2 BPP"
-msgstr ""
+msgstr "2 бита на пиксел (4 нюанса)"
 
 #: ../src/settings.cpp:1385
 msgid "3 BPP"
-msgstr ""
+msgstr "3 бита на пиксел (8 нюанса)"
 
 #: ../src/settings.cpp:1386
 msgid "4 BPP"
-msgstr ""
+msgstr "4 бита на пиксел (16 нюанса)"
 
 #: ../src/settings.cpp:1387
 msgid "8 BPP"
-msgstr ""
+msgstr "8 бита на пиксел (256 нюанса)"
 
 #: ../src/settings.cpp:1393
 msgid "Disabled (1:1)"
@@ -1151,7 +1152,7 @@ msgstr "Поема"
 
 #: ../src/settings.cpp:1503
 msgid "Text / Cite / Epigraph author"
-msgstr ""
+msgstr "Автор на текста / цитата / епиграфа"
 
 #: ../src/settings.cpp:1504
 msgid "Footnote"
@@ -1187,7 +1188,7 @@ msgstr "Подсказки на шрифта"
 
 #: ../src/settings.cpp:1564
 msgid "Font kerning"
-msgstr "Междубуквено разстояние"
+msgstr "Застъпване"
 
 #: ../src/settings.cpp:1566
 msgid "Font embolding"
@@ -1195,7 +1196,7 @@ msgstr "Допълнително удебеляване"
 
 #: ../src/settings.cpp:1568
 msgid "Tracking"
-msgstr ""
+msgstr "Междубуквено разстояние"
 
 #: ../src/settings.cpp:1570
 msgid "Font Gamma"
@@ -1231,11 +1232,11 @@ msgstr "Предформатиран текст"
 
 #: ../src/settings.cpp:1613
 msgid "Space condensing percent"
-msgstr ""
+msgstr "Свиване на разстоянието"
 
 #: ../src/settings.cpp:1616
 msgid "Space expanding percent"
-msgstr ""
+msgstr "Разширяване на разстоянието"
 
 #: ../src/settings.cpp:1619
 msgid "Floating punctuation"
@@ -1371,15 +1372,15 @@ msgstr "Турбо режим"
 
 #: ../src/settings.cpp:1767
 msgid "Gray buffer depth (needs restart)"
-msgstr ""
+msgstr "Дълбочина на буфера за сивия цвят (изисква рестартиране)"
 
 #: ../src/settings.cpp:1772
 msgid "Custom system theme (needs restart)"
-msgstr "Потребителска тема на системата (нужно е рестартиране)"
+msgstr "Потребителска тема на системата (изисква рестартиране)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "Използване на новото меню за съдържанието"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1903,15 +1904,15 @@ msgstr "Неуспешно изчистване на кеша!"
 
 #: ../src/cr3pocketbook.cpp:2703
 msgid "Start"
-msgstr ""
+msgstr "Начало"
 
 #: ../src/cr3pocketbook.cpp:2718
 msgid "Section"
-msgstr ""
+msgstr "Раздел"
 
 #: ../src/cr3pocketbook.cpp:2728
 msgid "End"
-msgstr ""
+msgstr "Край"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"
@@ -1919,7 +1920,7 @@ msgstr "Натиснете $1 за превод"
 
 #: ../src/cr3pocketbook.cpp:5291
 msgid "Updated to v"
-msgstr ""
+msgstr "Обновено до версия"
 
 #: ../src/cr3pocketbook.cpp:5452
 msgid "Untitled"

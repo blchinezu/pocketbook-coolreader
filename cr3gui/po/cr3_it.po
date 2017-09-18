@@ -4,13 +4,14 @@
 # Translators:
 # Fiorenzo Ponti <inactive+neodym@transifex.com>, 2015
 # XCO ME <xcomf7@yahoo.com>, 2016
+# XCO ME <xcomf7@yahoo.com>, 2016
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2016-02-11 20:37+0000\n"
-"Last-Translator: XCO ME <xcomf7@yahoo.com>\n"
+"PO-Revision-Date: 2017-08-03 13:45+0000\n"
+"Last-Translator: BruceLee\n"
 "Language-Team: Italian (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/it/)\n"
 "Language: it\n"
@@ -356,7 +357,7 @@ msgstr "Pagina $1 ($2%)"
 
 #: ../src/bmkdlg.cpp:68 ../src/bmkdlg.cpp:161
 msgid "Go to bookmark"
-msgstr "Vai ai segnalibri"
+msgstr "Vai al segnalibro"
 
 #: ../src/bmkdlg.cpp:72
 msgid ""
@@ -1260,7 +1261,7 @@ msgstr "Max ingrandimento immagini incorporate"
 
 #: ../src/settings.cpp:1648
 msgid "Page settings"
-msgstr "Impostazioni Pagina"
+msgstr "Impostazioni pagina"
 
 #: ../src/settings.cpp:1653
 msgid "Status line"
@@ -1340,7 +1341,7 @@ msgstr "Impostazioni schermo"
 
 #: ../src/settings.cpp:1735
 msgid "Landscape pages"
-msgstr "Numero di pagine in modalità orizzontale"
+msgstr "Numero pagine in orizzontale"
 
 #: ../src/settings.cpp:1737
 msgid "Inverse display"
@@ -1432,7 +1433,7 @@ msgstr "Pinch zoom"
 
 #: ../src/settings.cpp:1872
 msgid "Style settings"
-msgstr "Impostazioni Stile"
+msgstr "Impostazioni stile"
 
 #: ../src/settings.cpp:1877
 msgid "Document embedded styles"
@@ -1686,7 +1687,7 @@ msgstr "Lista citazioni"
 
 #: ../src/viewdlg.cpp:569
 msgid "Go to bookmark..."
-msgstr "Vai ai segnalibri..."
+msgstr "Vai al segnalibro..."
 
 #: ../src/viewdlg.cpp:570
 msgid "Recent books list"
