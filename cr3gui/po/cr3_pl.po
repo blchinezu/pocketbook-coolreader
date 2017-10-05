@@ -2,15 +2,15 @@
 # This file is put in the public domain.
 #
 # Translators:
-# Rafał <galon3@wp.pl>, 2015
+# Rafał <galon3@wp.pl>, 2015,2017
 # Tomasz Długosz <tomek3d@gmail.com>, 2009
 msgid ""
 msgstr ""
 "Project-Id-Version: coolreader-pocketbook\n"
 "Report-Msgid-Bugs-To: foo@bar.com\n"
 "POT-Creation-Date: 2016-10-31 12:09+0200\n"
-"PO-Revision-Date: 2017-08-03 13:45+0000\n"
-"Last-Translator: BruceLee\n"
+"PO-Revision-Date: 2017-09-25 08:14+0000\n"
+"Last-Translator: Rafał <galon3@wp.pl>\n"
 "Language-Team: Polish (http://www.transifex.com/coolreader-pocketbook/"
 "coolreader-pocketbook/language/pl/)\n"
 "Language: pl\n"
@@ -1380,7 +1380,7 @@ msgstr "Motyw systemu użytkownika (konieczny restart)"
 
 #: ../src/settings.cpp:1778
 msgid "Use new TOC menu"
-msgstr ""
+msgstr "Nowy styl spisu treści"
 
 #: ../src/settings.cpp:1786
 msgid "Skin"
@@ -1904,15 +1904,15 @@ msgstr "Nie można wyczyścić pamięci podręcznej!"
 
 #: ../src/cr3pocketbook.cpp:2703
 msgid "Start"
-msgstr ""
+msgstr "Początek"
 
 #: ../src/cr3pocketbook.cpp:2718
 msgid "Section"
-msgstr ""
+msgstr "Rozdział"
 
 #: ../src/cr3pocketbook.cpp:2728
 msgid "End"
-msgstr ""
+msgstr "Koniec"
 
 #: ../src/cr3pocketbook.cpp:4181
 msgid "Press $1 to translate"
