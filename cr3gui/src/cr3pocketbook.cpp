@@ -50,7 +50,7 @@ ifont * pbCrFontAA;
 int pbCrFontSize = 10;
 
 #ifdef POCKETBOOK_PRO
-iv_mtinfo* (*gti)(void);    /* Pointer to GetTouchInfo() function. */
+iv_mtinfo* (*inkview_GetTouchInfo)(void);    /* Pointer to GetTouchInfo() function. */
 
 typedef struct iv_mtinfo_54_s {
     int active;
@@ -61,6 +61,12 @@ typedef struct iv_mtinfo_54_s {
     int rsv_2;
     long long timems;
 } iv_mtinfo_54;
+
+#ifdef POCKETBOOK_PRO_FW5
+bool gotFrontLightColor = false;
+int (*inkview_GetFrontlightColor)(void);       /* Pointer to GetFrontlightColor() function. */
+void (*inkview_SetFrontlightColor)(int value); /* Pointer to SetFrontlightColor() function. */
+#endif
 #endif
 
 typedef struct finger_s {
@@ -2239,7 +2245,7 @@ protected:
             iv_mtinfo *mti;
             iv_mtinfo_54 *mti54; // iv_mtinfo changed starting with firmware 5.4
 
-            if (gti && (mti = (*gti)())) {
+            if (inkview_GetTouchInfo && (mti = (*inkview_GetTouchInfo)())) {
 
                 mti54 = (iv_mtinfo_54*)mti;
                 bool mtinfo_new = (fw_major > 5) || (fw_major == 5 && fw_minor >= 4);
@@ -2286,43 +2292,88 @@ protected:
             if( abs(finger1.start.x-pt.x) < abs(finger1.start.y-pt.y) ) {
                 int front_light_swipes_mode = CRPocketBookDocView::instance->getProps()->getIntDef(PROP_CTRL_FRONT_LIGHT_SWIPES, 2);
 
-                if( front_light_swipes_mode == 1 ) {
-                    setFrontLightValue(
-                        /* bottom to top */
-                        100 -
-                        /* value (%) */
-                        (
-                            100 *
+                // Front light COLOR
+                if( gotFrontLightColor && finger1.start.x < ScreenWidth()/2 ) {
+                    if( front_light_swipes_mode == 1 ) {
+                        setFrontLightColorValue(
+                            /* bottom to top */
+                            100 -
+                            /* value (%) */
                             (
-                                /* touch point (PX) */
-                                pt.y -
-                                /* offset (PX) used to center the region */
-                                ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                                100 *
+                                (
+                                    /* touch point (PX) */
+                                    pt.y -
+                                    /* offset (PX) used to center the region */
+                                    ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                                )
+                                /
+                                /* usable screen (PX) */
+                                ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
                             )
-                            /
-                            /* usable screen (PX) */
-                            ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
-                        )
-                        );
-                    ignoreNextTouchRelease = true;
+                            );
+                        ignoreNextTouchRelease = true;
+                    }
+                    else if( front_light_swipes_mode == 2 ) {
+                        setFrontLightColorValue(
+                            getFrontLightColorValue() -
+                            /* value (%) */
+                            (
+                                100 *
+                                (
+                                    /* step height (PX) */
+                                    pt.y - finger1.start.y
+                                )
+                                /
+                                /* usable screen (PX) */
+                                ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
+                            )
+                            );
+                        finger1.start.y = pt.y;
+                        ignoreNextTouchRelease = true;
+                    }
                 }
-                else if( front_light_swipes_mode == 2 ) {
-                    setFrontLightValue(
-                        getFrontLightValue() -
-                        /* value (%) */
-                        (
-                            100 *
+
+                // Front light BRIGHTNESS
+                else {
+                    if( front_light_swipes_mode == 1 ) {
+                        setFrontLightValue(
+                            /* bottom to top */
+                            100 -
+                            /* value (%) */
                             (
-                                /* step height (PX) */
-                                pt.y - finger1.start.y
+                                100 *
+                                (
+                                    /* touch point (PX) */
+                                    pt.y -
+                                    /* offset (PX) used to center the region */
+                                    ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT / 2
+                                )
+                                /
+                                /* usable screen (PX) */
+                                ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
                             )
-                            /
-                            /* usable screen (PX) */
-                            ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
-                        )
-                        );
-                    finger1.start.y = pt.y;
-                    ignoreNextTouchRelease = true;
+                            );
+                        ignoreNextTouchRelease = true;
+                    }
+                    else if( front_light_swipes_mode == 2 ) {
+                        setFrontLightValue(
+                            getFrontLightValue() -
+                            /* value (%) */
+                            (
+                                100 *
+                                (
+                                    /* step height (PX) */
+                                    pt.y - finger1.start.y
+                                )
+                                /
+                                /* usable screen (PX) */
+                                ( ScreenHeight() * FRONTLIGHT_SWIPE_USABLE_SCREEN_HEIGHT )
+                            )
+                            );
+                        finger1.start.y = pt.y;
+                        ignoreNextTouchRelease = true;
+                    }
                 }
                 return true;
             }
@@ -5137,6 +5188,29 @@ void setFrontLightValue(int value) {
     }
 }
 
+int getFrontLightColorValue() {
+    return min(max((*inkview_GetFrontlightColor)(), 0), 100);
+}
+void setFrontLightColorValue(int value) {
+
+    // Min
+    if( value <= 0 ) {
+        if( (*inkview_GetFrontlightColor)() > 0 )
+            (*inkview_SetFrontlightColor)(0);
+    }
+
+    // Max
+    else if( value >= 100 ) {
+        if( (*inkview_GetFrontlightColor)() < 100 )
+            (*inkview_SetFrontlightColor)(100);
+    }
+
+    // Adjust brightness
+    else {
+        (*inkview_SetFrontlightColor)(value);
+    }
+}
+
 #endif
 
 bool pbNetworkConnected() {
@@ -5922,16 +5996,32 @@ bool canUseNewTouchToc() {
 #endif
 
 #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
-void get_gti_pointer() {
-    /* This gets the pointer to the GetTouchInfo() function if it is available. */
+void getInkviewFeatures() {
     void *handle;
 
     if ((handle = dlopen("libinkview.so", RTLD_LAZY))) {
-        *(void **) (&gti) = dlsym(handle, "GetTouchInfo");
+
+        // Get pointers
+        *(void **) (&inkview_GetTouchInfo) = dlsym(handle, "GetTouchInfo");
+
+        #ifdef POCKETBOOK_PRO_FW5
+        *(void **) (&inkview_GetFrontlightColor) = dlsym(handle, "GetFrontlightColor");
+        *(void **) (&inkview_SetFrontlightColor) = dlsym(handle, "SetFrontlightColor");
+        gotFrontLightColor = inkview_GetFrontlightColor && inkview_SetFrontlightColor;
+        #endif
+
+        // Close lib
         dlclose(handle);
-    } else
-        gti = NULL;
+    } else {
+        inkview_GetTouchInfo       = NULL;
+
+        #ifdef POCKETBOOK_PRO_FW5
+        inkview_GetFrontlightColor = NULL;
+        inkview_SetFrontlightColor = NULL;
+        #endif
+    }
 }
+
 #endif
 
 int main(int argc, char **argv)
@@ -5945,7 +6035,7 @@ int main(int argc, char **argv)
     sscanf(GetSoftwareVersion(), "%*[^0-9]%u.%u.%u.%*u", &foo, &fw_major, &fw_minor);
 
     #if defined(POCKETBOOK_PRO) && !defined(POCKETBOOK_PRO_PRO2)
-    get_gti_pointer();
+    getInkviewFeatures();
     #endif
 
     OpenScreen();

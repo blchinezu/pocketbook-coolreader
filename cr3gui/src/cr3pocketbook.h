@@ -78,8 +78,8 @@ enum CRPbCommands {
 
 #define PB_CR3_CACHE_SIZE (0x100000 * 64)
 
-#define CR_PB_VERSION "0.0.6-17-61.3"
-#define CR_PB_BUILD_DATE "2017-10-05"
+#define CR_PB_VERSION "0.0.6-17-62a"
+#define CR_PB_BUILD_DATE "2018-02-09"
 
 #define PB_ROTATE_MODE_360 0
 #define PB_ROTATE_MODE_180 1
@@ -185,6 +185,9 @@ bool canUseNewTouchToc();
 void toggleFrontLight();
 void setFrontLightValue(int value);
 int getFrontLightValue();
+
+void setFrontLightColorValue(int value);
+int getFrontLightColorValue();
 #endif
 
 #endif
