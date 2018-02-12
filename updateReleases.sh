@@ -233,6 +233,11 @@ elif [ "$1" = "publish" ]; then
 			doUpdate "$FIRMWARE" "$DEVICE"
 		done
 	done
+	for DEVICE in '631'; do
+		for FIRMWARE in 'pro5'; do
+			doUpdate "$FIRMWARE" "$DEVICE"
+		done
+	done
 
 	# # Wait for dropbox to catch on
 	# echo
