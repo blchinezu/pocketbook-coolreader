@@ -47,7 +47,8 @@ After downloading the zip file, extract it and copy the system dir to your devic
  - Google & Wikipedia buttons in the dictionary window
  - Set book cover as power off logo [[pal](http://www.the-ebook.org/forum/profile.php?mode=viewprofile&u=45840&sid=43f0dd795517591f5bae7add0e609962)]
  - Get hardware depth from device
- - Control front light by vertically swiping in FW5
+ - Control front light brightness by vertically swiping in FW5
+ - Control front light color by vertically swiping in FW5
  - Turn pages by horizontally swiping
  - Rewritten TOC window
  - StandBy Mode
