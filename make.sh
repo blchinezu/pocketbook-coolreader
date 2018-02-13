@@ -145,6 +145,7 @@ if [ "$1" = "" -o "$1" = "pro4" ]; then
         -D ENABLE_PB_DB_STATE=1 \
         -D BACKGROUND_CACHE_FILE_CREATION=1 \
         -D POCKETBOOK_PRO=1 \
+        -D CR3_JPEG=1 \
         ..
     make
 
