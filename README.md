@@ -14,8 +14,7 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 **Donate** through PayPal at [brucelee.duckdns.org/donation/cr3-pb](http://brucelee.duckdns.org/donation/cr3-pb/)
 
-    Since I can't directly add the PayPal donation button here, I've created a simple page
-    which has the Donate button. So if anyone wants to throw money at me, now you can.
+ > Since I can't directly add the PayPal donation button here, I've created a simple page which has the Donate button. So if anyone wants to throw money at me, now you can.
 
 --------------------------------------------------------------------------------
 
@@ -30,10 +29,12 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 Grab the zip corresponding to your firmware from the link above. (Check the firmware from your device menu)
 
-    360  -> PB360
-    pro2 -> FW2.*
-    pro4 -> FW4.*
-    pro5 -> FW5.*
+```php
+360  -> PB360
+pro2 -> FW2.*
+pro4 -> FW4.*
+pro5 -> FW5.*
+```
 
 After downloading the zip file, extract it and copy the system dir to your device (overwrite the existing one)
 
@@ -157,73 +158,86 @@ After downloading the zip file, extract it and copy the system dir to your devic
 
 ### Setting up the build environment:
 
-    # update repositories
-    sudo apt-get update
+```bash
+# update repositories
+sudo apt-get update
 
-    # install required binaries
-    sudo apt-get install cmake git zip
+# install required binaries
+sudo apt-get install cmake git zip
 
-    # download sdk
-    git clone https://github.com/blchinezu/pocketbook-sdk ~/PBDEV
+# download sdk
+git clone https://github.com/blchinezu/pocketbook-sdk ~/PBDEV
 
-    # create required dirs
-    mkdir -p ~/PBDEV/sources ~/PBDEV/releases/coolreader3/dev
+# create required dirs
+mkdir -p ~/PBDEV/sources ~/PBDEV/releases/coolreader3/dev
 
-    # download CR3 source
-    # (if you symlink this dir cmake will crash!)
-    git clone https://github.com/blchinezu/pocketbook-coolreader.git ~/PBDEV/sources/cr3-fork
+# download CR3 source
+# (if you symlink this dir cmake will crash!)
+git clone https://github.com/blchinezu/pocketbook-coolreader.git ~/PBDEV/sources/cr3-fork
+```
 
 --------------------------------------------------------------------------------
 
 ### Building stable version:
 
-    # go to the CR3 source
-    cd ~/PBDEV/sources/cr3-fork
+```bash
+# go to the CR3 source
+cd ~/PBDEV/sources/cr3-fork
 
-    # make sure you're working with "master" branch
-    git checkout master
+# make sure you're working with "master" branch
+git checkout master
 
-    # update source code
-    git pull
+# update source code
+git pull
 
-    # build for all firmwares
-    bash make.sh
+# build for all firmwares
+bash make.sh
 
-    # or build for a single firmware
-    bash make.sh pro5
+# or build for a single firmware
+bash make.sh pro5
 
-    # you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+# you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+```
 
 --------------------------------------------------------------------------------
 
 ### Building dev version:
 
-    # go to the CR3 source
-    cd ~/PBDEV/sources/cr3-fork
+```bash
+# go to the CR3 source
+cd ~/PBDEV/sources/cr3-fork
 
-    # switch to "dev" branch
-    git checkout dev
+# switch to "dev" branch
+git checkout dev
 
-    # update source code
-    git pull
+# update source code
+git pull
 
-    # build for all firmwares
-    bash make.sh
+# build for all firmwares
+bash make.sh
 
-    # or build for a single firmware
-    bash make.sh pro5
+# or build for a single firmware
+bash make.sh pro5
 
-    # you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+# you'll find your builds in ~/PBDEV/releases/coolreader3/dev/
+```
 
 --------------------------------------------------------------------------------
 
 ### Screenshots:
 
 ![0.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/0.jpg)
+
 ![1.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/1.jpg)
+
 ![2.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/2.jpg)
+
 ![3.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/3.jpg)
+
 ![4.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/4.jpg)
+
 ![5.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/5.jpg)
+
 ![6.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/6.jpg)
+
 ![7.jpg](https://raw.githubusercontent.com/blchinezu/pocketbook-coolreader/master/screenshots/7.jpg)
