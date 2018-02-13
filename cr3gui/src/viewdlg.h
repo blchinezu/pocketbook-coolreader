@@ -15,6 +15,7 @@
 #include <crgui.h>
 //#ifdef WITH_DICT
 #include "dictdlg.h"
+#include "sdk_compatibility.h"
 //#endif
 
 
