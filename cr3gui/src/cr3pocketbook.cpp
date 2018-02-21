@@ -5333,16 +5333,17 @@ void stopStandByTimer() {
 }
 
 // Fix hardware duplication of events
-#define MIN_MS_BETWEEN_EVENTS 500
-lUInt64 lastAllowedEventTime = GetCurrentTimeMillis();
-lUInt64 currentEventTime;
+#ifdef POCKETBOOK_PRO
+#define MIN_MS_BETWEEN_EVENTS 500LL
+long long lastAllowedEventTime = hw_timeinms();
+long long currentEventTime;
 bool timerAllowsEvent(int type, int par1, int par2) {
     switch( type ) {
 
         case EVT_PREVPAGE:
         case EVT_NEXTPAGE:
         case EVT_KEYPRESS:
-            currentEventTime = GetCurrentTimeMillis();
+            currentEventTime = hw_timeinms();
             if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
                 return false;
             }
@@ -5351,7 +5352,7 @@ bool timerAllowsEvent(int type, int par1, int par2) {
 
         case EVT_KEYRELEASE:
             if( par2 == 0 ) {
-                currentEventTime = GetCurrentTimeMillis();
+                currentEventTime = hw_timeinms();
                 if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
                     return false;
                 }
@@ -5361,13 +5362,17 @@ bool timerAllowsEvent(int type, int par1, int par2) {
     }
     return true;
 }
+#endif
 
 static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
+
+#ifdef POCKETBOOK_PRO
     if( !timerAllowsEvent(type, par1, par2) ) {
         return 0;
     }
+#endif
 
     if( isStandByMode ) switch (type) {
 
