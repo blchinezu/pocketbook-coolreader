@@ -5332,9 +5332,42 @@ void stopStandByTimer() {
     ClearTimer(enterStandByMode);
 }
 
+// Fix hardware duplication of events
+#define MIN_MS_BETWEEN_EVENTS 500
+lUInt64 lastAllowedEventTime = GetCurrentTimeMillis();
+lUInt64 currentEventTime;
+bool timerAllowsEvent(int type, int par1, int par2) {
+    switch( type ) {
+
+        case EVT_PREVPAGE:
+        case EVT_NEXTPAGE:
+        case EVT_KEYPRESS:
+            currentEventTime = GetCurrentTimeMillis();
+            if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
+                return false;
+            }
+            lastAllowedEventTime = currentEventTime;
+            break;
+
+        case EVT_KEYRELEASE:
+            if( par2 == 0 ) {
+                currentEventTime = GetCurrentTimeMillis();
+                if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
+                    return false;
+                }
+                lastAllowedEventTime = currentEventTime;
+            }
+            break;
+    }
+    return true;
+}
+
 static bool need_save_cover = false;
 int main_handler(int type, int par1, int par2)
 {
+    if( !timerAllowsEvent(type, par1, par2) ) {
+        return 0;
+    }
 
     if( isStandByMode ) switch (type) {
 
