@@ -5334,31 +5334,50 @@ void stopStandByTimer() {
 
 // Fix hardware duplication of events
 #ifdef POCKETBOOK_PRO
-#define MIN_MS_BETWEEN_EVENTS 500LL
-long long lastAllowedEventTime = hw_timeinms();
-long long currentEventTime;
-bool timerAllowsEvent(int type, int par1, int par2) {
-    switch( type ) {
+#define MIN_MS_BETWEEN_EVENTS 1000ULL
+lUInt64 getTimeMs() {
+    struct timeval tval;
+    gettimeofday( &tval, NULL );
+    int ms = tval.tv_usec;
+    time_t t = tval.tv_sec;
+    tm * bt = localtime(&t);
+    lUInt64 stamp =
+        ( lUInt64(bt->tm_year+1900) * 10000000000000ULL ) +
+        ( lUInt64(bt->tm_mon+1)     * 100000000000ULL ) +
+        ( lUInt64(bt->tm_mday)      * 1000000000ULL ) +
+        ( lUInt64(bt->tm_hour)      * 10000000ULL ) +
+        ( lUInt64(bt->tm_min)       * 100000ULL ) +
+        ( lUInt64(bt->tm_sec)       * 1000ULL ) +
+        ( lUInt64(ms/1000) );
+    return stamp;
+}
 
-        case EVT_PREVPAGE:
-        case EVT_NEXTPAGE:
-        case EVT_KEYPRESS:
-            currentEventTime = hw_timeinms();
-            if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
+int timeLimitedEvents[4] = {
+    EVT_PREVPAGE,
+    EVT_NEXTPAGE,
+    EVT_KEYPRESS,
+    EVT_KEYRELEASE
+};
+
+lUInt64 lastAllowedEventTime[4] = {
+    getTimeMs(),
+    getTimeMs(),
+    getTimeMs(),
+    getTimeMs()
+};
+
+bool timerAllowsEvent(int type, int par1, int par2) {
+    CRLog::trace("timerAllowsEvent(%s, %d, %d): CALL", getEventName(type), par1, par2);
+    for( int i = 0; i < 4; i++ ) {
+        if( timeLimitedEvents[i] == type ) {
+            lUInt64 currentEventTime = getTimeMs();
+            CRLog::trace("timerAllowsEvent(%s, %d, %d): IF: %llu - %llu < %llu ", getEventName(type), par1, par2, currentEventTime, lastAllowedEventTime[i], MIN_MS_BETWEEN_EVENTS);
+            if( currentEventTime - lastAllowedEventTime[i] < MIN_MS_BETWEEN_EVENTS ) {
                 return false;
             }
-            lastAllowedEventTime = currentEventTime;
+            lastAllowedEventTime[i] = currentEventTime;
             break;
-
-        case EVT_KEYRELEASE:
-            if( par2 == 0 ) {
-                currentEventTime = hw_timeinms();
-                if( currentEventTime - lastAllowedEventTime < MIN_MS_BETWEEN_EVENTS ) {
-                    return false;
-                }
-                lastAllowedEventTime = currentEventTime;
-            }
-            break;
+        }
     }
     return true;
 }
@@ -5370,7 +5389,11 @@ int main_handler(int type, int par1, int par2)
 
 #ifdef POCKETBOOK_PRO
     if( !timerAllowsEvent(type, par1, par2) ) {
+        CRLog::trace("timerAllowsEvent(%s, %d, %d): RESULT: FALSE", getEventName(type), par1, par2);
         return 0;
+    }
+    else {
+        CRLog::trace("timerAllowsEvent(%s, %d, %d): RESULT: TRUE", getEventName(type), par1, par2);
     }
 #endif
 
