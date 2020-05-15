@@ -12,10 +12,6 @@ The **forum thread** is at [mobileread.com](http://www.mobileread.com/forums/sho
 
 **Help translating** the app at [transifex.com](https://www.transifex.com/projects/p/coolreader-pocketbook/)
 
-**Donate** through PayPal at [brucelee.duckdns.org/donation/cr3-pb](http://brucelee.duckdns.org/donation/cr3-pb/)
-
- > Since I can't directly add the PayPal donation button here, I've created a simple page which has the Donate button. So if anyone wants to throw money at me, now you can.
-
 --------------------------------------------------------------------------------
 
 ### Download
