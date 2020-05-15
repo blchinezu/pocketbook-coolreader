@@ -1294,8 +1294,8 @@ CRSettingsMenu::CRSettingsMenu( CRGUIWindowManager * wm, CRPropRef newProps, int
     };
 #if ENABLE_UPDATE_MODE_SETTING==1
     item_def_t screen_update_options[] = {
-        {_("Always use fast updates"), "0"},
-        {_("Don't use fast updates"), "1"},
+        {_("Don't use fast updates"), "0"},
+	{_("Always use fast updates"), "1"},
         {_("Full updates every 2 pages"), "2"},
         {_("Full updates every 3 pages"), "3"},
         {_("Full updates every 4 pages"), "4"},
